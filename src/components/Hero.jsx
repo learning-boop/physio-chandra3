@@ -76,10 +76,17 @@ export default function Hero() {
   const bodyPanel = (
     <div style={{
       position: 'relative',
-      height: isMobile ? '56vh' : 'auto',
+      height: isMobile ? '54vh' : 'auto',
       minHeight: isMobile ? 400 : 'auto',
-      background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%)',
-      borderRight: isMobile ? 'none' : '1px solid rgba(201,169,110,0.12)',
+      margin: isMobile ? '0 14px' : 0,
+      borderRadius: isMobile ? 26 : 0,
+      overflow: 'hidden',
+      background: isMobile
+        ? 'radial-gradient(ellipse 78% 62% at 50% 42%, rgba(201,169,110,0.12) 0%, rgba(255,255,255,0.03) 42%, rgba(5,5,5,0.6) 78%)'
+        : 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%)',
+      border: isMobile ? '1px solid rgba(201,169,110,0.16)' : 'none',
+      borderRight: isMobile ? '1px solid rgba(201,169,110,0.16)' : '1px solid rgba(201,169,110,0.12)',
+      boxShadow: isMobile ? 'inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 60px rgba(0,0,0,0.5)' : 'none',
     }}>
       <Body3D onSelectionChange={setSelected} />
     </div>

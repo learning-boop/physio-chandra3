@@ -79,7 +79,7 @@ const GOLD = '#c9a96e'
 const LINE_CORE = '#ffe6ad'
 
 function BodyFigure() {
-  const { scene } = useGLTF('/models/body.glb')
+  const { scene } = useGLTF('/models/body.glb', true)
   const cloned = useMemo(() => scene.clone(true), [scene])
   return (
     <group name="bodyModel" scale={MODEL_SCALE} position={[0, MODEL_Y_OFFSET, 0]}>
@@ -87,7 +87,7 @@ function BodyFigure() {
     </group>
   )
 }
-useGLTF.preload('/models/body.glb')
+useGLTF.preload('/models/body.glb', true)
 
 // Auto-fit the camera so the WHOLE body (head to feet, arms to sides) is always
 // visible with margin — on wide desktop and narrow phone screens alike.
@@ -155,12 +155,34 @@ function DrawSurface({ drawMode, onPathUpdate, onPathComplete }) {
     return hh.length ? hh[0].point.clone() : null
   }, [camera, gl, pointer, raycaster, scene])
 
-  const down = (e) => { if (!drawMode) return; const p = cast(e.clientX, e.clientY); if (!p) return; drawing.current = true; pathRef.current = [p]; onPathUpdate([p]) }
-  const move = (e) => { if (!drawMode || !drawing.current) return; const p = cast(e.clientX, e.clientY); if (!p) return; pathRef.current = [...pathRef.current, p]; onPathUpdate(pathRef.current) }
-  const up = () => { if (!drawMode || !drawing.current) return; drawing.current = false; onPathComplete(pathRef.current) }
+  const down = (e) => {
+    if (!drawMode) return
+    const p = cast(e.clientX, e.clientY)
+    if (!p) return
+    gl.domElement.setPointerCapture?.(e.pointerId)   // keep receiving moves off-model
+    drawing.current = true
+    pathRef.current = [p]
+    onPathUpdate([p])
+  }
+  const move = (e) => {
+    if (!drawMode || !drawing.current) return
+    const p = cast(e.clientX, e.clientY)
+    if (!p) return
+    pathRef.current = [...pathRef.current, p]
+    onPathUpdate(pathRef.current)
+  }
+  const up = () => { if (!drawing.current) return; drawing.current = false; onPathComplete(pathRef.current) }
+
+  // Always end the stroke on release anywhere (finger lifting off the model on
+  // mobile won't leave drawing "stuck").
+  useEffect(() => {
+    window.addEventListener('pointerup', up)
+    window.addEventListener('pointercancel', up)
+    return () => { window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up) }
+  })
 
   return (
-    <mesh position={[0, 0.45, 0]} visible={false} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerLeave={up}>
+    <mesh position={[0, 0.45, 0]} visible={false} onPointerDown={down} onPointerMove={move}>
       <capsuleGeometry args={[0.72, 3.5, 8, 16]} />
       <meshBasicMaterial />
     </mesh>
