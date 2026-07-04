@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo, Suspense, useCallback } from 'react'
+import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Line, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -13,6 +13,7 @@ const CAM_TARGET = [0, 0.45, 0]
 
 // Area labels/types for the info panel.
 const AREA = {
+  head:      { type: 'head',      label: 'Head' },
   neck:      { type: 'neck',      label: 'Neck' },
   shoulderL: { type: 'shoulder',  label: 'Left Shoulder' },
   shoulderR: { type: 'shoulder',  label: 'Right Shoulder' },
@@ -45,24 +46,33 @@ function classify(wx, wy, wz) {
   const absZ = Math.abs(lz)                          // distance from centre line
   const back = lx < -0.04
 
-  // legs (by height)
+  // legs (by height, either side)
   if (fy < -0.34) return 'ankle' + side
   if (fy < -0.12) return 'knee' + side
-
-  // arms well out to the sides (further out than the shoulders)
-  if (absZ > 0.20) return fy > 0.02 ? 'elbow' + side : 'wrist' + side
 
   // back of the torso
   if (back) return fy > 0.12 ? 'upperback' : 'lowerback'
 
-  // upper front: shoulders sit out from centre, the neck is dead centre + high
-  if (fy > 0.16) {
-    if (absZ > 0.09) return 'shoulder' + side
-    return fy > 0.26 ? 'neck' : null   // centre high = neck, centre mid = upper chest (none)
+  // ── FRONT of the body ──
+  // Far out to the sides = the arm ends / hands
+  if (absZ > 0.20) {
+    if (fy > 0.24) return 'shoulder' + side
+    if (fy > 0.10) return 'elbow' + side
+    return 'wrist' + side
   }
 
-  if (fy > 0.02) return null           // chest — no listed area
-  return 'hip' + side                  // centre, low-mid
+  // Moderately out (absZ 0.10–0.20): shoulder (high), elbow (mid), HIP (low)
+  if (absZ >= 0.10) {
+    if (fy > 0.24) return 'shoulder' + side
+    if (fy > 0.14) return 'elbow' + side
+    return 'hip' + side
+  }
+
+  // Centre column (absZ < 0.10): head, neck, chest(none), hip
+  if (fy > 0.38) return 'head'
+  if (fy > 0.26) return 'neck'
+  if (fy > 0.14) return null          // chest / upper stomach — no listed area
+  return 'hip' + side                  // centre-low = hip
 }
 
 const GOLD = '#c9a96e'
@@ -78,6 +88,23 @@ function BodyFigure() {
   )
 }
 useGLTF.preload('/models/body.glb')
+
+// Auto-fit the camera so the WHOLE body (head to feet, arms to sides) is always
+// visible with margin — on wide desktop and narrow phone screens alike.
+function FitCamera({ controlsRef }) {
+  const { camera, size } = useThree()
+  useEffect(() => {
+    const aspect = size.width / Math.max(1, size.height)
+    const t = Math.tan((36 * Math.PI) / 180 / 2)
+    const distForHeight = 2.55 / t                 // fit body height (+ margin)
+    const distForWidth = 1.55 / (t * aspect)       // fit arm span (+ margin)
+    const dist = Math.max(distForHeight, distForWidth)
+    camera.position.set(dist * FRONT_SIGN, CAM_TARGET[1], 0)
+    camera.updateProjectionMatrix()
+    controlsRef.current?.update?.()
+  }, [size.width, size.height, camera, controlsRef])
+  return null
+}
 
 function CollisionHull() {
   return (
@@ -140,7 +167,7 @@ function DrawSurface({ drawMode, onPathUpdate, onPathComplete }) {
   )
 }
 
-function Scene({ drawMode, path, glows, onPathUpdate, onPathComplete }) {
+function Scene({ drawMode, path, glows, controlsRef, onPathUpdate, onPathComplete }) {
   return (
     <>
       <ambientLight intensity={0.65} />
@@ -148,6 +175,7 @@ function Scene({ drawMode, path, glows, onPathUpdate, onPathComplete }) {
       <directionalLight position={[-3, 2, -3]} intensity={0.4} color={GOLD} />
       <Suspense fallback={null}><Environment preset="city" /></Suspense>
 
+      <FitCamera controlsRef={controlsRef} />
       <Suspense fallback={null}><BodyFigure /></Suspense>
       <CollisionHull />
       <DrawSurface drawMode={drawMode} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
@@ -164,7 +192,7 @@ function Scene({ drawMode, path, glows, onPathUpdate, onPathComplete }) {
 
       <ContactShadows position={[0, -1.55, 0]} opacity={0.5} scale={4.5} blur={2.4} far={2} color="#000000" />
 
-      <OrbitControls makeDefault enabled={!drawMode} enablePan={false} enableZoom={false} autoRotate={false}
+      <OrbitControls ref={controlsRef} makeDefault enabled={!drawMode} enablePan={false} enableZoom={false} autoRotate={false}
         rotateSpeed={0.8} target={CAM_TARGET} minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} />
     </>
   )
@@ -174,6 +202,7 @@ export default function Body3D({ onSelectionChange }) {
   const [drawMode, setDrawMode] = useState(true)
   const [path, setPath] = useState([])
   const [glows, setGlows] = useState([])
+  const controlsRef = useRef()
 
   // Walk the drawn line, classify each point, collect unique areas in order.
   const detect = (pts) => {
@@ -204,21 +233,25 @@ export default function Body3D({ onSelectionChange }) {
   })
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <Canvas shadows camera={{ position: CAM_POS, fov: 36 }} gl={{ antialias: true, alpha: true }}
-        style={{ width: '100%', height: '100%', touchAction: 'none' }}>
-        <Scene drawMode={drawMode} path={path} glows={glows} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
-      </Canvas>
-
-      <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 8, zIndex: 2, flexWrap: 'wrap' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Controls sit in their own row ABOVE the model — never overlapping it */}
+      <div style={{ display: 'flex', gap: 8, padding: '12px 12px 20px', flexWrap: 'wrap', flexShrink: 0, position: 'relative', zIndex: 2 }}>
         <button onClick={() => setDrawMode((d) => !d)} style={btn(drawMode)}>{drawMode ? 'Drawing Pain Line' : 'Rotate Body'}</button>
         <button onClick={reset} style={btn(false)}>Reset</button>
       </div>
 
-      <div style={{
-        position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: 10,
-        letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', whiteSpace: 'nowrap', pointerEvents: 'none',
-      }}>{drawMode ? 'Drag across the body to trace your pain' : 'Drag left / right to rotate'}</div>
+      {/* 3D canvas fills the remaining space */}
+      <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+        <Canvas shadows camera={{ position: CAM_POS, fov: 36 }} gl={{ antialias: true, alpha: true }}
+          style={{ width: '100%', height: '100%', touchAction: 'none' }}>
+          <Scene drawMode={drawMode} path={path} glows={glows} controlsRef={controlsRef} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
+        </Canvas>
+
+        <div style={{
+          position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: 10,
+          letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', whiteSpace: 'nowrap', pointerEvents: 'none',
+        }}>{drawMode ? 'Drag across the body to trace your pain' : 'Drag left / right to rotate'}</div>
+      </div>
     </div>
   )
 }
