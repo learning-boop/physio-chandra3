@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react'
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Line, useGLTF, Html } from '@react-three/drei'
 import * as THREE from 'three'
 
@@ -178,7 +178,63 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   )
 }
 
-function Scene({ highlight, path, glows, controlsRef, interactedRef, autoRotate, onInteract, onPathUpdate, onPathComplete }) {
+// Tap a body part (when NOT highlighting) to fly the camera to it.
+function TapFocus({ active, focusRef, onInteract }) {
+  const { camera, gl, scene } = useThree()
+  const ray = useMemo(() => new THREE.Raycaster(), [])
+  const pointer = useMemo(() => new THREE.Vector2(), [])
+  const down = useRef(null)
+
+  const handleDown = (e) => { if (active) down.current = { x: e.clientX, y: e.clientY } }
+  const handleUp = (e) => {
+    if (!active || !down.current) return
+    const moved = Math.hypot(e.clientX - down.current.x, e.clientY - down.current.y)
+    down.current = null
+    if (moved > 8) return   // that was a drag (rotate), not a tap
+    const rect = gl.domElement.getBoundingClientRect()
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+    ray.setFromCamera(pointer, camera)
+    const body = scene.getObjectByName('bodyModel')
+    if (!body) return
+    const hits = ray.intersectObject(body, true)
+    if (hits.length) {
+      focusRef.current = { point: hits[0].point.clone(), distance: 4.5 }
+      onInteract()
+    }
+  }
+
+  return (
+    <mesh position={[0, 0.45, 0]} visible={false} onPointerDown={handleDown} onPointerUp={handleUp}>
+      <capsuleGeometry args={[0.75, 3.6, 8, 16]} />
+      <meshBasicMaterial />
+    </mesh>
+  )
+}
+
+// Smoothly moves the camera + target toward a tapped point (and back out).
+function FocusController({ controlsRef, focusRef }) {
+  const { camera } = useThree()
+  const dir = useMemo(() => new THREE.Vector3(), [])
+  useFrame(() => {
+    const f = focusRef.current
+    const c = controlsRef.current
+    if (!f || !c) return
+    c.target.lerp(f.point, 0.14)
+    dir.subVectors(camera.position, c.target)
+    const curDist = dir.length() || 0.001
+    dir.normalize()
+    const newDist = THREE.MathUtils.lerp(curDist, f.distance, 0.14)
+    camera.position.copy(c.target).addScaledVector(dir, newDist)
+    c.update()
+    if (c.target.distanceTo(f.point) < 0.02 && Math.abs(curDist - f.distance) < 0.03) {
+      focusRef.current = null
+    }
+  })
+  return null
+}
+
+function Scene({ highlight, path, glows, controlsRef, interactedRef, focusRef, autoRotate, onInteract, onPathUpdate, onPathComplete }) {
   return (
     <>
       <ambientLight intensity={0.65} />
@@ -187,9 +243,12 @@ function Scene({ highlight, path, glows, controlsRef, interactedRef, autoRotate,
       <Suspense fallback={null}><Environment preset="city" /></Suspense>
 
       <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />
+      <FocusController controlsRef={controlsRef} focusRef={focusRef} />
       <Suspense fallback={<Loader />}><BodyFigure /></Suspense>
       <CollisionHull />
-      <DrawSurface active={highlight} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
+      {highlight
+        ? <DrawSurface active={highlight} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
+        : <TapFocus active={!highlight} focusRef={focusRef} onInteract={onInteract} />}
 
       {/* Highlighted pain path on the body — static, no blink or pulse */}
       {path.length > 1 && (
@@ -220,7 +279,7 @@ function Scene({ highlight, path, glows, controlsRef, interactedRef, autoRotate,
         target={CAM_TARGET}
         minPolarAngle={Math.PI / 2}
         maxPolarAngle={Math.PI / 2}
-        onStart={onInteract}
+        onStart={() => { onInteract(); if (focusRef.current) focusRef.current = null }}
       />
     </>
   )
@@ -232,6 +291,7 @@ export default function Body3D({ onSelectionChange }) {
   const [glows, setGlows] = useState([])
   const [interacted, setInteracted] = useState(false)
   const controlsRef = useRef()
+  const focusRef = useRef(null)
   const interactedRef = useRef(false)
 
   // Any drag / rotate / zoom / highlight stops auto-rotation permanently.
@@ -298,7 +358,7 @@ export default function Body3D({ onSelectionChange }) {
         >
           <Scene
             highlight={highlight} path={path} glows={glows}
-            controlsRef={controlsRef} interactedRef={interactedRef} autoRotate={!interacted}
+            controlsRef={controlsRef} interactedRef={interactedRef} focusRef={focusRef} autoRotate={!interacted}
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
           />
         </Canvas>
