@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react'
-import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { OrbitControls, ContactShadows, Environment, Line, useGLTF } from '@react-three/drei'
+import { Canvas, useThree } from '@react-three/fiber'
+import { OrbitControls, ContactShadows, Environment, Line, useGLTF, Html } from '@react-three/drei'
 import * as THREE from 'three'
 
 // body.glb faces sideways (along X; shoulders/arms along Z) → view from X.
@@ -78,6 +78,7 @@ function classify(wx, wy, wz) {
 const GOLD = '#c9a96e'
 const LINE_CORE = '#ffe6ad'
 
+// Lazy-loaded, Draco-compressed model.
 function BodyFigure() {
   const { scene } = useGLTF('/models/body.glb', true)
   const cloned = useMemo(() => scene.clone(true), [scene])
@@ -89,20 +90,29 @@ function BodyFigure() {
 }
 useGLTF.preload('/models/body.glb', true)
 
-// Auto-fit the camera so the WHOLE body (head to feet, arms to sides) is always
-// visible with margin — on wide desktop and narrow phone screens alike.
-function FitCamera({ controlsRef }) {
+function Loader() {
+  return (
+    <Html center>
+      <div style={{ color: GOLD, fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: '0.24em', textTransform: 'uppercase' }}>Loading…</div>
+    </Html>
+  )
+}
+
+// Keeps the model centred and correctly sized on every screen shape (until the
+// user manually zooms). Re-fits on resize / orientation change.
+function FitCamera({ controlsRef, interactedRef }) {
   const { camera, size } = useThree()
   useEffect(() => {
+    if (interactedRef.current) return   // don't fight the user's zoom
     const aspect = size.width / Math.max(1, size.height)
     const t = Math.tan((36 * Math.PI) / 180 / 2)
-    const distForHeight = 2.55 / t                 // fit body height (+ margin)
-    const distForWidth = 1.55 / (t * aspect)       // fit arm span (+ margin)
+    const distForHeight = 2.62 / t   // a touch more headroom so the head never clips
+    const distForWidth = 1.55 / (t * aspect)
     const dist = Math.max(distForHeight, distForWidth)
     camera.position.set(dist * FRONT_SIGN, CAM_TARGET[1], 0)
     camera.updateProjectionMatrix()
     controlsRef.current?.update?.()
-  }, [size.width, size.height, camera, controlsRef])
+  }, [size.width, size.height, camera, controlsRef, interactedRef])
   return null
 }
 
@@ -115,27 +125,8 @@ function CollisionHull() {
   )
 }
 
-// A soft glow placed on the body where a detected area sits on the drawn line.
-function AreaGlow({ position }) {
-  const ref = useRef()
-  useFrame(({ clock }) => {
-    if (ref.current) ref.current.scale.setScalar(1 + Math.sin(clock.getElapsedTime() * 3) * 0.18)
-  })
-  return (
-    <group position={position}>
-      <mesh ref={ref}>
-        <sphereGeometry args={[0.16, 16, 16]} />
-        <meshBasicMaterial color={LINE_CORE} transparent opacity={0.35} depthWrite={false} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshStandardMaterial color={LINE_CORE} emissive={LINE_CORE} emissiveIntensity={3} toneMapped={false} />
-      </mesh>
-    </group>
-  )
-}
-
-function DrawSurface({ drawMode, onPathUpdate, onPathComplete }) {
+// Active only in Highlight mode: trace over the body to highlight regions.
+function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   const { camera, gl, scene } = useThree()
   const raycaster = useMemo(() => new THREE.Raycaster(), [])
   const pointer = useMemo(() => new THREE.Vector2(), [])
@@ -156,16 +147,16 @@ function DrawSurface({ drawMode, onPathUpdate, onPathComplete }) {
   }, [camera, gl, pointer, raycaster, scene])
 
   const down = (e) => {
-    if (!drawMode) return
+    if (!active) return
     const p = cast(e.clientX, e.clientY)
     if (!p) return
-    gl.domElement.setPointerCapture?.(e.pointerId)   // keep receiving moves off-model
+    gl.domElement.setPointerCapture?.(e.pointerId)
     drawing.current = true
     pathRef.current = [p]
     onPathUpdate([p])
   }
   const move = (e) => {
-    if (!drawMode || !drawing.current) return
+    if (!active || !drawing.current) return
     const p = cast(e.clientX, e.clientY)
     if (!p) return
     pathRef.current = [...pathRef.current, p]
@@ -173,8 +164,6 @@ function DrawSurface({ drawMode, onPathUpdate, onPathComplete }) {
   }
   const up = () => { if (!drawing.current) return; drawing.current = false; onPathComplete(pathRef.current) }
 
-  // Always end the stroke on release anywhere (finger lifting off the model on
-  // mobile won't leave drawing "stuck").
   useEffect(() => {
     window.addEventListener('pointerup', up)
     window.addEventListener('pointercancel', up)
@@ -189,7 +178,7 @@ function DrawSurface({ drawMode, onPathUpdate, onPathComplete }) {
   )
 }
 
-function Scene({ drawMode, path, glows, controlsRef, onPathUpdate, onPathComplete }) {
+function Scene({ highlight, path, glows, controlsRef, interactedRef, autoRotate, onInteract, onPathUpdate, onPathComplete }) {
   return (
     <>
       <ambientLight intensity={0.65} />
@@ -197,50 +186,77 @@ function Scene({ drawMode, path, glows, controlsRef, onPathUpdate, onPathComplet
       <directionalLight position={[-3, 2, -3]} intensity={0.4} color={GOLD} />
       <Suspense fallback={null}><Environment preset="city" /></Suspense>
 
-      <FitCamera controlsRef={controlsRef} />
-      <Suspense fallback={null}><BodyFigure /></Suspense>
+      <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />
+      <Suspense fallback={<Loader />}><BodyFigure /></Suspense>
       <CollisionHull />
-      <DrawSurface drawMode={drawMode} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
+      <DrawSurface active={highlight} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
 
-      {/* Highlights sit ON the drawn line, so they're always on the body */}
-      {glows.map((g, i) => <AreaGlow key={i} position={g} />)}
-
+      {/* Highlighted pain path on the body — static, no blink or pulse */}
       {path.length > 1 && (
         <>
-          <Line points={path} color={LINE_CORE} lineWidth={12} transparent opacity={0.22} />
-          <Line points={path} color={LINE_CORE} lineWidth={4.5} transparent opacity={1} />
+          <Line points={path} color="#e8d5b0" lineWidth={13} transparent opacity={0.45} />
+          <Line points={path} color="#6b5528" lineWidth={7} transparent opacity={1} />
         </>
       )}
 
       <ContactShadows position={[0, -1.55, 0]} opacity={0.5} scale={4.5} blur={2.4} far={2} color="#000000" />
 
-      <OrbitControls ref={controlsRef} makeDefault enabled={!drawMode} enablePan={false} enableZoom={false} autoRotate={false}
-        rotateSpeed={0.8} target={CAM_TARGET} minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} />
+      {/* OFF (highlight false): rotate + zoom + auto-rotate. ON: locked for highlighting. */}
+      <OrbitControls
+        ref={controlsRef}
+        makeDefault
+        enabled={!highlight}
+        enablePan={false}
+        enableZoom={true}
+        zoomToCursor={true}
+        enableDamping
+        dampingFactor={0.08}
+        zoomSpeed={0.9}
+        rotateSpeed={0.8}
+        autoRotate={autoRotate && !highlight}
+        autoRotateSpeed={0.6}
+        minDistance={4}   // Zygote-style: zoom in on whatever you point at
+        maxDistance={15}
+        target={CAM_TARGET}
+        minPolarAngle={Math.PI / 2}
+        maxPolarAngle={Math.PI / 2}
+        onStart={onInteract}
+      />
     </>
   )
 }
 
 export default function Body3D({ onSelectionChange }) {
-  const [drawMode, setDrawMode] = useState(true)
+  const [highlight, setHighlight] = useState(false)   // OFF: rotate/zoom + auto-rotate
   const [path, setPath] = useState([])
   const [glows, setGlows] = useState([])
+  const [interacted, setInteracted] = useState(false)
   const controlsRef = useRef()
+  const interactedRef = useRef(false)
 
-  // Walk the drawn line, classify each point, collect unique areas in order.
+  // Any drag / rotate / zoom / highlight stops auto-rotation permanently.
+  const onInteract = () => { if (!interactedRef.current) { interactedRef.current = true; setInteracted(true) } }
+
   const detect = (pts) => {
-    const seen = new Set()
+    if (!pts.length) return []
+    // Classify each point, then only keep areas the line actually DWELLS on
+    // (a brief pass-through — e.g. crossing the hip on the way to the arm —
+    // won't register). Threshold scales with the line length.
+    const ids = pts.map((p) => classify(p.x, p.y, p.z))
+    const counts = {}
+    ids.forEach((id) => { if (id) counts[id] = (counts[id] || 0) + 1 })
+    const minPts = Math.max(3, Math.round(pts.length * 0.1))
     const out = []
-    pts.forEach((p) => {
-      const id = classify(p.x, p.y, p.z)
-      if (id && !seen.has(id)) { seen.add(id); out.push({ id, pos: [p.x, p.y, p.z] }) }
+    const seen = new Set()
+    ids.forEach((id, i) => {
+      if (id && counts[id] >= minPts && !seen.has(id)) {
+        seen.add(id)
+        out.push({ id, pos: [pts[i].x, pts[i].y, pts[i].z] })
+      }
     })
     return out
   }
-
-  const onPathUpdate = (pts) => {
-    setPath(pts)
-    setGlows(detect(pts).map((d) => d.pos))
-  }
+  const onPathUpdate = (pts) => { setPath(pts); setGlows(detect(pts).map((d) => d.pos)) }
   const onPathComplete = (pts) => {
     const found = detect(pts)
     setGlows(found.map((d) => d.pos))
@@ -248,31 +264,51 @@ export default function Body3D({ onSelectionChange }) {
   }
   const reset = () => { setPath([]); setGlows([]); onSelectionChange?.([]) }
 
+  const toggleHighlight = () => {
+    onInteract()
+    setHighlight((h) => {
+      if (h) { setPath([]); setGlows([]); onSelectionChange?.([]) } // leaving highlight clears
+      return !h
+    })
+  }
+
   const btn = (active) => ({
     fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase',
-    padding: '8px 14px', borderRadius: 999, border: `1px solid ${active ? GOLD : 'rgba(255,255,255,0.25)'}`,
-    background: active ? 'rgba(201,169,110,0.15)' : 'rgba(0,0,0,0.45)', color: active ? GOLD : 'rgba(255,255,255,0.72)', cursor: 'pointer',
+    padding: '9px 16px', borderRadius: 999, border: `1px solid ${active ? GOLD : 'rgba(255,255,255,0.25)'}`,
+    background: active ? 'rgba(201,169,110,0.18)' : 'rgba(0,0,0,0.45)', color: active ? GOLD : 'rgba(255,255,255,0.72)',
+    cursor: 'pointer', transition: 'all 0.2s',
   })
 
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {/* Controls sit in their own row ABOVE the model — never overlapping it */}
       <div style={{ display: 'flex', gap: 8, padding: '12px 12px 20px', flexWrap: 'wrap', flexShrink: 0, position: 'relative', zIndex: 2 }}>
-        <button onClick={() => setDrawMode((d) => !d)} style={btn(drawMode)}>{drawMode ? 'Drawing Pain Line' : 'Rotate Body'}</button>
-        <button onClick={reset} style={btn(false)}>Reset</button>
+        <button onClick={toggleHighlight} style={btn(highlight)}>
+          {highlight ? 'Highlight Pain Area · On' : 'Highlight Pain Area'}
+        </button>
+        {glows.length > 0 && <button onClick={reset} style={btn(false)}>Reset</button>}
       </div>
 
-      {/* 3D canvas fills the remaining space */}
       <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
-        <Canvas shadows camera={{ position: CAM_POS, fov: 36 }} gl={{ antialias: true, alpha: true }}
-          style={{ width: '100%', height: '100%', touchAction: 'none' }}>
-          <Scene drawMode={drawMode} path={path} glows={glows} controlsRef={controlsRef} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
+        <Canvas
+          shadows
+          camera={{ position: CAM_POS, fov: 36 }}
+          dpr={[1, 2]}
+          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+          style={{ width: '100%', height: '100%', touchAction: 'none' }}
+        >
+          <Scene
+            highlight={highlight} path={path} glows={glows}
+            controlsRef={controlsRef} interactedRef={interactedRef} autoRotate={!interacted}
+            onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
+          />
         </Canvas>
 
         <div style={{
           position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: 10,
           letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', whiteSpace: 'nowrap', pointerEvents: 'none',
-        }}>{drawMode ? 'Drag across the body to trace your pain' : 'Drag left / right to rotate'}</div>
+        }}>
+          {highlight ? 'Drag across the body to highlight the painful area' : 'Drag to rotate · Scroll or pinch to zoom'}
+        </div>
       </div>
     </div>
   )
