@@ -208,14 +208,15 @@ function Scene({ highlight, path, glows, controlsRef, interactedRef, autoRotate,
         enabled={!highlight}
         enablePan={false}
         enableZoom={true}
+        zoomToCursor={true}
         enableDamping
         dampingFactor={0.08}
         zoomSpeed={0.9}
         rotateSpeed={0.8}
         autoRotate={autoRotate && !highlight}
         autoRotateSpeed={0.6}
-        minDistance={7}    // capped so the whole body (head, arms, feet) always stays visible
-        maxDistance={13}
+        minDistance={3}    // Zygote-style deep zoom-in (zoom into any region)
+        maxDistance={16}
         target={CAM_TARGET}
         minPolarAngle={Math.PI / 2}
         maxPolarAngle={Math.PI / 2}
