@@ -206,7 +206,7 @@ function TapFocus({ active, focusRef, onInteract }) {
       if (!body) return
       const hits = ray.intersectObject(body, true)
       if (hits.length) {
-        focusRef.current = { point: hits[0].point.clone(), distance: 4.5 }
+        focusRef.current = { point: hits[0].point.clone(), distance: 3.6 }
         onInteract()
       }
     }
@@ -276,7 +276,9 @@ function Scene({ highlight, path, glows, controlsRef, interactedRef, focusRef, a
         ref={controlsRef}
         makeDefault
         enabled={!highlight}
-        enablePan={false}
+        enablePan={!highlight}
+        screenSpacePanning={true}
+        touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN }}
         enableZoom={true}
         zoomToCursor={true}
         enableDamping
@@ -285,7 +287,7 @@ function Scene({ highlight, path, glows, controlsRef, interactedRef, focusRef, a
         rotateSpeed={0.8}
         autoRotate={autoRotate && !highlight}
         autoRotateSpeed={0.6}
-        minDistance={3}    // Zygote-style deep zoom-in (zoom into any region)
+        minDistance={2.2}    // deeper zoom-in for mobile
         maxDistance={16}
         target={CAM_TARGET}
         minPolarAngle={Math.PI / 2}
@@ -378,7 +380,7 @@ export default function Body3D({ onSelectionChange }) {
           position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: 10,
           letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', whiteSpace: 'nowrap', pointerEvents: 'none',
         }}>
-          {highlight ? 'Drag across the body to highlight the painful area' : 'Drag to rotate · Scroll or pinch to zoom'}
+          {highlight ? 'Drag across the body to highlight the painful area' : '1 finger: rotate · Pinch: zoom · 2 fingers: move · Tap a part: zoom to it'}
         </div>
       </div>
     </div>
