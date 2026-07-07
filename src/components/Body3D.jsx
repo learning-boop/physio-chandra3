@@ -178,54 +178,65 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   )
 }
 
-// Tap a body part (when NOT highlighting) to fly the camera to it.
+// Tap a body part (when NOT highlighting) to fly the camera to it. Listens on
+// the canvas directly so touch taps register reliably on mobile.
 function TapFocus({ active, focusRef, onInteract }) {
   const { camera, gl, scene } = useThree()
   const ray = useMemo(() => new THREE.Raycaster(), [])
   const pointer = useMemo(() => new THREE.Vector2(), [])
-  const down = useRef(null)
+  const start = useRef(null)
 
-  const handleDown = (e) => { if (active) down.current = { x: e.clientX, y: e.clientY } }
-  const handleUp = (e) => {
-    if (!active || !down.current) return
-    const moved = Math.hypot(e.clientX - down.current.x, e.clientY - down.current.y)
-    down.current = null
-    if (moved > 8) return   // that was a drag (rotate), not a tap
-    const rect = gl.domElement.getBoundingClientRect()
-    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
-    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
-    ray.setFromCamera(pointer, camera)
-    const body = scene.getObjectByName('bodyModel')
-    if (!body) return
-    const hits = ray.intersectObject(body, true)
-    if (hits.length) {
-      focusRef.current = { point: hits[0].point.clone(), distance: 4.5 }
-      onInteract()
+  useEffect(() => {
+    if (!active) return
+    const el = gl.domElement
+    const onDown = (e) => { start.current = { x: e.clientX, y: e.clientY, t: performance.now() } }
+    const onUp = (e) => {
+      const s = start.current
+      start.current = null
+      if (!s) return
+      const moved = Math.hypot(e.clientX - s.x, e.clientY - s.y)
+      const dt = performance.now() - s.t
+      if (moved > 14 || dt > 400) return   // a drag or long-press, not a tap
+      const rect = el.getBoundingClientRect()
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return
+      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      ray.setFromCamera(pointer, camera)
+      const body = scene.getObjectByName('bodyModel')
+      if (!body) return
+      const hits = ray.intersectObject(body, true)
+      if (hits.length) {
+        focusRef.current = { point: hits[0].point.clone(), distance: 4.5 }
+        onInteract()
+      }
     }
-  }
+    el.addEventListener('pointerdown', onDown)
+    el.addEventListener('pointerup', onUp)
+    return () => { el.removeEventListener('pointerdown', onDown); el.removeEventListener('pointerup', onUp) }
+  }, [active, camera, gl, scene, ray, pointer, focusRef, onInteract])
 
-  return (
-    <mesh position={[0, 0.45, 0]} visible={false} onPointerDown={handleDown} onPointerUp={handleUp}>
-      <capsuleGeometry args={[0.75, 3.6, 8, 16]} />
-      <meshBasicMaterial />
-    </mesh>
-  )
+  return null
 }
 
-// Smoothly moves the camera + target toward a tapped point (and back out).
+// Smoothly moves the camera + target toward a tapped point, staying on the
+// horizontal plane (matches the locked rotation so the controls don't fight it).
 function FocusController({ controlsRef, focusRef }) {
   const { camera } = useThree()
-  const dir = useMemo(() => new THREE.Vector3(), [])
   useFrame(() => {
     const f = focusRef.current
     const c = controlsRef.current
     if (!f || !c) return
     c.target.lerp(f.point, 0.14)
-    dir.subVectors(camera.position, c.target)
-    const curDist = dir.length() || 0.001
-    dir.normalize()
+    const dx = camera.position.x - c.target.x
+    const dz = camera.position.z - c.target.z
+    const horiz = Math.hypot(dx, dz) || 0.001
+    const curDist = camera.position.distanceTo(c.target)
     const newDist = THREE.MathUtils.lerp(curDist, f.distance, 0.14)
-    camera.position.copy(c.target).addScaledVector(dir, newDist)
+    camera.position.set(
+      c.target.x + (dx / horiz) * newDist,
+      c.target.y,
+      c.target.z + (dz / horiz) * newDist
+    )
     c.update()
     if (c.target.distanceTo(f.point) < 0.02 && Math.abs(curDist - f.distance) < 0.03) {
       focusRef.current = null
