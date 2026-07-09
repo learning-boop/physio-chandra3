@@ -27,8 +27,8 @@ const AREA = {
   hipR:      { type: 'hip',       label: 'Right Hip' },
   kneeL:     { type: 'knee',      label: 'Left Knee' },
   kneeR:     { type: 'knee',      label: 'Right Knee' },
-  ankleL:    { type: 'ankle',     label: 'Left Ankle' },
-  ankleR:    { type: 'ankle',     label: 'Right Ankle' },
+  ankleL:    { type: 'ankle',     label: 'Left Ankle / Foot' },
+  ankleR:    { type: 'ankle',     label: 'Right Ankle / Foot' },
 }
 export const ZONE_LABELS = Object.fromEntries(Object.entries(AREA).map(([id, d]) => [id, d.label]))
 export const ZONE_TYPES = Object.fromEntries(Object.entries(AREA).map(([id, d]) => [id, d.type]))
@@ -218,25 +218,21 @@ function TapFocus({ active, focusRef, onInteract }) {
   return null
 }
 
-// Smoothly moves the camera + target toward a tapped point, staying on the
-// horizontal plane (matches the locked rotation so the controls don't fight it).
+// Smoothly moves the camera + target toward a tapped point, preserving the
+// current viewing angle (so it works whether you're level, above, or below).
 function FocusController({ controlsRef, focusRef }) {
   const { camera } = useThree()
+  const dir = useMemo(() => new THREE.Vector3(), [])
   useFrame(() => {
     const f = focusRef.current
     const c = controlsRef.current
     if (!f || !c) return
     c.target.lerp(f.point, 0.14)
-    const dx = camera.position.x - c.target.x
-    const dz = camera.position.z - c.target.z
-    const horiz = Math.hypot(dx, dz) || 0.001
-    const curDist = camera.position.distanceTo(c.target)
+    dir.subVectors(camera.position, c.target)
+    const curDist = dir.length() || 0.001
+    dir.normalize()
     const newDist = THREE.MathUtils.lerp(curDist, f.distance, 0.14)
-    camera.position.set(
-      c.target.x + (dx / horiz) * newDist,
-      c.target.y,
-      c.target.z + (dz / horiz) * newDist
-    )
+    camera.position.copy(c.target).addScaledVector(dir, newDist)
     c.update()
     if (c.target.distanceTo(f.point) < 0.02 && Math.abs(curDist - f.distance) < 0.03) {
       focusRef.current = null
@@ -290,8 +286,8 @@ function Scene({ highlight, path, glows, controlsRef, interactedRef, focusRef, a
         minDistance={2.2}    // deeper zoom-in for mobile
         maxDistance={16}
         target={CAM_TARGET}
-        minPolarAngle={Math.PI / 2}
-        maxPolarAngle={Math.PI / 2}
+        minPolarAngle={Math.PI * 0.08}
+        maxPolarAngle={Math.PI * 0.92}
         onStart={() => { onInteract(); if (focusRef.current) focusRef.current = null }}
       />
     </>
