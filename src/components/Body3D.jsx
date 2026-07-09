@@ -54,25 +54,19 @@ function classify(wx, wy, wz) {
   if (back) return fy > 0.12 ? 'upperback' : 'lowerback'
 
   // ── FRONT of the body ──
-  // Far out to the sides = the arm ends / hands
-  if (absZ > 0.20) {
+  // OUT to the side = the arm: shoulder (high) → elbow (mid) → wrist (low).
+  // The arm sits further from the centre than the hip, so distance decides.
+  if (absZ > 0.14) {
     if (fy > 0.24) return 'shoulder' + side
-    if (fy > 0.10) return 'elbow' + side
+    if (fy > 0.04) return 'elbow' + side
     return 'wrist' + side
   }
 
-  // Moderately out (absZ 0.10–0.20): shoulder (high), elbow (mid), HIP (low)
-  if (absZ >= 0.10) {
-    if (fy > 0.24) return 'shoulder' + side
-    if (fy > 0.14) return 'elbow' + side
-    return 'hip' + side
-  }
-
-  // Centre column (absZ < 0.10): head, neck, chest(none), hip
+  // NEAR the centre (absZ <= 0.14): head, neck, shoulders(inner), chest, hip
   if (fy > 0.38) return 'head'
-  if (fy > 0.26) return 'neck'
+  if (fy > 0.26) return absZ > 0.09 ? 'shoulder' + side : 'neck'
   if (fy > 0.14) return null          // chest / upper stomach — no listed area
-  return 'hip' + side                  // centre-low = hip
+  return 'hip' + side                  // lower torso = hip
 }
 
 const GOLD = '#c9a96e'
