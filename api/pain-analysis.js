@@ -16,29 +16,30 @@ function hasValidKey() {
 }
 
 // Safe, generic fallback so the panel always shows useful content even if the
-// AI call fails or the key isn't set.
+// AI call fails or the key isn't set. Wording follows the same CHCPBC rules as
+// the prompt: hedged, no diagnosis, no guaranteed outcomes, calm tone.
 function fallbackAnalysis(zones) {
   const areas = Array.isArray(zones) && zones.length ? zones.join(', ') : 'the traced areas'
   return {
     fallback: true,
     possibleCauses: [
-      `Muscle tension or strain affecting ${areas}`,
-      'Joint stiffness or reduced mobility in the region',
-      'Postural overload from repetitive movements or prolonged sitting',
-      'Irritation of nearby nerves referring pain along the path',
+      `Muscle tension or strain may affect ${areas}`,
+      'Joint stiffness or reduced mobility can contribute in this region',
+      'Postural load from repetitive movements or prolonged sitting is often associated with discomfort here',
+      'Nearby nerves can sometimes refer sensations along this path',
     ],
     commonSymptoms: [
-      'Aching, tightness, or stiffness that moves along the area',
-      'Discomfort that worsens with certain positions or activity',
-      'Reduced range of motion or a feeling of weakness',
+      'Aching, tightness, or stiffness in the area',
+      'Discomfort that may change with certain positions or activity',
+      'Reduced range of motion, or the area feeling weaker than usual',
     ],
     suggestedApproach: [
-      'Gentle movement and activity modification to avoid aggravation',
-      'Targeted stretching and strengthening guided by a physiotherapist',
-      'A hands-on assessment to pinpoint the source and build a plan',
+      'Gentle movement and adjusting activity that aggravates the area',
+      'Stretching and strengthening appropriate to the individual, guided by a physiotherapist',
+      'An individual assessment to better understand what may be contributing',
     ],
     disclaimer:
-      'This is general information, not a diagnosis. Please book an assessment with Physio Chandra for a proper, personalised evaluation.',
+      'This is general education only, not a diagnosis, and no particular outcome is implied or guaranteed. For advice specific to you, an individual assessment with a physiotherapist is the appropriate next step.',
   }
 }
 
@@ -59,9 +60,24 @@ export default async function handler(req, res) {
   try {
     const anthropic = new Anthropic({ apiKey: API_KEY })
 
+    // The prompt enforces the CHCPBC Practice Standard "Marketing, Advertising,
+    // and Promotion" (effective 1 Apr 2026). The licensee is responsible for ALL
+    // content published on their behalf — including anything generated here — so
+    // these constraints are not optional.
     const prompt = `A user traced a line across a body diagram passing through these areas, in order: ${zones.join(' -> ')}.
 
-You are giving general physiotherapy education content for a clinic website (Physio Chandra). This is NOT a diagnosis. Based on this pain pattern, respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
+You are writing general physiotherapy education content for the website of a physiotherapist registered in British Columbia, Canada (Physio Chandra). This is NOT a diagnosis.
+
+This content is published on a regulated health professional's website and MUST follow these rules:
+- Accurate, honest, and consistent with current evidence-informed physiotherapy practice.
+- NO diagnosis, and no claim to identify the cause of the person's symptoms. Use hedged language ("may", "can sometimes", "is often associated with").
+- NO guarantees, promises, or implied outcomes (never state or imply that treatment will fix, cure, resolve, or eliminate pain, or how quickly).
+- NO sensational, alarming, or fear-based language. Do not warn of dire consequences or urge urgency. Keep the tone calm, neutral, and supportive.
+- Stay strictly within the physiotherapy scope of practice. Do not name medications, order imaging, or speculate about serious pathology.
+- Do not claim superiority over other providers or treatments.
+- Do not offer free services or inducements.
+
+Respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
 
 {
   "possibleCauses": ["...", "..."],
@@ -70,7 +86,7 @@ You are giving general physiotherapy education content for a clinic website (Phy
   "disclaimer": "..."
 }
 
-Keep each array to 3-5 short bullet points written in plain, reassuring language for a patient (not clinical jargon). The disclaimer should make clear this is general information and recommend booking an in-person assessment.`
+Keep each array to 3-5 short bullet points in plain, patient-friendly language (not clinical jargon). "suggestedApproach" must describe general approaches a physiotherapist might consider, phrased as possibilities rather than a prescribed plan or promised result. The disclaimer must state that this is general education only, not a diagnosis, and that an individual assessment is the appropriate next step for advice specific to them.`
 
     // Using Sonnet; switch to 'claude-haiku-4-5-20251001' to cut cost for this short task.
     const response = await anthropic.messages.create({

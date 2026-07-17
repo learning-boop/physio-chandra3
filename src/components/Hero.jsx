@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from './Navbar'
 import Body3D from './Body3D'
@@ -7,8 +7,6 @@ import PainAIPanel from './PainAIPanel'
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
 const EASE = [0.16, 1, 0.3, 1]
-const NAV_H = 88          // desktop navbar height
-const NAV_H_MOBILE = 92   // mobile navbar height
 
 const glass = {
   background: 'rgba(255,255,255,0.04)',
@@ -19,43 +17,95 @@ const glass = {
   boxShadow: '0 20px 60px rgba(0,0,0,0.45)',
 }
 
-// Icon-first 3-step guide: big pictures + tiny words, so ANYONE — even
-// someone who can't read well — instantly understands what to do.
-function Intro({ compact = false }) {
-  const steps = [
-    ['👆', 'Touch & Turn', 'Drag on the body to rotate it'],
-    ['🖐️', 'Press Gold Button', 'It turns on drawing'],
-    ['✏️', 'Draw Your Pain', 'Trace lines where it hurts'],
-  ]
+function Intro() {
   return (
     <>
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: compact ? 12 : 16 }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
         <div style={{ width: 24, height: 1, background: GOLD }} />
         <span style={{ fontSize: 12, letterSpacing: '0.26em', textTransform: 'uppercase', color: GOLD }}>Physio Chandra</span>
       </div>
-      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: compact ? 'clamp(32px,8vw,44px)' : 'clamp(28px,3vw,42px)', fontWeight: 300, lineHeight: 1.03, color: '#fff', margin: `0 0 ${compact ? 16 : 20}px`, letterSpacing: '-0.02em' }}>
+      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(38px,7vw,76px)', fontWeight: 300, lineHeight: 1.03, color: '#fff', margin: '0 0 20px', letterSpacing: '-0.02em' }}>
         Where Does<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>It Hurt?</em>
       </h1>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: compact ? 12 : 16 }}>
-        {steps.map(([icon, t, d], i) => (
-          <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-            <div style={{
-              width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 22, background: 'rgba(201,169,110,0.1)', border: '1px solid rgba(201,169,110,0.3)',
-            }}>{icon}</div>
-            <div>
-              <div style={{ fontSize: 'clamp(14px,3.6vw,16px)', color: '#fff', fontWeight: 600 }}>{t}</div>
-              <div style={{ fontSize: 'clamp(12px,3vw,14px)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>{d}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <p style={{ fontSize: 'clamp(14px,3.6vw,17px)', lineHeight: 1.75, color: 'rgba(255,255,255,0.6)', maxWidth: 440, margin: 0 }}>
+        Draw a line across the body where you feel pain. The areas it crosses
+        will light up, and we'll show an AI overview of what might be going on.
+      </p>
     </>
   )
 }
 
+// Shown before revealing the generated information.
+// Wording follows the CHCPBC Practice Standard "Marketing, Advertising, and
+// Promotion" (effective 1 Apr 2026): accurate and honest, discloses material
+// limitations so patients can make informed choices, stays within scope of
+// practice, makes no guarantees about results, and avoids sensational or
+// fear-based messaging.
+function DisclaimerDialog({ onContinue, onCancel }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100, display: 'flex',
+        alignItems: 'center', justifyContent: 'center', padding: 20,
+        background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+      }}
+      onClick={onCancel}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 18, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.35, ease: EASE }}
+        onClick={(e) => e.stopPropagation()}
+        style={{ ...glass, maxWidth: 470, width: '100%', padding: '28px 26px' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.6">
+            <circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" />
+          </svg>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 400, color: '#fff', margin: 0 }}>
+            About this information
+          </h3>
+        </div>
+
+        <p style={{ fontSize: 14, lineHeight: 1.75, color: 'rgba(255,255,255,0.72)', margin: '0 0 12px' }}>
+          What follows is <strong style={{ color: '#fff' }}>general education only. It is not a diagnosis</strong>,
+          and it is not a substitute for an assessment by a physiotherapist or physician.
+        </p>
+        <p style={{ fontSize: 14, lineHeight: 1.75, color: 'rgba(255,255,255,0.72)', margin: '0 0 12px' }}>
+          It is generated automatically from the body areas you marked. It cannot examine
+          you, review your health history, or determine the cause of your symptoms. Every
+          person is different, and no particular result or outcome is implied or guaranteed.
+        </p>
+        <p style={{ fontSize: 14, lineHeight: 1.75, color: 'rgba(255,255,255,0.72)', margin: '0 0 22px' }}>
+          If your symptoms are ongoing or you would like advice specific to you, an
+          individual assessment is the appropriate next step.
+        </p>
+
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button onClick={onContinue} style={{
+            padding: '12px 26px', background: GOLD, color: 'var(--black)', border: 'none',
+            fontSize: 12.5, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
+            borderRadius: 999, cursor: 'pointer',
+          }}>I Understand · Continue</button>
+          <button onClick={onCancel} style={{
+            padding: '12px 22px', background: 'transparent', color: 'rgba(255,255,255,0.6)',
+            border: '1px solid rgba(255,255,255,0.25)', fontSize: 12.5, letterSpacing: '0.1em',
+            textTransform: 'uppercase', borderRadius: 999, cursor: 'pointer',
+          }}>Cancel</button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 function Results({ selected }) {
+  const [showDialog, setShowDialog] = useState(false)
+  const [revealed, setRevealed] = useState(false)
+  const key = selected.map((z) => z.id).join('|')
+
+  // A new selection re-gates the content.
+  useEffect(() => { setRevealed(false); setShowDialog(false) }, [key])
+
   return (
     <>
       <div style={{ marginBottom: 16 }}>
@@ -71,13 +121,41 @@ function Results({ selected }) {
           }}>{z.label}</span>
         ))}
       </div>
-      <div style={{ ...glass, padding: '22px 24px' }}>
-        <PainAIPanel zones={selected} />
-      </div>
-      <a href="tel:+16045550101" style={{
-        display: 'inline-block', marginTop: 18, padding: '14px 34px', background: GOLD, color: 'var(--black)',
-        fontSize: 13, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', borderRadius: 999, textDecoration: 'none',
-      }}>Book Appointment</a>
+
+      {!revealed ? (
+        <button onClick={() => setShowDialog(true)} style={{
+          display: 'inline-flex', alignItems: 'center', gap: 10,
+          padding: '14px 28px', background: 'rgba(201,169,110,0.12)', color: GOLD,
+          border: `1px solid ${GOLD}`, fontSize: 12.5, fontWeight: 500,
+          letterSpacing: '0.12em', textTransform: 'uppercase', borderRadius: 999, cursor: 'pointer',
+        }}>
+          Possible Causes
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+        </button>
+      ) : (
+        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }}>
+          <div style={{ ...glass, padding: '22px 24px' }}>
+            <PainAIPanel zones={selected} />
+          </div>
+          <p style={{ fontSize: 11.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.4)', margin: '14px 0 0' }}>
+            General education only — not a diagnosis, and not a substitute for an
+            individual assessment. No particular outcome is implied or guaranteed.
+          </p>
+          <a href="tel:+16045550101" style={{
+            display: 'inline-block', marginTop: 18, padding: '14px 34px', background: GOLD, color: 'var(--black)',
+            fontSize: 13, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', borderRadius: 999, textDecoration: 'none',
+          }}>Book Appointment</a>
+        </motion.div>
+      )}
+
+      <AnimatePresence>
+        {showDialog && (
+          <DisclaimerDialog
+            onContinue={() => { setShowDialog(false); setRevealed(true) }}
+            onCancel={() => setShowDialog(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   )
 }
@@ -93,41 +171,37 @@ export default function Hero() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  // EXPLICIT height everywhere — the panel can never collapse, no matter
-  // how the parent lays out.
-  const panelHeight = isMobile ? '78vh' : `calc(100vh - ${NAV_H}px)`
-
   const bodyPanel = (
     <div style={{
       position: 'relative',
-      height: panelHeight,
-      minHeight: isMobile ? 540 : 620,
-      margin: 0,
+      height: isMobile ? '54vh' : 'auto',
+      minHeight: isMobile ? 400 : 'auto',
+      margin: isMobile ? '0 14px' : 0,
+      borderRadius: isMobile ? 26 : 0,
       overflow: 'hidden',
       background: isMobile
         ? 'radial-gradient(ellipse 78% 62% at 50% 42%, rgba(201,169,110,0.12) 0%, rgba(255,255,255,0.03) 42%, rgba(5,5,5,0.6) 78%)'
         : 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%)',
-      borderRight: isMobile ? 'none' : '1px solid rgba(201,169,110,0.12)',
-      borderBottom: isMobile ? '1px solid rgba(201,169,110,0.16)' : 'none',
+      border: isMobile ? '1px solid rgba(201,169,110,0.16)' : 'none',
+      borderRight: isMobile ? '1px solid rgba(201,169,110,0.16)' : '1px solid rgba(201,169,110,0.12)',
+      boxShadow: isMobile ? 'inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 60px rgba(0,0,0,0.5)' : 'none',
     }}>
       <Body3D onSelectionChange={setSelected} />
     </div>
   )
 
-  // ─── MOBILE: BIG image FIRST (right under the navbar), guide below ────────
+  // ─── MOBILE: intro on top, body in the middle, results below ──────────────
   if (isMobile) {
     return (
       <div style={{ position: 'relative', background: 'var(--black)', fontFamily: 'var(--font-body)' }}>
         <Navbar />
-        <div style={{ paddingTop: NAV_H_MOBILE }}>
+        <div style={{ paddingTop: 104 }}>
+          <div style={{ padding: '0 20px 20px' }}>
+            <Intro />
+          </div>
           {bodyPanel}
-          <AnimatePresence mode="wait">
-            {selected.length === 0 ? (
-              <motion.div key="mintro" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: EASE }} style={{ padding: '26px 20px 48px' }}>
-                <Intro compact />
-              </motion.div>
-            ) : (
+          <AnimatePresence>
+            {selected.length > 0 && (
               <motion.div key="mres" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, ease: EASE }} style={{ padding: '28px 20px 56px' }}>
                 <Results selected={selected} />
@@ -139,20 +213,13 @@ export default function Hero() {
     )
   }
 
-  // ─── DESKTOP: image ~66% width at FULL viewport height, guide on the right ─
+  // ─── DESKTOP: two columns (body left, panel right) ────────────────────────
   return (
     <div style={{ position: 'relative', background: 'var(--black)', fontFamily: 'var(--font-body)' }}>
       <Navbar />
-      <div style={{ paddingTop: NAV_H, display: 'flex', alignItems: 'stretch' }}>
-        <div style={{ width: '75%', flexShrink: 0 }}>
-          {bodyPanel}
-        </div>
-        <div style={{
-          flex: 1, minHeight: `calc(100vh - ${NAV_H}px)`,
-          padding: 'clamp(22px,3vh,44px) clamp(16px,2vw,32px)',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          overflowY: 'auto',
-        }}>
+      <div style={{ minHeight: '100vh', paddingTop: 88, display: 'grid', gridTemplateColumns: '1.15fr 1fr' }}>
+        {bodyPanel}
+        <div style={{ padding: 'clamp(40px,6vh,90px) clamp(28px,4vw,64px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <AnimatePresence mode="wait">
             {selected.length === 0 ? (
               <motion.div key="intro" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.5, ease: EASE }}>
