@@ -1,6 +1,7 @@
 import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Line, useGLTF, Html } from '@react-three/drei'
+import { motion, AnimatePresence } from 'framer-motion'
 import * as THREE from 'three'
 
 // body.glb faces sideways (along X; shoulders/arms along Z) → view from X.
@@ -295,6 +296,70 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   )
 }
 
+// ── Small automated indication overlays ─────────────────────────────────────
+// They occupy almost no space, play on their own in a loop, and vanish the
+// moment the user touches the image. pointerEvents:none so they never block
+// touches. Made for users who don't read instructions.
+
+// Shown while the model is idle: a finger sweeping left↔right = "turn me".
+function RotateHint() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      style={{
+        position: 'absolute', left: '50%', top: '56%', transform: 'translateX(-50%)',
+        zIndex: 3, pointerEvents: 'none',
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '7px 16px', borderRadius: 999,
+        background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+        border: '1px solid rgba(201,169,110,0.35)',
+      }}
+    >
+      <span style={{ color: GOLD, fontSize: 14, opacity: 0.7 }}>‹</span>
+      <motion.span
+        animate={{ x: [-16, 16, -16] }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ fontSize: 20, lineHeight: 1 }}
+      >👆</motion.span>
+      <span style={{ color: GOLD, fontSize: 14, opacity: 0.7 }}>›</span>
+    </motion.div>
+  )
+}
+
+// Shown when highlight mode is ON but nothing is drawn yet: a pencil traces a
+// gold dashed line across the torso = "draw here".
+function DrawHint() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      style={{
+        position: 'absolute', left: '50%', top: '34%', transform: 'translateX(-50%)',
+        width: 130, height: 120, zIndex: 3, pointerEvents: 'none',
+      }}
+    >
+      <svg width="130" height="120" viewBox="0 0 130 120" fill="none" style={{ position: 'absolute', inset: 0 }}>
+        <motion.path
+          d="M18 20 C 55 42, 40 70, 88 74 C 104 76, 112 88, 112 100"
+          stroke={GOLD} strokeWidth="3.5" strokeLinecap="round" strokeDasharray="7 8"
+          animate={{ pathLength: [0, 1, 1], opacity: [0.9, 0.9, 0] }}
+          transition={{ duration: 2.6, times: [0, 0.72, 1], repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </svg>
+      <motion.span
+        animate={{
+          x: [8, 44, 30, 78, 100, 100],
+          y: [4, 22, 48, 56, 78, 78],
+          opacity: [1, 1, 1, 1, 1, 0],
+        }}
+        transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ position: 'absolute', fontSize: 22, lineHeight: 1 }}
+      >✏️</motion.span>
+    </motion.div>
+  )
+}
+
 function PainLine({ points }) {
   return (
     <>
@@ -357,8 +422,11 @@ export default function Body3D({ onSelectionChange }) {
   const controlsRef = useRef()
   const interactedRef = useRef(false)
   const highlightRef = useRef(false)
+  // Drives the small automated hint overlays: they loop until the user
+  // touches the image for the first time, then disappear for good.
+  const [touched, setTouched] = useState(false)
 
-  const onInteract = () => { interactedRef.current = true }
+  const onInteract = () => { interactedRef.current = true; setTouched(true) }
 
   // Keep a ref in sync so canvas-level listeners always see the current mode,
   // and control page scrolling: highlight mode captures all touches, normal
@@ -403,14 +471,6 @@ export default function Body3D({ onSelectionChange }) {
     })
   }
 
-  const undoLast = () => {
-    setPaths((prev) => {
-      const next = prev.slice(0, -1)
-      emitZones(next)
-      return next
-    })
-  }
-
   const reset = () => { setPaths([]); setLivePath([]); onSelectionChange?.([]) }
 
   // Turning highlight OFF now KEEPS the drawn lines (so users can rotate and
@@ -448,7 +508,6 @@ export default function Body3D({ onSelectionChange }) {
         <button onClick={toggleHighlight} style={btnMain}>
           {highlight ? '✓ Done Drawing' : '✏ Highlight Pain Areas'}
         </button>
-        {paths.length > 0 && <button onClick={undoLast} style={btnGhost}>Undo Line</button>}
         {paths.length > 0 && <button onClick={reset} style={btnGhost}>Reset</button>}
         {paths.length > 0 && (
           <span style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: GOLD }}>
@@ -457,7 +516,10 @@ export default function Body3D({ onSelectionChange }) {
         )}
       </div>
 
-      <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+      <div
+        style={{ flex: 1, position: 'relative', minHeight: 0 }}
+        onPointerDown={() => setTouched(true)}
+      >
         <Canvas
           shadows
           camera={{ position: CAM_POS, fov: 36 }}
@@ -472,6 +534,12 @@ export default function Body3D({ onSelectionChange }) {
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
           />
         </Canvas>
+
+        {/* Small automated indications — loop until the user touches the image */}
+        <AnimatePresence>
+          {!highlight && !touched && paths.length === 0 && <RotateHint key="rot" />}
+          {highlight && paths.length === 0 && livePath.length === 0 && <DrawHint key="draw" />}
+        </AnimatePresence>
 
         <div style={{
           position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: 10,
