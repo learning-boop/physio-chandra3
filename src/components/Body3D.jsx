@@ -107,8 +107,10 @@ function FitCamera({ controlsRef, interactedRef }) {
     const aspect = size.width / Math.max(1, size.height)
     const t = Math.tan((36 * Math.PI) / 180 / 2)
     // Smaller numbers = closer camera = BIGGER body on screen.
-    const distForHeight = 2.08 / t   // bigger body — button now sits at the left, out of the way
-    const distForWidth = 1.15 / (t * aspect)
+    const distForHeight = 1.85 / t   // bigger body — button now sits at the left, out of the way
+    // Width budget must cover the outstretched ARMS on narrow phone screens —
+    // too small and the hands get cropped at the edges.
+    const distForWidth = 1.32 / (t * aspect)
     const dist = Math.max(distForHeight, distForWidth)
     // Shift the framing UP a little so the body sits lower on screen —
     // keeps the head clear of the header / buttons.
@@ -308,7 +310,7 @@ function RotateHint() {
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
       style={{
-        position: 'absolute', left: '50%', top: '56%', transform: 'translateX(-50%)',
+        position: 'absolute', left: '50%', top: '42%', transform: 'translateX(-50%)',
         zIndex: 3, pointerEvents: 'none',
         display: 'flex', alignItems: 'center', gap: 10,
         padding: '7px 16px', borderRadius: 999,
@@ -372,9 +374,9 @@ function PainLine({ points }) {
 function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete }) {
   return (
     <>
-      <ambientLight intensity={0.65} />
-      <directionalLight position={[3, 5, 4]} intensity={1.3} castShadow />
-      <directionalLight position={[-3, 2, -3]} intensity={0.4} color={GOLD} />
+      <ambientLight intensity={0.9} />
+      <directionalLight position={[3, 5, 4]} intensity={1.7} castShadow />
+      <directionalLight position={[-3, 2, -3]} intensity={0.55} color={GOLD} />
       <Suspense fallback={null}><Environment preset="city" /></Suspense>
 
       <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />

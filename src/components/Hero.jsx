@@ -20,27 +20,140 @@ const glass = {
 function Intro({ compact = false }) {
   return (
     <>
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: compact ? 12 : 22 }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: compact ? 6 : 22 }}>
         <div style={{ width: 24, height: 1, background: GOLD }} />
-        <span style={{ fontSize: compact ? 11 : 12, letterSpacing: '0.26em', textTransform: 'uppercase', color: GOLD }}>Physio Chandra</span>
+        <span style={{ fontSize: compact ? 10 : 12, letterSpacing: '0.26em', textTransform: 'uppercase', color: GOLD }}>Physio Chandra</span>
       </div>
       <h1 style={{
         fontFamily: 'var(--font-display)',
-        fontSize: compact ? 'clamp(30px,6vw,44px)' : 'clamp(38px,7vw,76px)',
+        fontSize: compact ? 'clamp(24px,5.5vw,34px)' : 'clamp(38px,7vw,76px)',
         fontWeight: 300, lineHeight: 1.03, color: '#fff',
-        margin: compact ? '0 0 10px' : '0 0 20px', letterSpacing: '-0.02em',
-      }}>
-        Where Does<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>It Hurt?</em>
-      </h1>
-      <p style={{
-        fontSize: compact ? 14 : 'clamp(14px,3.6vw,17px)',
-        lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', maxWidth: 440, margin: 0,
+        margin: 0, letterSpacing: '-0.02em',
       }}>
         {compact
-          ? '✏️ Tap the button, then draw a line where it hurts.'
-          : "Draw a line across the body where you feel pain. The areas it crosses will light up, and we'll show an AI overview of what might be going on."}
-      </p>
+          ? (<>Where Does <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>It Hurt?</em></>)
+          : (<>Where Does<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>It Hurt?</em></>)}
+      </h1>
+      {/* Compact (phone/tablet): no paragraph — the how-to guidance is shown
+          as small animated overlays ON the image, so the image keeps the space. */}
+      {!compact && (
+        <p style={{
+          fontSize: 'clamp(14px,3.6vw,17px)',
+          lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', maxWidth: 440, margin: '20px 0 0',
+        }}>
+          Draw a line across the body where you feel pain. The areas it crosses will light up, and we'll show an AI overview of what might be going on.
+        </p>
+      )}
     </>
+  )
+}
+
+// Visual "how to operate" guide for the desktop right column (30%).
+// Designed so even someone who can't read understands it: big animated
+// pictograms first, tiny labels second.
+function HowTo() {
+  const stepBox = {
+    display: 'flex', alignItems: 'center', gap: 18, padding: '16px 0',
+  }
+  const iconBox = {
+    width: 84, height: 84, borderRadius: 18, flexShrink: 0,
+    border: '1px solid rgba(201,169,110,0.35)', background: 'rgba(201,169,110,0.06)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden',
+  }
+  const num = {
+    fontFamily: 'var(--font-display)', fontSize: 15, color: GOLD, opacity: 0.9,
+    letterSpacing: '0.1em', marginBottom: 2,
+  }
+  const label = {
+    fontSize: 15, color: 'rgba(255,255,255,0.85)', lineHeight: 1.4, fontWeight: 500,
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+        <div style={{ width: 24, height: 1, background: GOLD }} />
+        <span style={{ fontSize: 11, letterSpacing: '0.26em', textTransform: 'uppercase', color: GOLD }}>Physio Chandra</span>
+      </div>
+      <h1 style={{
+        fontFamily: 'var(--font-display)', fontSize: 'clamp(26px,2.4vw,38px)',
+        fontWeight: 300, lineHeight: 1.05, color: '#fff', margin: '0 0 18px', letterSpacing: '-0.02em',
+      }}>
+        Where Does <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>It Hurt?</em>
+      </h1>
+
+      {/* STEP 1 — touch and turn the body */}
+      <div style={stepBox}>
+        <div style={iconBox}>
+          <motion.span
+            animate={{ x: [-14, 14, -14], rotate: [-8, 8, -8] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ fontSize: 34, lineHeight: 1 }}
+          >👆</motion.span>
+          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: GOLD, fontSize: 16, opacity: 0.6 }}>‹</span>
+          <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: GOLD, fontSize: 16, opacity: 0.6 }}>›</span>
+        </div>
+        <div>
+          <div style={num}>1</div>
+          <div style={label}>Touch the body<br />and turn it</div>
+        </div>
+      </div>
+
+      {/* STEP 2 — tap the gold button */}
+      <div style={stepBox}>
+        <div style={iconBox}>
+          <motion.div
+            animate={{ scale: [1, 1.06, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            style={{
+              background: GOLD, color: '#0a0a0a', fontWeight: 700, fontSize: 16,
+              width: 44, height: 30, borderRadius: 999,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 0 0 6px rgba(201,169,110,0.15)',
+            }}
+          >✏</motion.div>
+          <motion.span
+            animate={{ x: [10, 0, 10], y: [12, 2, 12], opacity: [0.9, 1, 0.9] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ position: 'absolute', fontSize: 26, right: 10, bottom: 6, lineHeight: 1 }}
+          >👆</motion.span>
+        </div>
+        <div>
+          <div style={num}>2</div>
+          <div style={label}>Tap the gold<br />button</div>
+        </div>
+      </div>
+
+      {/* STEP 3 — draw a line where it hurts */}
+      <div style={stepBox}>
+        <div style={iconBox}>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+            {/* simple body silhouette */}
+            <circle cx="28" cy="10" r="6" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" />
+            <rect x="18" y="19" width="20" height="26" rx="9" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" />
+            {/* animated gold pain line */}
+            <motion.path
+              d="M14 26 C 24 30, 30 36, 44 38"
+              stroke={GOLD} strokeWidth="3" strokeLinecap="round" strokeDasharray="4 5"
+              animate={{ pathLength: [0, 1, 1], opacity: [1, 1, 0] }}
+              transition={{ duration: 2.4, times: [0, 0.7, 1], repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </svg>
+          <motion.span
+            animate={{ x: [-14, 12, -14], y: [-4, 6, -4], opacity: [1, 1, 1] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ position: 'absolute', fontSize: 20, lineHeight: 1 }}
+          >✏️</motion.span>
+        </div>
+        <div>
+          <div style={num}>3</div>
+          <div style={label}>Draw a line<br />where it hurts</div>
+        </div>
+      </div>
+
+      <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, margin: '14px 0 0', maxWidth: 300 }}>
+        The areas your line crosses will light up, and an AI overview appears here.
+      </p>
+    </div>
   )
 }
 
@@ -213,14 +326,15 @@ export default function Hero() {
 
 
   // 3D stage height, computed from the real viewport so it always fits.
-  // Phones/tablets: the image gets ~half the screen (was 2/3), so the heading,
-  // instructions and hints always share the first screen with the body.
+  // Phones/tablets: the IMAGE fills the whole first screen except the navbar
+  // and one thin heading strip (~170px total). All "how to operate" guidance
+  // is shown as tiny animated overlays ON the image itself.
   const stageHeight = isShort
     ? Math.max(300, Math.round(vp.h * 0.88))       // landscape: use most of the height
     : isPhone
-      ? Math.min(Math.max(Math.round(vp.h * 0.50), 340), 480)
+      ? Math.min(Math.max(vp.h - 130, 500), 920)
       : isTablet
-        ? Math.min(Math.max(Math.round(vp.h * 0.55), 400), 620)
+        ? Math.min(Math.max(vp.h - 150, 540), 960)
         : 'auto'
 
   const bodyPanel = (
@@ -247,9 +361,9 @@ export default function Hero() {
     return (
       <div style={{ position: 'relative', background: 'var(--black)', fontFamily: 'var(--font-body)', overflowX: 'hidden' }}>
         <Navbar />
-        <div style={{ paddingTop: isShort ? 80 : 94 }}>
+        <div style={{ paddingTop: isShort ? 76 : 86 }}>
           <div style={{
-            padding: isShort ? '0 20px 8px' : '0 20px 12px',
+            padding: isShort ? '0 20px 4px' : '0 20px 6px',
             maxWidth: 640, margin: '0 auto',
           }}>
             <Intro compact />
@@ -277,14 +391,14 @@ export default function Hero() {
         minHeight: vp.h,
         paddingTop: 88,
         display: 'grid',
-        gridTemplateColumns: vp.w < 1280 ? '1fr 1fr' : '1.15fr 1fr',
+        gridTemplateColumns: '7fr 3fr',   // 70% image · 30% how-to-operate
       }}>
         {bodyPanel}
-        <div style={{ padding: 'clamp(40px,6vh,90px) clamp(28px,4vw,64px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ padding: 'clamp(28px,4vh,56px) clamp(20px,2.5vw,44px)', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderLeft: '1px solid rgba(201,169,110,0.15)' }}>
           <AnimatePresence mode="wait">
             {selected.length === 0 ? (
               <motion.div key="intro" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.5, ease: EASE }}>
-                <Intro />
+                <HowTo />
               </motion.div>
             ) : (
               <motion.div key="panel" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.45, ease: EASE }}>
