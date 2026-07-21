@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import SymptomGuide from './SymptomGuide'
+import { ZONE_TO_REGION, REGIONS } from '../data/symptomGuide'
 
 const GOLD = '#c9a96e'
 
@@ -13,7 +15,19 @@ export default function PainAIPanel({ zones }) {
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
 
+  // Zones covered by Chandra's guided questionnaire go to the SymptomGuide
+  // (clinician-authored, on-device) instead of the AI call. Deduped by region.
+  const regionOptions = []
+  ;(zones || []).forEach((z) => {
+    const key = ZONE_TO_REGION[z.type]
+    if (key && REGIONS[key] && !regionOptions.some((r) => r.regionKey === key)) {
+      regionOptions.push({ regionKey: key, zoneLabel: z.label })
+    }
+  })
+  const useGuide = regionOptions.length > 0
+
   useEffect(() => {
+    if (useGuide) { setResult(null); setError(null); setLoading(false); return }
     if (!zones || zones.length === 0) {
       setResult(null)
       setError(null)
@@ -56,6 +70,11 @@ export default function PainAIPanel({ zones }) {
         </p>
       </div>
     )
+  }
+
+  if (useGuide) {
+    const guideKey = regionOptions.map((r) => r.regionKey).join('|')
+    return <SymptomGuide key={guideKey} regionOptions={regionOptions} />
   }
 
   return (

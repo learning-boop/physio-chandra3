@@ -220,13 +220,15 @@ function DisclaimerDialog({ onContinue, onCancel }) {
   )
 }
 
-function Results({ selected }) {
+function Results({ selected, onRevealChange }) {
   const [showDialog, setShowDialog] = useState(false)
   const [revealed, setRevealed] = useState(false)
   const key = selected.map((z) => z.id).join('|')
 
   // A new selection re-gates the content.
   useEffect(() => { setRevealed(false); setShowDialog(false) }, [key])
+  // Tell the hero layout when content is open so it can widen this column.
+  useEffect(() => { onRevealChange?.(revealed) }, [revealed, onRevealChange])
 
   return (
     <>
@@ -301,6 +303,9 @@ function Results({ selected }) {
 }
 
 export default function Hero() {
+  // When the person opens Possible Causes, the right column grows to 60%
+  // so questions/results are clearly readable; the image shrinks to 40%.
+  const [panelWide, setPanelWide] = useState(false)
   const [selected, setSelected] = useState([])
   // Track the REAL viewport in pixels. Using px (not vh) matters on mobile:
   // 'vh' includes the browser address bar, so the model jumps/clips when the
@@ -374,7 +379,7 @@ export default function Hero() {
               <motion.div key="mres" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 style={{ padding: '26px 20px 56px', maxWidth: 640, margin: '0 auto' }}>
-                <Results selected={selected} />
+                <Results selected={selected} onRevealChange={setPanelWide} />
               </motion.div>
             )}
           </AnimatePresence>
@@ -391,10 +396,11 @@ export default function Hero() {
         minHeight: vp.h,
         paddingTop: 88,
         display: 'grid',
-        gridTemplateColumns: '7fr 3fr',   // 70% image · 30% how-to-operate
+        gridTemplateColumns: panelWide ? '4fr 6fr' : '7fr 3fr',   // 70/30 → 40/60 when content opens
+        transition: 'grid-template-columns 0.65s cubic-bezier(0.22,1,0.36,1)',
       }}>
         {bodyPanel}
-        <div style={{ padding: 'clamp(28px,4vh,56px) clamp(20px,2.5vw,44px)', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderLeft: '1px solid rgba(201,169,110,0.15)' }}>
+        <div style={{ padding: 'clamp(28px,4vh,56px) clamp(20px,2.5vw,44px)', display: 'flex', flexDirection: 'column', justifyContent: panelWide ? 'flex-start' : 'center', borderLeft: '1px solid rgba(201,169,110,0.15)' }}>
           <AnimatePresence mode="wait">
             {selected.length === 0 ? (
               <motion.div key="intro" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.5, ease: EASE }}>
@@ -402,7 +408,7 @@ export default function Hero() {
               </motion.div>
             ) : (
               <motion.div key="panel" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.45, ease: EASE }}>
-                <Results selected={selected} />
+                <Results selected={selected} onRevealChange={setPanelWide} />
               </motion.div>
             )}
           </AnimatePresence>
