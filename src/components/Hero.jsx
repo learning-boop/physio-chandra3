@@ -306,6 +306,12 @@ export default function Hero() {
   // When the person opens Possible Causes, the right column grows to 60%
   // so questions/results are clearly readable; the image shrinks to 40%.
   const [panelWide, setPanelWide] = useState(false)
+  // On phones the results sit BELOW the tall image — when the user taps
+  // "Done Drawing", scroll them straight to the Possible Causes panel.
+  const resultsRef = useRef(null)
+  const scrollToResults = () => {
+    setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120)
+  }
   const [selected, setSelected] = useState([])
   // Track the REAL viewport in pixels. Using px (not vh) matters on mobile:
   // 'vh' includes the browser address bar, so the model jumps/clips when the
@@ -357,7 +363,7 @@ export default function Hero() {
       borderRight: isStacked ? '1px solid rgba(201,169,110,0.16)' : '1px solid rgba(201,169,110,0.12)',
       boxShadow: isStacked ? 'inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 60px rgba(0,0,0,0.5)' : 'none',
     }}>
-      <Body3D onSelectionChange={setSelected} />
+      <Body3D onSelectionChange={setSelected} onDoneDrawing={scrollToResults} />
     </div>
   )
 
@@ -376,9 +382,9 @@ export default function Hero() {
           {bodyPanel}
           <AnimatePresence>
             {selected.length > 0 && (
-              <motion.div key="mres" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              <motion.div key="mres" ref={resultsRef} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                style={{ padding: '26px 20px 56px', maxWidth: 640, margin: '0 auto' }}>
+                style={{ padding: '26px 20px 56px', maxWidth: 640, margin: '0 auto', scrollMarginTop: 80 }}>
                 <Results selected={selected} onRevealChange={setPanelWide} />
               </motion.div>
             )}

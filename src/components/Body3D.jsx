@@ -151,12 +151,12 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
   const v2 = useMemo(() => new THREE.Vector2(), [])
   const panState = useRef(null)
 
-  const onBody = useCallback((cx, cy) => {
+  const onBody = useCallback((cx, cy, useDrawSurface = false) => {
     const rect = gl.domElement.getBoundingClientRect()
     v2.x = ((cx - rect.left) / rect.width) * 2 - 1
     v2.y = -((cy - rect.top) / rect.height) * 2 + 1
     ray.setFromCamera(v2, camera)
-    const hull = scene.getObjectByName('collisionHull')
+    const hull = scene.getObjectByName(useDrawSurface ? 'drawSurface' : 'collisionHull')
     return hull ? ray.intersectObject(hull, false).length > 0 : false
   }, [gl, camera, scene, ray, v2])
 
@@ -189,7 +189,14 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
 
     // Pointer (mouse + touch): starting on black space begins an image pan.
     const onPointerDown = (e) => {
-      if (highlightRef.current) { panState.current = null; return }
+      if (highlightRef.current) {
+        // Draw mode: touching the BODY draws a line; touching the BLACK SPACE
+        // still moves the image / scrolls the page, so the user is never stuck.
+        if (onBody(e.clientX, e.clientY, true)) { panState.current = null; return }
+        panState.current = { y: e.clientY, id: e.pointerId }
+        el.setPointerCapture?.(e.pointerId)
+        return
+      }
       const hit = onBody(e.clientX, e.clientY)
       if (controlsRef.current) controlsRef.current.enableRotate = hit
       if (hit) { panState.current = null; return }
@@ -201,7 +208,11 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
       if (!s || e.pointerId !== s.id) return
       const dy = e.clientY - s.y
       s.y = e.clientY
-      if (dy !== 0) applyPan(dy)
+      if (dy === 0) return
+      // Finger/mouse drags on black space scroll the PAGE (content follows
+      // the finger, like everywhere else on the site). The image itself is
+      // moved only with the mouse wheel on desktop.
+      window.scrollBy({ top: -dy, behavior: 'auto' })
     }
     const onPointerEnd = (e) => {
       if (panState.current?.id === e.pointerId) panState.current = null
@@ -291,7 +302,7 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   })
 
   return (
-    <mesh position={[0, 0.45, 0]} visible={false} onPointerDown={down} onPointerMove={move}>
+    <mesh name="drawSurface" position={[0, 0.45, 0]} visible={false} onPointerDown={down} onPointerMove={move}>
       <capsuleGeometry args={[0.72, 3.5, 8, 16]} />
       <meshBasicMaterial />
     </mesh>
@@ -417,7 +428,7 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
   )
 }
 
-export default function Body3D({ onSelectionChange }) {
+export default function Body3D({ onSelectionChange, onDoneDrawing }) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
   const [paths, setPaths] = useState([])              // completed pain lines (multiple)
   const [livePath, setLivePath] = useState([])        // line being drawn now
@@ -477,7 +488,15 @@ export default function Body3D({ onSelectionChange }) {
 
   // Turning highlight OFF now KEEPS the drawn lines (so users can rotate and
   // keep adding lines from another angle). Only Reset clears.
-  const toggleHighlight = () => { onInteract(); setHighlight((h) => !h) }
+  const toggleHighlight = () => {
+    onInteract()
+    setHighlight((h) => {
+      const next = !h
+      // Finishing a drawing session → let the page bring the results into view
+      if (!next && paths.length > 0) onDoneDrawing?.()
+      return next
+    })
+  }
 
   const btnBase = {
     fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase',
