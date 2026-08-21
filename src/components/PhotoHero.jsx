@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
 const GOLD = '#c9a96e'
@@ -9,7 +10,7 @@ const EASE = [0.22, 1, 0.36, 1]
    To use a different photo: put it in public/images/ and change HERO_IMAGE.
    Best photo: a real treatment shot (hands-on therapy / exercise guidance). */
 const HERO_IMAGE = '/images/hero-treatment.jpg'
-const EYEBROW    = 'Registered Physiotherapy'
+const EYEBROW    = 'Registered Physiotherapy · '
 const LINE_1     = 'Your recovery'
 const LINE_2     = 'starts here'          // rendered in italic gold
 const SUBLINE    = 'Chandra Sekhar Matla, Registered Physiotherapist'
@@ -17,6 +18,14 @@ const BOOK_HREF  = 'tel:+16045550101'
 /* ──────────────────────────────────────────────────────────────────────── */
 
 export default function PhotoHero({ onStart }) {
+  // Phone layouts need their own photo crop, tint, and height.
+  const [vw, setVw] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
+  useEffect(() => {
+    const onR = () => setVw(window.innerWidth)
+    window.addEventListener('resize', onR)
+    return () => window.removeEventListener('resize', onR)
+  }, [])
+  const isPhone = vw < 768
   // Clicking anywhere on the hero (photo, text, or the gold-outlined button)
   // swaps this section out and brings the 3D body in — same spot, no scrolling.
   const start = () => onStart?.()
@@ -25,7 +34,7 @@ export default function PhotoHero({ onStart }) {
     <section onClick={start} style={{
       cursor: 'pointer',
       position: 'relative',
-      minHeight: 'clamp(520px, 92vh, 900px)',
+      minHeight: isPhone ? 'min(640px, 88svh)' : 'clamp(520px, 92vh, 900px)',
       display: 'flex', alignItems: 'center',
       fontFamily: 'var(--font-body)',
       overflow: 'hidden',
@@ -37,13 +46,15 @@ export default function PhotoHero({ onStart }) {
         alt="Physiotherapy treatment at Physio Chandra"
         style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
-          objectFit: 'cover', objectPosition: '70% 28%',
+          objectFit: 'cover', objectPosition: isPhone ? '38% 22%' : '70% 28%',
         }}
       />
       {/* Navy tint so the text is always readable over any photo */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(90deg, rgba(8,21,39,0.88) 0%, rgba(8,21,39,0.62) 34%, rgba(8,21,39,0.22) 58%, rgba(10,26,47,0) 100%)',
+        background: isPhone
+          ? 'linear-gradient(180deg, rgba(8,21,39,0.85) 0%, rgba(8,21,39,0.45) 34%, rgba(8,21,39,0.62) 66%, rgba(8,21,39,0.9) 100%)'
+          : 'linear-gradient(90deg, rgba(8,21,39,0.88) 0%, rgba(8,21,39,0.62) 34%, rgba(8,21,39,0.22) 58%, rgba(10,26,47,0) 100%)',
       }} />
       {/* Dark band at the TOP so the header/navbar stays visible over the
           photo's bright areas (the beige curtain washes out white nav text) */}
@@ -63,7 +74,7 @@ export default function PhotoHero({ onStart }) {
         transition={{ duration: 0.8, ease: EASE }}
         style={{
           position: 'relative', zIndex: 1,
-          padding: 'clamp(96px,14vh,140px) clamp(20px,6vw,90px) clamp(72px,10vh,110px)',
+          padding: isPhone ? '110px 22px 46px' : 'clamp(96px,14vh,140px) clamp(20px,6vw,90px) clamp(72px,10vh,110px)',
           maxWidth: 680,
         }}
       >
@@ -110,7 +121,7 @@ export default function PhotoHero({ onStart }) {
               border: `1.5px solid ${GOLD}`, fontWeight: 500,
               fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase',
             }}
-          >Find  Pain Areas ↓</motion.button>
+          >Find pain Areas↓</motion.button>
         </div>
       </motion.div>
     </section>
