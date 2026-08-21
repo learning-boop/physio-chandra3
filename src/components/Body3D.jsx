@@ -151,13 +151,16 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
   const v2 = useMemo(() => new THREE.Vector2(), [])
   const panState = useRef(null)
 
-  const onBody = useCallback((cx, cy, useDrawSurface = false) => {
+  const onBody = useCallback((cx, cy) => {
     const rect = gl.domElement.getBoundingClientRect()
     v2.x = ((cx - rect.left) / rect.width) * 2 - 1
     v2.y = -((cy - rect.top) / rect.height) * 2 + 1
     ray.setFromCamera(v2, camera)
-    const hull = scene.getObjectByName(useDrawSurface ? 'drawSurface' : 'collisionHull')
-    return hull ? ray.intersectObject(hull, false).length > 0 : false
+    const hull = scene.getObjectByName('collisionHull')
+    if (hull && ray.intersectObject(hull, false).length > 0) return true
+    // arms & hands sit OUTSIDE the torso capsule — test the real mesh too
+    const body = scene.getObjectByName('bodyModel')
+    return body ? ray.intersectObject(body, true).length > 0 : false
   }, [gl, camera, scene, ray, v2])
 
   // Moves the body image vertically by `dyPx` screen pixels (like dragging a
@@ -192,7 +195,7 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
       if (highlightRef.current) {
         // Draw mode: touching the BODY draws a line; touching the BLACK SPACE
         // still moves the image / scrolls the page, so the user is never stuck.
-        if (onBody(e.clientX, e.clientY, true)) { panState.current = null; return }
+        if (onBody(e.clientX, e.clientY)) { panState.current = null; return }
         panState.current = { y: e.clientY, id: e.pointerId }
         el.setPointerCapture?.(e.pointerId)
         return
@@ -303,8 +306,8 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
 
   return (
     <mesh name="drawSurface" position={[0, 0.45, 0]} visible={false} onPointerDown={down} onPointerMove={move}>
-      <capsuleGeometry args={[0.72, 3.5, 8, 16]} />
-      <meshBasicMaterial />
+      <boxGeometry args={[5, 5.6, 5]} />
+      <meshBasicMaterial side={THREE.DoubleSide} />
     </mesh>
   )
 }
@@ -325,7 +328,7 @@ function RotateHint() {
         zIndex: 3, pointerEvents: 'none',
         display: 'flex', alignItems: 'center', gap: 10,
         padding: '7px 16px', borderRadius: 999,
-        background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+        background: 'rgba(8,21,39,0.55)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
         border: '1px solid rgba(201,169,110,0.35)',
       }}
     >
@@ -340,44 +343,19 @@ function RotateHint() {
   )
 }
 
-// Shown when highlight mode is ON but nothing is drawn yet: a pencil traces a
-// gold dashed line across the torso = "draw here".
-function DrawHint() {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-      style={{
-        position: 'absolute', left: '50%', top: '34%', transform: 'translateX(-50%)',
-        width: 130, height: 120, zIndex: 3, pointerEvents: 'none',
-      }}
-    >
-      <svg width="130" height="120" viewBox="0 0 130 120" fill="none" style={{ position: 'absolute', inset: 0 }}>
-        <motion.path
-          d="M18 20 C 55 42, 40 70, 88 74 C 104 76, 112 88, 112 100"
-          stroke={GOLD} strokeWidth="3.5" strokeLinecap="round" strokeDasharray="7 8"
-          animate={{ pathLength: [0, 1, 1], opacity: [0.9, 0.9, 0] }}
-          transition={{ duration: 2.6, times: [0, 0.72, 1], repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </svg>
-      <motion.span
-        animate={{
-          x: [8, 44, 30, 78, 100, 100],
-          y: [4, 22, 48, 56, 78, 78],
-          opacity: [1, 1, 1, 1, 1, 0],
-        }}
-        transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ position: 'absolute', fontSize: 22, lineHeight: 1 }}
-      >✏️</motion.span>
-    </motion.div>
-  )
-}
-
 function PainLine({ points }) {
+  // Lift each point slightly OUT from the body's central axis so the line
+  // floats just above the skin — kills the striping/z-fighting against the
+  // mesh while still hiding correctly behind the body when rotated.
+  const lifted = useMemo(() => points.map((p) => {
+    const len = Math.hypot(p.x, p.z) || 1
+    const k = 0.03 / len
+    return new THREE.Vector3(p.x + p.x * k, p.y, p.z + p.z * k)
+  }), [points])
   return (
     <>
-      <Line points={points} color="#e8d5b0" lineWidth={13} transparent opacity={0.45} />
-      <Line points={points} color="#6b5528" lineWidth={7} transparent opacity={1} />
+      {/* One plain solid dark line */}
+      <Line points={lifted} color="#111111" lineWidth={5} />
     </>
   )
 }
@@ -428,7 +406,7 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
   )
 }
 
-export default function Body3D({ onSelectionChange, onDoneDrawing }) {
+export default function Body3D({ onSelectionChange, onDoneDrawing, autoDraw = false }) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
   const [paths, setPaths] = useState([])              // completed pain lines (multiple)
   const [livePath, setLivePath] = useState([])        // line being drawn now
@@ -440,6 +418,9 @@ export default function Body3D({ onSelectionChange, onDoneDrawing }) {
   const [touched, setTouched] = useState(false)
 
   const onInteract = () => { interactedRef.current = true; setTouched(true) }
+
+  // Welcome layer → "Start": drop straight into drawing mode.
+  useEffect(() => { if (autoDraw) { setHighlight(true); setTouched(true) } }, [autoDraw])
 
   // Keep a ref in sync so canvas-level listeners always see the current mode,
   // and control page scrolling: highlight mode captures all touches, normal
@@ -504,13 +485,13 @@ export default function Body3D({ onSelectionChange, onDoneDrawing }) {
   }
   const btnGhost = {
     ...btnBase, border: '1px solid rgba(255,255,255,0.25)',
-    background: 'rgba(0,0,0,0.45)', color: 'rgba(255,255,255,0.72)',
+    background: 'rgba(8,21,39,0.55)', color: 'rgba(255,255,255,0.72)',
   }
   // The main button is IMPOSSIBLE to miss: solid gold + soft pulsing glow
   // while off, so users immediately know where to start.
   const btnMain = highlight
     ? { ...btnBase, border: `1px solid ${GOLD}`, background: 'rgba(201,169,110,0.18)', color: GOLD, fontWeight: 600 }
-    : { ...btnBase, border: `1px solid ${GOLD}`, background: GOLD, color: '#0a0a0a', fontWeight: 700, animation: 'painBtnPulse 2s ease-in-out infinite' }
+    : { ...btnBase, border: `1px solid ${GOLD}`, background: GOLD, color: '#081527', fontWeight: 700, animation: 'painBtnPulse 2s ease-in-out infinite' }
 
   return (
     <div className="body3d-canvas" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
@@ -527,7 +508,7 @@ export default function Body3D({ onSelectionChange, onDoneDrawing }) {
         zIndex: 2, maxWidth: '94%',
       }}>
         <button onClick={toggleHighlight} style={btnMain}>
-          {highlight ? '✓ Done Drawing' : '✏ Highlight Pain Areas'}
+          {highlight ? '✓ Done — show results' : '✏ Mark my pain'}
         </button>
         {paths.length > 0 && <button onClick={reset} style={btnGhost}>Reset</button>}
         {paths.length > 0 && (
@@ -559,7 +540,6 @@ export default function Body3D({ onSelectionChange, onDoneDrawing }) {
         {/* Small automated indications — loop until the user touches the image */}
         <AnimatePresence>
           {!highlight && !touched && paths.length === 0 && <RotateHint key="rot" />}
-          {highlight && paths.length === 0 && livePath.length === 0 && <DrawHint key="draw" />}
         </AnimatePresence>
 
         <div style={{
@@ -568,8 +548,8 @@ export default function Body3D({ onSelectionChange, onDoneDrawing }) {
           whiteSpace: 'nowrap', pointerEvents: 'none', textAlign: 'center', maxWidth: '94%', overflow: 'hidden', textOverflow: 'ellipsis',
         }}>
           {highlight
-            ? '✏️ Draw on the body where it hurts'
-            : '👆 Touch the body to turn it'}
+            ? '✏️ Draw a line on the painful spot'
+            : '👆 Drag the body to turn it'}
         </div>
       </div>
     </div>

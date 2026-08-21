@@ -5,8 +5,8 @@ import { Link, useLocation } from 'react-router-dom'
 const links = [
   { label: 'About',      to: '/about' },
   { label: 'Conditions', to: '/conditions' },
-  { label: 'Pain Mapper', to: '/pain-mapper' },
-  { label: 'Education',  to: '/education' },
+  // { label: 'Pain Mapper', to: '/pain-mapper' },
+  //{ label: 'Education',  to: '/education' },
   { label: 'Locations',  to: '/conditions' },
 ]
 
@@ -41,7 +41,7 @@ export default function Navbar() {
   }, [])
 
   const navBg = (scrolled || isLightPage)
-    ? 'rgba(8,8,7,0.96)'
+    ? 'rgba(8,21,39,0.96)'
     : 'transparent'
 
   const showBorder = scrolled || isLightPage

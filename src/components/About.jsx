@@ -58,7 +58,7 @@ export default function About() {
               zIndex: 2,
             }}>
             <p style={{ fontFamily: 'var(--font-accent)', fontSize: '52px', color: 'var(--black)', lineHeight: 1 }}>5+</p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.6)', marginTop: '4px', fontWeight: 400 }}>Years in Practice</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(8,21,39,0.7)', marginTop: '4px', fontWeight: 400 }}>Years in Practice</p>
           </motion.div>
         </motion.div>
 

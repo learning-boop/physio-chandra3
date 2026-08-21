@@ -18,7 +18,7 @@ const chip = (sel) => ({
   color: sel ? GOLD_LIGHT : 'rgba(255,255,255,0.78)', transition: 'all 0.15s', textAlign: 'left',
 })
 const primaryBtn = {
-  padding: '12px 24px', background: GOLD, color: '#0a0a0a', border: 'none', borderRadius: 999,
+  padding: '12px 24px', background: GOLD, color: '#081527', border: 'none', borderRadius: 999,
   fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
 }
 const ghostBtn = {

@@ -104,7 +104,7 @@ export default function Conditions() {
                   border: '1px solid rgba(0,0,0,0.15)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                <span style={{ fontSize: '14px', color: 'rgba(0,0,0,0.4)', lineHeight: 1 }}>+</span>
+                <span style={{ fontSize: '14px', color: 'rgba(8,21,39,0.55)', lineHeight: 1 }}>+</span>
               </motion.div>
             </motion.div>
           ))}

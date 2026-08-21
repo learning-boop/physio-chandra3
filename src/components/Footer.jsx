@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#030303', padding: '80px clamp(20px, 5vw, 80px) 40px', borderTop: '1px solid rgba(201,169,110,0.1)' }}>
+    <footer style={{ background: '#081527', padding: '80px clamp(20px, 5vw, 80px) 40px', borderTop: '1px solid rgba(201,169,110,0.1)' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '48px', marginBottom: '64px' }} className="footer-g">
         <div>
           <p style={{ fontFamily: 'var(--font-accent)', fontSize: '20px', letterSpacing: '0.1em', color: 'var(--white)', marginBottom: '4px' }}>PHYSIO CHANDRA</p>

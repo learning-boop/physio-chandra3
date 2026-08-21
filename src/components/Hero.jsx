@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Navbar from './Navbar'
 import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
 
@@ -14,7 +13,7 @@ const glass = {
   WebkitBackdropFilter: 'blur(16px)',
   border: '1px solid rgba(201,169,110,0.18)',
   borderRadius: 20,
-  boxShadow: '0 20px 60px rgba(0,0,0,0.45)',
+  boxShadow: '0 20px 60px rgba(8,21,39,0.55)',
 }
 
 function Intro({ compact = false }) {
@@ -105,7 +104,7 @@ function HowTo() {
             animate={{ scale: [1, 1.06, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             style={{
-              background: GOLD, color: '#0a0a0a', fontWeight: 700, fontSize: 16,
+              background: GOLD, color: '#081527', fontWeight: 700, fontSize: 16,
               width: 44, height: 30, borderRadius: 999,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 0 0 6px rgba(201,169,110,0.15)',
@@ -357,7 +356,7 @@ export default function Hero() {
       borderRadius: isStacked ? 24 : 0,
       overflow: 'hidden',
       background: isStacked
-        ? 'radial-gradient(ellipse 78% 62% at 50% 42%, rgba(201,169,110,0.12) 0%, rgba(255,255,255,0.03) 42%, rgba(5,5,5,0.6) 78%)'
+        ? 'radial-gradient(ellipse 78% 62% at 50% 42%, rgba(201,169,110,0.12) 0%, rgba(255,255,255,0.03) 42%, rgba(10,26,47,0.6) 78%)'
         : 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%)',
       border: isStacked ? '1px solid rgba(201,169,110,0.16)' : 'none',
       borderRight: isStacked ? '1px solid rgba(201,169,110,0.16)' : '1px solid rgba(201,169,110,0.12)',
@@ -371,7 +370,6 @@ export default function Hero() {
   if (isStacked) {
     return (
       <div style={{ position: 'relative', background: 'var(--black)', fontFamily: 'var(--font-body)', overflowX: 'hidden' }}>
-        <Navbar />
         <div style={{ paddingTop: isShort ? 76 : 86 }}>
           <div style={{
             padding: isShort ? '0 20px 4px' : '0 20px 6px',
@@ -397,7 +395,6 @@ export default function Hero() {
   // ─── DESKTOP: two columns (body left, panel right) ────────────────────────
   return (
     <div style={{ position: 'relative', background: 'var(--black)', fontFamily: 'var(--font-body)' }}>
-      <Navbar />
       <div style={{
         minHeight: vp.h,
         paddingTop: 88,

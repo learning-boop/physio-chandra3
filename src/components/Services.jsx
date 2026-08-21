@@ -48,7 +48,7 @@ function ServiceCard({ s, reduce }) {
       {/* Gradient scrim so the name sits on solid dark */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.55) 42%, rgba(5,5,5,0.08) 100%)',
+        background: 'linear-gradient(to top, rgba(10,26,47,0.95) 0%, rgba(10,26,47,0.55) 42%, rgba(10,26,47,0.08) 100%)',
       }} />
 
       {/* Content */}

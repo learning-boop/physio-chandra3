@@ -176,7 +176,7 @@ export default function Education() {
                   width: '28px', height: '28px',
                   border: `1px solid ${expanded === i ? 'rgba(201,169,110,0.5)' : 'rgba(0,0,0,0.15)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: expanded === i ? 'var(--gold)' : 'rgba(0,0,0,0.4)',
+                  color: expanded === i ? 'var(--gold)' : 'rgba(8,21,39,0.55)',
                   fontSize: '16px', lineHeight: 1,
                   transition: 'border-color 0.4s, color 0.4s',
                 }}>+</motion.span>
