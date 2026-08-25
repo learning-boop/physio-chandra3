@@ -17,6 +17,17 @@ const CAM_POS = [7.4 * FRONT_SIGN, 0.45, 0]
 // cover the face or the feet.
 const CAM_TARGET = [0, 0.48, 0]
 
+// Real world-space extents of the posed model: it is MODEL_SCALE tall and
+// centred on MODEL_Y_OFFSET, so the feet sit at -1.55 and the head at 2.45.
+// (ContactShadows is pinned to BODY_BOTTOM, which is the same plane.)
+const BODY_BOTTOM = MODEL_Y_OFFSET - MODEL_SCALE / 2
+const BODY_CENTRE = MODEL_Y_OFFSET
+const BODY_HALF_H = MODEL_SCALE / 2
+// Half-width budget covering the outstretched arms on narrow phone screens.
+const BODY_HALF_W = 1.32
+// A little air around the silhouette so nothing touches the frame edge.
+const FIT_MARGIN = 1.08
+
 // Area labels/types for the info panel.
 const AREA = {
   head:      { type: 'head',      label: 'Head' },
@@ -105,19 +116,17 @@ function FitCamera({ controlsRef, interactedRef }) {
     if (interactedRef.current) return   // don't fight the user's zoom
     const aspect = size.width / Math.max(1, size.height)
     const t = Math.tan((36 * Math.PI) / 180 / 2)
-    // Smaller numbers = closer camera = BIGGER body on screen.
-    const distForHeight = 1.85 / t   // bigger body — button now sits at the left, out of the way
-    // Width budget must cover the outstretched ARMS on narrow phone screens —
-    // too small and the hands get cropped at the edges.
-    const distForWidth = 1.32 / (t * aspect)
+    // Pull back far enough that head AND feet both fit, whatever the shape of
+    // the container. Smaller numbers = closer camera = bigger body on screen.
+    const distForHeight = (BODY_HALF_H * FIT_MARGIN) / t
+    const distForWidth = (BODY_HALF_W * FIT_MARGIN) / (t * aspect)
     const dist = Math.max(distForHeight, distForWidth)
-    // Shift the framing UP a little so the body sits lower on screen —
-    // keeps the head clear of the header / buttons.
-    const yShift = 0.22
-    camera.position.set(dist * FRONT_SIGN, CAM_TARGET[1] + yShift, 0)
+    // Aim at the body's true centre so the margin is shared evenly between the
+    // head and the feet — any upward shift here crops the legs.
+    camera.position.set(dist * FRONT_SIGN, BODY_CENTRE, 0)
     camera.updateProjectionMatrix()
     if (controlsRef.current) {
-      controlsRef.current.target.set(CAM_TARGET[0], CAM_TARGET[1] + yShift, CAM_TARGET[2])
+      controlsRef.current.target.set(CAM_TARGET[0], BODY_CENTRE, CAM_TARGET[2])
       controlsRef.current.update()
     }
   }, [size.width, size.height, camera, controlsRef, interactedRef])
@@ -347,7 +356,7 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
       {/* the line currently being drawn */}
       {livePath.length > 1 && <PainLine points={livePath} />}
 
-      <ContactShadows position={[0, -1.55, 0]} opacity={0.5} scale={4.5} blur={2.4} far={2} color="#000000" />
+      <ContactShadows position={[0, BODY_BOTTOM, 0]} opacity={0.5} scale={4.5} blur={2.4} far={2} color="#000000" />
 
       {/* NO auto-rotate — the model stays still until the user touches the BODY. */}
       <OrbitControls
@@ -365,7 +374,7 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
         autoRotate={false}
         minDistance={2.2}
         maxDistance={16}
-        target={CAM_TARGET}
+        target={[CAM_TARGET[0], BODY_CENTRE, CAM_TARGET[2]]}
         minPolarAngle={Math.PI * 0.08}
         maxPolarAngle={Math.PI * 0.92}
         onStart={onInteract}
@@ -381,11 +390,7 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
   const controlsRef = useRef()
   const interactedRef = useRef(false)
   const highlightRef = useRef(false)
-  // Drives the small automated hint overlays: they loop until the user
-  // touches the image for the first time, then disappear for good.
-  const [touched, setTouched] = useState(false)
-
-  const onInteract = () => { interactedRef.current = true; setTouched(true) }
+  const onInteract = () => { interactedRef.current = true }
 
   // Guided-assessment mode: the parent decides when drawing is on/off and
   // when to clear, and the internal button bar is hidden.
@@ -492,10 +497,7 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
         )}
       </div>
 
-      <div
-        style={{ flex: 1, position: 'relative', minHeight: 0 }}
-        onPointerDown={() => setTouched(true)}
-      >
+      <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
         <Canvas
           shadows
           camera={{ position: CAM_POS, fov: 36 }}
@@ -510,17 +512,6 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
           />
         </Canvas>
-
-        <div style={{
-          position: 'absolute', bottom: 6, left: '50%', transform: 'translateX(-50%)',
-          fontSize: 'clamp(11px, 3vw, 12px)', lineHeight: 1.4,
-          letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)',
-          pointerEvents: 'none', textAlign: 'center', maxWidth: '92%',
-        }}>
-          {highlight
-            ? 'Draw on the body where it hurts'
-            : 'Touch the body to turn it'}
-        </div>
       </div>
     </div>
   )
