@@ -18,12 +18,12 @@ export default function PainMapperPage() {
   }, [])
 
   return (
-    <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
+    <div style={{ background: 'var(--black)', minHeight: '100svh' }}>
       <Navbar />
       <div style={{
         maxWidth: 1200,
         margin: '0 auto',
-        padding: isMobile ? '96px 16px 56px' : '120px 24px 80px',
+        padding: isMobile ? 'calc(84px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-left)) calc(56px + env(safe-area-inset-bottom))' : '120px 24px 80px',
       }}>
         <h1 style={{
           fontFamily: "'Cormorant Garamond', serif", color: '#fff',
@@ -45,7 +45,7 @@ export default function PainMapperPage() {
           alignItems: 'start',
         }}>
           <div style={{
-            height: isMobile ? 440 : 560,
+            height: isMobile ? 'min(62svh, 440px)' : 560,
             borderRadius: 20,
             overflow: 'hidden',
             background: 'rgba(255,255,255,0.02)',

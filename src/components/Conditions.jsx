@@ -16,9 +16,9 @@ export default function Conditions() {
   const [active, setActive] = useState(0)
 
   return (
-    <section id="conditions" style={{ background: 'var(--warm-white)', padding: '140px 0 160px', overflow: 'hidden' }}>
-      <div style={{ padding: '0 clamp(20px, 5vw, 80px)', marginBottom: '80px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+    <section id="conditions" className="cond-sec" style={{ background: 'var(--warm-white)', overflow: 'hidden' }}>
+      <div className="cond-head">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: 'clamp(20px, 5vw, 32px)' }}>
           <div style={{ width: '48px', height: '1px', background: 'var(--gold)' }} />
           <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 400 }}>Conditions</span>
         </div>
@@ -34,7 +34,7 @@ export default function Conditions() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '600px' }} className="cond-g">
-        <div style={{ padding: '0 clamp(20px, 5vw, 80px)', borderRight: '1px solid rgba(0,0,0,0.06)' }}>
+        <div className="cond-list">
           {conditions.map((c, i) => (
             <motion.div
               key={c.name}
@@ -44,15 +44,15 @@ export default function Conditions() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
               style={{
-                padding: '28px 0',
+                padding: 'clamp(20px, 5vw, 28px) 0',
                 borderBottom: '1px solid rgba(0,0,0,0.06)',
-                cursor: 'none',
+                cursor: 'pointer',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
                 gap: '24px',
               }}
             >
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: active === i ? '12px' : '0', transition: 'margin 0.4s' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 4vw, 20px)', marginBottom: active === i ? '12px' : '0', transition: 'margin 0.4s' }}>
                   <span style={{
                     fontFamily: 'var(--font-body)', fontSize: '12px',
                     color: active === i ? 'var(--gold)' : 'rgba(0,0,0,0.25)',
@@ -84,15 +84,15 @@ export default function Conditions() {
                         alt={c.name}
                         loading="lazy"
                         style={{
-                          width: '100%', height: '240px', objectFit: 'cover',
+                          width: '100%', height: 'clamp(200px, 55vw, 280px)', objectFit: 'cover',
                           marginTop: '4px', marginBottom: '20px',
                         }}
                       />
                       <p style={{
                         fontFamily: 'var(--font-body)', fontSize: '15px',
                         lineHeight: 1.8, color: 'var(--text-mid)',
-                        fontWeight: 200, paddingLeft: '30px',
-                      }}>{c.desc}</p>
+                        fontWeight: 200,
+                      }} className="cond-desc">{c.desc}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -100,7 +100,7 @@ export default function Conditions() {
               <motion.div
                 animate={{ rotate: active === i ? 45 : 0 }}
                 style={{
-                  width: '20px', height: '20px', flexShrink: 0, marginTop: '4px',
+                  width: '24px', height: '24px', flexShrink: 0, marginTop: '4px',
                   border: '1px solid rgba(0,0,0,0.15)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
@@ -137,11 +137,28 @@ export default function Conditions() {
       </div>
 
       <style>{`
+        .cond-sec { padding: clamp(80px, 13vw, 140px) 0 clamp(88px, 14vw, 160px); }
+        .cond-head {
+          padding: 0 max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+          margin-bottom: clamp(40px, 9vw, 80px);
+        }
+        .cond-list {
+          padding: 0 max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+          border-right: 1px solid rgba(0,0,0,0.06);
+        }
+        .cond-desc { padding-left: 30px; }
         .cond-mobile-img { display: none; }
+
         @media (max-width: 860px) {
-          .cond-g { grid-template-columns: 1fr !important; }
+          .cond-g { grid-template-columns: 1fr !important; min-height: 0 !important; }
           .cond-img { display: none !important; }
           .cond-mobile-img { display: block; }
+          /* No second column to divide from any more. */
+          .cond-list { border-right: none; }
+          /* The number gutter is desktop-only breathing room. */
+          .cond-desc { padding-left: 0; }
         }
       `}</style>
     </section>

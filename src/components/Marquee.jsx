@@ -5,9 +5,8 @@ const items = ['Back Pain', 'Neck Pain', 'Sports Injuries', 'Dry Needling', 'Cli
 export default function Marquee() {
   const repeated = [...items, ...items, ...items]
   return (
-    <div style={{
+    <div className="marquee" style={{
       background: 'var(--gold)',
-      padding: '14px 0',
       overflow: 'hidden',
       position: 'relative',
       zIndex: 10,
@@ -18,17 +17,27 @@ export default function Marquee() {
         style={{ display: 'flex', gap: '0', whiteSpace: 'nowrap' }}
       >
         {repeated.map((item, i) => (
-          <span key={i} style={{
+          <span key={i} className="marquee-item" style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '11px', fontWeight: 400,
+            fontWeight: 400,
             letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: 'var(--black)', padding: '0 40px',
+            color: 'var(--black)',
           }}>
             {item}
-            <span style={{ marginLeft: '40px', opacity: 0.4 }}>·</span>
+            <span className="marquee-dot" style={{ opacity: 0.4 }}>·</span>
           </span>
         ))}
       </motion.div>
+
+      <style>{`
+        .marquee { padding: clamp(11px, 3vw, 14px) 0; }
+        .marquee-item { font-size: 11px; padding: 0 40px; }
+        .marquee-dot { margin-left: 40px; }
+        @media (max-width: 600px) {
+          .marquee-item { font-size: 10.5px; padding: 0 22px; letter-spacing: 0.16em; }
+          .marquee-dot { margin-left: 22px; }
+        }
+      `}</style>
     </div>
   )
 }

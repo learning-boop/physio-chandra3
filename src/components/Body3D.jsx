@@ -1,7 +1,6 @@
 import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Line, useGLTF, Html } from '@react-three/drei'
-import { motion, AnimatePresence } from 'framer-motion'
 import * as THREE from 'three'
 
 // body.glb faces sideways (along X; shoulders/arms along Z) → view from X.
@@ -93,7 +92,7 @@ useGLTF.preload('/models/body.glb', true)
 function Loader() {
   return (
     <Html center>
-      <div style={{ color: GOLD, fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: '0.24em', textTransform: 'uppercase' }}>Loading…</div>
+      <div style={{ color: GOLD, fontFamily: "'DM Sans', sans-serif", fontSize: 12, letterSpacing: '0.24em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Loading…</div>
     </Html>
   )
 }
@@ -312,37 +311,6 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   )
 }
 
-// ── Small automated indication overlays ─────────────────────────────────────
-// They occupy almost no space, play on their own in a loop, and vanish the
-// moment the user touches the image. pointerEvents:none so they never block
-// touches. Made for users who don't read instructions.
-
-// Shown while the model is idle: a finger sweeping left↔right = "turn me".
-function RotateHint() {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-      style={{
-        position: 'absolute', left: '50%', top: '42%', transform: 'translateX(-50%)',
-        zIndex: 3, pointerEvents: 'none',
-        display: 'flex', alignItems: 'center', gap: 10,
-        padding: '7px 16px', borderRadius: 999,
-        background: 'rgba(8,21,39,0.55)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
-        border: '1px solid rgba(201,169,110,0.35)',
-      }}
-    >
-      <span style={{ color: GOLD, fontSize: 14, opacity: 0.7 }}>‹</span>
-      <motion.span
-        animate={{ x: [-16, 16, -16] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ fontSize: 20, lineHeight: 1 }}
-      >👆</motion.span>
-      <span style={{ color: GOLD, fontSize: 14, opacity: 0.7 }}>›</span>
-    </motion.div>
-  )
-}
-
 function PainLine({ points }) {
   // Lift each point slightly OUT from the body's central axis so the line
   // floats just above the skin — kills the striping/z-fighting against the
@@ -355,7 +323,7 @@ function PainLine({ points }) {
   return (
     <>
       {/* One plain solid dark line */}
-      <Line points={lifted} color="#111111" lineWidth={5} />
+      <Line points={lifted} color="#000000" lineWidth={7} />
     </>
   )
 }
@@ -406,7 +374,7 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
   )
 }
 
-export default function Body3D({ onSelectionChange, onDoneDrawing, autoDraw = false }) {
+export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = false, drawOn = false, clearSignal = 0 }) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
   const [paths, setPaths] = useState([])              // completed pain lines (multiple)
   const [livePath, setLivePath] = useState([])        // line being drawn now
@@ -419,8 +387,13 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, autoDraw = fa
 
   const onInteract = () => { interactedRef.current = true; setTouched(true) }
 
-  // Welcome layer → "Start": drop straight into drawing mode.
-  useEffect(() => { if (autoDraw) { setHighlight(true); setTouched(true) } }, [autoDraw])
+  // Guided-assessment mode: the parent decides when drawing is on/off and
+  // when to clear, and the internal button bar is hidden.
+  useEffect(() => { if (controlled) setHighlight(drawOn) }, [controlled, drawOn])
+  useEffect(() => {
+    if (controlled && clearSignal > 0) { setPaths([]); setLivePath([]); onSelectionChange?.([]) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clearSignal])
 
   // Keep a ref in sync so canvas-level listeners always see the current mode,
   // and control page scrolling: highlight mode captures all touches, normal
@@ -480,8 +453,9 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, autoDraw = fa
   }
 
   const btnBase = {
-    fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase',
-    padding: '10px 18px', borderRadius: 999, cursor: 'pointer', transition: 'all 0.2s',
+    fontFamily: "'DM Sans', sans-serif", fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase',
+    padding: '12px 20px', borderRadius: 999, cursor: 'pointer', transition: 'all 0.2s',
+    minHeight: 44, lineHeight: 1.2,
   }
   const btnGhost = {
     ...btnBase, border: '1px solid rgba(255,255,255,0.25)',
@@ -504,11 +478,11 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, autoDraw = fa
 
       <div style={{
         position: 'absolute', top: 14, left: 14,
-        display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center',
+        display: controlled ? 'none' : 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center',
         zIndex: 2, maxWidth: '94%',
       }}>
         <button onClick={toggleHighlight} style={btnMain}>
-          {highlight ? '✓ Done — show results' : '✏ Mark my pain'}
+          {highlight ? '✓ Done Drawing' : 'Highlight Pain Areas'}
         </button>
         {paths.length > 0 && <button onClick={reset} style={btnGhost}>Reset</button>}
         {paths.length > 0 && (
@@ -537,19 +511,15 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, autoDraw = fa
           />
         </Canvas>
 
-        {/* Small automated indications — loop until the user touches the image */}
-        <AnimatePresence>
-          {!highlight && !touched && paths.length === 0 && <RotateHint key="rot" />}
-        </AnimatePresence>
-
         <div style={{
-          position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: 10,
-          letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)',
-          whiteSpace: 'nowrap', pointerEvents: 'none', textAlign: 'center', maxWidth: '94%', overflow: 'hidden', textOverflow: 'ellipsis',
+          position: 'absolute', bottom: 6, left: '50%', transform: 'translateX(-50%)',
+          fontSize: 'clamp(11px, 3vw, 12px)', lineHeight: 1.4,
+          letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)',
+          pointerEvents: 'none', textAlign: 'center', maxWidth: '92%',
         }}>
           {highlight
-            ? '✏️ Draw a line on the painful spot'
-            : '👆 Drag the body to turn it'}
+            ? 'Draw on the body where it hurts'
+            : 'Touch the body to turn it'}
         </div>
       </div>
     </div>

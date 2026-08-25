@@ -87,3 +87,74 @@ body::before {
 @media (hover: none) and (pointer: coarse) {
   a, button { cursor: pointer; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE FOUNDATION — phones are the primary target
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Stop iOS/Android from re-scaling text in landscape or on reflow. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Root size steps down on small phones so every clamp()/rem stays in
+   proportion instead of feeling oversized on a 360px screen. */
+@media (max-width: 600px) { html { font-size: 16px; } }
+@media (max-width: 380px) { html { font-size: 15.5px; } }
+
+body { -webkit-tap-highlight-color: transparent; }
+
+/* Never let a long word (email, URL, clinic name) push the page sideways. */
+h1, h2, h3, p, a, li, span, button { overflow-wrap: break-word; }
+
+/* Media never exceeds its column. */
+img, svg, video, canvas { max-width: 100%; }
+
+/* ─── Touch input ─────────────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* 16px is the threshold below which iOS Safari zooms the page on focus. */
+  input, textarea, select { font-size: 16px !important; }
+  /* Hover-only affordances are meaningless on touch. */
+  a, button, [role="button"] { cursor: pointer; }
+}
+
+/* ─── Safe areas (notch / home indicator) ─────────────────────────── */
+@supports (padding: max(0px)) {
+  .safe-x {
+    padding-left: max(var(--safe-pad, 0px), env(safe-area-inset-left));
+    padding-right: max(var(--safe-pad, 0px), env(safe-area-inset-right));
+  }
+  .safe-bottom { padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+}
+
+/* ─── Comfortable tap targets ─────────────────────────────────────── */
+.tap-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Footer / nav link rows get real vertical room to be tapped. */
+@media (max-width: 900px) {
+  .link-list a { padding: 12px 0; }
+}
+
+/* ─── Section rhythm ──────────────────────────────────────────────── */
+/* Sections declare their padding inline; these classes give phones a
+   tighter, readable vertical rhythm without touching desktop. */
+.section-pad { padding-top: clamp(72px, 14vw, 160px); padding-bottom: clamp(72px, 14vw, 160px); }
+
+/* ─── Body3D canvas ───────────────────────────────────────────────── */
+/* The WebGL canvas owns its gestures; make sure it can never spill. */
+.body3d-canvas { touch-action: none; -webkit-user-select: none; user-select: none; }
+
+/* ─── Motion preferences ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

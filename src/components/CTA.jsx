@@ -5,9 +5,8 @@ export default function CTA() {
   const ref = useRef(null)
 
   return (
-    <section id="contact" ref={ref} style={{
+    <section id="contact" ref={ref} className="cta-sec" style={{
       background: 'var(--black)',
-      padding: '160px clamp(20px, 5vw, 80px)',
       position: 'relative', overflow: 'hidden',
     }}>
       <motion.div
@@ -15,15 +14,15 @@ export default function CTA() {
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           position: 'absolute', top: '50%', left: '50%',
-          width: '700px', height: '700px',
-          transform: 'translate(-50%, -50%)',
+          width: 'min(700px, 140vw)', height: 'min(700px, 140vw)',
+          x: '-50%', y: '-50%',
           background: 'radial-gradient(circle, rgba(201,169,110,0.15) 0%, transparent 70%)',
           borderRadius: '50%', pointerEvents: 'none',
         }}
       />
 
       <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '40px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: 'clamp(26px, 7vw, 40px)' }}>
           <div style={{ width: '48px', height: '1px', background: 'var(--gold)' }} />
           <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 300 }}>Get In Touch</span>
           <div style={{ width: '48px', height: '1px', background: 'var(--gold)' }} />
@@ -38,7 +37,7 @@ export default function CTA() {
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(44px, 7vw, 96px)',
             fontWeight: 300, lineHeight: 1,
-            color: 'var(--white)', marginBottom: '24px',
+            color: 'var(--white)', marginBottom: 'clamp(12px, 3vw, 24px)',
           }}>
           Begin Your
         </motion.h2>
@@ -52,7 +51,7 @@ export default function CTA() {
             fontSize: 'clamp(44px, 7vw, 96px)',
             fontWeight: 600, fontStyle: 'italic',
             lineHeight: 1, color: 'var(--gold)',
-            marginBottom: '56px',
+            marginBottom: 'clamp(30px, 8vw, 56px)',
           }}>
           Rehabilitation.
         </motion.h2>
@@ -63,22 +62,22 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
           style={{
-            fontFamily: 'var(--font-body)', fontSize: '17px',
+            fontFamily: 'var(--font-body)', fontSize: 'clamp(15px, 4vw, 17px)',
             fontWeight: 300, lineHeight: 1.8,
-            color: 'rgba(255,255,255,0.5)', marginBottom: '56px',
+            color: 'rgba(255,255,255,0.5)', marginBottom: 'clamp(32px, 8vw, 56px)',
           }}>
           Serving South Surrey, Burnaby, and Guildford.<br />
           Three clinic locations. Registered Physiotherapist. Assessment-guided care.
         </motion.p>
 
-        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div className="cta-actions" style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <motion.a href="mailto:chandra@physiochandra.ca"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
             style={{
-              padding: '18px 52px', background: 'var(--gold)',
+              padding: '18px 52px', background: 'var(--gold)', textAlign: 'center',
               fontFamily: 'var(--font-body)', fontSize: '13px',
               fontWeight: 500, letterSpacing: '0.13em', textTransform: 'uppercase',
               color: 'var(--black)', transition: 'all 0.3s',
@@ -93,7 +92,7 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
             style={{
-              padding: '18px 52px',
+              padding: '18px 52px', textAlign: 'center',
               border: '1px solid rgba(255,255,255,0.15)',
               fontFamily: 'var(--font-body)', fontSize: '13px',
               fontWeight: 300, letterSpacing: '0.13em', textTransform: 'uppercase',
@@ -104,6 +103,20 @@ export default function CTA() {
           >Call Now</motion.a>
         </div>
       </div>
+
+      <style>{`
+        .cta-sec {
+          padding: clamp(88px, 14vw, 160px) clamp(20px, 5vw, 80px);
+          padding-left: max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+        }
+        .cta-actions a { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; }
+        @media (max-width: 600px) {
+          /* Two full-width stacked buttons — the primary action stays obvious. */
+          .cta-actions { flex-direction: column; align-items: stretch; gap: 12px; }
+          .cta-actions a { width: 100%; padding-left: 20px; padding-right: 20px; }
+        }
+      `}</style>
     </section>
   )
 }

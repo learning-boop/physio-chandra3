@@ -15,7 +15,7 @@ export default function Approach() {
   const lineH = useTransform(scrollYProgress, [0.1, 0.9], ['0%', '100%'])
 
   return (
-    <section ref={ref} style={{ background: 'var(--cream)', padding: '160px clamp(20px, 5vw, 80px)', position: 'relative', overflow: 'hidden' }}>
+    <section ref={ref} className="approach-sec" style={{ background: 'var(--cream)', position: 'relative', overflow: 'hidden' }}>
       <div style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -26,7 +26,7 @@ export default function Approach() {
         whiteSpace: 'nowrap', lineHeight: 1,
       }}>METHOD</div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '80px' }}>
+      <div className="approach-eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div style={{ width: '48px', height: '1px', background: 'var(--gold)' }} />
         <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 300 }}>The Approach</span>
       </div>
@@ -45,12 +45,12 @@ export default function Approach() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.12, duration: 0.8 }}
+              className="approach-step"
               style={{
-                padding: '48px 0',
                 borderBottom: i < steps.length - 1 ? '1px solid rgba(0,0,0,0.07)' : 'none',
-                display: 'grid', gridTemplateColumns: '60px 1fr', gap: '0 32px', alignItems: 'start',
+                display: 'grid', alignItems: 'start',
               }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0', marginTop: '4px', position: 'relative', left: '-32px' }}>
+              <div className="approach-marker" style={{ display: 'flex', alignItems: 'center', gap: '0', marginTop: '4px', position: 'relative' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--gold)', flexShrink: 0 }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', letterSpacing: '0.12em', color: 'var(--gold)', marginLeft: '16px', fontWeight: 400 }}>{s.n}</span>
               </div>
@@ -65,9 +65,23 @@ export default function Approach() {
       </div>
 
       <style>{`
+        .approach-sec {
+          padding: clamp(88px, 14vw, 160px) clamp(20px, 5vw, 80px);
+          padding-left: max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+        }
+        .approach-eyebrow { margin-bottom: clamp(40px, 9vw, 80px); }
+        .approach-step { padding: clamp(30px, 7vw, 48px) 0; grid-template-columns: 60px 1fr; gap: 0 32px; }
+        /* The dot hangs left to meet the timeline rule. */
+        .approach-marker { left: -32px; }
+
         @media (max-width: 640px) {
           .approach-g { grid-template-columns: 1fr !important; gap: 0 !important; }
           .approach-line { display: none !important; }
+          /* No timeline to meet any more — stack the marker above the text and
+             drop the negative offset that pushed rows off the right edge. */
+          .approach-step { grid-template-columns: 1fr; gap: 12px 0; }
+          .approach-marker { left: 0; margin-top: 0 !important; }
         }
       `}</style>
     </section>

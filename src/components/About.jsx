@@ -8,21 +8,19 @@ export default function About() {
   const textY = useTransform(scrollYProgress, [0, 1], ['4%', '-4%'])
 
   return (
-    <section id="about" ref={ref} style={{
+    <section id="about" ref={ref} className="about-sec" style={{
       background: 'var(--black)',
-      padding: '160px clamp(20px, 5vw, 80px)',
       overflow: 'hidden',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '80px' }}>
+      <div className="about-eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div style={{ width: '48px', height: '1px', background: 'var(--gold)' }} />
         <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 300 }}>About</span>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="about-g">
         <motion.div style={{ y: imgY, position: 'relative' }}>
-          <div style={{
+          <div className="about-img" style={{
             position: 'relative',
-            height: '680px',
             overflow: 'hidden',
           }}>
             <img
@@ -51,13 +49,13 @@ export default function About() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4, duration: 0.8 }}
+            className="about-badge"
             style={{
-              position: 'absolute', bottom: '-32px', right: '-32px',
+              position: 'absolute',
               background: 'var(--gold)',
-              padding: '32px 40px',
               zIndex: 2,
             }}>
-            <p style={{ fontFamily: 'var(--font-accent)', fontSize: '52px', color: 'var(--black)', lineHeight: 1 }}>5+</p>
+            <p className="about-badge-n" style={{ fontFamily: 'var(--font-accent)', color: 'var(--black)', lineHeight: 1 }}>5+</p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(8,21,39,0.7)', marginTop: '4px', fontWeight: 400 }}>Years in Practice</p>
           </motion.div>
         </motion.div>
@@ -87,12 +85,12 @@ export default function About() {
               fontSize: 'clamp(40px, 5vw, 72px)',
               fontWeight: 600,
               lineHeight: 1.05, color: 'var(--white)',
-              marginBottom: '48px',
+              marginBottom: 'clamp(28px, 6vw, 48px)',
             }}>
             Matla
           </motion.h2>
 
-          <div style={{ width: '40px', height: '1px', background: 'var(--gold)', marginBottom: '40px' }} />
+          <div style={{ width: '40px', height: '1px', background: 'var(--gold)', marginBottom: 'clamp(24px, 6vw, 40px)' }} />
 
           {[
             'With over 5 years of clinical practice across British Columbia, Chandra Matla is a Registered Physiotherapist with a focus on supporting patients through rehabilitation toward their personal goals.',
@@ -117,7 +115,8 @@ export default function About() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            style={{ display: 'flex', gap: '48px', marginTop: '56px', flexWrap: 'wrap' }}>
+            className="about-stats"
+            style={{ display: 'flex', flexWrap: 'wrap' }}>
             {[['3', 'Clinic Locations'], ['BSc', 'Physiotherapy'], ['Evidence', 'Informed Care']].map(([n, l]) => (
               <div key={l}>
                 <p style={{ fontFamily: 'var(--font-accent)', fontSize: '32px', color: 'var(--gold)', lineHeight: 1 }}>{n}</p>
@@ -129,8 +128,27 @@ export default function About() {
       </div>
 
       <style>{`
+        .about-sec {
+          padding: clamp(88px, 14vw, 160px) clamp(20px, 5vw, 80px);
+          padding-left: max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+        }
+        .about-eyebrow { margin-bottom: clamp(40px, 9vw, 80px); }
+        .about-img { height: clamp(360px, 88vw, 680px); }
+        .about-badge { bottom: -32px; right: -32px; padding: 32px 40px; }
+        .about-badge-n { font-size: 52px; }
+        .about-stats { gap: clamp(24px, 7vw, 48px); margin-top: clamp(36px, 9vw, 56px); }
+
         @media (max-width: 860px) {
-          .about-g { grid-template-columns: 1fr !important; gap: 80px !important; }
+          /* Single column — and the badge tucks inside so it can't be clipped
+             by the section's overflow:hidden on a narrow screen. */
+          .about-g { grid-template-columns: 1fr !important; gap: clamp(52px, 12vw, 80px) !important; }
+          .about-badge { bottom: -22px; right: 0; padding: 22px 26px; }
+          .about-badge-n { font-size: 40px; }
+        }
+        @media (max-width: 420px) {
+          .about-badge { padding: 18px 22px; }
+          .about-badge-n { font-size: 34px; }
         }
       `}</style>
     </section>

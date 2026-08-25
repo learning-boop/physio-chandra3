@@ -80,7 +80,7 @@ export default function PainAIPanel({ zones }) {
   return (
     <div style={panelStyle}>
       <div style={{ marginBottom: 16 }}>
-        <span style={{ color: GOLD, fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+        <span style={{ color: GOLD, fontSize: 12, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
           Selected Areas
         </span>
         <div style={{ marginTop: 6, color: '#fff', fontSize: 15 }}>
@@ -118,7 +118,7 @@ function Section({ title, items }) {
   if (!items || items.length === 0) return null
   return (
     <div style={{ marginBottom: 14 }}>
-      <div style={{ color: GOLD, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+      <div style={{ color: GOLD, fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
         {title}
       </div>
       <ul style={{ margin: 0, paddingLeft: 18 }}>
@@ -132,6 +132,6 @@ const panelStyle = {
   background: 'rgba(255,255,255,0.03)',
   border: '1px solid rgba(255,255,255,0.08)',
   borderRadius: 16,
-  padding: '24px',
+  padding: 'clamp(18px, 5vw, 24px)',
   minHeight: 200,
 }

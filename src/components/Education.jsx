@@ -86,10 +86,10 @@ export default function Education() {
   const [expanded, setExpanded] = useState(null)
 
   return (
-    <section style={{ background: 'var(--warm-white)', minHeight: '100vh', paddingTop: '120px', paddingBottom: '120px' }}>
+    <section className="edu-sec" style={{ background: 'var(--warm-white)', minHeight: '100svh' }}>
       {/* Header */}
-      <div style={{ padding: '0 clamp(20px, 5vw, 80px)', marginBottom: '80px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
+      <div className="edu-head">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: 'clamp(18px, 5vw, 28px)' }}>
           <div style={{ width: '48px', height: '1px', background: 'var(--gold)' }} />
           <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 400 }}>Patient Education</span>
         </div>
@@ -98,13 +98,13 @@ export default function Education() {
           fontSize: 'clamp(44px, 7vw, 96px)',
           fontWeight: 300, lineHeight: 1,
           color: 'var(--text-dark)',
-          marginBottom: '28px',
+          marginBottom: 'clamp(18px, 5vw, 28px)',
         }}>
           Know Your<br />
           <em style={{ fontStyle: 'italic' }}>Body Better.</em>
         </h1>
         <p style={{
-          fontFamily: 'var(--font-body)', fontSize: '17px',
+          fontFamily: 'var(--font-body)', fontSize: 'clamp(15px, 4vw, 17px)',
           lineHeight: 1.75, color: 'var(--text-mid)',
           maxWidth: '560px', fontWeight: 300,
         }}>
@@ -113,8 +113,7 @@ export default function Education() {
       </div>
 
       {/* Articles grid */}
-      <div style={{
-        padding: '0 clamp(20px, 5vw, 80px)',
+      <div className="edu-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 420px), 1fr))',
         gap: '2px',
@@ -130,7 +129,7 @@ export default function Education() {
             style={{
               background: expanded === i ? 'var(--black)' : '#fff',
               border: '1px solid rgba(0,0,0,0.06)',
-              padding: '40px',
+              padding: 'clamp(24px, 6vw, 40px)',
               cursor: 'pointer',
               transition: 'background 0.4s, box-shadow 0.4s',
               boxShadow: expanded === i ? '0 24px 48px rgba(0,0,0,0.12)' : 'none',
@@ -152,7 +151,7 @@ export default function Education() {
                   transition: 'color 0.4s',
                 }}>{a.title}</h3>
               </div>
-              <span style={{ fontSize: '28px', flexShrink: 0, marginTop: '4px' }}>{a.icon}</span>
+              <span style={{ fontSize: 'clamp(24px, 6vw, 28px)', flexShrink: 0, marginTop: '4px', lineHeight: 1 }}>{a.icon}</span>
             </div>
 
             <p style={{
@@ -192,8 +191,8 @@ export default function Education() {
                   style={{ overflow: 'hidden' }}
                 >
                   <div style={{
-                    marginTop: '32px',
-                    paddingTop: '32px',
+                    marginTop: 'clamp(22px, 6vw, 32px)',
+                    paddingTop: 'clamp(22px, 6vw, 32px)',
                     borderTop: '1px solid rgba(201,169,110,0.2)',
                   }}>
                     <p style={{
@@ -225,6 +224,19 @@ export default function Education() {
           </motion.div>
         ))}
       </div>
+
+      <style>{`
+        .edu-sec { padding: clamp(96px, 16vw, 120px) 0 clamp(80px, 14vw, 120px); }
+        .edu-head {
+          padding-left: max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+          margin-bottom: clamp(44px, 10vw, 80px);
+        }
+        .edu-grid {
+          padding-left: max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+        }
+      `}</style>
     </section>
   )
 }

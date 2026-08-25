@@ -9,24 +9,24 @@ const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
 const EASE = [0.22, 1, 0.36, 1]
 
-const label = { fontSize: 10.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: GOLD }
-const qText = { fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 300, color: '#fff', lineHeight: 1.3, margin: '0 0 14px' }
+const label = { fontSize: 11.5, letterSpacing: '0.18em', textTransform: 'uppercase', color: GOLD }
+const qText = { fontFamily: 'var(--font-display)', fontSize: 'clamp(19px, 5vw, 22px)', fontWeight: 300, color: '#fff', lineHeight: 1.3, margin: '0 0 14px' }
 const chip = (sel) => ({
-  padding: '9px 14px', borderRadius: 999, cursor: 'pointer', fontSize: 12.5, lineHeight: 1.35,
+  padding: '12px 16px', borderRadius: 999, cursor: 'pointer', fontSize: 14, lineHeight: 1.35, minHeight: 44,
   border: `1px solid ${sel ? GOLD : 'rgba(255,255,255,0.22)'}`,
   background: sel ? 'rgba(201,169,110,0.18)' : 'rgba(255,255,255,0.04)',
   color: sel ? GOLD_LIGHT : 'rgba(255,255,255,0.78)', transition: 'all 0.15s', textAlign: 'left',
 })
 const primaryBtn = {
-  padding: '12px 24px', background: GOLD, color: '#081527', border: 'none', borderRadius: 999,
-  fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
+  padding: '15px 26px', background: GOLD, color: '#081527', border: 'none', borderRadius: 999,
+  minHeight: 48, fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
 }
 const ghostBtn = {
-  padding: '11px 20px', background: 'transparent', color: 'rgba(255,255,255,0.65)',
+  padding: '13px 20px', background: 'transparent', color: 'rgba(255,255,255,0.65)',
   border: '1px solid rgba(255,255,255,0.25)', borderRadius: 999,
-  fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer',
+  minHeight: 44, fontSize: 12.5, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer',
 }
-const card = { border: '1px solid rgba(201,169,110,0.25)', background: 'rgba(201,169,110,0.05)', borderRadius: 14, padding: '16px 18px', marginTop: 12 }
+const card = { border: '1px solid rgba(201,169,110,0.25)', background: 'rgba(201,169,110,0.05)', borderRadius: 14, padding: 'clamp(14px, 4vw, 18px)', marginTop: 12 }
 
 function Fade({ children, k }) {
   return (

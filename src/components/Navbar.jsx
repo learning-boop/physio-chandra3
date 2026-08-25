@@ -25,6 +25,7 @@ export default function Navbar() {
     // Reset scroll state on route change
     setScrolled(false)
     setHidden(false)
+    setOpen(false)
     lastY.current = 0
   }, [location.pathname])
 
@@ -40,46 +41,60 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const navBg = (scrolled || isLightPage)
+  // Lock the page behind the full-screen mobile menu — otherwise the body
+  // keeps scrolling under the overlay on iOS.
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [open])
+
+  // The bar never hides while the menu is open — the close button must stay put.
+  const barHidden = hidden && !open
+
+  const navBg = (scrolled || isLightPage || open)
     ? 'rgba(8,21,39,0.96)'
     : 'transparent'
 
-  const showBorder = scrolled || isLightPage
+  const showBorder = (scrolled || isLightPage) && !open
 
   return (
     <>
       <motion.nav
+        className="nav-bar"
         initial={{ y: -24, opacity: 0 }}
-        animate={{ y: hidden ? -100 : 0, opacity: 1 }}
-        transition={{ duration: hidden ? 0.4 : 0.6, ease: [0.16, 1, 0.3, 1] }}
+        animate={{ y: barHidden ? -100 : 0, opacity: 1 }}
+        transition={{ duration: barHidden ? 0.4 : 0.6, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0,
           zIndex: 500,
-          padding: '20px clamp(20px, 5vw, 80px)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          gap: '12px',
           background: navBg,
-          backdropFilter: (scrolled || isLightPage) ? 'blur(20px) saturate(1.4)' : 'none',
+          backdropFilter: (scrolled || isLightPage || open) ? 'blur(20px) saturate(1.4)' : 'none',
           borderBottom: showBorder ? '1px solid rgba(201,169,110,0.12)' : 'none',
           transition: 'background 0.5s, border 0.5s',
         }}
       >
         {/* Logo */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', lineHeight: 1 }}>
+        <Link to="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', lineHeight: 1, minWidth: 0, minHeight: 44 }}>
           <img
             src="/images/logo2.png"
             alt="Physio Chandra logo"
+            className="nav-logo-img"
             style={{
-              width: '40px', height: '40px',
               objectFit: 'contain',
               borderRadius: '50%',
               flexShrink: 0,
             }}
           />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0 }}>
+            <span className="nav-logo-text" style={{
               fontFamily: 'var(--font-accent)',
-              fontSize: '22px', letterSpacing: '0.13em',
+              letterSpacing: '0.13em',
               color: 'var(--white)', lineHeight: 1,
+              whiteSpace: 'nowrap',
             }}>PHYSIO-CHANDRA</span>
           </div>
         </Link>
@@ -123,10 +138,16 @@ export default function Navbar() {
           >Book Now</a>
         </div>
 
-        {/* Hamburger */}
-        <button onClick={() => setOpen(!open)} className="hide-desktop"
-          style={{ display: 'flex', flexDirection: 'column', gap: '5px', padding: '4px' }}
-          aria-label="Menu"
+        {/* Hamburger — 48px tap target with the icon centred inside it */}
+        <button onClick={() => setOpen(!open)} className="hide-desktop nav-burger"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          style={{
+            display: 'flex', flexDirection: 'column', gap: '5px',
+            alignItems: 'center', justifyContent: 'center',
+            width: '48px', height: '48px', flexShrink: 0,
+            marginRight: '-10px',   // optical alignment with the screen edge
+          }}
         >
           {[0,1,2].map(i => (
             <span key={i} style={{
@@ -153,11 +174,18 @@ export default function Navbar() {
             animate={{ clipPath: 'inset(0 0 0% 0)' }}
             exit={{ clipPath: 'inset(0 0 100% 0)' }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="nav-overlay"
             style={{
               position: 'fixed', inset: 0, zIndex: 499,
               background: 'var(--black)',
               display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center', gap: '36px',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 'clamp(16px, 4vh, 36px)',
+              // Clear the fixed bar above and the home indicator below, and
+              // stay scrollable if the list outgrows a short landscape screen.
+              padding: 'calc(84px + env(safe-area-inset-top)) 24px calc(32px + env(safe-area-inset-bottom))',
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch',
             }}>
             {links.map((l, i) => (
               <motion.div key={l.label}
@@ -168,10 +196,12 @@ export default function Navbar() {
                 <Link to={l.to}
                   onClick={() => setOpen(false)}
                   style={{
+                    display: 'block', padding: '6px 12px',
                     fontFamily: 'var(--font-display)',
-                    fontSize: '44px', fontWeight: 300,
+                    fontSize: 'clamp(32px, 10vw, 44px)', fontWeight: 300,
                     color: 'var(--white)',
                     letterSpacing: '-0.01em',
+                    lineHeight: 1.15,
                   }}
                 >{l.label}</Link>
               </motion.div>
@@ -180,18 +210,41 @@ export default function Navbar() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ delay: 0.45 }}
               style={{
-                marginTop: '16px',
-                padding: '14px 44px',
+                marginTop: '8px',
+                padding: '16px 44px',
                 background: 'var(--gold)',
                 fontFamily: 'var(--font-body)',
-                fontSize: '13px', letterSpacing: '0.16em',
+                fontSize: '14px', letterSpacing: '0.16em',
                 textTransform: 'uppercase', fontWeight: 500,
                 color: 'var(--black)',
                 borderRadius: '2px',
+                textAlign: 'center',
               }}>Book Now</motion.a>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`
+        .nav-bar {
+          padding: 20px clamp(20px, 5vw, 80px);
+          padding-left: max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+          padding-top: max(20px, env(safe-area-inset-top));
+        }
+        .nav-logo-img { width: 40px; height: 40px; }
+        .nav-logo-text { font-size: 22px; }
+
+        @media (max-width: 900px) {
+          .nav-bar { padding-top: max(14px, env(safe-area-inset-top)); padding-bottom: 14px; }
+          .nav-logo-img { width: 34px; height: 34px; }
+          .nav-logo-text { font-size: 19px; }
+          .nav-logo { gap: 9px; }
+        }
+        @media (max-width: 360px) {
+          .nav-logo-img { width: 30px; height: 30px; }
+          .nav-logo-text { font-size: 16.5px; letter-spacing: 0.1em; }
+        }
+      `}</style>
     </>
   )
 }

@@ -19,9 +19,8 @@ export default function Testimonials() {
   }, [])
 
   return (
-    <section style={{
+    <section className="test-sec" style={{
       background: 'var(--warm-white)',
-      padding: '160px clamp(20px, 5vw, 80px)',
       position: 'relative', overflow: 'hidden',
     }}>
       <div style={{
@@ -30,13 +29,13 @@ export default function Testimonials() {
         lineHeight: 1, color: 'rgba(0,0,0,0.04)', userSelect: 'none', pointerEvents: 'none',
       }}>"</div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '80px' }}>
+      <div className="test-eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div style={{ width: '48px', height: '1px', background: 'var(--gold)' }} />
         <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 300 }}>Patient Feedback</span>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="test-g">
-        <div style={{ position: 'relative', height: '380px' }}>
+        <div className="test-stack" style={{ position: 'relative' }}>
           {reviews.map((r, i) => {
             const offset = (i - cur + reviews.length) % reviews.length
             return (
@@ -49,16 +48,16 @@ export default function Testimonials() {
                   opacity: offset > 2 ? 0 : 1 - offset * 0.25,
                 }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="test-card"
                 style={{
                   position: 'absolute', inset: 0,
                   background: offset === 0 ? 'var(--text-dark)' : 'var(--mid-gray, #d0ccc5)',
-                  padding: '48px',
                   display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
                 }}
               >
                 {offset === 0 && (
                   <>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(16px, 2vw, 22px)', fontStyle: 'italic', fontWeight: 300, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', marginBottom: '32px' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(16px, 4vw, 22px)', fontStyle: 'italic', fontWeight: 300, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', marginBottom: 'clamp(20px, 5vw, 32px)' }}>
                       "{r.q}"
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -83,19 +82,28 @@ export default function Testimonials() {
             Patient feedback is published with written consent and reflects individual experiences of the care process. Physiotherapy outcomes vary between individuals; no guarantee of outcome is implied or intended.
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '56px' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', margin: '0 0 clamp(32px, 8vw, 56px)' }}>
             {reviews.map((_, i) => (
-              <button key={i} onClick={() => setCur(i)} style={{
-                width: i === cur ? '48px' : '8px', height: '2px',
-                background: i === cur ? 'var(--text-dark)' : 'rgba(0,0,0,0.15)',
-                transition: 'all 0.5s', border: 'none',
-              }} />
+              <button key={i} onClick={() => setCur(i)}
+                aria-label={`Show review ${i + 1}`}
+                style={{
+                  width: i === cur ? '48px' : '20px', height: '44px',
+                  padding: 0, background: 'none', border: 'none',
+                  display: 'flex', alignItems: 'center',
+                  transition: 'width 0.5s',
+                }}>
+                <span style={{
+                  display: 'block', width: '100%', height: '2px',
+                  background: i === cur ? 'var(--text-dark)' : 'rgba(0,0,0,0.15)',
+                  transition: 'background 0.5s',
+                }} />
+              </button>
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+          <div className="test-stats" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             {[['5+', 'Years in Practice'], ['3', 'Clinic Locations'], ['Individual', 'Treatment Plans'], ['Evidence', 'Informed Practice']].map(([n, l]) => (
-              <div key={l} style={{ padding: '24px', border: '1px solid rgba(0,0,0,0.08)' }}>
+              <div key={l} style={{ padding: 'clamp(16px, 4.5vw, 24px)', border: '1px solid rgba(0,0,0,0.08)' }}>
                 <p style={{ fontFamily: 'var(--font-accent)', fontSize: '32px', color: 'var(--text-dark)', lineHeight: 1, marginBottom: '4px' }}>{n}</p>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-mid)', fontWeight: 300 }}>{l}</p>
               </div>
@@ -105,8 +113,20 @@ export default function Testimonials() {
       </div>
 
       <style>{`
+        .test-sec {
+          padding: clamp(88px, 14vw, 160px) clamp(20px, 5vw, 80px);
+          padding-left: max(clamp(20px, 5vw, 80px), env(safe-area-inset-left));
+          padding-right: max(clamp(20px, 5vw, 80px), env(safe-area-inset-right));
+        }
+        .test-eyebrow { margin-bottom: clamp(40px, 9vw, 80px); }
+        .test-stack { height: 380px; }
+        .test-card { padding: clamp(24px, 6vw, 48px); }
+        .test-stats { gap: clamp(12px, 3vw, 32px); }
+
         @media (max-width: 860px) {
-          .test-g { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .test-g { grid-template-columns: 1fr !important; gap: clamp(32px, 8vw, 40px) !important; }
+          /* Taller stack so the longest quote fits at phone widths. */
+          .test-stack { height: clamp(330px, 92vw, 430px); }
         }
       `}</style>
     </section>
