@@ -1,6 +1,6 @@
-import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react'
+import { Component, useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
-import { OrbitControls, ContactShadows, Environment, Line, useGLTF, Html } from '@react-three/drei'
+import { OrbitControls, ContactShadows, Environment, Lightformer, Line, useGLTF, Html } from '@react-three/drei'
 import * as THREE from 'three'
 
 // body.glb faces sideways (along X; shoulders/arms along Z) → view from X.
@@ -16,6 +16,10 @@ const CAM_POS = [7.4 * FRONT_SIGN, 0.45, 0]
 // leaving a clear empty band at the TOP where the buttons float — they never
 // cover the face or the feet.
 const CAM_TARGET = [0, 0.48, 0]
+// Eye level with the body's centre. Locking OrbitControls' polar angle to this
+// value confines every drag to a left/right turn — the figure can never be
+// tipped forward, backward, or upside down.
+const LEVEL_POLAR = Math.PI / 2
 
 // Real world-space extents of the posed model: it is MODEL_SCALE tall and
 // centred on MODEL_Y_OFFSET, so the feet sit at -1.55 and the head at 2.45.
@@ -24,9 +28,10 @@ const BODY_BOTTOM = MODEL_Y_OFFSET - MODEL_SCALE / 2
 const BODY_CENTRE = MODEL_Y_OFFSET
 const BODY_HALF_H = MODEL_SCALE / 2
 // Half-width budget covering the outstretched arms on narrow phone screens.
-const BODY_HALF_W = 1.32
+const BODY_HALF_W = 1.18
 // A little air around the silhouette so nothing touches the frame edge.
-const FIT_MARGIN = 1.08
+// Kept tight so the figure fills the stage instead of floating in empty space.
+const FIT_MARGIN = 1.02
 
 // Area labels/types for the info panel.
 const AREA = {
@@ -343,7 +348,18 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
       <ambientLight intensity={0.9} />
       <directionalLight position={[3, 5, 4]} intensity={1.7} castShadow />
       <directionalLight position={[-3, 2, -3]} intensity={0.55} color={GOLD} />
-      <Suspense fallback={null}><Environment preset="city" /></Suspense>
+
+      {/* Reflections come from light panels rendered INSIDE the scene rather
+          than from Environment's `preset`, which downloads an HDR from a CDN.
+          That download can fail (offline, blocked network, CDN outage) and the
+          error escapes the Canvas and unmounts the whole page. Building the
+          environment locally keeps the site working with no network at all. */}
+      <Environment resolution={256} frames={1}>
+        <Lightformer intensity={2.2} color="#ffffff" position={[0, 2, 6]} scale={[9, 9, 1]} />
+        <Lightformer intensity={1.1} color="#c8d8ee" position={[5, 1, -3]} scale={[7, 7, 1]} />
+        <Lightformer intensity={0.9} color={GOLD} position={[-5, 1, -4]} scale={[7, 7, 1]} />
+        <Lightformer intensity={0.6} color="#ffffff" position={[0, -3, 3]} scale={[9, 4, 1]} />
+      </Environment>
 
       <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />
       <InteractionGuard controlsRef={controlsRef} highlightRef={highlightRef} interactedRef={interactedRef} />
@@ -358,7 +374,9 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
 
       <ContactShadows position={[0, BODY_BOTTOM, 0]} opacity={0.5} scale={4.5} blur={2.4} far={2} color="#000000" />
 
-      {/* NO auto-rotate — the model stays still until the user touches the BODY. */}
+      {/* The model NEVER moves on its own. It turns only while the user drags
+          it left or right; the polar angle is pinned to the horizon so a
+          vertical drag cannot tilt or flip the figure. */}
       <OrbitControls
         ref={controlsRef}
         makeDefault
@@ -375,17 +393,53 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
         minDistance={2.2}
         maxDistance={16}
         target={[CAM_TARGET[0], BODY_CENTRE, CAM_TARGET[2]]}
-        minPolarAngle={Math.PI * 0.08}
-        maxPolarAngle={Math.PI * 0.92}
+        minPolarAngle={LEVEL_POLAR}
+        maxPolarAngle={LEVEL_POLAR}
         onStart={onInteract}
       />
     </>
   )
 }
 
-export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = false, drawOn = false, clearSignal = 0 }) {
+// A failure anywhere inside the WebGL canvas — a missing asset, a lost GPU
+// context, an unsupported device — is re-thrown by R3F to the nearest React
+// boundary. With no boundary it reaches the root and React unmounts the ENTIRE
+// site, which reads to a visitor as "the page loaded, then vanished". This
+// contains the failure to the 3D stage so the rest of the page keeps working.
+class CanvasErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { failed: false }
+  }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(error) {
+    console.error('[Body3D] the 3D view failed and was contained:', error)
+  }
+  render() {
+    if (!this.state.failed) return this.props.children
+    return (
+      <div style={{
+        width: '100%', height: '100%', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 24, boxSizing: 'border-box',
+        textAlign: 'center', fontFamily: "'DM Sans', sans-serif",
+        fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)',
+      }}>
+        The interactive body model could not be displayed on this device.
+        You can still book an assessment and describe your symptoms directly.
+      </div>
+    )
+  }
+}
+
+export default function Body3D({
+  onSelectionChange, onDoneDrawing, controlled = false, drawOn = false,
+  clearSignal = 0, undoSignal = 0, redoSignal = 0, onHistoryChange,
+}) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
   const [paths, setPaths] = useState([])              // completed pain lines (multiple)
+  const [undone, setUndone] = useState([])            // lines removed by Undo, awaiting Redo
   const [livePath, setLivePath] = useState([])        // line being drawn now
   const controlsRef = useRef()
   const interactedRef = useRef(false)
@@ -396,9 +450,38 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
   // when to clear, and the internal button bar is hidden.
   useEffect(() => { if (controlled) setHighlight(drawOn) }, [controlled, drawOn])
   useEffect(() => {
-    if (controlled && clearSignal > 0) { setPaths([]); setLivePath([]); onSelectionChange?.([]) }
+    if (controlled && clearSignal > 0) { setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearSignal])
+
+  // Undo lifts the most recent line onto the redo stack; Redo puts it back.
+  // Drawing a new line after an undo clears the redo stack, which is the
+  // behaviour people already expect from every other drawing tool.
+  useEffect(() => {
+    if (!undoSignal || !paths.length) return
+    const next = paths.slice(0, -1)
+    setUndone((u) => [...u, paths[paths.length - 1]])
+    setPaths(next)
+    setLivePath([])
+    emitZones(next)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [undoSignal])
+
+  useEffect(() => {
+    if (!redoSignal || !undone.length) return
+    const next = [...paths, undone[undone.length - 1]]
+    setUndone((u) => u.slice(0, -1))
+    setPaths(next)
+    setLivePath([])
+    emitZones(next)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [redoSignal])
+
+  // Let the parent enable/disable its Undo and Redo controls.
+  useEffect(() => {
+    onHistoryChange?.({ canUndo: paths.length > 0, canRedo: undone.length > 0, lines: paths.length })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paths.length, undone.length])
 
   // Keep a ref in sync so canvas-level listeners always see the current mode,
   // and control page scrolling: highlight mode captures all touches, normal
@@ -436,6 +519,7 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
   const onPathComplete = (pts) => {
     setLivePath([])
     if (pts.length < 2) return
+    setUndone([])
     setPaths((prev) => {
       const next = [...prev, pts]
       emitZones(next)
@@ -443,7 +527,7 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
     })
   }
 
-  const reset = () => { setPaths([]); setLivePath([]); onSelectionChange?.([]) }
+  const reset = () => { setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
 
   // Turning highlight OFF now KEEPS the drawn lines (so users can rotate and
   // keep adding lines from another angle). Only Reset clears.
@@ -498,6 +582,7 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
       </div>
 
       <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+        <CanvasErrorBoundary>
         <Canvas
           shadows
           camera={{ position: CAM_POS, fov: 36 }}
@@ -512,6 +597,7 @@ export default function Body3D({ onSelectionChange, onDoneDrawing, controlled = 
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
           />
         </Canvas>
+        </CanvasErrorBoundary>
       </div>
     </div>
   )
