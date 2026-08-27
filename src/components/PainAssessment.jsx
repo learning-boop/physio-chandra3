@@ -100,6 +100,63 @@ const toolBtn = (disabled) => ({
 })
 const card = { border: '1px solid rgba(201,169,110,0.25)', background: 'rgba(201,169,110,0.05)', borderRadius: 14, padding: 'clamp(16px, 4.5vw, 22px)' }
 
+/* ── Shown after the safety check clears, before the result is revealed.
+   Wording follows the CHCPBC Practice Standards: it states plainly that the
+   output is not a diagnosis, describes it as general information rather than
+   a clinical finding, and makes no guarantee about any outcome. ───────── */
+function NoticeDialog({ onOk, onBack }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      onClick={onBack}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 200, display: 'flex',
+        alignItems: 'center', justifyContent: 'center', padding: 20,
+        background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+      }}
+    >
+      <motion.div
+        role="dialog" aria-modal="true" aria-labelledby="pa-notice-title"
+        initial={{ opacity: 0, y: 18, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.32, ease: EASE }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: '100%', maxWidth: 480, boxSizing: 'border-box',
+          borderRadius: 20, padding: 'clamp(22px, 6vw, 28px)',
+          background: 'rgba(12,28,50,0.97)', border: '1px solid rgba(201,169,110,0.3)',
+          boxShadow: '0 24px 70px rgba(0,0,0,0.6)', maxHeight: '86svh', overflowY: 'auto',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.6" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" />
+          </svg>
+          <h3 id="pa-notice-title" style={{ ...h2, fontSize: 'clamp(21px,5.4vw,25px)', fontWeight: 400, margin: 0 }}>
+            Please note
+          </h3>
+        </div>
+
+        <p style={{ ...body, fontSize: 15.5, margin: '0 0 12px' }}>
+          This is <strong style={{ color: '#fff' }}>not a confirmed diagnosis</strong>. What
+          follows is a general suggestion based only on the answers you provided.
+        </p>
+        <p style={{ ...body, fontSize: 15.5, margin: '0 0 12px' }}>
+          It cannot examine you, review your medical history, or determine the cause of your
+          symptoms. Only an individual assessment by a physiotherapist or physician can do that.
+        </p>
+        <p style={{ ...body, fontSize: 15.5, margin: '0 0 22px' }}>
+          Every person is different, and no particular result or outcome is implied or guaranteed.
+        </p>
+
+        <div className="pa-actions" style={{ maxWidth: 'none', marginTop: 0 }}>
+          <button className="pa-primary" style={goldBtn} onClick={onOk} autoFocus>OK</button>
+          <button style={ghostBtn} onClick={onBack}>Back</button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 function Fade({ children, k }) {
   return (
     <motion.div key={k} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
@@ -141,6 +198,8 @@ export default function PainAssessment() {
   const [redoSignal, setRedoSignal] = useState(0)
   const [history, setHistory] = useState({ canUndo: false, canRedo: false, lines: 0 })
   const [fromReview, setFromReview] = useState(false)
+  // Gates the result screen behind the "not a diagnosis" notice.
+  const [showNotice, setShowNotice] = useState(false)
 
   const drawOn = stage === 'draw'
   const modelSmall = ['intro', 'questions', 'review', 'safety', 'urgent', 'ok'].includes(stage)
@@ -175,7 +234,7 @@ export default function PainAssessment() {
 
   const restart = () => {
     setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther('')
-    setClearSignal((n) => n + 1); setFromReview(false)
+    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false)
   }
 
   return (
@@ -507,7 +566,7 @@ export default function PainAssessment() {
 
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary" style={goldBtn}
-                    onClick={() => setStage(anyFlagged ? 'urgent' : 'ok')}>
+                    onClick={() => { if (anyFlagged) setStage('urgent'); else setShowNotice(true) }}>
                     {anyFlagged ? 'Continue' : 'None Apply — Continue'}
                   </button>
                   <button style={ghostBtn} onClick={() => setStage('review')}>Back</button>
@@ -565,6 +624,33 @@ export default function PainAssessment() {
                   symptoms to be examined individually and a suitable plan of care discussed
                   with you.
                 </p>
+
+                {/* Everything the person told us, repeated back so they can
+                    check it — and read it out at the appointment. */}
+                <span style={{ ...label, marginBottom: 12 }}>Your responses</span>
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                    <span style={{ ...label, fontSize: 11.5 }}>Pain areas</span>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 10 }}>
+                      {zones.length
+                        ? zones.map((z) => <span key={z.id} style={pill}>{z.label}</span>)
+                        : <span style={{ ...body, fontSize: 15, margin: 0 }}>—</span>}
+                    </div>
+                  </div>
+                  {QUESTIONS.map((q) => (
+                    <div key={q.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                      <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
+                      <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
+                    </div>
+                  ))}
+                  <div style={{ ...card, maxWidth: 520, marginBottom: 22 }}>
+                    <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>Final safety check</p>
+                    <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>
+                      None of the listed symptoms apply
+                    </p>
+                  </div>
+                </div>
+
                 <div className="pa-actions">
                   <a className="pa-primary" href={BOOK_HREF} style={{ ...goldBtn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box' }}>
                     Book an Appointment
@@ -577,6 +663,16 @@ export default function PainAssessment() {
                   symptoms change or worsen, please seek advice from a health professional.
                 </p>
               </Fade>
+            )}
+          </AnimatePresence>
+
+          {/* Not-a-diagnosis notice — must be acknowledged before the result. */}
+          <AnimatePresence>
+            {showNotice && (
+              <NoticeDialog
+                onOk={() => { setShowNotice(false); setStage('ok') }}
+                onBack={() => setShowNotice(false)}
+              />
             )}
           </AnimatePresence>
         </div>
