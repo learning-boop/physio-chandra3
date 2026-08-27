@@ -16,3 +16,4 @@ server/dist/
 # Logs / OS
 *.log
 .DS_Store
+.model-backup/

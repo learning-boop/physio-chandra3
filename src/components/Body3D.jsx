@@ -2,10 +2,24 @@ import { Component, useRef, useState, useMemo, Suspense, useCallback, useEffect 
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Lightformer, Line, useGLTF, Html } from '@react-three/drei'
 import * as THREE from 'three'
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh'
+
+// Raycasting drives every drawn point, and this mesh has ~218k triangles.
+// Three's default raycast tests every triangle (O(n)), which stutters badly on
+// a phone. three-mesh-bvh builds a bounding-volume hierarchy once and turns
+// each ray into an O(log n) lookup, which is what makes drawing feel smooth.
+THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree
+THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree
+THREE.Mesh.prototype.raycast = acceleratedRaycast
 
 // body.glb faces sideways (along X; shoulders/arms along Z) → view from X.
 const MODEL_SCALE = 4
 const MODEL_Y_OFFSET = 0.45
+// Verified against the mesh itself: at face height the midline protrudes
+// +0.052 toward +X (the nose) versus +0.036 toward -X (the occiput), and the
+// eye/brow/nostril texels all sit at +X. The face points +X, so the camera
+// sits on +X. classify() derives front/back AND left/right from this sign, so
+// flipping it keeps every zone label anatomically correct.
 const FRONT_SIGN = 1   // set -1 if it opens showing the back
 
 const CAM_POS = [7.4 * FRONT_SIGN, 0.45, 0]
@@ -27,8 +41,9 @@ const LEVEL_POLAR = Math.PI / 2
 const BODY_BOTTOM = MODEL_Y_OFFSET - MODEL_SCALE / 2
 const BODY_CENTRE = MODEL_Y_OFFSET
 const BODY_HALF_H = MODEL_SCALE / 2
-// Half-width budget covering the outstretched arms on narrow phone screens.
-const BODY_HALF_W = 1.18
+// Half-width budget covering the widest part of the figure (the hands, which
+// hang at hip height). Measured from the model: max |z| 0.2602 x MODEL_SCALE.
+const BODY_HALF_W = 1.05
 // A little air around the silhouette so nothing touches the frame edge.
 // Kept tight so the figure fills the stage instead of floating in empty space.
 const FIT_MARGIN = 1.02
@@ -55,20 +70,29 @@ const AREA = {
 export const ZONE_LABELS = Object.fromEntries(Object.entries(AREA).map(([id, d]) => [id, d.label]))
 export const ZONE_TYPES = Object.fromEntries(Object.entries(AREA).map(([id, d]) => [id, d.type]))
 
+// Distance from the centre line that separates the torso from the arm.
+// Measured off this model, whose arms hang at its sides: at waist height the
+// torso ends at |z| 0.10 and the forearm starts at 0.12; at hip height the
+// torso ends at 0.12 and the hand starts at 0.17. 0.12 clears both gaps.
+const ARM_SPLIT = 0.12
+// Distance that separates the neck (centre) from the shoulders (out).
+const NECK_SPLIT = 0.09
+
 // Classify a point on the body (world coords) into an area, using its height
-// AND how far it sits from the centre line. Tunable dials:
-//   0.09 = neck (centre) vs shoulder (out) split
-//   0.20 = torso vs arm (elbow/wrist) split
-//   fy 0.26 = how high counts as neck
+// AND how far it sits from the centre line. Both the front/back test and the
+// left/right test are taken relative to FRONT_SIGN, because turning the figure
+// to face the other way swaps its anatomical left and right as well.
 function classify(wx, wy, wz) {
-  const fy = (wy - MODEL_Y_OFFSET) / MODEL_SCALE   // -0.5 feet .. +0.5 head
-  const lz = wz / MODEL_SCALE                        // left(-)/right(+)
-  const lx = wx / MODEL_SCALE                        // front(+)/back(-)
+  const fy = (wy - MODEL_Y_OFFSET) / MODEL_SCALE       // -0.5 feet .. +0.5 head
+  const lz = (wz / MODEL_SCALE) * FRONT_SIGN           // left(-)/right(+)
+  const lx = (wx / MODEL_SCALE) * FRONT_SIGN           // front(+)/back(-)
   const side = lz < 0 ? 'L' : 'R'
-  const absZ = Math.abs(lz)                          // distance from centre line
+  const absZ = Math.abs(lz)                            // distance from centre line
   const back = lx < -0.04
 
-  // legs (by height, either side)
+  // Legs first, by height alone. Safe because this model's arm points all sit
+  // above fy -0.10, while the feet spread to |z| 0.1385 — wider than ARM_SPLIT
+  // — so testing the arm first would read the edge of a foot as a wrist.
   if (fy < -0.34) return 'ankle' + side
   if (fy < -0.12) return 'knee' + side
 
@@ -78,15 +102,15 @@ function classify(wx, wy, wz) {
   // ── FRONT of the body ──
   // OUT to the side = the arm: shoulder (high) → elbow (mid) → wrist (low).
   // The arm sits further from the centre than the hip, so distance decides.
-  if (absZ > 0.14) {
+  if (absZ > ARM_SPLIT) {
     if (fy > 0.24) return 'shoulder' + side
     if (fy > 0.04) return 'elbow' + side
     return 'wrist' + side
   }
 
-  // NEAR the centre (absZ <= 0.14): head, neck, shoulders(inner), chest, hip
+  // NEAR the centre: head, neck, shoulders(inner), chest, hip
   if (fy > 0.38) return 'head'
-  if (fy > 0.26) return absZ > 0.09 ? 'shoulder' + side : 'neck'
+  if (fy > 0.26) return absZ > NECK_SPLIT ? 'shoulder' + side : 'neck'
   if (fy > 0.14) return null          // chest / upper stomach — no listed area
   return 'hip' + side                  // lower torso = hip
 }
@@ -95,15 +119,25 @@ const GOLD = '#c9a96e'
 
 // Lazy-loaded, Draco-compressed model.
 function BodyFigure() {
-  const { scene } = useGLTF('/models/body.glb', true)
-  const cloned = useMemo(() => scene.clone(true), [scene])
+  // useDraco=false: this model uses EXT_meshopt_compression, whose decoder drei
+  // bundles locally. Draco's decoder is fetched from a CDN, which is a network
+  // dependency the site does not need.
+  const { scene } = useGLTF('/models/body.glb', false)
+  const cloned = useMemo(() => {
+    const c = scene.clone(true)
+    // One-off BVH build (~50ms) that every later raycast rides on.
+    c.traverse((o) => {
+      if (o.isMesh && o.geometry && !o.geometry.boundsTree) o.geometry.computeBoundsTree()
+    })
+    return c
+  }, [scene])
   return (
     <group name="bodyModel" scale={MODEL_SCALE} position={[0, MODEL_Y_OFFSET, 0]}>
       <primitive object={cloned} />
     </group>
   )
 }
-useGLTF.preload('/models/body.glb', true)
+useGLTF.preload('/models/body.glb', false)
 
 function Loader() {
   return (
@@ -160,7 +194,7 @@ const PAN_MAX_Y = 2.2    // how far UP the body can be pushed
 
 function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
   const { gl, camera, scene } = useThree()
-  const ray = useMemo(() => new THREE.Raycaster(), [])
+  const ray = useMemo(() => { const r = new THREE.Raycaster(); r.firstHitOnly = true; return r }, [])
   const v2 = useMemo(() => new THREE.Vector2(), [])
   const panState = useRef(null)
 
@@ -266,11 +300,17 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
   return null
 }
 
+// Smallest gap between two recorded points, in world units (the body is 4 tall,
+// so this is ~1.5mm on a human scale) — fine enough that the stroke still reads
+// as a smooth curve.
+const MIN_STEP_SQ = 0.006 * 0.006
+
 // Active only in Highlight mode: trace over the body to draw pain lines.
 // Supports MULTIPLE lines — each completed drag becomes its own line.
 function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   const { camera, gl, scene } = useThree()
-  const raycaster = useMemo(() => new THREE.Raycaster(), [])
+  // firstHitOnly lets the BVH stop at the nearest hit instead of collecting all.
+  const raycaster = useMemo(() => { const r = new THREE.Raycaster(); r.firstHitOnly = true; return r }, [])
   const pointer = useMemo(() => new THREE.Vector2(), [])
   const drawing = useRef(false)
   const pathRef = useRef([])
@@ -301,6 +341,11 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
     if (!active || !drawing.current) return
     const p = cast(e.clientX, e.clientY)
     if (!p) return
+    // Ignore sub-threshold movement. Without this every pointer event appends a
+    // point and rebuilds the line geometry, which is what makes a slow drag
+    // feel gritty; the drawn stroke is visually identical.
+    const last = pathRef.current[pathRef.current.length - 1]
+    if (last && last.distanceToSquared(p) < MIN_STEP_SQ) return
     pathRef.current = [...pathRef.current, p]
     onPathUpdate(pathRef.current)
   }
@@ -325,6 +370,12 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   )
 }
 
+// Pain marks are drawn in red: it is the convention on a clinical body chart,
+// and unlike the previous black it stays legible against every surface the line
+// can cross — skin, the dark shorts, hair, and the navy backdrop.
+const PAIN_RED = '#ff2f2f'
+const PAIN_HALO = '#4a0000'
+
 function PainLine({ points }) {
   // Lift each point slightly OUT from the body's central axis so the line
   // floats just above the skin — kills the striping/z-fighting against the
@@ -334,10 +385,18 @@ function PainLine({ points }) {
     const k = 0.03 / len
     return new THREE.Vector3(p.x + p.x * k, p.y, p.z + p.z * k)
   }), [points])
+  // Slightly further out again, so the dark halo sits behind the red core
+  // rather than fighting it for the same depth.
+  const haloPts = useMemo(() => lifted.map((p) => {
+    const len = Math.hypot(p.x, p.z) || 1
+    const k = 0.004 / len
+    return new THREE.Vector3(p.x + p.x * k, p.y, p.z + p.z * k)
+  }), [lifted])
   return (
     <>
-      {/* One plain solid dark line */}
-      <Line points={lifted} color="#000000" lineWidth={7} />
+      {/* Dark outline first, so the red core reads on pale skin too */}
+      <Line points={haloPts} color={PAIN_HALO} lineWidth={11} transparent opacity={0.85} />
+      <Line points={lifted} color={PAIN_RED} lineWidth={7} />
     </>
   )
 }
