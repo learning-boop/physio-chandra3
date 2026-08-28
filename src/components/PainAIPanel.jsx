@@ -10,7 +10,10 @@ const GOLD = '#c9a96e'
 // (e.g. https://api.physiochandra.com). See .env.example.
 const API_URL = import.meta.env.VITE_API_URL || ''
 
-export default function PainAIPanel({ zones }) {
+// `aiOnly` renders JUST the AI overview and always calls the API. The guided
+// questionnaire below is a whole interactive flow of its own, so it must not be
+// dropped into a results screen that has already asked its questions.
+export default function PainAIPanel({ zones, aiOnly = false }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
@@ -24,7 +27,7 @@ export default function PainAIPanel({ zones }) {
       regionOptions.push({ regionKey: key, zoneLabel: z.label })
     }
   })
-  const useGuide = regionOptions.length > 0
+  const useGuide = !aiOnly && regionOptions.length > 0
 
   useEffect(() => {
     if (useGuide) { setResult(null); setError(null); setLoading(false); return }
@@ -102,6 +105,15 @@ export default function PainAIPanel({ zones }) {
 
       {result && !loading && (
         <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, lineHeight: 1.7 }}>
+          {result.fallback && (
+            <p style={{
+              margin: '0 0 14px', padding: '10px 12px', borderRadius: 10, fontSize: 12.5, lineHeight: 1.6,
+              border: '1px solid rgba(224,138,138,0.4)', background: 'rgba(224,138,138,0.08)', color: '#e0b0b0',
+            }}>
+              Showing standard information — the analysis service is not configured, so this
+              was not generated for your specific pattern.
+            </p>
+          )}
           <Section title="Possible Causes" items={result.possibleCauses} />
           <Section title="Common Symptoms" items={result.commonSymptoms} />
           <Section title="Suggested Approach" items={result.suggestedApproach} />

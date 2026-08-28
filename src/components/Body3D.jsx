@@ -30,10 +30,10 @@ const CAM_POS = [7.4 * FRONT_SIGN, 0.45, 0]
 // leaving a clear empty band at the TOP where the buttons float — they never
 // cover the face or the feet.
 const CAM_TARGET = [0, 0.48, 0]
-// Eye level with the body's centre. Locking OrbitControls' polar angle to this
-// value confines every drag to a left/right turn — the figure can never be
-// tipped forward, backward, or upside down.
-const LEVEL_POLAR = Math.PI / 2
+// Tilt limits. Wide enough to look up at the soles of the feet and down at the
+// top of the head, but stopping short of the poles so the view never flips.
+const POLAR_MIN = Math.PI * 0.04
+const POLAR_MAX = Math.PI * 0.96
 
 // Real world-space extents of the posed model: it is MODEL_SCALE tall and
 // centred on MODEL_Y_OFFSET, so the feet sit at -1.55 and the head at 2.45.
@@ -44,9 +44,10 @@ const BODY_HALF_H = MODEL_SCALE / 2
 // Half-width budget covering the widest part of the figure (the hands, which
 // hang at hip height). Measured from the model: max |z| 0.2602 x MODEL_SCALE.
 const BODY_HALF_W = 1.05
-// A little air around the silhouette so nothing touches the frame edge.
-// Kept tight so the figure fills the stage instead of floating in empty space.
-const FIT_MARGIN = 1.02
+// Air around the silhouette so nothing touches the frame edge. At 1.02 the
+// feet sat exactly on the bottom edge and were clipped on the landing view;
+// 1.16 pulls the camera back far enough that the soles are always visible.
+const FIT_MARGIN = 1.16
 
 // Area labels/types for the info panel.
 const AREA = {
@@ -303,7 +304,10 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
 // Smallest gap between two recorded points, in world units (the body is 4 tall,
 // so this is ~1.5mm on a human scale) — fine enough that the stroke still reads
 // as a smooth curve.
-const MIN_STEP_SQ = 0.006 * 0.006
+// Smallest gap between two recorded points, in world units. Small enough that
+// the curve keeps its detail, large enough that a still finger does not pile up
+// duplicate samples at one spot.
+const MIN_STEP_SQ = 0.004 * 0.004
 
 // Active only in Highlight mode: trace over the body to draw pain lines.
 // Supports MULTIPLE lines — each completed drag becomes its own line.
@@ -339,15 +343,25 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   }
   const move = (e) => {
     if (!active || !drawing.current) return
-    const p = cast(e.clientX, e.clientY)
-    if (!p) return
-    // Ignore sub-threshold movement. Without this every pointer event appends a
-    // point and rebuilds the line geometry, which is what makes a slow drag
-    // feel gritty; the drawn stroke is visually identical.
-    const last = pathRef.current[pathRef.current.length - 1]
-    if (last && last.distanceToSquared(p) < MIN_STEP_SQ) return
-    pathRef.current = [...pathRef.current, p]
-    onPathUpdate(pathRef.current)
+    // The browser batches pointermove events, so a quick drag delivers only a
+    // handful of positions and the stroke comes out as long straight chords.
+    // getCoalescedEvents() returns every sample the device actually recorded.
+    const ne = e.nativeEvent
+    const coalesced = ne && typeof ne.getCoalescedEvents === 'function' ? ne.getCoalescedEvents() : null
+    const samples = coalesced && coalesced.length ? coalesced : [e]
+
+    let added = false
+    for (const sample of samples) {
+      const p = cast(sample.clientX, sample.clientY)
+      if (!p) continue
+      // Ignore sub-threshold movement so a stationary finger does not pile up
+      // duplicate points; the drawn stroke is visually identical.
+      const last = pathRef.current[pathRef.current.length - 1]
+      if (last && last.distanceToSquared(p) < MIN_STEP_SQ) continue
+      pathRef.current.push(p)
+      added = true
+    }
+    if (added) onPathUpdate([...pathRef.current])
   }
   const up = () => {
     if (!drawing.current) return
@@ -376,11 +390,46 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
 const PAIN_RED = '#ff2f2f'
 const PAIN_HALO = '#4a0000'
 
+// Each drawn point is a raycast hit on a 218k-triangle surface, so consecutive
+// hits wobble in and out along the view ray. Averaging each point with its two
+// neighbours removes that high-frequency noise without moving the stroke off
+// the path the finger took. Endpoints are pinned so the line keeps its extent.
+function denoise(pts, passes = 2) {
+  if (pts.length < 3) return pts
+  let cur = pts
+  for (let pass = 0; pass < passes; pass++) {
+    const out = [cur[0]]
+    for (let i = 1; i < cur.length - 1; i++) {
+      const a = cur[i - 1], b = cur[i], c = cur[i + 1]
+      out.push(new THREE.Vector3(
+        (a.x + b.x * 2 + c.x) / 4,
+        (a.y + b.y * 2 + c.y) / 4,
+        (a.z + b.z * 2 + c.z) / 4,
+      ))
+    }
+    out.push(cur[cur.length - 1])
+    cur = out
+  }
+  return cur
+}
+
+// <Line> renders straight chords between the points it is given, so the raw
+// samples read as a chain of angular segments. Fitting a centripetal
+// Catmull-Rom curve through them and re-sampling densely turns the stroke into
+// a genuine curve. Centripetal parameterisation is the variant that will not
+// overshoot or form cusps on tight turns.
+function toCurve(pts) {
+  if (pts.length < 3) return pts
+  const curve = new THREE.CatmullRomCurve3(pts, false, 'centripetal', 0.5)
+  const n = Math.min(700, Math.max(pts.length * 4, 32))
+  return curve.getPoints(n)
+}
+
 function PainLine({ points }) {
   // Lift each point slightly OUT from the body's central axis so the line
   // floats just above the skin — kills the striping/z-fighting against the
   // mesh while still hiding correctly behind the body when rotated.
-  const lifted = useMemo(() => points.map((p) => {
+  const lifted = useMemo(() => toCurve(denoise(points)).map((p) => {
     const len = Math.hypot(p.x, p.z) || 1
     const k = 0.03 / len
     return new THREE.Vector3(p.x + p.x * k, p.y, p.z + p.z * k)
@@ -395,8 +444,8 @@ function PainLine({ points }) {
   return (
     <>
       {/* Dark outline first, so the red core reads on pale skin too */}
-      <Line points={haloPts} color={PAIN_HALO} lineWidth={11} transparent opacity={0.85} />
-      <Line points={lifted} color={PAIN_RED} lineWidth={7} />
+      <Line points={haloPts} color={PAIN_HALO} lineWidth={5} transparent opacity={0.85} />
+      <Line points={lifted} color={PAIN_RED} lineWidth={2.6} />
     </>
   )
 }
@@ -433,9 +482,10 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
 
       <ContactShadows position={[0, BODY_BOTTOM, 0]} opacity={0.5} scale={4.5} blur={2.4} far={2} color="#000000" />
 
-      {/* The model NEVER moves on its own. It turns only while the user drags
-          it left or right; the polar angle is pinned to the horizon so a
-          vertical drag cannot tilt or flip the figure. */}
+      {/* The model NEVER moves on its own — it only responds to a drag.
+          Dragging left/right turns it; dragging up/down tilts it, which is what
+          makes the sole of the foot and the top of the head reachable. The
+          polar range stops just short of both poles so it can never flip. */}
       <OrbitControls
         ref={controlsRef}
         makeDefault
@@ -452,8 +502,8 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
         minDistance={2.2}
         maxDistance={16}
         target={[CAM_TARGET[0], BODY_CENTRE, CAM_TARGET[2]]}
-        minPolarAngle={LEVEL_POLAR}
-        maxPolarAngle={LEVEL_POLAR}
+        minPolarAngle={POLAR_MIN}
+        maxPolarAngle={POLAR_MAX}
         onStart={onInteract}
       />
     </>

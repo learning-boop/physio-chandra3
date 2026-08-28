@@ -1,6 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Body3D from './Body3D'
+import PainAIPanel from './PainAIPanel'
+import {
+  REGIONS, ZONE_TO_REGION, allQuestions, isRelevant, shouldStop,
+  answeredRegionCount, computeResults,
+} from '../data/symptomGuide'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -38,7 +43,102 @@ const QUESTIONS = [
   { id: 'q5', text: 'Is there anything further you would like the physiotherapist to know?', textarea: true,
     placeholder: 'Other symptoms, previous injuries, relevant medical history, or any concerns…' },
 ]
-const LETTERS = ['A', 'B', 'C', 'D']
+const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F']
+
+/* ── Region-specific option sets ───────────────────────────────────────
+   The four core questions (onset, character, aggravating, easing) are the
+   standard subjective examination and apply to any body area — but what
+   provokes and eases pain is very different for a neck than for a knee.
+   These overrides swap in the aggravating/easing options that a
+   physiotherapist would actually ask about for the area the person drew. */
+const REGION_AGGRAVATORS = {
+  lowback:   ['Bending forward or lifting', 'Sitting for a long time', 'Standing or walking for a long time', 'Coughing, sneezing, or straining'],
+  neck:      ['Looking down at a phone or desk', 'Turning the head to one side', 'Sleeping position', 'Carrying a bag on that shoulder'],
+  upperback: ['Sitting at a desk for a long time', 'Deep breathing or coughing', 'Reaching or lifting overhead', 'Twisting the trunk'],
+  shoulder:  ['Reaching overhead', 'Reaching behind your back', 'Lying on that side at night', 'Lifting or carrying'],
+  elbow:     ['Gripping or squeezing', 'Lifting with the palm down', 'Twisting a handle or door knob', 'Repetitive work or sport'],
+  wrist:     ['Gripping or twisting', 'Typing or using a mouse', 'Taking weight through the hand', 'Fine tasks such as buttons or jars'],
+  hip:       ['Walking or climbing stairs', 'Lying on that side at night', 'Standing on one leg', 'Getting up from a chair'],
+  knee:      ['Going up or down stairs', 'Squatting or kneeling', 'Sitting with the knee bent for a long time', 'Running or jumping'],
+  ankle:     ['First steps in the morning', 'Walking or standing for a long time', 'Running or jumping', 'Uneven ground or stairs'],
+}
+const REGION_EASERS = {
+  lowback:   ['Lying down or resting', 'Gentle walking', 'Changing position often', 'Heat or cold packs'],
+  neck:      ['Gentle neck movement', 'Supporting the head or a different pillow', 'Heat packs', 'Rest from screens'],
+  upperback: ['Moving and stretching', 'Sitting upright with support', 'Heat packs', 'Rest'],
+  shoulder:  ['Resting the arm', 'Supporting the arm in a sling or pocket', 'Gentle pendulum movement', 'Heat or cold packs'],
+  elbow:     ['Resting from gripping', 'A brace or strap', 'Ice', 'Gentle stretching'],
+  wrist:     ['Resting the hand', 'A splint or support', 'Ice', 'Avoiding the aggravating task'],
+  hip:       ['Rest', 'A pillow between the knees at night', 'Gentle walking', 'Heat packs'],
+  knee:      ['Rest and elevation', 'Ice', 'A support or brace', 'Gentle movement'],
+  ankle:     ['Rest and elevation', 'Ice', 'Supportive footwear', 'Gentle stretching'],
+}
+
+/* The single region a drawn selection points at (the most-marked one). */
+function primaryRegion(zones) {
+  const tally = {}
+  zones.forEach((z) => {
+    const k = ZONE_TO_REGION[z.type]
+    if (k && REGIONS[k]) tally[k] = (tally[k] || 0) + 1
+  })
+  const best = Object.entries(tally).sort((a, b) => b[1] - a[1])[0]
+  return best ? best[0] : null
+}
+
+/* The open field stays at the end of every region's set. Its id is not one of
+   the region's question ids, so the scoring engine simply ignores it. */
+const NOTES_Q = {
+  id: 'notes', textarea: true,
+  text: 'Is there anything further you would like the physiotherapist to know?',
+  placeholder: 'Other symptoms, previous injuries, relevant medical history, or any concerns…',
+}
+
+/* Builds the question list for this particular selection. */
+function buildQuestions(zones) {
+  const rk = primaryRegion(zones)
+  const area = rk && REGIONS[rk] ? REGIONS[rk].name.toLowerCase() : null
+  return QUESTIONS.map((q) => {
+    if (q.id === 'q3' && rk && REGION_AGGRAVATORS[rk]) {
+      return { ...q, text: `What tends to make your ${area} pain worse?`, options: REGION_AGGRAVATORS[rk] }
+    }
+    if (q.id === 'q4' && rk && REGION_EASERS[rk]) {
+      return { ...q, text: `What tends to ease your ${area} pain?`, options: REGION_EASERS[rk] }
+    }
+    if (q.id === 'q1' && area) return { ...q, text: `When did your ${area} pain begin?` }
+    return q
+  })
+}
+
+/* Possible contributing causes for the drawn areas — general education only,
+   never presented as a diagnosis (CHCPBC Practice Standards). */
+function likelyCauses(zones, max = 3) {
+  // Take one condition from each region the line crossed before taking a second
+  // from any of them. Filling the list in region order instead would spend every
+  // slot on the first area — a shoulder-to-wrist line would return three
+  // shoulder conditions and never mention the elbow or the wrist.
+  const regions = []
+  const seenRegion = new Set()
+  zones.forEach((z) => {
+    const k = ZONE_TO_REGION[z.type]
+    const r = k && REGIONS[k]
+    if (!r || !r.conditions || seenRegion.has(k)) return
+    seenRegion.add(k)
+    regions.push(r)
+  })
+
+  const seen = new Set(); const out = []
+  const deepest = Math.max(0, ...regions.map((r) => r.conditions.length))
+  for (let rank = 0; rank < deepest && out.length < max; rank++) {
+    for (const r of regions) {
+      if (out.length >= max) break
+      const c = r.conditions[rank]
+      if (!c || seen.has(c.id)) continue
+      seen.add(c.id)
+      out.push({ id: c.id, name: c.name, region: r.name, blurb: (c.blurb || '').split('. ')[0] + '.' })
+    }
+  }
+  return out
+}
 
 /* ── Final safety check — four grouped screening questions plus a manual
    option, presented in the same A–E format as the questions above.
@@ -46,10 +146,18 @@ const LETTERS = ['A', 'B', 'C', 'D']
    (cauda equina, progressive neurological deficit, infection or
    malignancy, and significant trauma or suspected fracture). */
 const SAFETY_CHECKS = [
-  { id: 'sc-cauda', text: 'Loss of bladder or bowel control, or new numbness around the groin, genitals, or inner thighs' },
-  { id: 'sc-neuro', text: 'New or worsening weakness, numbness, or loss of coordination in an arm or leg' },
-  { id: 'sc-systemic', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain' },
-  { id: 'sc-trauma', text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis' },
+  { id: 'sc-cauda', text: 'Loss of bladder or bowel control, or new numbness around the groin, genitals, or inner thighs',
+    why: { title: 'Pressure on the lowest spinal nerves',
+      text: 'This combination can indicate compression of the nerve bundle at the base of the spine. It is uncommon, but it is assessed urgently because early treatment protects bladder, bowel and leg function.' } },
+  { id: 'sc-neuro', text: 'New or worsening weakness, numbness, or loss of coordination in an arm or leg',
+    why: { title: 'A nerve or spinal cord may be involved',
+      text: 'Weakness that is getting worse suggests a nerve is under pressure rather than simply irritated. A physician needs to establish the cause before any physiotherapy loading begins.' } },
+  { id: 'sc-systemic', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain',
+    why: { title: 'Possible infection or systemic cause',
+      text: 'Pain accompanied by fever, weight loss, or a cancer history can have a medical rather than a mechanical cause. That has to be excluded by a doctor first, as it is treated quite differently.' } },
+  { id: 'sc-trauma', text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
+    why: { title: 'A fracture should be excluded',
+      text: 'After a significant impact — or any fall where bone strength may be reduced — imaging is usually needed to rule out a fracture before the area is loaded or mobilised.' } },
 ]
 
 /* ── shared styles ───────────────────────────────────────────────────── */
@@ -157,6 +265,31 @@ function NoticeDialog({ onOk, onBack }) {
   )
 }
 
+/* Multi-select needs a visible "chosen" marker beyond the colour change. */
+function Tick({ on }) {
+  if (!on) return null
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2.6"
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+      style={{ marginLeft: 'auto', flexShrink: 0, alignSelf: 'center' }}>
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  )
+}
+
+/* Renders one treatment-guidance list inside a condition card. */
+function Bullets({ title, items }) {
+  if (!items || !items.length) return null
+  return (
+    <div style={{ marginTop: 12 }}>
+      <div style={{ fontSize: 11.5, letterSpacing: '0.14em', textTransform: 'uppercase', color: GOLD, marginBottom: 6 }}>{title}</div>
+      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+        {items.map((t, i) => <li key={i} style={{ marginBottom: 3 }}>{t}</li>)}
+      </ul>
+    </div>
+  )
+}
+
 function Fade({ children, k }) {
   return (
     <motion.div key={k} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
@@ -201,7 +334,48 @@ export default function PainAssessment() {
   // Gates the result screen behind the "not a diagnosis" notice.
   const [showNotice, setShowNotice] = useState(false)
 
-  const drawOn = stage === 'draw'
+  // In the draw step the person can switch between marking and turning the
+  // model, so they can follow pain that radiates from front to back.
+  const [drawMode, setDrawMode] = useState(true)
+  const drawOn = stage === 'draw' && drawMode
+
+  // ── The questionnaire is the drawn region's OWN clinical question set ──
+  // Each option carries weights pointing at that region's conditions, which is
+  // what lets the answers actually decide which condition (and therefore which
+  // treatment guidance) is shown. Areas with no authored region — currently
+  // only the head — fall back to the generic set.
+  const region = useMemo(() => {
+    const k = primaryRegion(zones)
+    return k && REGIONS[k] ? REGIONS[k] : null
+  }, [zones])
+  const regionQs = useMemo(() => (region ? allQuestions(region) : []), [region])
+  const ctxCount = region ? region.context.length : 0
+  const activeQuestions = useMemo(
+    () => (region ? [...regionQs, NOTES_Q] : buildQuestions(zones)),
+    [region, regionQs, zones],
+  )
+
+  // Ranked conditions for the answers given. Empty until enough is answered.
+  const ranked = useMemo(() => {
+    if (!region) return []
+    try { return computeResults(region, answers).ranked || [] } catch { return [] }
+  }, [region, answers])
+  // Shown only when the answers do not identify anything specific.
+  const causes = useMemo(() => likelyCauses(zones), [zones])
+
+  // Skip questions that can no longer change the outcome, and stop early once
+  // one condition is clearly ahead. Both rules come from the engine and only
+  // apply to the region's diagnostic questions, never to the context ones
+  // (age/onset/duration), whose answers gate which conditions are eligible.
+  const nextIdx = (from, ans) => {
+    let i = from
+    while (region && i >= ctxCount && i < regionQs.length) {
+      if (answeredRegionCount(region, ans) >= 2 && shouldStop(region, ans)) return regionQs.length
+      if (!isRelevant(regionQs[i], region, ans)) { i++; continue }
+      break
+    }
+    return Math.min(i, activeQuestions.length - 1)
+  }
   const modelSmall = ['intro', 'questions', 'review', 'safety', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
@@ -210,21 +384,38 @@ export default function PainAssessment() {
 
   const setAnswer = (qid, value) => setAnswers((a) => ({ ...a, [qid]: value }))
 
+  // A question marked `multi` holds an ARRAY of option ids; every other choice
+  // question holds a single id. This distinction is not cosmetic — the engine
+  // gates conditions on single values such as age, so an array there would
+  // silently stop those conditions from ever qualifying.
+  const toggleAnswer = (q, oid) => setAnswers((a) => {
+    if (q.multi) {
+      const cur = Array.isArray(a[q.id]) ? a[q.id] : []
+      return { ...a, [q.id]: cur.includes(oid) ? cur.filter((x) => x !== oid) : [...cur, oid] }
+    }
+    return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
+  })
+
+  const isPicked = (q, oid) => {
+    const a = answers[q.id]
+    return q.multi ? (Array.isArray(a) && a.includes(oid)) : a === oid
+  }
+
   const answerText = (q) => {
     const a = answers[q.id]
     if (q.textarea) return (a && String(a).trim()) || '—'
-    if (a === '__other') {
-      const t = (answers[q.id + '_other'] || '').trim()
-      return t ? `Other: ${t}` : '—'
-    }
-    return a || '—'
+    const ids = q.multi ? (Array.isArray(a) ? a : []) : (a === undefined ? [] : [a])
+    const labels = ids
+      .map((id) => (q.options.find((o) => o.id === id) || {}).label)
+      .filter(Boolean)
+    return labels.length ? labels.join(' · ') : '—'
   }
 
   const goToQuestion = (i, viaReview = false) => { setFromReview(viaReview); setQIndex(i); setStage('questions') }
   const nextFromQuestion = () => {
     if (fromReview) { setFromReview(false); setStage('review'); return }
-    if (qIndex < QUESTIONS.length - 1) setQIndex(qIndex + 1)
-    else setStage('review')
+    if (qIndex >= activeQuestions.length - 1) { setStage('review'); return }
+    setQIndex(nextIdx(qIndex + 1, answers))
   }
   const backFromQuestion = () => {
     if (fromReview) { setFromReview(false); setStage('review') }
@@ -234,7 +425,7 @@ export default function PainAssessment() {
 
   const restart = () => {
     setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther('')
-    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false)
+    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(true)
   }
 
   return (
@@ -339,9 +530,30 @@ export default function PainAssessment() {
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 10px' }}>
                   Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
                 </h2>
-                <p style={{ ...body, margin: '0 0 18px', maxWidth: 460 }}>
-                  You can draw more than one line.
+                <p style={{ ...body, margin: '0 0 14px', maxWidth: 460 }}>
+                  You can draw more than one line. Switch to <strong style={{ color: GOLD_LIGHT }}>Turn</strong> to
+                  rotate or tilt the body — your marks stay in place — then switch back to add more.
                 </p>
+
+                {/* Draw / Turn switch: drawing and rotating cannot share the
+                    same drag, so the person chooses which one a drag does. */}
+                <div role="group" aria-label="Drag mode" style={{
+                  display: 'inline-flex', padding: 4, borderRadius: 999, marginBottom: 16,
+                  border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.04)',
+                }}>
+                  {[['Draw', true], ['Turn', false]].map(([lbl, on]) => (
+                    <button key={lbl} onClick={() => setDrawMode(on)}
+                      aria-pressed={drawMode === on}
+                      style={{
+                        padding: '11px 24px', borderRadius: 999, border: 'none', cursor: 'pointer',
+                        minHeight: 46, fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase',
+                        fontFamily: 'var(--font-body)', transition: 'all 0.15s',
+                        background: drawMode === on ? GOLD : 'transparent',
+                        color: drawMode === on ? '#081527' : 'rgba(255,255,255,0.7)',
+                        fontWeight: drawMode === on ? 700 : 400,
+                      }}>{lbl}</button>
+                  ))}
+                </div>
 
                 {zones.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
@@ -414,21 +626,25 @@ export default function PainAssessment() {
               </Fade>
             )}
 
-            {/* QUESTIONS — options A–D + E (Other, entered manually) */}
+            {/* QUESTIONS — multi-select A–D + Other (entered manually) */}
             {stage === 'questions' && (() => {
-              const q = QUESTIONS[qIndex]
+              const q = activeQuestions[qIndex]
               const a = answers[q.id]
-              const isOther = a === '__other'
-              const canNext = q.textarea
-                ? true
-                : (!!a && (!isOther || (answers[q.id + '_other'] || '').trim().length > 0))
+              // Multi questions may be left empty ("none of these apply");
+              // single-answer questions need a choice before continuing.
+              const canNext = q.textarea || q.multi ? true : a !== undefined
               return (
                 <Fade k={'q' + qIndex}>
-                  <span style={label}>Question {qIndex + 1} of {QUESTIONS.length}</span>
+                  <span style={label}>Question {qIndex + 1} of {activeQuestions.length}</span>
                   <div style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, margin: '12px 0 20px', maxWidth: 520 }}>
-                    <motion.div animate={{ width: `${((qIndex + 1) / QUESTIONS.length) * 100}%` }} style={{ height: 3, background: GOLD, borderRadius: 2 }} />
+                    <motion.div animate={{ width: `${((qIndex + 1) / activeQuestions.length) * 100}%` }} style={{ height: 3, background: GOLD, borderRadius: 2 }} />
                   </div>
-                  <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '0 0 20px', maxWidth: 520 }}>{q.text}</h2>
+                  <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '0 0 8px', maxWidth: 520 }}>{q.text}</h2>
+                  {!q.textarea && (
+                    <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.55)', margin: '0 0 18px' }}>
+                      {q.multi ? 'Select all that apply.' : 'Choose one.'}
+                    </p>
+                  )}
 
                   {q.textarea ? (
                     <textarea
@@ -445,30 +661,15 @@ export default function PainAssessment() {
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
                       {q.options.map((opt, oi) => {
-                        const sel = a === opt
+                        const sel = isPicked(q, opt.id)
                         return (
-                          <button key={opt} style={chip(sel)} onClick={() => setAnswer(q.id, sel ? undefined : opt)}>
-                            <span style={letterStyle(sel)}>{LETTERS[oi]}</span>
-                            <span>{opt}</span>
+                          <button key={opt.id} style={chip(sel)} onClick={() => toggleAnswer(q, opt.id)}>
+                            <span style={letterStyle(sel)}>{LETTERS[oi] || '·'}</span>
+                            <span>{opt.label}</span>
+                            <Tick on={sel} />
                           </button>
                         )
                       })}
-                      <button style={chip(isOther)} onClick={() => setAnswer(q.id, isOther ? undefined : '__other')}>
-                        <span style={letterStyle(isOther)}>E</span>
-                        <span>Other — enter your own answer</span>
-                      </button>
-                      {isOther && (
-                        <input
-                          autoFocus
-                          value={answers[q.id + '_other'] || ''}
-                          onChange={(e) => setAnswer(q.id + '_other', e.target.value)}
-                          placeholder="Please describe…"
-                          style={{
-                            borderRadius: 14, border: `1px solid ${GOLD}`, background: 'rgba(255,255,255,0.05)',
-                            color: '#fff', padding: '16px 17px', fontSize: 16.5, fontFamily: 'var(--font-body)', boxSizing: 'border-box', minHeight: 56,
-                          }}
-                        />
-                      )}
                     </div>
                   )}
 
@@ -478,7 +679,7 @@ export default function PainAssessment() {
                       style={{ ...goldBtn, opacity: canNext ? 1 : 0.45, cursor: canNext ? 'pointer' : 'not-allowed' }}
                       disabled={!canNext}
                       onClick={nextFromQuestion}
-                    >{fromReview ? 'Save' : qIndex === QUESTIONS.length - 1 ? 'Review Answers' : 'Continue'}</button>
+                    >{fromReview ? 'Save' : qIndex === activeQuestions.length - 1 ? 'Review Answers' : 'Continue'}</button>
                     <button style={ghostBtn} onClick={backFromQuestion}>Back</button>
                   </div>
                 </Fade>
@@ -498,7 +699,7 @@ export default function PainAssessment() {
                     {zones.map((z) => <span key={z.id} style={pill}>{z.label}</span>)}
                   </div>
                 </div>
-                {QUESTIONS.map((q, i) => (
+                {activeQuestions.map((q, i) => (
                   <div key={q.id} style={{ ...card, marginBottom: 10, maxWidth: 520, display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div style={{ minWidth: 0 }}>
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
@@ -510,7 +711,7 @@ export default function PainAssessment() {
                 ))}
                 <div className="pa-actions" style={{ marginTop: 16 }}>
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('safety')}>Continue</button>
-                  <button style={ghostBtn} onClick={() => goToQuestion(QUESTIONS.length - 1)}>Back</button>
+                  <button style={ghostBtn} onClick={() => goToQuestion(activeQuestions.length - 1)}>Back</button>
                 </div>
               </Fade>
             )}
@@ -598,6 +799,20 @@ export default function PainAssessment() {
                   </p>
                 </div>
 
+                {pickedFlags.length > 0 && (
+                  <>
+                    <span style={{ ...label, display: 'block', margin: '22px 0 0' }}>Why these need review first</span>
+                    <div style={{ marginTop: 12 }}>
+                      {pickedFlags.slice(0, 3).map((f) => (
+                        <div key={f.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                          <p style={{ fontSize: 16, color: GOLD_LIGHT, margin: 0, lineHeight: 1.45, fontWeight: 500 }}>{f.why.title}</p>
+                          <p style={{ ...body, fontSize: 14.5, margin: '7px 0 0' }}>{f.why.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
                 <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '16px 0 0', maxWidth: 520 }}>
                   This is a precautionary screening question, not a diagnosis. It does not
                   confirm that anything serious is present. If you selected an option in error,
@@ -637,7 +852,7 @@ export default function PainAssessment() {
                         : <span style={{ ...body, fontSize: 15, margin: 0 }}>—</span>}
                     </div>
                   </div>
-                  {QUESTIONS.map((q) => (
+                  {activeQuestions.map((q) => (
                     <div key={q.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
                       <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
@@ -649,6 +864,56 @@ export default function PainAssessment() {
                       None of the listed symptoms apply
                     </p>
                   </div>
+                </div>
+
+                {/* Matched from YOUR answers by the scoring engine. A condition
+                    only appears once it scores >= 3 and >= 40% of its maximum,
+                    so a weak match stays hidden rather than padding the list. */}
+                {ranked.length > 0 ? (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>What your answers point to</span>
+                    <div style={{ marginTop: 12, marginBottom: 22 }}>
+                      {ranked.map(({ c }) => (
+                        <div key={c.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                          <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{c.name}</p>
+                          <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{c.blurb}</p>
+                          <Bullets title="What people often notice" items={c.noticed} />
+                          <Bullets title="What often helps" items={c.homeCare} />
+                          <Bullets title="See a physiotherapist if" items={c.seePhysioIf} />
+                        </div>
+                      ))}
+                      <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
+                        These patterns are suggested by the answers you gave. They are general
+                        education, not findings about you — only a hands-on assessment can
+                        establish what is actually causing your symptoms.
+                      </p>
+                    </div>
+                  </>
+                ) : causes.length > 0 && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>What can cause pain here</span>
+                    <div style={{ marginTop: 12, marginBottom: 22 }}>
+                      {causes.map((c) => (
+                        <div key={c.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                          <p style={{ fontSize: 16, color: GOLD_LIGHT, margin: 0, lineHeight: 1.45, fontWeight: 500 }}>{c.name}</p>
+                          <p style={{ ...body, fontSize: 14.5, margin: '7px 0 0' }}>{c.blurb}</p>
+                        </div>
+                      ))}
+                      <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
+                        Your answers did not point clearly to one pattern, so these are the
+                        common reasons for pain in the area you marked. They are general
+                        examples, not findings about you.
+                      </p>
+                    </div>
+                  </>
+                )}
+
+                {/* AI overview of the whole traced path. The curated causes above
+                    are per-area; this is the part that can read a line running
+                    from one area to another as a single radiating pattern. */}
+                <span style={{ ...label, marginBottom: 12 }}>Overview of your traced pattern</span>
+                <div style={{ maxWidth: 520, margin: '12px 0 22px' }}>
+                  <PainAIPanel zones={zones} aiOnly />
                 </div>
 
                 <div className="pa-actions">
