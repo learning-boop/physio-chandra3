@@ -43,7 +43,10 @@ const QUESTIONS = [
   { id: 'q5', text: 'Is there anything further you would like the physiotherapist to know?', textarea: true,
     placeholder: 'Other symptoms, previous injuries, relevant medical history, or any concerns…' },
 ]
-const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F']
+const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+/* Synthetic option id for the free-text alternative. Deliberately not present
+   in any region's option list, so the scoring engine skips it. */
+const OTHER_ID = '__other'
 
 /* ── Region-specific option sets ───────────────────────────────────────
    The four core questions (onset, character, aggravating, easing) are the
@@ -348,11 +351,22 @@ export default function PainAssessment() {
     const k = primaryRegion(zones)
     return k && REGIONS[k] ? REGIONS[k] : null
   }, [zones])
-  const regionQs = useMemo(() => (region ? allQuestions(region) : []), [region])
-  const ctxCount = region ? region.context.length : 0
-  const activeQuestions = useMemo(
-    () => (region ? [...regionQs, NOTES_Q] : buildQuestions(zones)),
-    [region, regionQs, zones],
+  // Age / how it started / how long are one-tap answers, so they share a single
+  // screen instead of costing three. That drops the flow from 9 screens to 7
+  // before the adaptive rules trim it further, without losing any answer the
+  // scoring engine relies on.
+  const activeQuestions = useMemo(() => {
+    if (!region) return buildQuestions(zones)
+    return [
+      { id: '__ctx', group: region.context, text: 'A few details to start' },
+      ...region.questions,
+      NOTES_Q,
+    ]
+  }, [region, zones])
+  // Flat list used by the review screen and the summary.
+  const flatQuestions = useMemo(
+    () => (region ? [...allQuestions(region), NOTES_Q] : buildQuestions(zones)),
+    [region, zones],
   )
 
   // Ranked conditions for the answers given. Empty until enough is answered.
@@ -368,10 +382,12 @@ export default function PainAssessment() {
   // apply to the region's diagnostic questions, never to the context ones
   // (age/onset/duration), whose answers gate which conditions are eligible.
   const nextIdx = (from, ans) => {
+    if (!region) return Math.min(from, activeQuestions.length - 1)
+    const lastDiag = region.questions.length          // index of the notes screen
     let i = from
-    while (region && i >= ctxCount && i < regionQs.length) {
-      if (answeredRegionCount(region, ans) >= 2 && shouldStop(region, ans)) return regionQs.length
-      if (!isRelevant(regionQs[i], region, ans)) { i++; continue }
+    while (i >= 1 && i < lastDiag + 1) {
+      if (answeredRegionCount(region, ans) >= 2 && shouldStop(region, ans)) return lastDiag + 1
+      if (!isRelevant(region.questions[i - 1], region, ans)) { i++; continue }
       break
     }
     return Math.min(i, activeQuestions.length - 1)
@@ -388,12 +404,23 @@ export default function PainAssessment() {
   // question holds a single id. This distinction is not cosmetic — the engine
   // gates conditions on single values such as age, so an array there would
   // silently stop those conditions from ever qualifying.
+  // "No", "None of these", "Not sure" answer the question on their own, so they
+  // clear any other pick and are cleared by one — otherwise someone could tick
+  // both "No" and "Pain below the knee", whose weights then cancel out.
+  const isExclusive = (o) =>
+    /^(no|none|ns|nope)$/i.test(o.id) || /^(no|none of|not sure|no particular)/i.test(o.label)
+
   const toggleAnswer = (q, oid) => setAnswers((a) => {
-    if (q.multi) {
-      const cur = Array.isArray(a[q.id]) ? a[q.id] : []
-      return { ...a, [q.id]: cur.includes(oid) ? cur.filter((x) => x !== oid) : [...cur, oid] }
-    }
-    return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
+    if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
+    const cur = Array.isArray(a[q.id]) ? a[q.id] : []
+    if (cur.includes(oid)) return { ...a, [q.id]: cur.filter((x) => x !== oid) }
+    const opt = q.options.find((o) => o.id === oid)
+    if (opt && isExclusive(opt)) return { ...a, [q.id]: [oid] }
+    const kept = cur.filter((id) => {
+      const o = q.options.find((x) => x.id === id)
+      return !(o && isExclusive(o))
+    })
+    return { ...a, [q.id]: [...kept, oid] }
   })
 
   const isPicked = (q, oid) => {
@@ -408,7 +435,19 @@ export default function PainAssessment() {
     const labels = ids
       .map((id) => (q.options.find((o) => o.id === id) || {}).label)
       .filter(Boolean)
+    if (ids.includes(OTHER_ID)) {
+      const t = (answers[q.id + '_other'] || '').trim()
+      if (t) labels.push(`Other: ${t}`)
+    }
     return labels.length ? labels.join(' · ') : '—'
+  }
+
+  // The review screen lists every question flat; map a flat index back to the
+  // screen that actually holds it (the three context ones share screen 0).
+  const reviewIndexToScreen = (flatIdx) => {
+    if (!region) return flatIdx
+    const c = region.context.length
+    return flatIdx < c ? 0 : flatIdx - c + 1
   }
 
   const goToQuestion = (i, viaReview = false) => { setFromReview(viaReview); setQIndex(i); setStage('questions') }
@@ -632,7 +671,16 @@ export default function PainAssessment() {
               const a = answers[q.id]
               // Multi questions may be left empty ("none of these apply");
               // single-answer questions need a choice before continuing.
-              const canNext = q.textarea || q.multi ? true : a !== undefined
+              // A grouped screen needs every one of its questions answered.
+              const otherPicked = Array.isArray(a) && a.includes(OTHER_ID)
+              const otherText = (answers[q.id + '_other'] || '').trim()
+              const canNext = q.group
+                ? q.group.every((sub) => answers[sub.id] !== undefined)
+                : q.textarea
+                  ? true
+                  : q.multi
+                    ? (!otherPicked || otherText.length > 0)
+                    : a !== undefined
               return (
                 <Fade k={'q' + qIndex}>
                   <span style={label}>Question {qIndex + 1} of {activeQuestions.length}</span>
@@ -642,11 +690,39 @@ export default function PainAssessment() {
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '0 0 8px', maxWidth: 520 }}>{q.text}</h2>
                   {!q.textarea && (
                     <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.55)', margin: '0 0 18px' }}>
-                      {q.multi ? 'Select all that apply.' : 'Choose one.'}
+                      {q.group
+                        ? 'Tap an answer for each.'
+                        : q.multi
+                          ? 'Select all that apply — or continue if none do.'
+                          : 'Choose one.'}
                     </p>
                   )}
 
-                  {q.textarea ? (
+                  {q.group ? (
+                    <div style={{ maxWidth: 520 }}>
+                      {q.group.map((sub, si) => (
+                        <div key={sub.id} style={{ marginBottom: si === q.group.length - 1 ? 0 : 22 }}>
+                          <div style={{ fontSize: 17, color: '#fff', margin: '0 0 10px', lineHeight: 1.4 }}>{sub.text}</div>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                            {sub.options.map((opt) => {
+                              const sel = isPicked(sub, opt.id)
+                              return (
+                                <button key={opt.id} onClick={() => toggleAnswer(sub, opt.id)}
+                                  style={{
+                                    padding: '12px 16px', borderRadius: 12, cursor: 'pointer', minHeight: 48,
+                                    fontSize: 15, lineHeight: 1.35, textAlign: 'left', flex: '0 1 auto',
+                                    fontFamily: 'var(--font-body)', transition: 'all 0.15s',
+                                    border: `1px solid ${sel ? GOLD : 'rgba(255,255,255,0.22)'}`,
+                                    background: sel ? 'rgba(201,169,110,0.18)' : 'rgba(255,255,255,0.04)',
+                                    color: sel ? GOLD_LIGHT : 'rgba(255,255,255,0.85)',
+                                  }}>{opt.label}</button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : q.textarea ? (
                     <textarea
                       value={a || ''}
                       onChange={(e) => setAnswer(q.id, e.target.value)}
@@ -670,6 +746,34 @@ export default function PainAssessment() {
                           </button>
                         )
                       })}
+                      {/* Free-text alternative. It carries no weights, so the
+                          scoring engine ignores it — but it reaches the
+                          physiotherapist on the summary, which is the point. */}
+                      {q.multi && (() => {
+                        const sel = isPicked(q, OTHER_ID)
+                        return (
+                          <>
+                            <button style={chip(sel)} onClick={() => toggleAnswer(q, OTHER_ID)}>
+                              <span style={letterStyle(sel)}>{LETTERS[q.options.length] || '·'}</span>
+                              <span>Something else — type it below</span>
+                              <Tick on={sel} />
+                            </button>
+                            {sel && (
+                              <input
+                                autoFocus
+                                value={answers[q.id + '_other'] || ''}
+                                onChange={(e) => setAnswer(q.id + '_other', e.target.value)}
+                                placeholder="Describe it in your own words…"
+                                style={{
+                                  borderRadius: 14, border: `1px solid ${GOLD}`, background: 'rgba(255,255,255,0.05)',
+                                  color: '#fff', padding: '16px 17px', fontSize: 16.5,
+                                  fontFamily: 'var(--font-body)', boxSizing: 'border-box', minHeight: 56,
+                                }}
+                              />
+                            )}
+                          </>
+                        )
+                      })()}
                     </div>
                   )}
 
@@ -699,13 +803,13 @@ export default function PainAssessment() {
                     {zones.map((z) => <span key={z.id} style={pill}>{z.label}</span>)}
                   </div>
                 </div>
-                {activeQuestions.map((q, i) => (
+                {flatQuestions.map((q, i) => (
                   <div key={q.id} style={{ ...card, marginBottom: 10, maxWidth: 520, display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div style={{ minWidth: 0 }}>
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
                       <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
                     </div>
-                    <button onClick={() => goToQuestion(i, true)}
+                    <button onClick={() => goToQuestion(reviewIndexToScreen(i), true)}
                       style={{ background: 'none', border: 'none', color: GOLD, fontSize: 13.5, cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0, padding: '10px 2px 10px 12px', margin: '-10px -2px -10px 0', minHeight: 44, alignSelf: 'flex-start', fontFamily: 'var(--font-body)' }}>Change</button>
                   </div>
                 ))}
@@ -852,7 +956,7 @@ export default function PainAssessment() {
                         : <span style={{ ...body, fontSize: 15, margin: 0 }}>—</span>}
                     </div>
                   </div>
-                  {activeQuestions.map((q) => (
+                  {flatQuestions.map((q) => (
                     <div key={q.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
                       <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>

@@ -487,6 +487,17 @@ import { AUTHORED } from './symptomGuideAuthored.js'
 Object.assign(REGIONS, EXTRA_REGIONS)
 Object.assign(SPECIAL_CARDS, EXTRA_SPECIAL_CARDS)
 
+/* ── Every diagnostic question accepts multiple answers ─────────────────
+   Pain rarely has a single aggravating factor, so the questions after the
+   opening details let people tick everything that applies. This flag is read
+   by BOTH the UI and maxScores(): a multi question's ceiling is the sum of its
+   positive weights rather than its single best, so scores stay correctly
+   normalised when someone selects several options. The opening context
+   questions stay single-answer — nobody has two ages. */
+for (const r of Object.values(REGIONS)) {
+  for (const q of r.questions) q.multi = true
+}
+
 for (const entry of AUTHORED) {
   const region = REGIONS[entry.region]
   if (!region) continue

@@ -3,11 +3,13 @@
 // works unchanged (same origin, no CORS). Your API key stays on the server side.
 import Anthropic from '@anthropic-ai/sdk'
 
-const API_KEY = process.env.ANTHROPIC_API_KEY
+// Trimmed, and stripped of wrapping quotes: pasting a key into a dashboard
+// field often carries a trailing newline or the quotes from a .env line, and
+// either one makes an otherwise-valid key fail.
+const API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim().replace(/^["']|["']$/g, '')
 
 function hasValidKey() {
   return (
-    typeof API_KEY === 'string' &&
     API_KEY.startsWith('sk-ant-') &&
     API_KEY.length > 30 &&
     !API_KEY.includes('PASTE') &&
@@ -18,10 +20,13 @@ function hasValidKey() {
 // Safe, generic fallback so the panel always shows useful content even if the
 // AI call fails or the key isn't set. Wording follows the same CHCPBC rules as
 // the prompt: hedged, no diagnosis, no guaranteed outcomes, calm tone.
-function fallbackAnalysis(zones) {
+function fallbackAnalysis(zones, reason = 'unknown') {
   const areas = Array.isArray(zones) && zones.length ? zones.join(', ') : 'the traced areas'
   return {
     fallback: true,
+    // Diagnostic only — a short code, never the key or its contents.
+    reason,
+    keyPresent: API_KEY.length > 0,
     possibleCauses: [
       `Muscle tension or strain may affect ${areas}`,
       'Joint stiffness or reduced mobility can contribute in this region',
@@ -54,7 +59,7 @@ export default async function handler(req, res) {
   }
 
   if (!hasValidKey()) {
-    return res.status(200).json(fallbackAnalysis(zones))
+    return res.status(200).json(fallbackAnalysis(zones, API_KEY ? 'key-malformed' : 'key-missing'))
   }
 
   try {
@@ -103,12 +108,17 @@ Keep each array to 3-5 short bullet points in plain, patient-friendly language (
     try {
       parsed = JSON.parse(cleaned)
     } catch {
-      parsed = fallbackAnalysis(zones)
+      parsed = fallbackAnalysis(zones, 'bad-json-from-model')
     }
 
     return res.status(200).json(parsed)
   } catch (err) {
-    console.error('pain-analysis error:', err?.message || err)
-    return res.status(200).json(fallbackAnalysis(zones))
+    // Log the full error to the Vercel function log; return only a short code.
+    console.error('pain-analysis error:', err?.status || '', err?.message || err)
+    const code = err?.status === 401 ? 'api-401-bad-key'
+      : err?.status === 400 ? 'api-400-bad-request'
+      : err?.status === 429 ? 'api-429-rate-or-credit'
+      : err?.status ? `api-${err.status}` : 'api-call-failed'
+    return res.status(200).json(fallbackAnalysis(zones, code))
   }
 }

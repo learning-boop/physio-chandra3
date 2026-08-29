@@ -110,8 +110,8 @@ export default function PainAIPanel({ zones, aiOnly = false }) {
               margin: '0 0 14px', padding: '10px 12px', borderRadius: 10, fontSize: 12.5, lineHeight: 1.6,
               border: '1px solid rgba(224,138,138,0.4)', background: 'rgba(224,138,138,0.08)', color: '#e0b0b0',
             }}>
-              Showing standard information — the analysis service is not configured, so this
-              was not generated for your specific pattern.
+              Showing standard information — this was not generated for your specific
+              pattern.{result.reason ? ` (${result.reason})` : ''}
             </p>
           )}
           <Section title="Possible Causes" items={result.possibleCauses} />
