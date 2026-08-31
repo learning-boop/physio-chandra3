@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import SymptomGuide from './SymptomGuide'
 import { ZONE_TO_REGION, REGIONS } from '../data/symptomGuide'
 
@@ -13,7 +13,7 @@ const API_URL = import.meta.env.VITE_API_URL || ''
 // `aiOnly` renders JUST the AI overview and always calls the API. The guided
 // questionnaire below is a whole interactive flow of its own, so it must not be
 // dropped into a results screen that has already asked its questions.
-export default function PainAIPanel({ zones, aiOnly = false }) {
+export default function PainAIPanel({ zones, aiOnly = false, answers = null, notes = '' }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
@@ -28,6 +28,10 @@ export default function PainAIPanel({ zones, aiOnly = false }) {
     }
   })
   const useGuide = !aiOnly && regionOptions.length > 0
+
+  // Re-fetch when the answers change too (the results screen passes them so
+  // the overview reflects what the person said, not just where they drew).
+  const ansKey = useMemo(() => JSON.stringify([answers || null, notes || '']), [answers, notes])
 
   useEffect(() => {
     if (useGuide) { setResult(null); setError(null); setLoading(false); return }
@@ -44,7 +48,11 @@ export default function PainAIPanel({ zones, aiOnly = false }) {
     fetch(`${API_URL}/api/pain-analysis`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ zones: zones.map(z => z.label) }),
+      body: JSON.stringify({
+        zones: zones.map(z => z.label),
+        answers: Array.isArray(answers) && answers.length ? answers : undefined,
+        notes: notes && notes.trim() ? notes.trim() : undefined,
+      }),
       signal: controller.signal,
     })
       .then(res => {
@@ -62,7 +70,8 @@ export default function PainAIPanel({ zones, aiOnly = false }) {
       .finally(() => setLoading(false))
 
     return () => controller.abort()
-  }, [zones])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zones, ansKey])
 
   if (!zones || zones.length === 0) {
     return (
@@ -82,17 +91,21 @@ export default function PainAIPanel({ zones, aiOnly = false }) {
 
   return (
     <div style={panelStyle}>
-      <div style={{ marginBottom: 16 }}>
-        <span style={{ color: GOLD, fontSize: 12, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-          Selected Areas
-        </span>
-        <div style={{ marginTop: 6, color: '#fff', fontSize: 15 }}>
-          {zones.map(z => z.label).join(' → ')}
+      {!aiOnly && (
+        <div style={{ marginBottom: 16 }}>
+          <span style={{ color: GOLD, fontSize: 12, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            Selected Areas
+          </span>
+          <div style={{ marginTop: 6, color: '#fff', fontSize: 15 }}>
+            {zones.map(z => z.label).join(' → ')}
+          </div>
         </div>
-      </div>
+      )}
 
       {loading && (
-        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>Analysing pain pattern…</p>
+        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>
+          {aiOnly ? 'Looking at your pattern and your answers…' : 'Analysing pain pattern…'}
+        </p>
       )}
 
       {error && (
@@ -114,9 +127,36 @@ export default function PainAIPanel({ zones, aiOnly = false }) {
               pattern.{result.reason ? ` (${result.reason})` : ''}
             </p>
           )}
-          <Section title="Possible Causes" items={result.possibleCauses} />
-          <Section title="Common Symptoms" items={result.commonSymptoms} />
-          <Section title="Suggested Approach" items={result.suggestedApproach} />
+          {aiOnly ? (
+            <>
+              {/* THE ANSWER the person came for: at most three possibilities,
+                  framed as "could be" — never "you have". */}
+              <p style={{ margin: '0 0 12px', fontSize: 14.5, lineHeight: 1.65, color: 'rgba(255,255,255,0.75)' }}>
+                Based on where you drew and what you answered, your pain could be
+                associated with:
+              </p>
+              {(result.possibleCauses || []).slice(0, 3).map((c, i) => (
+                <div key={i} style={{
+                  display: 'flex', gap: 12, alignItems: 'baseline', marginBottom: 9,
+                  border: '1px solid rgba(201,169,110,0.35)', background: 'rgba(201,169,110,0.08)',
+                  borderRadius: 12, padding: '13px 15px',
+                }}>
+                  <span style={{ color: GOLD, fontFamily: 'var(--font-display)', fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{i + 1}</span>
+                  <span style={{ fontSize: 14.5, lineHeight: 1.6, color: 'rgba(255,255,255,0.88)' }}>{c}</span>
+                </div>
+              ))}
+              <div style={{ marginTop: 16 }}>
+                <Section title="What people often notice" items={result.commonSymptoms} />
+                <Section title="How physiotherapy may approach it" items={result.suggestedApproach} />
+              </div>
+            </>
+          ) : (
+            <>
+              <Section title="Possible Causes" items={result.possibleCauses} />
+              <Section title="Common Symptoms" items={result.commonSymptoms} />
+              <Section title="Suggested Approach" items={result.suggestedApproach} />
+            </>
+          )}
           <p style={{ marginTop: 16, fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
             {result.disclaimer || 'This is general information, not a diagnosis. Please book an assessment with Physio Chandra for a proper evaluation.'}
           </p>

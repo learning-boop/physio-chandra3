@@ -184,14 +184,42 @@ function CollisionHull() {
   )
 }
 
-// THE INTERACTION RULES (user-friendly behaviour):
-//   • Touch/drag ON the body        → rotate the model.
-//   • Scroll / drag the BLACK SPACE → the body image moves UP and DOWN.
-//     When it reaches the limit, the page itself continues scrolling.
-//   • Mouse wheel over the body     → zoom the model.
-//   • Highlight mode captures everything so lines can be drawn freely.
+// THE INTERACTION RULES (no buttons — everything on the mouse/finger):
+//   • DRAG ON THE BODY → sideways TURNS it, cleanly, about its vertical
+//     axis; up/down TILTS it (clamped short of the poles, so the view can
+//     never flip) — tilting up is how you see and draw on the soles of the
+//     feet, tilting down the top of the head.
+//   • DRAG ON EMPTY SPACE → MOVES the picture straight. Mouse: both
+//     directions, following the cursor. Finger: sideways slides it; up/down
+//     scrolls the page as usual, so a phone user is never trapped.
+//   • Two fingers (anywhere) → move the picture; pinch zooms.
+//   • Mouse wheel over the body → zoom. Over empty space → moves the picture
+//     up/down (sideways with Shift or a trackpad).
+//   • Highlight mode: one finger draws on the body; empty-space drags and
+//     two-finger gestures still move the view.
 const PAN_MIN_Y = -1.0   // how far DOWN the body can be pushed
 const PAN_MAX_Y = 2.2    // how far UP the body can be pushed
+const PAN_MAX_XZ = 1.6   // how far SIDEWAYS the body can be pushed
+const UP_AXIS = new THREE.Vector3(0, 1, 0)
+const clampNum = (v, lo, hi) => Math.min(hi, Math.max(lo, v))
+
+// Keeps two-finger / right-drag pans within reach, so the body can never be
+// pushed fully out of frame. Wired to OrbitControls' onChange.
+function clampPanTarget(e) {
+  const c = e?.target
+  if (!c || !c.target || !c.object) return
+  const t = c.target
+  const nx = clampNum(t.x, -PAN_MAX_XZ, PAN_MAX_XZ)
+  const ny = clampNum(t.y, PAN_MIN_Y, PAN_MAX_Y)
+  const nz = clampNum(t.z, -PAN_MAX_XZ, PAN_MAX_XZ)
+  const dx = nx - t.x, dy = ny - t.y, dz = nz - t.z
+  if (dx || dy || dz) {
+    t.set(nx, ny, nz)
+    c.object.position.x += dx
+    c.object.position.y += dy
+    c.object.position.z += dz
+  }
+}
 
 function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
   const { gl, camera, scene } = useThree()
@@ -211,74 +239,160 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
     return body ? ray.intersectObject(body, true).length > 0 : false
   }, [gl, camera, scene, ray, v2])
 
-  // Moves the body image vertically by `dyPx` screen pixels (like dragging a
-  // photo). Any movement beyond the clamp limits is handed to the PAGE scroll,
-  // so the user is never stuck.
-  const applyPan = useCallback((dyPx) => {
+  // Moves the body image by screen pixels, like dragging a photo. dyPx moves
+  // it up/down (clamped; the overflow is handed to the PAGE scroll so the user
+  // is never stuck); dxPx moves it sideways along the camera's right axis.
+  const applyPan = useCallback((dxPx, dyPx) => {
     const c = controlsRef.current
     if (!c) return
     interactedRef.current = true
     const rect = gl.domElement.getBoundingClientRect()
     const dist = camera.position.distanceTo(c.target)
     const worldPerPx = (2 * dist * Math.tan((36 * Math.PI) / 180 / 2)) / Math.max(1, rect.height)
-    const desired = c.target.y + dyPx * worldPerPx
-    const clamped = Math.min(PAN_MAX_Y, Math.max(PAN_MIN_Y, desired))
-    const shift = clamped - c.target.y
-    c.target.y = clamped
-    camera.position.y += shift
+
+    const desiredY = c.target.y + dyPx * worldPerPx
+    const clampedY = clampNum(desiredY, PAN_MIN_Y, PAN_MAX_Y)
+    const shiftY = clampedY - c.target.y
+
+    let shiftX = 0, shiftZ = 0
+    if (dxPx) {
+      const right = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0)
+      right.y = 0
+      if (right.lengthSq() > 0) right.normalize()
+      const dWorld = dxPx * worldPerPx
+      shiftX = clampNum(c.target.x + right.x * dWorld, -PAN_MAX_XZ, PAN_MAX_XZ) - c.target.x
+      shiftZ = clampNum(c.target.z + right.z * dWorld, -PAN_MAX_XZ, PAN_MAX_XZ) - c.target.z
+    }
+
+    c.target.x += shiftX; c.target.y = clampedY; c.target.z += shiftZ
+    camera.position.x += shiftX; camera.position.y += shiftY; camera.position.z += shiftZ
     c.update()
-    const leftoverPx = (desired - clamped) / worldPerPx
+    const leftoverPx = (desiredY - clampedY) / worldPerPx
     if (Math.abs(leftoverPx) > 0.5) window.scrollBy({ top: -leftoverPx, behavior: 'auto' })
+  }, [camera, controlsRef, gl, interactedRef])
+
+  // Turns the body about its VERTICAL axis only (yaw). Because pitch never
+  // changes, a sideways drag reads as a clean straight left–right turn and
+  // the accidental top-down views are impossible.
+  const yawBy = useCallback((dxPx) => {
+    const c = controlsRef.current
+    if (!c) return
+    interactedRef.current = true
+    const rect = gl.domElement.getBoundingClientRect()
+    const angle = (2 * Math.PI * dxPx / Math.max(1, rect.height)) * 0.8   // matches old rotateSpeed
+    const offset = camera.position.clone().sub(c.target)
+    offset.applyAxisAngle(UP_AXIS, -angle)
+    camera.position.copy(c.target).add(offset)
+    camera.lookAt(c.target)
+    c.update()
+  }, [camera, controlsRef, gl, interactedRef])
+
+  // Tilts the view up/down (pitch), clamped to the same polar range the
+  // controls use, so dragging up on the body reveals the SOLES of the feet
+  // and dragging down the top of the head — and the view can never flip.
+  const pitchBy = useCallback((dyPx) => {
+    const c = controlsRef.current
+    if (!c) return
+    interactedRef.current = true
+    const rect = gl.domElement.getBoundingClientRect()
+    const angle = (2 * Math.PI * dyPx / Math.max(1, rect.height)) * 0.8
+    const offset = camera.position.clone().sub(c.target)
+    const sph = new THREE.Spherical().setFromVector3(offset)
+    sph.phi = clampNum(sph.phi - angle, POLAR_MIN, POLAR_MAX)
+    sph.makeSafe()
+    offset.setFromSpherical(sph)
+    camera.position.copy(c.target).add(offset)
+    camera.lookAt(c.target)
+    c.update()
   }, [camera, controlsRef, gl, interactedRef])
 
   useEffect(() => {
     const el = gl.domElement
+    const active = new Set()   // pointers currently down on the canvas
 
-    // Touch: we own every gesture on the canvas. On the body → rotate
-    // (OrbitControls). On black space → we pan the image ourselves.
+    // Touch: we own every gesture on the canvas.
     const onTouchStart = (e) => { e.preventDefault() }
 
-    // Pointer (mouse + touch): starting on black space begins an image pan.
+    const releasePan = () => {
+      const s = panState.current
+      if (s) { try { el.releasePointerCapture?.(s.id) } catch { /* already released */ } }
+      panState.current = null
+    }
+
     const onPointerDown = (e) => {
+      active.add(e.pointerId)
+      // A second finger = a two-finger gesture. Hand the whole gesture to
+      // OrbitControls (move + pinch zoom) and stop any one-finger pan/turn.
+      if (active.size >= 2) { releasePan(); return }
+
       if (highlightRef.current) {
-        // Draw mode: touching the BODY draws a line; touching the BLACK SPACE
-        // still moves the image / scrolls the page, so the user is never stuck.
+        // Draw mode: touching the BODY draws a line; touching the EMPTY SPACE
+        // still turns the body / scrolls the page, so the user is never stuck.
         if (onBody(e.clientX, e.clientY)) { panState.current = null; return }
-        panState.current = { y: e.clientY, id: e.pointerId }
+        panState.current = { x: e.clientX, y: e.clientY, id: e.pointerId, mode: null, type: e.pointerType, onBodyStart: false }
         el.setPointerCapture?.(e.pointerId)
         return
       }
       const hit = onBody(e.clientX, e.clientY)
-      if (controlsRef.current) controlsRef.current.enableRotate = hit
-      if (hit) { panState.current = null; return }
-      panState.current = { y: e.clientY, id: e.pointerId }
+      panState.current = { x: e.clientX, y: e.clientY, id: e.pointerId, mode: null, type: e.pointerType, onBodyStart: hit }
       el.setPointerCapture?.(e.pointerId)
     }
+
     const onPointerMove = (e) => {
       const s = panState.current
       if (!s || e.pointerId !== s.id) return
+      const dx = e.clientX - s.x
       const dy = e.clientY - s.y
+      // STARTED ON THE BODY (mouse or finger): sideways TURNS the body about
+      // its vertical axis; up/down TILTS it (clamped) — that is how the
+      // soles of the feet and the top of the head are reached.
+      if (s.onBodyStart) {
+        s.x = e.clientX
+        s.y = e.clientY
+        if (dx) yawBy(dx)
+        if (dy) pitchBy(dy)
+        return
+      }
+      // MOUSE on EMPTY SPACE: the picture follows the cursor in both
+      // directions. (Horizontal is negated: moving the CAMERA right slides
+      // the picture left, so following the cursor needs the opposite sign.
+      // Vertical is not: screen-down is world-minus-Y, which already cancels
+      // the camera inversion.)
+      if (s.type === 'mouse') {
+        s.x = e.clientX
+        s.y = e.clientY
+        if (dx || dy) applyPan(-dx, dy)
+        return
+      }
+      // FINGER on EMPTY SPACE: decide once what this drag is: SIDEWAYS →
+      // slide the picture straight left–right; UP/DOWN → scroll the page
+      // (content follows the finger, like the rest of the site). The axis
+      // locks for the rest of the drag; a tie goes to the slide.
+      if (!s.mode) {
+        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return
+        s.mode = Math.abs(dx) >= Math.abs(dy) ? 'slide' : 'scroll'
+      }
+      s.x = e.clientX
       s.y = e.clientY
-      if (dy === 0) return
-      // Finger/mouse drags on black space scroll the PAGE (content follows
-      // the finger, like everywhere else on the site). The image itself is
-      // moved only with the mouse wheel on desktop.
-      window.scrollBy({ top: -dy, behavior: 'auto' })
+      if (s.mode === 'slide') { if (dx) applyPan(-dx, 0) }
+      else if (dy) window.scrollBy({ top: -dy, behavior: 'auto' })
     }
     const onPointerEnd = (e) => {
+      active.delete(e.pointerId)
       if (panState.current?.id === e.pointerId) panState.current = null
     }
 
-    // Wheel over black space: move the body image up/down like scrolling a
-    // photo. Wheel over the body: normal zoom.
+    // Wheel over the body: normal zoom. Wheel over empty space: move the body
+    // image up/down (and sideways on trackpads that report deltaX).
     const onWheel = (e) => {
       const hit = onBody(e.clientX, e.clientY)
-      if (controlsRef.current) controlsRef.current.enableZoom = hit
-      if (!hit) {
-        e.preventDefault()
-        e.stopPropagation()
-        applyPan(-e.deltaY)
-      }
+      if (hit) { if (controlsRef.current) controlsRef.current.enableZoom = true; return }
+      e.preventDefault()
+      e.stopPropagation()
+      // Shift+wheel (or a trackpad's sideways scroll) moves the picture
+      // left–right; a plain wheel moves it up–down.
+      if (e.shiftKey && !e.deltaX) applyPan(-e.deltaY, 0)
+      else applyPan(-e.deltaX, -e.deltaY)
     }
 
     el.addEventListener('touchstart', onTouchStart, { passive: false })
@@ -296,7 +410,7 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
       window.removeEventListener('pointercancel', onPointerEnd)
       parent?.removeEventListener('wheel', onWheel, { capture: true })
     }
-  }, [gl, onBody, applyPan, controlsRef, highlightRef])
+  }, [gl, onBody, applyPan, yawBy, pitchBy, controlsRef, highlightRef])
 
   return null
 }
@@ -375,6 +489,30 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
     window.addEventListener('pointercancel', up)
     return () => { window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up) }
   })
+
+  // A second finger during a stroke means the person is pinching or moving the
+  // view, not drawing — discard the half-drawn stroke instead of leaving a
+  // stray line underneath their pinch.
+  useEffect(() => {
+    const ids = new Set()
+    const down = (e) => {
+      ids.add(e.pointerId)
+      if (ids.size >= 2 && drawing.current) {
+        drawing.current = false
+        pathRef.current = []
+        onPathUpdate([])
+      }
+    }
+    const lift = (e) => ids.delete(e.pointerId)
+    window.addEventListener('pointerdown', down, true)
+    window.addEventListener('pointerup', lift, true)
+    window.addEventListener('pointercancel', lift, true)
+    return () => {
+      window.removeEventListener('pointerdown', down, true)
+      window.removeEventListener('pointerup', lift, true)
+      window.removeEventListener('pointercancel', lift, true)
+    }
+  }, [onPathUpdate])
 
   return (
     <mesh name="drawSurface" position={[0, 0.45, 0]} visible={false} onPointerDown={down} onPointerMove={move}>
@@ -482,15 +620,18 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
 
       <ContactShadows position={[0, BODY_BOTTOM, 0]} opacity={0.5} scale={4.5} blur={2.4} far={2} color="#000000" />
 
-      {/* The model NEVER moves on its own — it only responds to a drag.
-          Dragging left/right turns it; dragging up/down tilts it, which is what
-          makes the sole of the foot and the top of the head reachable. The
-          polar range stops just short of both poles so it can never flip. */}
+      {/* The model NEVER moves on its own, and DRAGS NEVER ROTATE IT —
+          rotation happens only through the ⟲ ⟳ buttons, so the body always
+          stays upright. TWO fingers move the picture and pinch-zoom — in
+          draw mode too, so people can zoom in to draw precisely.
+          clampPanTarget keeps every move within frame. */}
       <OrbitControls
         ref={controlsRef}
         makeDefault
-        enabled={!highlight}
-        enablePan={false}
+        enableRotate={false}
+        enablePan={true}
+        screenSpacePanning={true}
+        onChange={clampPanTarget}
         touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN }}
         enableZoom={true}
         zoomToCursor={true}
@@ -547,6 +688,17 @@ export default function Body3D({
   clearSignal = 0, undoSignal = 0, redoSignal = 0, onHistoryChange,
 }) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
+  // Touch devices get a one-line gesture hint over the canvas: one finger
+  // rotates (or draws, in highlight mode), two fingers move the picture.
+  const [coarse, setCoarse] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return
+    const mq = window.matchMedia('(pointer: coarse)')
+    const sync = () => setCoarse(mq.matches)
+    sync()
+    mq.addEventListener?.('change', sync)
+    return () => mq.removeEventListener?.('change', sync)
+  }, [])
   const [paths, setPaths] = useState([])              // completed pain lines (multiple)
   const [undone, setUndone] = useState([])            // lines removed by Undo, awaiting Redo
   const [livePath, setLivePath] = useState([])        // line being drawn now
@@ -707,6 +859,18 @@ export default function Body3D({
           />
         </Canvas>
         </CanvasErrorBoundary>
+        {coarse && (
+          <div style={{
+            position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)',
+            zIndex: 2, pointerEvents: 'none', whiteSpace: 'nowrap', maxWidth: '96%',
+            padding: '7px 14px', borderRadius: 999, boxSizing: 'border-box',
+            background: 'rgba(8,21,39,0.62)', border: '1px solid rgba(255,255,255,0.14)',
+            fontFamily: "'DM Sans', sans-serif", fontSize: 10.5, letterSpacing: '0.1em',
+            textTransform: 'uppercase', color: 'rgba(255,255,255,0.78)', textAlign: 'center',
+          }}>
+            {highlight ? 'On the body — draw · Beside it — move' : 'On the body — turn · Beside it — move'}
+          </div>
+        )}
       </div>
     </div>
   )

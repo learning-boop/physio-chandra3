@@ -1,15 +1,17 @@
-// Vercel serverless function — replaces the Express /server backend in production.
-// Lives at /api/pain-analysis, so the frontend's existing fetch('/api/pain-analysis')
-// works unchanged (same origin, no CORS). Your API key stays on the server side.
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
 import Anthropic from '@anthropic-ai/sdk'
 
-// Trimmed, and stripped of wrapping quotes: pasting a key into a dashboard
-// field often carries a trailing newline or the quotes from a .env line, and
-// either one makes an otherwise-valid key fail.
-const API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim().replace(/^["']|["']$/g, '')
+const app = express()
+const PORT = process.env.PORT || 4000
+const API_KEY = process.env.ANTHROPIC_API_KEY
 
+// A usable key starts with "sk-ant-", is a real length, and isn't the template
+// placeholder. Anything else means analysis will use the safe fallback content.
 function hasValidKey() {
   return (
+    typeof API_KEY === 'string' &&
     API_KEY.startsWith('sk-ant-') &&
     API_KEY.length > 30 &&
     !API_KEY.includes('PASTE') &&
@@ -17,72 +19,140 @@ function hasValidKey() {
   )
 }
 
-// Safe, generic fallback so the panel always shows useful content even if the
-// AI call fails or the key isn't set. Wording follows the same CHCPBC rules as
-// the prompt: hedged, no diagnosis, no guaranteed outcomes, calm tone.
-function fallbackAnalysis(zones, reason = 'unknown') {
+// ─── Startup sanity check on the API key ─────────────────────────────────────
+// If it's missing, malformed (e.g. the VITE_API_URL value accidentally glued
+// onto it), or still the placeholder, warn loudly so it's obvious what to fix.
+if (!hasValidKey()) {
+  console.warn(
+    '\n[WARN] ANTHROPIC_API_KEY is missing, malformed, or still the placeholder.\n' +
+    '       It must be a single value starting with "sk-ant-".\n' +
+    '       Set it in server/.env. AI analysis will fall back to general content until fixed.\n'
+  )
+}
+
+app.use(cors()) // for production, restrict to your site: cors({ origin: 'https://physiochandra.com' })
+app.use(express.json())
+
+const anthropic = new Anthropic({ apiKey: API_KEY })
+
+// Safe, generic fallback used when the model can't be reached or the key is bad,
+// so the panel always shows something useful instead of an error.
+function fallbackAnalysis(zones) {
   const areas = Array.isArray(zones) && zones.length ? zones.join(', ') : 'the traced areas'
   return {
     fallback: true,
-    // Diagnostic only — a short code, never the key or its contents.
-    reason,
-    keyPresent: API_KEY.length > 0,
     possibleCauses: [
-      `Muscle tension or strain may affect ${areas}`,
-      'Joint stiffness or reduced mobility can contribute in this region',
-      'Postural load from repetitive movements or prolonged sitting is often associated with discomfort here',
-      'Nearby nerves can sometimes refer sensations along this path',
+      `Muscle tension or strain affecting ${areas}`,
+      'Joint stiffness or reduced mobility in the region',
+      'Postural overload from repetitive movements or prolonged sitting',
+      'Irritation of nearby nerves referring pain along the path',
     ],
     commonSymptoms: [
-      'Aching, tightness, or stiffness in the area',
-      'Discomfort that may change with certain positions or activity',
-      'Reduced range of motion, or the area feeling weaker than usual',
+      'Aching, tightness, or stiffness that moves along the area',
+      'Discomfort that worsens with certain positions or activity',
+      'Reduced range of motion or a feeling of weakness',
     ],
     suggestedApproach: [
-      'Gentle movement and adjusting activity that aggravates the area',
-      'Stretching and strengthening appropriate to the individual, guided by a physiotherapist',
-      'An individual assessment to better understand what may be contributing',
+      'Gentle movement and activity modification to avoid aggravation',
+      'Targeted stretching and strengthening guided by a physiotherapist',
+      'A hands-on assessment to pinpoint the source and build a plan',
     ],
     disclaimer:
-      'This is general education only, not a diagnosis, and no particular outcome is implied or guaranteed. For advice specific to you, an individual assessment with a physiotherapist is the appropriate next step.',
+      'This is general information, not a diagnosis. Please book an assessment with Physio Chandra for a proper, personalised evaluation.',
   }
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
-  }
 
-  const { zones } = req.body || {}
+// Turns the visitor's Q&A into a prompt section, with hard length caps so a
+// hostile client can't stuff the prompt.
+function answersBlock(answers, notes) {
+  const qa = Array.isArray(answers)
+    ? answers
+        .slice(0, 12)
+        .filter((p) => p && typeof p.question === 'string' && typeof p.answer === 'string')
+        .map((p) => `Q: ${p.question.slice(0, 160)}\nA: ${p.answer.slice(0, 160)}`)
+        .join('\n')
+    : ''
+  const note = typeof notes === 'string' && notes.trim()
+    ? `\nThe visitor added in their own words: "${notes.trim().slice(0, 400)}"`
+    : ''
+  if (!qa && !note) return ''
+  return `\n\nThe visitor then answered these questions about the pattern:\n${qa}${note}\n\nTailor every list to BOTH the traced path and these answers — reflect what they said about how it started, how it behaves or travels, and what worsens or eases it.`
+}
+function questionPrompt(zones) {
+  return `A visitor to a physiotherapy education website (Physio Chandra, a Registered Physiotherapist in BC, Canada) traced their pain on a 3D body. The traced line passed through these areas, in order: ${zones.join(' -> ')}.
+
+Write the intake questions a physiotherapist would ask about THIS pattern AS A WHOLE — pain travelling from ${zones[0]} toward ${zones[zones.length - 1]} — never about one area on its own.
+
+Rules:
+- Exactly 4 multiple-choice questions, together covering: how it started; how the pain behaves or travels between these areas; what makes it worse; what eases it or how it changes through the day.
+- Plain, warm language a 12-year-old could read. Each question under 14 words. Give 4 or 5 short options each (under 8 words). Visitors can select MORE THAN ONE option, so write options that can sensibly be combined; include "Not sure" where it fits.
+- These are educational questions, never a diagnosis: no disease names inside the questions, no alarming wording, no emergency or red-flag symptoms (fever, saddle numbness, bladder or bowel changes, chest pain — the site runs its own separate safety check), and no medication questions.
+
+Respond ONLY with valid JSON, no markdown, exactly: {"questions":[{"text":"...","options":["...","..."]}]}`
+}
+
+// Anything the model writes is checked before it reaches a visitor: shape,
+// length, and a blocklist for content the questions must never contain.
+const BANNED_IN_QUESTIONS = /(cancer|tumou?r|fracture|emergency|bladder|bowel|fever|saddle|diagnos|medicat|drug|opioid|guarantee)/i
+function cleanQuestions(parsed) {
+  if (!parsed || !Array.isArray(parsed.questions)) return null
+  const out = parsed.questions
+    .filter((q) => q && typeof q.text === 'string' && Array.isArray(q.options) && q.options.length >= 3)
+    .filter((q) => !BANNED_IN_QUESTIONS.test(q.text + ' ' + q.options.join(' ')))
+    .slice(0, 5)
+    .map((q) => ({
+      text: q.text.slice(0, 140),
+      options: q.options.slice(0, 6).map((o) => String(o).slice(0, 70)),
+    }))
+  return out.length >= 3 ? out : null
+}
+
+// ─── Pattern questions: the intake step, written by Claude for the exact
+//     path the visitor traced (shoulder → elbow is ONE travelling pattern,
+//     so the questions are about the whole pattern, not one part) ──────────
+app.post('/api/pain-questions', async (req, res) => {
+  const { zones } = req.body
+  if (!Array.isArray(zones) || zones.length === 0) {
+    return res.status(400).json({ error: 'zones must be a non-empty array of body area labels' })
+  }
+  // No usable key → tell the client to use its built-in clinician-authored
+  // question sets instead of erroring.
+  if (!hasValidKey()) return res.json({ questions: null, fallback: true })
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 700,
+      messages: [{ role: 'user', content: questionPrompt(zones.map(String)) }],
+    })
+    const textBlock = response.content.find((b) => b.type === 'text')
+    const raw = textBlock ? textBlock.text : '{}'
+    let parsed = null
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()) } catch { parsed = null }
+    const questions = cleanQuestions(parsed)
+    res.json(questions ? { questions } : { questions: null, fallback: true })
+  } catch (err) {
+    console.error('pain-questions error:', err?.message || err)
+    res.json({ questions: null, fallback: true })
+  }
+})
+
+app.post('/api/pain-analysis', async (req, res) => {
+  const { zones, answers, notes } = req.body
+
   if (!Array.isArray(zones) || zones.length === 0) {
     return res.status(400).json({ error: 'zones must be a non-empty array of body area labels' })
   }
 
+  // No usable key -> serve the fallback rather than erroring out.
   if (!hasValidKey()) {
-    return res.status(200).json(fallbackAnalysis(zones, API_KEY ? 'key-malformed' : 'key-missing'))
+    return res.json(fallbackAnalysis(zones))
   }
 
   try {
-    const anthropic = new Anthropic({ apiKey: API_KEY })
+    const prompt = `A user traced a line across a body diagram passing through these areas, in order: ${zones.join(' -> ')}.${answersBlock(answers, notes)}
 
-    // The prompt enforces the CHCPBC Practice Standard "Marketing, Advertising,
-    // and Promotion" (effective 1 Apr 2026). The licensee is responsible for ALL
-    // content published on their behalf — including anything generated here — so
-    // these constraints are not optional.
-    const prompt = `A user traced a line across a body diagram passing through these areas, in order: ${zones.join(' -> ')}.
-
-You are writing general physiotherapy education content for the website of a physiotherapist registered in British Columbia, Canada (Physio Chandra). This is NOT a diagnosis.
-
-This content is published on a regulated health professional's website and MUST follow these rules:
-- Accurate, honest, and consistent with current evidence-informed physiotherapy practice.
-- NO diagnosis, and no claim to identify the cause of the person's symptoms. Use hedged language ("may", "can sometimes", "is often associated with").
-- NO guarantees, promises, or implied outcomes (never state or imply that treatment will fix, cure, resolve, or eliminate pain, or how quickly).
-- NO sensational, alarming, or fear-based language. Do not warn of dire consequences or urge urgency. Keep the tone calm, neutral, and supportive.
-- Stay strictly within the physiotherapy scope of practice. Do not name medications, order imaging, or speculate about serious pathology.
-- Do not claim superiority over other providers or treatments.
-- Do not offer free services or inducements.
-
-Respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
+You are giving general physiotherapy education content for a clinic website (Physio Chandra). This is NOT a diagnosis. Based on this pain pattern, respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
 
 {
   "possibleCauses": ["...", "..."],
@@ -91,9 +161,8 @@ Respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
   "disclaimer": "..."
 }
 
-Keep each array to 3-5 short bullet points in plain, patient-friendly language (not clinical jargon). "suggestedApproach" must describe general approaches a physiotherapist might consider, phrased as possibilities rather than a prescribed plan or promised result. The disclaimer must state that this is general education only, not a diagnosis, and that an individual assessment is the appropriate next step for advice specific to them.`
+Keep each array to 3-5 short bullet points written in plain, reassuring language for a patient (not clinical jargon). The disclaimer should make clear this is general information and recommend booking an in-person assessment.`
 
-    // Using Sonnet; switch to 'claude-haiku-4-5-20251001' to cut cost for this short task.
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 800,
@@ -108,17 +177,20 @@ Keep each array to 3-5 short bullet points in plain, patient-friendly language (
     try {
       parsed = JSON.parse(cleaned)
     } catch {
-      parsed = fallbackAnalysis(zones, 'bad-json-from-model')
+      // Model didn't return clean JSON — use the safe fallback.
+      parsed = fallbackAnalysis(zones)
     }
 
-    return res.status(200).json(parsed)
+    res.json(parsed)
   } catch (err) {
-    // Log the full error to the Vercel function log; return only a short code.
-    console.error('pain-analysis error:', err?.status || '', err?.message || err)
-    const code = err?.status === 401 ? 'api-401-bad-key'
-      : err?.status === 400 ? 'api-400-bad-request'
-      : err?.status === 429 ? 'api-429-rate-or-credit'
-      : err?.status ? `api-${err.status}` : 'api-call-failed'
-    return res.status(200).json(fallbackAnalysis(zones, code))
+    console.error('pain-analysis error:', err?.message || err)
+    // Don't 500 the user experience — degrade gracefully.
+    res.json(fallbackAnalysis(zones))
   }
-}
+})
+
+app.get('/health', (req, res) => res.json({ ok: true }))
+
+app.listen(PORT, () => {
+  console.log(`Pain AI server running on http://localhost:${PORT}`)
+})

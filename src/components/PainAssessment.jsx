@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
@@ -11,6 +11,9 @@ const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
 const EASE = [0.22, 1, 0.36, 1]
 const BOOK_HREF = 'tel:+16045550101'
+// Same convention as PainAIPanel: blank in dev (Vite proxies /api/* to the
+// backend), set VITE_API_URL only when the backend lives on another origin.
+const API_URL = import.meta.env.VITE_API_URL || ''
 
 /* ── The 5 questions — A–D fixed choices, E = Other (entered manually) ──
    Option sets follow a standard subjective examination: onset, pain
@@ -22,19 +25,19 @@ const QUESTIONS = [
     'Between one and six weeks ago',
     'More than six weeks ago',
   ]},
-  { id: 'q2', text: 'How would you describe your pain?', options: [
+  { id: 'q2', text: 'How would you describe your pain?', multi: true, options: [
     'Sharp or stabbing',
     'Dull ache',
     'Burning or tingling',
     'Throbbing',
   ]},
-  { id: 'q3', text: 'What tends to make your pain worse?', options: [
+  { id: 'q3', text: 'What tends to make your pain worse?', multi: true, options: [
     'Movement or exercise',
     'Prolonged sitting or standing',
     'Bending or lifting',
     'At night, or lying in bed',
   ]},
-  { id: 'q4', text: 'What tends to ease your pain?', options: [
+  { id: 'q4', text: 'What tends to ease your pain?', multi: true, options: [
     'Rest',
     'Gentle movement or stretching',
     'Heat or cold packs',
@@ -64,6 +67,7 @@ const REGION_AGGRAVATORS = {
   hip:       ['Walking or climbing stairs', 'Lying on that side at night', 'Standing on one leg', 'Getting up from a chair'],
   knee:      ['Going up or down stairs', 'Squatting or kneeling', 'Sitting with the knee bent for a long time', 'Running or jumping'],
   ankle:     ['First steps in the morning', 'Walking or standing for a long time', 'Running or jumping', 'Uneven ground or stairs'],
+  head:      ['Long screen time or reading', 'Stress or poor sleep', 'Certain neck or jaw positions', 'Bright light or noisy places'],
 }
 const REGION_EASERS = {
   lowback:   ['Lying down or resting', 'Gentle walking', 'Changing position often', 'Heat or cold packs'],
@@ -75,6 +79,37 @@ const REGION_EASERS = {
   hip:       ['Rest', 'A pillow between the knees at night', 'Gentle walking', 'Heat packs'],
   knee:      ['Rest and elevation', 'Ice', 'A support or brace', 'Gentle movement'],
   ankle:     ['Rest and elevation', 'Ice', 'Supportive footwear', 'Gentle stretching'],
+  head:      ['Rest in a quiet, dark room', 'Gentle neck movement or a short walk', 'A heat pack across the neck and shoulders', 'Regular meals and plenty of water'],
+}
+
+/* Most-marked zone TYPE (left/right ignored). Lets the generic fallback still
+   ask area-specific questions when an area has no authored question set. */
+function primaryZoneType(zones) {
+  const tally = {}
+  zones.forEach((z) => { tally[z.type] = (tally[z.type] || 0) + 1 })
+  const best = Object.entries(tally).sort((a, b) => b[1] - a[1])[0]
+  return best ? best[0] : null
+}
+const TYPE_TO_KEY = { lowerback: 'lowback' }   // zone type → aggravator/easer key
+const TYPE_WORD = { head: 'head' }             // plain word for types with no authored region
+
+/* Regions that lie on one anatomical chain, listed from the body outwards.
+   Pain drawn ALONG a chain (shoulder → elbow, low back → down the leg,
+   neck → arm) is one travelling pattern, not separate problems — so the
+   questions focus automatically on the most PROXIMAL region, whose authored
+   set already asks where the pain travels. Only marks in genuinely separate
+   areas (e.g. shoulder AND knee) still ask the person to choose. */
+const REGION_CHAINS = [
+  ['neck', 'shoulder', 'elbow', 'wrist'],
+  ['lowback', 'hip', 'knee', 'ankle'],
+  ['neck', 'upperback', 'lowback'],
+]
+function proximalRegion(keys) {
+  if (keys.length < 2) return null
+  for (const chain of REGION_CHAINS) {
+    if (keys.every((k) => chain.includes(k))) return chain.find((k) => keys.includes(k))
+  }
+  return null
 }
 
 /* The single region a drawn selection points at (the most-marked one). */
@@ -99,17 +134,21 @@ const NOTES_Q = {
 /* Builds the question list for this particular selection. */
 function buildQuestions(zones) {
   const rk = primaryRegion(zones)
-  const area = rk && REGIONS[rk] ? REGIONS[rk].name.toLowerCase() : null
+  const zt = primaryZoneType(zones)
+  const key = rk || (zt ? (TYPE_TO_KEY[zt] || zt) : null)
+  const area = rk && REGIONS[rk] ? REGIONS[rk].name.toLowerCase() : (TYPE_WORD[zt] || null)
   return QUESTIONS.map((q) => {
-    if (q.id === 'q3' && rk && REGION_AGGRAVATORS[rk]) {
-      return { ...q, text: `What tends to make your ${area} pain worse?`, options: REGION_AGGRAVATORS[rk] }
+    if (q.id === 'q3' && key && REGION_AGGRAVATORS[key]) {
+      return { ...q, text: area ? `What tends to make your ${area} pain worse?` : q.text, options: REGION_AGGRAVATORS[key] }
     }
-    if (q.id === 'q4' && rk && REGION_EASERS[rk]) {
-      return { ...q, text: `What tends to ease your ${area} pain?`, options: REGION_EASERS[rk] }
+    if (q.id === 'q4' && key && REGION_EASERS[key]) {
+      return { ...q, text: area ? `What tends to ease your ${area} pain?` : q.text, options: REGION_EASERS[key] }
     }
     if (q.id === 'q1' && area) return { ...q, text: `When did your ${area} pain begin?` }
     return q
-  })
+  }).map((q) => (q.options
+    ? { ...q, options: q.options.map((o) => (typeof o === 'string' ? { id: o, label: o } : o)) }
+    : q))
 }
 
 /* Possible contributing causes for the drawn areas — general education only,
@@ -304,8 +343,9 @@ function Fade({ children, k }) {
 
 /* ═════════════════════════════════════════════════════════════════════
    Guided journey:
-   landing → rotate (step 1) → draw (step 2) → intro notice →
-   questions (A–E) → review → safety check → urgent care | book
+   landing → rotate (step 1) → draw (step 2) → area (only when the marks
+   cross more than one area) → intro notice → questions (A–E) → review →
+   safety check → urgent care | results
 
    Wording throughout follows the CHCPBC Practice Standards: the tool is
    described accurately as general information rather than a diagnosis,
@@ -336,11 +376,67 @@ export default function PainAssessment() {
   const [fromReview, setFromReview] = useState(false)
   // Gates the result screen behind the "not a diagnosis" notice.
   const [showNotice, setShowNotice] = useState(false)
+  // When the marks cross more than one area, the person chooses which area
+  // the questions focus on; each area has its own clinician-authored set.
+  const [focusKey, setFocusKey] = useState(null)
+  const regionChoices = useMemo(() => {
+    const seen = new Set(); const out = []
+    zones.forEach((z) => {
+      const k = ZONE_TO_REGION[z.type]
+      if (k && REGIONS[k] && !seen.has(k)) { seen.add(k); out.push({ key: k, name: REGIONS[k].name }) }
+    })
+    return out
+  }, [zones])
+  const [autoFocused, setAutoFocused] = useState(false)
+  // New or changed marks invalidate a previously chosen focus area.
+  useEffect(() => { setFocusKey(null); setAutoFocused(false) }, [zones])
 
   // In the draw step the person can switch between marking and turning the
   // model, so they can follow pain that radiates from front to back.
   const [drawMode, setDrawMode] = useState(true)
   const drawOn = stage === 'draw' && drawMode
+
+  /* ── AI pattern questions ─────────────────────────────────────────────
+     A line traced from one part to another is ONE travelling pattern, so the
+     questions should cover the whole path. The Claude API writes them for the
+     exact areas crossed (via /api/pain-questions, which validates, length-caps
+     and content-filters the output before it reaches a visitor). Single-area
+     marks keep the clinician-authored, scored sets — and those same sets are
+     the fallback whenever the API is unavailable. */
+  const multiPattern = useMemo(() => new Set(zones.map((z) => z.type)).size > 1, [zones])
+  const [aiQuestions, setAiQuestions] = useState(null)
+  const [aiQLoading, setAiQLoading] = useState(false)
+  const aiReq = useRef(0)
+  useEffect(() => { aiReq.current += 1; setAiQuestions(null); setAiQLoading(false) }, [zones])
+  const useAI = multiPattern && Array.isArray(aiQuestions) && aiQuestions.length >= 3
+
+  const fetchAiQuestions = async (zs) => {
+    const ticket = aiReq.current
+    setAiQLoading(true)
+    try {
+      const res = await fetch(`${API_URL}/api/pain-questions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ zones: zs.map((z) => z.label) }),
+      })
+      const data = res.ok ? await res.json() : null
+      const qs = Array.isArray(data?.questions)
+        ? data.questions
+            .map((q, i) => ({
+              id: 'ai' + (i + 1),
+              multi: true,   // pain rarely has a single answer — tick all that apply
+              text: String(q.text || ''),
+              options: (q.options || []).map((o) => ({ id: String(o), label: String(o) })),
+            }))
+            .filter((q) => q.text && q.options.length >= 3)
+        : []
+      if (aiReq.current === ticket) setAiQuestions(qs.length >= 3 ? qs : null)
+    } catch {
+      if (aiReq.current === ticket) setAiQuestions(null)
+    } finally {
+      if (aiReq.current === ticket) setAiQLoading(false)
+    }
+  }
 
   // ── The questionnaire is the drawn region's OWN clinical question set ──
   // Each option carries weights pointing at that region's conditions, which is
@@ -348,25 +444,28 @@ export default function PainAssessment() {
   // treatment guidance) is shown. Areas with no authored region — currently
   // only the head — fall back to the generic set.
   const region = useMemo(() => {
-    const k = primaryRegion(zones)
+    if (useAI) return null   // the pattern questions replace the per-region set
+    const k = focusKey || primaryRegion(zones)
     return k && REGIONS[k] ? REGIONS[k] : null
-  }, [zones])
+  }, [zones, focusKey, useAI])
   // Age / how it started / how long are one-tap answers, so they share a single
   // screen instead of costing three. That drops the flow from 9 screens to 7
   // before the adaptive rules trim it further, without losing any answer the
   // scoring engine relies on.
   const activeQuestions = useMemo(() => {
+    if (useAI) return [...aiQuestions, NOTES_Q]
     if (!region) return buildQuestions(zones)
     return [
       { id: '__ctx', group: region.context, text: 'A few details to start' },
       ...region.questions,
       NOTES_Q,
     ]
-  }, [region, zones])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [region, zones, useAI, aiQuestions])
   // Flat list used by the review screen and the summary.
   const flatQuestions = useMemo(
-    () => (region ? [...allQuestions(region), NOTES_Q] : buildQuestions(zones)),
-    [region, zones],
+    () => (useAI ? [...aiQuestions, NOTES_Q] : region ? [...allQuestions(region), NOTES_Q] : buildQuestions(zones)),
+    [region, zones, useAI, aiQuestions],
   )
 
   // Ranked conditions for the answers given. Empty until enough is answered.
@@ -442,6 +541,15 @@ export default function PainAssessment() {
     return labels.length ? labels.join(' · ') : '—'
   }
 
+  // The Q&A pairs feed the AI overview on the results screen, so the analysis
+  // reflects the traced pattern AND what the person answered.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const qaPairs = useMemo(() => flatQuestions
+    .filter((q) => !q.textarea)
+    .map((q) => ({ question: q.text, answer: answerText(q) }))
+    .filter((pair) => pair.answer && pair.answer !== '—'), [flatQuestions, answers])
+  const notesText = String(answers.notes || answers.q5 || '').trim()
+
   // The review screen lists every question flat; map a flat index back to the
   // screen that actually holds it (the three context ones share screen 0).
   const reviewIndexToScreen = (flatIdx) => {
@@ -451,6 +559,17 @@ export default function PainAssessment() {
   }
 
   const goToQuestion = (i, viaReview = false) => { setFromReview(viaReview); setQIndex(i); setStage('questions') }
+  // AI pattern questions when we have them; otherwise the clinician-authored
+  // sets (chained marks focus the source region automatically; genuinely
+  // separate areas ask the person to choose).
+  const startQuestions = () => {
+    if (multiPattern && !useAI) {
+      const auto = proximalRegion(regionChoices.map((r) => r.key))
+      if (auto) { setFocusKey(auto); setAutoFocused(true) }
+      else if (regionChoices.length > 1 && !focusKey) { setStage('area'); return }
+    }
+    goToQuestion(0)
+  }
   const nextFromQuestion = () => {
     if (fromReview) { setFromReview(false); setStage('review'); return }
     if (qIndex >= activeQuestions.length - 1) { setStage('review'); return }
@@ -463,7 +582,7 @@ export default function PainAssessment() {
   }
 
   const restart = () => {
-    setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther('')
+    setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setAutoFocused(false)
     setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(true)
   }
 
@@ -540,11 +659,11 @@ export default function PainAssessment() {
                 <div className="pa-actions">
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('rotate')}>start</button>
                 </div>
-                {/* <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '20px 0 0', maxWidth: 520 }}>
-                  This tool provides general information to help you describe your symptoms.
+                <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '20px 0 0', maxWidth: 520 }}>
+                  This guide offers general information to help you describe your symptoms.
                   It is not a diagnosis and does not replace an assessment by a qualified
                   health professional.
-                </p> */}
+                </p>
               </Fade>
             )}
 
@@ -552,9 +671,14 @@ export default function PainAssessment() {
             {stage === 'rotate' && (
               <Fade k="rotate">
                 <span style={label}>Step 1 of 2 · Turn the Body</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 22px' }}>
-                  Turn the body <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>as required</em>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 12px' }}>
+                  Turn the body to face <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>where it hurts</em>
                 </h2>
+                <p style={{ ...body, margin: '0 0 22px', maxWidth: 460 }}>
+                  {isPhone
+                    ? 'Drag the body sideways to turn it, or up and down to tilt it — tilt up to reach the soles of the feet. Drag the space beside it to move it, and pinch to zoom.'
+                    : 'Drag the body sideways to turn it, or up and down to tilt it — tilt up to reach the soles of the feet. Drag the space beside it to move it, and use the mouse wheel over the body to zoom.'}
+                </p>
                 <div className="pa-actions">
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
                   <button style={ghostBtn} onClick={restart}>Back</button>
@@ -571,7 +695,8 @@ export default function PainAssessment() {
                 </h2>
                 <p style={{ ...body, margin: '0 0 14px', maxWidth: 460 }}>
                   You can draw more than one line. Switch to <strong style={{ color: GOLD_LIGHT }}>Turn</strong> to
-                  rotate or tilt the body — your marks stay in place — then switch back to add more.
+                  spin or tilt the body — tilt up for the soles of the feet; your marks stay
+                  in place — then switch back to add more.
                 </p>
 
                 {/* Draw / Turn switch: drawing and rotating cannot share the
@@ -636,7 +761,13 @@ export default function PainAssessment() {
                     className="pa-primary"
                     style={{ ...goldBtn, opacity: zones.length ? 1 : 0.45, cursor: zones.length ? 'pointer' : 'not-allowed' }}
                     disabled={!zones.length}
-                    onClick={() => setStage('intro')}
+                    onClick={() => {
+                      // A line through more than one area = one travelling
+                      // pattern: ask Claude for questions about the WHOLE
+                      // path while the intro screen shows.
+                      if (multiPattern && !aiQuestions && !aiQLoading) fetchAiQuestions(zones)
+                      setStage('intro')
+                    }}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('rotate')}>Back</button>
                 </div>
@@ -649,18 +780,75 @@ export default function PainAssessment() {
               </Fade>
             )}
 
+            {/* CHOOSE THE FOCUS AREA — only when the marks cross more than
+                one area. Each area has its own clinician-authored questions,
+                so asking beats silently guessing which area the person meant. */}
+            {stage === 'area' && (
+              <Fade k="area">
+                <span style={label}>One More Step</span>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '12px 0 10px' }}>
+                  Which area should the questions <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>focus on?</em>
+                </h2>
+                <p style={{ ...body, margin: '0 0 20px', maxWidth: 460 }}>
+                  Your marks are in more than one separate area, and each area has its
+                  own set of questions. Choose the one that bothers you most — you can run
+                  the guide again afterwards for the others.
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
+                  {regionChoices.map((r, i) => {
+                    const sel = focusKey === r.key
+                    return (
+                      <button key={r.key} style={chip(sel)} onClick={() => setFocusKey(sel ? null : r.key)}>
+                        <span style={letterStyle(sel)}>{LETTERS[i] || '·'}</span>
+                        <span>{r.name}</span>
+                        <Tick on={sel} />
+                      </button>
+                    )
+                  })}
+                </div>
+                <div className="pa-actions" style={{ marginTop: 20 }}>
+                  <button
+                    className="pa-primary"
+                    style={{ ...goldBtn, opacity: focusKey ? 1 : 0.45, cursor: focusKey ? 'pointer' : 'not-allowed' }}
+                    disabled={!focusKey}
+                    onClick={() => { setAutoFocused(false); setStage('intro') }}
+                  >Continue</button>
+                  <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
+                </div>
+              </Fade>
+            )}
+
             {/* NOTICE BEFORE THE QUESTIONS */}
             {stage === 'intro' && (
               <Fade k="intro">
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '4px 0 10px' }}>
                   Please answer a few <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>questions</em>
                 </h2>
+                {useAI && zones.length > 1 && (
+                  <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
+                    Your marks travel from the {zones[0].label.toLowerCase()} toward
+                    the {zones[zones.length - 1].label.toLowerCase()}. The questions were
+                    prepared for that whole pattern — how it behaves as one — rather than
+                    for a single area.
+                  </p>
+                )}
+                {multiPattern && aiQLoading && (
+                  <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
+                    Preparing questions for the pattern you traced…
+                  </p>
+                )}
                 <p style={{ ...body, margin: '0 0 24px', maxWidth: 460 }}>
-                  It takes approximately two minutes.
+                  This takes about two minutes, and your answers shape the information
+                  you will see at the end.
                 </p>
                 <div className="pa-actions">
-                  <button className="pa-primary" style={goldBtn} onClick={() => goToQuestion(0)}>Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
+                  <button
+                    className="pa-primary"
+                    style={{ ...goldBtn, opacity: aiQLoading ? 0.45 : 1, cursor: aiQLoading ? 'wait' : 'pointer' }}
+                    disabled={aiQLoading}
+                    onClick={startQuestions}
+                  >Continue</button>
+                  <button style={ghostBtn} onClick={() => setStage(!useAI && regionChoices.length > 1 ? 'area' : 'draw')}>Back</button>
                 </div>
               </Fade>
             )}
@@ -933,70 +1121,38 @@ export default function PainAssessment() {
             {/* NON-URGENT RESULT */}
             {stage === 'ok' && (
               <Fade k="ok">
-                <span style={label}>You May Proceed With Physiotherapy</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 14px' }}>
-                  Book your <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>assessment</em>
+                <span style={label}>Your Results · General Education</span>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 18px' }}>
+                  What your answers <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>can be associated with</em>
                 </h2>
-                <p style={{ ...body, margin: '0 0 22px', maxWidth: 520 }}>
-                  Based on the information you provided, a physiotherapy assessment is an
-                  appropriate next step. Booking an appointment with Physio Chandra allows your
-                  symptoms to be examined individually and a suitable plan of care discussed
-                  with you.
-                </p>
 
-                {/* Everything the person told us, repeated back so they can
-                    check it — and read it out at the appointment. */}
-                <span style={{ ...label, marginBottom: 12 }}>Your responses</span>
-                <div style={{ marginTop: 12 }}>
-                  <div style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
-                    <span style={{ ...label, fontSize: 11.5 }}>Pain areas</span>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 10 }}>
-                      {zones.length
-                        ? zones.map((z) => <span key={z.id} style={pill}>{z.label}</span>)
-                        : <span style={{ ...body, fontSize: 15, margin: 0 }}>—</span>}
-                    </div>
-                  </div>
-                  {flatQuestions.map((q) => (
-                    <div key={q.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
-                      <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
-                      <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
-                    </div>
-                  ))}
-                  <div style={{ ...card, maxWidth: 520, marginBottom: 22 }}>
-                    <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>Final safety check</p>
-                    <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>
-                      None of the listed symptoms apply
+                {/* THE POSSIBLE REASONS COME FIRST. Matched from the answers by
+                    the scoring engine — a condition only appears once it scores
+                    >= 3 and >= 40% of its maximum, so a weak match stays hidden
+                    rather than padding the list. The answer recap was removed
+                    from this screen; answers can still be checked and changed
+                    on the Review screen before this point. */}
+                {ranked.length > 0 ? (
+                  <div style={{ marginBottom: 24 }}>
+                    {ranked.map(({ c }) => (
+                      <div key={c.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                        <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{c.name}</p>
+                        <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{c.blurb}</p>
+                        <Bullets title="What people often notice" items={c.noticed} />
+                        <Bullets title="What often helps" items={c.homeCare} />
+                        <Bullets title="See a physiotherapist if" items={c.seePhysioIf} />
+                      </div>
+                    ))}
+                    <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
+                      These patterns can be associated with answers like yours. They are general
+                      education, not findings about you — only an individual, hands-on assessment
+                      can establish what is actually going on.
                     </p>
                   </div>
-                </div>
-
-                {/* Matched from YOUR answers by the scoring engine. A condition
-                    only appears once it scores >= 3 and >= 40% of its maximum,
-                    so a weak match stays hidden rather than padding the list. */}
-                {ranked.length > 0 ? (
-                  <>
-                    <span style={{ ...label, marginBottom: 12 }}>What your answers point to</span>
-                    <div style={{ marginTop: 12, marginBottom: 22 }}>
-                      {ranked.map(({ c }) => (
-                        <div key={c.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
-                          <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{c.name}</p>
-                          <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{c.blurb}</p>
-                          <Bullets title="What people often notice" items={c.noticed} />
-                          <Bullets title="What often helps" items={c.homeCare} />
-                          <Bullets title="See a physiotherapist if" items={c.seePhysioIf} />
-                        </div>
-                      ))}
-                      <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
-                        These patterns are suggested by the answers you gave. They are general
-                        education, not findings about you — only a hands-on assessment can
-                        establish what is actually causing your symptoms.
-                      </p>
-                    </div>
-                  </>
-                ) : causes.length > 0 && (
-                  <>
-                    <span style={{ ...label, marginBottom: 12 }}>What can cause pain here</span>
-                    <div style={{ marginTop: 12, marginBottom: 22 }}>
+                ) : !useAI && causes.length > 0 && (
+                  <div style={{ marginBottom: 24 }}>
+                    <span style={{ ...label, marginBottom: 12 }}>Common reasons for pain in this area</span>
+                    <div style={{ marginTop: 12 }}>
                       {causes.map((c) => (
                         <div key={c.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
                           <p style={{ fontSize: 16, color: GOLD_LIGHT, margin: 0, lineHeight: 1.45, fontWeight: 500 }}>{c.name}</p>
@@ -1004,21 +1160,28 @@ export default function PainAssessment() {
                         </div>
                       ))}
                       <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
-                        Your answers did not point clearly to one pattern, so these are the
-                        common reasons for pain in the area you marked. They are general
-                        examples, not findings about you.
+                        Your answers did not point clearly to one pattern, so these are common
+                        reasons for pain in the area you marked. They are general examples, not
+                        findings about you.
                       </p>
                     </div>
-                  </>
+                  </div>
                 )}
 
-                {/* AI overview of the whole traced path. The curated causes above
+                {/* AI overview of the whole traced path. The curated cards above
                     are per-area; this is the part that can read a line running
                     from one area to another as a single radiating pattern. */}
-                <span style={{ ...label, marginBottom: 12 }}>Overview of your traced pattern</span>
-                <div style={{ maxWidth: 520, margin: '12px 0 22px' }}>
-                  <PainAIPanel zones={zones} aiOnly />
+                <span style={{ ...label, marginBottom: 12 }}>{useAI ? 'What could be causing it' : 'Overview of your traced pattern'}</span>
+                <div style={{ maxWidth: 520, margin: '12px 0 26px' }}>
+                  <PainAIPanel zones={zones} answers={qaPairs} notes={notesText} aiOnly />
                 </div>
+
+                <span style={{ ...label, marginBottom: 12 }}>Your Next Step</span>
+                <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
+                  Based on what you have shared, a physiotherapy assessment is an appropriate
+                  next step. An appointment with Physio Chandra lets your symptoms be examined
+                  individually and a suitable plan of care discussed with you.
+                </p>
 
                 <div className="pa-actions">
                   <a className="pa-primary" href={BOOK_HREF} style={{ ...goldBtn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box' }}>

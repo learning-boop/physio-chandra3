@@ -42,10 +42,9 @@ function fallbackAnalysis(zones) {
   return {
     fallback: true,
     possibleCauses: [
-      `Muscle tension or strain affecting ${areas}`,
-      'Joint stiffness or reduced mobility in the region',
-      'Postural overload from repetitive movements or prolonged sitting',
-      'Irritation of nearby nerves referring pain along the path',
+      `Muscle tension or strain could be affecting ${areas}`,
+      'Joint stiffness or reduced mobility may be contributing in this region',
+      'Postural load from repetitive movements or long sitting is sometimes linked to pain like this',
     ],
     commonSymptoms: [
       'Aching, tightness, or stiffness that moves along the area',
@@ -62,8 +61,83 @@ function fallbackAnalysis(zones) {
   }
 }
 
-app.post('/api/pain-analysis', async (req, res) => {
+
+// Turns the visitor's Q&A into a prompt section, with hard length caps so a
+// hostile client can't stuff the prompt.
+function answersBlock(answers, notes) {
+  const qa = Array.isArray(answers)
+    ? answers
+        .slice(0, 12)
+        .filter((p) => p && typeof p.question === 'string' && typeof p.answer === 'string')
+        .map((p) => `Q: ${p.question.slice(0, 160)}\nA: ${p.answer.slice(0, 160)}`)
+        .join('\n')
+    : ''
+  const note = typeof notes === 'string' && notes.trim()
+    ? `\nThe visitor added in their own words: "${notes.trim().slice(0, 400)}"`
+    : ''
+  if (!qa && !note) return ''
+  return `\n\nThe visitor then answered these questions about the pattern:\n${qa}${note}\n\nTailor every list to BOTH the traced path and these answers — reflect what they said about how it started, how it behaves or travels, and what worsens or eases it.`
+}
+function questionPrompt(zones) {
+  return `A visitor to a physiotherapy education website (Physio Chandra, a Registered Physiotherapist in BC, Canada) traced their pain on a 3D body. The traced line passed through these areas, in order: ${zones.join(' -> ')}.
+
+Write the intake questions a physiotherapist would ask about THIS pattern AS A WHOLE — pain travelling from ${zones[0]} toward ${zones[zones.length - 1]} — never about one area on its own.
+
+Rules:
+- Exactly 4 multiple-choice questions, together covering: how it started; how the pain behaves or travels between these areas; what makes it worse; what eases it or how it changes through the day.
+- Plain, warm language a 12-year-old could read. Each question under 14 words. Give 4 or 5 short options each (under 8 words). Visitors can select MORE THAN ONE option, so write options that can sensibly be combined; include "Not sure" where it fits.
+- These are educational questions, never a diagnosis: no disease names inside the questions, no alarming wording, no emergency or red-flag symptoms (fever, saddle numbness, bladder or bowel changes, chest pain — the site runs its own separate safety check), and no medication questions.
+
+Respond ONLY with valid JSON, no markdown, exactly: {"questions":[{"text":"...","options":["...","..."]}]}`
+}
+
+// Anything the model writes is checked before it reaches a visitor: shape,
+// length, and a blocklist for content the questions must never contain.
+const BANNED_IN_QUESTIONS = /(cancer|tumou?r|fracture|emergency|bladder|bowel|fever|saddle|diagnos|medicat|drug|opioid|guarantee)/i
+function cleanQuestions(parsed) {
+  if (!parsed || !Array.isArray(parsed.questions)) return null
+  const out = parsed.questions
+    .filter((q) => q && typeof q.text === 'string' && Array.isArray(q.options) && q.options.length >= 3)
+    .filter((q) => !BANNED_IN_QUESTIONS.test(q.text + ' ' + q.options.join(' ')))
+    .slice(0, 5)
+    .map((q) => ({
+      text: q.text.slice(0, 140),
+      options: q.options.slice(0, 6).map((o) => String(o).slice(0, 70)),
+    }))
+  return out.length >= 3 ? out : null
+}
+
+// ─── Pattern questions: the intake step, written by Claude for the exact
+//     path the visitor traced (shoulder → elbow is ONE travelling pattern,
+//     so the questions are about the whole pattern, not one part) ──────────
+app.post('/api/pain-questions', async (req, res) => {
   const { zones } = req.body
+  if (!Array.isArray(zones) || zones.length === 0) {
+    return res.status(400).json({ error: 'zones must be a non-empty array of body area labels' })
+  }
+  // No usable key → tell the client to use its built-in clinician-authored
+  // question sets instead of erroring.
+  if (!hasValidKey()) return res.json({ questions: null, fallback: true })
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 700,
+      messages: [{ role: 'user', content: questionPrompt(zones.map(String)) }],
+    })
+    const textBlock = response.content.find((b) => b.type === 'text')
+    const raw = textBlock ? textBlock.text : '{}'
+    let parsed = null
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()) } catch { parsed = null }
+    const questions = cleanQuestions(parsed)
+    res.json(questions ? { questions } : { questions: null, fallback: true })
+  } catch (err) {
+    console.error('pain-questions error:', err?.message || err)
+    res.json({ questions: null, fallback: true })
+  }
+})
+
+app.post('/api/pain-analysis', async (req, res) => {
+  const { zones, answers, notes } = req.body
 
   if (!Array.isArray(zones) || zones.length === 0) {
     return res.status(400).json({ error: 'zones must be a non-empty array of body area labels' })
@@ -75,7 +149,7 @@ app.post('/api/pain-analysis', async (req, res) => {
   }
 
   try {
-    const prompt = `A user traced a line across a body diagram passing through these areas, in order: ${zones.join(' -> ')}.
+    const prompt = `A user traced a line across a body diagram passing through these areas, in order: ${zones.join(' -> ')}.${answersBlock(answers, notes)}
 
 You are giving general physiotherapy education content for a clinic website (Physio Chandra). This is NOT a diagnosis. Based on this pain pattern, respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
 
@@ -86,7 +160,7 @@ You are giving general physiotherapy education content for a clinic website (Phy
   "disclaimer": "..."
 }
 
-Keep each array to 3-5 short bullet points written in plain, reassuring language for a patient (not clinical jargon). The disclaimer should make clear this is general information and recommend booking an in-person assessment.`
+"possibleCauses" must contain EXACTLY 3 items — the three explanations that best fit THIS pattern and THESE answers — each written as a possibility ("could be…", "may be…", "is sometimes linked to…"), never as a statement of what the person has. Keep the other arrays to 3-4 short bullet points, all in plain, reassuring language for a patient (not clinical jargon). The disclaimer should make clear this is general information and recommend booking an in-person assessment.`
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
@@ -105,6 +179,9 @@ Keep each array to 3-5 short bullet points written in plain, reassuring language
       // Model didn't return clean JSON — use the safe fallback.
       parsed = fallbackAnalysis(zones)
     }
+
+    // Hard guarantee, whatever the model wrote: at most 3 possible causes.
+    if (Array.isArray(parsed.possibleCauses)) parsed.possibleCauses = parsed.possibleCauses.slice(0, 3)
 
     res.json(parsed)
   } catch (err) {
