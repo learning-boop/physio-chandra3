@@ -10,6 +10,12 @@
 import fs from 'fs'
 import path from 'path'
 import { REGIONS, allQuestions } from '../src/data/symptomGuide.js'
+// symptomGuide.js merges the PREVIOUS run's output back into REGIONS, so a
+// second run would see its own records as duplicates and refuse. This import
+// is regenerated from scratch every time, so anything it produced is not a
+// clash — only a collision with a built-in condition is.
+import { AUTHORED as PREVIOUS } from '../src/data/symptomGuideAuthored.js'
+const fromLastRun = new Set(PREVIOUS.map((e) => `${e.region}/${e.cond.id}`))
 
 const DIR = 'content/conditions'
 const OUT = 'src/data/symptomGuideAuthored.js'
@@ -63,7 +69,9 @@ for (const file of files) {
   const region = REGIONS[meta.region]
   if (!region) { fail(file, `unknown region "${meta.region}"`); continue }
   if (!meta.id || !meta.name) { fail(file, 'id and name are required'); continue }
-  if (region.conditions.some((c) => c.id === meta.id)) { fail(file, `id "${meta.id}" already exists in ${meta.region}`); continue }
+  if (region.conditions.some((c) => c.id === meta.id) && !fromLastRun.has(`${meta.region}/${meta.id}`)) {
+    fail(file, `id "${meta.id}" already exists in ${meta.region}`); continue
+  }
   for (const k of ['blurb', 'noticed', 'homeCare', 'seePhysioIf']) {
     if (!sections[k] || !sections[k].length) fail(file, `## ${k} section is empty`)
   }
