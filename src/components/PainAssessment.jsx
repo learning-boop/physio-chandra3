@@ -91,7 +91,7 @@ function primaryZoneType(zones) {
   return best ? best[0] : null
 }
 const TYPE_TO_KEY = { lowerback: 'lowback' }   // zone type → aggravator/easer key
-const TYPE_WORD = { head: 'head' }             // plain word for types with no authored region
+const TYPE_WORD = { head: 'head', chest: 'chest', abdomen: 'stomach' } // plain word for types with no authored region
 
 /* Regions that lie on one anatomical chain, listed from the body outwards.
    Pain drawn ALONG a chain (shoulder → elbow, low back → down the leg,
@@ -197,6 +197,9 @@ const SAFETY_CHECKS = [
   { id: 'sc-systemic', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain',
     why: { title: 'Possible infection or systemic cause',
       text: 'Pain accompanied by fever, weight loss, or a cancer history can have a medical rather than a mechanical cause. That has to be excluded by a doctor first, as it is treated quite differently.' } },
+  { id: 'sc-cardiac', text: 'Chest pain or pressure, or pain with breathlessness, sweating, or nausea — especially if it comes on with exertion',
+    why: { title: 'The heart must be checked first',
+      text: 'Pain in the chest, or pain that arrives with breathlessness, sweating, or nausea, can have a cardiac cause. That is a medical emergency assessment, not a physiotherapy one — call 911 if it is happening now.' } },
   { id: 'sc-trauma', text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
     why: { title: 'A fracture should be excluded',
       text: 'After a significant impact — or any fall where bone strength may be reduced — imaging is usually needed to rule out a fracture before the area is loaded or mobilised.' } },
@@ -362,6 +365,9 @@ export default function PainAssessment() {
     return () => window.removeEventListener('resize', onR)
   }, [])
   const isPhone = vw < 768
+  // The swipe hint is a nudge, not decoration: it disappears the moment the
+  // visitor touches the model, so it never nags someone who already knows.
+  const [hasTurned, setHasTurned] = useState(false)
 
   const [stage, setStage] = useState('landing')
   const [qIndex, setQIndex] = useState(0)
@@ -417,7 +423,9 @@ export default function PainAssessment() {
       const res = await fetch(`${API_URL}/api/pain-questions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zones: zs.map((z) => z.label) }),
+        // type lets the server retrieve the approved condition records for
+        // these exact regions, so the questions are written from that data.
+        body: JSON.stringify({ zones: zs.map((z) => ({ type: z.type, label: z.label })) }),
       })
       const data = res.ok ? await res.json() : null
       const qs = Array.isArray(data?.questions)
@@ -639,6 +647,72 @@ export default function PainAssessment() {
           /* Undo / Redo / Clear row above the main actions. */
           .pa-tools { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 14px; }
 
+          /* One-line intro under a step heading. */
+          .pa-lede {
+            margin: 0 0 18px; max-width: 460px;
+            font-size: clamp(14.5px, 3.6vw, 16px); line-height: 1.55;
+            color: rgba(255,255,255,0.72);
+          }
+
+          /* Gesture list: badge + text, wrapping safely on narrow phones. */
+          .pa-gestures {
+            list-style: none; margin: 0 0 22px; padding: 0;
+            display: grid; gap: 9px; max-width: 460px;
+          }
+          .pa-gestures li { display: flex; align-items: flex-start; gap: 12px; }
+          .pa-gestures__badge {
+            width: 30px; height: 30px; border-radius: 999px; flex: 0 0 auto;
+            display: inline-flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(201,169,110,0.45); color: ${GOLD_LIGHT};
+            font-size: 15px; line-height: 1;
+          }
+          .pa-gestures li > span:last-child {
+            font-size: clamp(14px, 3.5vw, 15px); line-height: 1.45;
+            color: rgba(255,255,255,0.72); padding-top: 5px; min-width: 0;
+          }
+          .pa-gestures b { color: rgba(255,255,255,0.94); font-weight: 600; }
+
+          /* Swipe nudge sitting on the model itself, where the gesture happens
+             rather than in a list the visitor has already stopped reading. */
+          .pa-swipe {
+            position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
+            z-index: 3; pointer-events: none; white-space: nowrap;
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 15px; border-radius: 999px;
+            background: rgba(9,17,32,0.74); backdrop-filter: blur(6px);
+            border: 1px solid rgba(201,169,110,0.34);
+            color: rgba(255,255,255,0.88); font-size: 13px; letter-spacing: 0.01em;
+            animation: pa-swipe-in 0.45s ease both 0.7s;
+          }
+          .pa-swipe__track {
+            position: relative; width: 52px; height: 16px; flex: 0 0 auto;
+            display: inline-flex; align-items: center; justify-content: space-between;
+          }
+          .pa-swipe__chev { color: rgba(201,169,110,0.75); font-size: 15px; line-height: 1; }
+          .pa-swipe__dot {
+            position: absolute; left: 22px; width: 8px; height: 8px; border-radius: 50%;
+            background: ${GOLD_LIGHT}; box-shadow: 0 0 10px rgba(201,169,110,0.6);
+            animation: pa-swipe-move 1.9s ease-in-out infinite;
+          }
+          @keyframes pa-swipe-move {
+            0%, 100% { transform: translateX(-15px); opacity: 0.55; }
+            50%      { transform: translateX(15px);  opacity: 1; }
+          }
+          @keyframes pa-swipe-in { from { opacity: 0; } to { opacity: 1; } }
+          @media (prefers-reduced-motion: reduce) {
+            .pa-swipe, .pa-swipe__dot { animation: none; }
+          }
+          /* Narrow phones: keep the pill inside the frame. */
+          @media (max-width: 380px) {
+            .pa-swipe { font-size: 12px; padding: 7px 12px; gap: 8px; }
+            .pa-swipe__track { width: 42px; }
+            .pa-swipe__dot { left: 17px; }
+            @keyframes pa-swipe-move {
+              0%, 100% { transform: translateX(-12px); opacity: 0.55; }
+              50%      { transform: translateX(12px);  opacity: 1; }
+            }
+          }
+
           @media (min-width: 900px) {
             .pa-grid { grid-template-columns: ${modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
             .pa-model { order: 2; height: min(86vh, 820px); }
@@ -671,14 +745,36 @@ export default function PainAssessment() {
             {stage === 'rotate' && (
               <Fade k="rotate">
                 <span style={label}>Step 1 of 2 · Turn the Body</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 12px' }}>
-                  Turn the body to face <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>where it hurts</em>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 8px' }}>
+                  Turn the body <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>if you need to</em>
                 </h2>
-                <p style={{ ...body, margin: '0 0 22px', maxWidth: 460 }}>
-                  {isPhone
-                    ? 'Drag the body sideways to turn it, or up and down to tilt it — tilt up to reach the soles of the feet. Drag the space beside it to move it, and pinch to zoom.'
-                    : 'Drag the body sideways to turn it, or up and down to tilt it — tilt up to reach the soles of the feet. Drag the space beside it to move it, and use the mouse wheel over the body to zoom.'}
+                <p className="pa-lede">
+                  Only if the sore side isn't facing you — otherwise just press Continue.
                 </p>
+                {/* One arrow, one action, one result. The verb follows the input
+                    the visitor actually has: "swipe" means nothing on a mouse,
+                    "scroll" means nothing on a phone. */}
+                <ul className="pa-gestures">
+                  {(isPhone
+                    ? [
+                        ['\u2194', 'Swipe left or right', 'spin the body around'],
+                        ['\u2195', 'Swipe up or down', 'tilt it (see the soles of the feet)'],
+                        ['\u21c4', 'Two fingers', 'slide the picture'],
+                        ['\u2295', 'Pinch', 'zoom in and out'],
+                      ]
+                    : [
+                        ['\u2194', 'Drag left or right', 'spin the body around'],
+                        ['\u2195', 'Drag up or down', 'tilt it (see the soles of the feet)'],
+                        ['\u21c4', 'Drag beside it', 'slide the picture'],
+                        ['\u2295', 'Scroll on it', 'zoom in and out'],
+                      ]
+                  ).map(([arrow, action, result]) => (
+                    <li key={action}>
+                      <span className="pa-gestures__badge" aria-hidden="true">{arrow}</span>
+                      <span><b>{action}</b> — {result}</span>
+                    </li>
+                  ))}
+                </ul>
                 <div className="pa-actions">
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
                   <button style={ghostBtn} onClick={restart}>Back</button>
@@ -1212,9 +1308,20 @@ export default function PainAssessment() {
         {/* ── RIGHT: the 3D model (shrinks after confirm, marks persist) ── */}
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
-          <div className="pa-model-stage">
+          <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
+            {stage === 'rotate' && !hasTurned && (
+              <div className="pa-swipe" aria-hidden="true">
+                <span className="pa-swipe__track">
+                  <span className="pa-swipe__chev">‹</span>
+                  <span className="pa-swipe__dot" />
+                  <span className="pa-swipe__chev">›</span>
+                </span>
+                {isPhone ? 'Swipe to turn' : 'Drag to turn'}
+              </div>
+            )}
             <Body3D
               onSelectionChange={setZones}
+              showGestureHint={!(stage === 'rotate' && !hasTurned)}
               controlled
               drawOn={drawOn}
               clearSignal={clearSignal}

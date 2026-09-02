@@ -1,28 +1,32 @@
+/* Express backend (local dev + the EC2/Nginx or cPanel deployment).
+   All prompts, retrieval, and validation live in ../api/_lib/painShared.js —
+   the SAME module the Vercel functions use — so the two backends can never
+   drift apart. This server is just the Express wiring around it. */
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import Anthropic from '@anthropic-ai/sdk'
+import {
+  getApiKey,
+  hasValidKey,
+  parseZones,
+  questionKnowledge,
+  questionPrompt,
+  cleanQuestions,
+  analysisKnowledge,
+  analysisPrompt,
+  sanitizeAnalysis,
+  fallbackAnalysis,
+} from '../api/_lib/painShared.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
-const API_KEY = process.env.ANTHROPIC_API_KEY
-
-// A usable key starts with "sk-ant-", is a real length, and isn't the template
-// placeholder. Anything else means analysis will use the safe fallback content.
-function hasValidKey() {
-  return (
-    typeof API_KEY === 'string' &&
-    API_KEY.startsWith('sk-ant-') &&
-    API_KEY.length > 30 &&
-    !API_KEY.includes('PASTE') &&
-    !API_KEY.includes('xxxx')
-  )
-}
+const API_KEY = getApiKey()
 
 // ─── Startup sanity check on the API key ─────────────────────────────────────
 // If it's missing, malformed (e.g. the VITE_API_URL value accidentally glued
 // onto it), or still the placeholder, warn loudly so it's obvious what to fix.
-if (!hasValidKey()) {
+if (!hasValidKey(API_KEY)) {
   console.warn(
     '\n[WARN] ANTHROPIC_API_KEY is missing, malformed, or still the placeholder.\n' +
     '       It must be a single value starting with "sk-ant-".\n' +
@@ -35,94 +39,32 @@ app.use(express.json())
 
 const anthropic = new Anthropic({ apiKey: API_KEY })
 
-// Safe, generic fallback used when the model can't be reached or the key is bad,
-// so the panel always shows something useful instead of an error.
-function fallbackAnalysis(zones) {
-  const areas = Array.isArray(zones) && zones.length ? zones.join(', ') : 'the traced areas'
-  return {
-    fallback: true,
-    possibleCauses: [
-      `Muscle tension or strain could be affecting ${areas}`,
-      'Joint stiffness or reduced mobility may be contributing in this region',
-      'Postural load from repetitive movements or long sitting is sometimes linked to pain like this',
-    ],
-    commonSymptoms: [
-      'Aching, tightness, or stiffness that moves along the area',
-      'Discomfort that worsens with certain positions or activity',
-      'Reduced range of motion or a feeling of weakness',
-    ],
-    suggestedApproach: [
-      'Gentle movement and activity modification to avoid aggravation',
-      'Targeted stretching and strengthening guided by a physiotherapist',
-      'A hands-on assessment to pinpoint the source and build a plan',
-    ],
-    disclaimer:
-      'This is general information, not a diagnosis. Please book an assessment with Physio Chandra for a proper, personalised evaluation.',
-  }
-}
-
-
-// Turns the visitor's Q&A into a prompt section, with hard length caps so a
-// hostile client can't stuff the prompt.
-function answersBlock(answers, notes) {
-  const qa = Array.isArray(answers)
-    ? answers
-        .slice(0, 12)
-        .filter((p) => p && typeof p.question === 'string' && typeof p.answer === 'string')
-        .map((p) => `Q: ${p.question.slice(0, 160)}\nA: ${p.answer.slice(0, 160)}`)
-        .join('\n')
-    : ''
-  const note = typeof notes === 'string' && notes.trim()
-    ? `\nThe visitor added in their own words: "${notes.trim().slice(0, 400)}"`
-    : ''
-  if (!qa && !note) return ''
-  return `\n\nThe visitor then answered these questions about the pattern:\n${qa}${note}\n\nTailor every list to BOTH the traced path and these answers — reflect what they said about how it started, how it behaves or travels, and what worsens or eases it.`
-}
-function questionPrompt(zones) {
-  return `A visitor to a physiotherapy education website (Physio Chandra, a Registered Physiotherapist in BC, Canada) traced their pain on a 3D body. The traced line passed through these areas, in order: ${zones.join(' -> ')}.
-
-Write the intake questions a physiotherapist would ask about THIS pattern AS A WHOLE — pain travelling from ${zones[0]} toward ${zones[zones.length - 1]} — never about one area on its own.
-
-Rules:
-- Exactly 4 multiple-choice questions, together covering: how it started; how the pain behaves or travels between these areas; what makes it worse; what eases it or how it changes through the day.
-- Plain, warm language a 12-year-old could read. Each question under 14 words. Give 4 or 5 short options each (under 8 words). Visitors can select MORE THAN ONE option, so write options that can sensibly be combined; include "Not sure" where it fits.
-- These are educational questions, never a diagnosis: no disease names inside the questions, no alarming wording, no emergency or red-flag symptoms (fever, saddle numbness, bladder or bowel changes, chest pain — the site runs its own separate safety check), and no medication questions.
-
-Respond ONLY with valid JSON, no markdown, exactly: {"questions":[{"text":"...","options":["...","..."]}]}`
-}
-
-// Anything the model writes is checked before it reaches a visitor: shape,
-// length, and a blocklist for content the questions must never contain.
-const BANNED_IN_QUESTIONS = /(cancer|tumou?r|fracture|emergency|bladder|bowel|fever|saddle|diagnos|medicat|drug|opioid|guarantee)/i
-function cleanQuestions(parsed) {
-  if (!parsed || !Array.isArray(parsed.questions)) return null
-  const out = parsed.questions
-    .filter((q) => q && typeof q.text === 'string' && Array.isArray(q.options) && q.options.length >= 3)
-    .filter((q) => !BANNED_IN_QUESTIONS.test(q.text + ' ' + q.options.join(' ')))
-    .slice(0, 5)
-    .map((q) => ({
-      text: q.text.slice(0, 140),
-      options: q.options.slice(0, 6).map((o) => String(o).slice(0, 70)),
-    }))
-  return out.length >= 3 ? out : null
-}
-
-// ─── Pattern questions: the intake step, written by Claude for the exact
-//     path the visitor traced (shoulder → elbow is ONE travelling pattern,
-//     so the questions are about the whole pattern, not one part) ──────────
+// ─── Pattern questions ───────────────────────────────────────────────────────
+// A line traced across areas is ONE travelling pattern; the questions cover
+// the whole path. The approved condition records for the crossed regions are
+// retrieved and injected into the prompt, so the questions probe exactly the
+// features Chandra's data uses to tell those patterns apart.
 app.post('/api/pain-questions', async (req, res) => {
-  const { zones } = req.body
-  if (!Array.isArray(zones) || zones.length === 0) {
-    return res.status(400).json({ error: 'zones must be a non-empty array of body area labels' })
+  const { labels, regionKeys } = parseZones((req.body || {}).zones)
+  if (!labels.length) {
+    return res.status(400).json({ error: 'zones must be a non-empty array of body areas' })
   }
   // No usable key → tell the client to use its built-in clinician-authored
   // question sets instead of erroring.
-  if (!hasValidKey()) return res.json({ questions: null, fallback: true })
+  if (!hasValidKey(API_KEY)) return res.json({ questions: null, fallback: true })
   try {
+    const knowledge = questionKnowledge(regionKeys)
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 700,
-      messages: [{ role: 'user', content: questionPrompt(zones.map(String)) }],
+      model: 'claude-sonnet-5',
+      // Sonnet 5 runs adaptive thinking when `thinking` is omitted (Sonnet 4.6
+      // ran thinking-off), and max_tokens caps thinking + text together — so
+      // omitting it here would spend the budget on reasoning and truncate the
+      // JSON. This task is structured extraction; it does not need thinking.
+      thinking: { type: 'disabled' },
+      // Sonnet 5's tokenizer emits ~40% more tokens for the same text, so the
+      // old 700 cap would cut the same answer short.
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: questionPrompt(labels, knowledge) }],
     })
     const textBlock = response.content.find((b) => b.type === 'text')
     const raw = textBlock ? textBlock.text : '{}'
@@ -136,58 +78,36 @@ app.post('/api/pain-questions', async (req, res) => {
   }
 })
 
+// ─── Pattern analysis ────────────────────────────────────────────────────────
+// Grounded in the retrieved records; honest when they don't cover the pattern;
+// shape-checked before anything reaches a visitor; fixed fallback on failure.
 app.post('/api/pain-analysis', async (req, res) => {
-  const { zones, answers, notes } = req.body
-
-  if (!Array.isArray(zones) || zones.length === 0) {
-    return res.status(400).json({ error: 'zones must be a non-empty array of body area labels' })
+  const { zones, answers, notes } = req.body || {}
+  const { labels, regionKeys } = parseZones(zones)
+  if (!labels.length) {
+    return res.status(400).json({ error: 'zones must be a non-empty array of body areas' })
   }
-
   // No usable key -> serve the fallback rather than erroring out.
-  if (!hasValidKey()) {
-    return res.json(fallbackAnalysis(zones))
-  }
-
+  if (!hasValidKey(API_KEY)) return res.json(fallbackAnalysis(labels))
   try {
-    const prompt = `A user traced a line across a body diagram passing through these areas, in order: ${zones.join(' -> ')}.${answersBlock(answers, notes)}
-
-You are giving general physiotherapy education content for a clinic website (Physio Chandra). This is NOT a diagnosis. Based on this pain pattern, respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
-
-{
-  "possibleCauses": ["...", "..."],
-  "commonSymptoms": ["...", "..."],
-  "suggestedApproach": ["...", "..."],
-  "disclaimer": "..."
-}
-
-"possibleCauses" must contain EXACTLY 3 items — the three explanations that best fit THIS pattern and THESE answers — each written as a possibility ("could be…", "may be…", "is sometimes linked to…"), never as a statement of what the person has. Keep the other arrays to 3-4 short bullet points, all in plain, reassuring language for a patient (not clinical jargon). The disclaimer should make clear this is general information and recommend booking an in-person assessment.`
-
+    const knowledge = analysisKnowledge(regionKeys)
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 800,
-      messages: [{ role: 'user', content: prompt }],
+      model: 'claude-sonnet-5',
+      // See the questions route: thinking is on by default on Sonnet 5 and
+      // shares the max_tokens budget with the response.
+      thinking: { type: 'disabled' },
+      max_tokens: 1150,   // ~40% headroom for Sonnet 5's tokenizer
+      messages: [{ role: 'user', content: analysisPrompt(labels, answers, notes, knowledge) }],
     })
-
     const textBlock = response.content.find((b) => b.type === 'text')
     const raw = textBlock ? textBlock.text : '{}'
-    const cleaned = raw.replace(/```json|```/g, '').trim()
-
-    let parsed
-    try {
-      parsed = JSON.parse(cleaned)
-    } catch {
-      // Model didn't return clean JSON — use the safe fallback.
-      parsed = fallbackAnalysis(zones)
-    }
-
-    // Hard guarantee, whatever the model wrote: at most 3 possible causes.
-    if (Array.isArray(parsed.possibleCauses)) parsed.possibleCauses = parsed.possibleCauses.slice(0, 3)
-
-    res.json(parsed)
+    let parsed = null
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()) } catch { parsed = null }
+    res.json(sanitizeAnalysis(parsed, labels))
   } catch (err) {
     console.error('pain-analysis error:', err?.message || err)
     // Don't 500 the user experience — degrade gracefully.
-    res.json(fallbackAnalysis(zones))
+    res.json(fallbackAnalysis(labels))
   }
 })
 

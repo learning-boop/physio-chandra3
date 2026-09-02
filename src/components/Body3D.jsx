@@ -20,7 +20,8 @@ const MODEL_Y_OFFSET = 0.45
 // eye/brow/nostril texels all sit at +X. The face points +X, so the camera
 // sits on +X. classify() derives front/back AND left/right from this sign, so
 // flipping it keeps every zone label anatomically correct.
-const FRONT_SIGN = 1   // set -1 if it opens showing the back
+const FRONT_SIGN = 1   // the raw-export GLB faces +X (unlike the old optimized file),
+                       // so +1 opens facing the FRONT with correct front/back zones
 
 const CAM_POS = [7.4 * FRONT_SIGN, 0.45, 0]
 // Target sits slightly ABOVE the body's centre → the body renders slightly
@@ -38,16 +39,18 @@ const POLAR_MAX = Math.PI * 0.96
 // Real world-space extents of the posed model: it is MODEL_SCALE tall and
 // centred on MODEL_Y_OFFSET, so the feet sit at -1.55 and the head at 2.45.
 // (ContactShadows is pinned to BODY_BOTTOM, which is the same plane.)
-const BODY_BOTTOM = MODEL_Y_OFFSET - MODEL_SCALE / 2
+const BODY_BOTTOM = MODEL_Y_OFFSET - MODEL_SCALE       // raw model is 2 units tall
 const BODY_CENTRE = MODEL_Y_OFFSET
-const BODY_HALF_H = MODEL_SCALE / 2
+const BODY_HALF_H = MODEL_SCALE            // world half-height = 4: head AND feet fit
 // Half-width budget covering the widest part of the figure (the hands, which
-// hang at hip height). Measured from the model: max |z| 0.2602 x MODEL_SCALE.
-const BODY_HALF_W = 1.05
+// hang at hip height). Measured from the mesh: the hands reach |z| 0.5206 in
+// the raw GLB, and the group scales that by MODEL_SCALE -> 2.08 world units.
+// (The old 1.05 came from the same halved-figure mistake as the zone bands.)
+const BODY_HALF_W = 2.1
 // Air around the silhouette so nothing touches the frame edge. At 1.02 the
 // feet sat exactly on the bottom edge and were clipped on the landing view;
 // 1.16 pulls the camera back far enough that the soles are always visible.
-const FIT_MARGIN = 1.16
+const FIT_MARGIN = 1.06
 
 // Area labels/types for the info panel.
 const AREA = {
@@ -63,6 +66,8 @@ const AREA = {
   wristR:    { type: 'wrist',     label: 'Right Wrist' },
   hipL:      { type: 'hip',       label: 'Left Hip' },
   hipR:      { type: 'hip',       label: 'Right Hip' },
+  chest:     { type: 'chest',     label: 'Chest' },
+  abdomen:   { type: 'abdomen',   label: 'Stomach / Abdomen' },
   kneeL:     { type: 'knee',      label: 'Left Knee' },
   kneeR:     { type: 'knee',      label: 'Right Knee' },
   ankleL:    { type: 'ankle',     label: 'Left Ankle / Foot' },
@@ -79,14 +84,50 @@ const ARM_SPLIT = 0.12
 // Distance that separates the neck (centre) from the shoulders (out).
 const NECK_SPLIT = 0.09
 
+// The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
+// fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
+// body's own axis in the same units. Those fractions only line up with the
+// mesh if we divide by the figure's REAL world height, which is the raw GLB's
+// height times MODEL_SCALE -- body-v14.glb exports 2 units tall, so the figure
+// stands 8 world units, not MODEL_SCALE. Dividing by MODEL_SCALE (as this file
+// used to) doubled every coordinate, so a mark on the sternum arrived as
+// fy 0.8 and came back "Head", and a mark on the hand came back "Knee".
+// Measured once from the loaded mesh so swapping the model can never
+// desynchronise the bands again.
+const BODY_METRICS = { h: MODEL_SCALE * 2, cx: 0, cy: MODEL_Y_OFFSET, cz: 0 }
+function measureBody(object3d) {
+  const box = new THREE.Box3().setFromObject(object3d)
+  const h = (box.max.y - box.min.y) * MODEL_SCALE
+  if (!isFinite(h) || h <= 0) return
+  BODY_METRICS.h = h
+  BODY_METRICS.cx = ((box.min.x + box.max.x) / 2) * MODEL_SCALE
+  BODY_METRICS.cy = ((box.min.y + box.max.y) / 2) * MODEL_SCALE + MODEL_Y_OFFSET
+  BODY_METRICS.cz = ((box.min.z + box.max.z) / 2) * MODEL_SCALE
+  if (typeof window !== 'undefined') {
+    console.info('[pain-mapper] figure height ' + h.toFixed(2) +
+      ' world units, centre y ' + BODY_METRICS.cy.toFixed(2))
+  }
+}
+
+// Bump this whenever the zone bands change. It prints once in the browser
+// console, so if a fix "doesn't take", open DevTools → Console: no line or an
+// older version means the browser is running a stale cached bundle (hard
+// refresh with Ctrl+Shift+R) or the file wasn't replaced.
+const CLASSIFIER_VERSION = 'zones-v6'
+if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
+  window.__painZonesV = CLASSIFIER_VERSION
+  console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
+}
+
 // Classify a point on the body (world coords) into an area, using its height
 // AND how far it sits from the centre line. Both the front/back test and the
 // left/right test are taken relative to FRONT_SIGN, because turning the figure
 // to face the other way swaps its anatomical left and right as well.
 function classify(wx, wy, wz) {
-  const fy = (wy - MODEL_Y_OFFSET) / MODEL_SCALE       // -0.5 feet .. +0.5 head
-  const lz = (wz / MODEL_SCALE) * FRONT_SIGN           // left(-)/right(+)
-  const lx = (wx / MODEL_SCALE) * FRONT_SIGN           // front(+)/back(-)
+  const H = BODY_METRICS.h
+  const fy = (wy - BODY_METRICS.cy) / H                       // -0.5 feet .. +0.5 head
+  const lz = ((wz - BODY_METRICS.cz) / H) * FRONT_SIGN        // left(-)/right(+)
+  const lx = ((wx - BODY_METRICS.cx) / H) * FRONT_SIGN        // front(+)/back(-)
   const side = lz < 0 ? 'L' : 'R'
   const absZ = Math.abs(lz)                            // distance from centre line
   const back = lx < -0.04
@@ -97,8 +138,16 @@ function classify(wx, wy, wz) {
   if (fy < -0.34) return 'ankle' + side
   if (fy < -0.12) return 'knee' + side
 
-  // back of the torso
-  if (back) return fy > 0.12 ? 'upperback' : 'lowerback'
+  // ── BACK of the body ──
+  // The arms hang clear of the trunk from the shoulder blades down: measured on
+  // the back half of this mesh, below fy 0.18 the torso stops at |z| 0.092 and
+  // the arm starts at 0.10, so anything past ARM_SPLIT down there is the arm,
+  // not the back. (Above 0.18 the rear deltoid merges into the trunk, so that
+  // stays back — the shoulder blade is upper back, which is what people mean.)
+  if (back && absZ > ARM_SPLIT && fy < 0.18) return (fy > 0.04 ? 'elbow' : 'wrist') + side
+  // The nape above the shoulder line is the NECK — people very often draw neck
+  // pain from behind — but the back of the SKULL is still the head.
+  if (back) return fy > 0.41 ? 'head' : fy > 0.33 ? 'neck' : fy > 0.12 ? 'upperback' : 'lowerback'
 
   // ── FRONT of the body ──
   // OUT to the side = the arm: shoulder (high) → elbow (mid) → wrist (low).
@@ -109,11 +158,21 @@ function classify(wx, wy, wz) {
     return 'wrist' + side
   }
 
-  // NEAR the centre: head, neck, shoulders(inner), chest, hip
-  if (fy > 0.38) return 'head'
-  if (fy > 0.26) return absZ > NECK_SPLIT ? 'shoulder' + side : 'neck'
-  if (fy > 0.14) return null          // chest / upper stomach — no listed area
-  return 'hip' + side                  // lower torso = hip
+  // NEAR the centre: head, neck, shoulders(inner), chest, abdomen, hip.
+  // Thresholds measured off body-v14.glb's actual silhouette (fy = height as a
+  // fraction of the figure, -0.5 feet .. +0.5 head): the jaw/ear line sits at
+  // ~0.395, the shoulders flare out at ~0.335, the ribcage ends at ~0.16, and
+  // the pelvis starts at ~0.02. Head is STRICTLY above the jaw line — no
+  // chin/depth special-case, because the chin and the front of the neck are
+  // only millimetres apart on this mesh, and any depth test there let strokes
+  // up the throat clip into "Head". Everything from the jaw down to the
+  // shoulder line is the neck; that matches how people actually draw neck pain.
+  if (fy > 0.395) return 'head'
+  if (fy > 0.33) return absZ > NECK_SPLIT ? 'shoulder' + side : 'neck'
+  if (fy > 0.26 && absZ > 0.09) return 'shoulder' + side   // clavicle end / front of the shoulder
+  if (fy > 0.16) return 'chest'
+  if (fy > 0.02) return absZ > 0.08 ? 'hip' + side : 'abdomen'
+  return 'hip' + side                  // pelvis / groin
 }
 
 const GOLD = '#c9a96e'
@@ -123,13 +182,15 @@ function BodyFigure() {
   // useDraco=false: this model uses EXT_meshopt_compression, whose decoder drei
   // bundles locally. Draco's decoder is fetched from a CDN, which is a network
   // dependency the site does not need.
-  const { scene } = useGLTF('/models/body.glb', false)
+  const { scene } = useGLTF('/models/body-v15.glb', false)
   const cloned = useMemo(() => {
     const c = scene.clone(true)
     // One-off BVH build (~50ms) that every later raycast rides on.
     c.traverse((o) => {
       if (o.isMesh && o.geometry && !o.geometry.boundsTree) o.geometry.computeBoundsTree()
     })
+    // Teach classify() how tall this particular figure actually is.
+    measureBody(c)
     return c
   }, [scene])
   return (
@@ -138,7 +199,7 @@ function BodyFigure() {
     </group>
   )
 }
-useGLTF.preload('/models/body.glb', false)
+useGLTF.preload('/models/body-v15.glb', false)
 
 function Loader() {
   return (
@@ -178,7 +239,11 @@ function FitCamera({ controlsRef, interactedRef }) {
 function CollisionHull() {
   return (
     <mesh position={[0, 0.45, 0]} name="collisionHull" visible={false}>
-      <capsuleGeometry args={[0.62, 3.3, 8, 16]} />
+      {/* Sized to the REAL figure: radius 1 + a 6-long shaft = 8 units tall,
+          the same as the body, so it reaches the head and the feet. At 0.62 x
+          3.3 it stopped at y 2.72 and -1.82, leaving the head and the shins
+          outside every hull test. */}
+      <capsuleGeometry args={[1, 6, 8, 16]} />
       <meshBasicMaterial />
     </mesh>
   )
@@ -423,6 +488,27 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
 // duplicate samples at one spot.
 const MIN_STEP_SQ = 0.004 * 0.004
 
+// Snap a world-space point onto the nearest REAL body surface, using the BVH
+// that is already built on every body mesh. Returns null when the nearest
+// surface is further than MAX_SNAP away — that is a genuine miss, not a graze.
+const MAX_SNAP = 0.5 // world units (the body is 4 tall, so this is generous)
+const _snapLocal = new THREE.Vector3()
+function snapToBody(body, worldPoint) {
+  let best = null
+  let bestD = Infinity
+  body.traverse((o) => {
+    if (!o.isMesh || !o.geometry || !o.geometry.boundsTree) return
+    _snapLocal.copy(worldPoint)
+    o.worldToLocal(_snapLocal)
+    const hit = o.geometry.boundsTree.closestPointToPoint(_snapLocal, { point: new THREE.Vector3() })
+    if (!hit || !hit.point) return
+    const w = o.localToWorld(hit.point.clone())
+    const d = w.distanceTo(worldPoint)
+    if (d < bestD) { bestD = d; best = w }
+  })
+  return best && bestD <= MAX_SNAP ? best : null
+}
+
 // Active only in Highlight mode: trace over the body to draw pain lines.
 // Supports MULTIPLE lines — each completed drag becomes its own line.
 function DrawSurface({ active, onPathUpdate, onPathComplete }) {
@@ -440,10 +526,19 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
     raycaster.setFromCamera(pointer, camera)
     const body = scene.getObjectByName('bodyModel')
     if (body) { const h = raycaster.intersectObject(body, true); if (h.length) return h[0].point.clone() }
+    // NEAR MISS: the ray slipped past the silhouette — common in the notch
+    // between the neck and the shoulder, or beside the head on a tilted view.
+    // The old code recorded the raw hit on the invisible capsule hull, but the
+    // hull extends ABOVE the head (fy 0.57) and 0.155 out from the centre
+    // line, so those floating points classified at head height and kept
+    // producing a phantom "Head" area no matter how the bands were tuned.
+    // Now the hull hit is only a probe: the point is SNAPPED onto the nearest
+    // real body surface, and dropped entirely if the pointer is genuinely far
+    // from the body. Bonus: the drawn line hugs the body instead of floating.
     const hull = scene.getObjectByName('collisionHull')
-    if (!hull) return null
+    if (!hull || !body) return null
     const hh = raycaster.intersectObject(hull, false)
-    return hh.length ? hh[0].point.clone() : null
+    return hh.length ? snapToBody(body, hh[0].point) : null
   }, [camera, gl, pointer, raycaster, scene])
 
   const down = (e) => {
@@ -516,7 +611,13 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
 
   return (
     <mesh name="drawSurface" position={[0, 0.45, 0]} visible={false} onPointerDown={down} onPointerMove={move}>
-      <boxGeometry args={[5, 5.6, 5]} />
+      {/* This invisible box is what turns a pointer press into a stroke: no
+          hit here, no drawing at all. It was 5.6 tall around y 0.45, i.e.
+          y -2.35 .. 3.25, while the figure runs -3.55 .. 4.45 — so the HEAD
+          (3.61 and up) and most of the feet sat outside it and simply could
+          not be drawn on. Sized from the figure's own extents now, plus a
+          margin so near-misses at the crown and the soles still register. */}
+      <boxGeometry args={[BODY_HALF_W * 2 + 2, BODY_HALF_H * 2 + 2, BODY_HALF_W * 2 + 2]} />
       <meshBasicMaterial side={THREE.DoubleSide} />
     </mesh>
   )
@@ -685,6 +786,9 @@ class CanvasErrorBoundary extends Component {
 
 export default function Body3D({
   onSelectionChange, onDoneDrawing, controlled = false, drawOn = false,
+  // The parent can suppress this one-line hint when it is showing its own
+  // guidance in the same corner — two hints in one slot is worse than none.
+  showGestureHint = true,
   clearSignal = 0, undoSignal = 0, redoSignal = 0, onHistoryChange,
 }) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
@@ -700,6 +804,13 @@ export default function Body3D({
     return () => mq.removeEventListener?.('change', sync)
   }, [])
   const [paths, setPaths] = useState([])              // completed pain lines (multiple)
+  // Same list in a ref. onPathComplete used to append inside a setPaths
+  // updater and call emitZones() from in there — React runs updaters during
+  // the render phase, so that notified the parent mid-render ("Cannot update a
+  // component while rendering a different component") and the new areas could
+  // be dropped. The ref lets the handler build the next list itself and emit
+  // once, outside render.
+  const pathsRef = useRef([])
   const [undone, setUndone] = useState([])            // lines removed by Undo, awaiting Redo
   const [livePath, setLivePath] = useState([])        // line being drawn now
   const controlsRef = useRef()
@@ -711,7 +822,7 @@ export default function Body3D({
   // when to clear, and the internal button bar is hidden.
   useEffect(() => { if (controlled) setHighlight(drawOn) }, [controlled, drawOn])
   useEffect(() => {
-    if (controlled && clearSignal > 0) { setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
+    if (controlled && clearSignal > 0) { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearSignal])
 
@@ -722,6 +833,7 @@ export default function Body3D({
     if (!undoSignal || !paths.length) return
     const next = paths.slice(0, -1)
     setUndone((u) => [...u, paths[paths.length - 1]])
+    pathsRef.current = next
     setPaths(next)
     setLivePath([])
     emitZones(next)
@@ -732,6 +844,7 @@ export default function Body3D({
     if (!redoSignal || !undone.length) return
     const next = [...paths, undone[undone.length - 1]]
     setUndone((u) => u.slice(0, -1))
+    pathsRef.current = next
     setPaths(next)
     setLivePath([])
     emitZones(next)
@@ -754,12 +867,17 @@ export default function Body3D({
   }, [highlight])
 
   // Which areas does one line dwell on? (brief pass-throughs are ignored)
+  // The dwell filter only makes sense on LONG lines — its job is to drop areas
+  // a line merely crossed. A short deliberate scribble on a small target (the
+  // sole of a foot seen from below, a wrist) can be just a handful of samples,
+  // and demanding 3+ per area silently threw those marks away — which is why
+  // drawing under the foot produced no area at all.
   const detect = (pts) => {
     if (!pts.length) return []
     const ids = pts.map((p) => classify(p.x, p.y, p.z))
     const counts = {}
     ids.forEach((id) => { if (id) counts[id] = (counts[id] || 0) + 1 })
-    const minPts = Math.max(3, Math.round(pts.length * 0.1))
+    const minPts = pts.length < 8 ? 1 : Math.max(3, Math.round(pts.length * 0.1))
     return [...new Set(ids.filter((id) => id && counts[id] >= minPts))]
   }
 
@@ -780,15 +898,14 @@ export default function Body3D({
   const onPathComplete = (pts) => {
     setLivePath([])
     if (pts.length < 2) return
+    const next = [...pathsRef.current, pts]
+    pathsRef.current = next
     setUndone([])
-    setPaths((prev) => {
-      const next = [...prev, pts]
-      emitZones(next)
-      return next
-    })
+    setPaths(next)
+    emitZones(next)
   }
 
-  const reset = () => { setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
+  const reset = () => { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
 
   // Turning highlight OFF now KEEPS the drawn lines (so users can rotate and
   // keep adding lines from another angle). Only Reset clears.
@@ -859,7 +976,7 @@ export default function Body3D({
           />
         </Canvas>
         </CanvasErrorBoundary>
-        {coarse && (
+        {coarse && showGestureHint && (
           <div style={{
             position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)',
             zIndex: 2, pointerEvents: 'none', whiteSpace: 'nowrap', maxWidth: '96%',
