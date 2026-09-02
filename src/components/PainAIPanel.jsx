@@ -49,7 +49,9 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        zones: zones.map(z => z.label),
+        // type lets the server retrieve the approved condition records for
+        // these exact regions, so the overview is grounded in that data.
+        zones: zones.map(z => ({ type: z.type, label: z.label })),
         answers: Array.isArray(answers) && answers.length ? answers : undefined,
         notes: notes && notes.trim() ? notes.trim() : undefined,
       }),
