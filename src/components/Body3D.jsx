@@ -81,8 +81,10 @@ export const ZONE_TYPES = Object.fromEntries(Object.entries(AREA).map(([id, d]) 
 // torso ends at |z| 0.10 and the forearm starts at 0.12; at hip height the
 // torso ends at 0.12 and the hand starts at 0.17. 0.12 clears both gaps.
 const ARM_SPLIT = 0.12
-// Distance that separates the neck (centre) from the shoulders (out).
-const NECK_SPLIT = 0.09
+// Distance that separates the neck (centre) from the shoulders (out). Measured
+// on this mesh the neck column is only 0.053-0.065 half-wide, so the old 0.09
+// was wider than the neck itself and swallowed the trapezius.
+const NECK_SPLIT = 0.06
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -169,7 +171,16 @@ function classify(wx, wy, wz) {
   // shoulder line is the neck; that matches how people actually draw neck pain.
   if (fy > 0.395) return 'head'
   if (fy > 0.33) return absZ > NECK_SPLIT ? 'shoulder' + side : 'neck'
-  if (fy > 0.26 && absZ > 0.09) return 'shoulder' + side   // clavicle end / front of the shoulder
+  // Front of the shoulder. Measured on this mesh, the trunk's half-width is
+  // 0.145 at the clavicle and 0.154 at the upper chest, so the band from 0.085
+  // out to ARM_SPLIT is the outer chest wall where the arm attaches — people
+  // drawing a line down the arm cross it constantly, and reporting that as
+  // "Chest" is wrong. Central chest (|z| <= 0.085) is still chest.
+  // At and above clavicle height the shoulder reaches much further in: the
+  // collarbone runs from the sternum out to the acromion, and someone marking
+  // anywhere along it means their shoulder, not their chest.
+  if (fy > 0.26 && absZ > 0.05) return 'shoulder' + side
+  if (fy > 0.18 && absZ > 0.085) return 'shoulder' + side
   if (fy > 0.16) return 'chest'
   if (fy > 0.02) return absZ > 0.08 ? 'hip' + side : 'abdomen'
   return 'hip' + side                  // pelvis / groin
@@ -877,7 +888,12 @@ export default function Body3D({
     const ids = pts.map((p) => classify(p.x, p.y, p.z))
     const counts = {}
     ids.forEach((id) => { if (id) counts[id] = (counts[id] || 0) + 1 })
-    const minPts = pts.length < 8 ? 1 : Math.max(3, Math.round(pts.length * 0.1))
+    // A zone has to own a real share of the stroke. At the old 10% (and just a
+    // single point for short marks) a stroke that merely grazed a boundary —
+    // a dot on the front of the shoulder catching the edge of the chest —
+    // reported that neighbour as a separate painful area. 22% still lets a
+    // deliberate shoulder-to-wrist line report all three zones (~33% each).
+    const minPts = Math.max(2, Math.ceil(pts.length * 0.22))
     return [...new Set(ids.filter((id) => id && counts[id] >= minPts))]
   }
 
