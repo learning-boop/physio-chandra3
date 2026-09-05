@@ -4,7 +4,7 @@ import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
 import {
   REGIONS, ZONE_TO_REGION, allQuestions, isRelevant, shouldStop,
-  answeredRegionCount, computeResults,
+  answeredRegionCount, computeResults, GENERAL_RED_FLAGS,
 } from '../data/symptomGuide'
 
 const GOLD = '#c9a96e'
@@ -187,23 +187,36 @@ function likelyCauses(zones, max = 3) {
    Each option consolidates a recognised set of musculoskeletal red flags
    (cauda equina, progressive neurological deficit, infection or
    malignancy, and significant trauma or suspected fracture). */
-const SAFETY_CHECKS = [
-  { id: 'sc-cauda', text: 'Loss of bladder or bowel control, or new numbness around the groin, genitals, or inner thighs',
-    why: { title: 'Pressure on the lowest spinal nerves',
-      text: 'This combination can indicate compression of the nerve bundle at the base of the spine. It is uncommon, but it is assessed urgently because early treatment protects bladder, bowel and leg function.' } },
+/* Checks that apply to ANY body part, appended after the region's own flags.
+   Deliberately excludes the cauda-equina and cardiac items that used to live
+   here: those are low-back and shoulder/upper-back flags respectively, and the
+   guide already carries them in those regions' own redFlags. */
+const UNIVERSAL_CHECKS = [
   { id: 'sc-neuro', text: 'New or worsening weakness, numbness, or loss of coordination in an arm or leg',
     why: { title: 'A nerve or spinal cord may be involved',
       text: 'Weakness that is getting worse suggests a nerve is under pressure rather than simply irritated. A physician needs to establish the cause before any physiotherapy loading begins.' } },
   { id: 'sc-systemic', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain',
     why: { title: 'Possible infection or systemic cause',
       text: 'Pain accompanied by fever, weight loss, or a cancer history can have a medical rather than a mechanical cause. That has to be excluded by a doctor first, as it is treated quite differently.' } },
-  { id: 'sc-cardiac', text: 'Chest pain or pressure, or pain with breathlessness, sweating, or nausea — especially if it comes on with exertion',
-    why: { title: 'The heart must be checked first',
-      text: 'Pain in the chest, or pain that arrives with breathlessness, sweating, or nausea, can have a cardiac cause. That is a medical emergency assessment, not a physiotherapy one — call 911 if it is happening now.' } },
   { id: 'sc-trauma', text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
     why: { title: 'A fracture should be excluded',
       text: 'After a significant impact — or any fall where bone strength may be reduced — imaging is usually needed to rule out a fracture before the area is loaded or mobilised.' } },
 ]
+
+/* Why a flagged symptom needs looking at before physiotherapy. Region red
+   flags in the guide carry a tier but no explanation, and inventing a clinical
+   rationale per symptom would be unreviewed content — so the wording is tied
+   to the tier the clinician already assigned. */
+const TIER_WHY = {
+  emergency: {
+    title: 'This needs same-day medical assessment',
+    text: 'Symptoms in this group can point to a problem that is time-sensitive and outside what physiotherapy treats. Being asked about it is routine and does not mean something serious is present — but it should be checked today rather than waited on.',
+  },
+  urgent: {
+    title: 'This should be checked before starting physiotherapy',
+    text: 'Symptoms in this group are usually examined first to rule out a fracture, an infection, or a circulation problem. Once that has been done, physiotherapy can go ahead safely.',
+  },
+}
 
 /* ── shared styles ───────────────────────────────────────────────────── */
 const label = { fontSize: 13, letterSpacing: '0.18em', textTransform: 'uppercase', color: GOLD, display: 'inline-block' }
@@ -373,7 +386,7 @@ export default function PainAssessment() {
   const [qIndex, setQIndex] = useState(0)
   const [zones, setZones] = useState([])
   const [answers, setAnswers] = useState({})   // { q1: 'text'|'__other', q1_other: '' }
-  const [flags, setFlags] = useState([])       // ids from SAFETY_CHECKS, plus '__other'
+  const [flags, setFlags] = useState([])       // ids from safetyChecks, plus '__other'
   const [flagOther, setFlagOther] = useState('')
   const [clearSignal, setClearSignal] = useState(0)
   const [undoSignal, setUndoSignal] = useState(0)
@@ -402,49 +415,14 @@ export default function PainAssessment() {
   const [drawMode, setDrawMode] = useState(true)
   const drawOn = stage === 'draw' && drawMode
 
-  /* ── AI pattern questions ─────────────────────────────────────────────
-     A line traced from one part to another is ONE travelling pattern, so the
-     questions should cover the whole path. The Claude API writes them for the
-     exact areas crossed (via /api/pain-questions, which validates, length-caps
-     and content-filters the output before it reaches a visitor). Single-area
-     marks keep the clinician-authored, scored sets — and those same sets are
-     the fallback whenever the API is unavailable. */
+  /* ── One travelling pattern, one source region ────────────────────────
+     A line through several areas is usually ONE problem referring along a
+     path, so the questions come from the region the pattern most likely
+     starts at (see startQuestions below). Those sets are weighted, so the
+     answers actually score a condition and earn its treatment guidance.
+     The cross-region narrative is handled after the result, by the AI
+     overview, which already receives the whole traced path. */
   const multiPattern = useMemo(() => new Set(zones.map((z) => z.type)).size > 1, [zones])
-  const [aiQuestions, setAiQuestions] = useState(null)
-  const [aiQLoading, setAiQLoading] = useState(false)
-  const aiReq = useRef(0)
-  useEffect(() => { aiReq.current += 1; setAiQuestions(null); setAiQLoading(false) }, [zones])
-  const useAI = multiPattern && Array.isArray(aiQuestions) && aiQuestions.length >= 3
-
-  const fetchAiQuestions = async (zs) => {
-    const ticket = aiReq.current
-    setAiQLoading(true)
-    try {
-      const res = await fetch(`${API_URL}/api/pain-questions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // type lets the server retrieve the approved condition records for
-        // these exact regions, so the questions are written from that data.
-        body: JSON.stringify({ zones: zs.map((z) => ({ type: z.type, label: z.label })) }),
-      })
-      const data = res.ok ? await res.json() : null
-      const qs = Array.isArray(data?.questions)
-        ? data.questions
-            .map((q, i) => ({
-              id: 'ai' + (i + 1),
-              multi: true,   // pain rarely has a single answer — tick all that apply
-              text: String(q.text || ''),
-              options: (q.options || []).map((o) => ({ id: String(o), label: String(o) })),
-            }))
-            .filter((q) => q.text && q.options.length >= 3)
-        : []
-      if (aiReq.current === ticket) setAiQuestions(qs.length >= 3 ? qs : null)
-    } catch {
-      if (aiReq.current === ticket) setAiQuestions(null)
-    } finally {
-      if (aiReq.current === ticket) setAiQLoading(false)
-    }
-  }
 
   // ── The questionnaire is the drawn region's OWN clinical question set ──
   // Each option carries weights pointing at that region's conditions, which is
@@ -452,16 +430,14 @@ export default function PainAssessment() {
   // treatment guidance) is shown. Areas with no authored region — currently
   // only the head — fall back to the generic set.
   const region = useMemo(() => {
-    if (useAI) return null   // the pattern questions replace the per-region set
     const k = focusKey || primaryRegion(zones)
     return k && REGIONS[k] ? REGIONS[k] : null
-  }, [zones, focusKey, useAI])
+  }, [zones, focusKey])
   // Age / how it started / how long are one-tap answers, so they share a single
   // screen instead of costing three. That drops the flow from 9 screens to 7
   // before the adaptive rules trim it further, without losing any answer the
   // scoring engine relies on.
   const activeQuestions = useMemo(() => {
-    if (useAI) return [...aiQuestions, NOTES_Q]
     if (!region) return buildQuestions(zones)
     return [
       { id: '__ctx', group: region.context, text: 'A few details to start' },
@@ -469,11 +445,11 @@ export default function PainAssessment() {
       NOTES_Q,
     ]
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [region, zones, useAI, aiQuestions])
+  }, [region, zones])
   // Flat list used by the review screen and the summary.
   const flatQuestions = useMemo(
-    () => (useAI ? [...aiQuestions, NOTES_Q] : region ? [...allQuestions(region), NOTES_Q] : buildQuestions(zones)),
-    [region, zones, useAI, aiQuestions],
+    () => (region ? [...allQuestions(region), NOTES_Q] : buildQuestions(zones)),
+    [region, zones],
   )
 
   // Ranked conditions for the answers given. Empty until enough is answered.
@@ -503,7 +479,37 @@ export default function PainAssessment() {
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
   const anyFlagged = flags.some((f) => f !== '__other') || otherFlagged
-  const pickedFlags = SAFETY_CHECKS.filter((f) => flags.includes(f.id))
+  /* ── The safety check is built for the area actually marked ───────────
+     Every region in the guide carries its own red flags — a swollen warm calf
+     for a knee, clumsiness in both hands for a neck, a sudden pop in the calf
+     for an ankle. Those are the questions that make this screen worth asking,
+     so they come first, emergency tier before urgent. Two checks that apply
+     to any body part are appended, and the whole list is capped so the screen
+     stays short. */
+  const safetyChecks = useMemo(() => {
+    const keys = [...new Set(zones.map((z) => ZONE_TO_REGION[z.type]).filter((k) => k && REGIONS[k]))]
+    const regional = []
+    const seen = new Set()
+    for (const tier of ['emergency', 'urgent']) {
+      for (const k of keys) {
+        for (const f of REGIONS[k].redFlags) {
+          if (f.tier === tier && !seen.has(f.id)) { seen.add(f.id); regional.push(f) }
+        }
+      }
+    }
+    const list = regional.slice(0, 3).map((f) => ({ ...f, why: TIER_WHY[f.tier] || TIER_WHY.urgent }))
+    // Areas with no authored region (currently only the head) fall back to the
+    // general flags — but only those the universal checks below do not already
+    // cover, otherwise the same question appears twice on one screen.
+    if (!list.length) {
+      const covered = /fever|weight loss|cancer|accident|fall/i
+      GENERAL_RED_FLAGS.filter((f) => !covered.test(f.text))
+        .forEach((f) => list.push({ ...f, why: TIER_WHY.urgent }))
+    }
+    return [...list, ...UNIVERSAL_CHECKS]
+  }, [zones])
+
+  const pickedFlags = safetyChecks.filter((f) => flags.includes(f.id))
 
   const setAnswer = (qid, value) => setAnswers((a) => ({ ...a, [qid]: value }))
 
@@ -571,7 +577,7 @@ export default function PainAssessment() {
   // sets (chained marks focus the source region automatically; genuinely
   // separate areas ask the person to choose).
   const startQuestions = () => {
-    if (multiPattern && !useAI) {
+    if (multiPattern) {
       const auto = proximalRegion(regionChoices.map((r) => r.key))
       if (auto) { setFocusKey(auto); setAutoFocused(true) }
       else if (regionChoices.length > 1 && !focusKey) { setStage('area'); return }
@@ -858,10 +864,6 @@ export default function PainAssessment() {
                     style={{ ...goldBtn, opacity: zones.length ? 1 : 0.45, cursor: zones.length ? 'pointer' : 'not-allowed' }}
                     disabled={!zones.length}
                     onClick={() => {
-                      // A line through more than one area = one travelling
-                      // pattern: ask Claude for questions about the WHOLE
-                      // path while the intro screen shows.
-                      if (multiPattern && !aiQuestions && !aiQLoading) fetchAiQuestions(zones)
                       setStage('intro')
                     }}
                   >Continue</button>
@@ -920,17 +922,11 @@ export default function PainAssessment() {
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '4px 0 10px' }}>
                   Please answer a few <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>questions</em>
                 </h2>
-                {useAI && zones.length > 1 && (
+                {multiPattern && zones.length > 1 && (
                   <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
                     Your marks travel from the {zones[0].label.toLowerCase()} toward
-                    the {zones[zones.length - 1].label.toLowerCase()}. The questions were
-                    prepared for that whole pattern — how it behaves as one — rather than
-                    for a single area.
-                  </p>
-                )}
-                {multiPattern && aiQLoading && (
-                  <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
-                    Preparing questions for the pattern you traced…
+                    the {zones[zones.length - 1].label.toLowerCase()}. Pain that travels
+                    usually comes from one place, so the questions focus there.
                   </p>
                 )}
                 <p style={{ ...body, margin: '0 0 24px', maxWidth: 460 }}>
@@ -940,11 +936,9 @@ export default function PainAssessment() {
                 <div className="pa-actions">
                   <button
                     className="pa-primary"
-                    style={{ ...goldBtn, opacity: aiQLoading ? 0.45 : 1, cursor: aiQLoading ? 'wait' : 'pointer' }}
-                    disabled={aiQLoading}
                     onClick={startQuestions}
                   >Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage(!useAI && regionChoices.length > 1 ? 'area' : 'draw')}>Back</button>
+                  <button style={ghostBtn} onClick={() => setStage(regionChoices.length > 1 ? 'area' : 'draw')}>Back</button>
                 </div>
               </Fade>
             )}
@@ -1117,12 +1111,12 @@ export default function PainAssessment() {
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
-                  {SAFETY_CHECKS.map((f, i) => {
+                  {safetyChecks.map((f, i) => {
                     const sel = flags.includes(f.id)
                     return (
                       <button key={f.id} style={chip(sel)}
                         onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
-                        <span style={letterStyle(sel)}>{LETTERS[i]}</span>
+                        <span style={letterStyle(sel)}>{LETTERS[i] || '·'}</span>
                         <span>{f.text}</span>
                       </button>
                     )
@@ -1245,7 +1239,7 @@ export default function PainAssessment() {
                       can establish what is actually going on.
                     </p>
                   </div>
-                ) : !useAI && causes.length > 0 && (
+                ) : causes.length > 0 && (
                   <div style={{ marginBottom: 24 }}>
                     <span style={{ ...label, marginBottom: 12 }}>Common reasons for pain in this area</span>
                     <div style={{ marginTop: 12 }}>
@@ -1267,7 +1261,7 @@ export default function PainAssessment() {
                 {/* AI overview of the whole traced path. The curated cards above
                     are per-area; this is the part that can read a line running
                     from one area to another as a single radiating pattern. */}
-                <span style={{ ...label, marginBottom: 12 }}>{useAI ? 'What could be causing it' : 'Overview of your traced pattern'}</span>
+                <span style={{ ...label, marginBottom: 12 }}>Overview of your traced pattern</span>
                 <div style={{ maxWidth: 520, margin: '12px 0 26px' }}>
                   <PainAIPanel zones={zones} answers={qaPairs} notes={notesText} aiOnly />
                 </div>
