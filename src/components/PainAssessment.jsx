@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
 import {
@@ -10,7 +11,6 @@ import {
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
 const EASE = [0.22, 1, 0.36, 1]
-const BOOK_HREF = 'tel:+16045550101'
 // Same convention as PainAIPanel: blank in dev (Vite proxies /api/* to the
 // backend), set VITE_API_URL only when the backend lives on another origin.
 const API_URL = import.meta.env.VITE_API_URL || ''
@@ -651,7 +651,9 @@ export default function PainAssessment() {
   return (
     <section className="pa-section" style={{
       background: 'var(--black)', fontFamily: 'var(--font-body)',
-      minHeight: '100svh', position: 'relative', overflow: 'hidden',
+      // overflowX 'clip' (not 'hidden'): hidden would make this a scroll
+      // container and stop the figure sticking as the results are read.
+      minHeight: '100svh', position: 'relative', overflowX: 'clip',
     }}>
       <div className="pa-grid" style={{ maxWidth: 1280, margin: '0 auto' }}>
         <style>{`
@@ -770,7 +772,16 @@ export default function PainAssessment() {
           @media (min-width: 900px) {
             .pa-grid { grid-template-columns: ${modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
             .pa-model { order: 2; height: min(86vh, 820px); }
-            .pa-model.small { height: 460px; }
+            /* From the questions onward the panel grows much taller than the
+               figure, and centring it parks the figure halfway down a long
+               page — off screen exactly when someone wants to see which areas
+               they marked. Pin it to the top and let it follow the scroll. */
+            .pa-model.small {
+              height: 460px;
+              align-self: start;
+              position: sticky;
+              top: calc(clamp(74px, 19vw, 92px) + 12px);
+            }
           }
         `}</style>
 
@@ -1334,10 +1345,13 @@ export default function PainAssessment() {
                 </p>
 
                 <div className="pa-actions">
-                  <a className="pa-primary" href={BOOK_HREF} style={{ ...goldBtn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box' }}>
-                    Book an Appointment
-                  </a>
-                  <button style={ghostBtn} onClick={restart}>Start Over</button>
+                  <button className="pa-primary" style={goldBtn} onClick={restart}>Start Over</button>
+                  {/* Booking lives on the About page, so this hands the person
+                      to Chandra's introduction and lands them on its booking
+                      section rather than dialling straight out. */}
+                  <Link to="/about#contact" style={{ ...ghostBtn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box' }}>
+                    Next Step
+                  </Link>
                 </div>
                 <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '20px 0 0', maxWidth: 520 }}>
                   The information above is general in nature and is not a diagnosis. Individual

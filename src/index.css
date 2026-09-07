@@ -17,7 +17,15 @@
 }
 
 /* Base font size bump — all rem-based values scale up */
-html { scroll-behavior: auto; font-size: 17px; overflow-x: hidden; }
+/* overflow-x:hidden forces overflow-y to compute to auto, which turns html and
+   body into scroll containers and stops position:sticky working anywhere in
+   the app. overflow-x:clip stops sideways overflow without that side effect.
+   The hidden declaration stays first as a fallback for browsers without clip. */
+html {
+  scroll-behavior: auto; font-size: 17px;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
 
 body {
   font-family: var(--font-body);
@@ -25,6 +33,7 @@ body {
   color: var(--white);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overflow-x: clip;
   line-height: 1.65;
 }
 
