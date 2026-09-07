@@ -417,12 +417,53 @@ export default function PainAssessment() {
 
   /* ── One travelling pattern, one source region ────────────────────────
      A line through several areas is usually ONE problem referring along a
-     path, so the questions come from the region the pattern most likely
-     starts at (see startQuestions below). Those sets are weighted, so the
-     answers actually score a condition and earn its treatment guidance.
-     The cross-region narrative is handled after the result, by the AI
-     overview, which already receives the whole traced path. */
+     path, so the SCORED questions come from the region the pattern most
+     likely starts at (see startQuestions below). Those sets are weighted,
+     which is what lets the answers pick a condition and earn its treatment
+     guidance — so they are never replaced.
+
+     On top of them, for multi-area patterns only, Claude writes up to two
+     questions about how the pain behaves along the whole path — the thing a
+     single region's set cannot ask. Their ids are not region question ids,
+     so the scoring engine ignores them; they reach the physiotherapist on
+     the summary. If the API is slow or unavailable the flow simply proceeds
+     with the clinician-authored set alone. */
   const multiPattern = useMemo(() => new Set(zones.map((z) => z.type)).size > 1, [zones])
+  const MAX_AI_QUESTIONS = 2
+  const [aiQuestions, setAiQuestions] = useState(null)
+  const [aiQLoading, setAiQLoading] = useState(false)
+  const aiReq = useRef(0)
+  useEffect(() => { aiReq.current += 1; setAiQuestions(null); setAiQLoading(false) }, [zones])
+  const patternQs = multiPattern && Array.isArray(aiQuestions) ? aiQuestions : []
+
+  const fetchAiQuestions = async (zs) => {
+    const ticket = aiReq.current
+    setAiQLoading(true)
+    try {
+      const res = await fetch(`${API_URL}/api/pain-questions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ zones: zs.map((z) => ({ type: z.type, label: z.label })) }),
+      })
+      const data = res.ok ? await res.json() : null
+      const qs = Array.isArray(data?.questions)
+        ? data.questions
+            .map((q, i) => ({
+              id: 'ai' + (i + 1),
+              multi: true,   // pain rarely has a single answer — tick all that apply
+              text: String(q.text || ''),
+              options: (q.options || []).map((o) => ({ id: String(o), label: String(o) })),
+            }))
+            .filter((q) => q.text && q.options.length >= 3)
+            .slice(0, MAX_AI_QUESTIONS)
+        : []
+      if (aiReq.current === ticket) setAiQuestions(qs.length ? qs : null)
+    } catch {
+      if (aiReq.current === ticket) setAiQuestions(null)
+    } finally {
+      if (aiReq.current === ticket) setAiQLoading(false)
+    }
+  }
 
   // ── The questionnaire is the drawn region's OWN clinical question set ──
   // Each option carries weights pointing at that region's conditions, which is
@@ -442,14 +483,17 @@ export default function PainAssessment() {
     return [
       { id: '__ctx', group: region.context, text: 'A few details to start' },
       ...region.questions,
+      ...patternQs,
       NOTES_Q,
     ]
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [region, zones])
-  // Flat list used by the review screen and the summary.
+  }, [region, zones, patternQs])
+  // Flat list used by the review screen and the summary. Same order as the
+  // screens above, which is what reviewIndexToScreen() relies on.
   const flatQuestions = useMemo(
-    () => (region ? [...allQuestions(region), NOTES_Q] : buildQuestions(zones)),
-    [region, zones],
+    () => (region ? [...allQuestions(region), ...patternQs, NOTES_Q] : buildQuestions(zones)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [region, zones, patternQs],
   )
 
   // Ranked conditions for the answers given. Empty until enough is answered.
@@ -466,7 +510,11 @@ export default function PainAssessment() {
   // (age/onset/duration), whose answers gate which conditions are eligible.
   const nextIdx = (from, ans) => {
     if (!region) return Math.min(from, activeQuestions.length - 1)
-    const lastDiag = region.questions.length          // index of the notes screen
+    // Screens run: 0 context, 1..lastDiag the scored questions, then any AI
+    // pattern questions, then the free-text one. Stopping early therefore
+    // lands on the first pattern question (or the free-text screen when there
+    // are none) — never past them.
+    const lastDiag = region.questions.length
     let i = from
     while (i >= 1 && i < lastDiag + 1) {
       if (answeredRegionCount(region, ans) >= 2 && shouldStop(region, ans)) return lastDiag + 1
@@ -864,6 +912,10 @@ export default function PainAssessment() {
                     style={{ ...goldBtn, opacity: zones.length ? 1 : 0.45, cursor: zones.length ? 'pointer' : 'not-allowed' }}
                     disabled={!zones.length}
                     onClick={() => {
+                      // A line through more than one area is one travelling
+                      // pattern: ask Claude for questions about the WHOLE path
+                      // while the intro screen is being read.
+                      if (multiPattern && !aiQuestions && !aiQLoading) fetchAiQuestions(zones)
                       setStage('intro')
                     }}
                   >Continue</button>
@@ -926,7 +978,13 @@ export default function PainAssessment() {
                   <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
                     Your marks travel from the {zones[0].label.toLowerCase()} toward
                     the {zones[zones.length - 1].label.toLowerCase()}. Pain that travels
-                    usually comes from one place, so the questions focus there.
+                    usually comes from one place, so the questions focus there
+                    {patternQs.length ? ', with a couple more about how it behaves along the whole path' : ''}.
+                  </p>
+                )}
+                {multiPattern && aiQLoading && (
+                  <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
+                    Preparing a couple of extra questions for the pattern you traced…
                   </p>
                 )}
                 <p style={{ ...body, margin: '0 0 24px', maxWidth: 460 }}>
@@ -936,6 +994,8 @@ export default function PainAssessment() {
                 <div className="pa-actions">
                   <button
                     className="pa-primary"
+                    style={{ ...goldBtn, opacity: aiQLoading ? 0.45 : 1, cursor: aiQLoading ? 'wait' : 'pointer' }}
+                    disabled={aiQLoading}
                     onClick={startQuestions}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage(regionChoices.length > 1 ? 'area' : 'draw')}>Back</button>
