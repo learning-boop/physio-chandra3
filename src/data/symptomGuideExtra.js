@@ -99,11 +99,6 @@ export const EXTRA_REGIONS = {
       { id: "trf-breath", text: "Sharp pain with every deep breath plus fever or feeling unwell", tier: "urgent" }
     ],
     context: [
-      { id: "age", text: "Your age?", options: [
-        { id: "u30", label: "Under 30" },
-        { id: "30-50", label: "30 – 50" },
-        { id: "o50", label: "Over 50" }
-      ]},
       { id: "onset", text: "How did it start?", options: [
         { id: "load", label: "Lifting, twisting, or carrying", weights: { tlj: 2, mech: 1 } },
         { id: "desk", label: "Gradually with sitting or desk work", weights: { mech: 2 } },
@@ -180,12 +175,6 @@ export const EXTRA_REGIONS = {
         { id: "gradual", label: "Gradually, no clear cause", },
         { id: "ns", label: "Not sure" }
       ]},
-      { id: "duration", text: "How long has it been going on?", options: [
-        { id: "d2w", label: "Less than 2 weeks" },
-        { id: "d6w", label: "2 – 6 weeks" },
-        { id: "d6m", label: "More than 6 weeks" },
-        { id: "years", label: "Comes and goes over years" }
-      ]}
     ],
     questions: [
       { id: "E1", text: "Where exactly is it?", options: [
