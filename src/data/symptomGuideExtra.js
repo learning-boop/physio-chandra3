@@ -332,8 +332,11 @@ export const EXTRA_REGIONS = {
     ],
     questions: [
       { id: "H1", text: "Where do you feel it most?", options: [
-        { id: "outside", label: "The outside of the hip — tender to lie on", weights: { gtps: 3 } },
-        { id: "groin", label: "Deep in the groin / front hip crease", weights: { fai: 3 } },
+        // Snapping is felt at the outer hip (IT band) or the front (hip flexor),
+        // so someone with a snapping hip can point to where it is — without
+        // this the location question gave snapping hip nothing to go on.
+        { id: "outside", label: "The outside of the hip — tender to lie on", weights: { gtps: 3, snap: 1 } },
+        { id: "groin", label: "Deep in the groin / front hip crease", weights: { fai: 3, snap: 1 } },
         { id: "innerthigh", label: "The inner thigh", weights: { add: 3 } },
         { id: "buttock", label: "Deep in the buttock", weights: { piri: 3 } },
         { id: "ns", label: "Not sure" }

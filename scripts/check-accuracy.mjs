@@ -1,22 +1,27 @@
 /* Does the questionnaire give the RIGHT answer?  Run: npm run check:accuracy
+   Try another question limit:                     node scripts/check-accuracy.mjs 5
 
    check-symptom-data.mjs only proves each condition is reachable in theory.
    This runs patients through the same adaptive flow the homepage uses
-   (src/data/assessmentFlow.js) and checks what they are shown:
+   (src/data/assessmentFlow.js — at most MAX_SCORED_QUESTIONS scored
+   questions, the most useful one picked each time) and checks what they are
+   shown:
 
    1. Textbook patient — ticks every telltale answer of one condition. That
       condition must be shown FIRST. Any miss fails the run (exit 1).
    2. Realistic patient — the same, but misses one telltale answer. Reported
       as a percentage; no questionnaire can be perfect on partial answers.
-   3. Lines across areas (shoulder → elbow, hip → knee …) — a patient with a
-      condition in either area, answering "not sure"/nothing for the other
-      area. The condition must be among the results. Any miss fails the run.
+   3. Lines across two areas (shoulder → elbow, hip → knee …) — a patient with
+      a condition in either area, answering nothing for the other area. The
+      condition must be among the results. Any miss fails the run.
 
    Run it after adding or editing anything in content/conditions/.        */
 import { REGIONS } from '../src/data/symptomGuide.js'
 import {
-  REGION_CHAINS, buildScreens, nextScreen, rankAcross, regionAnswers,
+  REGION_CHAINS, MAX_SCORED_QUESTIONS, buildScreens, nextQuestion, rankAcross, regionAnswers,
 } from '../src/data/assessmentFlow.js'
+
+const BUDGET = Number(process.argv[2]) || MAX_SCORED_QUESTIONS
 
 const others = (o, cid) =>
   Object.entries(o.weights || {}).filter(([k]) => k !== cid).reduce((s, [, w]) => s + Math.max(0, w), 0)
@@ -54,20 +59,18 @@ function missedOne(region, c, base) {
   return out
 }
 
-/** Walk the real flow: only the screens nextScreen() lands on get answered. */
+/** Walk the real flow: only the questions nextQuestion() picks get answered. */
 function runFlow(keys, full) {
-  const { context, questions } = buildScreens(keys)
-  const screens = [{ id: '__ctx', group: context }, ...questions]
+  const { context } = buildScreens(keys)
   const ans = {}
   for (const q of context) if (full[q.id] !== undefined) ans[q.id] = full[q.id]
-  let i = nextScreen(screens, 1, keys, ans)
-  while (i < screens.length && screens[i].rk) {
-    const q = screens[i]
-    if (full[q.id] !== undefined) ans[q.id] = full[q.id]
-    if (i === screens.length - 1) break
-    i = nextScreen(screens, i + 1, keys, ans)
+  const asked = []
+  let id
+  while ((id = nextQuestion(keys, ans, asked, BUDGET))) {
+    asked.push(id)
+    if (full[id] !== undefined) ans[id] = full[id]
   }
-  return rankAcross(keys, ans)
+  return { ranked: rankAcross(keys, ans), asked: asked.length }
 }
 
 /** Translate one region's answers into the shared ids of a multi-area screen. */
@@ -93,21 +96,25 @@ function toShared(keys, rk, own) {
 }
 
 let failed = 0
+let maxAsked = 0
 const say = (s) => console.log(s)
+say(`At most ${BUDGET} scored questions (+ the opening screen)`)
 
 say('\n1. Textbook patients (every telltale answer) — must be shown first')
-let n1 = 0
+let n1 = 0, fail1 = 0
 for (const [rk, region] of Object.entries(REGIONS)) {
   for (const c of region.conditions) {
     n1++
-    const got = runFlow([rk], textbook(region, c))
-    if (got[0]?.c.id !== c.id) {
-      failed++
-      say(`   FAIL  ${rk}/${c.id} → shown: ${got.map((x) => x.c.id).join(', ') || 'nothing'}`)
+    const { ranked, asked } = runFlow([rk], textbook(region, c))
+    maxAsked = Math.max(maxAsked, asked)
+    if (ranked[0]?.c.id !== c.id) {
+      fail1++
+      say(`   FAIL  ${rk}/${c.id} → shown: ${ranked.map((x) => x.c.id).join(', ') || 'nothing'}`)
     }
   }
 }
-say(`   ${n1 - failed}/${n1} shown first`)
+failed += fail1
+say(`   ${n1 - fail1}/${n1} shown first`)
 
 say('\n2. Realistic patients (one telltale answer missed)')
 let n2 = 0, ok2 = 0
@@ -115,7 +122,7 @@ for (const [rk, region] of Object.entries(REGIONS)) {
   for (const c of region.conditions) {
     for (const v of missedOne(region, c, textbook(region, c))) {
       n2++
-      if (runFlow([rk], v)[0]?.c.id === c.id) ok2++
+      if (runFlow([rk], v).ranked[0]?.c.id === c.id) ok2++
     }
   }
 }
@@ -129,18 +136,39 @@ for (const keys of pairs) {
   for (const rk of keys) {
     for (const c of REGIONS[rk].conditions) {
       n3++
-      const got = runFlow(keys, toShared(keys, rk, textbook(REGIONS[rk], c)))
-      const pos = got.findIndex((x) => x.c.id === c.id && x.rk === rk)
+      const { ranked, asked } = runFlow(keys, toShared(keys, rk, textbook(REGIONS[rk], c)))
+      maxAsked = Math.max(maxAsked, asked)
+      const pos = ranked.findIndex((x) => x.c.id === c.id && x.rk === rk)
       if (pos === 0) first3++
       if (pos < 0) {
         fail3++
-        say(`   FAIL  ${keys.join('→')}: ${rk}/${c.id} → shown: ${got.map((x) => `${x.rk}/${x.c.id}`).join(', ') || 'nothing'}`)
+        say(`   FAIL  ${keys.join('→')}: ${rk}/${c.id} → shown: ${ranked.map((x) => `${x.rk}/${x.c.id}`).join(', ') || 'nothing'}`)
       }
     }
   }
 }
 failed += fail3
 say(`   ${n3 - fail3}/${n3} in the results, ${first3}/${n3} shown first`)
+
+// Lines across three areas share the same question budget between more areas,
+// so they are reported (not failed) to show what the budget costs there.
+say('\n4. Lines across three areas (reported only)')
+const triples = []
+for (const chain of REGION_CHAINS) for (let i = 0; i + 2 < chain.length; i++) triples.push(chain.slice(i, i + 3))
+let n4 = 0, in4 = 0, first4 = 0
+for (const keys of triples) {
+  for (const rk of keys) {
+    for (const c of REGIONS[rk].conditions) {
+      n4++
+      const { ranked } = runFlow(keys, toShared(keys, rk, textbook(REGIONS[rk], c)))
+      const pos = ranked.findIndex((x) => x.c.id === c.id && x.rk === rk)
+      if (pos >= 0) in4++
+      if (pos === 0) first4++
+    }
+  }
+}
+say(`   ${in4}/${n4} in the results, ${first4}/${n4} shown first`)
+say(`\nMost scored questions any patient was asked: ${maxAsked}`)
 
 say(failed ? `\n${failed} failure(s)` : '\nAll checks passed')
 process.exit(failed ? 1 : 0)

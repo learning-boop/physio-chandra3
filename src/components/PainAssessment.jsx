@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import Body3D from './Body3D'
@@ -6,15 +6,12 @@ import PainAIPanel from './PainAIPanel'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextScreen, rankAcross,
+  buildScreens, nextQuestion, rankAcross, MAX_SCORED_QUESTIONS,
 } from '../data/assessmentFlow'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
 const EASE = [0.22, 1, 0.36, 1]
-// Same convention as PainAIPanel: blank in dev (Vite proxies /api/* to the
-// backend), set VITE_API_URL only when the backend lives on another origin.
-const API_URL = import.meta.env.VITE_API_URL || ''
 
 /* ── The 5 questions — A–D fixed choices, E = Other (entered manually) ──
    Option sets follow a standard subjective examination: onset, pain
@@ -99,8 +96,8 @@ const TYPE_WORD = { head: 'head', chest: 'chest', abdomen: 'stomach' } // plain 
    cross-region ranking all live in ../data/assessmentFlow.js, so
    scripts/check-accuracy.mjs can test the very same logic. */
 
-/* The open field stays at the end of every region's set. Its id is not one of
-   the region's question ids, so the scoring engine simply ignores it. */
+/* The optional free-text box on the review screen. Its id is not one of the
+   region's question ids, so the scoring engine simply ignores it. */
 const NOTES_Q = {
   id: 'notes', textarea: true,
   text: 'Is there anything further you would like the physiotherapist to know?',
@@ -359,56 +356,19 @@ export default function PainAssessment() {
   const [drawMode, setDrawMode] = useState(true)
   const drawOn = stage === 'draw' && drawMode
 
-  /* ── Every crossed area is asked about ────────────────────────────────
-     A line along one chain (shoulder → elbow, low back → knee) runs EACH
-     crossed area's own weighted question set, one area after another, so a
-     problem in any of them can be recognised. Asking only the area nearest
-     the spine meant a shoulder-to-elbow line could never be matched to an
-     elbow problem, and those answers fell through to a fixed list. Age and
-     duration are asked once for all areas. Marks in genuinely separate areas
-     (shoulder AND knee) are separate problems, so the person picks one.
+  /* ── Every crossed area counts, in at most 6 screens ──────────────────
+     A line along one chain (shoulder → elbow, low back → knee) draws on EACH
+     crossed area's own weighted questions, so a problem in any of them can be
+     recognised. Marks in genuinely separate areas (shoulder AND knee) are
+     separate problems, so the person picks one.
 
-     On top of the scored sets, for multi-area patterns only, Claude writes up
-     to two questions about how the pain behaves along the whole path. Their
-     ids are not region question ids, so the scoring ignores them; they reach
-     the physiotherapist on the summary. If the API is slow or unavailable the
-     flow simply proceeds with the clinician-authored sets alone. */
+     The flow is the opening screen plus at most MAX_SCORED_QUESTIONS scored
+     questions. Which question comes next is decided from the answers so far
+     (nextQuestion in ../data/assessmentFlow.js): each area's most useful
+     question first, then whichever can still move the result most, stopping
+     as soon as one condition is clearly ahead. The free-text box sits on the
+     review screen rather than costing a screen of its own. */
   const multiPattern = useMemo(() => new Set(zones.map((z) => z.type)).size > 1, [zones])
-  const MAX_AI_QUESTIONS = 2
-  const [aiQuestions, setAiQuestions] = useState(null)
-  const [aiQLoading, setAiQLoading] = useState(false)
-  const aiReq = useRef(0)
-  useEffect(() => { aiReq.current += 1; setAiQuestions(null); setAiQLoading(false) }, [zones])
-  const patternQs = multiPattern && Array.isArray(aiQuestions) ? aiQuestions : []
-
-  const fetchAiQuestions = async (zs) => {
-    const ticket = aiReq.current
-    setAiQLoading(true)
-    try {
-      const res = await fetch(`${API_URL}/api/pain-questions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zones: zs.map((z) => ({ type: z.type, label: z.label })) }),
-      })
-      const data = res.ok ? await res.json() : null
-      const qs = Array.isArray(data?.questions)
-        ? data.questions
-            .map((q, i) => ({
-              id: 'ai' + (i + 1),
-              multi: true,   // pain rarely has a single answer — tick all that apply
-              text: String(q.text || ''),
-              options: (q.options || []).map((o) => ({ id: String(o), label: String(o) })),
-            }))
-            .filter((q) => q.text && q.options.length >= 3)
-            .slice(0, MAX_AI_QUESTIONS)
-        : []
-      if (aiReq.current === ticket) setAiQuestions(qs.length ? qs : null)
-    } catch {
-      if (aiReq.current === ticket) setAiQuestions(null)
-    } finally {
-      if (aiReq.current === ticket) setAiQLoading(false)
-    }
-  }
 
   // ── The questionnaire is each asked area's OWN clinical question set ──
   // Each option carries weights pointing at that area's conditions, which is
@@ -422,35 +382,48 @@ export default function PainAssessment() {
   // duration are still asked once; only "how did it start?" is asked per area,
   // because its options (and weights) differ from area to area.
   const { context: ctxQuestions, questions: regionQuestions } = useMemo(() => buildScreens(keys), [keys])
-  const activeQuestions = useMemo(() => {
-    if (!keys.length) return buildQuestions(zones)
-    return [
-      { id: '__ctx', group: ctxQuestions, text: 'A few details to start' },
-      ...regionQuestions,
-      ...patternQs,
-      NOTES_Q,
-    ]
-  }, [keys, zones, ctxQuestions, regionQuestions, patternQs])
-  // Flat list used by the review screen and the summary. Same order as the
-  // screens above, which is what reviewIndexToScreen() relies on.
+  const activeQuestions = useMemo(
+    () => (keys.length
+      ? [{ id: '__ctx', group: ctxQuestions, text: 'A few details to start' }, ...regionQuestions]
+      : buildQuestions(zones)),
+    [keys, zones, ctxQuestions, regionQuestions],
+  )
+  // The screens actually shown, in order (indices into activeQuestions). Back
+  // walks this list, and the question number is the position in it.
+  const [path, setPath] = useState([0])
+  useEffect(() => { setPath([0]) }, [activeQuestions])
+  const askedIds = useMemo(
+    () => (keys.length ? path.slice(1).map((i) => activeQuestions[i]?.id).filter(Boolean) : []),
+    [keys, path, activeQuestions],
+  )
+  // Screens this selection can take: the opening one plus the scored limit.
+  // It ends sooner when one condition is clearly ahead.
+  const plannedScreens = keys.length ? 1 + Math.min(MAX_SCORED_QUESTIONS, regionQuestions.length) : activeQuestions.length
+  // Only the opening answers, the questions on the current path and the free
+  // text count. After going Back and taking a different route, the abandoned
+  // question's answer must not quietly shape the result.
+  const scopedAnswers = useMemo(() => {
+    if (!keys.length) return answers
+    const keep = new Set([...ctxQuestions.map((q) => q.id), ...askedIds, 'notes'])
+    const out = {}
+    for (const [k, v] of Object.entries(answers)) if (keep.has(k.replace(/_other$/, ''))) out[k] = v
+    return out
+  }, [keys, answers, ctxQuestions, askedIds])
+  // Flat list for the review screen and the summary: what was actually asked.
   const flatQuestions = useMemo(
-    () => (keys.length ? [...ctxQuestions, ...regionQuestions, ...patternQs, NOTES_Q] : buildQuestions(zones)),
-    [keys, zones, ctxQuestions, regionQuestions, patternQs],
+    () => (keys.length
+      ? [...ctxQuestions, ...askedIds.map((id) => regionQuestions.find((q) => q.id === id)).filter(Boolean)]
+      : activeQuestions),
+    [keys, ctxQuestions, askedIds, regionQuestions, activeQuestions],
   )
 
   // Ranked conditions across every asked area. Empty until enough is answered.
   const ranked = useMemo(() => {
     if (!keys.length) return []
-    try { return rankAcross(keys, answers) } catch { return [] }
-  }, [keys, answers])
+    try { return rankAcross(keys, scopedAnswers) } catch { return [] }
+  }, [keys, scopedAnswers])
   // What the AI overview explains: exactly these conditions, in this order.
   const matched = useMemo(() => ranked.map((x) => ({ region: x.rk, id: x.c.id })), [ranked])
-
-  // Skip questions that can no longer change an area's outcome, and stop an
-  // area's questions early once one condition there is clearly ahead. The
-  // opening, AI pattern and free-text screens are never skipped; the opening
-  // answers (age/onset/duration) gate which conditions are eligible.
-  const nextIdx = (from, ans) => nextScreen(activeQuestions, from, keys, ans)
   const modelSmall = ['intro', 'questions', 'review', 'safety', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
@@ -542,30 +515,44 @@ export default function PainAssessment() {
     .filter((pair) => pair.answer && pair.answer !== '—'), [flatQuestions, answers])
   const notesText = String(answers.notes || answers.q5 || '').trim()
 
-  // The review screen lists every question flat; map a flat index back to the
-  // screen that actually holds it (the opening ones share screen 0).
-  const reviewIndexToScreen = (flatIdx) => {
+  // The screen a review-screen entry lives on (the opening answers share 0).
+  const screenOf = (q, flatIdx) => {
     if (!keys.length) return flatIdx
-    const c = ctxQuestions.length
-    return flatIdx < c ? 0 : flatIdx - c + 1
+    return ctxQuestions.includes(q) ? 0 : activeQuestions.findIndex((s) => s.id === q.id)
   }
+  // Question number = position in the path, which also stays right when a
+  // question is reopened from the review screen.
+  const step = Math.max(1, path.indexOf(qIndex) + 1)
 
   const goToQuestion = (i, viaReview = false) => { setFromReview(viaReview); setQIndex(i); setStage('questions') }
-  // Marks along one chain are asked about area by area; marks in genuinely
+  // Marks along one chain are asked about together; marks in genuinely
   // separate areas ask the person to choose one first.
   const startQuestions = () => {
     if (needsAreaChoice(zones, focusKey)) { setStage('area'); return }
+    setPath([0])
     goToQuestion(0)
   }
+  // Region flows ask whichever question is most useful next, or finish; the
+  // generic set (areas without their own questions) simply goes in order.
   const nextFromQuestion = () => {
     if (fromReview) { setFromReview(false); setStage('review'); return }
-    if (qIndex >= activeQuestions.length - 1) { setStage('review'); return }
-    setQIndex(nextIdx(qIndex + 1, answers))
+    let next = -1
+    if (keys.length) {
+      const id = nextQuestion(keys, scopedAnswers, askedIds)
+      if (id) next = activeQuestions.findIndex((s) => s.id === id)
+    } else if (qIndex + 1 < activeQuestions.length) {
+      next = qIndex + 1
+    }
+    if (next < 0) { setStage('review'); return }
+    setPath((p) => [...p, next])
+    setQIndex(next)
   }
   const backFromQuestion = () => {
-    if (fromReview) { setFromReview(false); setStage('review') }
-    else if (qIndex === 0) setStage('intro')
-    else setQIndex(qIndex - 1)
+    if (fromReview) { setFromReview(false); setStage('review'); return }
+    if (path.length <= 1) { setStage('intro'); return }
+    const p = path.slice(0, -1)
+    setPath(p)
+    setQIndex(p[p.length - 1])
   }
 
   const restart = () => {
@@ -847,13 +834,7 @@ export default function PainAssessment() {
                     className="pa-primary"
                     style={{ ...goldBtn, opacity: zones.length ? 1 : 0.45, cursor: zones.length ? 'pointer' : 'not-allowed' }}
                     disabled={!zones.length}
-                    onClick={() => {
-                      // A line through more than one area is one travelling
-                      // pattern: ask Claude for questions about the WHOLE path
-                      // while the intro screen is being read.
-                      if (multiPattern && !aiQuestions && !aiQLoading) fetchAiQuestions(zones)
-                      setStage('intro')
-                    }}
+                    onClick={() => setStage('intro')}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('rotate')}>Back</button>
                 </div>
@@ -915,34 +896,23 @@ export default function PainAssessment() {
                     {multiArea ? (
                       <>
                         Your marks travel from the {zones[0].label.toLowerCase()} toward
-                        the {zones[zones.length - 1].label.toLowerCase()}, so there are questions
-                        about each area — {keys.map((k) => REGIONS[k].name.toLowerCase()).join(', then ')}
-                        {patternQs.length ? ' — plus a couple about how it behaves along the whole path' : ''}.
+                        the {zones[zones.length - 1].label.toLowerCase()}, so the questions cover
+                        the {(() => {
+                          const n = keys.map((k) => REGIONS[k].name.toLowerCase())
+                          return `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}`
+                        })()}.
                       </>
                     ) : keys.length === 1 ? (
-                      <>
-                        The questions focus on the {REGIONS[keys[0]].name.toLowerCase()}
-                        {patternQs.length ? ', with a couple more about how the pain behaves along the whole path' : ''}.
-                      </>
+                      <>The questions focus on the {REGIONS[keys[0]].name.toLowerCase()}.</>
                     ) : null}
                   </p>
                 )}
-                {multiPattern && aiQLoading && (
-                  <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
-                    Preparing a couple of extra questions for the pattern you traced…
-                  </p>
-                )}
                 <p style={{ ...body, margin: '0 0 24px', maxWidth: 460 }}>
-                  This takes about two minutes, and your answers shape the information
-                  you will see at the end.
+                  There are up to {plannedScreens} short questions, and your answers shape
+                  the information you will see at the end.
                 </p>
                 <div className="pa-actions">
-                  <button
-                    className="pa-primary"
-                    style={{ ...goldBtn, opacity: aiQLoading ? 0.45 : 1, cursor: aiQLoading ? 'wait' : 'pointer' }}
-                    disabled={aiQLoading}
-                    onClick={startQuestions}
-                  >Continue</button>
+                  <button className="pa-primary" style={goldBtn} onClick={startQuestions}>Continue</button>
                   <button style={ghostBtn} onClick={() => setStage(needsAreaChoice(zones, null) ? 'area' : 'draw')}>Back</button>
                 </div>
               </Fade>
@@ -966,9 +936,9 @@ export default function PainAssessment() {
                     : a !== undefined
               return (
                 <Fade k={'q' + qIndex}>
-                  <span style={label}>{q.area ? `${q.area} · ` : ''}Question {qIndex + 1} of {activeQuestions.length}</span>
+                  <span style={label}>{q.area ? `${q.area} · ` : ''}Question {step} of {Math.max(plannedScreens, step)}</span>
                   <div style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, margin: '12px 0 20px', maxWidth: 520 }}>
-                    <motion.div animate={{ width: `${((qIndex + 1) / activeQuestions.length) * 100}%` }} style={{ height: 3, background: GOLD, borderRadius: 2 }} />
+                    <motion.div animate={{ width: `${(step / Math.max(plannedScreens, step)) * 100}%` }} style={{ height: 3, background: GOLD, borderRadius: 2 }} />
                   </div>
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '0 0 8px', maxWidth: 520 }}>{q.text}</h2>
                   {!q.textarea && (
@@ -1066,7 +1036,7 @@ export default function PainAssessment() {
                       style={{ ...goldBtn, opacity: canNext ? 1 : 0.45, cursor: canNext ? 'pointer' : 'not-allowed' }}
                       disabled={!canNext}
                       onClick={nextFromQuestion}
-                    >{fromReview ? 'Save' : qIndex === activeQuestions.length - 1 ? 'Review Answers' : 'Continue'}</button>
+                    >{fromReview ? 'Save' : step >= plannedScreens ? 'Review Answers' : 'Continue'}</button>
                     <button style={ghostBtn} onClick={backFromQuestion}>Back</button>
                   </div>
                 </Fade>
@@ -1092,13 +1062,34 @@ export default function PainAssessment() {
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.area ? `${q.area} — ` : ''}{q.text}</p>
                       <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
                     </div>
-                    <button onClick={() => goToQuestion(reviewIndexToScreen(i), true)}
+                    <button onClick={() => goToQuestion(screenOf(q, i), true)}
                       style={{ background: 'none', border: 'none', color: GOLD, fontSize: 13.5, cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0, padding: '10px 2px 10px 12px', margin: '-10px -2px -10px 0', minHeight: 44, alignSelf: 'flex-start', fontFamily: 'var(--font-body)' }}>Change</button>
                   </div>
                 ))}
+                {/* The free-text box lives here rather than on a screen of its
+                    own, which keeps the questions to six screens at most. */}
+                {keys.length > 0 && (
+                  <div style={{ maxWidth: 520, margin: '6px 0 0' }}>
+                    <label htmlFor="pa-notes" style={{ display: 'block', fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: '0 0 8px', lineHeight: 1.5 }}>
+                      {NOTES_Q.text} <span style={{ color: 'rgba(255,255,255,0.4)' }}>(optional)</span>
+                    </label>
+                    <textarea
+                      id="pa-notes"
+                      value={answers.notes || ''}
+                      onChange={(e) => setAnswer('notes', e.target.value)}
+                      placeholder={NOTES_Q.placeholder}
+                      rows={4}
+                      style={{
+                        width: '100%', resize: 'vertical', borderRadius: 14, boxSizing: 'border-box',
+                        border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.05)',
+                        color: '#fff', padding: '14px 16px', fontSize: 16, lineHeight: 1.6, fontFamily: 'var(--font-body)',
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="pa-actions" style={{ marginTop: 16 }}>
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('safety')}>Continue</button>
-                  <button style={ghostBtn} onClick={() => goToQuestion(activeQuestions.length - 1)}>Back</button>
+                  <button style={ghostBtn} onClick={() => goToQuestion(path[path.length - 1])}>Back</button>
                 </div>
               </Fade>
             )}

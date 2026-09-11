@@ -5,13 +5,14 @@
    Node by scripts/check-accuracy.mjs — the component only renders it.
 
    A line through several areas of ONE chain (shoulder → elbow, low back →
-   knee) is asked about area by area: each crossed region's own weighted
-   questions run, so a problem in any of them can be recognised. Asking only
-   the region nearest the spine meant an elbow problem on a shoulder-to-elbow
-   line could never be matched at all.
+   knee) draws on every crossed region's own weighted questions, so a problem
+   in any of them can be recognised. Asking only the region nearest the spine
+   meant an elbow problem on a shoulder-to-elbow line could never be matched
+   at all. nextQuestion() keeps it short: the most useful question each time,
+   at most MAX_SCORED_QUESTIONS of them.
    ───────────────────────────────────────────────────────────────────────── */
 import {
-  REGIONS, ZONE_TO_REGION, computeResults, shouldStop, isRelevant, answeredRegionCount,
+  REGIONS, ZONE_TO_REGION, computeResults, shouldStop, isRelevant, answeredRegionCount, questionValue,
 } from './symptomGuide.js'
 
 /* Regions on one anatomical chain, from the spine outwards. */
@@ -161,24 +162,55 @@ export function buildScreens(keys) {
   return { context, questions }
 }
 
-/** From screen `from`, skip region questions that can no longer change that
-    region's result, and the rest of a region once one condition there is
-    clearly ahead. Non-region screens (opening, AI, notes) are never skipped. */
-export function nextScreen(screens, from, keys, answers) {
-  let i = from
-  while (i < screens.length) {
-    const q = screens[i]
-    if (!q || !q.rk) break
-    const region = REGIONS[q.rk]
-    const ra = regionAnswers(keys, q.rk, answers)
-    if (answeredRegionCount(region, ra) >= 2 && shouldStop(region, ra)) {
-      while (i < screens.length && screens[i].rk === q.rk) i++
-      continue
+/* At most this many scored questions, so the whole flow is the opening screen
+   + these = 6 screens, however many areas are drawn (the free-text box sits on
+   the review screen). scripts/check-accuracy.mjs measures what each extra
+   question buys: 4 misses conditions on two-area lines, 5 does not. */
+export const MAX_SCORED_QUESTIONS = 5
+
+// An area whose answers so far point at nothing ("Not sure", nothing ticked)
+// is probably not where the problem is; its questions are asked only when
+// nothing better is left.
+const SILENT_AREA_WEIGHT = 0.25
+
+/** True when any of these asked questions got an answer that points at a condition. */
+function gaveSignal(questions, ra) {
+  return questions.some((q) => {
+    const a = ra[q.id]
+    const ids = Array.isArray(a) ? a : a === undefined ? [] : [a]
+    return ids.some((id) => {
+      const o = q.options.find((x) => x.id === id)
+      return o && o.weights && Object.values(o.weights).some((w) => w > 0)
+    })
+  })
+}
+
+/** The id of the next scored question to ask, or null when done.
+    - Each drawn area first gets its single most useful question, so a line
+      from the shoulder to the elbow finds out early which area is involved.
+    - After that, across all areas, the question that can still move the result
+      the most (questionValue), with silent areas pushed back.
+    - Areas where one condition is already clearly ahead are skipped, and it
+      stops after `budget` questions.
+    `askedIds` = scored questions already shown, answered or not. */
+export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTIONS) {
+  if (askedIds.length >= budget) return null
+  const live = []
+  for (const k of keys) {
+    const region = REGIONS[k]
+    const ra = regionAnswers(keys, k, answers)
+    if (answeredRegionCount(region, ra) >= 2 && shouldStop(region, ra)) continue
+    const askedHere = region.questions.filter((q) => askedIds.includes(q.id))
+    const weight = askedHere.length && !gaveSignal(askedHere, ra) ? SILENT_AREA_WEIGHT : 1
+    for (const q of region.questions) {
+      if (askedIds.includes(q.id) || !isRelevant(q, region, ra)) continue
+      live.push({ id: q.id, unseenArea: askedHere.length === 0, v: questionValue(q, region, ra) * weight })
     }
-    if (!isRelevant(q, region, ra)) { i++; continue }
-    break
   }
-  return Math.min(i, screens.length - 1)
+  const pool = keys.length > 1 && live.some((x) => x.unseenArea) ? live.filter((x) => x.unseenArea) : live
+  let best = null
+  for (const x of pool) if (!best || x.v > best.v) best = x
+  return best ? best.id : null
 }
 
 /** The conditions the answers point to, across every asked region. Each

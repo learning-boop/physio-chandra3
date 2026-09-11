@@ -439,6 +439,22 @@ export function isRelevant(q, region, answers) {
   })
 }
 
+/* How much a question can still move the result: for every condition that can
+   still qualify, the share of its ceiling this question could add. Questions
+   whose options point at many live conditions (usually "where is it?") score
+   highest, so asking the most useful question next reaches an answer in far
+   fewer questions than going through a region's list in order. */
+export function questionValue(q, region, answers) {
+  const { scores, unlocks } = computeRaw(region, answers)
+  const rem = remainingMax(region, answers), maxS = maxScores(region)
+  let v = 0
+  for (const c of region.conditions) {
+    if (!canQualify(c, scores, rem, maxS, unlocks, region, answers)) continue
+    v += bestFromQuestion(q, c.id) / maxS[c.id]
+  }
+  return v
+}
+
 export function answeredRegionCount(region, answers) {
   return region.questions.filter(q => {
     const a = answers[q.id]
