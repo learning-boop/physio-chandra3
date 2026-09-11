@@ -412,8 +412,14 @@ export const AUTHORED = [
       },
       {
         "qid": "K1",
-        "oid": "jointline",
-        "label": "Along the inner or outer joint line",
+        "oid": "innerline",
+        "label": "The inner side, along the joint line",
+        "weight": 1
+      },
+      {
+        "qid": "K1",
+        "oid": "outerline",
+        "label": "The outer side, along the joint line",
         "weight": 1
       },
       {
@@ -509,6 +515,12 @@ export const AUTHORED = [
         "weight": 3
       },
       {
+        "qid": "K3",
+        "oid": "kneecap",
+        "label": "The kneecap shifted or popped out to the side",
+        "weight": 3
+      },
+      {
         "qid": "K1",
         "oid": "front",
         "label": "Front — behind or around the kneecap",
@@ -559,8 +571,8 @@ export const AUTHORED = [
       },
       {
         "qid": "K1",
-        "oid": "jointline",
-        "label": "Along the inner or outer joint line",
+        "oid": "outerline",
+        "label": "The outer side, along the joint line",
         "weight": 3
       },
       {
@@ -602,8 +614,8 @@ export const AUTHORED = [
       },
       {
         "qid": "K1",
-        "oid": "jointline",
-        "label": "Along the inner or outer joint line",
+        "oid": "innerline",
+        "label": "The inner side, along the joint line",
         "weight": 3
       },
       {
@@ -654,6 +666,12 @@ export const AUTHORED = [
         "oid": "whole",
         "label": "The whole knee — hard to localize",
         "weight": 1
+      },
+      {
+        "qid": "K1",
+        "oid": "back",
+        "label": "The back of the knee",
+        "weight": 2
       },
       {
         "qid": "K4",

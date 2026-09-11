@@ -412,8 +412,11 @@ export const EXTRA_REGIONS = {
         { id: "ns", label: "Not sure" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
-        { id: "d2w", label: "Less than 2 weeks" },
-        { id: "d6w", label: "2 – 6 weeks" },
+        // A fresh sprain is recent by definition; without this the sprain and
+        // long-term instability scored identically for someone rolling their
+        // ankle for years.
+        { id: "d2w", label: "Less than 2 weeks", weights: { atfl: 2 } },
+        { id: "d6w", label: "2 – 6 weeks", weights: { atfl: 1 } },
         { id: "d6m", label: "More than 6 weeks" },
         { id: "years", label: "Comes and goes over years" }
       ]}

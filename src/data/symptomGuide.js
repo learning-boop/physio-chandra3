@@ -130,6 +130,9 @@ export const REGIONS = {
         {id:"top", label:"Right on top, at the bony point of the shoulder", weights:{acj:3}},
         {id:"deep", label:"Deep inside / all over the shoulder", weights:{frozen:2}},
         {id:"blade", label:"Between the neck and shoulder blade", weights:{neckref:3}},
+        // Rotator-cuff pain stays in the upper arm; pain carrying on past the
+        // elbow is the neck-referred pattern ("Symptoms spread down the arm").
+        {id:"downarm", label:"Down the arm, past the elbow — sometimes with tingling", weights:{neckref:3}},
         {id:"ns", label:"Not sure"}
       ]},
       {id:"S2", text:"Which movements are worst?", options:[
@@ -214,9 +217,14 @@ export const REGIONS = {
     questions:[
       {id:"K1", text:"Where do you feel it most?", options:[
         {id:"front", label:"Front — behind or around the kneecap", weights:{pfp:3}},
-        {id:"jointline", label:"Along the inner or outer joint line", weights:{meniscus:2, oa:2}},
+        // Inner and outer are separate options: the inner and outer knee
+        // ligament sprains point at one side each, and a single "inner or outer"
+        // option left the two tied on every answer.
+        {id:"innerline", label:"The inner side, along the joint line", weights:{meniscus:2, oa:2}},
+        {id:"outerline", label:"The outer side, along the joint line", weights:{meniscus:2, oa:2}},
         {id:"belowcap", label:"Just below the kneecap, on the tendon", weights:{pt:3}},
         {id:"outside", label:"Outside of the knee, slightly above the joint", weights:{itb:3}},
+        {id:"back", label:"The back of the knee"},
         {id:"whole", label:"The whole knee — hard to localize", weights:{oa:1}},
         {id:"ns", label:"Not sure"}
       ]},
@@ -231,6 +239,7 @@ export const REGIONS = {
       {id:"K3", text:"Any of these mechanical symptoms?", options:[
         {id:"locking", label:"True locking — it gets stuck and I must wiggle it free", weights:{meniscus:3}},
         {id:"givingway", label:"Giving way / buckling since an injury", weights:{ligament:3}},
+        {id:"kneecap", label:"The kneecap shifted or popped out to the side"},
         {id:"click", label:"Clicking without pain", special:"click"},
         {id:"none", label:"None of these"}
       ]},
@@ -437,22 +446,36 @@ export function answeredRegionCount(region, answers) {
   }).length
 }
 
+/* Ranking. A plain percentage (score / max) let a condition that can only
+   ever score 3 reach 100% from a single "yes" and outrank a well-matched
+   condition at 90% — e.g. one click put "snapping hip" above hip impingement.
+   RANK_PRIOR adds a few points of doubt to every ceiling, so a match backed by
+   more of the answers ranks higher; exact ties go to the condition that
+   matched more evidence. It only ORDERS conditions — whether one is shown at
+   all is still meetsThreshold(). Tuned with scripts/check-accuracy.mjs: 4 is
+   the smallest value that gets every textbook case right and the most cases
+   right when one telltale answer is missed. */
+export const RANK_PRIOR = 4
+export function rankValue(score, max) { return score / (max + RANK_PRIOR) }
+
 export function shouldStop(region, answers) {
   const { scores, unlocks } = computeRaw(region, answers)
   const rem = remainingMax(region, answers), maxS = maxScores(region)
   const conds = region.conditions.filter(c => possiblyEligible(c, unlocks, region, answers))
   const qualified = conds.filter(c => eligibleNow(c, unlocks, answers) && meetsThreshold(scores[c.id] || 0, maxS[c.id]))
   if (!qualified.length) return false
-  const leader = qualified.reduce((a, b) =>
-    ((scores[a.id] || 0) / maxS[a.id] >= (scores[b.id] || 0) / maxS[b.id]) ? a : b)
-  const normL = (scores[leader.id] || 0) / maxS[leader.id]
+  // Same ordering as computeResults(), or the questions could stop while a
+  // rival that would finally be shown first is still catching up.
+  const rankOf = (c) => rankValue(scores[c.id] || 0, maxS[c.id])
+  const leader = qualified.reduce((a, b) => (rankOf(a) >= rankOf(b) ? a : b))
+  const rankL = rankOf(leader)
   for (const c of conds) {
     if (c === leader) continue
     const pot = (scores[c.id] || 0) + (rem[c.id] || 0)
     if (!qualified.includes(c)) {
       if (meetsThreshold(pot, maxS[c.id])) return false
     } else {
-      if (pot / maxS[c.id] >= normL) return false
+      if (rankValue(pot, maxS[c.id]) >= rankL) return false
     }
   }
   return true
@@ -463,9 +486,12 @@ export function computeResults(region, answers) {
   const maxScore = maxScores(region)
   const eligible = region.conditions.filter(c => eligibleNow(c, unlocks, answers))
   const ranked = eligible
-    .map(c => ({ c, score: scores[c.id] || 0, norm: (scores[c.id] || 0) / maxScore[c.id] }))
+    .map(c => {
+      const score = scores[c.id] || 0
+      return { c, score, norm: score / maxScore[c.id], rank: rankValue(score, maxScore[c.id]) }
+    })
     .filter(x => meetsThreshold(x.score, maxScore[x.c.id]))
-    .sort((a, b) => b.norm - a.norm)
+    .sort((a, b) => b.rank - a.rank || b.score - a.score)
     .slice(0, 3)
   return { ranked, specials }
 }

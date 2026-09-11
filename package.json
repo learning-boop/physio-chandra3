@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check:data": "node scripts/check-symptom-data.mjs",
+    "check:accuracy": "node scripts/check-accuracy.mjs",
     "import:conditions": "node scripts/import-conditions.mjs"
   },
   "dependencies": {

@@ -10,6 +10,10 @@
    instead of generic, and keeps the analysis grounded in Chandra's approved
    content instead of invented.
 
+   The analysis also receives the conditions the app's scoring engine MATCHED
+   from the answers. The overview explains exactly those, in that order, so
+   the results page gives one answer instead of two lists that can disagree.
+
    Files that begin with "_" inside /api are NOT deployed as endpoints by
    Vercel, so this folder is safe for shared code.
    ───────────────────────────────────────────────────────────────────────── */
@@ -70,53 +74,67 @@ export function parseZones(zones) {
   return { labels, regionKeys: regionKeys.slice(0, 3) }
 }
 
+/** The conditions the app's scoring matched, as sent by the client
+    ([{ region, id }], strongest first). Each is looked up in REGIONS, so only
+    real approved records reach the prompt — never client-supplied text. */
+export function parseMatched(matched) {
+  const out = []
+  if (!Array.isArray(matched)) return out
+  for (const m of matched.slice(0, 3)) {
+    const r = m && typeof m === 'object' && REGIONS[m.region]
+    const c = r && r.conditions.find((x) => x.id === m.id)
+    if (c && !out.some((o) => o.c === c)) out.push({ region: m.region, regionName: r.name, c })
+  }
+  return out
+}
+
 /* ── Retrieval: approved records → prompt-sized knowledge blocks ────────── */
 const cap = (s, n) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n)
+const firstSentence = (s) => cap(s, 400).split(/(?<=\.)\s/)[0]
+
+/** Budget split PER REGION and trimmed on condition boundaries, so a long
+    first region can never push a later one out of the prompt. Every
+    condition is offered (they used to be cut at the first 7-8, which hid
+    newer knee conditions from the AI entirely); matched ones go first so
+    they can never be the ones trimmed. */
+function knowledgeBlocks(regionKeys, budget, render, matched = []) {
+  const keys = [...regionKeys]
+  for (const m of matched) if (!keys.includes(m.region)) keys.push(m.region)
+  const live = keys.filter((k) => REGIONS[k])
+  if (!live.length) return ''
+  const perRegion = Math.floor(budget / live.length)
+  const first = new Set(matched.map((m) => m.c))
+  return live.map((k) => {
+    const r = REGIONS[k]
+    const conds = [...(r.conditions || [])].sort((a, b) => first.has(b) - first.has(a))
+    let block = `[${r.name}]`
+    for (const c of conds) {
+      const part = render(c)
+      if (!part) continue
+      if (block.length + part.length + 1 > perRegion) break
+      block += '\n' + part
+    }
+    return block
+  }).join('\n')
+}
 
 /** Compact block for QUESTION generation: each condition's telltales. */
 export function questionKnowledge(regionKeys) {
-  const lines = []
-  for (const k of regionKeys) {
-    const r = REGIONS[k]
-    if (!r) continue
-    lines.push(`[${r.name}]`)
-    for (const c of (r.conditions || []).slice(0, 8)) {
-      const tell = (c.noticed || []).slice(0, 3).map((s) => cap(s, 90)).join('; ')
-      if (tell) lines.push(`- ${cap(c.name, 60)}: ${tell}`)
-    }
-  }
-  return lines.join('\n').slice(0, 4500)
+  return knowledgeBlocks(regionKeys, 4500, (c) => {
+    const tell = (c.noticed || []).slice(0, 3).map((s) => cap(s, 90)).join('; ')
+    return tell ? `- ${cap(c.name, 60)}: ${tell}` : ''
+  })
 }
 
-/** Fuller block for the ANALYSIS: description + telltales + guidance.
-    The budget is split PER REGION so a long first region can never truncate
-    a later one out of the prompt — every crossed area stays represented. */
-export function analysisKnowledge(regionKeys) {
-  const keys = regionKeys.filter((k) => REGIONS[k])
-  if (!keys.length) return ''
-  const perRegion = Math.floor(7000 / keys.length)
-  const blocks = []
-  for (const k of keys) {
-    const r = REGIONS[k]
-    const parts = [`[${r.name}]`]
-    for (const c of (r.conditions || []).slice(0, 7)) {
-      parts.push(
-        `• ${cap(c.name, 60)}${c.clin ? ` (${cap(c.clin, 60)})` : ''}\n` +
-          `  What it is: ${cap(c.blurb, 200)}\n` +
-          `  People notice: ${(c.noticed || []).slice(0, 3).map((s) => cap(s, 85)).join('; ')}\n` +
-          `  Home care: ${(c.homeCare || []).slice(0, 3).map((s) => cap(s, 85)).join('; ')}\n` +
-          `  See a physio if: ${(c.seePhysioIf || []).slice(0, 2).map((s) => cap(s, 85)).join('; ')}`
-      )
-    }
-    // Trim on condition boundaries, never mid-record.
-    let block = ''
-    for (const p of parts) {
-      if (block.length + p.length + 1 > perRegion) break
-      block += (block ? '\n' : '') + p
-    }
-    blocks.push(block)
-  }
-  return blocks.join('\n')
+/** Fuller block for the ANALYSIS: description + telltales + guidance. */
+export function analysisKnowledge(regionKeys, matched = []) {
+  return knowledgeBlocks(regionKeys, 7000, (c) =>
+    `• ${cap(c.name, 60)}${c.clin ? ` (${cap(c.clin, 60)})` : ''}\n` +
+    `  What it is: ${cap(c.blurb, 200)}\n` +
+    `  People notice: ${(c.noticed || []).slice(0, 3).map((s) => cap(s, 85)).join('; ')}\n` +
+    `  Home care: ${(c.homeCare || []).slice(0, 3).map((s) => cap(s, 85)).join('; ')}\n` +
+    `  See a physio if: ${(c.seePhysioIf || []).slice(0, 2).map((s) => cap(s, 85)).join('; ')}`,
+  matched)
 }
 
 /* ── Prompts ─────────────────────────────────────────────────────────────
@@ -145,7 +163,7 @@ Respond ONLY with valid JSON, no markdown, exactly: {"questions":[{"text":"...",
 export function answersBlock(answers, notes) {
   const qa = Array.isArray(answers)
     ? answers
-        .slice(0, 12)
+        .slice(0, 24)
         .filter((p) => p && typeof p.question === 'string' && typeof p.answer === 'string')
         .map((p) => `Q: ${p.question.slice(0, 160)}\nA: ${p.answer.slice(0, 160)}`)
         .join('\n')
@@ -158,22 +176,28 @@ export function answersBlock(answers, notes) {
   return `\n\nThe visitor then answered these questions about the pattern:\n${qa}${note}\n\nTailor every list to BOTH the traced path and these answers — reflect what they said about how it started, how it behaves or travels, and what worsens or eases it.`
 }
 
-export function analysisPrompt(labels, answers, notes, knowledge) {
-  const kb = knowledge
-    ? `\n\nApproved clinical notes from the clinic's physiotherapist for the areas crossed:\n${knowledge}\n\nGround every list in these notes. When the traced path and the visitor's answers match one of the patterns above, word "possibleCauses" around that pattern (its name in plain words), take "commonSymptoms" from what the notes say people notice, and take "suggestedApproach" from the notes' home-care and see-a-physio guidance — reworded warmly, never as copied clinical jargon. If NONE of the notes fit this pattern, keep every list general, do not invent specifics, and make the disclaimer say plainly that this guide does not specifically cover this pattern, so booking an in-person assessment is the right next step.`
-    : ''
-  return `A user traced a line across a body diagram passing through these areas, in order: ${labels.join(' -> ')}.${answersBlock(answers, notes)}${kb}
+export function analysisPrompt(labels, answers, notes, knowledge, matched = []) {
+  const kb = knowledge ? `\n\nApproved clinical notes from the clinic's physiotherapist for the areas crossed:\n${knowledge}` : ''
+  let task
+  if (matched.length) {
+    const list = matched.map((m, i) => `${i + 1}. ${m.c.name} [${m.regionName}] (id: ${m.c.id})`).join('\n')
+    task = `\n\nThe clinic's own scoring has already matched the visitor's answers to these patterns from the notes, strongest first:\n${list}\n\n"possibleCauses" must explain EXACTLY these patterns, in this order — one item per pattern, each an object {"id": "<the id above>", "text": "..."}. The text is one or two short sentences (under 40 words) saying in plain words how the traced path and the visitor's answers fit that pattern, written as a possibility ("could be…", "may be…", "is sometimes linked to…"), never as a statement of what the person has. Do not add, drop, rename or reorder patterns, and do not mention any other condition. Take "commonSymptoms" from what the notes say people notice with these patterns, and "suggestedApproach" from their home-care and see-a-physio guidance — reworded warmly, never as copied clinical jargon.`
+  } else {
+    task = `\n\nThe clinic's scoring did NOT find a clear match between these answers and any pattern in the notes. Do not name any specific condition. Make "possibleCauses" 3 general, plain-language possibilities (for example muscle, joint or load-related causes) written as possibilities, keep every list general without inventing specifics, and make the disclaimer say plainly that this guide could not match the pattern, so booking an in-person assessment is the right next step.`
+  }
+  const causesShape = matched.length ? '[{"id": "...", "text": "..."}]' : '["...", "...", "..."]'
+  return `A user traced a line across a body diagram passing through these areas, in order: ${labels.join(' -> ')}.${answersBlock(answers, notes)}${kb}${task}
 
-You are giving general physiotherapy education content for a clinic website (Physio Chandra). This is NOT a diagnosis. Based on this pain pattern, respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
+You are giving general physiotherapy education content for a clinic website (Physio Chandra). This is NOT a diagnosis. Respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
 
 {
-  "possibleCauses": ["...", "..."],
+  "possibleCauses": ${causesShape},
   "commonSymptoms": ["...", "..."],
   "suggestedApproach": ["...", "..."],
   "disclaimer": "..."
 }
 
-"possibleCauses" must contain EXACTLY 3 items — the three explanations that best fit THIS pattern and THESE answers — each written as a possibility ("could be…", "may be…", "is sometimes linked to…"), never as a statement of what the person has. Keep the other arrays to 3-4 short bullet points, all in plain, reassuring language for a patient (not clinical jargon). The disclaimer should make clear this is general information and recommend booking an in-person assessment.`
+Keep "commonSymptoms" and "suggestedApproach" to 3-4 short bullet points each, all in plain, reassuring language for a patient (not clinical jargon). The disclaimer should make clear this is general information and recommend booking an in-person assessment.`
 }
 
 /* ── Output validation: nothing the model writes reaches a visitor raw ─── */
@@ -193,8 +217,38 @@ export function cleanQuestions(parsed) {
   return out.length >= 3 ? out : null
 }
 
-/** Safe, generic content when the model can't be reached — never an error page. */
-export function fallbackAnalysis(labels) {
+const DISCLAIMER =
+  'This is general information, not a diagnosis. Please book an assessment with Physio Chandra for a proper, personalised evaluation.'
+
+/** One line per matched pattern, straight from its approved record. */
+const causeFromRecord = (m) => `${m.c.name} — ${firstSentence(m.c.blurb)}`
+
+/** Up to n items taken round-robin across the matched records' lists. */
+function fromRecords(matched, field, n) {
+  const out = []
+  for (let i = 0; out.length < n && i < 4; i++) {
+    for (const m of matched) {
+      const s = (m.c[field] || [])[i]
+      if (s && out.length < n && !out.includes(s)) out.push(s)
+    }
+  }
+  return out
+}
+
+/** Safe content when the model can't be reached — never an error page. With
+    matched patterns it is the clinic's own notes for them (still one answer
+    with the result cards); without, general content. */
+export function fallbackAnalysis(labels, matched = []) {
+  if (matched.length) {
+    return {
+      fallback: true,
+      fromNotes: true,
+      possibleCauses: matched.map(causeFromRecord),
+      commonSymptoms: fromRecords(matched, 'noticed', 4),
+      suggestedApproach: fromRecords(matched, 'homeCare', 4),
+      disclaimer: DISCLAIMER,
+    }
+  }
   const areas = labels && labels.length ? labels.join(', ') : 'the traced areas'
   return {
     fallback: true,
@@ -213,27 +267,47 @@ export function fallbackAnalysis(labels) {
       'Targeted stretching and strengthening guided by a physiotherapist',
       'A hands-on assessment to pinpoint the source and build a plan',
     ],
-    disclaimer:
-      'This is general information, not a diagnosis. Please book an assessment with Physio Chandra for a proper, personalised evaluation.',
+    disclaimer: DISCLAIMER,
   }
 }
 
-/** Shape-check the model's analysis JSON; anything off → the safe fallback. */
-export function sanitizeAnalysis(parsed, labels) {
+/** Shape-check the model's analysis JSON; anything off → the safe fallback.
+    With matched patterns the list of causes is rebuilt from `matched` itself —
+    same patterns, same order, whatever the model returned — and only the
+    model's explanation for each is kept. */
+export function sanitizeAnalysis(parsed, labels, matched = []) {
   const arr = (v, n) =>
     Array.isArray(v) ? v.filter((x) => typeof x === 'string').map((x) => x.slice(0, 240)).slice(0, n) : []
-  if (!parsed || typeof parsed !== 'object') return fallbackAnalysis(labels)
+  if (!parsed || typeof parsed !== 'object') return fallbackAnalysis(labels, matched)
+  // Over-long explanations are cut at a sentence end (or a word, with "…"),
+  // never mid-word.
+  const clip = (s, n) => {
+    if (s.length <= n) return s
+    const cut = s.slice(0, n)
+    const end = cut.lastIndexOf('. ')
+    return end > n / 2 ? cut.slice(0, end + 1) : cut.replace(/\s+\S*$/, '') + '…'
+  }
+  let possibleCauses
+  if (matched.length) {
+    const given = Array.isArray(parsed.possibleCauses) ? parsed.possibleCauses : []
+    possibleCauses = matched.map((m) => {
+      const hit = given.find((x) => x && typeof x === 'object' && x.id === m.c.id && typeof x.text === 'string' && x.text.trim())
+      return hit ? `${m.c.name} — ${clip(hit.text.trim(), 320)}` : causeFromRecord(m)
+    })
+  } else {
+    possibleCauses = arr(parsed.possibleCauses, 3)
+  }
   const out = {
-    possibleCauses: arr(parsed.possibleCauses, 3),
+    possibleCauses,
     commonSymptoms: arr(parsed.commonSymptoms, 5),
     suggestedApproach: arr(parsed.suggestedApproach, 5),
     disclaimer:
       typeof parsed.disclaimer === 'string' && parsed.disclaimer.trim()
         ? parsed.disclaimer.slice(0, 400)
-        : fallbackAnalysis(labels).disclaimer,
+        : DISCLAIMER,
   }
   if (!out.possibleCauses.length || !out.commonSymptoms.length || !out.suggestedApproach.length) {
-    return fallbackAnalysis(labels)
+    return fallbackAnalysis(labels, matched)
   }
   return out
 }

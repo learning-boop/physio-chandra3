@@ -8,6 +8,7 @@ clin: Patellar instability / subluxation-dislocation
 pointers:
   "A twist, pivot, or impact injury": 2
   "Giving way / buckling since an injury": 3
+  "The kneecap shifted or popped out to the side": 3
   "Front — behind or around the kneecap": 1
   "Under 30": 2
   "It swelled within 1–2 hours of an injury": 1

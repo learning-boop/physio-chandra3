@@ -13,7 +13,10 @@ const API_URL = import.meta.env.VITE_API_URL || ''
 // `aiOnly` renders JUST the AI overview and always calls the API. The guided
 // questionnaire below is a whole interactive flow of its own, so it must not be
 // dropped into a results screen that has already asked its questions.
-export default function PainAIPanel({ zones, aiOnly = false, answers = null, notes = '' }) {
+// `matched` ([{ region, id }], strongest first) is what the scoring engine
+// found; the overview then explains exactly those conditions, so it can never
+// contradict the result cards shown above it.
+export default function PainAIPanel({ zones, aiOnly = false, answers = null, notes = '', matched = null }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
@@ -29,9 +32,13 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
   })
   const useGuide = !aiOnly && regionOptions.length > 0
 
-  // Re-fetch when the answers change too (the results screen passes them so
-  // the overview reflects what the person said, not just where they drew).
-  const ansKey = useMemo(() => JSON.stringify([answers || null, notes || '']), [answers, notes])
+  // Re-fetch when the answers or the matched conditions change too (the
+  // results screen passes them so the overview reflects what the person said,
+  // not just where they drew).
+  const ansKey = useMemo(
+    () => JSON.stringify([answers || null, notes || '', matched || null]),
+    [answers, notes, matched],
+  )
 
   useEffect(() => {
     if (useGuide) { setResult(null); setError(null); setLoading(false); return }
@@ -54,6 +61,9 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
         zones: zones.map(z => ({ type: z.type, label: z.label })),
         answers: Array.isArray(answers) && answers.length ? answers : undefined,
         notes: notes && notes.trim() ? notes.trim() : undefined,
+        // An empty list is meaningful: it tells the server nothing matched,
+        // so the overview stays general instead of picking conditions itself.
+        matched: Array.isArray(matched) ? matched : undefined,
       }),
       signal: controller.signal,
     })
@@ -125,8 +135,10 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
               margin: '0 0 14px', padding: '10px 12px', borderRadius: 10, fontSize: 12.5, lineHeight: 1.6,
               border: '1px solid rgba(224,138,138,0.4)', background: 'rgba(224,138,138,0.08)', color: '#e0b0b0',
             }}>
-              Showing standard information — this was not generated for your specific
-              pattern.{result.reason ? ` (${result.reason})` : ''}
+              {result.fromNotes
+                ? "Showing the clinic's standard notes for these patterns — the personalised overview isn't available right now."
+                : 'Showing standard information — this was not generated for your specific pattern.'}
+              {result.reason ? ` (${result.reason})` : ''}
             </p>
           )}
           {aiOnly ? (
@@ -134,8 +146,9 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
               {/* THE ANSWER the person came for: at most three possibilities,
                   framed as "could be" — never "you have". */}
               <p style={{ margin: '0 0 12px', fontSize: 14.5, lineHeight: 1.65, color: 'rgba(255,255,255,0.75)' }}>
-                Based on where you drew and what you answered, your pain could be
-                associated with:
+                {Array.isArray(matched) && matched.length
+                  ? 'How the patterns above could fit where you drew and what you answered:'
+                  : 'Based on where you drew and what you answered, your pain could be associated with:'}
               </p>
               {(result.possibleCauses || []).slice(0, 3).map((c, i) => (
                 <div key={i} style={{

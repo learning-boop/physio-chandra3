@@ -8,6 +8,7 @@ clin: Posterior cruciate ligament (PCL) sprain
 pointers:
   "A twist, pivot, or impact injury": 2
   "The whole knee — hard to localize": 1
+  "The back of the knee": 2
   "It swelled within 1–2 hours of an injury": 1
 ---
 

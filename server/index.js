@@ -10,6 +10,7 @@ import {
   getApiKey,
   hasValidKey,
   parseZones,
+  parseMatched,
   questionKnowledge,
   questionPrompt,
   cleanQuestions,
@@ -79,35 +80,38 @@ app.post('/api/pain-questions', async (req, res) => {
 })
 
 // ─── Pattern analysis ────────────────────────────────────────────────────────
-// Grounded in the retrieved records; honest when they don't cover the pattern;
-// shape-checked before anything reaches a visitor; fixed fallback on failure.
+// Explains the conditions the app's scoring matched (so it agrees with the
+// result cards); grounded in the retrieved records; honest when nothing
+// matched; shape-checked before anything reaches a visitor; fixed fallback on
+// failure.
 app.post('/api/pain-analysis', async (req, res) => {
-  const { zones, answers, notes } = req.body || {}
+  const { zones, answers, notes, matched } = req.body || {}
   const { labels, regionKeys } = parseZones(zones)
   if (!labels.length) {
     return res.status(400).json({ error: 'zones must be a non-empty array of body areas' })
   }
+  const found = parseMatched(matched)
   // No usable key -> serve the fallback rather than erroring out.
-  if (!hasValidKey(API_KEY)) return res.json(fallbackAnalysis(labels))
+  if (!hasValidKey(API_KEY)) return res.json(fallbackAnalysis(labels, found))
   try {
-    const knowledge = analysisKnowledge(regionKeys)
+    const knowledge = analysisKnowledge(regionKeys, found)
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-5',
       // See the questions route: thinking is on by default on Sonnet 5 and
       // shares the max_tokens budget with the response.
       thinking: { type: 'disabled' },
-      max_tokens: 1150,   // ~40% headroom for Sonnet 5's tokenizer
-      messages: [{ role: 'user', content: analysisPrompt(labels, answers, notes, knowledge) }],
+      max_tokens: 1400,   // Sonnet 5's tokenizer + the {id, text} cause objects
+      messages: [{ role: 'user', content: analysisPrompt(labels, answers, notes, knowledge, found) }],
     })
     const textBlock = response.content.find((b) => b.type === 'text')
     const raw = textBlock ? textBlock.text : '{}'
     let parsed = null
     try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()) } catch { parsed = null }
-    res.json(sanitizeAnalysis(parsed, labels))
+    res.json(sanitizeAnalysis(parsed, labels, found))
   } catch (err) {
     console.error('pain-analysis error:', err?.message || err)
     // Don't 500 the user experience — degrade gracefully.
-    res.json(fallbackAnalysis(labels))
+    res.json(fallbackAnalysis(labels, found))
   }
 })
 

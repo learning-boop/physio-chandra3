@@ -9,7 +9,8 @@ pointers:
   "It swelled within 1–2 hours of an injury": 3
   "Intermittent puffiness after activity": 2
   "True locking": 2
-  "Along the inner or outer joint line": 1
+  "The inner side, along the joint line": 1
+  "The outer side, along the joint line": 1
   "After increasing running, jumping, or hiking": 1
 ---
 

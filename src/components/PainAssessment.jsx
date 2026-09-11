@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
+import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS } from '../data/symptomGuide'
 import {
-  REGIONS, ZONE_TO_REGION, allQuestions, isRelevant, shouldStop,
-  answeredRegionCount, computeResults, GENERAL_RED_FLAGS,
-} from '../data/symptomGuide'
+  primaryRegion, questionRegions, needsAreaChoice,
+  buildScreens, nextScreen, rankAcross,
+} from '../data/assessmentFlow'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -93,35 +94,10 @@ function primaryZoneType(zones) {
 const TYPE_TO_KEY = { lowerback: 'lowback' }   // zone type → aggravator/easer key
 const TYPE_WORD = { head: 'head', chest: 'chest', abdomen: 'stomach' } // plain word for types with no authored region
 
-/* Regions that lie on one anatomical chain, listed from the body outwards.
-   Pain drawn ALONG a chain (shoulder → elbow, low back → down the leg,
-   neck → arm) is one travelling pattern, not separate problems — so the
-   questions focus automatically on the most PROXIMAL region, whose authored
-   set already asks where the pain travels. Only marks in genuinely separate
-   areas (e.g. shoulder AND knee) still ask the person to choose. */
-const REGION_CHAINS = [
-  ['neck', 'shoulder', 'elbow', 'wrist'],
-  ['lowback', 'hip', 'knee', 'ankle'],
-  ['neck', 'upperback', 'lowback'],
-]
-function proximalRegion(keys) {
-  if (keys.length < 2) return null
-  for (const chain of REGION_CHAINS) {
-    if (keys.every((k) => chain.includes(k))) return chain.find((k) => keys.includes(k))
-  }
-  return null
-}
-
-/* The single region a drawn selection points at (the most-marked one). */
-function primaryRegion(zones) {
-  const tally = {}
-  zones.forEach((z) => {
-    const k = ZONE_TO_REGION[z.type]
-    if (k && REGIONS[k]) tally[k] = (tally[k] || 0) + 1
-  })
-  const best = Object.entries(tally).sort((a, b) => b[1] - a[1])[0]
-  return best ? best[0] : null
-}
+/* Which regions get asked about (every region along one chain, e.g.
+   shoulder → elbow), the shared opening screen, the adaptive skipping and the
+   cross-region ranking all live in ../data/assessmentFlow.js, so
+   scripts/check-accuracy.mjs can test the very same logic. */
 
 /* The open field stays at the end of every region's set. Its id is not one of
    the region's question ids, so the scoring engine simply ignores it. */
@@ -149,37 +125,6 @@ function buildQuestions(zones) {
   }).map((q) => (q.options
     ? { ...q, options: q.options.map((o) => (typeof o === 'string' ? { id: o, label: o } : o)) }
     : q))
-}
-
-/* Possible contributing causes for the drawn areas — general education only,
-   never presented as a diagnosis (CHCPBC Practice Standards). */
-function likelyCauses(zones, max = 3) {
-  // Take one condition from each region the line crossed before taking a second
-  // from any of them. Filling the list in region order instead would spend every
-  // slot on the first area — a shoulder-to-wrist line would return three
-  // shoulder conditions and never mention the elbow or the wrist.
-  const regions = []
-  const seenRegion = new Set()
-  zones.forEach((z) => {
-    const k = ZONE_TO_REGION[z.type]
-    const r = k && REGIONS[k]
-    if (!r || !r.conditions || seenRegion.has(k)) return
-    seenRegion.add(k)
-    regions.push(r)
-  })
-
-  const seen = new Set(); const out = []
-  const deepest = Math.max(0, ...regions.map((r) => r.conditions.length))
-  for (let rank = 0; rank < deepest && out.length < max; rank++) {
-    for (const r of regions) {
-      if (out.length >= max) break
-      const c = r.conditions[rank]
-      if (!c || seen.has(c.id)) continue
-      seen.add(c.id)
-      out.push({ id: c.id, name: c.name, region: r.name, blurb: (c.blurb || '').split('. ')[0] + '.' })
-    }
-  }
-  return out
 }
 
 /* ── Final safety check — four grouped screening questions plus a manual
@@ -406,28 +351,28 @@ export default function PainAssessment() {
     })
     return out
   }, [zones])
-  const [autoFocused, setAutoFocused] = useState(false)
   // New or changed marks invalidate a previously chosen focus area.
-  useEffect(() => { setFocusKey(null); setAutoFocused(false) }, [zones])
+  useEffect(() => { setFocusKey(null) }, [zones])
 
   // In the draw step the person can switch between marking and turning the
   // model, so they can follow pain that radiates from front to back.
   const [drawMode, setDrawMode] = useState(true)
   const drawOn = stage === 'draw' && drawMode
 
-  /* ── One travelling pattern, one source region ────────────────────────
-     A line through several areas is usually ONE problem referring along a
-     path, so the SCORED questions come from the region the pattern most
-     likely starts at (see startQuestions below). Those sets are weighted,
-     which is what lets the answers pick a condition and earn its treatment
-     guidance — so they are never replaced.
+  /* ── Every crossed area is asked about ────────────────────────────────
+     A line along one chain (shoulder → elbow, low back → knee) runs EACH
+     crossed area's own weighted question set, one area after another, so a
+     problem in any of them can be recognised. Asking only the area nearest
+     the spine meant a shoulder-to-elbow line could never be matched to an
+     elbow problem, and those answers fell through to a fixed list. Age and
+     duration are asked once for all areas. Marks in genuinely separate areas
+     (shoulder AND knee) are separate problems, so the person picks one.
 
-     On top of them, for multi-area patterns only, Claude writes up to two
-     questions about how the pain behaves along the whole path — the thing a
-     single region's set cannot ask. Their ids are not region question ids,
-     so the scoring engine ignores them; they reach the physiotherapist on
-     the summary. If the API is slow or unavailable the flow simply proceeds
-     with the clinician-authored set alone. */
+     On top of the scored sets, for multi-area patterns only, Claude writes up
+     to two questions about how the pain behaves along the whole path. Their
+     ids are not region question ids, so the scoring ignores them; they reach
+     the physiotherapist on the summary. If the API is slow or unavailable the
+     flow simply proceeds with the clinician-authored sets alone. */
   const multiPattern = useMemo(() => new Set(zones.map((z) => z.type)).size > 1, [zones])
   const MAX_AI_QUESTIONS = 2
   const [aiQuestions, setAiQuestions] = useState(null)
@@ -465,64 +410,47 @@ export default function PainAssessment() {
     }
   }
 
-  // ── The questionnaire is the drawn region's OWN clinical question set ──
-  // Each option carries weights pointing at that region's conditions, which is
+  // ── The questionnaire is each asked area's OWN clinical question set ──
+  // Each option carries weights pointing at that area's conditions, which is
   // what lets the answers actually decide which condition (and therefore which
   // treatment guidance) is shown. Areas with no authored region — currently
-  // only the head — fall back to the generic set.
-  const region = useMemo(() => {
-    const k = focusKey || primaryRegion(zones)
-    return k && REGIONS[k] ? REGIONS[k] : null
-  }, [zones, focusKey])
+  // the head, chest and stomach — fall back to the generic set.
+  const keys = useMemo(() => questionRegions(zones, focusKey), [zones, focusKey])
+  const multiArea = keys.length > 1
   // Age / how it started / how long are one-tap answers, so they share a single
-  // screen instead of costing three. That drops the flow from 9 screens to 7
-  // before the adaptive rules trim it further, without losing any answer the
-  // scoring engine relies on.
+  // opening screen instead of costing three. With several areas, age and
+  // duration are still asked once; only "how did it start?" is asked per area,
+  // because its options (and weights) differ from area to area.
+  const { context: ctxQuestions, questions: regionQuestions } = useMemo(() => buildScreens(keys), [keys])
   const activeQuestions = useMemo(() => {
-    if (!region) return buildQuestions(zones)
+    if (!keys.length) return buildQuestions(zones)
     return [
-      { id: '__ctx', group: region.context, text: 'A few details to start' },
-      ...region.questions,
+      { id: '__ctx', group: ctxQuestions, text: 'A few details to start' },
+      ...regionQuestions,
       ...patternQs,
       NOTES_Q,
     ]
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [region, zones, patternQs])
+  }, [keys, zones, ctxQuestions, regionQuestions, patternQs])
   // Flat list used by the review screen and the summary. Same order as the
   // screens above, which is what reviewIndexToScreen() relies on.
   const flatQuestions = useMemo(
-    () => (region ? [...allQuestions(region), ...patternQs, NOTES_Q] : buildQuestions(zones)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [region, zones, patternQs],
+    () => (keys.length ? [...ctxQuestions, ...regionQuestions, ...patternQs, NOTES_Q] : buildQuestions(zones)),
+    [keys, zones, ctxQuestions, regionQuestions, patternQs],
   )
 
-  // Ranked conditions for the answers given. Empty until enough is answered.
+  // Ranked conditions across every asked area. Empty until enough is answered.
   const ranked = useMemo(() => {
-    if (!region) return []
-    try { return computeResults(region, answers).ranked || [] } catch { return [] }
-  }, [region, answers])
-  // Shown only when the answers do not identify anything specific.
-  const causes = useMemo(() => likelyCauses(zones), [zones])
+    if (!keys.length) return []
+    try { return rankAcross(keys, answers) } catch { return [] }
+  }, [keys, answers])
+  // What the AI overview explains: exactly these conditions, in this order.
+  const matched = useMemo(() => ranked.map((x) => ({ region: x.rk, id: x.c.id })), [ranked])
 
-  // Skip questions that can no longer change the outcome, and stop early once
-  // one condition is clearly ahead. Both rules come from the engine and only
-  // apply to the region's diagnostic questions, never to the context ones
-  // (age/onset/duration), whose answers gate which conditions are eligible.
-  const nextIdx = (from, ans) => {
-    if (!region) return Math.min(from, activeQuestions.length - 1)
-    // Screens run: 0 context, 1..lastDiag the scored questions, then any AI
-    // pattern questions, then the free-text one. Stopping early therefore
-    // lands on the first pattern question (or the free-text screen when there
-    // are none) — never past them.
-    const lastDiag = region.questions.length
-    let i = from
-    while (i >= 1 && i < lastDiag + 1) {
-      if (answeredRegionCount(region, ans) >= 2 && shouldStop(region, ans)) return lastDiag + 1
-      if (!isRelevant(region.questions[i - 1], region, ans)) { i++; continue }
-      break
-    }
-    return Math.min(i, activeQuestions.length - 1)
-  }
+  // Skip questions that can no longer change an area's outcome, and stop an
+  // area's questions early once one condition there is clearly ahead. The
+  // opening, AI pattern and free-text screens are never skipped; the opening
+  // answers (age/onset/duration) gate which conditions are eligible.
+  const nextIdx = (from, ans) => nextScreen(activeQuestions, from, keys, ans)
   const modelSmall = ['intro', 'questions', 'review', 'safety', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
@@ -604,32 +532,29 @@ export default function PainAssessment() {
   }
 
   // The Q&A pairs feed the AI overview on the results screen, so the analysis
-  // reflects the traced pattern AND what the person answered.
+  // reflects the traced pattern AND what the person answered. With several
+  // areas each question is prefixed with its area — two areas can both ask
+  // "Where exactly is it?".
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const qaPairs = useMemo(() => flatQuestions
     .filter((q) => !q.textarea)
-    .map((q) => ({ question: q.text, answer: answerText(q) }))
+    .map((q) => ({ question: q.area ? `${q.area}: ${q.text}` : q.text, answer: answerText(q) }))
     .filter((pair) => pair.answer && pair.answer !== '—'), [flatQuestions, answers])
   const notesText = String(answers.notes || answers.q5 || '').trim()
 
   // The review screen lists every question flat; map a flat index back to the
-  // screen that actually holds it (the three context ones share screen 0).
+  // screen that actually holds it (the opening ones share screen 0).
   const reviewIndexToScreen = (flatIdx) => {
-    if (!region) return flatIdx
-    const c = region.context.length
+    if (!keys.length) return flatIdx
+    const c = ctxQuestions.length
     return flatIdx < c ? 0 : flatIdx - c + 1
   }
 
   const goToQuestion = (i, viaReview = false) => { setFromReview(viaReview); setQIndex(i); setStage('questions') }
-  // AI pattern questions when we have them; otherwise the clinician-authored
-  // sets (chained marks focus the source region automatically; genuinely
-  // separate areas ask the person to choose).
+  // Marks along one chain are asked about area by area; marks in genuinely
+  // separate areas ask the person to choose one first.
   const startQuestions = () => {
-    if (multiPattern) {
-      const auto = proximalRegion(regionChoices.map((r) => r.key))
-      if (auto) { setFocusKey(auto); setAutoFocused(true) }
-      else if (regionChoices.length > 1 && !focusKey) { setStage('area'); return }
-    }
+    if (needsAreaChoice(zones, focusKey)) { setStage('area'); return }
     goToQuestion(0)
   }
   const nextFromQuestion = () => {
@@ -644,7 +569,7 @@ export default function PainAssessment() {
   }
 
   const restart = () => {
-    setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setAutoFocused(false)
+    setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
     setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(true)
   }
 
@@ -972,7 +897,7 @@ export default function PainAssessment() {
                     className="pa-primary"
                     style={{ ...goldBtn, opacity: focusKey ? 1 : 0.45, cursor: focusKey ? 'pointer' : 'not-allowed' }}
                     disabled={!focusKey}
-                    onClick={() => { setAutoFocused(false); setStage('intro') }}
+                    onClick={() => setStage('intro')}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
                 </div>
@@ -987,10 +912,19 @@ export default function PainAssessment() {
                 </h2>
                 {multiPattern && zones.length > 1 && (
                   <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
-                    Your marks travel from the {zones[0].label.toLowerCase()} toward
-                    the {zones[zones.length - 1].label.toLowerCase()}. Pain that travels
-                    usually comes from one place, so the questions focus there
-                    {patternQs.length ? ', with a couple more about how it behaves along the whole path' : ''}.
+                    {multiArea ? (
+                      <>
+                        Your marks travel from the {zones[0].label.toLowerCase()} toward
+                        the {zones[zones.length - 1].label.toLowerCase()}, so there are questions
+                        about each area — {keys.map((k) => REGIONS[k].name.toLowerCase()).join(', then ')}
+                        {patternQs.length ? ' — plus a couple about how it behaves along the whole path' : ''}.
+                      </>
+                    ) : keys.length === 1 ? (
+                      <>
+                        The questions focus on the {REGIONS[keys[0]].name.toLowerCase()}
+                        {patternQs.length ? ', with a couple more about how the pain behaves along the whole path' : ''}.
+                      </>
+                    ) : null}
                   </p>
                 )}
                 {multiPattern && aiQLoading && (
@@ -1009,7 +943,7 @@ export default function PainAssessment() {
                     disabled={aiQLoading}
                     onClick={startQuestions}
                   >Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage(regionChoices.length > 1 ? 'area' : 'draw')}>Back</button>
+                  <button style={ghostBtn} onClick={() => setStage(needsAreaChoice(zones, null) ? 'area' : 'draw')}>Back</button>
                 </div>
               </Fade>
             )}
@@ -1032,7 +966,7 @@ export default function PainAssessment() {
                     : a !== undefined
               return (
                 <Fade k={'q' + qIndex}>
-                  <span style={label}>Question {qIndex + 1} of {activeQuestions.length}</span>
+                  <span style={label}>{q.area ? `${q.area} · ` : ''}Question {qIndex + 1} of {activeQuestions.length}</span>
                   <div style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, margin: '12px 0 20px', maxWidth: 520 }}>
                     <motion.div animate={{ width: `${((qIndex + 1) / activeQuestions.length) * 100}%` }} style={{ height: 3, background: GOLD, borderRadius: 2 }} />
                   </div>
@@ -1155,7 +1089,7 @@ export default function PainAssessment() {
                 {flatQuestions.map((q, i) => (
                   <div key={q.id} style={{ ...card, marginBottom: 10, maxWidth: 520, display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div style={{ minWidth: 0 }}>
-                      <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
+                      <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.area ? `${q.area} — ` : ''}{q.text}</p>
                       <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
                     </div>
                     <button onClick={() => goToQuestion(reviewIndexToScreen(i), true)}
@@ -1295,8 +1229,11 @@ export default function PainAssessment() {
                     on the Review screen before this point. */}
                 {ranked.length > 0 ? (
                   <div style={{ marginBottom: 24 }}>
-                    {ranked.map(({ c }) => (
-                      <div key={c.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                    {ranked.map(({ c, rk }) => (
+                      <div key={`${rk}/${c.id}`} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                        {multiArea && (
+                          <span style={{ ...label, fontSize: 11, display: 'block', marginBottom: 6 }}>{REGIONS[rk].name}</span>
+                        )}
                         <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{c.name}</p>
                         <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{c.blurb}</p>
                         <Bullets title="What people often notice" items={c.noticed} />
@@ -1310,31 +1247,30 @@ export default function PainAssessment() {
                       can establish what is actually going on.
                     </p>
                   </div>
-                ) : causes.length > 0 && (
-                  <div style={{ marginBottom: 24 }}>
-                    <span style={{ ...label, marginBottom: 12 }}>Common reasons for pain in this area</span>
-                    <div style={{ marginTop: 12 }}>
-                      {causes.map((c) => (
-                        <div key={c.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
-                          <p style={{ fontSize: 16, color: GOLD_LIGHT, margin: 0, lineHeight: 1.45, fontWeight: 500 }}>{c.name}</p>
-                          <p style={{ ...body, fontSize: 14.5, margin: '7px 0 0' }}>{c.blurb}</p>
-                        </div>
-                      ))}
-                      <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
-                        Your answers did not point clearly to one pattern, so these are common
-                        reasons for pain in the area you marked. They are general examples, not
-                        findings about you.
-                      </p>
-                    </div>
+                ) : (
+                  /* No condition matched. This used to show a fixed list — the
+                     first entries of each area's list, the same for everyone
+                     whatever they answered — which read as a result but wasn't
+                     one. Saying so plainly is the accurate answer. */
+                  <div style={{ ...card, maxWidth: 520, marginBottom: 24 }}>
+                    <p style={{ fontSize: 16, color: GOLD_LIGHT, margin: 0, lineHeight: 1.45, fontWeight: 500 }}>
+                      {keys.length ? 'No clear match in this guide' : 'This area is not covered in detail yet'}
+                    </p>
+                    <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>
+                      {keys.length
+                        ? 'Your answers did not clearly match one of the patterns this guide describes for the area you marked. That is common — pain often does not fit a textbook pattern — and it is exactly what an in-person assessment is for.'
+                        : 'This guide does not yet have a detailed set of patterns for the area you marked, so it cannot match your answers to a specific one. An in-person assessment is the right next step.'}
+                    </p>
                   </div>
                 )}
 
-                {/* AI overview of the whole traced path. The curated cards above
-                    are per-area; this is the part that can read a line running
-                    from one area to another as a single radiating pattern. */}
+                {/* AI overview of the whole traced path. It is given the matched
+                    conditions above and explains exactly those, in the same
+                    order, so the page gives one answer rather than two lists
+                    that could disagree. */}
                 <span style={{ ...label, marginBottom: 12 }}>Overview of your traced pattern</span>
                 <div style={{ maxWidth: 520, margin: '12px 0 26px' }}>
-                  <PainAIPanel zones={zones} answers={qaPairs} notes={notesText} aiOnly />
+                  <PainAIPanel zones={zones} answers={qaPairs} notes={notesText} matched={matched} aiOnly />
                 </div>
 
                 <span style={{ ...label, marginBottom: 12 }}>Your Next Step</span>

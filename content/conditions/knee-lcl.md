@@ -7,7 +7,7 @@ clin: Lateral collateral ligament (LCL) sprain
 # Reviewed by: (add your name once you have checked every line)
 pointers:
   "A twist, pivot, or impact injury": 2
-  "Along the inner or outer joint line": 3
+  "The outer side, along the joint line": 3
   "Mild swelling the day after activity or injury": 1
 ---
 
