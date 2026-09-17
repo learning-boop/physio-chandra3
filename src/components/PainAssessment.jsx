@@ -353,7 +353,8 @@ export default function PainAssessment() {
 
   // In the draw step the person can switch between marking and turning the
   // model, so they can follow pain that radiates from front to back.
-  const [drawMode, setDrawMode] = useState(true)
+  // Turn is selected when the step opens; the person picks Draw to mark.
+  const [drawMode, setDrawMode] = useState(false)
   const drawOn = stage === 'draw' && drawMode
 
   /* ── Every crossed area counts, in at most 6 screens ──────────────────
@@ -557,7 +558,7 @@ export default function PainAssessment() {
 
   const restart = () => {
     setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
-    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(true)
+    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(false)
   }
 
   return (
@@ -767,18 +768,19 @@ export default function PainAssessment() {
                   Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
                 </h2>
                 <p style={{ ...body, margin: '0 0 14px', maxWidth: 460 }}>
-                  You can draw more than one line. Switch to <strong style={{ color: GOLD_LIGHT }}>Turn</strong> to
-                  spin or tilt the body — tilt up for the soles of the feet; your marks stay
-                  in place — then switch back to add more.
+                  Use <strong style={{ color: GOLD_LIGHT }}>Turn</strong> to spin or tilt the
+                  body — tilt up for the soles of the feet — then choose{' '}
+                  <strong style={{ color: GOLD_LIGHT }}>Draw</strong> to mark it. You can draw
+                  more than one line; your marks stay in place when you turn.
                 </p>
 
-                {/* Draw / Turn switch: drawing and rotating cannot share the
+                {/* Turn / Draw switch: drawing and rotating cannot share the
                     same drag, so the person chooses which one a drag does. */}
                 <div role="group" aria-label="Drag mode" style={{
                   display: 'inline-flex', padding: 4, borderRadius: 999, marginBottom: 16,
                   border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.04)',
                 }}>
-                  {[['Draw', true], ['Turn', false]].map(([lbl, on]) => (
+                  {[['Turn', false], ['Draw', true]].map(([lbl, on]) => (
                     <button key={lbl} onClick={() => setDrawMode(on)}
                       aria-pressed={drawMode === on}
                       style={{
@@ -1223,7 +1225,7 @@ export default function PainAssessment() {
                     {ranked.map(({ c, rk }) => (
                       <div key={`${rk}/${c.id}`} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
                         {multiArea && (
-                          <span style={{ ...label, fontSize: 11, display: 'block', marginBottom: 6 }}>{REGIONS[rk].name}</span>
+                          <span style={{ ...label, fontSize: 15, display: 'block', marginBottom: 8 }}>{REGIONS[rk].name}</span>
                         )}
                         <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{c.name}</p>
                         <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{c.blurb}</p>
