@@ -584,10 +584,10 @@ export default function PainAssessment() {
           /* Phone: the body sits on top and takes the space that used to sit
              empty below the panel. Sized off the *small* viewport unit so the
              browser chrome collapsing never crops it. */
-          .pa-model { height: min(56svh, 520px); order: -1; }
+          .pa-model { height: min(68svh, 640px); order: -1; }
           /* Once the questions begin the figure shrinks, but it must stay big
              enough to read the marked areas on it. */
-          .pa-model.small { height: min(34svh, 300px); }
+          .pa-model.small { height: min(42svh, 380px); }
 
           /* The canvas owns the flexible space; the caption sits BELOW it in
              normal flow so it can never overlap the body. */
@@ -601,8 +601,8 @@ export default function PainAssessment() {
 
           /* Short phones (or landscape) — keep the panel readable. */
           @media (max-height: 700px) and (max-width: 899px) {
-            .pa-model { height: min(46svh, 380px); }
-            .pa-model.small { height: min(30svh, 220px); }
+            .pa-model { height: min(56svh, 460px); }
+            .pa-model.small { height: min(36svh, 280px); }
           }
 
           /* Action rows: primary and Back always sit SIDE BY SIDE. */
@@ -683,7 +683,7 @@ export default function PainAssessment() {
           }
 
           @media (min-width: 900px) {
-            .pa-grid { grid-template-columns: ${modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
+            .pa-grid { grid-template-columns: ${stage === 'landing' ? '1fr' : modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
             .pa-model { order: 2; height: min(86vh, 820px); }
             /* From the questions onward the panel grows much taller than the
                figure, and centring it parks the figure halfway down a long
@@ -702,11 +702,12 @@ export default function PainAssessment() {
         <div style={{ minWidth: 0, paddingTop: 8 }}>
           <AnimatePresence mode="wait">
 
-            {/* LANDING — heading + Begin only */}
+            {/* LANDING — heading + Start only. The 3D body is not shown here;
+                it appears once Start is pressed. */}
             {stage === 'landing' && (
               <Fade k="landing">
-                <h1 style={{ ...h2, fontSize: 'clamp(34px,8.5vw,60px)', margin: isPhone ? '4px 0 22px' : '12px 0 30px' }}>
-                  Find the Possible Causes<br />of <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>
+                <h1 style={{ ...h2, fontSize: 'clamp(34px,8.5vw,60px)', margin: isPhone ? '12svh 0 22px' : '18vh 0 30px', maxWidth: 640 }}>
+                  What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
                 </h1>
                 <div className="pa-actions">
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('rotate')}>start</button>
@@ -1302,7 +1303,9 @@ export default function PainAssessment() {
           </AnimatePresence>
         </div>
 
-        {/* ── RIGHT: the 3D model (shrinks after confirm, marks persist) ── */}
+        {/* ── RIGHT: the 3D model (shrinks after confirm, marks persist) ──
+            Not on the landing page: it appears once Start is pressed. */}
+        {stage !== 'landing' && (
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
@@ -1331,6 +1334,7 @@ export default function PainAssessment() {
             <p className="pa-model-caption">Your selected pain areas</p>
           )}
         </motion.div>
+        )}
       </div>
     </section>
   )
