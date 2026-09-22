@@ -573,29 +573,14 @@ export default function PainAssessment() {
           /* Clear the fixed navbar, then leave breathing room above the fold. */
           .pa-section { padding-top: clamp(74px, 19vw, 92px); }
 
-          /* Landing: the text sits centred in a frosted-glass panel. Two soft
-             glows behind it give the blur something to catch, otherwise glass
-             on a flat navy background just looks like a grey box. */
+          /* Landing: the text sits centred on the page — no panel around it. */
           .pa-landing {
             position: relative; display: flex; align-items: center; justify-content: center;
             min-height: calc(100svh - clamp(74px, 19vw, 92px) - 40px); padding: 24px 0;
           }
-          .pa-landing::before {
-            content: ''; position: absolute; inset: 12% 8%; z-index: 0; pointer-events: none;
-            background:
-              radial-gradient(circle at 28% 38%, rgba(201,169,110,0.30), transparent 55%),
-              radial-gradient(circle at 74% 66%, rgba(80,125,200,0.28), transparent 55%);
-            filter: blur(40px);
-          }
           .pa-glass {
-            position: relative; z-index: 1; width: 100%; max-width: 680px; text-align: center;
-            padding: clamp(32px, 7vw, 60px) clamp(22px, 6vw, 60px);
-            border-radius: 28px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
-            border: 1px solid rgba(255,255,255,0.14);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.20);
-            backdrop-filter: blur(18px) saturate(140%);
-            -webkit-backdrop-filter: blur(18px) saturate(140%);
+            width: 100%; max-width: 680px; text-align: center;
+            padding: 0 clamp(4px, 2vw, 24px);
           }
           .pa-glass-title {
             background: linear-gradient(180deg, #ffffff 30%, rgba(214,224,240,0.78));
