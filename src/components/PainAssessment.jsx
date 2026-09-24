@@ -725,6 +725,49 @@ export default function PainAssessment() {
           /* Clear the fixed navbar, then leave breathing room above the fold. */
           .pa-section { padding-top: clamp(74px, 19vw, 92px); }
 
+          /* Landing: the text sits centred on the page — no panel around it. */
+          .pa-landing {
+            position: relative; display: flex; align-items: center; justify-content: center;
+            min-height: calc(100svh - clamp(74px, 19vw, 92px) - 40px); padding: 24px 0;
+          }
+          .pa-glass {
+            width: 100%; max-width: 680px; text-align: center;
+            padding: 0 clamp(4px, 2vw, 24px);
+          }
+          .pa-glass-title {
+            background: linear-gradient(180deg, #ffffff 30%, rgba(214,224,240,0.78));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          .pa-glass-title em { -webkit-text-fill-color: ${GOLD_LIGHT}; }
+
+          /* Draw step: Turn / Draw sit either side of the head, Undo / Redo
+             either side of the legs. The layer ignores the pointer so the body
+             underneath can still be dragged; only the buttons take clicks. */
+          .pa-onbody { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+          .pa-ob {
+            position: absolute; pointer-events: auto; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 10px 18px; min-height: 44px; border-radius: 999px;
+            font-family: var(--font-body); font-size: 13.5px; letter-spacing: 0.08em; text-transform: uppercase;
+            color: rgba(255,255,255,0.88);
+            background: rgba(9,17,32,0.62);
+            border: 1px solid rgba(201,169,110,0.40);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            transition: background 0.15s, color 0.15s, opacity 0.15s;
+          }
+          .pa-ob.on { background: ${GOLD}; color: #081527; font-weight: 700; border-color: ${GOLD}; }
+          .pa-ob:disabled { opacity: 0.35; cursor: not-allowed; }
+          .pa-ob-turn { top: 9%;  right: calc(50% + 64px); }
+          .pa-ob-draw { top: 9%;  left:  calc(50% + 64px); }
+          .pa-ob-undo { bottom: 9%; right: calc(50% + 70px); }
+          .pa-ob-redo { bottom: 9%; left:  calc(50% + 70px); }
+          @media (max-width: 380px) {
+            .pa-ob { padding: 9px 14px; font-size: 12.5px; }
+            .pa-ob-turn, .pa-ob-undo { right: calc(50% + 52px); }
+            .pa-ob-draw, .pa-ob-redo { left: calc(50% + 52px); }
+          }
+
           .pa-grid {
             display: grid; grid-template-columns: 1fr; gap: 4px;
             padding: 0 clamp(16px, 4vw, 48px) clamp(32px, 8vw, 56px);
@@ -858,17 +901,21 @@ export default function PainAssessment() {
                 it appears once Start is pressed. */}
             {stage === 'landing' && (
               <Fade k="landing">
-                <h1 style={{ ...h2, fontSize: 'clamp(34px,8.5vw,60px)', margin: isPhone ? '12svh 0 22px' : '18vh 0 30px', maxWidth: 640 }}>
-                  What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
-                </h1>
-                <div className="pa-actions">
-                  <button className="pa-primary" style={goldBtn} onClick={() => setStage('rotate')}>start</button>
+                <div className="pa-landing">
+                  <div className="pa-glass">
+                    <h1 className="pa-glass-title" style={{ ...h2, fontSize: 'clamp(34px,8.5vw,60px)', margin: isPhone ? '0 0 24px' : '0 0 32px' }}>
+                      What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
+                    </h1>
+                    <div className="pa-actions" style={{ margin: '0 auto' }}>
+                      <button className="pa-primary" style={goldBtn} onClick={() => setStage('rotate')}>start</button>
+                    </div>
+                    <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '20px auto 0', maxWidth: 520 }}>
+                      This guide offers general information to help you describe your symptoms.
+                      It is not a diagnosis and does not replace an assessment by a qualified
+                      health professional.
+                    </p>
+                  </div>
                 </div>
-                <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '20px 0 0', maxWidth: 520 }}>
-                  This guide offers general information to help you describe your symptoms.
-                  It is not a diagnosis and does not replace an assessment by a qualified
-                  health professional.
-                </p>
               </Fade>
             )}
 
@@ -917,72 +964,20 @@ export default function PainAssessment() {
             {stage === 'draw' && (
               <Fade k="draw">
                 <span style={label}>Step 2 of 2 · Mark Your Pain</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 10px' }}>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 22px' }}>
                   Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
                 </h2>
-                <p style={{ ...body, margin: '0 0 14px', maxWidth: 460 }}>
-                  Use <strong style={{ color: GOLD_LIGHT }}>Turn</strong> to spin or tilt the
-                  body — tilt up for the soles of the feet — then choose{' '}
-                  <strong style={{ color: GOLD_LIGHT }}>Draw</strong> to mark it. You can draw
-                  more than one line; your marks stay in place when you turn.
-                </p>
 
-                {/* Turn / Draw switch: drawing and rotating cannot share the
-                    same drag, so the person chooses which one a drag does. */}
-                <div role="group" aria-label="Drag mode" style={{
-                  display: 'inline-flex', padding: 4, borderRadius: 999, marginBottom: 16,
-                  border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.04)',
-                }}>
-                  {[['Turn', false], ['Draw', true]].map(([lbl, on]) => (
-                    <button key={lbl} onClick={() => setDrawMode(on)}
-                      aria-pressed={drawMode === on}
-                      style={{
-                        padding: '11px 24px', borderRadius: 999, border: 'none', cursor: 'pointer',
-                        minHeight: 46, fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase',
-                        fontFamily: 'var(--font-body)', transition: 'all 0.15s',
-                        background: drawMode === on ? GOLD : 'transparent',
-                        color: drawMode === on ? '#081527' : 'rgba(255,255,255,0.7)',
-                        fontWeight: drawMode === on ? 700 : 400,
-                      }}>{lbl}</button>
-                  ))}
-                </div>
-
+                {/* Turn / Draw and Undo / Redo sit on the body itself (see the
+                    model panel); only the marked areas and Clear All stay here. */}
                 {zones.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 18 }}>
                     {zones.map((z) => (
                       <span key={z.id} style={pill}>{z.label}</span>
                     ))}
+                    <button style={toolBtn(false)} onClick={() => setClearSignal((n) => n + 1)}>Clear All</button>
                   </div>
                 )}
-
-                {/* Undo / Redo / Clear */}
-                <div className="pa-tools">
-                  <button
-                    style={toolBtn(!history.canUndo)}
-                    disabled={!history.canUndo}
-                    onClick={() => setUndoSignal((n) => n + 1)}
-                    aria-label="Undo the last line"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M9 14 4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 0 12h-3" />
-                    </svg>
-                    Undo
-                  </button>
-                  <button
-                    style={toolBtn(!history.canRedo)}
-                    disabled={!history.canRedo}
-                    onClick={() => setRedoSignal((n) => n + 1)}
-                    aria-label="Redo the last undone line"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="m15 14 5-5-5-5" /><path d="M20 9H10a6 6 0 0 0 0 12h3" />
-                    </svg>
-                    Redo
-                  </button>
-                  {history.lines > 0 && (
-                    <button style={toolBtn(false)} onClick={() => setClearSignal((n) => n + 1)}>Clear All</button>
-                  )}
-                </div>
 
                 <div className="pa-actions">
                   <button
@@ -1655,6 +1650,31 @@ export default function PainAssessment() {
                   <span className="pa-swipe__chev">›</span>
                 </span>
                 {isPhone ? 'Swipe to turn' : 'Drag to turn'}
+              </div>
+            )}
+            {/* Draw step controls on the body: Turn / Draw beside the head,
+                Undo / Redo beside the legs. Drawing and rotating cannot share
+                the same drag, so the person chooses which one a drag does. */}
+            {stage === 'draw' && (
+              <div className="pa-onbody">
+                <button className={'pa-ob pa-ob-turn' + (!drawMode ? ' on' : '')}
+                  aria-pressed={!drawMode} onClick={() => setDrawMode(false)}>Turn</button>
+                <button className={'pa-ob pa-ob-draw' + (drawMode ? ' on' : '')}
+                  aria-pressed={drawMode} onClick={() => setDrawMode(true)}>Draw</button>
+                <button className="pa-ob pa-ob-undo" disabled={!history.canUndo}
+                  onClick={() => setUndoSignal((n) => n + 1)} aria-label="Undo the last line">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M9 14 4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 0 12h-3" />
+                  </svg>
+                  Undo
+                </button>
+                <button className="pa-ob pa-ob-redo" disabled={!history.canRedo}
+                  onClick={() => setRedoSignal((n) => n + 1)} aria-label="Redo the last undone line">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="m15 14 5-5-5-5" /><path d="M20 9H10a6 6 0 0 0 0 12h3" />
+                  </svg>
+                  Redo
+                </button>
               </div>
             )}
             <Body3D
