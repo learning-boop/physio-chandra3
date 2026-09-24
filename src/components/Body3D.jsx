@@ -115,7 +115,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v6'
+const CLASSIFIER_VERSION = 'zones-v9'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -144,12 +144,22 @@ function classify(wx, wy, wz) {
   // The arms hang clear of the trunk from the shoulder blades down: measured on
   // the back half of this mesh, below fy 0.18 the torso stops at |z| 0.092 and
   // the arm starts at 0.10, so anything past ARM_SPLIT down there is the arm,
-  // not the back. (Above 0.18 the rear deltoid merges into the trunk, so that
-  // stays back — the shoulder blade is upper back, which is what people mean.)
-  if (back && absZ > ARM_SPLIT && fy < 0.18) return (fy > 0.04 ? 'elbow' : 'wrist') + side
-  // The nape above the shoulder line is the NECK — people very often draw neck
-  // pain from behind — but the back of the SKULL is still the head.
-  if (back) return fy > 0.41 ? 'head' : fy > 0.33 ? 'neck' : fy > 0.12 ? 'upperback' : 'lowerback'
+  // not the back.
+  // Above that, the BACK OF THE SHOULDER (rear deltoid, acromion, the outer
+  // edge past the shoulder blade) is the shoulder. This used to fall through
+  // to "upper back", so from behind the shoulder did not exist at all — a
+  // shoulder marked from the back was reported as upper back (see
+  // scripts/mesh/zone-map.mjs). The shoulder blade itself, inside |z| 0.10,
+  // stays upper back; the top of the shoulder past the nape is shoulder, as it
+  // already is from the front.
+  if (back) {
+    if (fy > 0.41) return 'head'
+    // The nape is the NECK — people very often draw neck pain from behind.
+    if (fy > 0.33) return absZ > 0.08 ? 'shoulder' + side : 'neck'
+    if (absZ > ARM_SPLIT && fy < 0.18) return (fy > 0.04 ? 'elbow' : 'wrist') + side
+    if (absZ > 0.10 && fy >= 0.18) return 'shoulder' + side
+    return fy > 0.12 ? 'upperback' : 'lowerback'
+  }
 
   // ── FRONT of the body ──
   // OUT to the side = the arm: shoulder (high) → elbow (mid) → wrist (low).
@@ -184,6 +194,26 @@ function classify(wx, wy, wz) {
   if (fy > 0.16) return 'chest'
   if (fy > 0.02) return absZ > 0.08 ? 'hip' + side : 'abdomen'
   return 'hip' + side                  // pelvis / groin
+}
+
+// Which SURFACE a point sits on. The same area reads differently front and
+// back — anterior knee is kneecap, posterior knee is hamstring or Baker's cyst
+// with a calf-swelling (DVT) screen; anterior shoulder is biceps and cuff,
+// posterior is cuff or referred neck, and the right one carries the
+// gallbladder map. Same test as classify() uses internally.
+function surfaceOf(wx, wy, wz) {
+  return ((wx - BODY_METRICS.cx) / BODY_METRICS.h) * FRONT_SIGN < -0.04 ? 'back' : 'front'
+}
+
+// Base of the neck: the lower neck, the notch above the sternum and the upper
+// trapezius, front or back. The neck band itself is thin from the front
+// (fy 0.33–0.395), so someone tracing "from my neck down my arm" very often
+// starts just below it — on the upper chest or the top of the shoulder.
+function nearNeckBase(wx, wy, wz) {
+  const H = BODY_METRICS.h
+  const fy = (wy - BODY_METRICS.cy) / H
+  const absZ = Math.abs(((wz - BODY_METRICS.cz) / H) * FRONT_SIGN)
+  return fy > 0.29 && fy <= 0.395 && absZ < 0.10
 }
 
 const GOLD = '#c9a96e'
@@ -796,7 +826,7 @@ class CanvasErrorBoundary extends Component {
 }
 
 export default function Body3D({
-  onSelectionChange, onDoneDrawing, controlled = false, drawOn = false,
+  onSelectionChange, onLinesChange, onDoneDrawing, controlled = false, drawOn = false,
   // The parent can suppress this one-line hint when it is showing its own
   // guidance in the same corner — two hints in one slot is worse than none.
   showGestureHint = true,
@@ -833,7 +863,7 @@ export default function Body3D({
   // when to clear, and the internal button bar is hidden.
   useEffect(() => { if (controlled) setHighlight(drawOn) }, [controlled, drawOn])
   useEffect(() => {
-    if (controlled && clearSignal > 0) { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
+    if (controlled && clearSignal > 0) { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onLinesChange?.([]); onSelectionChange?.([]) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearSignal])
 
@@ -883,29 +913,86 @@ export default function Body3D({
   // sole of a foot seen from below, a wrist) can be just a handful of samples,
   // and demanding 3+ per area silently threw those marks away — which is why
   // drawing under the foot produced no area at all.
+  // Returns the zone ids in the ORDER the line passes through them.
   const detect = (pts) => {
     if (!pts.length) return []
     const ids = pts.map((p) => classify(p.x, p.y, p.z))
+    // Long lines: a zone counts when the line runs through it for a real
+    // stretch (its longest unbroken run). A fixed share of the WHOLE line
+    // does not work here — a neck-to-fingertips line crosses five zones, so
+    // the short neck stretch at its start fell under the old 22% and the
+    // line's origin was silently lost. A graze (a few points across a
+    // boundary) is still a short run and is still dropped.
+    if (pts.length >= 24) {
+      const minRun = Math.max(3, Math.ceil(pts.length * 0.06))
+      const out = []
+      let i = 0
+      while (i < ids.length) {
+        let j = i
+        while (j + 1 < ids.length && ids[j + 1] === ids[i]) j++
+        if (ids[i] && j - i + 1 >= minRun && !out.includes(ids[i])) out.push(ids[i])
+        i = j + 1
+      }
+      // A line that runs down the arm (reaches the elbow or hand) and STARTS
+      // at the base of the neck is traced from the neck, even when its first
+      // points fall just below the thin neck band. Without this, neck-to-hand
+      // began as "Chest" and was never recognised as referral from the neck.
+      if (!out.includes('neck') && out.some((id) => /^(elbow|wrist)/.test(id))) {
+        const n = Math.max(3, Math.ceil(pts.length * 0.15))
+        const ends = [...pts.slice(0, n), ...pts.slice(-n)]   // drawn either direction
+        if (ends.some((p) => nearNeckBase(p.x, p.y, p.z))) {
+          const k = out.findIndex((id) => id === 'chest')
+          if (k >= 0) out.splice(k, 1)   // the neck base, not chest pain
+          out.unshift('neck')
+        }
+      }
+      return out
+    }
+    // Short marks: a zone has to own a real share of the stroke. At the old
+    // 10% (and just a single point) a dot on the front of the shoulder
+    // catching the edge of the chest reported that neighbour as a separate
+    // painful area.
     const counts = {}
     ids.forEach((id) => { if (id) counts[id] = (counts[id] || 0) + 1 })
-    // A zone has to own a real share of the stroke. At the old 10% (and just a
-    // single point for short marks) a stroke that merely grazed a boundary —
-    // a dot on the front of the shoulder catching the edge of the chest —
-    // reported that neighbour as a separate painful area. 22% still lets a
-    // deliberate shoulder-to-wrist line report all three zones (~33% each).
     const minPts = Math.max(2, Math.ceil(pts.length * 0.22))
     return [...new Set(ids.filter((id) => id && counts[id] >= minPts))]
   }
 
-  // Merge the zones from EVERY line into one selection list.
+  // Areas where the trunk itself does not already say front or back, so the
+  // surface has to be carried on the zone (a knee is one area; its front and
+  // back are different problems).
+  const SURFACE_MATTERS = new Set(['shoulder', 'elbow', 'wrist', 'hip', 'knee', 'ankle', 'neck', 'head'])
+
+  // Merge the zones from EVERY line into one selection list, and report each
+  // line's own ordered zone types separately — one continuous line from the
+  // neck to the hand is a referral pattern, which a merged list cannot show.
+  // Each zone also carries the SURFACE it was drawn on (front / back).
   const emitZones = (allPaths) => {
     const seen = new Set()
     const zones = []
+    const lines = []
     allPaths.forEach((pts) => {
-      detect(pts).forEach((id) => {
-        if (!seen.has(id)) { seen.add(id); zones.push({ id, type: ZONE_TYPES[id], label: ZONE_LABELS[id] }) }
+      const ids = detect(pts)
+      lines.push(ids)
+      // Which surface each area's points were mostly on.
+      const tally = {}
+      for (const p of pts) {
+        const id = classify(p.x, p.y, p.z)
+        if (!id) continue
+        if (!tally[id]) tally[id] = { front: 0, back: 0 }
+        tally[id][surfaceOf(p.x, p.y, p.z)]++
+      }
+      ids.forEach((id) => {
+        if (seen.has(id)) return
+        seen.add(id)
+        const t = tally[id] || { front: 1, back: 0 }
+        const face = t.back > t.front ? 'back' : 'front'
+        const type = ZONE_TYPES[id]
+        const label = ZONE_LABELS[id] + (face === 'back' && SURFACE_MATTERS.has(type) ? ' — back' : '')
+        zones.push({ id, type, label, face })
       })
     })
+    onLinesChange?.(lines)
     onSelectionChange?.(zones)
     return zones
   }
@@ -921,7 +1008,7 @@ export default function Body3D({
     emitZones(next)
   }
 
-  const reset = () => { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onSelectionChange?.([]) }
+  const reset = () => { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onLinesChange?.([]); onSelectionChange?.([]) }
 
   // Turning highlight OFF now KEEPS the drawn lines (so users can rotate and
   // keep adding lines from another angle). Only Reset clears.

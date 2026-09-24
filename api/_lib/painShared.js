@@ -178,19 +178,39 @@ export function answersBlock(answers, notes) {
 
 export function analysisPrompt(labels, answers, notes, knowledge, matched = []) {
   const kb = knowledge ? `\n\nApproved clinical notes from the clinic's physiotherapist for the areas crossed:\n${knowledge}` : ''
-  let task
+  let task = ''
   if (matched.length) {
     const list = matched.map((m, i) => `${i + 1}. ${m.c.name} [${m.regionName}] (id: ${m.c.id})`).join('\n')
     task = `\n\nThe clinic's own scoring has already matched the visitor's answers to these patterns from the notes, strongest first:\n${list}\n\n"possibleCauses" must explain EXACTLY these patterns, in this order — one item per pattern, each an object {"id": "<the id above>", "text": "..."}. The text is one or two short sentences (under 40 words) saying in plain words how the traced path and the visitor's answers fit that pattern, written as a possibility ("could be…", "may be…", "is sometimes linked to…"), never as a statement of what the person has. Do not add, drop, rename or reorder patterns, and do not mention any other condition. Take "commonSymptoms" from what the notes say people notice with these patterns, and "suggestedApproach" from their home-care and see-a-physio guidance — reworded warmly, never as copied clinical jargon.`
   } else {
     task = `\n\nThe clinic's scoring did NOT find a clear match between these answers and any pattern in the notes. Do not name any specific condition. Make "possibleCauses" 3 general, plain-language possibilities (for example muscle, joint or load-related causes) written as possibilities, keep every list general without inventing specifics, and make the disclaimer say plainly that this guide could not match the pattern, so booking an in-person assessment is the right next step.`
   }
+  /* ── The reasoning pass ────────────────────────────────────────────────
+     Before anything is shown, the model reviews the scoring against the
+     WHOLE picture and may reorder or drop the matched patterns, say none of
+     them fit, or raise a medical concern. It may never add a pattern, and it
+     may never say something is safe — sanitizeReview() enforces both, and the
+     red-flag screening has already run in the app before this point. */
+  const review = matched.length
+    ? `\n\nFIRST, review the clinic's scoring as a physiotherapist would, using everything above — where the pain was drawn, how it travels, how it behaves, what eases it, and how long it has lasted. Return a "review" object:
+{"order": ["<ids, best fit first>"], "drop": [{"id": "...", "why": "<short reason this does not fit>"}], "noMatch": false, "concern": null, "note": "<one sentence on your reasoning>"}
+Rules for "review":
+- "order" may contain ONLY the ids listed above. Never invent or rename an id, and never add a condition that is not listed.
+- Drop a pattern only when the answers clearly argue against it; say why in plain words.
+- Set "noMatch": true when none of them genuinely fit the picture — an honest "no clear match" is better than a forced answer.
+- "concern": set it to {"why": "<one plain sentence>"} ONLY if this picture should be looked at by a physician before physiotherapy (for example it reads as pain referred from an internal organ, or a systemic or inflammatory pattern). Otherwise null. Never state that anything is safe, urgent, or an emergency, and never name a disease.
+- Then build "possibleCauses" from the patterns you kept, in YOUR order.`
+    : ''
+  task += review
   const causesShape = matched.length ? '[{"id": "...", "text": "..."}]' : '["...", "...", "..."]'
+  const reviewShape = matched.length
+    ? '\n  "review": {"order": ["..."], "drop": [{"id": "...", "why": "..."}], "noMatch": false, "concern": null, "note": "..."},'
+    : ''
   return `A user traced a line across a body diagram passing through these areas, in order: ${labels.join(' -> ')}.${answersBlock(answers, notes)}${kb}${task}
 
 You are giving general physiotherapy education content for a clinic website (Physio Chandra). This is NOT a diagnosis. Respond ONLY with valid JSON (no markdown, no preamble) in exactly this shape:
 
-{
+{${reviewShape}
   "possibleCauses": ${causesShape},
   "commonSymptoms": ["...", "..."],
   "suggestedApproach": ["...", "..."],
@@ -269,6 +289,62 @@ export function fallbackAnalysis(labels, matched = []) {
     ],
     disclaimer: DISCLAIMER,
   }
+}
+
+/* ── The reasoning pass, validated ────────────────────────────────────────
+   What the model may do: reorder the matched patterns, drop ones that do not
+   fit, say none of them fit, and raise a concern for medical review.
+   What it may NOT do, enforced here rather than trusted to the prompt:
+     · name any condition outside the ids it was given (added ids are dropped)
+     · say anything is safe, fine, or not serious
+     · claim an emergency or name a disease in the concern text
+     · change the red-flag routing — that ran in the app before this call
+   Anything malformed simply means "no review", and the rules-only result
+   stands. */
+const CONCERN_BANNED = /(emergenc|911|cancer|tumou?r|infarct|heart attack|stroke|fracture|sepsis|diagnos|you have)/i
+const SAFE_CLAIM = /(is safe|not serious|nothing serious|no cause for concern|perfectly fine|harmless)/i
+
+export function sanitizeReview(parsed, matched = []) {
+  if (!parsed || typeof parsed !== 'object' || !matched.length) return null
+  const r = parsed.review
+  if (!r || typeof r !== 'object') return null
+  const allowed = new Map(matched.map((m) => [m.c.id, m]))
+  const txt = (s, n) => (typeof s === 'string' ? s.replace(/\s+/g, ' ').trim().slice(0, n) : '')
+
+  const order = []
+  for (const id of Array.isArray(r.order) ? r.order.slice(0, 8) : []) {
+    if (allowed.has(id) && !order.includes(id)) order.push(id)
+  }
+  const dropped = []
+  for (const d of Array.isArray(r.drop) ? r.drop.slice(0, 8) : []) {
+    const id = d && typeof d === 'object' ? d.id : null
+    if (allowed.has(id) && !dropped.some((x) => x.id === id)) dropped.push({ id, why: txt(d.why, 200) })
+  }
+  // Everything dropped is the same as saying nothing fits.
+  const noMatch = r.noMatch === true || dropped.length >= matched.length
+
+  let concern = null
+  const why = r.concern && typeof r.concern === 'object' ? txt(r.concern.why, 220) : ''
+  if (why && !CONCERN_BANNED.test(why) && !SAFE_CLAIM.test(why)) concern = { why }
+
+  const note = txt(r.note, 300)
+  const kept = order.filter((id) => !dropped.some((d) => d.id === id))
+  const changed = noMatch || dropped.length > 0 || concern !== null ||
+    (kept.length > 0 && kept.join('|') !== matched.map((m) => m.c.id).filter((id) => kept.includes(id)).join('|'))
+  if (!order.length && !dropped.length && !noMatch && !concern) return null
+  return { order: kept, dropped, noMatch, concern, note, changed }
+}
+
+/** The matched patterns after the review: same records, new order, minus any
+    dropped. Never gains a pattern. */
+export function applyReview(matched = [], review) {
+  if (!review) return matched
+  if (review.noMatch) return []
+  const dropped = new Set(review.dropped.map((d) => d.id))
+  const kept = matched.filter((m) => !dropped.has(m.c.id))
+  const rank = new Map(review.order.map((id, i) => [id, i]))
+  return [...kept].sort((a, b) =>
+    (rank.has(a.c.id) ? rank.get(a.c.id) : 99) - (rank.has(b.c.id) ? rank.get(b.c.id) : 99))
 }
 
 /** Shape-check the model's analysis JSON; anything off → the safe fallback.

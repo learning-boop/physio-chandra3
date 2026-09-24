@@ -1,13 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
+import ClinicPicker from './ClinicPicker'
+import ClinicianSummary from './ClinicianSummary'
+import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
   buildScreens, nextQuestion, rankAcross, MAX_SCORED_QUESTIONS,
 } from '../data/assessmentFlow'
+import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
+import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial } from '../data/psychosocial'
+import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism } from '../data/painType'
+import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
+import { patternChecks } from '../data/patternChecks'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -45,6 +52,14 @@ const QUESTIONS = [
     placeholder: 'Other symptoms, previous injuries, relevant medical history, or any concerns…' },
 ]
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+const BEHAV_ID = '__behav'
+const PSYCH_ID = '__psych'
+/* Unscored screens that always close the questions, in this order. */
+const TAIL_IDS = [BEHAV_ID, PSYCH_ID]
+const PSYCH_SCREEN = {
+  id: PSYCH_ID, group: PSYCHOSOCIAL_QUESTIONS, text: 'How it is affecting you',
+  hint: 'There are no right or wrong answers — choose the one closest to how you feel.',
+}
 /* Synthetic option id for the free-text alternative. Deliberately not present
    in any region's option list, so the scoring engine skips it. */
 const OTHER_ID = '__other'
@@ -134,15 +149,36 @@ function buildQuestions(zones) {
    here: those are low-back and shoulder/upper-back flags respectively, and the
    guide already carries them in those regions' own redFlags. */
 const UNIVERSAL_CHECKS = [
-  { id: 'sc-neuro', text: 'New or worsening weakness, numbness, or loss of coordination in an arm or leg',
+  { id: 'sc-neuro', tier: 'urgent', text: 'New or worsening weakness, numbness, or loss of coordination in an arm or leg',
     why: { title: 'A nerve or spinal cord may be involved',
       text: 'Weakness that is getting worse suggests a nerve is under pressure rather than simply irritated. A physician needs to establish the cause before any physiotherapy loading begins.' } },
-  { id: 'sc-systemic', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain',
+  { id: 'sc-systemic', tier: 'urgent', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain',
     why: { title: 'Possible infection or systemic cause',
       text: 'Pain accompanied by fever, weight loss, or a cancer history can have a medical rather than a mechanical cause. That has to be excluded by a doctor first, as it is treated quite differently.' } },
-  { id: 'sc-trauma', text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
+  { id: 'sc-trauma', tier: 'urgent', text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
     why: { title: 'A fracture should be excluded',
       text: 'After a significant impact — or any fall where bone strength may be reduced — imaging is usually needed to rule out a fracture before the area is loaded or mobilised.' } },
+]
+
+/* ── Cautions, not red flags ──────────────────────────────────────────────
+   The CPA Orthopaedic Division subjective framework separates "must be seen
+   medically first" from "physiotherapy can go ahead, but the first physical
+   examination should be adjusted". These are the second kind: they never
+   withhold booking, and they reach Chandra with the summary so the first
+   assessment can be planned around them. */
+const CAUTION_CHECKS = [
+  { id: 'ca-bone', tier: 'caution', text: 'Osteoporosis, thinning bones, or long-term steroid medication',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Where bone strength may be reduced, hands-on techniques and loading are chosen more carefully. It does not stop physiotherapy — it shapes how it starts.' } },
+  { id: 'ca-surgery', tier: 'caution', text: 'Surgery or a procedure in this area within the last 3 months',
+    why: { title: 'Recent surgery changes the plan',
+      text: 'Healing tissue and any surgeon\'s restrictions come first, so your assessment works within them.' } },
+  { id: 'ca-preg', tier: 'caution', text: 'Pregnant, or within 3 months of giving birth',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Positions, hands-on techniques and exercise choices are adjusted during and after pregnancy.' } },
+  { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
 ]
 
 /* Why a flagged symptom needs looking at before physiotherapy. Region red
@@ -151,8 +187,8 @@ const UNIVERSAL_CHECKS = [
    to the tier the clinician already assigned. */
 const TIER_WHY = {
   emergency: {
-    title: 'This needs same-day medical assessment',
-    text: 'Symptoms in this group can point to a problem that is time-sensitive and outside what physiotherapy treats. Being asked about it is routine and does not mean something serious is present — but it should be checked today rather than waited on.',
+    title: 'This needs emergency medical assessment',
+    text: 'Symptoms in this group can point to a problem that is time-sensitive and outside what physiotherapy treats. Being asked about it is routine and does not mean something serious is present — but it should be checked in an emergency department now rather than waited on.',
   },
   urgent: {
     title: 'This should be checked before starting physiotherapy',
@@ -340,14 +376,24 @@ export default function PainAssessment() {
   // When the marks cross more than one area, the person chooses which area
   // the questions focus on; each area has its own clinician-authored set.
   const [focusKey, setFocusKey] = useState(null)
+  // Each drawn line's zones in drawing order (from Body3D). One continuous
+  // line from the spine down a limb is a referral pattern (../data/referral.js):
+  // its limb areas are folded into the spine for the questions (flowZ), so
+  // neck-to-hand is asked about as neck pain travelling down the arm — not as
+  // separate shoulder, elbow and wrist problems. `zones` stays the full list
+  // for display, the AI overview and the pain-type rules.
+  const [lines, setLines] = useState([])
+  const referral = useMemo(() => detectReferral(lines), [lines])
+  const flowZ = useMemo(() => flowZones(zones, referral), [zones, referral])
+  const drawn = useMemo(() => drawnAnswers(referral), [referral])
   const regionChoices = useMemo(() => {
     const seen = new Set(); const out = []
-    zones.forEach((z) => {
+    flowZ.forEach((z) => {
       const k = ZONE_TO_REGION[z.type]
       if (k && REGIONS[k] && !seen.has(k)) { seen.add(k); out.push({ key: k, name: REGIONS[k].name }) }
     })
     return out
-  }, [zones])
+  }, [flowZ])
   // New or changed marks invalidate a previously chosen focus area.
   useEffect(() => { setFocusKey(null) }, [zones])
 
@@ -357,14 +403,14 @@ export default function PainAssessment() {
   const [drawMode, setDrawMode] = useState(false)
   const drawOn = stage === 'draw' && drawMode
 
-  /* ── Every crossed area counts, in at most 6 screens ──────────────────
+  /* ── Every crossed area counts, in at most 8 screens ──────────────────
      A line along one chain (shoulder → elbow, low back → knee) draws on EACH
      crossed area's own weighted questions, so a problem in any of them can be
      recognised. Marks in genuinely separate areas (shoulder AND knee) are
      separate problems, so the person picks one.
 
-     The flow is the opening screen plus at most MAX_SCORED_QUESTIONS scored
-     questions. Which question comes next is decided from the answers so far
+     The flow is the opening screen, at most MAX_SCORED_QUESTIONS scored
+     questions, then the pain-behaviour and yellow-flag screens. Which question comes next is decided from the answers so far
      (nextQuestion in ../data/assessmentFlow.js): each area's most useful
      question first, then whichever can still move the result most, stopping
      as soon as one condition is clearly ahead. The free-text box sits on the
@@ -376,18 +422,40 @@ export default function PainAssessment() {
   // what lets the answers actually decide which condition (and therefore which
   // treatment guidance) is shown. Areas with no authored region — currently
   // the head, chest and stomach — fall back to the generic set.
-  const keys = useMemo(() => questionRegions(zones, focusKey), [zones, focusKey])
+  const keys = useMemo(() => questionRegions(flowZ, focusKey), [flowZ, focusKey])
   const multiArea = keys.length > 1
   // Age / how it started / how long are one-tap answers, so they share a single
   // opening screen instead of costing three. With several areas, age and
   // duration are still asked once; only "how did it start?" is asked per area,
   // because its options (and weights) differ from area to area.
   const { context: ctxQuestions, questions: regionQuestions } = useMemo(() => buildScreens(keys), [keys])
-  const activeQuestions = useMemo(
-    () => (keys.length
-      ? [{ id: '__ctx', group: ctxQuestions, text: 'A few details to start' }, ...regionQuestions]
-      : buildQuestions(zones)),
-    [keys, zones, ctxQuestions, regionQuestions],
+  // Two unscored screens close the questions: pain behaviour (severity,
+  // irritability, 24-hour pattern, easing — ../data/painBehaviour.js) and the
+  // yellow flags (../data/psychosocial.js). The generic set already asks about
+  // easing (q4), so it is left out of the behaviour screen there.
+  const activeQuestions = useMemo(() => {
+    // Region flows also ask pain quality here; the generic set asks it as q2.
+    const behav = (easers) => ({
+      id: BEHAV_ID, text: 'How your pain behaves',
+      group: easers === null ? behaviourQuestions(null) : [PAIN_QUALITY, ...behaviourQuestions(easers)],
+      hint: 'Tap an answer for each — some questions let you choose more than one.',
+    })
+    if (keys.length) {
+      return [
+        { id: '__ctx', group: ctxQuestions, text: 'A few details to start' },
+        ...regionQuestions,
+        behav(REGION_EASERS[keys[0]] || undefined),
+        PSYCH_SCREEN,
+      ]
+    }
+    const generic = buildQuestions(flowZ)
+    const notesAt = generic.findIndex((q) => q.textarea)
+    return [...generic.slice(0, notesAt), behav(null), PSYCH_SCREEN, ...generic.slice(notesAt)]
+  }, [keys, flowZ, ctxQuestions, regionQuestions])
+  // Positions of the closing screens, in asking order.
+  const tailIndexes = useMemo(
+    () => TAIL_IDS.map((id) => activeQuestions.findIndex((q) => q.id === id)),
+    [activeQuestions],
   )
   // The screens actually shown, in order (indices into activeQuestions). Back
   // walks this list, and the question number is the position in it.
@@ -399,36 +467,74 @@ export default function PainAssessment() {
   )
   // Screens this selection can take: the opening one plus the scored limit.
   // It ends sooner when one condition is clearly ahead.
-  const plannedScreens = keys.length ? 1 + Math.min(MAX_SCORED_QUESTIONS, regionQuestions.length) : activeQuestions.length
+  const plannedScreens = keys.length ? 1 + TAIL_IDS.length + Math.min(MAX_SCORED_QUESTIONS, regionQuestions.length) : activeQuestions.length
   // Only the opening answers, the questions on the current path and the free
   // text count. After going Back and taking a different route, the abandoned
   // question's answer must not quietly shape the result.
   const scopedAnswers = useMemo(() => {
     if (!keys.length) return answers
-    const keep = new Set([...ctxQuestions.map((q) => q.id), ...askedIds, 'notes'])
+    // Answers the drawing gave (e.g. N1 "past the elbow") count even when that
+    // question was not shown.
+    const keep = new Set([...ctxQuestions.map((q) => q.id), ...askedIds, ...Object.keys(drawn), 'notes'])
     const out = {}
     for (const [k, v] of Object.entries(answers)) if (keep.has(k.replace(/_other$/, ''))) out[k] = v
     return out
-  }, [keys, answers, ctxQuestions, askedIds])
+  }, [keys, answers, ctxQuestions, askedIds, drawn])
   // Flat list for the review screen and the summary: what was actually asked.
   const flatQuestions = useMemo(
     () => (keys.length
-      ? [...ctxQuestions, ...askedIds.map((id) => regionQuestions.find((q) => q.id === id)).filter(Boolean)]
-      : activeQuestions),
-    [keys, ctxQuestions, askedIds, regionQuestions, activeQuestions],
+      ? [
+          ...ctxQuestions,
+          ...askedIds.map((id) => regionQuestions.find((q) => q.id === id)).filter(Boolean),
+          ...tailIndexes.filter((i) => path.includes(i)).flatMap((i) => activeQuestions[i].group),
+        ]
+      : activeQuestions.flatMap((q) => q.group || [q])),
+    [keys, ctxQuestions, askedIds, regionQuestions, activeQuestions, path, tailIndexes],
+  )
+  // How the pain behaves (SIN, 24-hour pattern, easing), in plain language.
+  const behaviour = useMemo(() => interpretBehaviour(answers), [answers])
+  // Yellow flags, read as supportive notes — never a score or a label.
+  const psych = useMemo(() => interpretPsychosocial(answers), [answers])
+  // ── The reasoning pass ───────────────────────────────────────────────────
+  // The server reviews the scoring against the whole picture before anything
+  // is shown, and may reorder the matched patterns, drop ones that do not fit,
+  // say none fit, or raise a concern for medical review. It can never add a
+  // pattern (the server validates that) and it never touches the red-flag
+  // routing, which ran on the safety screen before this point. No review, or
+  // no connection, simply leaves the rules-only result standing.
+  const [review, setReview] = useState(null)
+  // Pain mechanism (tissue / nerve / sensitised), by fixed rules.
+  const painType = useMemo(
+    () => classifyPainMechanism({ zones, answers, behaviour, psych, referral }),
+    [zones, answers, behaviour, psych, referral],
   )
 
   // Ranked conditions across every asked area. Empty until enough is answered.
   const ranked = useMemo(() => {
     if (!keys.length) return []
-    try { return rankAcross(keys, scopedAnswers) } catch { return [] }
+    // Two hypotheses, matching the summary Chandra receives (MAX_HYPOTHESES).
+    try { return rankAcross(keys, scopedAnswers, MAX_HYPOTHESES) } catch { return [] }
   }, [keys, scopedAnswers])
   // What the AI overview explains: exactly these conditions, in this order.
   const matched = useMemo(() => ranked.map((x) => ({ region: x.rk, id: x.c.id })), [ranked])
+  // An earlier review belongs to earlier answers: changing an answer clears it
+  // until the pass has run again on the new picture.
+  useEffect(() => { setReview(null) }, [matched])
+  // The conditions actually shown: the reviewed order, minus anything dropped.
+  const shown = useMemo(() => {
+    if (!review) return ranked
+    if (review.noMatch) return []
+    const dropped = new Set((review.dropped || []).map((d) => d.id))
+    const rank = new Map((review.order || []).map((id, i) => [id, i]))
+    return ranked.filter((x) => !dropped.has(x.c.id))
+      .sort((a, b) => (rank.has(a.c.id) ? rank.get(a.c.id) : 99) - (rank.has(b.c.id) ? rank.get(b.c.id) : 99))
+  }, [ranked, review])
   const modelSmall = ['intro', 'questions', 'review', 'safety', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
-  const anyFlagged = flags.some((f) => f !== '__other') || otherFlagged
+  // Only red flags route away from the result; a caution does not.
+  const cautionIds = CAUTION_CHECKS.map((c) => c.id)
+  const anyFlagged = flags.some((f) => f !== '__other' && !cautionIds.includes(f)) || otherFlagged
   /* ── The safety check is built for the area actually marked ───────────
      Every region in the guide carries its own red flags — a swollen warm calf
      for a knee, clumsiness in both hands for a neck, a sudden pop in the calf
@@ -437,7 +543,7 @@ export default function PainAssessment() {
      to any body part are appended, and the whole list is capped so the screen
      stays short. */
   const safetyChecks = useMemo(() => {
-    const keys = [...new Set(zones.map((z) => ZONE_TO_REGION[z.type]).filter((k) => k && REGIONS[k]))]
+    const keys = [...new Set(flowZ.map((z) => ZONE_TO_REGION[z.type]).filter((k) => k && REGIONS[k]))]
     const regional = []
     const seen = new Set()
     for (const tier of ['emergency', 'urgent']) {
@@ -456,10 +562,24 @@ export default function PainAssessment() {
       GENERAL_RED_FLAGS.filter((f) => !covered.test(f.text))
         .forEach((f) => list.push({ ...f, why: TIER_WHY.urgent }))
     }
-    return [...list, ...UNIVERSAL_CHECKS]
-  }, [zones])
+    // Pain that nothing eases, constant or waking them at night, was reported
+    // on the pain-behaviour screen: put the matching flag to them to confirm.
+    const night = GENERAL_RED_FLAGS.find((f) => f.id === 'grf-night')
+    if (behaviour.nightConcern && night && !list.some((f) => f.id === night.id)) {
+      list.push({ ...night, why: TIER_WHY.urgent })
+    }
+    // Organ-referral and systemic maps the drawing matches (../data/patternChecks.js).
+    // These use every marked area, not the folded-down flow zones, because the
+    // maps are about WHERE it is felt — right shoulder blade, left arm, flank.
+    return [...list, ...UNIVERSAL_CHECKS, ...patternChecks(zones, answers, 2)]
+  }, [flowZ, zones, answers, behaviour.nightConcern])
 
   const pickedFlags = safetyChecks.filter((f) => flags.includes(f.id))
+  // Emergency-tier flags (e.g. cauda equina signs) mean 911 now, not a booking.
+  const emergencyFlagged = pickedFlags.some((f) => f.tier === 'emergency')
+  // Cautions never withhold booking — they shape the first assessment, and
+  // they are listed on the result screen and in Chandra's summary.
+  const pickedCautions = CAUTION_CHECKS.filter((f) => flags.includes(f.id))
 
   const setAnswer = (qid, value) => setAnswers((a) => ({ ...a, [qid]: value }))
 
@@ -510,17 +630,40 @@ export default function PainAssessment() {
   // areas each question is prefixed with its area — two areas can both ask
   // "Where exactly is it?".
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const qaPairs = useMemo(() => flatQuestions
-    .filter((q) => !q.textarea)
-    .map((q) => ({ question: q.area ? `${q.area}: ${q.text}` : q.text, answer: answerText(q) }))
-    .filter((pair) => pair.answer && pair.answer !== '—'), [flatQuestions, answers])
+  // The rule-based pain type is passed along too, so the overview does not
+  // describe a different kind of pain from the card above it.
+  const qaPairs = useMemo(() => [
+    ...flatQuestions
+      .filter((q) => !q.textarea)
+      .map((q) => ({ question: q.area ? `${q.area}: ${q.text}` : q.text, answer: answerText(q) }))
+      .filter((pair) => pair.answer && pair.answer !== '—'),
+    ...referral.map((r) => ({
+      question: 'Drawn pattern (from the body diagram)',
+      answer: `One continuous line from the ${r.kind === 'arm' ? 'neck' : 'low back'} down the ${r.side ? r.side + ' ' : ''}${r.kind} to the ${r.reach} — ${({ radicular: 'nerve-type referral', somatic: 'a referred ache, NOT nerve pain', unclear: 'referred pain, nerve involvement unclear' })[referralMechanism(r, answers)]}`,
+    })),
+    ...(painType ? [{
+      question: "Pain type suggested by the clinic's rules (not the visitor's words)",
+      answer: [painType.primary, painType.secondary].filter(Boolean)
+        .map((t) => `${PAIN_TYPES[t].title} (${PAIN_TYPES[t].term})`).join(', with some features of '),
+    }] : []),
+  ], [flatQuestions, answers, painType, referral])
   const notesText = String(answers.notes || answers.q5 || '').trim()
 
+  // The summary Chandra receives — built from the same rule output the result
+  // screen shows, plus the answers themselves. Only on the result screen, so
+  // it is never computed while the person is still answering.
+  const summaryText = useMemo(() => (stage === 'ok'
+    ? buildClinicianSummary({
+      zones, referral, keys, answers: scopedAnswers, qaPairs, notes: notesText,
+      ranked: shown, behaviour, psych, painType, cautions: pickedCautions,
+      declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
+      review,
+    })
+    : ''), [stage, zones, referral, keys, scopedAnswers, qaPairs, notesText, shown, behaviour, psych, painType, pickedCautions, safetyChecks, flags, review])
+
   // The screen a review-screen entry lives on (the opening answers share 0).
-  const screenOf = (q, flatIdx) => {
-    if (!keys.length) return flatIdx
-    return ctxQuestions.includes(q) ? 0 : activeQuestions.findIndex((s) => s.id === q.id)
-  }
+  const screenOf = (q) =>
+    activeQuestions.findIndex((s) => s === q || s.id === q.id || (s.group && s.group.includes(q)))
   // Question number = position in the path, which also stays right when a
   // question is reopened from the review screen.
   const step = Math.max(1, path.indexOf(qIndex) + 1)
@@ -529,7 +672,10 @@ export default function PainAssessment() {
   // Marks along one chain are asked about together; marks in genuinely
   // separate areas ask the person to choose one first.
   const startQuestions = () => {
-    if (needsAreaChoice(zones, focusKey)) { setStage('area'); return }
+    if (needsAreaChoice(flowZ, focusKey)) { setStage('area'); return }
+    // What the drawing already answers (a line to the hand = "past the
+    // elbow") — shown selected, and still changeable.
+    setAnswers((a) => ({ ...drawn, ...a }))
     setPath([0])
     goToQuestion(0)
   }
@@ -539,8 +685,14 @@ export default function PainAssessment() {
     if (fromReview) { setFromReview(false); setStage('review'); return }
     let next = -1
     if (keys.length) {
-      const id = nextQuestion(keys, scopedAnswers, askedIds)
-      if (id) next = activeQuestions.findIndex((s) => s.id === id)
+      // Scored questions first, then the closing screens in order.
+      const t = tailIndexes.indexOf(qIndex)
+      if (t >= 0) {
+        next = t + 1 < tailIndexes.length ? tailIndexes[t + 1] : -1
+      } else {
+        const id = nextQuestion(keys, scopedAnswers, askedIds)
+        next = id ? activeQuestions.findIndex((s) => s.id === id) : tailIndexes[0]
+      }
     } else if (qIndex + 1 < activeQuestions.length) {
       next = qIndex + 1
     }
@@ -557,8 +709,8 @@ export default function PainAssessment() {
   }
 
   const restart = () => {
-    setStage('landing'); setQIndex(0); setZones([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
-    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(false)
+    setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
+    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(false); setReview(null)
   }
 
   return (
@@ -896,7 +1048,13 @@ export default function PainAssessment() {
                 </h2>
                 {multiPattern && zones.length > 1 && (
                   <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
-                    {multiArea ? (
+                    {referral.length > 0 && keys.length === 1 ? (
+                      <>
+                        Your line travels from the {referral[0].kind === 'arm' ? 'neck down the arm' : 'low back down the leg'}.
+                        Pain that travels this way often starts in the {referral[0].kind === 'arm' ? 'neck' : 'back'}, so
+                        the questions focus on the {REGIONS[keys[0]].name.toLowerCase()} first.
+                      </>
+                    ) : multiArea ? (
                       <>
                         Your marks travel from the {zones[0].label.toLowerCase()} toward
                         the {zones[zones.length - 1].label.toLowerCase()}, so the questions cover
@@ -916,7 +1074,7 @@ export default function PainAssessment() {
                 </p>
                 <div className="pa-actions">
                   <button className="pa-primary" style={goldBtn} onClick={startQuestions}>Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage(needsAreaChoice(zones, null) ? 'area' : 'draw')}>Back</button>
+                  <button style={ghostBtn} onClick={() => setStage(needsAreaChoice(flowZ, null) ? 'area' : 'draw')}>Back</button>
                 </div>
               </Fade>
             )}
@@ -931,7 +1089,9 @@ export default function PainAssessment() {
               const otherPicked = Array.isArray(a) && a.includes(OTHER_ID)
               const otherText = (answers[q.id + '_other'] || '').trim()
               const canNext = q.group
-                ? q.group.every((sub) => answers[sub.id] !== undefined)
+                ? q.group.every((sub) => (sub.multi
+                  ? Array.isArray(answers[sub.id]) && answers[sub.id].length > 0
+                  : answers[sub.id] !== undefined))
                 : q.textarea
                   ? true
                   : q.multi
@@ -947,7 +1107,7 @@ export default function PainAssessment() {
                   {!q.textarea && (
                     <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.55)', margin: '0 0 18px' }}>
                       {q.group
-                        ? 'Tap an answer for each.'
+                        ? (q.hint || 'Tap an answer for each.')
                         : q.multi
                           ? 'Select all that apply — or continue if none do.'
                           : 'Choose one.'}
@@ -971,7 +1131,7 @@ export default function PainAssessment() {
                                     border: `1px solid ${sel ? GOLD : 'rgba(255,255,255,0.22)'}`,
                                     background: sel ? 'rgba(201,169,110,0.18)' : 'rgba(255,255,255,0.04)',
                                     color: sel ? GOLD_LIGHT : 'rgba(255,255,255,0.85)',
-                                  }}>{opt.label}</button>
+                                  }}>{sel && sub.multi ? '✓ ' : ''}{opt.label}</button>
                               )
                             })}
                           </div>
@@ -1039,7 +1199,7 @@ export default function PainAssessment() {
                       style={{ ...goldBtn, opacity: canNext ? 1 : 0.45, cursor: canNext ? 'pointer' : 'not-allowed' }}
                       disabled={!canNext}
                       onClick={nextFromQuestion}
-                    >{fromReview ? 'Save' : step >= plannedScreens ? 'Review Answers' : 'Continue'}</button>
+                    >{fromReview ? 'Save' : (step >= plannedScreens || (keys.length && q.id === TAIL_IDS[TAIL_IDS.length - 1])) ? 'Review Answers' : 'Continue'}</button>
                     <button style={ghostBtn} onClick={backFromQuestion}>Back</button>
                   </div>
                 </Fade>
@@ -1065,12 +1225,12 @@ export default function PainAssessment() {
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.area ? `${q.area} — ` : ''}{q.text}</p>
                       <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
                     </div>
-                    <button onClick={() => goToQuestion(screenOf(q, i), true)}
+                    <button onClick={() => goToQuestion(screenOf(q), true)}
                       style={{ background: 'none', border: 'none', color: GOLD, fontSize: 13.5, cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0, padding: '10px 2px 10px 12px', margin: '-10px -2px -10px 0', minHeight: 44, alignSelf: 'flex-start', fontFamily: 'var(--font-body)' }}>Change</button>
                   </div>
                 ))}
                 {/* The free-text box lives here rather than on a screen of its
-                    own, which keeps the questions to six screens at most. */}
+                    own, which keeps the questions to eight screens at most. */}
                 {keys.length > 0 && (
                   <div style={{ maxWidth: 520, margin: '6px 0 0' }}>
                     <label htmlFor="pa-notes" style={{ display: 'block', fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: '0 0 8px', lineHeight: 1.5 }}>
@@ -1126,7 +1286,7 @@ export default function PainAssessment() {
                       <>
                         <button style={chip(sel)}
                           onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== '__other') : [...cur, '__other'])}>
-                          <span style={letterStyle(sel)}>E</span>
+                          <span style={letterStyle(sel)}>{LETTERS[safetyChecks.length] || '·'}</span>
                           <span>Other — enter your own answer</span>
                         </button>
                         {sel && (
@@ -1146,10 +1306,29 @@ export default function PainAssessment() {
                   })()}
                 </div>
 
+                {/* Cautions: they change how the first assessment is done,
+                    they do not stop it. Kept visually separate so the screen
+                    never reads as "more red flags". */}
+                <p style={{ ...label, display: 'block', margin: '26px 0 0', fontSize: 11.5 }}>
+                  Also worth telling us — these do not stop physiotherapy
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520, marginTop: 12 }}>
+                  {CAUTION_CHECKS.map((f, i) => {
+                    const sel = flags.includes(f.id)
+                    return (
+                      <button key={f.id} style={chip(sel)}
+                        onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
+                        <span style={letterStyle(sel)}>{i + 1}</span>
+                        <span>{f.text}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary" style={goldBtn}
                     onClick={() => { if (anyFlagged) setStage('urgent'); else setShowNotice(true) }}>
-                    {anyFlagged ? 'Continue' : 'None Apply — Continue'}
+                    {anyFlagged || pickedCautions.length ? 'Continue' : 'None Apply — Continue'}
                   </button>
                   <button style={ghostBtn} onClick={() => setStage('review')}>Back</button>
                 </div>
@@ -1171,14 +1350,34 @@ export default function PainAssessment() {
                   </div>
                 )}
 
-                <div style={{ ...card, borderColor: 'rgba(239,68,68,0.6)', background: 'rgba(239,68,68,0.08)', maxWidth: 520 }}>
-                  <strong style={{ color: '#fca5a5', fontSize: 19, lineHeight: 1.4 }}>Please Seek Medical Assessment First</strong>
-                  <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '12px 0 0' }}>
-                    The symptoms you selected should be reviewed by a physician before
-                    beginning physiotherapy. Please contact your family doctor, or your local
-                    emergency service if your symptoms are severe or worsening.
-                  </p>
-                </div>
+                {/* Two outcomes, decided by the tier the clinician assigned to
+                    each flag — never by the AI. Emergency: 911 now, and no
+                    booking is offered. Otherwise: see a physician first. */}
+                {emergencyFlagged ? (
+                  <div style={{ ...card, borderColor: 'rgba(239,68,68,0.6)', background: 'rgba(239,68,68,0.08)', maxWidth: 520 }}>
+                    <strong style={{ color: '#fca5a5', fontSize: 19, lineHeight: 1.4 }}>Please Seek Emergency Care Now</strong>
+                    <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '12px 0 0' }}>
+                      What you selected can be a sign of a problem that needs urgent medical
+                      attention. Please call 911 or go to your nearest emergency department
+                      now. Do not wait for a physiotherapy appointment.
+                    </p>
+                    <a href="tel:911" style={{ ...goldBtn, background: '#ef4444', color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', marginTop: 16 }}>
+                      Call 911
+                    </a>
+                  </div>
+                ) : (
+                  <div style={{ ...card, borderColor: 'rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', maxWidth: 520 }}>
+                    <strong style={{ color: '#fcd34d', fontSize: 19, lineHeight: 1.4 }}>Please See a Physician First</strong>
+                    <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '12px 0 0' }}>
+                      The symptoms you selected should be reviewed by a physician before
+                      beginning physiotherapy. Please book a visit with your family physician,
+                      or a walk-in clinic if you do not have one.
+                    </p>
+                    <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
+                      <strong style={{ color: '#fff' }}>If your symptoms are severe or getting worse quickly, call 911.</strong>
+                    </p>
+                  </div>
+                )}
 
                 {pickedFlags.length > 0 && (
                   <>
@@ -1199,6 +1398,19 @@ export default function PainAssessment() {
                   confirm that anything serious is present. If you selected an option in error,
                   please use Back to amend your answer.
                 </p>
+
+                {/* Physiotherapy can follow once a physician has reviewed the
+                    flagged symptom — but never for an emergency-tier flag. */}
+                {!emergencyFlagged && (
+                  <>
+                    <span style={{ ...label, display: 'block', margin: '26px 0 0' }}>After Your Physician Review</span>
+                    <p style={{ ...body, fontSize: 15, margin: '10px 0 14px', maxWidth: 520 }}>
+                      Once your physician has confirmed that physiotherapy is appropriate, you are
+                      welcome to book an assessment with Chandra at any of these clinics.
+                    </p>
+                    <ClinicPicker />
+                  </>
+                )}
 
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('safety')}>Back</button>
@@ -1221,9 +1433,41 @@ export default function PainAssessment() {
                     rather than padding the list. The answer recap was removed
                     from this screen; answers can still be checked and changed
                     on the Review screen before this point. */}
-                {ranked.length > 0 ? (
+                {/* Referral pattern — a spine-to-limb line read as one problem.
+                    Comes first because it explains why the conditions below
+                    are about the neck or back rather than the arm or leg. */}
+                {referral.map((r, i) => {
+                  const s = referralSummary(r, referralMechanism(r, answers))
+                  return (
+                    <div key={i} style={{ ...card, maxWidth: 520, marginBottom: 14 }}>
+                      <span style={{ ...label, fontSize: 11.5 }}>Your drawing shows a referral pattern</span>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: '8px 0 0', lineHeight: 1.4, fontWeight: 500 }}>{s.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{s.text}</p>
+                      <Bullets title="Also to be checked at your assessment" items={s.ruleOut} />
+                    </div>
+                  )
+                })}
+
+                {/* Raised by the reasoning pass, not by the red-flag rules: a
+                    picture worth a medical opinion as well. Booking stays
+                    available — only the rules can withhold it. */}
+                {review && review.concern && (
+                  <div style={{ ...card, borderColor: 'rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', maxWidth: 520, marginBottom: 14 }}>
+                    <p style={{ fontSize: 16, color: '#fcd34d', margin: 0, fontWeight: 500, lineHeight: 1.4 }}>
+                      Worth mentioning to your physician as well
+                    </p>
+                    <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{review.concern.why}</p>
+                    <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>
+                      This is not a finding about you, and it does not mean anything serious is
+                      present — it means the pattern you described is worth a medical opinion
+                      alongside your physiotherapy assessment.
+                    </p>
+                  </div>
+                )}
+
+                {shown.length > 0 ? (
                   <div style={{ marginBottom: 24 }}>
-                    {ranked.map(({ c, rk }) => (
+                    {shown.map(({ c, rk }) => (
                       <div key={`${rk}/${c.id}`} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
                         {multiArea && (
                           <span style={{ ...label, fontSize: 15, display: 'block', marginBottom: 8 }}>{REGIONS[rk].name}</span>
@@ -1262,26 +1506,120 @@ export default function PainAssessment() {
                     conditions above and explains exactly those, in the same
                     order, so the page gives one answer rather than two lists
                     that could disagree. */}
+                {/* Cautions the person ticked: physiotherapy goes ahead, and
+                    these shape how the first assessment is done. */}
+                {pickedCautions.length > 0 && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>What we will take into account</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      {pickedCautions.map((f) => (
+                        <div key={f.id} style={{ marginBottom: 10 }}>
+                          <p style={{ fontSize: 15.5, color: GOLD_LIGHT, margin: 0, lineHeight: 1.45 }}>{f.text}</p>
+                          <p style={{ ...body, fontSize: 14, margin: '4px 0 0' }}>{f.why.text}</p>
+                        </div>
+                      ))}
+                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: '6px 0 0', lineHeight: 1.6 }}>
+                        Please mention these when you book, so your first appointment can be planned around them.
+                      </p>
+                    </div>
+                  </>
+                )}
+
+                {/* Pain type (mechanism) — fixed rules in ../data/painType.js.
+                    Shown only when the answers clearly point somewhere. */}
+                {painType && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Likely pain type</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      {[painType.primary, painType.secondary].filter(Boolean).map((t, i) => (
+                        <div key={t} style={i ? { marginTop: 16, paddingTop: 14, borderTop: '1px solid rgba(201,169,110,0.2)' } : null}>
+                          <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>
+                            {i ? 'Also some features of: ' : ''}{PAIN_TYPES[t].title}
+                            {!i && t === 'nociceptive' && painType.subtype && (
+                              <span style={{ fontSize: 15, color: GOLD_LIGHT, fontWeight: 400 }}>, {NOCICEPTIVE_SUBTYPES[painType.subtype].label}</span>
+                            )}
+                            <span style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}> ({PAIN_TYPES[t].term})</span>
+                          </p>
+                          {!i && t === 'nociceptive' && painType.subtype && (
+                            <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{NOCICEPTIVE_SUBTYPES[painType.subtype].text}</p>
+                          )}
+                          {painType.reasons[t].length > 0 && (
+                            <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.6)', margin: '6px 0 0', lineHeight: 1.6 }}>
+                              Because {painType.reasons[t].join(', ')}.
+                            </p>
+                          )}
+                          <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{PAIN_TYPES[t].text}</p>
+                        </div>
+                      ))}
+                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: '14px 0 0', lineHeight: 1.6 }}>
+                        Pain often has more than one of these features. Your physiotherapist
+                        will confirm this at your assessment.
+                      </p>
+                    </div>
+                  </>
+                )}
+
+                {/* How the pain behaves: severity, irritability, 24-hour
+                    pattern and easing, read by fixed rules — not the AI. */}
+                {behaviour.notes.length > 0 && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>How your pain behaves</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      {behaviour.irritability && (
+                        <p style={{ fontSize: 16, color: GOLD_LIGHT, margin: '0 0 8px', lineHeight: 1.45, fontWeight: 500 }}>
+                          {{ mild: 'Settles quickly', moderate: 'Moderately irritable', severe: 'Easily flared' }[behaviour.irritability]}
+                        </p>
+                      )}
+                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {behaviour.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* Yellow flags — supportive notes only; no score or label is
+                    shown, and nothing here changes whether booking is offered. */}
+                {psych.notes.length > 0 && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>How it is affecting you</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {psych.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                      {psych.moodSupport && (
+                        <p style={{ ...body, fontSize: 14.5, margin: '12px 0 0', paddingTop: 12, borderTop: '1px solid rgba(201,169,110,0.2)' }}>
+                          You mentioned feeling low, worried or stressed. Your family physician is a
+                          good person to talk to about this as well. If you are ever in crisis or
+                          thinking about harming yourself, call or text <a href="tel:988" style={{ color: GOLD_LIGHT }}>9-8-8</a> any
+                          time, or call 911 in an emergency.
+                        </p>
+                      )}
+                    </div>
+                  </>
+                )}
+
                 <span style={{ ...label, marginBottom: 12 }}>Overview of your traced pattern</span>
                 <div style={{ maxWidth: 520, margin: '12px 0 26px' }}>
-                  <PainAIPanel zones={zones} answers={qaPairs} notes={notesText} matched={matched} aiOnly />
+                  <PainAIPanel zones={zones} answers={qaPairs} notes={notesText} matched={matched} onReview={setReview} aiOnly />
                 </div>
 
-                <span style={{ ...label, marginBottom: 12 }}>Your Next Step</span>
+                <span style={{ ...label, marginBottom: 12 }}>Your Next Step · Book an Assessment</span>
                 <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
                   Based on what you have shared, a physiotherapy assessment is an appropriate
-                  next step. An appointment with Physio Chandra lets your symptoms be examined
-                  individually and a suitable plan of care discussed with you.
+                  next step. An appointment with Chandra lets your symptoms be examined
+                  individually and a suitable plan of care discussed with you. Choose the
+                  clinic that suits you, then call or book online.
                 </p>
 
-                <div className="pa-actions">
-                  <button className="pa-primary" style={goldBtn} onClick={restart}>Start Over</button>
-                  {/* Booking lives on the About page, so this hands the person
-                      to Chandra's introduction and lands them on its booking
-                      section rather than dialling straight out. */}
-                  <Link to="/about#contact" style={{ ...ghostBtn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box' }}>
-                    Next Step
-                  </Link>
+                <ClinicPicker />
+
+                {/* Everything the screen worked out, in the order of the CPA
+                    Orthopaedic Division subjective booklet — for Chandra, and
+                    built on the device from the answers already given. */}
+                <ClinicianSummary text={summaryText} />
+
+                <div className="pa-actions" style={{ marginTop: 22 }}>
+                  <button style={ghostBtn} onClick={restart}>Start Over</button>
                 </div>
                 <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '20px 0 0', maxWidth: 520 }}>
                   The information above is general in nature and is not a diagnosis. Individual
@@ -1321,6 +1659,7 @@ export default function PainAssessment() {
             )}
             <Body3D
               onSelectionChange={setZones}
+              onLinesChange={setLines}
               showGestureHint={!(stage === 'rotate' && !hasTurned)}
               controlled
               drawOn={drawOn}

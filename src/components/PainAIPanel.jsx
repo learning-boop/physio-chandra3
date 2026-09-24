@@ -16,7 +16,10 @@ const API_URL = import.meta.env.VITE_API_URL || ''
 // `matched` ([{ region, id }], strongest first) is what the scoring engine
 // found; the overview then explains exactly those conditions, so it can never
 // contradict the result cards shown above it.
-export default function PainAIPanel({ zones, aiOnly = false, answers = null, notes = '', matched = null }) {
+// `onReview` receives the server's validated reasoning pass ({ order, dropped,
+// noMatch, concern }) so the result cards above can follow the same order the
+// overview explains — or step back to "no clear match" when nothing fits.
+export default function PainAIPanel({ zones, aiOnly = false, answers = null, notes = '', matched = null, onReview = null }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
@@ -71,9 +74,10 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
         if (!res.ok) throw new Error(`Server responded ${res.status}`)
         return res.json()
       })
-      .then(data => setResult(data))
+      .then(data => { setResult(data); if (onReview) onReview(data.review || null) })
       .catch(err => {
         if (err.name === 'AbortError') return
+        if (onReview) onReview(null)   // unreachable → the rules-only result stands
         // 'Failed to fetch' is a TypeError thrown before any HTTP response —
         // it means the request never reached the server (server down, wrong
         // URL, or blocked mixed content).

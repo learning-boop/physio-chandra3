@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "check:data": "node scripts/check-symptom-data.mjs",
     "check:accuracy": "node scripts/check-accuracy.mjs",
+    "check:patterns": "node scripts/check-patterns.mjs",
     "import:conditions": "node scripts/import-conditions.mjs"
   },
   "dependencies": {

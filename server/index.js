@@ -17,6 +17,8 @@ import {
   analysisKnowledge,
   analysisPrompt,
   sanitizeAnalysis,
+  sanitizeReview,
+  applyReview,
   fallbackAnalysis,
 } from '../api/_lib/painShared.js'
 
@@ -107,7 +109,10 @@ app.post('/api/pain-analysis', async (req, res) => {
     const raw = textBlock ? textBlock.text : '{}'
     let parsed = null
     try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()) } catch { parsed = null }
-    res.json(sanitizeAnalysis(parsed, labels, found))
+    // The reasoning pass may reorder or drop the matched patterns, or say none
+    // fit — validated against the ids it was given, never adding one.
+    const review = sanitizeReview(parsed, found)
+    res.json({ ...sanitizeAnalysis(parsed, labels, applyReview(found, review)), review })
   } catch (err) {
     console.error('pain-analysis error:', err?.message || err)
     // Don't 500 the user experience — degrade gracefully.

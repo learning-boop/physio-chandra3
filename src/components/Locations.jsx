@@ -1,35 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const locs = [
-  {
-    name: 'Arka Physiotherapy',
-    area: 'South Surrey',
-    address: 'South Surrey, BC',
-    hours: 'Mon – Fri   8:00 am – 7:00 pm\nSaturday   9:00 am – 4:00 pm',
-    phone: '+1 (604) 555-0101',
-    img: 'images/clinic1.png',
-    tagline: 'Comprehensive physiotherapy in the heart of South Surrey.',
-  },
-  {
-    name: 'BC Ice',
-    area: 'Burnaby',
-    address: 'Burnaby, BC',
-    hours: 'Mon – Fri   7:00 am – 8:00 pm\nSaturday   9:00 am – 3:00 pm',
-    phone: '+1 (604) 555-0202',
-    img: 'images/clinic2.jpg',
-    tagline: 'Physiotherapy and rehabilitation services in Burnaby.',
-  },
-  {
-    name: 'Performance Health Group',
-    area: 'Guildford',
-    address: 'Guildford, Surrey BC',
-    hours: 'Mon – Fri   8:00 am – 6:00 pm\nSaturday   10:00 am – 2:00 pm',
-    phone: '+1 (604) 555-0303',
-    img: 'images/clinic31.jpg',
-    tagline: 'Physiotherapy and rehabilitation services in Guildford.',
-  },
-]
+import { CLINICS as locs, telHref } from '../data/clinics'
 
 export default function Locations() {
   const [active, setActive] = useState(0)
@@ -103,7 +75,7 @@ export default function Locations() {
             </div>
 
             <div className="loc-cta" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <a href={`tel:${locs[active].phone}`} style={{
+              <a href={telHref(locs[active].phone)} style={{
                 padding: '15px 28px', border: '1px solid rgba(255,255,255,0.15)',
                 fontFamily: 'var(--font-body)', fontSize: '13px',
                 letterSpacing: '0.15em', textTransform: 'uppercase',
@@ -112,7 +84,11 @@ export default function Locations() {
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'white'; e.currentTarget.style.color = 'white' }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)' }}
               >Call Clinic</a>
-              <a href="mailto:chandra@physiochandra.ca" style={{
+              {/* Jane online booking once the clinic's link is set in
+                  ../data/clinics.js; email until then. */}
+              <a href={locs[active].janeUrl || 'mailto:chandra@physiochandra.ca'}
+                {...(locs[active].janeUrl ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                style={{
                 padding: '15px 28px', background: 'var(--gold)',
                 fontFamily: 'var(--font-body)', fontSize: '13px',
                 letterSpacing: '0.15em', textTransform: 'uppercase',

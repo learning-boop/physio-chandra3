@@ -126,7 +126,7 @@ export default function SymptomGuide({ regionOptions }) {
           <p style={{ fontSize: 13, lineHeight: 1.65, color: 'rgba(255,255,255,0.8)', margin: '8px 0 0' }}>
             {emergency
               ? 'Based on what you selected, this needs emergency assessment — call 911 or go to the nearest emergency department now. This guide will stop here.'
-              : 'Some of what you selected should be checked by a doctor promptly rather than through this guide. Please contact your family doctor today, call 811 (HealthLink BC), or visit urgent care.'}
+              : 'Some of what you selected should be checked by a physician before physiotherapy. Please see your family physician, or a walk-in clinic if you do not have one. If your symptoms are severe or getting worse quickly, call 911.'}
           </p>
         </div>
         <p style={{ ...label, marginTop: 14, display: 'block' }}>You selected</p>
