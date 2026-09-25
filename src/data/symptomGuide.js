@@ -593,6 +593,7 @@ Object.assign(ZONE_TO_REGION, {
   flank: 'tlj',
   sij: 'sij',
   coccyx: 'coccyx',
+  jaw: 'jaw',
   elbow: 'elbow',
   wrist: 'wrist',
   hip: 'hip',

@@ -28,10 +28,12 @@ export const REGION_CHAINS = [
   // The tailbone, between the back of the pelvis and the perineum.
   ['tlj', 'lowback', 'sij', 'coccyx'],
   ['coccyx', 'hip'],
+  // The jaw and the upper neck refer to each other.
+  ['jaw', 'neck'],
 ]
 
 const AREA_WORD = {
-  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', shoulder: 'shoulder',
+  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', jaw: 'jaw', shoulder: 'shoulder',
   elbow: 'elbow', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
 }
 
@@ -117,8 +119,9 @@ function mapAge(bucketId, q) {
 const DURATIONS = [
   { id: 'd2w', label: 'Less than 2 weeks', to: ['d2w'] },
   // d2m / o2m: the tailbone's own bands (2 weeks to 2 months, more than 2 months).
-  { id: 'd6w', label: '2 – 6 weeks', to: ['d6w', 'd2m'] },
-  { id: 'd3m', label: '6 weeks – 3 months', to: ['d3m', 'd6m', 'o2m'] },
+  // d12w: the jaw's band (2 weeks to 3 months).
+  { id: 'd6w', label: '2 – 6 weeks', to: ['d6w', 'd2m', 'd12w'] },
+  { id: 'd3m', label: '6 weeks – 3 months', to: ['d3m', 'd6m', 'o2m', 'd12w'] },
   { id: 'o3m', label: 'More than 3 months', to: ['o3m', 'd6m', 'o2m'] },
   { id: 'years', label: 'Comes and goes over years', to: ['years', 'o3m', 'd6m', 'o2m'] },
 ]

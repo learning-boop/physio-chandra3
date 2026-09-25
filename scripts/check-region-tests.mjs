@@ -206,6 +206,31 @@ const TESTS = {
       flags: ['xrf-pilonidal'],
       expect: { route: 'urgent' } },
   ],
+  jaw: [
+    { name: '1. Clicking jaw joint',
+      lines: [['jawL']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'd12w', M1: ['joint', 'click'], M2: ['chewing', 'yawning'], M3: ['click'], M4: ['fullpain'] },
+      expect: { top: 'jaw/clicking', not: ['jaw/closedlock'], notTop: ['jaw/myalgia'], route: 'results' } },
+    // Both cheeks (jaw) and both temples (head).
+    { name: '2. Jaw muscle pain with clenching',
+      lines: [['jawL'], ['jawR'], ['head']],
+      answers: { age: '30-49', onset: 'stress', duration: 'o3m', M1: ['muscles'], M2: ['chewing', 'talking'], M3: ['none'],
+        M6: ['clench'], M7: ['waking'], M8: ['temples'] },
+      expect: { top: 'jaw/myalgia', not: ['jaw/clicking', 'jaw/closedlock'], route: 'results' } },
+    { name: '3. Closed lock',
+      lines: [['jawR']],
+      answers: { age: '18-29', onset: 'woke', duration: 'd2w', M1: ['stiff', 'locks'], M3: ['stopped'], M4: ['partway'], M5: ['closed'] },
+      expect: { top: 'jaw/closedlock', notTop: ['jaw/clicking'], route: 'results' } },
+    { name: '4. Giant cell arteritis look-alike',
+      lines: [['head'], ['jawL']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'd2w', M1: ['muscles'], M2: ['chewing'] },
+      flags: ['mrf-gca'],
+      expect: { route: 'urgent' } },
+    { name: '5. Neck look-alike: angle of the jaw and the neck',
+      lines: [['jawR', 'neck']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'o3m', M1: ['muscles'], M2: ['nothing'], M3: ['none'], M4: ['fullfree'], M8: ['neck'] },
+      expect: { notRegion: ['jaw'], special: 'neckSource', route: 'results' } },
+  ],
 }
 
 const zonesOf = (lines) => {

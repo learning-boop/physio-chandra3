@@ -27,6 +27,7 @@ const code = [
   grab(/const COCCYX_TOP = [^\n]+/, 'COCCYX_TOP'),
   grab(/const COCCYX_BOTTOM = [^\n]+/, 'COCCYX_BOTTOM'),
   grab(/const COCCYX_HALF = [^\n]+/, 'COCCYX_HALF'),
+  grab(/const JAW_TOP = [^\n]+/, 'JAW_TOP'),
   'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
   grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/, 'classify()'),
   'return { classify, BODY_METRICS }',
@@ -63,7 +64,7 @@ for (let i = 0; i < VC; i++) {
 BODY_METRICS.h = mxy - mny; BODY_METRICS.cx = (mnx + mxx) / 2; BODY_METRICS.cy = (mny + mxy) / 2; BODY_METRICS.cz = (mnz + mxz) / 2
 
 const COLORS = {
-  head: [150, 150, 150], neck: [230, 80, 80], shoulder: [70, 130, 230], upperback: [240, 190, 60], ctj: [255, 255, 255], tlj: [255, 90, 200], flank: [0, 255, 170], sij: [120, 220, 255], coccyx: [255, 0, 0],
+  head: [150, 150, 150], neck: [230, 80, 80], shoulder: [70, 130, 230], upperback: [240, 190, 60], ctj: [255, 255, 255], tlj: [255, 90, 200], flank: [0, 255, 170], sij: [120, 220, 255], coccyx: [255, 0, 0], jaw: [255, 255, 0],
   lowerback: [240, 130, 40], chest: [160, 90, 200], abdomen: [120, 70, 160], elbow: [60, 190, 190],
   wrist: [40, 150, 90], hip: [200, 110, 170], knee: [110, 200, 90], ankle: [90, 90, 200],
 }

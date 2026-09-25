@@ -27,6 +27,12 @@ export const REFERRAL_MAP = {
     muscles: ['Upper trapezius (temple, angle of jaw)', 'Sternocleidomastoid (forehead, eye, ear; autonomic eye signs)', 'Suboccipitals (occiput to orbit)', 'Splenius (vertex, behind the eye)', 'Masseter / temporalis (teeth, ear, eyebrow)'],
     organs: ['Heart via the vagus (jaw, throat, ear)'],
   },
+  jaw: {
+    joints: ['Jaw joint / TMJ (in front of or into the ear; clicking, locking)', 'C2–C3 and upper cervical joints (jaw, face, around the ear)'],
+    roots: [],
+    muscles: ['Masseter / temporalis (cheek, temple, ear, teeth)', 'Upper trapezius (angle of the jaw)', 'Sternocleidomastoid (ear, face)'],
+    organs: ['Heart (left jaw, with effort)', 'Teeth (sensitive to hot, cold or biting: dentist first)', 'Throat, tonsils or voice box via the vagus and glossopharyngeal nerves (ear and jaw)', 'Ear'],
+  },
   neck: {
     joints: ['C3–C4 facet (posterolateral neck, over levator scapulae)', 'C4–C5 facet (base of neck, top of shoulder)'],
     roots: ['C4 (neck, upper trapezius, top of shoulder)'],

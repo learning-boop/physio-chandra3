@@ -55,6 +55,8 @@ const FIT_MARGIN = 1.06
 // Area labels/types for the info panel.
 const AREA = {
   head:      { type: 'head',      label: 'Head' },
+  jawL:      { type: 'jaw',       label: 'Left Jaw' },
+  jawR:      { type: 'jaw',       label: 'Right Jaw' },
   neck:      { type: 'neck',      label: 'Neck' },
   shoulderL: { type: 'shoulder',  label: 'Left Shoulder' },
   shoulderR: { type: 'shoulder',  label: 'Right Shoulder' },
@@ -107,6 +109,10 @@ const SIJ_TOP = 0.02
 const COCCYX_TOP = -0.005
 const COCCYX_BOTTOM = -0.07
 const COCCYX_HALF = 0.025
+// The jaw: the face and side of the head from the jaw line up to just below
+// eye level — jaw, cheeks, in front of the ear (content/regions/jaw.md).
+// Above it (temples, forehead, scalp) stays the head.
+const JAW_TOP = 0.445
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -137,7 +143,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v13'
+const CLASSIFIER_VERSION = 'zones-v14'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -208,7 +214,7 @@ function classify(wx, wy, wz) {
   // only millimetres apart on this mesh, and any depth test there let strokes
   // up the throat clip into "Head". Everything from the jaw down to the
   // shoulder line is the neck; that matches how people actually draw neck pain.
-  if (fy > 0.395) return 'head'
+  if (fy > 0.395) return fy <= JAW_TOP ? 'jaw' + side : 'head'
   if (fy > 0.33) return absZ > NECK_SPLIT ? 'shoulder' + side : 'neck'
   // Front of the shoulder. Measured on this mesh, the trunk's half-width is
   // 0.145 at the clavicle and 0.154 at the upper chest, so the band from 0.085

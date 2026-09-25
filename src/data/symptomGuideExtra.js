@@ -745,6 +745,118 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
+  /* ══════════════ JAW (TMJ) ══════════════
+     From Chandra's "TMJ assessment" region document (DRAFT 23 Sep 2026; the
+     source text is content/regions/jaw.md). Sources: DC/TMD (Schiffman 2014),
+     BMJ chronic TMD pain guideline (Busse 2023), ICHD-3 2018, Travell &
+     Simons 2019, Myers 2008.
+     Reached from the body map's lower face and side of the head, below eye
+     level (JAW_TOP in src/components/Body3D.jsx); temples and above stay the
+     head. Conditions: content/conditions/jaw-*.md. */
+  jaw: {
+    name: "Jaw (TMJ)",
+    redFlags: [
+      { id: "mrf-stuckopen", tier: "emergency", why: "Jaw dislocation needs urgent reduction",
+        text: "Is your jaw stuck open, so you cannot close your mouth?" },
+      { id: "mrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the jaw",
+        text: "Is pain in your jaw brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
+      { id: "mrf-droop", tier: "emergency", why: "Possible stroke or facial nerve palsy",
+        text: "Has one side of your face suddenly drooped or become weak?" },
+      { id: "mrf-fracture", tier: "urgent", why: "Possible jaw fracture",
+        text: "Did this start after a blow to the jaw or face, and your teeth no longer meet the way they used to?" },
+      { id: "mrf-gca", tier: "urgent", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
+        text: "If you are over 50: do your jaw muscles ache when chewing and ease when you stop, or is your scalp or temple tender, or has your vision changed?" },
+      { id: "mrf-infection", tier: "urgent", why: "Possible dental or jaw infection (doctor or dentist)",
+        text: "Is there swelling of your face or jaw with a fever, or a bad taste or discharge in your mouth?" },
+      { id: "mrf-numb", tier: "urgent", why: "Nerve involvement is not typical of TMD",
+        text: "Is part of your chin, lip, or face numb?" },
+      { id: "mrf-lump", tier: "urgent", why: "Needs medical or dental review to rule out other causes",
+        text: "Is there a lump or swelling in front of your ear or under your jaw that is growing, or has your bite changed without an injury?" },
+      { id: "mrf-ear", tier: "urgent", why: "Ear problem rather than the jaw joint",
+        text: "Do you have hearing loss or discharge from the ear on the painful side?" },
+      { id: "mrf-throat", tier: "urgent", why: "Throat and voice box problems can refer pain to the ear and jaw (vagus and glossopharyngeal nerves)",
+        text: "Do you have ear or jaw pain with a sore throat, hoarse voice, or trouble swallowing that has lasted more than 3 weeks?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "dental", label: "After dental work, or opening my mouth very wide" },
+        { id: "blow", label: "After a blow to the jaw or face" },
+        { id: "stress", label: "During a stressful period" },
+        { id: "woke", label: "I woke up with it" },
+        { id: "years", label: "On and off for years" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d12w", label: "2 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "M1", text: "What is the main problem? Tick all that apply.", options: [
+        { id: "muscles", label: "Pain in the jaw muscles (cheek or temple)" },
+        { id: "joint", label: "Pain just in front of the ear, at the joint" },
+        { id: "click", label: "Clicking or popping" },
+        { id: "locks", label: "My jaw catches or locks" },
+        { id: "stiff", label: "My jaw feels stiff and will not open fully" }
+      ]},
+      { id: "M2", text: "What brings the pain on? Tick all that apply.", options: [
+        { id: "chewing", label: "Chewing, especially hard or chewy food" },
+        { id: "talking", label: "Talking for a long time" },
+        { id: "yawning", label: "Yawning or opening wide" },
+        { id: "rest", label: "It hurts even when I am not using my jaw" },
+        // Jaw movement does not change it: consider the neck (test patient 5).
+        { id: "nothing", label: "Nothing, it does not hurt", special: "neckSource" }
+      ]},
+      { id: "M3", text: "What noises does your jaw make?", options: [
+        { id: "none", label: "No noises" },
+        { id: "click", label: "A click when opening or closing" },
+        { id: "grating", label: "A grating or crunching sound" },
+        { id: "stopped", label: "It used to click, but it stopped and now I cannot open fully" }
+      ]},
+      { id: "M4", text: "How wide can you open your mouth?", options: [
+        { id: "fullfree", label: "Fully, without pain" },
+        { id: "fullpain", label: "Fully, but it hurts" },
+        { id: "partway", label: "Only partway (less than 3 fingers’ width)" },
+        { id: "swing", label: "My jaw swings to one side as I open" }
+      ]},
+      { id: "M5", text: "When your jaw catches or locks, what happens?",
+        askIf: ({ ra }) => [].concat(ra.M1 || []).some((o) => o === "locks" || o === "stiff"),
+        options: [
+          { id: "wiggle", label: "It catches, but I can wiggle it free" },
+          { id: "closed", label: "It locks closed and I cannot open fully" },
+          { id: "open", label: "It gets stuck open for a moment, then goes back" }
+        ]},
+      { id: "M6", text: "Which habits apply to you? Tick all that apply.", options: [
+        { id: "clench", label: "I clench or grind my teeth, or wake with a sore jaw" },
+        { id: "gum", label: "I chew gum, my nails, or pens" },
+        { id: "posture", label: "I hold my phone between my ear and shoulder, or rest my chin on my hand" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "M7", text: "When is it worst?", options: [
+        { id: "waking", label: "When I wake up" },
+        { id: "builds", label: "It builds up through the day" },
+        { id: "meals", label: "After meals" },
+        { id: "nopattern", label: "No pattern" }
+      ]},
+      { id: "M8", text: "Do any of these come with it? Tick all that apply.", options: [
+        { id: "temples", label: "Headache at the temples" },
+        { id: "ear", label: "A full feeling or ringing in the ear, with no ear infection" },
+        { id: "neck", label: "Neck pain", special: "neckSource" },
+        { id: "teeth", label: "Teeth feel sore, but my dentist found nothing" },
+        { id: "none", label: "None of these" }
+      ]}
+    ],
+    conditions: []
+  },
+
   /* ══════════════ ELBOW ══════════════ */
   elbow: {
     name: "Elbow & forearm",
@@ -1103,6 +1215,8 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain deep in the pelvis or back passage, or pain with bowel movements or sex, often involves the <strong>pelvic floor muscles</strong>. A <strong>pelvic health physiotherapist</strong> assesses and treats these muscles, often with an internal examination if you are comfortable with it. It is worth mentioning to your doctor too, so bowel and gynaecological causes can be checked." },
   pilonidal: { title: "A pit or lump in the buttock crease: see your doctor",
     body: "A small pit or a tender lump at the top of the buttock crease can be a <strong>pilonidal sinus</strong>, a skin problem that can become infected. It is treated by a doctor rather than physiotherapy, so please have it checked, sooner if it becomes red, swollen or starts to leak." },
+  neckSource: { title: "This may be coming from your neck",
+    body: "Pain around the jaw that does not change when you chew, talk or open wide, especially with neck pain, is often felt in the jaw but comes from the <strong>upper neck</strong> or the neck muscles. Consider running the <strong>Neck</strong> guide too. Your assessment will check both." },
   ribcage: { title: "Pain with deep breaths",
     body: "Sharp pain with a deep breath often involves the <strong>rib joints</strong> where they meet the spine — usually mechanical and treatable. But if breath pain comes with fever, breathlessness, or follows an accident, see a doctor promptly." }
 }
