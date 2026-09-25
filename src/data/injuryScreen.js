@@ -161,14 +161,12 @@ export const ARM_INJURY = [
     options: yesNo('emergency', 'Possible compartment syndrome (pressure building up in the arm)') },
   { id: 'I5', text: 'Since the injury, can you not lift your wrist or straighten your fingers?',
     options: yesNo('urgent', 'Possible radial nerve injury, often with a fracture of the upper arm bone'), sameDay: true },
-  // The age cut-off is the document's, marked "for Chandra: confirm".
-  { id: 'I6', text: 'Did you feel a pop at the front of the shoulder or upper arm while lifting, and now have a new bulge low in the biceps?',
-    askIf: (a) => a.I1 === 'pop', options: [
-      { id: 'young', label: 'Yes, and I am under 40 or do heavy manual work or sport', route: 'urgent',
-        why: 'A torn biceps tendon: younger or heavy-use patients may want a surgical opinion' },
-      { id: 'older', label: 'Yes, and I am 40 or over', route: 'continue' },
-      { id: 'no', label: 'No' },
-    ]},
+  // Chandra, 25 Sep 2026: a sudden forced effort, a pop, click or tearing
+  // feeling, and a change in the shape of the biceps mean a doctor the same
+  // day, at any age (this replaced the document's under-40 cut-off).
+  { id: 'I6', text: 'Did you feel a pop, click, or tearing at the front of the shoulder or upper arm during a sudden, forceful lift or pull, and has the shape of your biceps changed since (a new bulge low in the arm)?',
+    askIf: (a) => a.I1 === 'pop', sameDay: true,
+    options: yesNo('urgent', 'Possible torn biceps tendon: a doctor should check it the same day') },
 ]
 
 /* ── Elbow: fall, blow or sudden force ── */
@@ -186,9 +184,11 @@ export const ELBOW_INJURY = [
   { id: 'I4', text: 'Is the pain in your forearm getting worse and worse, with the forearm tight and swollen, and much worse when your fingers are moved?',
     options: yesNo('emergency', 'Possible compartment syndrome (pressure building up in the forearm)') },
   // Asked after a pop only: it does not fit a fall or a blow.
-  { id: 'I5', text: 'Did you feel a pop at the front of the elbow while lifting, and now have bruising there or a bulge in the upper arm that was not there before?',
-    askIf: (a) => a.I1 === 'pop',
-    options: yesNo('urgent', 'Possible torn biceps tendon at the elbow: repair works best within about 2 to 3 weeks') },
+  // Same day (Chandra, 25 Sep 2026): a sudden forced effort, a pop, click or
+  // tearing feeling, and a change in the shape of the biceps.
+  { id: 'I5', text: 'Did you feel a pop, click, or tearing at the front of the elbow during a sudden, forceful lift or pull, and now have bruising there or a change in the shape of your biceps?',
+    askIf: (a) => a.I1 === 'pop', sameDay: true,
+    options: yesNo('urgent', 'Possible torn biceps tendon at the elbow: repair works best within about 2 to 3 weeks, so a doctor should check it the same day') },
   // The elbow extension test (Appelboam 2008): a possible fracture, so same day.
   { id: 'I6', text: 'After the fall or blow, can you fully straighten your elbow?',
     askIf: (a) => a.I1 === 'fall' || a.I1 === 'blow', sameDay: true, options: [

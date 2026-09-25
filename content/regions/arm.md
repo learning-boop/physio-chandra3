@@ -50,12 +50,10 @@ I5 Since the injury, can you not lift your wrist or straighten your fingers?
 Route: Yes → PHYSICIAN FIRST
 Why: Possible radial nerve injury, often with a fracture of the upper arm bone
 
-I6 Did you feel a pop at the front of the shoulder or upper arm while lifting, and now have a new bulge low in the biceps?
-- Yes, and I am under 40 or do heavy manual work or sport
-- Yes, and I am 40 or over
-- No
-Route: Under 40 or heavy work → PHYSICIAN FIRST / 40 or over → continue (results + booking)
-Why: Long head of biceps tear; younger or heavy-use patients may want a surgical opinion (for Chandra: confirm the cut-off)
+I6 Did you feel a pop, click, or tearing at the front of the shoulder or upper arm during a sudden, forceful lift or pull, and has the shape of your biceps changed since (a new bulge low in the arm)?
+Route: Yes → PHYSICIAN FIRST, same day
+Why: Possible torn biceps tendon
+<!-- Chandra, 25 Sep 2026: sudden forced activity, a click or feel of a tear, and a change in the shape of the biceps mean a doctor the same day, at any age. This replaced the document's age split (under 40 or heavy work → physician first; 40 or over → continue). -->
 
 
 ## opening questions

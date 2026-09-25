@@ -43,8 +43,9 @@ I4 Is the pain in your forearm getting worse and worse, with the forearm tight a
 Route: Yes → EMERGENCY
 Why: Possible compartment syndrome (pressure build-up in the forearm)
 
-I5 Did you feel a pop at the front of the elbow while lifting, and now have bruising there or a bulge in the upper arm that was not there before?
-Route: Yes → PHYSICIAN FIRST
+I5 Did you feel a pop, click, or tearing at the front of the elbow during a sudden, forceful lift or pull, and now have bruising there or a change in the shape of your biceps?
+<!-- Chandra, 25 Sep 2026: same day. Wording widened from the document's "pop ... bruising or a bulge" to take in a click or tearing feeling and a change of shape. Asked only after "I felt a pop while lifting or pulling". -->
+Route: Yes → PHYSICIAN FIRST, same day
 Why: Possible distal biceps tendon tear; repair works best within about 2 to 3 weeks
 
 I6 After the fall or blow, can you fully straighten your elbow?
