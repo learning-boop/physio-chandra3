@@ -43,7 +43,7 @@ const TESTS = {
     { name: '5. Cervicogenic headache',
       lines: [['neck', 'head']],
       answers: { age: '18-29', onset: 'gradual', duration: 'o3m', N1: ['onestiff'], N4: ['onesided', 'movement'], N6: ['desk'] },
-      expect: { top: 'neck/cheadache', route: 'results' } },
+      expect: { top: ['neck/cheadache', 'head/cgh'], route: 'results' } },
     { name: '6. Neck, jaw and left arm with effort (heart)',
       lines: [['head', 'neck'], ['shoulderL', 'elbowL']],
       focus: 'neck',
@@ -231,6 +231,32 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'o3m', M1: ['muscles'], M2: ['nothing'], M3: ['none'], M4: ['fullfree'], M8: ['neck'] },
       expect: { notRegion: ['jaw'], special: 'neckSource', route: 'results' } },
   ],
+  head: [
+    { name: '1. Cervicogenic headache: back of the head and upper neck',
+      lines: [['head', 'neck']],
+      answers: { age: '30-49', onset: 'desk', duration: 'o3m', D1: ['sameside'], D2: ['pressing'], D3: ['neckmove', 'skullbase'],
+        D4: ['h4d3'], D5: ['d1to14'], D6: ['upto9'] },
+      expect: { top: ['head/cgh', 'neck/cheadache'], route: 'results' } },
+    { name: '2. Tension-type headache',
+      lines: [['head']],
+      answers: { age: '30-49', onset: 'stress', duration: 'd12w', D1: ['band'], D2: ['pressing'], D3: ['stiffnochange'],
+        D4: ['m30h4'], D5: ['d1to14'], D7: ['stress', 'desk'] },
+      expect: { top: 'head/tth', notTop: ['head/cgh'], route: 'results' } },
+    { name: '3. Thunderclap headache',
+      lines: [['head']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd2w' },
+      flags: ['hrf-thunderclap'],
+      expect: { route: 'emergency' } },
+    { name: '4. Migraine look-alike',
+      lines: [['head']],
+      answers: { age: '30-49', onset: 'years', duration: 'o3m', D1: ['switch'], D2: ['throb', 'sick', 'lightnoise'],
+        D4: ['h4d3'], D5: ['d1to14'], D6: ['upto9'] },
+      expect: { notRegion: ['head'], special: 'migraine', route: 'results' } },
+    { name: '5. Frequent headaches and painkillers',
+      lines: [['head']],
+      answers: { age: '30-49', onset: 'years', duration: 'o3m', D1: ['band'], D5: ['d15'], D6: ['d15plus'] },
+      expect: { top: 'head/tth', special: 'medOveruse', route: 'results' } },
+  ],
 }
 
 const zonesOf = (lines) => {
@@ -314,7 +340,8 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     const why = []
     if (r.error) why.push(r.error)
     if (e.route && r.route !== e.route) why.push(`route ${r.route}, expected ${e.route}`)
-    if (e.top && (r.shown || [])[0] !== e.top) why.push(`top ${(r.shown || [])[0] || 'nothing'}, expected ${e.top}`)
+    // A pattern two areas share (neck and head "Neck-related headache") may come from either.
+    if (e.top && ![].concat(e.top).includes((r.shown || [])[0])) why.push(`top ${(r.shown || [])[0] || 'nothing'}, expected ${[].concat(e.top).join(' or ')}`)
     for (const c of e.not || []) if ((r.shown || []).includes(c)) why.push(`shows ${c}`)
     for (const c of e.notTop || []) if ((r.shown || [])[0] === c) why.push(`${c} is on top`)
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)

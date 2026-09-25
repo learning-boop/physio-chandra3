@@ -24,13 +24,13 @@ export const EXTRA_REGIONS = {
   neck: {
     name: "Neck (cervical spine)",
     redFlags: [
-      { id: "nrf-thunderclap", tier: "emergency", why: "Possible bleed or artery tear in the neck or head",
+      { id: "nrf-thunderclap", tier: "emergency", group: "thunderclap", why: "Possible bleed or artery tear in the neck or head",
         text: "Have you had a sudden, severe headache, the worst you have ever had?" },
-      { id: "nrf-artery", tier: "emergency", why: "Stroke or neck artery warning signs",
+      { id: "nrf-artery", tier: "emergency", group: "stroke", why: "Stroke or neck artery warning signs",
         text: "Since this started, have you had any of these: room spinning or dizziness, double vision, slurred speech, trouble swallowing, sudden falls or blackouts, numb face, weakness on one side, or unsteady walking?" },
       { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord",
         text: "Along with the neck pain, have you lost control of your bladder or bowels, or had new numbness or weakness in both legs?" },
-      { id: "nrf-mening", tier: "emergency", why: "Possible meningitis",
+      { id: "nrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
         text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
       { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
         text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
@@ -40,7 +40,7 @@ export const EXTRA_REGIONS = {
         text: "Have your hands become clumsy (buttons, writing, dropping things), or has your walking become unsteady?" },
       { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability",
         text: "Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
-      { id: "nrf-cad", tier: "urgent", why: "An early sign of a neck artery tear can be pain alone",
+      { id: "nrf-cad", tier: "urgent", group: "cad", why: "An early sign of a neck artery tear can be pain alone",
         text: "Did a new neck pain or headache, unlike anything you have had before, start suddenly after a neck manipulation, a sudden jerk, or a minor knock?" },
       { id: "nrf-tip", tier: "urgent", drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder tip",
         text: "Is the pain at the tip of your shoulder worse when you breathe in deeply, or does it come on after fatty meals?" }
@@ -764,7 +764,7 @@ export const EXTRA_REGIONS = {
         text: "Has one side of your face suddenly drooped or become weak?" },
       { id: "mrf-fracture", tier: "urgent", why: "Possible jaw fracture",
         text: "Did this start after a blow to the jaw or face, and your teeth no longer meet the way they used to?" },
-      { id: "mrf-gca", tier: "urgent", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
+      { id: "mrf-gca", tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
         text: "If you are over 50: do your jaw muscles ache when chewing and ease when you stop, or is your scalp or temple tender, or has your vision changed?" },
       { id: "mrf-infection", tier: "urgent", why: "Possible dental or jaw infection (doctor or dentist)",
         text: "Is there swelling of your face or jaw with a fever, or a bad taste or discharge in your mouth?" },
@@ -853,6 +853,129 @@ export const EXTRA_REGIONS = {
         { id: "teeth", label: "Teeth feel sore, but my dentist found nothing" },
         { id: "none", label: "None of these" }
       ]}
+    ],
+    conditions: []
+  },
+
+  /* ══════════════ HEAD (HEADACHES) ══════════════
+     From Chandra's "Head assessment" region document (DRAFT 23 Sep 2026; the
+     source text is content/regions/head.md). Sources: SNNOOP10 red flags
+     (Do 2019), ICHD-3 2018, JOSPT Neck Pain CPG 2017, IFOMPT cervical
+     framework 2023, Travell & Simons 2019.
+     Reached from the body map's head above eye level: temples, forehead,
+     scalp and the back of the head (the lower face is the jaw).
+     Conditions: content/conditions/head-*.md. Migraine and cluster-type
+     patterns are not physio conditions here: they show a see-a-doctor card.
+     askIf may use "head@back" — a head mark on the back surface. */
+  head: {
+    name: "Head (headaches)",
+    redFlags: [
+      { id: "hrf-thunderclap", tier: "emergency", group: "thunderclap", why: "Possible bleed on the brain (thunderclap headache)",
+        text: "Did this headache come on suddenly and reach its worst within a minute, like the worst headache of your life?" },
+      { id: "hrf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke or other brain cause",
+        text: "With the headache, have you had any of these: weakness or numbness on one side, a drooping face, trouble speaking or understanding, confusion, loss of vision or double vision, or trouble walking?" },
+      { id: "hrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
+        text: "Do you have a fever with a stiff neck, a new rash, or are you very drowsy?" },
+      { id: "hrf-headinjury", tier: "emergency", why: "Possible bleeding after a head injury",
+        text: "Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse?" },
+      { id: "hrf-glaucoma", tier: "emergency", why: "Possible acute glaucoma",
+        text: "Is one eye painful and red, with blurred vision or halos around lights?" },
+      { id: "hrf-gca", tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
+        text: "If you are over 50: is your scalp or temple tender to touch, or do your jaw muscles ache when chewing and ease when you stop?" },
+      { id: "hrf-new50", tier: "urgent", why: "New or progressive headache needs medical review",
+        text: "Is this a new kind of headache that started after age 50, or are your headaches getting steadily worse or changing pattern over weeks?" },
+      { id: "hrf-pressure", tier: "urgent", why: "Pressure-related headache can have a brain cause",
+        text: "Is the headache brought on by coughing, sneezing, straining, or exercise, or much worse when you lie down or stand up?" },
+      { id: "hrf-concussion", tier: "urgent", why: "Possible concussion: medical assessment before physio",
+        text: "Did the headache start after a knock to the head or a whiplash injury in the last 4 weeks?" },
+      { id: "hrf-medication", tier: "urgent", why: "Medication side effect: the prescriber should review it",
+        text: "Did this new headache start after beginning a new medication?" },
+      { id: "hrf-pregnancy", tier: "urgent", why: "Possible pre-eclampsia or other pregnancy-related cause",
+        text: "Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache?" },
+      { id: "hrf-cad", tier: "urgent", group: "cad", why: "Early sign of a neck artery tear can be pain alone (IFOMPT framework)",
+        text: "Did a new headache with neck pain, unlike anything you have had before, start after a neck manipulation or sudden jolt?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "knock", label: "After a knock to the head or a whiplash injury" },
+        { id: "desk", label: "After long hours at a desk or screen" },
+        { id: "stress", label: "During a stressful period" },
+        { id: "years", label: "I have had headaches on and off for years" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d12w", label: "2 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "D1", text: "Which best describes where your headache is?", options: [
+        { id: "sameside", label: "Always the same side, starting from the neck" },
+        { id: "band", label: "Both sides, like a tight band or pressure" },
+        { id: "switch", label: "One side, but it can switch sides", special: "migraine" },
+        { id: "eye", label: "Behind one eye, with a watery eye or runny nose on that side", special: "cluster" }
+      ]},
+      { id: "D2", text: "What does the headache feel like, and what comes with it? Tick all that apply.", options: [
+        { id: "pressing", label: "Pressing or tightening, not throbbing" },
+        { id: "throb", label: "Throbbing or pulsing", special: "migraine" },
+        { id: "sick", label: "Feeling sick or being sick", special: "migraine" },
+        { id: "lightnoise", label: "Light or noise bothers me" },
+        { id: "aura", label: "Zigzag lines or blind spots before it starts", special: "migraine" }
+      ]},
+      { id: "D3", text: "How does your neck affect the headache? Tick all that apply.",
+        askIf: ({ draw, ra }) => !draw || draw.has("neck") || draw.has("head@back") || [].concat(ra.D1 || []).includes("sameside"),
+        options: [
+          { id: "neckmove", label: "Neck movement or holding one position brings it on" },
+          { id: "skullbase", label: "Pressing at the base of my skull brings on my usual headache" },
+          { id: "stiffnochange", label: "My neck is stiff, but it does not change the headache" },
+          { id: "neckfine", label: "My neck is fine" }
+        ]},
+      { id: "D4", text: "How long does each headache usually last?", options: [
+        { id: "u30m", label: "Less than 30 minutes" },
+        { id: "m30h4", label: "30 minutes to 4 hours" },
+        { id: "h4d3", label: "4 hours to 3 days" },
+        { id: "constant", label: "It never fully goes away" }
+      ]},
+      { id: "D5", text: "On how many days a month do you get a headache?", options: [
+        { id: "u1", label: "Fewer than 1" },
+        { id: "d1to14", label: "1 to 14" },
+        { id: "d15", label: "15 or more", special: "medOveruse" },
+        { id: "daily", label: "Every day since it started, without a break", special: "medOveruse" }
+      ]},
+      { id: "D6", text: "On how many days a month do you take pain medication for headaches?",
+        askIf: ({ ra }) => [].concat(ra.D5 || []).some((o) => o === "d1to14" || o === "d15" || o === "daily"),
+        options: [
+          { id: "rarely", label: "Rarely or never" },
+          { id: "upto9", label: "Up to 9 days" },
+          { id: "d10to14", label: "10 to 14 days", special: "medOveruse" },
+          { id: "d15plus", label: "15 or more days", special: "medOveruse" }
+        ]},
+      { id: "D7", text: "What tends to bring a headache on? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.D1 || []).some((o) => o === "sameside" || o === "band" || o === "switch"),
+        options: [
+          { id: "stress", label: "Stress or poor sleep" },
+          { id: "desk", label: "Long spells at a desk or screen" },
+          { id: "hormonal", label: "My period or hormonal changes", special: "migraine" },
+          { id: "food", label: "Missed meals, or certain foods or drinks" },
+          { id: "lightsmell", label: "Bright light or strong smells" }
+        ]},
+      { id: "D8", text: "Since your head injury, which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "knock",
+        options: [
+          { id: "screens", label: "Headache worse with screens or concentrating" },
+          { id: "dizzy", label: "Dizzy or off balance" },
+          { id: "sensitive", label: "Light or noise bothers me more than before" },
+          { id: "foggy", label: "Foggy, or trouble sleeping" },
+          { id: "neckpain", label: "Neck pain since the injury" }
+        ]}
     ],
     conditions: []
   },
@@ -1217,6 +1340,12 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "A small pit or a tender lump at the top of the buttock crease can be a <strong>pilonidal sinus</strong>, a skin problem that can become infected. It is treated by a doctor rather than physiotherapy, so please have it checked, sooner if it becomes red, swollen or starts to leak." },
   neckSource: { title: "This may be coming from your neck",
     body: "Pain around the jaw that does not change when you chew, talk or open wide, especially with neck pain, is often felt in the jaw but comes from the <strong>upper neck</strong> or the neck muscles. Consider running the <strong>Neck</strong> guide too. Your assessment will check both." },
+  migraine: { title: "This pattern can be migraine: worth seeing your doctor",
+    body: "Throbbing headaches that switch sides, with feeling sick, sensitivity to light or noise, or zigzag lines beforehand, are typical of <strong>migraine</strong>. Migraine is treated first by a doctor, who can confirm it and discuss medicines that prevent or stop attacks. Physiotherapy can help alongside, especially when neck pain comes with it." },
+  cluster: { title: "Headache behind one eye: please see your doctor",
+    body: "Severe pain behind one eye, with a watery eye or runny nose on the same side, can be a <strong>cluster-type headache</strong>. It needs a doctor's assessment and specific treatment, so please book with your doctor." },
+  medOveruse: { title: "Frequent painkillers can keep headaches going",
+    body: "Taking painkillers for headaches on <strong>10 or more days a month</strong> (15 or more for simple ones like paracetamol or ibuprofen) can itself keep headaches going, called <strong>medication-overuse headache</strong>. Please review how often you take them with your doctor or pharmacist; do not stop suddenly without advice." },
   ribcage: { title: "Pain with deep breaths",
     body: "Sharp pain with a deep breath often involves the <strong>rib joints</strong> where they meet the spine — usually mechanical and treatable. But if breath pain comes with fever, breathlessness, or follows an accident, see a doctor promptly." }
 }

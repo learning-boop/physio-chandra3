@@ -737,7 +737,9 @@ export default function PainAssessment() {
         // The drawing and every answer so far decide which questions apply
         // (a question's `askIf`), e.g. the neck's arm questions.
         const id = nextQuestion(keys, scopedAnswers, askedIds, MAX_SCORED_QUESTIONS,
-          { draw: zones.map((z) => z.type), all: answers })
+          // Types, plus type@surface (e.g. head@back) for questions that
+          // depend on which side of the body was marked.
+          { draw: zones.flatMap((z) => (z.face ? [z.type, `${z.type}@${z.face}`] : [z.type])), all: answers })
         next = id ? activeQuestions.findIndex((s) => s.id === id) : tailIndexes[0]
       }
     } else if (qIndex + 1 < activeQuestions.length) {

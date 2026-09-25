@@ -28,12 +28,12 @@ export const REGION_CHAINS = [
   // The tailbone, between the back of the pelvis and the perineum.
   ['tlj', 'lowback', 'sij', 'coccyx'],
   ['coccyx', 'hip'],
-  // The jaw and the upper neck refer to each other.
-  ['jaw', 'neck'],
+  // Head, jaw and upper neck all refer to each other.
+  ['head', 'jaw', 'neck'],
 ]
 
 const AREA_WORD = {
-  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', jaw: 'jaw', shoulder: 'shoulder',
+  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head', shoulder: 'shoulder',
   elbow: 'elbow', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
 }
 
@@ -245,11 +245,15 @@ export function rankAcross(keys, answers, max = 3) {
   const byRank = (a, b) => b.rank - a.rank || b.score - a.score
   const perRegion = keys.map((k) =>
     computeResults(REGIONS[k], regionAnswers(keys, k, answers)).ranked.map((x) => ({ ...x, rk: k })))
-  const picked = perRegion.map((list) => list[0]).filter(Boolean).sort(byRank).slice(0, max)
-  for (const x of perRegion.flat().sort(byRank)) {
-    if (picked.length >= max) break
-    if (!picked.includes(x)) picked.push(x)
+  // A pattern two asked areas both describe (the neck's and the head's
+  // "Neck-related headache") is shown once, from the area that ranks it higher.
+  const picked = []
+  const add = (x) => {
+    if (picked.length >= max || picked.includes(x) || picked.some((p) => p.c.name === x.c.name)) return
+    picked.push(x)
   }
+  perRegion.map((list) => list[0]).filter(Boolean).sort(byRank).forEach(add)
+  perRegion.flat().sort(byRank).forEach(add)
   return picked.sort(byRank)
 }
 
