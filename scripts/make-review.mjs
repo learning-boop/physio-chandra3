@@ -58,14 +58,14 @@ function renderRegion(key) {
 
   const flags = R.redFlags.map((f) => `
       <li class="flag">
-        <span class="tier ${f.tier}">${f.tier === 'emergency' ? '911' : 'Doctor first'}</span>
+        <span class="tier ${f.tier}">${f.tier === 'emergency' ? '911' : f.sameDay ? 'Doctor today' : 'See doctor'}</span>
         <div><p class="q">${esc(f.text)}</p>${f.why ? `<p class="why">${esc(f.why)}</p>` : ''}${f.drawn ? `<p class="meta">Asked only when ${esc(f.drawn.join(', '))} is drawn</p>` : ''}${f.group ? `<p class="meta">Shown once with other areas that ask the same (${esc(f.group)})</p>` : ''}</div>
       </li>`).join('')
 
   const screen = SCREENS.find((s) => s.id === key)
   const injury = screen ? `
     <section class="block"><h3>Injury screen</h3>
-      <p class="note">Shown straight after the safety check when this area is drawn. The first answer that routes ends it.</p>
+      <p class="note">Shown after the two safety pages when this area is drawn. The first answer that routes ends it; a see-a-doctor result lets the patient book and carry on.</p>
       <ol class="inj">${screen.questions.map((q) => `
         <li><p class="q">${esc(q.text)}</p><ul class="opts">${q.options.map((o) => `
           <li><span>${esc(o.label)}</span>${o.route ? `<span class="route ${esc(o.route)}">${{ emergency: '→ 911', urgent: '→ doctor first', skip: '→ skip screen', continue: '→ continue' }[o.route] || ''}</span>` : ''}${o.why ? `<span class="meta"> ${esc(o.why)}</span>` : ''}</li>`).join('')}
