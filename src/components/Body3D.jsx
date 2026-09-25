@@ -59,7 +59,10 @@ const AREA = {
   shoulderL: { type: 'shoulder',  label: 'Left Shoulder' },
   shoulderR: { type: 'shoulder',  label: 'Right Shoulder' },
   ctj:       { type: 'ctj',       label: 'Base of Neck' },
-  upperback: { type: 'upperback', label: 'Upper Back' },
+  upperback: { type: 'upperback', label: 'Mid Back' },
+  tlj:       { type: 'tlj',       label: 'Mid-to-Low Back' },
+  flankL:    { type: 'flank',     label: 'Left Side, Below the Ribs' },
+  flankR:    { type: 'flank',     label: 'Right Side, Below the Ribs' },
   lowerback: { type: 'lowerback', label: 'Lower Back' },
   elbowL:    { type: 'elbow',     label: 'Left Elbow' },
   elbowR:    { type: 'elbow',     label: 'Right Elbow' },
@@ -89,6 +92,11 @@ const NECK_SPLIT = 0.06
 // Lower edge of the base-of-neck band on the back (C7 to about T3), as a
 // fraction of the figure's height. Above it, up to the nape, is 'ctj'.
 const CTJ_BOTTOM = 0.25
+// The band where the ribs end and the low back begins (T10–L2): the
+// thoracolumbar junction on the back, and the side just below the ribs
+// (flank) on the front. Both have their own questions (content/regions/tlj.md).
+const TLJ_TOP = 0.17
+const TLJ_BOTTOM = 0.09
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -119,7 +127,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v10'
+const CLASSIFIER_VERSION = 'zones-v11'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -165,7 +173,8 @@ function classify(wx, wy, wz) {
     // Base of the neck and top of the upper back (C7–T3): the cervicothoracic
     // junction, which has its own questions (content/regions/ctj.md).
     if (fy > CTJ_BOTTOM) return 'ctj'
-    return fy > 0.12 ? 'upperback' : 'lowerback'
+    if (fy > TLJ_TOP) return 'upperback'
+    return fy > TLJ_BOTTOM ? 'tlj' : 'lowerback'
   }
 
   // ── FRONT of the body ──
@@ -199,6 +208,7 @@ function classify(wx, wy, wz) {
   if (fy > 0.26 && absZ > 0.05) return 'shoulder' + side
   if (fy > 0.18 && absZ > 0.085) return 'shoulder' + side
   if (fy > 0.16) return 'chest'
+  if (fy > TLJ_BOTTOM && absZ > 0.05) return 'flank' + side   // side, just below the ribs
   if (fy > 0.02) return absZ > 0.08 ? 'hip' + side : 'abdomen'
   return 'hip' + side                  // pelvis / groin
 }

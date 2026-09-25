@@ -27,8 +27,14 @@ const zoneType = (id) => id.replace(/[LR]$/, '').replace('lowerback', 'lowback')
    outlet at the base of the neck (content/regions/ctj.md). */
 const LIMBS = [
   { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'elbow', 'wrist'] },
-  { kind: 'leg', region: 'lowback', spine: ['lowback'], sources: ['lowback'], chain: ['hip', 'knee', 'ankle'] },
+  { kind: 'leg', region: 'lowback', spine: ['lowback'], sources: ['lowerback'], chain: ['hip', 'knee', 'ankle'] },
 ]
+
+/* Areas a mark implies even when it is not drawn. Pain from the TL junction
+   (T10–L2) is felt low — low back, top of the buttock, side of the hip, groin
+   — so a low-back mark also asks the TL-junction questions
+   (content/regions/tlj.md). Zone type → zone types. */
+const IMPLIES = { lowerback: ['tlj'] }
 
 /* How far down the limb a line must reach to count as referral: past the
    shoulder (into the elbow / upper-arm band) or past the hip (into the thigh
@@ -61,12 +67,13 @@ export function detectReferral(lines = []) {
     its spinal source, so the neck (or low back) questions are asked — once —
     instead of each limb area's own. Other marks are left untouched.
     Every source area of the line is included even when it was not drawn
-    (an arm line from the neck also asks about the base of the neck). */
-export function flowZones(zones, referral) {
-  if (!referral.length) return zones
+    (an arm line from the neck also asks about the base of the neck), and so
+    is every area a mark implies (IMPLIES). Added areas carry `implied`. */
+export function flowZones(zones, referral = []) {
   const felt = new Set(referral.flatMap((r) => r.felt))
   const out = zones.filter((z) => !felt.has(z.id))
-  for (const t of referral.flatMap((r) => r.sources || [])) {
+  const want = [...referral.flatMap((r) => r.sources || []), ...out.flatMap((z) => IMPLIES[z.type] || [])]
+  for (const t of want) {
     if (!out.some((z) => z.type === t)) out.push({ id: t, type: t, label: t, implied: true })
   }
   return out

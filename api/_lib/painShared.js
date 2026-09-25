@@ -37,6 +37,9 @@ export function hasValidKey(key) {
    The frontend now sends { type, label } objects, but plain label strings
    (older clients, manual testing) still resolve via keyword hints. */
 const TYPE_HINTS = [
+  // Before 'lowerback': the label 'Mid-to-Low Back' contains 'low back'.
+  ['tlj', ['mid-to-low back', 'thoracolumbar']],
+  ['flank', ['below the ribs', 'flank']],
   ['lowerback', ['lower back', 'low back', 'lumbar']],
   ['upperback', ['upper back', 'mid back', 'thoracic']],
   ['ctj', ['base of neck', 'base of the neck', 'cervicothoracic']],

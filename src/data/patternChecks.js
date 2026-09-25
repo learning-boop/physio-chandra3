@@ -92,12 +92,12 @@ const PATTERNS = [
     text: 'Pain that does not change at all with movement or position, or that comes with nausea, fever, or feeling unwell',
     // Gallbladder/liver (right shoulder blade), diaphragm (shoulder), stomach
     // and pancreas (mid back) maps. The flank → groin map has its own item.
-    when: (z) => has(z, 'chest', 'abdomen', 'upperback') || onSide(z, 'R', 'shoulder'),
+    when: (z) => has(z, 'chest', 'abdomen', 'upperback', 'tlj') || onSide(z, 'R', 'shoulder'),
   },
   {
     id: 'pc-urinary', tier: 'urgent', why: WHY.urinary,
     text: 'Pain spreading from your side or flank toward the groin, or fever, blood in the urine, or burning when passing urine',
-    when: (z) => has(z, 'lowerback', 'abdomen', 'hip'),
+    when: (z) => has(z, 'lowerback', 'tlj', 'flank', 'abdomen', 'hip'),
   },
   {
     id: 'pc-inflammatory', tier: 'urgent', why: WHY.systemic,

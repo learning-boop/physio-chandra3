@@ -28,11 +28,11 @@ export const EXTRA_REGIONS = {
         text: "Have you had a sudden, severe headache, the worst you have ever had?" },
       { id: "nrf-artery", tier: "emergency", why: "Stroke or neck artery warning signs",
         text: "Since this started, have you had any of these: room spinning or dizziness, double vision, slurred speech, trouble swallowing, sudden falls or blackouts, numb face, weakness on one side, or unsteady walking?" },
-      { id: "nrf-cord", tier: "emergency", why: "Acute pressure on the spinal cord",
+      { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord",
         text: "Along with the neck pain, have you lost control of your bladder or bowels, or had new numbness or weakness in both legs?" },
       { id: "nrf-mening", tier: "emergency", why: "Possible meningitis",
         text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
-      { id: "nrf-cardiac", tier: "emergency", why: "Heart pain can be felt in the neck, jaw, and arm",
+      { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
         text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
       { id: "nrf-kehr", tier: "emergency", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
         text: "Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?" },
@@ -163,21 +163,22 @@ export const EXTRA_REGIONS = {
      crash, a fall from a height, or a hard blow") is not a checkbox here: as
      the document says, it is routed through the neck injury screen
      (./injuryScreen.js), which runs whenever this area is drawn.
-     `sameAs`: the flag is left out when the neck's equivalent is also asked. */
+     `group`: flags asking the same thing in neighbouring areas; only the first on
+     the screen is kept. */
   ctj: {
     name: "Base of the neck & upper back",
     redFlags: [
-      { id: "crf-aorta", tier: "emergency", why: "Possible tear in the aorta (aortic dissection)",
+      { id: "crf-aorta", tier: "emergency", group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
         text: "Did the pain start suddenly as a tearing or ripping pain between your shoulder blades, or spreading into your chest?" },
-      { id: "crf-cardiac", tier: "emergency", sameAs: "nrf-cardiac", why: "Heart pain is often felt between the shoulder blades",
+      { id: "crf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain is often felt between the shoulder blades",
         text: "Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your left arm or jaw?" },
-      { id: "crf-lung", tier: "emergency", why: "Possible blood clot in the lung or a collapsed lung",
+      { id: "crf-lung", tier: "emergency", group: "lungclot", why: "Possible blood clot in the lung or a collapsed lung",
         text: "Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf?" },
-      { id: "crf-cord", tier: "emergency", sameAs: "nrf-cord", why: "Possible spinal cord compression",
+      { id: "crf-cord", tier: "emergency", group: "cord", why: "Possible spinal cord compression",
         text: "Along with the back pain, have you lost control of your bladder or bowels, or had new weakness, numbness, or unsteadiness in both legs?" },
       { id: "crf-pancoast", tier: "urgent", why: "Possible tumour at the top of the lung (Pancoast)",
         text: "Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, or noticed a drooping eyelid on the painful side?" },
-      { id: "crf-osteo", tier: "urgent", why: "Possible osteoporotic fracture of the spine",
+      { id: "crf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
         text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or take long-term steroid tablets?" },
       { id: "crf-wasting", tier: "urgent", why: "Nerve compression (C8/T1) or thoracic outlet needs medical review",
         text: "Are the small muscles of your hand getting thinner, or has your grip become weak?" },
@@ -185,7 +186,7 @@ export const EXTRA_REGIONS = {
         text: "Does your arm or hand turn pale, blue, cold, or swollen, especially when your arm is raised?" },
       { id: "crf-gallbladder", tier: "urgent", why: "Gallbladder pain can be felt under the right shoulder blade",
         text: "Is the pain under your right shoulder blade worse after fatty meals, or does it come with feeling sick?" },
-      { id: "crf-shingles", tier: "urgent", why: "Possible shingles",
+      { id: "crf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
         text: "Is there a band of burning pain around one side of your chest or back, with a rash or blisters?" },
       { id: "crf-oesophagus", tier: "urgent", why: "Oesophagus pain can be felt between the shoulder blades",
         text: "Does the pain come on when you swallow, or does food feel like it sticks on the way down?" }
@@ -275,69 +276,253 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
-  /* ══════════════ UPPER / MID BACK ══════════════ */
+  /* ══════════════ MID BACK (THORACIC SPINE, T4–T12) ══════════════
+     From Chandra's "Thoracic assessment" region document (DRAFT 23 Sep 2026;
+     the source text is content/regions/upperback.md). Sources: IFOMPT red
+     flags framework 2020, Heneghan & Rushton 2016, ASAS inflammatory back
+     pain 2009, Proulx & Zryd 2009, Bogduk 2009, Dreyfuss 1994, Travell &
+     Simons 2019, Giamberardino 2003.
+     Reached from the body map's upper back and from the front of the chest
+     (costochondritis). Conditions: content/conditions/upperback-*.md.
+     `group`: flags asking the same thing in neighbouring areas (base of the
+     neck, TL junction); only the first on the screen is kept. */
   upperback: {
-    name: "Upper & mid back",
+    name: "Mid back (thoracic spine)",
     redFlags: [
-      { id: "trf-chest", text: "Chest pain, pressure, or breathlessness with exertion alongside this pain", tier: "emergency" },
-      { id: "trf-band", text: "A new band-like numbness around the trunk, or numbness/weakness in the legs", tier: "emergency" },
-      { id: "trf-fracture", text: "Sudden mid-back pain after a minor strain and you're over 65 or have osteoporosis or long-term steroid use", tier: "urgent" },
-      { id: "trf-breath", text: "Sharp pain with every deep breath plus fever or feeling unwell", tier: "urgent" }
+      { id: "trf-aorta", tier: "emergency", group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
+        text: "Did the pain start suddenly as a tearing or ripping pain in your mid back or between your shoulder blades, or spreading into your chest?" },
+      { id: "trf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the mid back",
+        text: "Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your arm or jaw?" },
+      { id: "trf-lung", tier: "emergency", group: "lungclot", why: "Possible blood clot in the lung or a collapsed lung",
+        text: "Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf?" },
+      { id: "trf-pancreas", tier: "emergency", group: "pancreas", why: "Possible pancreatitis or perforated ulcer",
+        text: "Do you have severe pain in the upper tummy that goes straight through to your back, with vomiting?" },
+      { id: "trf-cord", tier: "emergency", group: "cord", why: "Possible spinal cord compression",
+        text: "Along with the back pain, have you lost control of your bladder or bowels, or had sudden weakness or numbness in both legs?" },
+      { id: "trf-fracture", tier: "emergency", group: "fracture", why: "Possible spinal fracture",
+        text: "Did this start in the last few days after a car crash, a fall from a height, or a hard blow to the back?" },
+      { id: "trf-myelo", tier: "urgent", group: "legs", why: "Possible slow pressure on the spinal cord (thoracic myelopathy)",
+        text: "Have your legs gradually become stiff, heavy, or clumsy when you walk?" },
+      { id: "trf-cancer", tier: "urgent", group: "cancer", why: "The thoracic spine is a common site for cancer to spread",
+        text: "Have you ever had cancer, and is this a new mid-back pain?" },
+      { id: "trf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
+        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+      { id: "trf-infection", tier: "urgent", group: "infection", why: "Possible spinal infection",
+        text: "Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?" },
+      { id: "trf-kidney", tier: "urgent", why: "Possible kidney infection or stone",
+        text: "Is the pain in your side or lower ribs, with a fever, burning when you pass urine, or blood in your urine?" },
+      { id: "trf-gut", tier: "urgent", why: "Stomach, ulcer, or gallbladder pain can be felt in the back",
+        text: "Is the pain linked to eating, heartburn, or black stools, or is it under your right shoulder blade after fatty meals?" },
+      { id: "trf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
+        text: "Is there a band of burning pain around one side of your chest or back, with a rash or blisters?" }
     ],
     context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
       { id: "onset", text: "How did it start?", options: [
-        { id: "load", label: "Lifting, twisting, or carrying", weights: { tlj: 2, mech: 1 } },
-        { id: "desk", label: "Gradually with sitting or desk work", weights: { mech: 2 } },
-        { id: "gradual", label: "Gradually, no clear cause", weights: { mech: 1, maigne: 1 } },
-        { id: "ns", label: "Not sure" }
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "sitting", label: "After long hours sitting, at a desk, or driving" },
+        { id: "lift", label: "After lifting, twisting, or reaching" },
+        { id: "cough", label: "After a cough, sneeze, or sudden movement" },
+        { id: "fall", label: "After a fall or knock" },
+        { id: "sport", label: "After sport or a new activity (rowing, golf, racket sports)" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
-        { id: "d6w", label: "2 – 6 weeks" },
-        { id: "d6m", label: "More than 6 weeks" },
-        { id: "years", label: "Comes and goes over years", weights: { tlj: 1, maigne: 1 } }
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
       ]}
     ],
     questions: [
-      { id: "T1", text: "Where do you feel it most?", options: [
-        { id: "blades", label: "Between the shoulder blades", weights: { mech: 2 } },
-        { id: "junction", label: "Where the ribcage ends — the 'junction' of mid and low back", weights: { tlj: 3, maigne: 1 } },
-        { id: "crest", label: "Along the top of the pelvis / flank — though the back itself feels stiff higher up", weights: { maigne: 3 } },
-        { id: "ns", label: "Not sure" }
+      { id: "T1", text: "Where is the pain mainly?", options: [
+        { id: "spine", label: "In the middle of my back, on the spine" },
+        { id: "beside", label: "Beside my spine, on one side" },
+        { id: "rib", label: "Wrapping around a rib, towards the side" },
+        { id: "band", label: "Like a band across my back or around my chest" },
+        // A first episode of chest pain should be checked by a doctor even
+        // when it fits a chest-wall pattern (test patient 3).
+        { id: "front", label: "At the front of my chest, on the breastbone or ribs", special: "chestFirst" }
       ]},
-      { id: "T2", text: "Which pattern sounds most like yours?", options: [
-        { id: "flare", label: "Repeated flare-ups after small tasks (laundry, bending, long drives), easing with support or position change", weights: { tlj: 3 } },
-        { id: "slump", label: "Builds with slumped sitting, eases when I move", weights: { mech: 2 } },
-        { id: "twist", label: "Worse with twisting or rotating", weights: { tlj: 1, mech: 1 } },
-        { id: "ns", label: "Not sure" }
+      { id: "T2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "twist", label: "Twisting or turning" },
+        { id: "slump", label: "Bending forward or slumping" },
+        { id: "arch", label: "Arching back or reaching up" },
+        { id: "sitting", label: "Sitting for a long time" },
+        { id: "lifting", label: "Lifting or carrying" }
       ]},
-      { id: "T3", text: "Is the top edge of your pelvis tender to press, even though the problem feels like it's in the back?", options: [
-        { id: "yes", label: "Yes — surprisingly tender there", weights: { maigne: 3 } },
-        { id: "no", label: "No", weights: { maigne: -2 } },
-        { id: "ns", label: "Haven't checked" }
+      { id: "T3", text: "Does breathing or coughing affect it?", options: [
+        { id: "no", label: "No" },
+        { id: "catch", label: "A deep breath catches at one spot in my back" },
+        { id: "rib", label: "A deep breath or cough hurts along a rib, towards the side or front" },
+        { id: "bandcough", label: "Coughing or sneezing sends pain around my chest like a band" }
       ]},
-      { id: "T4", text: "Does a deep breath change the pain?", options: [
-        { id: "breath", label: "Yes — a deep breath is sharp", weights: { mech: 1 }, special: "ribcage" },
-        { id: "no", label: "No" }
+      { id: "T4", text: "Which of these do you notice? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.T1 || []).some((o) => o === "rib" || o === "band") || [].concat(ra.T3 || []).includes("bandcough"),
+        options: [
+          { id: "burning", label: "Burning or tingling in a strip around my chest or tummy" },
+          { id: "skin", label: "The skin in that strip is sensitive to touch or clothing" },
+          { id: "numb", label: "A numb patch on my chest or tummy" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "T5", text: "How do you spend most of your day?", options: [
+        { id: "desk", label: "At a desk or laptop" },
+        { id: "driving", label: "Driving" },
+        { id: "lifting", label: "Lifting and carrying" },
+        { id: "feet", label: "On my feet, moving around" },
+        { id: "sport", label: "Sport or training most days" }
+      ]},
+      { id: "T6", text: "How does stiffness behave?", options: [
+        { id: "eases", label: "Stiff at first, then eases as I move" },
+        { id: "worse", label: "Gets worse the more I move" },
+        { id: "night", label: "Worst in the second half of the night, and exercise helps", special: "inflammatory" },
+        { id: "notstiff", label: "Not stiff" }
+      ]},
+      { id: "T7", text: "About the front of your chest: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.T1 || []).includes("front"),
+        options: [
+          { id: "tender", label: "It is tender when I press on the breastbone or where the ribs join it" },
+          { id: "pushing", label: "Worse with pushing, hugging, or lying on my front" },
+          { id: "infection", label: "It started after a chest infection or a bout of coughing" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "T8", text: "What eases it? Tick all that apply.", options: [
+        { id: "tall", label: "Sitting up tall, or gently arching back" },
+        { id: "lying", label: "Lying on my back" },
+        { id: "moving", label: "Moving around" },
+        { id: "heat", label: "Heat or massage" },
+        { id: "nothing", label: "Nothing specific" }
       ]}
     ],
-    conditions: [
-      { id: "mech", name: "Mechanical thoracic pain & stiffness", clin: "Non-specific mid-back / postural pain",
-        blurb: "Stiffness and muscle ache of the mid-back region, commonly linked to sustained postures — the upper back tolerates load well but dislikes staying still.",
-        noticed: ["Ache between the shoulder blades after sitting", "Stiffness with rotation or looking behind", "Eases with movement and activity"],
-        homeCare: ["Break up sitting regularly; vary positions", "Gentle extension over a chair back and rotation stretches", "Stay generally active — walking helps the whole spine"],
-        seePhysioIf: ["Stiffness or ache persists beyond 2 weeks", "It limits work, sport, or sleep", "You'd like a posture-and-strength plan for desk work"] },
-      { id: "tlj", name: "Thoracolumbar junction irritation / instability pattern", clin: "TLJ overload where mid and low back meet",
-        blurb: "The junction between the stiff ribcage spine and the mobile low back can become sensitised and 'flare-prone' — small loads trigger recurring episodes that settle with support and better load control.",
-        noticed: ["Recurring flares after minor activities", "A specific sore spot where the ribcage ends", "Temporary relief from support, bracing, or position change", "Predictable aggravators: extension, rotation, loading"],
-        homeCare: ["Note and temporarily moderate the predictable triggers", "Gentle mobility plus gradual core/hinge strengthening", "Remember: pain intensity here does not equal tissue damage"],
-        seePhysioIf: ["Flare-ups keep recurring", "You want a structured stability and load-management program", "Episodes are getting closer together or stronger"] },
-      { id: "maigne", name: "Maigne syndrome (thoracolumbar referred pain)", clin: "TL-junction pain referring to the pelvis rim / flank",
-        blurb: "Irritation at the thoracolumbar junction can refer pain along nerves that travel to the top of the pelvis, flank, or groin — so the felt pain is lower than its actual source. Pressing the pelvic rim is often unexpectedly tender.",
-        noticed: ["Pain along the iliac crest (top of the pelvis) or flank", "Tenderness when pressing that rim of bone", "A stiff segment where ribcage meets low back", "Low-back or hip treatments that never quite worked"],
-        homeCare: ["Gentle mobility for the mid-back junction rather than rubbing the sore spot", "Avoid prolonged slumped sitting", "Keep generally active within comfort"],
-        seePhysioIf: ["Pelvic-rim or flank pain hasn't responded to treatment aimed at the low back or hip", "The pattern keeps recurring", "You'd like assessment of the thoracolumbar junction specifically"] }
-    ]
+    conditions: []
+  },
+
+  /* ══════════════ WHERE THE MID BACK MEETS THE LOW BACK (TL JUNCTION, T10–L2) ══════════════
+     From Chandra's "TL-junction assessment" region document (DRAFT 23 Sep
+     2026; the source text is content/regions/tlj.md). Sources: Maigne 1980,
+     Maigne 1989, IFOMPT red flags framework 2020, McMahon 2018, SVS AAA
+     guidelines 2018, Travell & Simons 2019.
+     Reached from the body map's band where the ribs end, the side below the
+     ribs (flank), and ANY low-back drawing: TL-junction pain is "felt low,
+     starts higher" (../data/referral.js, IMPLIES).
+     Conditions: content/conditions/tlj-*.md. */
+  tlj: {
+    name: "Where the mid back meets the low back",
+    redFlags: [
+      { id: "jrf-aaa", tier: "emergency", why: "Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
+        text: "Do you have a sudden, severe pain in your back, tummy, or side, with a pulsing feeling in your tummy, or feeling faint or sweaty?" },
+      { id: "jrf-aorta", tier: "emergency", group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
+        text: "Did the pain start suddenly as a tearing or ripping pain in your back, spreading to your chest or tummy?" },
+      { id: "jrf-conus", tier: "emergency", why: "Possible compression of the lower spinal cord or nerves (conus medullaris or cauda equina)",
+        text: "Have you lost control of your bladder or bowels, lost feeling between your legs or around your bottom, or had sudden weakness or numbness in both legs?" },
+      { id: "jrf-fracture", tier: "emergency", group: "fracture", why: "Possible fracture; this is the most common level for spinal fractures",
+        text: "Did this start in the last few days after a car crash, a fall from a height, or landing hard on your feet or bottom?" },
+      { id: "jrf-pancreas", tier: "emergency", group: "pancreas", why: "Possible pancreatitis or perforated ulcer",
+        text: "Do you have severe pain in the upper tummy that goes straight through to your back, with vomiting?" },
+      { id: "jrf-testis", tier: "emergency", why: "Possible testicular torsion",
+        text: "Do you have sudden, severe pain in a testicle?" },
+      { id: "jrf-kidney", tier: "urgent", why: "Possible kidney stone or kidney infection",
+        text: "Does the pain come in waves of severe pain from your side down to your groin, or come with a fever, burning when you pass urine, or blood in your urine?" },
+      { id: "jrf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the spine",
+        text: "Have you ever had cancer, and is this a new back pain?" },
+      { id: "jrf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
+        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+      { id: "jrf-infection", tier: "urgent", group: "infection", why: "Possible spinal infection",
+        text: "Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?" },
+      { id: "jrf-legs", tier: "urgent", group: "legs", why: "Possible slow pressure on the spinal cord",
+        text: "Have your legs gradually become stiff, heavy, or clumsy when you walk?" },
+      { id: "jrf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
+        text: "Is there a band of burning pain around one side of your body, with a rash or blisters?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "lift", label: "After lifting, twisting, or bending" },
+        { id: "fall", label: "After a fall, landing on my feet or bottom" },
+        { id: "sport", label: "After a twisting sport (golf, tennis, rowing, hockey)" },
+        { id: "sitting", label: "After long hours sitting or driving" },
+        { id: "woke", label: "I woke up with it" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "J1", text: "Where do you feel it? Tick all that apply.", options: [
+        { id: "mid", label: "In the middle of my back, where the ribs end" },
+        { id: "beside", label: "Beside my spine at the bottom of the ribs, on one side" },
+        { id: "crest", label: "Low back or top of the buttock, over the hip bone" },
+        { id: "side", label: "At my side, just below the ribs" },
+        { id: "groin", label: "In the groin or lower tummy" }
+      ]},
+      { id: "J2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "twist", label: "Twisting or turning" },
+        { id: "bend", label: "Bending forward" },
+        { id: "extend", label: "Standing up straight after bending, or arching back" },
+        { id: "sitting", label: "Sitting or driving for a long time" },
+        { id: "lying", label: "Lying on the painful side" }
+      ]},
+      { id: "J3", text: "Is there a sore spot on the top of your hip bone, about a hand’s width out from the spine?",
+        askIf: ({ ra }) => [].concat(ra.J1 || []).includes("crest"),
+        options: [
+          { id: "usual", label: "Yes, and pressing it brings on my usual pain" },
+          { id: "tender", label: "It is tender, but it is not my usual pain" },
+          { id: "no", label: "No" }
+        ]},
+      { id: "J4", text: "About your lower ribs: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.J1 || []).includes("side"),
+        options: [
+          { id: "click", label: "A clicking or slipping feeling at the bottom edge of my ribs" },
+          { id: "sharp", label: "Sharp pain at the rib edge when I bend or twist" },
+          { id: "dull", label: "A dull ache at the rib edge that lasts for hours" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "J5", text: "About the groin or lower tummy: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.J1 || []).includes("groin"),
+        options: [
+          { id: "burning", label: "Burning or tingling in the groin or upper inner thigh" },
+          { id: "numbhip", label: "A numb or sensitive patch on the side of my hip" },
+          { id: "nochange", label: "Groin pain that does not change with hip movement" },
+          { id: "hipmove", label: "Groin pain that is worse when I move my hip", special: "hipSource" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "J6", text: "How does stiffness behave?", options: [
+        { id: "eases", label: "Stiff at first, then eases as I move" },
+        { id: "worse", label: "Gets worse the more I move" },
+        { id: "night", label: "Worst in the second half of the night, and exercise helps", special: "inflammatory" },
+        { id: "notstiff", label: "Not stiff" }
+      ]},
+      { id: "J7", text: "Which of these do you do regularly? Tick all that apply.", options: [
+        { id: "golf", label: "Golf, tennis, or another twisting sport" },
+        { id: "rowing", label: "Rowing or paddling" },
+        { id: "lifting", label: "Lifting at work or at the gym" },
+        { id: "desk", label: "Sitting at a desk or driving most of the day" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "J8", text: "What eases it? Tick all that apply.", options: [
+        { id: "knees", label: "Lying on my back with my knees bent" },
+        { id: "moving", label: "Moving around" },
+        { id: "sitting", label: "Sitting" },
+        { id: "heat", label: "Heat" },
+        { id: "nothing", label: "Nothing specific" }
+      ]}
+    ],
+    conditions: []
   },
 
   /* ══════════════ ELBOW ══════════════ */
@@ -686,6 +871,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Burning, tingling or numbness on the inner ankle or sole can involve a nerve (tarsal tunnel), especially with flat feet or after ankle swelling. Worth assessment if it persists — nerve symptoms respond best to early care." },
   shoulderSource: { title: "This may be coming from your shoulder",
     body: "Pain at the top of the shoulder or upper arm that is worse when you move the <strong>arm</strong> than when you move the neck usually comes from the <strong>shoulder</strong> itself: the rotator cuff, the AC joint at the top of the shoulder, or a stiffening shoulder joint. Consider running the <strong>Shoulder</strong> guide too. Your assessment will check both the neck and the shoulder." },
+  chestFirst: { title: "If this is your first chest pain, see a doctor as well",
+    body: "Pain on the front of the chest that is tender to press often comes from the <strong>chest wall</strong>: the joints where the ribs meet the breastbone. But if this is the <strong>first time</strong> you have had chest pain, a doctor should check your heart and lungs before it is treated as a chest-wall problem. If it comes with breathlessness, sweating, or spreads to your arm or jaw, call 911." },
+  hipSource: { title: "This may be coming from your hip",
+    body: "Groin pain that is worse when you <strong>move your hip</strong> usually comes from the <strong>hip joint</strong> or the muscles around it rather than from the back. Consider running the <strong>Hip</strong> guide too. Your assessment will check both." },
   ribcage: { title: "Pain with deep breaths",
     body: "Sharp pain with a deep breath often involves the <strong>rib joints</strong> where they meet the spine — usually mechanical and treatable. But if breath pain comes with fever, breathlessness, or follows an accident, see a doctor promptly." }
 }

@@ -554,6 +554,10 @@ Object.assign(ZONE_TO_REGION, {
   neck: 'neck',
   ctj: 'ctj',
   upperback: 'upperback',
+  // The front of the chest (costochondritis) is asked the mid-back questions.
+  chest: 'upperback',
+  tlj: 'tlj',
+  flank: 'tlj',
   elbow: 'elbow',
   wrist: 'wrist',
   hip: 'hip',

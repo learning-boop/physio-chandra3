@@ -56,7 +56,7 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   const ref = detectReferral(lines)
   const fz = flowZones(zonesOf(lines), ref)
   check('low back→foot line detected as leg referral', ref.length === 1 && ref[0].kind === 'leg' && ref[0].reach === 'ankle', ref)
-  check('questions come from the LOW BACK only', JSON.stringify(questionRegions(fz, null)) === '["lowback"]', questionRegions(fz, null))
+  check('questions come from the LOW BACK and the TL junction it implies (not hip/knee/ankle)', JSON.stringify(questionRegions(fz, null)) === '["tlj","lowback"]', questionRegions(fz, null))
   check('drawing pre-answers L2 = "below the knee"', JSON.stringify(drawnAnswers(ref).L2) === '["belowknee"]', drawnAnswers(ref))
 }
 
@@ -179,7 +179,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const src = fs.readFileSync(root + '/src/components/Body3D.jsx', 'utf8')
   const grab = (re) => (src.match(re) || [''])[0]
   const code = [
-    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/), grab(/const CTJ_BOTTOM = [^\n]+/),
+    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/), grab(/const CTJ_BOTTOM = [^\n]+/), grab(/const TLJ_TOP = [^\n]+/), grab(/const TLJ_BOTTOM = [^\n]+/),
     'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
     grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/),
     grab(/function surfaceOf\(wx, wy, wz\) \{[\s\S]*?\n\}/),
@@ -193,6 +193,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('back of the shoulder is shoulder, not upper back', /^shoulder/.test(classify(-0.08, 0.25, 0.14)), classify(-0.08, 0.25, 0.14))
   check('the middle of the shoulder blade is still upper back', classify(-0.08, 0.22, 0.06) === 'upperback', classify(-0.08, 0.22, 0.06))
   check('the base of the neck from behind (C7–T3) is its own area', classify(-0.08, 0.30, 0.03) === 'ctj', classify(-0.08, 0.30, 0.03))
+  check('where the ribs end, from behind (T10–L2), is its own area', classify(-0.08, 0.13, 0.03) === 'tlj', classify(-0.08, 0.13, 0.03))
+  check('the side just below the ribs, from the front, is the flank', /^flank/.test(classify(0.08, 0.13, 0.07)), classify(0.08, 0.13, 0.07))
+  check('the centre of the tummy is still the abdomen', classify(0.08, 0.13, 0.02) === 'abdomen', classify(0.08, 0.13, 0.02))
+  check('the low back is still the low back', classify(-0.08, 0.05, 0.03) === 'lowerback', classify(-0.08, 0.05, 0.03))
   check('the nape is still the neck', classify(-0.08, 0.36, 0.03) === 'neck', classify(-0.08, 0.36, 0.03))
 }
 

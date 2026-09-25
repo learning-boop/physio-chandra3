@@ -19,13 +19,15 @@ import {
 export const REGION_CHAINS = [
   ['neck', 'shoulder', 'elbow', 'wrist'],
   ['lowback', 'hip', 'knee', 'ankle'],
-  ['neck', 'ctj', 'upperback', 'lowback'],
+  ['neck', 'ctj', 'upperback', 'tlj', 'lowback'],
   // The base of the neck feeds the arm too (first rib, thoracic outlet).
   ['ctj', 'shoulder', 'elbow', 'wrist'],
+  // The TL junction refers to the low back, side of the hip and groin.
+  ['tlj', 'lowback', 'hip', 'knee', 'ankle'],
 ]
 
 const AREA_WORD = {
-  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', shoulder: 'shoulder',
+  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', shoulder: 'shoulder',
   elbow: 'elbow', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
 }
 
@@ -270,8 +272,14 @@ export function regionRedFlags(flowZ = [], zones = flowZ) {
       }
     }
   }
-  // A flag with `sameAs` asks what another region's flag already asks (the
-  // base of the neck's heart and spinal-cord questions, when the neck's own
-  // are on the screen too): keep one.
-  return out.filter((f) => !(f.sameAs && out.some((o) => o.id === f.sameAs)))
+  // Flags sharing a `group` ask the same thing in neighbouring areas (the
+  // heart, aorta or spinal-cord question in the neck, base of the neck, mid
+  // back and TL junction): keep the first, which is the most serious tier.
+  const groups = new Set()
+  return out.filter((f) => {
+    if (!f.group) return true
+    if (groups.has(f.group)) return false
+    groups.add(f.group)
+    return true
+  })
 }
