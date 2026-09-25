@@ -4,7 +4,7 @@
 # Run `npm run import:conditions` then `npm run check:data` when you're done.
 #
 # region : which body area this belongs to. One of:
-#          lowback  neck  ctj  upperback  tlj  sij  coccyx  jaw  head  shoulder  elbow  wrist  hip  knee  ankle
+#          lowback  neck  ctj  upperback  tlj  sij  coccyx  jaw  head  shoulder  arm  elbow  wrist  hip  knee  ankle
 # id     : short unique code, lowercase, no spaces (e.g. achilles)
 # ─────────────────────────────────────────────────────────────────────────
 region: ankle

@@ -15,7 +15,7 @@ import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial } from '../data/psychosoc
 import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism } from '../data/painType'
 import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
 import { patternChecks } from '../data/patternChecks'
-import { INJURY_QUESTIONS, injuryStep, injuryScreenApplies } from '../data/injuryScreen'
+import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -81,6 +81,7 @@ const REGION_AGGRAVATORS = {
   coccyx:    ['Sitting on hard seats', 'Leaning back while sitting', 'Standing up from sitting', 'Cycling or rowing'],
   sij:       ['Standing on one leg', 'Stairs or getting in and out of the car', 'Rolling over in bed', 'Sitting for a long time'],
   shoulder:  ['Reaching overhead', 'Reaching behind your back', 'Lying on that side at night', 'Lifting or carrying'],
+  arm:       ['Lifting or carrying', 'Reaching overhead', 'Gripping or using tools', 'Sitting at a desk'],
   elbow:     ['Gripping or squeezing', 'Lifting with the palm down', 'Twisting a handle or door knob', 'Repetitive work or sport'],
   wrist:     ['Gripping or twisting', 'Typing or using a mouse', 'Taking weight through the hand', 'Fine tasks such as buttons or jars'],
   hip:       ['Walking or climbing stairs', 'Lying on that side at night', 'Standing on one leg', 'Getting up from a chair'],
@@ -98,6 +99,7 @@ const REGION_EASERS = {
   coccyx:    ['A wedge or cut-out cushion', 'Leaning forward when sitting', 'Standing or walking', 'Heat packs'],
   sij:       ['Moving around', 'A pelvic support belt', 'A pillow between the knees at night', 'Heat packs'],
   shoulder:  ['Resting the arm', 'Supporting the arm in a sling or pocket', 'Gentle pendulum movement', 'Heat or cold packs'],
+  arm:       ['Resting the arm', 'Gentle stretching', 'Heat packs', 'Changing position'],
   elbow:     ['Resting from gripping', 'A brace or strap', 'Ice', 'Gentle stretching'],
   wrist:     ['Resting the hand', 'A splint or support', 'Ice', 'Avoiding the aggravating task'],
   hip:       ['Rest', 'A pillow between the knees at night', 'Gentle walking', 'Heat packs'],
@@ -567,7 +569,7 @@ export default function PainAssessment() {
      emergency checks (the neck has ten). A flag with `drawn` is asked only
      when one of those areas is marked (the neck's shoulder-tip flags). Its
      `why` line from the region document titles the explanation. */
-  const injuryApplies = useMemo(() => injuryScreenApplies(zones), [zones])
+  const injuryApplies = useMemo(() => injuryScreenApplies(flowZ), [flowZ])
   const safetyChecks = useMemo(() => {
     const regional = regionRedFlags(flowZ, zones)
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
@@ -592,7 +594,7 @@ export default function PainAssessment() {
     // These use every marked area, not the folded-down flow zones, because the
     // maps are about WHERE it is felt — right shoulder blade, left arm, flank.
     // A region that asks its own heart question (the neck) replaces the
-    // drawing's generic one. When the neck injury screen follows, it asks
+    // drawing's generic one. When an injury screen follows, it asks
     // about recent injuries in its own, more precise way.
     const ownCardiac = list.some((f) => /cardiac/.test(f.id))
     const universal = injuryApplies ? UNIVERSAL_CHECKS.filter((f) => f.id !== 'sc-trauma') : UNIVERSAL_CHECKS
@@ -600,17 +602,18 @@ export default function PainAssessment() {
     return [...list, ...universal, ...pattern]
   }, [flowZ, zones, injuryApplies, answers, behaviour.nightConcern])
 
-  /* ── Neck injury screen (Canadian C-Spine Rule, ../data/injuryScreen.js) ──
+  /* ── Injury screens (../data/injuryScreen.js: neck, shoulder, upper arm) ──
      Straight after the safety check when the neck is drawn. Its answers are
-     kept in `answers` (I1–I7); `injuryPath` is the questions shown, for Back.
+     kept in `answers` as "<screen>:<question>"; `injuryPath` is the questions
+     shown, for Back.
      Its outcome joins the flags: 'emergency' → 911, 'urgent' → physician. */
   const [injuryPath, setInjuryPath] = useState([])
   const [injuryQ, setInjuryQ] = useState(null)       // question on screen
   const [injuryDraft, setInjuryDraft] = useState(undefined) // its uncommitted pick
-  const injury = useMemo(() => injuryStep(answers, answers.age), [answers])
+  const injury = useMemo(() => injuryFlow(flowZ, answers, answers.age), [flowZ, answers])
   const injuryOutcome = injury.route === 'emergency' || injury.route === 'urgent' ? injury : null
   const injuryFlag = injuryOutcome && stage === 'urgent'
-    ? { id: '__injury', tier: injuryOutcome.route, text: 'A neck injury in the last 7 days (injury screen)',
+    ? { id: '__injury', tier: injuryOutcome.route, text: (SCREENS.find((sc) => sc.id === injuryOutcome.screen) || {}).flag || 'A recent injury (injury screen)',
       why: { title: injuryOutcome.why, text: TIER_WHY[injuryOutcome.route].text } }
     : null
 
@@ -677,10 +680,13 @@ export default function PainAssessment() {
       .filter((q) => !q.textarea)
       .map((q) => ({ question: q.area ? `${q.area}: ${q.text}` : q.text, answer: answerText(q) }))
       .filter((pair) => pair.answer && pair.answer !== '—'),
-    ...INJURY_QUESTIONS.filter((q) => answers[q.id] !== undefined).map((q) => ({
-      question: `Neck injury screen: ${q.text}`,
-      answer: [].concat(answers[q.id]).map((id) => (q.options.find((o) => o.id === id) || {}).label).filter(Boolean).join(' · '),
-    })),
+    ...INJURY_KEYS.filter((k) => answers[k] !== undefined).map((k) => {
+      const { screen, q } = injuryQuestion(k)
+      return {
+        question: `${screen.title} (injury screen): ${q.text}`,
+        answer: [].concat(answers[k]).map((id) => (q.options.find((o) => o.id === id) || {}).label).filter(Boolean).join(' · '),
+      }
+    }),
     ...referral.map((r) => ({
       question: 'Drawn pattern (from the body diagram)',
       answer: `One continuous line from the ${r.kind === 'arm' ? 'neck' : 'low back'} down the ${r.side ? r.side + ' ' : ''}${r.kind} to the ${r.reach} — ${({ radicular: 'nerve-type referral', somatic: 'a referred ache, NOT nerve pain', unclear: 'referred pain, nerve involvement unclear' })[referralMechanism(r, answers)]}`,
@@ -759,21 +765,20 @@ export default function PainAssessment() {
 
   // Injury screen. Answers only count once Continue is pressed, so ticking
   // one box of a "tick all that apply" question does not move straight on.
-  const INJURY_IDS = INJURY_QUESTIONS.map((q) => q.id)
   const withoutInjury = (a, keep = []) => {
     const out = { ...a }
-    for (const id of INJURY_IDS) if (!keep.includes(id)) delete out[id]
+    for (const id of INJURY_KEYS) if (!keep.includes(id)) delete out[id]
     return out
   }
   const startInjury = () => {
     setAnswers((a) => withoutInjury(a))
     setInjuryPath([]); setInjuryDraft(undefined)
-    setInjuryQ(injuryStep({}, answers.age).next)
+    setInjuryQ(injuryFlow(flowZ, {}, answers.age).next)
     setStage('injury')
   }
   const continueInjury = () => {
     const next = { ...answers, [injuryQ]: injuryDraft }
-    const r = injuryStep(next, answers.age)
+    const r = injuryFlow(flowZ, next, answers.age)
     setAnswers(next)
     setInjuryPath((p) => [...p, injuryQ])
     if (r.next) { setInjuryQ(r.next); setInjuryDraft(undefined); return }
@@ -1424,17 +1429,18 @@ export default function PainAssessment() {
               </Fade>
             )}
 
-            {/* NECK INJURY SCREEN — Canadian C-Spine Rule, one question at a
-                time (../data/injuryScreen.js). The first answer that routes
+            {/* INJURY SCREENS — neck (Canadian C-Spine Rule), shoulder and
+                upper arm, one question at a time (../data/injuryScreen.js). The first answer that routes
                 ends it: to 911, to a physician, or on to the results. */}
             {stage === 'injury' && (() => {
-              const q = INJURY_QUESTIONS.find((x) => x.id === injuryQ)
-              if (!q) return null
+              const found = injuryQuestion(injuryQ)
+              if (!found) return null
+              const { q, screen } = found
               const picked = (oid) => (q.multi ? Array.isArray(injuryDraft) && injuryDraft.includes(oid) : injuryDraft === oid)
               const ready = q.multi ? Array.isArray(injuryDraft) && injuryDraft.length > 0 : injuryDraft !== undefined
               return (
-                <Fade k={`injury-${q.id}`}>
-                  <span style={label}>Recent Neck Injury</span>
+                <Fade k={`injury-${injuryQ}`}>
+                  <span style={label}>{screen.title}</span>
                   <h2 style={{ ...h2, fontSize: 'clamp(23px,5.4vw,32px)', margin: '12px 0 18px', maxWidth: 520 }}>{q.text}</h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
                     {q.options.map((o, i) => (

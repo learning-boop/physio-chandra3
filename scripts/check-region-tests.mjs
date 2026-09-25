@@ -12,7 +12,7 @@ import {
   specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
 } from '../src/data/assessmentFlow.js'
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
-import { injuryStep, injuryScreenApplies } from '../src/data/injuryScreen.js'
+import { injuryFlow } from '../src/data/injuryScreen.js'
 import { MAX_HYPOTHESES } from '../src/data/clinicianSummary.js'
 
 const TESTS = {
@@ -29,7 +29,7 @@ const TESTS = {
     { name: '3. Highway crash within 48 hours',
       lines: [['neck']],
       answers: { age: '50-64', onset: 'car', duration: 'd2w', I1: 'vehicle', I2: 'h48', I4: ['mvc'] },
-      expect: { route: 'emergency', notAsked: ['I6', 'I7'] } },
+      expect: { route: 'emergency', notAsked: ['neck:I6', 'neck:I7'] } },
     // The document draws the shoulder only; with no neck mark the site asks
     // the shoulder's questions, so it is run both ways.
     { name: '4a. Shoulder look-alike, shoulder drawn only',
@@ -257,7 +257,67 @@ const TESTS = {
       answers: { age: '30-49', onset: 'years', duration: 'o3m', D1: ['band'], D5: ['d15'], D6: ['d15plus'] },
       expect: { top: 'head/tth', special: 'medOveruse', route: 'results' } },
   ],
+  shoulder: [
+    // "Outer right upper arm, below the shoulder": an upper-arm mark, which
+    // also asks the shoulder.
+    { name: '1. Rotator cuff related shoulder pain',
+      lines: [['upperarmR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', S1: ['outer'], S2: ['midarc'], S3: ['highshelf', 'lying'], S7: ['shoulder'] },
+      expect: { top: 'shoulder/rc', not: ['shoulder/frozen'], notRegion: ['neck'], route: 'results' } },
+    { name: '2. Frozen shoulder',
+      lines: [['shoulderL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', S2: ['cantgo'], S3: ['behind', 'highshelf', 'across'], S4: ['stiffer'] },
+      expect: { top: 'shoulder/frozen', notTop: ['shoulder/rc'], route: 'results' } },
+    { name: '3. Neck look-alike: shoulder to thumb with pins and needles',
+      lines: [['shoulderR', 'upperarmR', 'elbowR', 'forearmR', 'wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        S2: ['fullfree'], S7: ['neck'], S8: ['pastelbow', 'fingers', 'armworse'] },
+      expect: { notRegion: ['shoulder'], special: 'neckSource', route: 'results' } },
+    { name: '4. Heart look-alike: left shoulder and inner arm',
+      lines: [['shoulderL', 'upperarmL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd2w', S2: ['fullfree'], S7: ['neither'] },
+      flags: ['rf-cardiac1'],
+      expect: { route: 'emergency' } },
+    { name: '5. Gallbladder look-alike: tip of the right shoulder',
+      lines: [['shoulderR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd6w', S2: ['fullfree'], S7: ['neither'] },
+      flags: ['srf-gallbladder'],
+      expect: { route: 'urgent' } },
+    { name: '6. Cannot lift the arm after a fall (injury screen)',
+      lines: [['upperarmL']],
+      answers: { age: 'o64', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'yes' },
+      expect: { route: 'urgent' } },
+  ],
+  arm: [
+    { name: '1. Biceps soreness after the gym',
+      lines: [['upperarmR']],
+      answers: { age: '18-29', onset: 'gym', duration: 'd2w', U1: ['front'], U2: ['lift'], U6: ['doms'] },
+      expect: { top: 'arm/strain', notRegion: ['neck'], route: 'results' } },
+    // A line from the neck to the thumb is read as neck referral: the neck
+    // is asked, the upper arm is where it is felt.
+    { name: '2. Neck look-alike: neck down the outer arm to the thumb',
+      lines: [['neck', 'shoulderR', 'upperarmR', 'elbowR', 'forearmR', 'wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        U3: ['fromneck', 'line'], U4: ['thumb'], U5: ['neck'] },
+      expect: { notRegion: ['arm'], areas: ['neck'], route: 'results' } },
+    { name: '3. Thoracic outlet: whole arm heavy with it raised',
+      lines: [['shoulderR', 'upperarmR', 'elbowR', 'forearmR', 'wristR']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'd3m', U2: ['carry', 'overhead'], U3: ['heavy'], U7: ['heavy'] },
+      expect: { top: 'arm/tos', notTop: ['arm/strain'], route: 'results' } },
+    { name: '4. Heart look-alike: inside of the left arm',
+      lines: [['upperarmL', 'forearmL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd2w', U5: ['none'] },
+      flags: ['arf-cardiac'],
+      expect: { route: 'emergency' } },
+    { name: '5. Cannot lift the wrist after a fall (injury screen)',
+      lines: [['upperarmR']],
+      answers: { age: 'o64', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+  ],
 }
+
+/* Which injury screen a region's test patients answer with plain I1… keys. */
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []
@@ -303,13 +363,17 @@ function run(rk, t) {
   if (tiers.includes('urgent')) return { ...seen, route: 'urgent' }
 
   const all = toScreen(keys, rk, t.answers)
-  // Injury screen: anyone not described as injured answers "No".
-  if (injuryScreenApplies(zones)) {
+  // Injury screens: a test's plain I1… answers belong to its own region's
+  // screen; any other screen's gate is answered "No" (not injured there).
+  {
+    const own = SCREEN_OF[rk]
     const ia = {}
     let s
-    while ((s = injuryStep(ia, all.age)).next) {
+    while ((s = injuryFlow(flowZ, ia, all.age)).next) {
       seen.asked.push(s.next)
-      ia[s.next] = t.answers[s.next] ?? (s.next === 'I1' ? 'no' : undefined)
+      const [sid, qid] = s.next.split(':')
+      ia[s.next] = sid === own ? t.answers[qid] : undefined
+      if (ia[s.next] === undefined && qid === 'I1') ia[s.next] = 'no'
       if (ia[s.next] === undefined) return { ...seen, error: `injury question ${s.next} has no answer in the test` }
     }
     if (s.route === 'emergency' || s.route === 'urgent') return { ...seen, route: s.route }
@@ -320,7 +384,7 @@ function run(rk, t) {
   const ans = { ...drawnAnswers(referral) }
   for (const q of context) if (all[q.id] !== undefined) ans[q.id] = all[q.id]
   let id
-  while ((id = nextQuestion(keys, ans, seen.asked.filter((x) => !/^I\d$/.test(x)), MAX_SCORED_QUESTIONS,
+  while ((id = nextQuestion(keys, ans, seen.asked.filter((x) => !x.includes(':')), MAX_SCORED_QUESTIONS,
     { draw: zones.map((z) => z.type), all }))) {
     seen.asked.push(id)
     if (all[id] !== undefined) ans[id] = all[id]
@@ -346,6 +410,7 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     for (const c of e.notTop || []) if ((r.shown || [])[0] === c) why.push(`${c} is on top`)
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)
     for (const q of e.notAsked || []) if (r.asked.includes(q)) why.push(`asked ${q}`)
+    for (const k of e.areas || []) if (!(r.keys || []).includes(k)) why.push(`${k} was not asked`)
     if (e.special && ![].concat(e.special).some((c) => (r.specials || []).includes(c))) why.push(`no "${[].concat(e.special).join('" or "')}" card`)
     if (why.length) failed++
     console.log(`${why.length ? 'FAIL' : 'PASS'}  ${t.name}`)

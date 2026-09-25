@@ -129,95 +129,133 @@ export const REGIONS = {
     conditions:[]
   },
 
+  /* ══════════════ SHOULDER ══════════════
+     From Chandra's "Shoulder assessment" region document (DRAFT 24 Sep 2026;
+     the source text is content/regions/shoulder.md). Sources: BESS/BOA
+     pathways 2015–2016, JOSPT adhesive capsulitis CPG 2013, Lewis 2016,
+     Park 2005, Hegedus 2012, Chronopoulos 2004, Travell & Simons 2019,
+     Giamberardino 2003.
+     Reached from the shoulder, and from any upper-arm mark (./referral.js,
+     IMPLIES). Its injury screen is in ./injuryScreen.js.
+     Conditions: content/conditions/shoulder-*.md. Pain that comes from the
+     neck shows the "may be coming from your neck" card instead. */
   shoulder: {
     name:"Shoulder",
     redFlags:[
-      {id:"rf-cardiac1", text:"Chest pain or pressure, or shoulder/arm pain that comes on with exertion and eases with rest", tier:"emergency"},
-      {id:"rf-cardiac2", text:"Shoulder pain together with breathlessness, sweating, or nausea", tier:"emergency"},
-      {id:"rf-deform", text:"The shoulder looks visibly deformed or out of place after an injury", tier:"urgent"},
-      {id:"rf-hotjoint", text:"The joint is hot, swollen and very painful, and you feel feverish or unwell", tier:"urgent"},
-      {id:"rf-nolift", text:"Since a fall or injury, you suddenly cannot lift the arm at all", tier:"urgent"}
+      {id:"rf-cardiac1", tier:"emergency", group:"cardiac", why:"Heart pain is often felt in the left shoulder and inner arm",
+        text:"Is the pain in your shoulder, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?"},
+      {id:"srf-kehr", tier:"emergency", group:"kehr", why:"Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign)",
+        text:"Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?"},
+      {id:"srf-ectopic", tier:"emergency", why:"Possible ectopic pregnancy: blood under the diaphragm is felt at the shoulder tip",
+        text:"Could you be pregnant, and do you have pain low in your tummy along with pain at the tip of your shoulder?"},
+      {id:"srf-lung", tier:"emergency", group:"lungclot", why:"Possible blood clot in the lung or a collapsed lung",
+        text:"Do you have a sudden, sharp pain on breathing with shortness of breath?"},
+      {id:"rf-hotjoint", tier:"emergency", why:"Possible joint infection (septic arthritis)",
+        text:"Is your shoulder hot, red, or swollen, with a fever or feeling very unwell?"},
+      {id:"srf-pmr", tier:"urgent", why:"Possible polymyalgia rheumatica; needs blood tests and medical care",
+        text:"If you are over 50: are both shoulders (and often both hips) stiff and aching, worst in the morning for more than 45 minutes, and do you feel generally unwell?"},
+      {id:"srf-pancoast", tier:"urgent", group:"pancoast", why:"Possible tumour at the top of the lung (Pancoast), felt in the shoulder and inner arm",
+        text:"Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, a drooping eyelid, or weakness in your hand?"},
+      {id:"srf-cancer", tier:"urgent", group:"cancer", why:"Cancer can spread to the shoulder bones",
+        text:"Have you ever had cancer, or is there a new lump, or pain at night that does not change with position, with weight loss?"},
+      {id:"srf-gallbladder", tier:"urgent", group:"gallbladder", why:"Gallbladder or liver pain is felt in the right shoulder (C3–C5 and T7–T9)",
+        text:"Is the pain at the tip of your right shoulder or under your right shoulder blade worse after fatty meals, or does it come with feeling sick or yellow skin or eyes?"},
+      {id:"srf-tip", tier:"urgent", group:"tip", why:"Diaphragm or lung lining pain is felt at the shoulder tip (C3–C5)",
+        text:"Is the pain at the tip of your shoulder worse when you breathe in deeply?"},
+      {id:"srf-pta", tier:"urgent", group:"pta", why:"Possible nerve inflammation (neuralgic amyotrophy, Parsonage-Turner)",
+        text:"Did a sudden, severe shoulder pain with no injury last several days, and then your shoulder or arm muscles became weak or thin?"}
     ],
     context:[
       {id:"age", text:"Your age?", options:[
-        {id:"u35", label:"Under 35"},
-        {id:"35-60", label:"35 – 60"},
-        {id:"o60", label:"Over 60"}
+        {id:"u18", label:"Under 18"},
+        {id:"18-29", label:"18 to 29"},
+        {id:"30-49", label:"30 to 49"},
+        {id:"50-64", label:"50 to 64"},
+        {id:"o64", label:"65 or over"}
       ]},
       {id:"onset", text:"How did it start?", options:[
-        {id:"injury", label:"A specific injury or fall", weights:{rc:1, instability:1}},
-        {id:"gradual", label:"Gradually, no clear cause", weights:{frozen:1, rc:1}},
-        {id:"activity", label:"After new or increased activity (painting, gym, gardening…)", weights:{rc:2}},
-        {id:"ns", label:"Not sure"}
+        {id:"gradual", label:"Gradually, no clear reason"},
+        {id:"overhead", label:"After a lot of overhead work, lifting, or sport"},
+        {id:"fall", label:"After a fall onto the arm or shoulder"},
+        {id:"popped", label:"It popped out or slipped out of place"},
+        {id:"pull", label:"After a sudden pull, lift, or jerk"},
+        {id:"severe", label:"Sudden severe pain with no injury"}
       ]},
       {id:"duration", text:"How long has it been going on?", options:[
         {id:"d2w", label:"Less than 2 weeks"},
-        {id:"d6w", label:"2 – 6 weeks"},
-        {id:"d3m", label:"6 weeks – 3 months"},
+        {id:"d6w", label:"2 to 6 weeks"},
+        {id:"d3m", label:"6 weeks to 3 months"},
         {id:"o3m", label:"More than 3 months"}
       ]}
     ],
     questions:[
-      {id:"S1", text:"Where exactly do you feel it?", options:[
-        {id:"outer", label:"Outer upper arm — hard to point to one exact spot", weights:{rc:3}},
-        {id:"top", label:"Right on top, at the bony point of the shoulder", weights:{acj:3}},
-        {id:"deep", label:"Deep inside / all over the shoulder", weights:{frozen:2}},
-        {id:"blade", label:"Between the neck and shoulder blade", weights:{neckref:3}},
-        // Rotator-cuff pain stays in the upper arm; pain carrying on past the
-        // elbow is the neck-referred pattern ("Symptoms spread down the arm").
-        {id:"downarm", label:"Down the arm, past the elbow — sometimes with tingling", weights:{neckref:3}},
-        {id:"ns", label:"Not sure"}
+      {id:"S1", text:"Where is the pain mainly?", options:[
+        {id:"top", label:"On top of the shoulder, at the bony point"},
+        {id:"outer", label:"Outer upper arm, below the shoulder"},
+        {id:"deep", label:"Deep inside, or at the front of the shoulder"},
+        {id:"back", label:"Back of the shoulder"},
+        {id:"topneck", label:"Top of the shoulder spreading up into the neck"}
       ]},
-      {id:"S2", text:"Which movements are worst?", options:[
-        {id:"reachup", label:"Reaching up or out — a painful arc partway up", weights:{rc:3}},
-        {id:"across", label:"Reaching across the chest to the other shoulder", weights:{acj:3}},
-        {id:"allstiff", label:"Everything is stiff in all directions — even someone else can't move it further", weights:{frozen:3}},
-        {id:"headturn", label:"Turning or tilting my head brings it on", weights:{neckref:3}},
-        {id:"ns", label:"Not sure"}
+      {id:"S2", text:"When you lift your arm out to the side and up, what happens?", options:[
+        {id:"midarc", label:"It hurts in the middle of the movement, then eases near the top"},
+        {id:"top", label:"It hurts most right at the top"},
+        {id:"cantgo", label:"It will not go as high as the other side, even when I help it with my other hand"},
+        {id:"cantlift", label:"I cannot lift it on my own, but it goes up if I help it"},
+        {id:"fullfree", label:"It lifts fully without pain"}
       ]},
-      {id:"S3", text:"Is it painful to lie on that shoulder at night?", options:[
-        {id:"yes", label:"Yes", weights:{rc:2, frozen:2}},
-        {id:"no", label:"No"},
-        {id:"ns", label:"Not sure"}
+      {id:"S3", text:"Which of these are hard or painful? Tick all that apply.", options:[
+        {id:"behind", label:"Reaching behind my back (bra strap, back pocket)"},
+        {id:"highshelf", label:"Reaching up to a high shelf"},
+        {id:"across", label:"Reaching across my body (seatbelt, washing the other armpit)"},
+        {id:"lying", label:"Lying on that side at night"},
+        {id:"throwing", label:"Throwing, or overhead sport"}
       ]},
-      {id:"S4", text:"Does the shoulder ever feel unstable or like it slips — or have you dislocated it before?", options:[
-        {id:"yes", label:"Yes", weights:{instability:3}, unlocks:"instability"},
-        {id:"no", label:"No", weights:{instability:-2}},
-        {id:"ns", label:"Not sure"}
+      {id:"S4", text:"How has the movement changed over time?",
+        askIf: ({ ra }) => ra.duration === "d3m" || ra.duration === "o3m" || [].concat(ra.S2 || []).includes("cantgo"),
+        options:[
+          {id:"stiffer", label:"Getting stiffer month by month"},
+          {id:"painfulthenstiff", label:"Very painful at first, now more stiff than painful"},
+          {id:"easing", label:"The stiffness is slowly easing"},
+          {id:"nostiff", label:"No real stiffness, just pain"}
+        ]},
+      {id:"S5", text:"Does your shoulder feel unstable?",
+        // "Under 40": the age bands split at 50, so 30 to 49 is included.
+        askIf: ({ ra }) => !ra.age || ["u18", "18-29", "30-49"].includes(ra.age) || ra.onset === "popped" || ra.onset === "overhead",
+        options:[
+          {id:"popped", label:"It has popped out and needed putting back"},
+          {id:"slips", label:"It slips or clunks, then goes back on its own"},
+          {id:"worry", label:"I worry it will pop out with my arm up and back"},
+          {id:"stable", label:"No, it feels stable"}
+        ]},
+      {id:"S6", text:"Which of these do you notice? Tick all that apply.", options:[
+        {id:"weakness", label:"Weakness lifting the arm or turning it outwards"},
+        {id:"clicking", label:"Clicking or catching deep in the shoulder"},
+        {id:"builtup", label:"The pain built up over a day or two to very severe, with no injury"},
+        {id:"deadarm", label:"A “dead arm” feeling with the arm overhead"},
+        {id:"acrossbody", label:"Pain on top of the shoulder when I reach across my body"}
       ]},
-      {id:"S5", text:"Have you clearly lost the ability to reach behind you (back pocket, bra strap, tucking a shirt)?", options:[
-        {id:"marked", label:"Yes, noticeably", weights:{frozen:3}},
-        {id:"no", label:"No"},
-        {id:"ns", label:"Not sure"}
-      ]}
+      {id:"S7", text:"Which hurts more: moving your neck, or moving your shoulder and arm?",
+        askIf: ({ draw, all }) => !draw || ["neck", "ctj", "upperback", "elbow", "forearm", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).includes("tingling"),
+        // Asked early when the drawing runs below the elbow: the neck look-alike.
+        priority: ({ draw }) => !!draw && ["elbow", "forearm", "wrist"].some((t) => draw.has(t)),
+        options:[
+          {id:"neck", label:"Moving my neck", special:"neckSource"},
+          {id:"shoulder", label:"Moving my shoulder and arm"},
+          {id:"both", label:"Both about the same"},
+          {id:"neither", label:"Neither brings it on"}
+        ]},
+      {id:"S8", text:"Which of these describe your arm symptoms? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["elbow", "forearm", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options:[
+          {id:"pastelbow", label:"Pain goes below the elbow into the forearm or hand", special:"neckSource"},
+          {id:"fingers", label:"Pins and needles or numbness in particular fingers", special:"neckSource"},
+          {id:"armworse", label:"The arm pain is worse than the shoulder pain", special:"neckSource"},
+          {id:"stopsabove", label:"Pain on the outer upper arm that stops above the elbow"}
+        ]}
     ],
-    conditions:[
-      {id:"rc", name:"Rotator-cuff-related shoulder pain", clin:"includes subacromial shoulder pain",
-        blurb:"The most common shoulder problem: the tendons that lift and steady the arm become sensitive to load, often after a spike in activity. Pain is typically felt in the outer upper arm when reaching.",
-        noticed:["Painful arc when lifting the arm up or out","Pain in the outer upper arm rather than the joint itself","Night pain when lying on that side"],
-        homeCare:["Keep using the arm within tolerable comfort — total rest slows recovery","Temporarily reduce (not stop) overhead activity","Try supported reaching: slide the hand up a wall or table","Sleep with a pillow supporting the arm"],
-        seePhysioIf:["It isn't clearly improving after ~2 weeks","Reaching, dressing, or sleep stay limited","You want a graded strengthening plan — the treatment with the best evidence"]},
-      {id:"frozen", name:"Frozen shoulder", clin:"adhesive capsulitis", gates:{ages:["35-60","o60"]},
-        blurb:"The capsule around the shoulder joint tightens, causing pain then marked stiffness in all directions. It's most common between 40 and 65, and more common with diabetes or thyroid conditions. It does improve, but on a long timescale — physiotherapy can help shorten the stiff phase and keep you functional.",
-        noticed:["Stiffness in every direction — others can't move it further either","Losing outward reach (back pocket, seat-belt, bra strap) early on","Often significant night pain in the early phase"],
-        homeCare:["Move within tolerable limits — gentle pendulum and wall-slide movements","Heat before movement can ease things","Pace tasks; adapt rather than force through sharp pain"],
-        seePhysioIf:["Stiffness is progressing or already limits daily tasks","You have diabetes or a thyroid condition with new shoulder stiffness","You'd like a staged plan matched to the phase you're in"]},
-      {id:"acj", name:"Acromioclavicular (AC) joint pain", clin:"the joint at the very top of the shoulder",
-        blurb:"The small joint where the collarbone meets the shoulder blade can be sprained by a fall onto the shoulder or irritated by load (bench press, dips). Pain sits right on the bony point at the top.",
-        noticed:["Pointable pain on the very top of the shoulder","Worse reaching across the body or lying on it","Sometimes a small bump over the joint"],
-        homeCare:["Reduce cross-body and heavy pressing movements for now","Ice or heat over the point of pain for comfort","Keep the rest of the shoulder moving normally"],
-        seePhysioIf:["Pain persists past ~2–3 weeks","There's a visible step or bump after an injury","You want a graded return to gym or sport"]},
-      {id:"instability", name:"Shoulder instability", clin:"laxity or recurrent subluxation", gates:{ages:["u35"], unlockedBy:"instability"},
-        blurb:"The shoulder feels loose, slips, or has dislocated — most common in younger, active people. Strengthening the muscles that steady the joint is the first-line approach.",
-        noticed:["A sense of slipping or apprehension in certain positions (often reaching up-and-out)","A previous dislocation or 'dead arm' moments","Clicking with a feeling of looseness"],
-        homeCare:["Avoid the specific positions that feel apprehensive for now","Keep general shoulder strength work within confident range","Don't repeatedly 'test' the slip"],
-        seePhysioIf:["It has slipped or dislocated before — a structured strengthening program is first-line care","Apprehension limits sport or work","You want assessment before returning to overhead or contact sport"]},
-      {id:"neckref", name:"Neck-referred pain", clin:"cervical referral",
-        blurb:"Shoulder-area pain sometimes tells a neck story: irritation of neck joints or nerves can be felt between the neck and shoulder blade or down the arm, even when the shoulder itself is healthy.",
-        noticed:["Turning or tilting the head changes the symptoms","Pain sits between the neck and shoulder blade","The shoulder itself moves fairly freely"],
-        homeCare:["Gentle neck range-of-motion movements several times daily","Check desk and pillow setup","Short breaks from prolonged screen postures"],
-        seePhysioIf:["Your shoulder may be telling a neck story — an assessment can tell them apart","Symptoms spread down the arm or include tingling","It persists beyond ~2 weeks"]}
-    ]
+    conditions:[]
   },
 
   knee: {
@@ -595,6 +633,9 @@ Object.assign(ZONE_TO_REGION, {
   coccyx: 'coccyx',
   jaw: 'jaw',
   head: 'head',
+  upperarm: 'arm',
+  // The forearm uses the elbow's questions until its own document is built.
+  forearm: 'elbow',
   elbow: 'elbow',
   wrist: 'wrist',
   hip: 'hip',

@@ -34,15 +34,15 @@ export const EXTRA_REGIONS = {
         text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
       { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
         text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
-      { id: "nrf-kehr", tier: "emergency", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
+      { id: "nrf-kehr", tier: "emergency", group: "kehr", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
         text: "Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?" },
-      { id: "nrf-myelo", tier: "urgent", why: "Possible pressure on the spinal cord (myelopathy)",
+      { id: "nrf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord (myelopathy)",
         text: "Have your hands become clumsy (buttons, writing, dropping things), or has your walking become unsteady?" },
       { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability",
         text: "Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
       { id: "nrf-cad", tier: "urgent", group: "cad", why: "An early sign of a neck artery tear can be pain alone",
         text: "Did a new neck pain or headache, unlike anything you have had before, start suddenly after a neck manipulation, a sudden jerk, or a minor knock?" },
-      { id: "nrf-tip", tier: "urgent", drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder tip",
+      { id: "nrf-tip", tier: "urgent", group: "tip", drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder tip",
         text: "Is the pain at the tip of your shoulder worse when you breathe in deeply, or does it come on after fatty meals?" }
     ],
     context: [
@@ -176,7 +176,7 @@ export const EXTRA_REGIONS = {
         text: "Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf?" },
       { id: "crf-cord", tier: "emergency", group: "cord", why: "Possible spinal cord compression",
         text: "Along with the back pain, have you lost control of your bladder or bowels, or had new weakness, numbness, or unsteadiness in both legs?" },
-      { id: "crf-pancoast", tier: "urgent", why: "Possible tumour at the top of the lung (Pancoast)",
+      { id: "crf-pancoast", tier: "urgent", group: "pancoast", why: "Possible tumour at the top of the lung (Pancoast)",
         text: "Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, or noticed a drooping eyelid on the painful side?" },
       { id: "crf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
         text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or take long-term steroid tablets?" },
@@ -184,7 +184,7 @@ export const EXTRA_REGIONS = {
         text: "Are the small muscles of your hand getting thinner, or has your grip become weak?" },
       { id: "crf-vascular", tier: "urgent", why: "Possible blood vessel compression or clot in the arm (same-day review)",
         text: "Does your arm or hand turn pale, blue, cold, or swollen, especially when your arm is raised?" },
-      { id: "crf-gallbladder", tier: "urgent", why: "Gallbladder pain can be felt under the right shoulder blade",
+      { id: "crf-gallbladder", tier: "urgent", group: "gallbladder", why: "Gallbladder pain can be felt under the right shoulder blade",
         text: "Is the pain under your right shoulder blade worse after fatty meals, or does it come with feeling sick?" },
       { id: "crf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
         text: "Is there a band of burning pain around one side of your chest or back, with a rash or blisters?" },
@@ -980,6 +980,132 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
+  /* ══════════════ UPPER ARM ══════════════
+     From Chandra's "Upper arm assessment" region document (DRAFT 24 Sep 2026;
+     the source text is content/regions/arm.md). Sources: JOSPT Neck Pain CPG
+     2017, Murphy 2009, SVS thoracic outlet standards 2016, van Alfen 2006,
+     Travell & Simons 2019, IFOMPT red flags framework 2020.
+     Reached from the body map's upper arm, between the shoulder and the
+     elbow; an upper-arm mark also asks the shoulder. Its injury screen is in
+     ./injuryScreen.js. Conditions: content/conditions/arm-*.md. */
+  arm: {
+    name: "Upper arm",
+    redFlags: [
+      { id: "arf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain is often felt down the inside of the arm (T1)",
+        text: "Is the pain in your arm, especially the inside of the left arm, brought on by effort, or does it come with chest tightness, shortness of breath, sweating, or jaw pain?" },
+      { id: "arf-clotlung", tier: "emergency", why: "Possible clot in the arm that has travelled to the lung",
+        text: "Has your whole arm suddenly become swollen, heavy, or bluish, and are you also short of breath or have chest pain?" },
+      { id: "arf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+        text: "Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
+      { id: "arf-rhabdo", tier: "emergency", why: "Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
+        text: "After very hard exercise, is your arm hugely swollen and very painful, and is your urine dark like cola?" },
+      { id: "arf-cellulitis", tier: "urgent", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
+        text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
+      { id: "arf-clot", tier: "urgent", why: "Possible blood clot in the arm (same-day review)",
+        text: "Has your whole arm become swollen, heavy, or bluish over a day or two, especially after a drip or line in the arm, or heavy overhead exercise?" },
+      { id: "arf-pancoast", tier: "urgent", group: "pancoast", why: "Possible tumour at the top of the lung (Pancoast)",
+        text: "Do you smoke or used to smoke, and does pain run down the inside of your arm to your little finger, with a cough that will not go away, or a drooping eyelid?" },
+      { id: "arf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
+        text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+      { id: "arf-pta", tier: "urgent", group: "pta", why: "Possible nerve inflammation (neuralgic amyotrophy)",
+        text: "Did a sudden, severe arm or shoulder pain with no injury last several days, and then your arm muscles became weak or thin?" },
+      { id: "arf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
+        text: "Is there a band of burning pain down the arm, with a rash or blisters in the same strip?" },
+      { id: "arf-cancer", tier: "urgent", group: "cancer", why: "Cancer or a bone lesion needs medical review",
+        text: "Have you ever had cancer, or is there a lump in your arm that is growing, or deep bone pain at night that does not change with position?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "grip", label: "After a lot of gripping, typing, or tool use" },
+        { id: "gym", label: "After the gym, heavy lifting, or a new workout" },
+        { id: "fall", label: "After a fall or a blow to the arm" },
+        { id: "pop", label: "I felt a pop or tear while lifting" },
+        { id: "rash", label: "It came with a rash, or after an illness or vaccine" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "U1", text: "Where is the pain mainly?", options: [
+        { id: "front", label: "Front of the upper arm (biceps)" },
+        { id: "back", label: "Back of the upper arm (triceps)" },
+        { id: "outer", label: "Outer upper arm, just below the shoulder" },
+        { id: "inner", label: "Inner upper arm, towards the armpit" },
+        { id: "whole", label: "The whole upper arm" }
+      ]},
+      { id: "U2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "grip", label: "Gripping, typing, or using tools" },
+        { id: "lift", label: "Lifting, curls, or push-ups" },
+        { id: "overhead", label: "Lifting my arm up or reaching overhead" },
+        { id: "neckdesk", label: "Moving my neck, or sitting at a desk for long", special: "neckSource" },
+        { id: "carry", label: "Carrying bags, or letting the arm hang down" }
+      ]},
+      { id: "U3", text: "How does the pain spread? Tick all that apply.", options: [
+        { id: "onemuscle", label: "It stays in one muscle area" },
+        { id: "line", label: "It runs along a narrow line into particular fingers", special: "neckSource" },
+        { id: "fromneck", label: "It starts at the neck or shoulder and travels down the arm", special: "neckSource" },
+        { id: "forearm", label: "It goes on down into the forearm" },
+        { id: "heavy", label: "The whole arm feels heavy and tired, especially with it raised" }
+      ]},
+      { id: "U4", text: "Which of these do you notice in your hand? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || draw.has("wrist") || [].concat(all.painQuality || []).includes("tingling"),
+        options: [
+          { id: "little", label: "Tingling or numbness in the little and ring fingers" },
+          { id: "thumb", label: "Tingling or numbness in the thumb, index, and middle fingers" },
+          { id: "weakgrip", label: "Weak grip, or dropping things" },
+          { id: "wristdrop", label: "Cannot lift the wrist or straighten the fingers well" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "U5", text: "Which hurts more: moving your neck, moving your shoulder, or using your arm and hand?",
+        askIf: ({ draw, all }) => !draw || ["neck", "shoulder", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "neck", label: "Moving my neck", special: "neckSource" },
+          { id: "shoulder", label: "Moving my shoulder", special: "shoulderSource" },
+          { id: "armhand", label: "Using my arm and hand" },
+          { id: "none", label: "None of these bring it on" }
+        ]},
+      { id: "U6", text: "About the muscle after exercise: which apply?",
+        askIf: ({ ra }) => ra.onset === "gym",
+        options: [
+          { id: "doms", label: "Sore and stiff 1 to 3 days after, then easing" },
+          { id: "sharp", label: "A sudden sharp pain during a lift, with bruising after" },
+          { id: "knot", label: "A tender knot in the muscle that sends pain elsewhere when pressed" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "U7", text: "When your arm is raised overhead, or you carry something heavy, what happens?",
+        askIf: ({ ra }) => [].concat(ra.U2 || []).includes("carry") || [].concat(ra.U3 || []).includes("heavy"),
+        options: [
+          { id: "heavy", label: "The arm goes heavy, tingly, or dead" },
+          { id: "pale", label: "The hand goes pale or cold", special: "armDoctor" },
+          { id: "swells", label: "The arm swells or looks bluish", special: "armDoctor" },
+          { id: "nothing", label: "Nothing changes" }
+        ]},
+      { id: "U8", text: "Did any of these come with it? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "rash" || (ra.onset === "gradual" && (ra.duration === "d2w" || ra.duration === "d6w")),
+        options: [
+          { id: "rash", label: "A rash or blisters in a strip on the arm", special: "armDoctor" },
+          { id: "severe", label: "Severe pain for a few days, then weakness", special: "armDoctor" },
+          { id: "glands", label: "Swollen glands in the armpit", special: "armDoctor" },
+          { id: "illness", label: "An illness or vaccine in the weeks before" },
+          { id: "none", label: "None of these" }
+        ]}
+    ],
+    conditions: []
+  },
+
   /* ══════════════ ELBOW ══════════════ */
   elbow: {
     name: "Elbow & forearm",
@@ -1346,6 +1472,8 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Severe pain behind one eye, with a watery eye or runny nose on the same side, can be a <strong>cluster-type headache</strong>. It needs a doctor's assessment and specific treatment, so please book with your doctor." },
   medOveruse: { title: "Frequent painkillers can keep headaches going",
     body: "Taking painkillers for headaches on <strong>10 or more days a month</strong> (15 or more for simple ones like paracetamol or ibuprofen) can itself keep headaches going, called <strong>medication-overuse headache</strong>. Please review how often you take them with your doctor or pharmacist; do not stop suddenly without advice." },
+  armDoctor: { title: "Please have this checked by a doctor",
+    body: "A rash or blisters in a strip, severe pain followed by weakness, swollen glands in the armpit, or an arm or hand that goes <strong>pale, cold, swollen or bluish</strong> when you raise it or carry something, are signs a doctor should look at. They can point to shingles, an inflamed nerve, an infection, or pressure on the blood vessels. Physiotherapy can help afterwards if it is needed." },
   ribcage: { title: "Pain with deep breaths",
     body: "Sharp pain with a deep breath often involves the <strong>rib joints</strong> where they meet the spine — usually mechanical and treatable. But if breath pain comes with fever, breathlessness, or follows an accident, see a doctor promptly." }
 }

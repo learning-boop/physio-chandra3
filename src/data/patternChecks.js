@@ -34,7 +34,9 @@ const bothSides = (zones, type) =>
   zones.some((z) => z.type === type && z.id.endsWith('R'))
 /** Areas along one arm or leg on one side (whole-limb spread). */
 const limbSpread = (zones, side) => {
-  const arm = ['shoulder', 'elbow', 'wrist'].filter((t) => onSide(zones, side, t)).length
+  // Upper arm, elbow and forearm count as one stretch of the arm, so the
+  // whole-limb rule still means shoulder, mid-arm and hand.
+  const arm = [['shoulder'], ['upperarm', 'elbow', 'forearm'], ['wrist']].filter((ts) => onSide(zones, side, ...ts)).length
   const leg = ['hip', 'knee', 'ankle'].filter((t) => onSide(zones, side, t)).length
   return Math.max(arm, leg)
 }
@@ -79,7 +81,7 @@ const PATTERNS = [
     // Spec's cardiac map: central chest, left arm, jaw. Deliberately NOT every
     // neck drawing — that would put a heart-attack question in front of
     // everyone with a stiff neck.
-    when: (z) => has(z, 'chest') || onSide(z, 'L', 'shoulder', 'elbow', 'wrist'),
+    when: (z) => has(z, 'chest') || onSide(z, 'L', 'shoulder', 'upperarm', 'elbow', 'forearm', 'wrist'),
   },
   {
     // Spec: back of the knee / calf — "swollen calf + red/warm → screen DVT".

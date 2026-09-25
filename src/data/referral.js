@@ -26,7 +26,7 @@ const zoneType = (id) => id.replace(/[LR]$/, '').replace('lowerback', 'lowback')
    neck asks both: a nerve root in the neck, or the first rib and thoracic
    outlet at the base of the neck (content/regions/ctj.md). */
 const LIMBS = [
-  { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'elbow', 'wrist'] },
+  { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist'] },
   // A leg line from the back of the pelvis (sacroiliac) asks both it and the
   // low back, where nerve-root leg pain comes from (content/regions/sij.md).
   { kind: 'leg', region: 'lowback', spine: ['lowback', 'sij'], sources: ['lowerback'], chain: ['hip', 'knee', 'ankle'] },
@@ -36,7 +36,12 @@ const LIMBS = [
    (T10–L2) is felt low — low back, top of the buttock, side of the hip, groin
    — so a low-back mark also asks the TL-junction questions
    (content/regions/tlj.md). Zone type → zone types. */
-const IMPLIES = { lowerback: ['tlj'] }
+const IMPLIES = {
+  lowerback: ['tlj'],
+  // Pain in the outer upper arm is very often the shoulder's (the deltoid
+  // patch): an upper-arm mark also asks the shoulder (content/regions/shoulder.md).
+  upperarm: ['shoulder'],
+}
 
 /* How far down the limb a line must reach to count as referral: past the
    shoulder (into the elbow / upper-arm band) or past the hip (into the thigh
@@ -126,7 +131,7 @@ export function referralMechanism(r, answers = {}) {
 }
 
 const REACH_WORDS = {
-  elbow: 'the upper arm and elbow', wrist: 'the forearm and hand',
+  upperarm: 'the upper arm', elbow: 'the upper arm and elbow', forearm: 'the forearm', wrist: 'the forearm and hand',
   knee: 'the thigh and knee', ankle: 'the lower leg and foot',
 }
 

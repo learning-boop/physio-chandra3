@@ -5,12 +5,15 @@ name: Calcium deposits in the shoulder tendon
 clin: Rotator cuff calcific tendinopathy
 # DRAFT extracted from: Rotator Cuff Tendinopathy Diagnosis, Nonsurgical Medical Care, and Rehabilitation: A Clinical Practice Guideline (JOSPT, 2025)
 # Reviewed by: (add your name once you have checked every line)
+# Pointers re-mapped 25 Sep 2026 to the questions in content/regions/shoulder.md.
 pointers:
-  "Deep inside / all over the shoulder": 2
-  "a painful arc partway up": 2
-  "Yes": 3
-  "More than 3 months": 2
-  "Gradually, no clear cause": 1
+  "Sudden severe pain with no injury": 3
+  "The pain built up over a day or two to very severe, with no injury": 3
+  "Deep inside, or at the front of the shoulder": 1
+  "Outer upper arm, below the shoulder": 1
+  "It hurts in the middle of the movement, then eases near the top": 1
+  "Lying on that side at night": 1
+  "Moving my neck": -2
 ---
 
 ## blurb

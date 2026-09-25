@@ -1,17 +1,25 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Injury screen: the Canadian C-Spine Rule, adapted (Stiell et al., JAMA
-   2001), from Chandra's cervical region document, section B2.
+   Injury screens, shown straight after the safety check when a recent injury
+   could need medical care first. One per region document that has one:
 
-   Shown straight after the safety check when the neck is drawn. Questions are
-   asked in order and the first answer that routes ends the screen. The site
-   can only send people on to medical care from here, never clear them:
-   tenderness over the middle of the spine can only be checked in person, so
-   even a full pass within 48 hours stays at "see a physician first".
+     neck      the Canadian C-Spine Rule, adapted (Stiell et al., JAMA 2001),
+               from the cervical document, section B2 — also run for the base
+               of the neck (its document routes its injury flag here)
+     shoulder  fall, dislocation or sudden pull (shoulder document, B2)
+     arm       fall, blow or sudden force to the upper arm (upper arm, B2)
 
-   Pure logic, no React, so scripts/check-region-tests.mjs runs the same rule.
-   ⚠ FOR CLINICIAN REVIEW: the final route of I7 (see I7_PASS_ROUTE).
+   Questions are asked in order and the first answer that routes ends that
+   screen. The site can only send people on to medical care from here, never
+   clear them. When several apply (an upper-arm mark also asks the shoulder),
+   they run one after another until one routes.
+
+   Answers are stored as "<screen>:<question>", e.g. "neck:I1".
+   Pure logic, no React, so scripts/check-region-tests.mjs runs the same rules.
+   FOR CLINICIAN REVIEW: the final route of the neck I7 (I7_PASS_ROUTE) and
+   the upper arm I6 age cut-off.
    ───────────────────────────────────────────────────────────────────────── */
 
+/* ── Neck: Canadian C-Spine Rule ── */
 export const INJURY_QUESTIONS = [
   { id: 'I1', text: 'Has your neck been hurt in an accident or injury in the last 7 days?', options: [
     { id: 'no', label: 'No' },
@@ -112,6 +120,112 @@ export function injuryStep(answers = {}, ageId) {
   return { route: I7_PASS_ROUTE, why: WHY.pass }
 }
 
-/** The injury screen applies when the neck or the base of the neck is drawn
-    (the base-of-neck document routes its injury flag through this screen). */
-export const injuryScreenApplies = (zones = []) => zones.some((z) => z.type === 'neck' || z.type === 'ctj')
+const yesNo = (yes, why) => [
+  { id: 'yes', label: 'Yes', route: yes, why },
+  { id: 'no', label: 'No' },
+]
+
+/* ── Shoulder: fall, dislocation or sudden pull (BESS pathways) ── */
+export const SHOULDER_INJURY = [
+  { id: 'I1', text: 'Has your shoulder been hurt in a fall, accident, or sport in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'fall', label: 'Yes, I fell onto my arm or shoulder' },
+    { id: 'popped', label: 'Yes, it popped out of place' },
+    { id: 'pull', label: 'Yes, a sudden pull, lift, or jerk' },
+  ]},
+  { id: 'I2', text: 'Is your shoulder still out of place, or does it look a different shape, or is there a new lump or step at the top of the shoulder?',
+    options: yesNo('emergency', 'Possible dislocation or fracture that has not been put back') },
+  { id: 'I3', text: 'Since the injury, has your arm or hand been cold, pale, or blue?',
+    options: yesNo('emergency', 'Possible blood vessel injury') },
+  { id: 'I4', text: 'Since the injury, have you been unable to lift your arm at all, or is there a numb patch on the outer upper arm?',
+    options: yesNo('urgent', 'Possible acute rotator cuff tear or nerve injury: an early surgical opinion matters') },
+  { id: 'I5', text: 'Did it pop out for the first time, and are you 40 or older?', askIf: (a) => a.I1 === 'popped',
+    options: yesNo('urgent', 'Rotator cuff tear and nerve injury are common after a first dislocation over 40') },
+  { id: 'I6', text: 'Did it happen during a seizure (fit) or an electric shock?',
+    options: yesNo('urgent', 'Possible dislocation to the back of the shoulder, which is often missed') },
+]
+
+/* ── Upper arm: fall, blow or sudden force ── */
+export const ARM_INJURY = [
+  { id: 'I1', text: 'Has your upper arm been hurt in a fall, accident, blow, or heavy lift in the last 2 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'fall', label: 'Yes, a fall' },
+    { id: 'blow', label: 'Yes, a blow to the arm' },
+    { id: 'pop', label: 'Yes, I felt a pop or tear while lifting' },
+  ]},
+  { id: 'I2', text: 'Is the arm a different shape, or is bone showing through the skin?',
+    options: yesNo('emergency', 'Possible fracture') },
+  { id: 'I3', text: 'Since the injury, is your hand cold, pale, or blue, or is your whole hand numb?',
+    options: yesNo('emergency', 'Possible blood vessel or nerve injury') },
+  { id: 'I4', text: 'Is the pain in your upper arm getting worse and worse, with the arm tight and swollen, and much worse when your elbow or fingers are moved?',
+    options: yesNo('emergency', 'Possible compartment syndrome (pressure building up in the arm)') },
+  { id: 'I5', text: 'Since the injury, can you not lift your wrist or straighten your fingers?',
+    options: yesNo('urgent', 'Possible radial nerve injury, often with a fracture of the upper arm bone') },
+  // The age cut-off is the document's, marked "for Chandra: confirm".
+  { id: 'I6', text: 'Did you feel a pop at the front of the shoulder or upper arm while lifting, and now have a new bulge low in the biceps?',
+    askIf: (a) => a.I1 === 'pop', options: [
+      { id: 'young', label: 'Yes, and I am under 40 or do heavy manual work or sport', route: 'urgent',
+        why: 'A torn biceps tendon: younger or heavy-use patients may want a surgical opinion' },
+      { id: 'older', label: 'Yes, and I am 40 or over', route: 'continue' },
+      { id: 'no', label: 'No' },
+    ]},
+]
+
+/** Step through a simple screen: each question in order (skipping any whose
+    askIf is false), ending at the first picked option that has a route. */
+function linearStep(questions) {
+  return (a = {}) => {
+    for (const q of questions) {
+      if (q.askIf && !q.askIf(a)) continue
+      if (a[q.id] === undefined) return { next: q.id }
+      for (const oid of list(a[q.id])) {
+        const o = q.options.find((x) => x.id === oid)
+        if (o && o.route) return { route: o.route, why: o.why }
+      }
+    }
+    return { route: 'continue' }
+  }
+}
+
+export const SCREENS = [
+  { id: 'neck', zones: ['neck', 'ctj'], title: 'Recent Neck Injury',
+    flag: 'A neck injury in the last 7 days (injury screen)', questions: INJURY_QUESTIONS, step: injuryStep },
+  { id: 'shoulder', zones: ['shoulder'], title: 'Recent Shoulder Injury',
+    flag: 'A shoulder injury in the last 6 weeks (injury screen)', questions: SHOULDER_INJURY, step: linearStep(SHOULDER_INJURY) },
+  { id: 'arm', zones: ['upperarm'], title: 'Recent Upper Arm Injury',
+    flag: 'An upper arm injury in the last 2 weeks (injury screen)', questions: ARM_INJURY, step: linearStep(ARM_INJURY) },
+]
+
+/** Every stored answer key, e.g. "shoulder:I2". */
+export const INJURY_KEYS = SCREENS.flatMap((sc) => sc.questions.map((q) => sc.id + ':' + q.id))
+
+/** The screens these zones call for, in order. Pass the question-flow zones
+    (areas a referral line only travels through are left out; implied areas,
+    like the shoulder for an upper-arm mark, are in). */
+export const screensFor = (zones = []) => SCREENS.filter((sc) => zones.some((z) => sc.zones.includes(z.type)))
+export const injuryScreenApplies = (zones = []) => screensFor(zones).length > 0
+
+/** The question "<screen>:<id>" as { screen, q }, or null. */
+export function injuryQuestion(key) {
+  const [sid, qid] = String(key || '').split(':')
+  const screen = SCREENS.find((sc) => sc.id === sid)
+  const q = screen && screen.questions.find((x) => x.id === qid)
+  return q ? { screen, q } : null
+}
+
+/** Where the injury screens go next, across every screen that applies.
+    Returns { next: "<screen>:<id>" } while a question is needed, else
+    { route: 'emergency' | 'urgent', why, screen } or { route: 'continue' }. */
+export function injuryFlow(zones, answers = {}, ageId) {
+  for (const sc of screensFor(zones)) {
+    const own = {}
+    for (const q of sc.questions) {
+      const v = answers[sc.id + ':' + q.id]
+      if (v !== undefined) own[q.id] = v
+    }
+    const r = sc.step(own, ageId)
+    if (r.next) return { next: sc.id + ':' + r.next, screen: sc.id }
+    if (r.route === 'emergency' || r.route === 'urgent') return { ...r, screen: sc.id }
+  }
+  return { route: 'continue' }
+}

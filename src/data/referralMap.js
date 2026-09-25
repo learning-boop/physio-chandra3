@@ -51,6 +51,18 @@ export const REFERRAL_MAP = {
     muscles: ['Supraspinatus (mid-deltoid)', 'Infraspinatus (deep anterior shoulder)', 'Teres minor (posterior deltoid)', 'Subscapularis (posterior shoulder)', 'Scalenes (anterior chest, lateral arm)'],
     organs: ['Diaphragm (shoulder tip, C3–C5)', 'Liver / gallbladder (right shoulder)', 'Spleen (left shoulder tip, Kehr\'s sign)', 'Heart (left shoulder)', 'Lung / pleura (shoulder tip)', 'Ectopic pregnancy (shoulder tip)'],
   },
+  upperarm: {
+    joints: ['Glenohumeral joint / capsule (deltoid area, C5 zone)'],
+    roots: ['C5 (outer upper arm, deltoid patch)', 'C7 (back of the arm)', 'T1 (inner arm and armpit)'],
+    muscles: ['Supraspinatus / infraspinatus (outer upper arm; infraspinatus down the front of the arm)', 'Biceps and brachialis (front of the upper arm)', 'Triceps and coracobrachialis (back of the arm)', 'Pectoralis minor and latissimus dorsi (inner arm)'],
+    organs: ['Heart (inside of the left arm, T1, with effort)', 'Lung apex / Pancoast (inner arm)', 'Arm vein clot (whole arm swollen and heavy)'],
+  },
+  forearm: {
+    joints: [],
+    roots: ['C6 (outer forearm to the thumb)', 'C7 (back of the forearm to the middle finger)', 'C8 (inner forearm to the little finger)'],
+    muscles: ['Forearm extensors, supinator and brachioradialis (top of the forearm, back of the hand)', 'Infraspinatus (thumb side of the forearm)', 'Radial tunnel (deep ache below the outer elbow)', 'Median nerve at the pronator (underside of the forearm)'],
+    organs: ['Heart (inner forearm, left, with effort)'],
+  },
   elbow: {
     joints: ['Glenohumeral joint (upper arm)'],
     roots: ['C5 (lateral upper arm)', 'C6 (lateral forearm)', 'C7 (posterior arm and forearm)', 'C8 (medial forearm)', 'T1 (medial arm and elbow)'],

@@ -68,8 +68,12 @@ const AREA = {
   lowerback: { type: 'lowerback', label: 'Lower Back' },
   sij:       { type: 'sij',       label: 'Back of Pelvis & Buttock' },
   coccyx:    { type: 'coccyx',    label: 'Tailbone' },
+  upperarmL: { type: 'upperarm',  label: 'Left Upper Arm' },
+  upperarmR: { type: 'upperarm',  label: 'Right Upper Arm' },
   elbowL:    { type: 'elbow',     label: 'Left Elbow' },
   elbowR:    { type: 'elbow',     label: 'Right Elbow' },
+  forearmL:  { type: 'forearm',   label: 'Left Forearm' },
+  forearmR:  { type: 'forearm',   label: 'Right Forearm' },
   wristL:    { type: 'wrist',     label: 'Left Wrist' },
   wristR:    { type: 'wrist',     label: 'Right Wrist' },
   hipL:      { type: 'hip',       label: 'Left Hip' },
@@ -113,6 +117,12 @@ const COCCYX_HALF = 0.025
 // eye level — jaw, cheeks, in front of the ear (content/regions/jaw.md).
 // Above it (temples, forehead, scalp) stays the head.
 const JAW_TOP = 0.445
+// Down the arm, below the shoulder: upper arm (content/regions/arm.md), the
+// elbow joint, the forearm, then the wrist and hand. Heights as fractions.
+const UPPERARM_BOTTOM = 0.13
+const ELBOW_BOTTOM = 0.08
+const FOREARM_BOTTOM = 0.01
+const armBand = (fy) => (fy > UPPERARM_BOTTOM ? 'upperarm' : fy > ELBOW_BOTTOM ? 'elbow' : fy > FOREARM_BOTTOM ? 'forearm' : 'wrist')
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -143,7 +153,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v14'
+const CLASSIFIER_VERSION = 'zones-v15'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -184,7 +194,7 @@ function classify(wx, wy, wz) {
     if (fy > 0.41) return 'head'
     // The nape is the NECK — people very often draw neck pain from behind.
     if (fy > 0.33) return absZ > 0.08 ? 'shoulder' + side : 'neck'
-    if (absZ > ARM_SPLIT && fy < 0.18) return (fy > 0.04 ? 'elbow' : 'wrist') + side
+    if (absZ > ARM_SPLIT && fy < 0.18) return armBand(fy) + side
     if (absZ > 0.10 && fy >= 0.18) return 'shoulder' + side
     // Base of the neck and top of the upper back (C7–T3): the cervicothoracic
     // junction, which has its own questions (content/regions/ctj.md).
@@ -201,8 +211,7 @@ function classify(wx, wy, wz) {
   // The arm sits further from the centre than the hip, so distance decides.
   if (absZ > ARM_SPLIT) {
     if (fy > 0.24) return 'shoulder' + side
-    if (fy > 0.04) return 'elbow' + side
-    return 'wrist' + side
+    return armBand(fy) + side
   }
 
   // NEAR the centre: head, neck, shoulders(inner), chest, abdomen, hip.
@@ -973,7 +982,7 @@ export default function Body3D({
       // at the base of the neck is traced from the neck, even when its first
       // points fall just below the thin neck band. Without this, neck-to-hand
       // began as "Chest" and was never recognised as referral from the neck.
-      if (!out.includes('neck') && out.some((id) => /^(elbow|wrist)/.test(id))) {
+      if (!out.includes('neck') && out.some((id) => /^(upperarm|elbow|forearm|wrist)/.test(id))) {
         const n = Math.max(3, Math.ceil(pts.length * 0.15))
         const ends = [...pts.slice(0, n), ...pts.slice(-n)]   // drawn either direction
         if (ends.some((p) => nearNeckBase(p.x, p.y, p.z))) {
@@ -997,7 +1006,7 @@ export default function Body3D({
   // Areas where the trunk itself does not already say front or back, so the
   // surface has to be carried on the zone (a knee is one area; its front and
   // back are different problems).
-  const SURFACE_MATTERS = new Set(['shoulder', 'elbow', 'wrist', 'hip', 'knee', 'ankle', 'neck', 'head'])
+  const SURFACE_MATTERS = new Set(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hip', 'knee', 'ankle', 'neck', 'head'])
 
   // Merge the zones from EVERY line into one selection list, and report each
   // line's own ordered zone types separately — one continuous line from the
