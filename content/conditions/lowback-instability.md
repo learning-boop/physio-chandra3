@@ -5,11 +5,13 @@ name: Back that feels unstable or gives way
 clin: Lumbar movement control impairment (instability)
 # DRAFT extracted from: Interventions for the Management of Acute and Chronic Low Back Pain: Revision 2021 (JOSPT Clinical Practice Guideline)
 # Reviewed by: (add your name once you have checked every line)
+# Pointers re-mapped 24 Sep 2026 to the questions in content/regions/lowback.md.
 pointers:
-  "Rolling over in bed or standing on one leg": 3
-  "Comes and goes over years": 2
-  "Gradually, no clear cause": 1
-  "Across the whole lower back": 1
+  "My back catches or gives way with small movements": 3
+  "I push on my thighs to stand up straight after bending": 2
+  "I get frequent flare-ups from small movements": 3
+  "Rolling over in bed, or standing on one leg": 1
+  "It feels stiff rather than weak": -2
 ---
 
 ## blurb

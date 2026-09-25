@@ -260,7 +260,10 @@ export function specialsAcross(keys, answers) {
     zone; a flag with `drawn` (e.g. the neck's shoulder-tip flags) is only
     asked when one of those zone types is marked. */
 export function regionRedFlags(flowZ = [], zones = flowZ) {
-  const keys = [...new Set(flowZ.map((z) => ZONE_TO_REGION[z.type]).filter((k) => k && REGIONS[k]))]
+  // Drawn areas before implied ones, so a shared (grouped) flag keeps the
+  // wording of the area the person actually marked.
+  const ordered = [...flowZ.filter((z) => !z.implied), ...flowZ.filter((z) => z.implied)]
+  const keys = [...new Set(ordered.map((z) => ZONE_TO_REGION[z.type]).filter((k) => k && REGIONS[k]))]
   const drawn = new Set(zones.map((z) => z.type))
   const out = []
   for (const tier of ['emergency', 'urgent']) {

@@ -7,93 +7,125 @@ export const GENERAL_RED_FLAGS = [
 ];
 
 export const REGIONS = {
+  /* ══════════════ LOW BACK & PELVIS ══════════════
+     From Chandra's "Lumbar assessment" region document (DRAFT 23 Sep 2026;
+     the source text is content/regions/lowback.md). Sources: JOSPT LBP CPG
+     2021 and 2012, NICE NG59, IFOMPT red flags framework 2020, Konno 2007,
+     Laslett 2005, Bogduk 2009, Fukui 1997, O'Neill 2002, Lesher 2008,
+     Travell & Simons 2019.
+     A low-back mark also asks the TL-junction questions (./referral.js).
+     Conditions: content/conditions/lowback-*.md. */
   lowback: {
     name:"Low back & pelvis",
     redFlags:[
-      {id:"rf-saddle", text:"New numbness or tingling around the groin, genitals, or inner thighs (the 'saddle' area)", tier:"emergency"},
-      {id:"rf-bladder", text:"New difficulty starting urination, or loss of bladder or bowel control", tier:"emergency"},
-      {id:"rf-legs", text:"Weakness in both legs, or leg weakness that is getting worse", tier:"emergency"},
-      {id:"rf-first55", text:"First-ever episode of severe back pain and you're over 55", tier:"urgent"}
+      {id:"rf-saddle", tier:"emergency", why:"Possible cauda equina syndrome",
+        text:"Do you have new numbness or tingling between your legs, around your bottom, or in your genitals (the area you would sit on a saddle)?"},
+      {id:"rf-bladder", tier:"emergency", group:"cauda", why:"Possible cauda equina syndrome",
+        text:"Have you had new trouble starting to pass urine, not being able to feel when your bladder is full, leaking urine, or losing control of your bowels?"},
+      {id:"rf-legs", tier:"emergency", why:"Possible cauda equina syndrome or severe nerve compression",
+        text:"In the last few days, has your leg pain spread to both legs, or has weakness in your leg or foot been getting quickly worse?"},
+      {id:"rf-aaa", tier:"emergency", group:"aaa", why:"Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
+        text:"Do you have a sudden, severe pain in your back or tummy, with a pulsing feeling in your tummy, or feeling faint or sweaty?"},
+      {id:"rf-fracture", tier:"emergency", group:"fracture", why:"Possible spinal fracture",
+        text:"Did this start in the last few days after a car crash, a fall from a height, or landing hard on your feet or bottom?"},
+      {id:"rf-cancer", tier:"urgent", group:"cancer", why:"Cancer can spread to the spine",
+        text:"Have you ever had cancer, and is this a new back pain?"},
+      {id:"rf-osteo", tier:"urgent", group:"osteo", why:"Possible osteoporotic fracture of the spine",
+        text:"Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70?"},
+      {id:"rf-infection", tier:"urgent", group:"infection", why:"Possible spinal infection",
+        text:"Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?"},
+      {id:"rf-footdrop", tier:"urgent", why:"Nerve weakness (foot drop) needs medical review",
+        text:"Is your foot slapping down or your toes catching when you walk, even if it is not getting worse?"},
+      {id:"rf-kidney", tier:"urgent", group:"kidney", why:"Possible kidney stone or kidney infection",
+        text:"Does the pain come in waves from your side to your groin, or come with a fever, burning when you pass urine, or blood in your urine?"},
+      {id:"rf-spondy", tier:"urgent", why:"Possible stress fracture of the spine (spondylolysis); needs imaging",
+        text:"Are you under 20, and does it hurt to arch your back, especially with sport such as gymnastics, dance, cricket bowling, or tennis?"},
+      {id:"rf-pelvic", tier:"urgent", why:"Pelvic organ and prostate problems can be felt in the low back",
+        text:"Is the pain linked to your periods, or do you have unusual vaginal bleeding, or (for men) new trouble passing urine?"}
     ],
     context:[
       {id:"age", text:"Your age?", options:[
-        {id:"u30", label:"Under 30"},
-        {id:"30-50", label:"30 – 50"},
-        {id:"o50", label:"Over 50", weights:{stenosis:1}}
+        {id:"u18", label:"Under 18"},
+        {id:"18-29", label:"18 to 29"},
+        {id:"30-49", label:"30 to 49"},
+        {id:"50-64", label:"50 to 64"},
+        {id:"o64", label:"65 or over"}
       ]},
       {id:"onset", text:"How did it start?", options:[
-        {id:"lifting", label:"Lifting or an awkward movement", weights:{nslbp:2, facet:1}},
-        {id:"gradual", label:"Gradually, no clear cause", weights:{nslbp:1}},
-        {id:"activity", label:"After unusual or increased activity", weights:{nslbp:2}},
-        {id:"woke", label:"Woke up with it", weights:{nslbp:1, facet:1}},
-        {id:"ns", label:"Not sure"}
+        {id:"gradual", label:"Gradually, no clear reason"},
+        {id:"lift", label:"After lifting or bending"},
+        {id:"twist", label:"After a twist or sudden movement"},
+        {id:"fall", label:"After a fall"},
+        {id:"sitting", label:"After long periods sitting or driving"},
+        {id:"pregnancy", label:"During or after pregnancy"}
       ]},
       {id:"duration", text:"How long has it been going on?", options:[
         {id:"d2w", label:"Less than 2 weeks"},
-        {id:"d6w", label:"2 – 6 weeks"},
-        {id:"d6m", label:"More than 6 weeks"},
-        {id:"years", label:"Comes and goes over years"}
+        {id:"d6w", label:"2 to 6 weeks"},
+        {id:"d3m", label:"6 weeks to 3 months"},
+        {id:"o3m", label:"More than 3 months"}
       ]}
     ],
     questions:[
-      {id:"L1", text:"Where do you feel it most?", options:[
-        {id:"oneside", label:"One side of the lower back", weights:{facet:2, sij:1}},
-        {id:"across", label:"Across the whole lower back", weights:{nslbp:2}},
-        {id:"buttleg", label:"Buttock and down the back of the leg, below the knee", weights:{radicular:3}},
-        {id:"dimple", label:"One buttock, near the dimple at the back of the pelvis", weights:{sij:3}},
-        {id:"ns", label:"Not sure"}
+      {id:"L1", text:"How far does the pain go?", options:[
+        {id:"back", label:"Low back only"},
+        {id:"buttock", label:"Into the buttock"},
+        {id:"thigh", label:"Down the thigh, stopping above the knee"},
+        {id:"belowknee", label:"Below the knee, into the leg or foot"},
+        {id:"front", label:"Front of the thigh or groin"}
       ]},
-      {id:"L2", text:"Does anything travel down your leg?", options:[
-        {id:"belowknee", label:"Pain below the knee", weights:{radicular:3}},
-        {id:"pins", label:"Pins & needles or numbness into the foot", weights:{radicular:3}},
-        {id:"thigh", label:"An ache into the thigh only", weights:{nslbp:1, facet:1}},
-        {id:"none", label:"No", weights:{radicular:-2}},
-        {id:"ns", label:"Not sure"}
+      {id:"L2", text:"Which is worse?",
+        askIf: ({ ra }) => [].concat(ra.L1 || []).some((o) => o === "thigh" || o === "belowknee" || o === "front"),
+        options:[
+          {id:"back", label:"The back pain"},
+          {id:"leg", label:"The leg pain"},
+          {id:"same", label:"About the same"}
+        ]},
+      {id:"L3", text:"Which of these do you notice in the leg? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.L1 || []).includes("belowknee"),
+        options:[
+          {id:"pins", label:"Pins and needles or numbness in the foot or toes"},
+          {id:"cough", label:"Shooting pain down the leg when I cough or sneeze"},
+          {id:"bendsit", label:"The leg pain is worse when I bend forward or sit"},
+          {id:"none", label:"None of these"}
+        ]},
+      {id:"L4", text:"Which of these bring it on? Tick all that apply.", options:[
+        {id:"bendsit", label:"Bending forward, or sitting"},
+        {id:"arch", label:"Arching back, or standing for a long time"},
+        {id:"twist", label:"Twisting"},
+        {id:"getup", label:"Getting up after sitting or lying"},
+        {id:"roll", label:"Rolling over in bed, or standing on one leg"}
       ]},
-      {id:"L3", text:"What makes it worse? (choose all that apply)", multi:true, options:[
-        {id:"bendsit", label:"Bending forward or sitting", weights:{radicular:2, nslbp:1}},
-        {id:"arch", label:"Arching back or standing for long", weights:{facet:3, stenosis:2}},
-        {id:"walk", label:"Walking — but it eases when I sit or lean on a shopping cart", weights:{stenosis:3}},
-        {id:"roll", label:"Rolling over in bed or standing on one leg", weights:{sij:2}}
+      {id:"L5", text:"What happens when you walk?",
+        askIf: ({ ra }) => ra.age === "50-64" || ra.age === "o64" || [].concat(ra.L1 || []).includes("belowknee"),
+        options:[
+          {id:"eases", label:"Walking eases it"},
+          {id:"claud", label:"Walking brings on leg pain, heaviness, or tingling that eases when I sit or bend forward"},
+          {id:"backworse", label:"Walking makes my back worse, but not my legs"},
+          {id:"nochange", label:"Walking does not change it"}
+        ]},
+      {id:"L6", text:"If you point to the worst spot with one finger, where is it?", options:[
+        {id:"centre", label:"In the middle of the low back, on the spine"},
+        {id:"side", label:"On one side, beside the spine above the belt line"},
+        {id:"dimple", label:"Over the dimple at the back of my pelvis"},
+        {id:"wide", label:"Spread over a wide area; I cannot point to one spot"}
       ]},
-      {id:"L4", text:"What are mornings like?", options:[
-        {id:"short", label:"Stiff for up to 30 minutes, then it eases", weights:{nslbp:1, facet:1}},
-        {id:"long", label:"Stiff for well over 30–60 minutes, better with exercise", special:"inflammatory"},
-        {id:"none", label:"No particular morning pattern"}
+      {id:"L7", text:"Which of these apply? Tick all that apply.", options:[
+        {id:"catch", label:"My back catches or gives way with small movements"},
+        {id:"thighs", label:"I push on my thighs to stand up straight after bending"},
+        {id:"flares", label:"I get frequent flare-ups from small movements"},
+        {id:"stiff", label:"It feels stiff rather than weak"},
+        {id:"none", label:"None of these"}
       ]},
-      {id:"L5", text:"Does coughing or sneezing sharpen the leg symptoms?", options:[
-        {id:"yes", label:"Yes", weights:{radicular:2}},
-        {id:"no", label:"No"},
-        {id:"ns", label:"Not sure"}
+      {id:"L8", text:"Which of these do you do regularly? Tick all that apply.", options:[
+        {id:"arching", label:"Sport with a lot of arching back (gymnastics, dance, fast bowling, tennis)"},
+        {id:"heavy", label:"Heavy lifting at work or the gym"},
+        {id:"sitting", label:"Sitting most of the day"},
+        {id:"driving", label:"Driving long distances"},
+        {id:"none", label:"None of these"}
       ]}
     ],
-    conditions:[
-      {id:"nslbp", name:"Non-specific mechanical low back pain", clin:"the most common form of back pain",
-        blurb:"Pain arising from the working parts of the back — joints, discs, muscles and ligaments reacting to load — without a single damaged structure to blame. It is very common, and the back remains strong.",
-        noticed:["Pain that changes with position and activity","Stiffness after rest that eases with movement","Good days and bad days"],
-        homeCare:["Keep moving — gentle walking several times a day beats bed rest","Use heat for comfort in the first days","Modify (don't stop) activities that flare it","Sleep positions: side-lying with a pillow between the knees often helps"],
-        seePhysioIf:["It isn't clearly improving after ~2 weeks","It keeps returning","It's limiting your work, sleep, or activity"]},
-      {id:"radicular", name:"Nerve-related leg pain", clin:"often called sciatica; radicular pain",
-        blurb:"Irritation of a nerve as it leaves the lower spine — commonly related to a disc — which can send pain, pins & needles, or numbness down the leg. Most cases settle over weeks to a few months.",
-        noticed:["Leg symptoms often bother you more than the back itself","Sitting, bending, or coughing can sharpen it","Pain, tingling, or numbness may reach the calf or foot"],
-        homeCare:["Change positions often; short frequent walks","Find your direction of relief — many people ease when walking or lying down","Avoid long sitting in the early irritable phase","Keep the leg gently moving within comfort"],
-        seePhysioIf:["Leg symptoms persist beyond ~1–2 weeks","Numbness or tingling isn't settling","You want a plan to stay active safely while it recovers"]},
-      {id:"facet", name:"Facet joint irritation", clin:"lumbar facet (zygapophyseal) joint pain",
-        blurb:"The small joints at the back of the spine can become irritated, typically causing one-sided back pain that dislikes arching backwards or long standing.",
-        noticed:["One-sided low back ache","Worse arching back, standing long, or looking up overhead","Usually eases when sitting or bending slightly forward"],
-        homeCare:["Gentle knees-to-chest and pelvic tilt movements","Break up long standing with brief sitting or a step stool","Heat for comfort","Short regular walks"],
-        seePhysioIf:["It lingers beyond ~2 weeks","It recurs with particular activities","You'd like specific mobility and strength work for it"]},
-      {id:"sij", name:"Sacroiliac joint pain", clin:"SIJ-related pain",
-        blurb:"The joint between the base of the spine and the pelvis can become sensitive — often after pregnancy, a fall onto the buttock, or an uneven load — causing focal pain near the pelvic dimple.",
-        noticed:["Pointable pain near the dimple at the back of the pelvis","Worse rolling in bed, standing on one leg, or climbing stairs","May spread into the buttock or groin"],
-        homeCare:["Avoid prolonged single-leg loading while irritable","A support belt can help short-term in some cases","Gentle gluteal and core activation within comfort","Even, symmetrical standing habits"],
-        seePhysioIf:["Pain persists more than ~2 weeks","It began after pregnancy or a fall","Walking or stairs remain limited"]},
-      {id:"stenosis", name:"Spinal stenosis pattern", clin:"lumbar spinal stenosis / neurogenic claudication", gates:{ages:["o50"]},
-        blurb:"With age, the passageways for the spinal nerves can narrow. The classic pattern: legs that ache, heavy or tingle with walking, easing quickly when you sit or lean forward (like on a shopping cart).",
-        noticed:["Walking distance limited by leg heaviness or ache","Relief within minutes of sitting or bending forward","Often better cycling than walking"],
-        homeCare:["Keep walking within your comfortable distance — little and often","Cycling or pool walking maintain fitness with less symptom","A slight forward lean (poles, cart) extends walking range"],
-        seePhysioIf:["Walking distance is shrinking","You'd like a structured conditioning plan — good evidence supports exercise for this pattern","Symptoms affect balance or confidence"]}
-    ]
+    conditions:[]
   },
 
   shoulder: {

@@ -5,11 +5,17 @@ name: Disc-related back pain that changes with position
 clin: Lumbar disc derangement / directional preference (Mechanical Diagnosis and Therapy)
 # DRAFT extracted from: Interventions for the Management of Acute and Chronic Low Back Pain: Revision 2021 (JOSPT Clinical Practice Guideline)
 # Reviewed by: (add your name once you have checked every line)
+# Pointers re-mapped 24 Sep 2026 to the questions in content/regions/lowback.md.
 pointers:
-  "Bending forward or sitting": 3
-  "Lifting or an awkward movement": 2
-  "Pain below the knee": 1
+  "Bending forward, or sitting": 3
+  "After lifting or bending": 2
   "Less than 2 weeks": 1
+  "Below the knee, into the leg or foot": 1
+  "Down the thigh, stopping above the knee": 1
+  "The leg pain is worse when I bend forward or sit": 1
+  "In the middle of the low back, on the spine": 1
+  "Heavy lifting at work or the gym": 1
+  "Sitting most of the day": 1
 ---
 
 ## blurb

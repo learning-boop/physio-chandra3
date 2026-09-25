@@ -13,6 +13,8 @@ content/
   pain-patterns/  pain-pattern records and the spec they follow
     _PROMPT.md
     _SPEC-the-shape-of-pain.md
+  reference/      clinician references the site reasons with (never shown to visitors)
+    referred-pain.md   → src/data/referralMap.js
 ```
 
 Files starting with `_` are templates, examples and instructions, never data.

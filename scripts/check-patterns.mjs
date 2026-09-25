@@ -57,7 +57,7 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   const fz = flowZones(zonesOf(lines), ref)
   check('low back→foot line detected as leg referral', ref.length === 1 && ref[0].kind === 'leg' && ref[0].reach === 'ankle', ref)
   check('questions come from the LOW BACK and the TL junction it implies (not hip/knee/ankle)', JSON.stringify(questionRegions(fz, null)) === '["tlj","lowback"]', questionRegions(fz, null))
-  check('drawing pre-answers L2 = "below the knee"', JSON.stringify(drawnAnswers(ref).L2) === '["belowknee"]', drawnAnswers(ref))
+  check('drawing pre-answers L1 = "below the knee"', JSON.stringify(drawnAnswers(ref).L1) === '["belowknee"]', drawnAnswers(ref))
 }
 
 // ── 4. Not referral ──
@@ -268,8 +268,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const zones = zonesOf(lines).map((z) => ({ ...z, face: 'back' }))
   const referral = detectReferral(lines)
   const answers = {
-    age: 'o50', onset: 'lifting', duration: 'o3m',
-    L1: ['buttleg'], L2: ['belowknee', 'pins'], L5: ['yes'],
+    age: '50-64', onset: 'lift', duration: 'o3m',
+    L1: ['belowknee'], L2: ['leg'], L3: ['pins', 'cough'], L4: ['bendsit', 'arch'], L6: ['side'],
     painQuality: ['burning', 'tingling'], sinSeverity: 'severe', sinProvoke: 'light',
     sinSettle: 'nextday', pattern24: ['nightWake'], easing: ['Lying down or resting'],
     yfFear: 'agree', yfMood: 'agree', yfOutlook: 'disagree', yfSleep: 'agree', yfRoles: 'disagree',
@@ -302,7 +302,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('summary lists cautions for the first examination', /CAUTIONS reported/.test(text) && /Osteoporosis/.test(text))
   check('summary states that red flags were denied', /Red flags: none reported/.test(text))
   check('summary gives hypotheses with supporting subjective findings',
-    /H1: /.test(text) && /Buttock and down the back of the leg/.test(text), text.match(/HYPOTHESES[\s\S]{0,400}/)[0])
+    /H1: /.test(text) && /Below the knee, into the leg or foot/.test(text), text.match(/HYPOTHESES[\s\S]{0,400}/)[0])
   check('summary is capped at two hypotheses', /H2: /.test(text) && !/H3: /.test(text), text.match(/H\d: [^\n]*/g))
   check('summary adds examination considerations for nerve symptoms', /neurodynamic testing/.test(text))
   check('supporting findings come from answers that actually scored',
@@ -315,6 +315,32 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('summary records what the AI reasoning pass changed',
     /AI reasoning pass: .*dropped nslbp \(leg symptoms dominate\)/.test(withReview), withReview.match(/AI reasoning pass[^\n]*/))
   check('summary never claims to be a diagnosis', /not a diagnosis/.test(text))
+}
+
+// ── 12. Referral map (Referred Pain Clinical Reference) ──
+{
+  const fs = await import('node:fs')
+  const { REFERRAL_MAP, organsForType } = await imp('src/data/referralMap.js')
+  const { buildClinicianSummary } = await imp('src/data/clinicianSummary.js')
+  const { parseZones, referralBackground, sanitizeReview } = await imp('api/_lib/painShared.js')
+  const body = fs.readFileSync(root + '/src/components/Body3D.jsx', 'utf8')
+  const types = [...new Set([...body.matchAll(/type: '([a-z]+)'/g)].map((m) => m[1]))]
+  const missing = types.filter((t) => !REFERRAL_MAP[t])
+  check('every body-map area has a referral-map entry', !missing.length, missing)
+  check('left shoulder: spleen listed, gallbladder (right) left out',
+    organsForType('shoulder', [{ id: 'shoulderL', type: 'shoulder' }]).some((o) => /Spleen/.test(o)) &&
+    !organsForType('shoulder', [{ id: 'shoulderL', type: 'shoulder' }]).some((o) => /gallbladder/.test(o)))
+  check('the heart stays listed on either side',
+    organsForType('shoulder', [{ id: 'shoulderR', type: 'shoulder' }]).some((o) => /^Heart/.test(o)))
+  const zones = [{ id: 'upperback', type: 'upperback', label: 'Mid Back' }]
+  const text = buildClinicianSummary({ zones, keys: ['upperback'] })
+  check('summary lists referral sources for the drawn area, with the screening sequence',
+    /REFERRAL SOURCES TO CONSIDER/.test(text) && /Mid Back:/.test(text) && /gallbladder/.test(text) && /Screening sequence/.test(text))
+  const { drawn } = parseZones([{ type: 'shoulder', label: 'Right Shoulder' }])
+  check('the AI concern check is told which organs refer to the drawn area', /Liver \/ gallbladder/.test(referralBackground(drawn)) && !/Spleen/.test(referralBackground(drawn)))
+  const matched = [{ region: 'upperback', regionName: 'Mid back', c: { id: 'stiffness' } }]
+  const organ = sanitizeReview({ review: { order: ['stiffness'], concern: { why: 'This may come from the gallbladder.' } } }, matched)
+  check('a concern naming an organ keeps its signal but not the organ', organ.concern && !/gallbladder/i.test(organ.concern.why), organ.concern)
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

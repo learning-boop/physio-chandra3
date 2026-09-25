@@ -89,7 +89,7 @@ export function drawnAnswers(referral) {
   const out = {}
   for (const r of referral) {
     if (r.kind === 'arm' && r.reach === 'wrist') out.N2 = ['pastelbow']
-    if (r.kind === 'leg' && r.reach === 'ankle') out.L2 = ['belowknee']
+    if (r.kind === 'leg' && r.reach === 'ankle') out.L1 = ['belowknee']
   }
   return out
 }
@@ -112,9 +112,9 @@ export function referralMechanism(r, answers = {}) {
   const quality = [...asList(answers.painQuality), ...asList(answers.q2)]
   const nerveWords = quality.some((q) => NERVE_QUALITY.includes(q))
   // The region questions' own nerve answers: neck N2 "pins and needles or
-  // numbness in particular fingers"; low back L2 "pins & needles or numbness
-  // into the foot".
-  const nerveAnswer = asList(answers.N2).includes('fingers') || asList(answers.L2).includes('pins')
+  // numbness in particular fingers"; low back L3 "pins and needles or numbness
+  // in the foot or toes".
+  const nerveAnswer = asList(answers.N2).includes('fingers') || asList(answers.L3).includes('pins')
   const distal = r.reach === 'wrist' || r.reach === 'ankle'
   if (nerveWords || nerveAnswer) return 'radicular'
   if (!distal) return 'somatic'
@@ -155,15 +155,20 @@ export function referralSummary(r, mechanism = 'unclear') {
   return {
     title: `A ${TITLE_WORD[mechanism]} travelling from the ${from} into the ${side}${limb}`,
     text: `You drew one continuous line from your ${from} down to ${REACH_WORDS[r.reach]}. ${MEANS[limb][mechanism]} That is why the questions focused on your ${from} rather than treating ${rest} as separate problems.`,
+    // Somatic sources that refer along the same limb (Referred Pain Clinical
+    // Reference, section 5; ./referralMap.js). Organs are never listed to a
+    // visitor: those are screened by the safety check.
     ruleOut: r.kind === 'arm'
       ? [
           'A nerve being irritated further down the arm — at the elbow (cubital tunnel) or the wrist (carpal tunnel)',
-          'A shoulder problem referring pain down the upper arm',
+          'The shoulder joint or rotator cuff, which can refer pain down the upper arm',
+          'Muscles at the side of the neck and around the shoulder blade, which can refer pain down the arm to the hand',
           'Irritation of the nerves and vessels between the neck and shoulder (thoracic outlet)',
         ]
       : [
           'The sciatic nerve being irritated in the buttock (deep gluteal / piriformis)',
-          'The hip joint referring pain into the thigh and knee',
+          'The sacroiliac joint or the hip joint, both of which can refer pain into the thigh and sometimes below the knee',
+          'A buttock muscle (gluteus minimus) whose referred pain can look like sciatica without pins and needles',
           'A nerve being irritated at the ankle (tarsal tunnel)',
         ],
   }

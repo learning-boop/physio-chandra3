@@ -1,7 +1,7 @@
 ---
-# WORKED EXAMPLE — this is the region the site uses today, written in the new
-# format so you can see what a filled-in file looks like. Rename to
-# "lowback.md" and edit it to make it yours, or start from _TEMPLATE-region.md.
+# WORKED EXAMPLE of the format only: the site's ORIGINAL low back region.
+# The live low back region is now content/regions/lowback.md (Lumbar
+# assessment, 24 Sep 2026). Start new regions from _TEMPLATE-region.md.
 region: lowback
 name: Low back & pelvis
 source: (add yours — e.g. NICE NG59 2020; JOSPT LBP CPG 2021)

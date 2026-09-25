@@ -18,6 +18,7 @@
    Vercel, so this folder is safe for shared code.
    ───────────────────────────────────────────────────────────────────────── */
 import { REGIONS, ZONE_TO_REGION } from '../../src/data/symptomGuide.js'
+import { organsFor, NOT_MSK_SIGNS } from '../../src/data/referralMap.js'
 
 /* ── API key ──────────────────────────────────────────────────────────── */
 export function getApiKey() {
@@ -75,7 +76,22 @@ export function parseZones(zones) {
     const k = ZONE_TO_REGION[zoneType(z)]
     if (k && REGIONS[k] && !regionKeys.includes(k)) regionKeys.push(k)
   }
-  return { labels, regionKeys: regionKeys.slice(0, 3) }
+  // Type + side (from the label, e.g. "Left Shoulder"), for the referral map.
+  const drawn = list.map((z) => {
+    const t = zoneType(z)
+    const l = zoneLabel(z).toLowerCase()
+    return t ? { type: t, id: t + (l.startsWith('left') ? 'L' : l.startsWith('right') ? 'R' : '') } : null
+  }).filter(Boolean)
+  return { labels, regionKeys: regionKeys.slice(0, 3), drawn }
+}
+
+/** Organ-referral background for the reasoning pass's medical-concern
+    check (Referred Pain Clinical Reference, src/data/referralMap.js). */
+export function referralBackground(drawn = []) {
+  const organs = organsFor(drawn).slice(0, 10)
+  if (!organs.length) return ''
+  return `
+- Background for the "concern" decision ONLY, from the clinic's referred-pain reference: pain in the drawn areas can also be referred from ${organs.join('; ')}. Signs that point away from a muscle or joint source: ${NOT_MSK_SIGNS.join('; ')}. Raise "concern" when the answers or notes show these signs. Never mention these organs, or any disease, in "concern" or in any other field.`
 }
 
 /** The conditions the app's scoring matched, as sent by the client
@@ -180,7 +196,7 @@ export function answersBlock(answers, notes) {
   return `\n\nThe visitor then answered these questions about the pattern:\n${qa}${note}\n\nTailor every list to BOTH the traced path and these answers — reflect what they said about how it started, how it behaves or travels, and what worsens or eases it.`
 }
 
-export function analysisPrompt(labels, answers, notes, knowledge, matched = []) {
+export function analysisPrompt(labels, answers, notes, knowledge, matched = [], background = '') {
   const kb = knowledge ? `\n\nApproved clinical notes from the clinic's physiotherapist for the areas crossed:\n${knowledge}` : ''
   let task = ''
   if (matched.length) {
@@ -202,7 +218,7 @@ Rules for "review":
 - "order" may contain ONLY the ids listed above. Never invent or rename an id, and never add a condition that is not listed.
 - Drop a pattern only when the answers clearly argue against it; say why in plain words.
 - Set "noMatch": true when none of them genuinely fit the picture — an honest "no clear match" is better than a forced answer.
-- "concern": set it to {"why": "<one plain sentence>"} ONLY if this picture should be looked at by a physician before physiotherapy (for example it reads as pain referred from an internal organ, or a systemic or inflammatory pattern). Otherwise null. Never state that anything is safe, urgent, or an emergency, and never name a disease.
+- "concern": set it to {"why": "<one plain sentence>"} ONLY if this picture should be looked at by a physician before physiotherapy (for example it reads as pain referred from an internal organ, or a systemic or inflammatory pattern). Otherwise null. Never state that anything is safe, urgent, or an emergency, and never name a disease.${background}
 - Then build "possibleCauses" from the patterns you kept, in YOUR order.`
     : ''
   task += review
@@ -307,6 +323,12 @@ export function fallbackAnalysis(labels, matched = []) {
    stands. */
 const CONCERN_BANNED = /(emergenc|911|cancer|tumou?r|infarct|heart attack|stroke|fracture|sepsis|diagnos|you have)/i
 const SAFE_CLAIM = /(is safe|not serious|nothing serious|no cause for concern|perfectly fine|harmless)/i
+/* The reasoning pass is shown which organs can refer to the drawn areas
+   (referralBackground) so it can judge a medical concern, but a visitor is
+   never told an organ may be involved. A concern that names one keeps its
+   signal with fixed, neutral wording instead of being dropped. */
+const ORGAN_WORDS = /(heart|cardiac|aort|gall ?bladder|liver|pancrea|kidney|renal|ureter|spleen|lung|pleura|stomach|duoden|oesophag|esophag|bowel|intestin|colon|append|bladder|uter|ovar|prostat|testi|diaphragm|pregnan|organ)/i
+const NEUTRAL_CONCERN = "The way this pain behaves is worth a doctor's opinion alongside your physiotherapy assessment."
 
 export function sanitizeReview(parsed, matched = []) {
   if (!parsed || typeof parsed !== 'object' || !matched.length) return null
@@ -329,7 +351,7 @@ export function sanitizeReview(parsed, matched = []) {
 
   let concern = null
   const why = r.concern && typeof r.concern === 'object' ? txt(r.concern.why, 220) : ''
-  if (why && !CONCERN_BANNED.test(why) && !SAFE_CLAIM.test(why)) concern = { why }
+  if (why && !CONCERN_BANNED.test(why) && !SAFE_CLAIM.test(why)) concern = { why: ORGAN_WORDS.test(why) ? NEUTRAL_CONCERN : why }
 
   const note = txt(r.note, 300)
   const kept = order.filter((id) => !dropped.some((d) => d.id === id))

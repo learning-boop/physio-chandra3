@@ -90,8 +90,19 @@ for (const file of files) {
   if (!resolved.length) fail(file, 'no pointers — this condition could never be shown')
   if (resolved.length !== Object.keys(pointers).length || !resolved.length) continue
 
+  // Optional `ages: 50-64, o64` — the condition is only shown to people whose
+  // age answer is one of these option ids (e.g. spinal stenosis).
+  let gates
+  if (meta.ages) {
+    const ages = meta.ages.split(',').map((x) => x.trim()).filter(Boolean)
+    const ageQ = region.context.find((q) => q.id === 'age')
+    const bad = ages.filter((a) => !ageQ || !ageQ.options.some((o) => o.id === a))
+    if (bad.length) { fail(file, `ages: no such age option in "${meta.region}": ${bad.join(', ')}`); continue }
+    gates = { ages }
+  }
+
   authored.push({ region: meta.region, cond: {
-    id: meta.id, name: meta.name, clin: meta.clin || '',
+    id: meta.id, name: meta.name, clin: meta.clin || '', ...(gates ? { gates } : {}),
     blurb: sections.blurb, noticed: sections.noticed,
     homeCare: sections.homeCare, seePhysioIf: sections.seePhysioIf,
   }, resolved })

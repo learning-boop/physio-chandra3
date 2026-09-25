@@ -17,11 +17,14 @@
    in clinical language and kept behind a disclosure on the result screen.
    ───────────────────────────────────────────────────────────────────────── */
 import { REGIONS, allQuestions } from './symptomGuide.js'
+import { REFERRAL_MAP, SCREENING_SEQUENCE, mappedTypes, organsForType } from './referralMap.js'
 
 /* The CPA Orthopaedic Division subjective booklet asks for the two most
    likely hypotheses. The result screen shows the same two, so the patient's
    page and Chandra's summary can never disagree. */
 export const MAX_HYPOTHESES = 2
+/* Drawn areas the referral-sources section covers, so it stays readable. */
+const MAX_REFERRAL_AREAS = 4
 
 const line = (label, value) => (value ? `${label}: ${value}` : null)
 const listOf = (items, bullet = '  - ') => (items || []).filter(Boolean).map((t) => bullet + t)
@@ -113,6 +116,32 @@ export function buildClinicianSummary(ctx = {}) {
   }
   if (keys.length) push(`  Questions asked from: ${keys.map((k) => (REGIONS[k] ? REGIONS[k].name : k)).join(', ')}`)
   push('')
+
+  // ── Referral sources (Referred Pain Clinical Reference, ./referralMap.js) ──
+  // Every drawn area, including those a referral line only travels through:
+  // those are exactly where joint, root and muscle referral is felt.
+  const mapped = mappedTypes(zones).slice(0, MAX_REFERRAL_AREAS)
+  if (mapped.length) {
+    push('REFERRAL SOURCES TO CONSIDER (from the body chart; possibilities, not findings)')
+    for (const t of mapped) {
+      const m = REFERRAL_MAP[t]
+      const label = (zones.find((z) => z.type === t) || {}).label || t
+      push(`  ${label}:`)
+      if (m.joints.length) push(`      Joints / discs: ${m.joints.join('; ')}`)
+      if (m.roots.length) push(`      Nerve roots: ${m.roots.join('; ')}`)
+      if (m.muscles.length) push(`      Muscles: ${m.muscles.join('; ')}`)
+      const organs = organsForType(t, zones)
+      if (organs.length) push(`      Organs to clear if it is not mechanical: ${organs.join('; ')}`)
+    }
+    if (referral.length) {
+      push('  Distance alone does not prove a nerve root: facets, discs, the SIJ, the hip and gluteus minimus',
+        '  can refer past the knee or elbow, and radicular pain rarely follows one dermatome (Bogduk 2009;',
+        '  Murphy 2009; Lesher 2008). Distal pins and needles are the more localising sign.')
+    }
+    push('  Screening sequence:')
+    push(...SCREENING_SEQUENCE.map((s, i) => `      ${i + 1}. ${s}`))
+    push('')
+  }
 
   // ── History ──
   const history = qaPairs.filter((p) => /your age|how long has it been|did it (start|begin)/i.test(p.question))

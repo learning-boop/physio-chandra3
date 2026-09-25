@@ -18,6 +18,7 @@ import {
   parseMatched,
   analysisKnowledge,
   analysisPrompt,
+  referralBackground,
   sanitizeAnalysis,
   sanitizeReview,
   applyReview,
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
   }
 
   const { zones, answers, notes, matched } = req.body || {}
-  const { labels, regionKeys } = parseZones(zones)
+  const { labels, regionKeys, drawn } = parseZones(zones)
   if (!labels.length) {
     return res.status(400).json({ error: 'zones must be a non-empty array of body areas' })
   }
@@ -51,7 +52,7 @@ export default async function handler(req, res) {
       // shares the max_tokens budget with the response.
       thinking: { type: 'disabled' },
       max_tokens: 1400,   // Sonnet 5's tokenizer + the {id, text} cause objects
-      messages: [{ role: 'user', content: analysisPrompt(labels, answers, notes, knowledge, found) }],
+      messages: [{ role: 'user', content: analysisPrompt(labels, answers, notes, knowledge, found, referralBackground(drawn)) }],
     })
     const textBlock = response.content.find((b) => b.type === 'text')
     const raw = textBlock ? textBlock.text : '{}'

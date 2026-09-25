@@ -128,6 +128,32 @@ const TESTS = {
       flags: ['jrf-kidney'],
       expect: { route: 'urgent' } },
   ],
+  lowback: [
+    { name: '1. Acute low back pain, one side',
+      lines: [['lowerback']],
+      answers: { age: '30-49', onset: 'lift', duration: 'd2w', L1: ['back'], L4: ['bendsit', 'getup'], L6: ['side'], L7: ['stiff'] },
+      expect: { top: 'lowback/nslbp', not: ['lowback/radicular', 'lowback/stenosis'], route: 'results' } },
+    { name: '2. Sciatica to the outer foot',
+      lines: [['lowerback', 'hipR', 'kneeR', 'ankleR']],
+      answers: { age: '30-49', onset: 'lift', duration: 'd6w', L1: ['belowknee'], L2: ['leg'],
+        L3: ['pins', 'cough', 'bendsit'], L4: ['bendsit'] },
+      expect: { top: 'lowback/radicular', not: ['lowback/stenosis', 'lowback/facet'], route: 'results' } },
+    { name: '3. Spinal stenosis, walking brings on leg pain',
+      lines: [['lowerback', 'hipL', 'kneeL']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', L1: ['belowknee'], L2: ['same'], L4: ['arch'], L5: ['claud'] },
+      expect: { top: 'lowback/stenosis', notTop: ['lowback/radicular'], route: 'results' } },
+    { name: '4. Saddle numbness (cauda equina)',
+      lines: [['lowerback'], ['hipL'], ['hipR']],
+      focus: 'lowback',
+      answers: { age: '30-49', onset: 'lift', duration: 'd2w' },
+      flags: ['rf-saddle'],
+      expect: { route: 'emergency' } },
+    { name: '5. Young athlete, arching hurts (spondylolysis)',
+      lines: [['lowerback']],
+      answers: { age: 'u18', onset: 'gradual', duration: 'd6w', L1: ['back'], L4: ['arch'], L6: ['centre'], L8: ['arching'] },
+      flags: ['rf-spondy'],
+      expect: { route: 'urgent' } },
+  ],
 }
 
 const zonesOf = (lines) => {
@@ -160,8 +186,16 @@ function run(rk, t) {
   const seen = { asked: [], flagsOffered: regionRedFlags(flowZ, zones).map((f) => f.id), keys }
 
   // Safety check: the ticked flags must be on the screen; their tier routes.
-  for (const id of t.flags || []) if (!seen.flagsOffered.includes(id)) return { ...seen, error: `flag ${id} is not on the safety screen` }
-  const tiers = (t.flags || []).map((id) => regionRedFlags(flowZ, zones).find((f) => f.id === id).tier)
+  // A flag shared with a neighbouring area (same `group`) is shown once, in
+  // the wording of the area that was drawn, so that one counts as ticked.
+  const offered = regionRedFlags(flowZ, zones)
+  const allFlags = Object.values(REGIONS).flatMap((r) => r.redFlags)
+  const onScreen = (id) => {
+    const f = allFlags.find((x) => x.id === id)
+    return offered.find((o) => o.id === id || (f && f.group && o.group === f.group))
+  }
+  for (const id of t.flags || []) if (!onScreen(id)) return { ...seen, error: `flag ${id} is not on the safety screen` }
+  const tiers = (t.flags || []).map((id) => onScreen(id).tier)
   if (tiers.includes('emergency')) return { ...seen, route: 'emergency' }
   if (tiers.includes('urgent')) return { ...seen, route: 'urgent' }
 
