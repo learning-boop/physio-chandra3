@@ -85,7 +85,7 @@ const PATTERNS = [
   },
   {
     // Spec: back of the knee / calf — "swollen calf + red/warm → screen DVT".
-    id: 'pc-dvt', tier: 'urgent', why: WHY.dvt,
+    id: 'pc-dvt', tier: 'urgent', sameDay: true, why: WHY.dvt,
     text: 'Swelling, warmth or redness in the calf or the back of the knee',
     when: (z) => onFace(z, 'back', 'knee', 'ankle'),
   },
@@ -127,7 +127,7 @@ export function patternChecks(zones = [], answers = {}, max = 3) {
   const out = []
   for (const p of PATTERNS) {
     if (out.length >= max) break
-    try { if (p.when(zones, answers)) out.push({ id: p.id, text: p.text, tier: p.tier, why: p.why }) } catch { /* skip */ }
+    try { if (p.when(zones, answers)) out.push({ id: p.id, text: p.text, tier: p.tier, why: p.why, ...(p.sameDay ? { sameDay: true } : {}) }) } catch { /* skip */ }
   }
   return out
 }

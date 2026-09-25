@@ -160,7 +160,7 @@ export const ARM_INJURY = [
   { id: 'I4', text: 'Is the pain in your upper arm getting worse and worse, with the arm tight and swollen, and much worse when your elbow or fingers are moved?',
     options: yesNo('emergency', 'Possible compartment syndrome (pressure building up in the arm)') },
   { id: 'I5', text: 'Since the injury, can you not lift your wrist or straighten your fingers?',
-    options: yesNo('urgent', 'Possible radial nerve injury, often with a fracture of the upper arm bone') },
+    options: yesNo('urgent', 'Possible radial nerve injury, often with a fracture of the upper arm bone'), sameDay: true },
   // The age cut-off is the document's, marked "for Chandra: confirm".
   { id: 'I6', text: 'Did you feel a pop at the front of the shoulder or upper arm while lifting, and now have a new bulge low in the biceps?',
     askIf: (a) => a.I1 === 'pop', options: [
@@ -180,7 +180,7 @@ function linearStep(questions) {
       if (a[q.id] === undefined) return { next: q.id }
       for (const oid of list(a[q.id])) {
         const o = q.options.find((x) => x.id === oid)
-        if (o && o.route) return { route: o.route, why: o.why }
+        if (o && o.route) return { route: o.route, why: o.why, ...(q.sameDay ? { sameDay: true } : {}) }
       }
     }
     return { route: 'continue' }
@@ -188,7 +188,8 @@ function linearStep(questions) {
 }
 
 export const SCREENS = [
-  { id: 'neck', zones: ['neck', 'ctj'], title: 'Recent Neck Injury',
+  // Its "see a doctor" outcome means a possible fracture: same day.
+  { id: 'neck', zones: ['neck', 'ctj'], title: 'Recent Neck Injury', sameDayUrgent: true,
     flag: 'A neck injury in the last 7 days (injury screen)', questions: INJURY_QUESTIONS, step: injuryStep },
   { id: 'shoulder', zones: ['shoulder'], title: 'Recent Shoulder Injury',
     flag: 'A shoulder injury in the last 6 weeks (injury screen)', questions: SHOULDER_INJURY, step: linearStep(SHOULDER_INJURY) },
@@ -225,7 +226,7 @@ export function injuryFlow(zones, answers = {}, ageId) {
     }
     const r = sc.step(own, ageId)
     if (r.next) return { next: sc.id + ':' + r.next, screen: sc.id }
-    if (r.route === 'emergency' || r.route === 'urgent') return { ...r, screen: sc.id }
+    if (r.route === 'emergency' || r.route === 'urgent') return { ...r, screen: sc.id, sameDay: !!(r.sameDay || (r.route === 'urgent' && sc.sameDayUrgent)) }
   }
   return { route: 'continue' }
 }

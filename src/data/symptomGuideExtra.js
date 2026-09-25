@@ -174,7 +174,7 @@ export const EXTRA_REGIONS = {
         text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or take long-term steroid tablets?" },
       { id: "crf-wasting", tier: "urgent", why: "Nerve compression (C8/T1) or thoracic outlet needs medical review",
         text: "Are the small muscles of your hand getting thinner, or has your grip become weak?" },
-      { id: "crf-vascular", tier: "urgent", why: "Possible blood vessel compression or clot in the arm (same-day review)",
+      { id: "crf-vascular", sameDay: true, tier: "urgent", why: "Possible blood vessel compression or clot in the arm (same-day review)",
         text: "Does your arm or hand turn pale, blue, cold, or swollen, especially when your arm is raised?" },
       { id: "crf-gallbladder", tier: "urgent", group: "gallbladder", why: "Gallbladder pain can be felt under the right shoulder blade",
         text: "Is the pain under your right shoulder blade worse after fatty meals, or does it come with feeling sick?" },
@@ -537,7 +537,7 @@ export const EXTRA_REGIONS = {
         text: "Are you pregnant and have severe pelvic or back pain with bleeding, fluid leaking, or regular tightenings?" },
       { id: "prf-osteo", tier: "urgent", group: "osteo", why: "Possible stress (insufficiency) fracture of the sacrum",
         text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
-      { id: "prf-infection", tier: "urgent", group: "infection", why: "Possible joint infection (septic sacroiliitis)",
+      { id: "prf-infection", sameDay: true, tier: "urgent", group: "infection", why: "Possible joint infection (septic sacroiliitis)",
         text: "Do you have a fever or chills with the pain, or have you recently given birth, had surgery, or injected drugs?" },
       { id: "prf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the pelvis and sacrum",
         text: "Have you ever had cancer, and is this a new pain?" },
@@ -754,9 +754,9 @@ export const EXTRA_REGIONS = {
         text: "Is pain in your jaw brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
       { id: "mrf-droop", tier: "emergency", why: "Possible stroke or facial nerve palsy",
         text: "Has one side of your face suddenly drooped or become weak?" },
-      { id: "mrf-fracture", tier: "urgent", why: "Possible jaw fracture",
+      { id: "mrf-fracture", sameDay: true, tier: "urgent", why: "Possible jaw fracture",
         text: "Did this start after a blow to the jaw or face, and your teeth no longer meet the way they used to?" },
-      { id: "mrf-gca", tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
+      { id: "mrf-gca", sameDay: true, tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
         text: "If you are over 50: do your jaw muscles ache when chewing and ease when you stop, or is your scalp or temple tender, or has your vision changed?" },
       { id: "mrf-infection", tier: "urgent", why: "Possible dental or jaw infection (doctor or dentist)",
         text: "Is there swelling of your face or jaw with a fever, or a bad taste or discharge in your mouth?" },
@@ -872,7 +872,7 @@ export const EXTRA_REGIONS = {
         text: "Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse?" },
       { id: "hrf-glaucoma", tier: "emergency", why: "Possible acute glaucoma",
         text: "Is one eye painful and red, with blurred vision or halos around lights?" },
-      { id: "hrf-gca", tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
+      { id: "hrf-gca", sameDay: true, tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
         text: "If you are over 50: is your scalp or temple tender to touch, or do your jaw muscles ache when chewing and ease when you stop?" },
       { id: "hrf-new50", tier: "urgent", why: "New or progressive headache needs medical review",
         text: "Is this a new kind of headache that started after age 50, or are your headaches getting steadily worse or changing pattern over weeks?" },
@@ -993,7 +993,7 @@ export const EXTRA_REGIONS = {
         text: "After very hard exercise, is your arm hugely swollen and very painful, and is your urine dark like cola?" },
       { id: "arf-cellulitis", tier: "urgent", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
         text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
-      { id: "arf-clot", tier: "urgent", why: "Possible blood clot in the arm (same-day review)",
+      { id: "arf-clot", sameDay: true, tier: "urgent", why: "Possible blood clot in the arm (same-day review)",
         text: "Has your whole arm become swollen, heavy, or bluish over a day or two, especially after a drip or line in the arm, or heavy overhead exercise?" },
       { id: "arf-pancoast", tier: "urgent", group: "pancoast", why: "Possible tumour at the top of the lung (Pancoast)",
         text: "Do you smoke or used to smoke, and does pain run down the inside of your arm to your little finger, with a cough that will not go away, or a drooping eyelid?" },
@@ -1102,9 +1102,9 @@ export const EXTRA_REGIONS = {
   elbow: {
     name: "Elbow & forearm",
     redFlags: [
-      { id: "erf-hot", text: "A hot, red, swollen elbow — especially with fever or feeling unwell", tier: "urgent" },
-      { id: "erf-trauma", text: "A fall or impact with deformity, severe swelling, or inability to bend/straighten the elbow", tier: "urgent" },
-      { id: "erf-wasting", text: "Visible muscle wasting in the hand, or rapidly worsening hand weakness", tier: "urgent" }
+      { id: "erf-hot", sameDay: true, why: "Possible joint or bursa infection, or gout", text: "A hot, red, swollen elbow — especially with fever or feeling unwell", tier: "urgent" },
+      { id: "erf-trauma", sameDay: true, why: "Possible fracture or dislocation of the elbow", text: "A fall or impact with deformity, severe swelling, or inability to bend/straighten the elbow", tier: "urgent" },
+      { id: "erf-wasting", why: "Possible nerve compression that is getting worse and needs medical review", text: "Visible muscle wasting in the hand, or rapidly worsening hand weakness", tier: "urgent" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1168,9 +1168,9 @@ export const EXTRA_REGIONS = {
   wrist: {
     name: "Wrist & hand",
     redFlags: [
-      { id: "wrf-fall", text: "A fall onto the hand with severe pain, swelling, or tenderness in the 'snuffbox' at the base of the thumb", tier: "urgent" },
-      { id: "wrf-hot", text: "A hot, red, swollen wrist or hand with fever or feeling unwell", tier: "urgent" },
-      { id: "wrf-loss", text: "Rapidly worsening numbness, weakness, or visible muscle wasting in the hand", tier: "urgent" }
+      { id: "wrf-fall", sameDay: true, why: "Possible fracture of the scaphoid, a small wrist bone that is easily missed on first look", text: "A fall onto the hand with severe pain, swelling, or tenderness in the 'snuffbox' at the base of the thumb", tier: "urgent" },
+      { id: "wrf-hot", sameDay: true, why: "Possible joint or tendon-sheath infection", text: "A hot, red, swollen wrist or hand with fever or feeling unwell", tier: "urgent" },
+      { id: "wrf-loss", why: "Possible nerve compression that is getting worse and needs medical review", text: "Rapidly worsening numbness, weakness, or visible muscle wasting in the hand", tier: "urgent" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1250,9 +1250,9 @@ export const EXTRA_REGIONS = {
   hip: {
     name: "Hip & groin",
     redFlags: [
-      { id: "hrf-fall", text: "A fall or impact after which you cannot put weight on the leg", tier: "urgent" },
-      { id: "hrf-hot", text: "Severe groin/hip pain with fever, or a hot swollen joint", tier: "urgent" },
-      { id: "hrf-child", text: "This is for a child or teenager with a limp or groin/knee pain", tier: "urgent" }
+      { id: "hrf-fall", sameDay: true, why: "Possible hip fracture", text: "A fall or impact after which you cannot put weight on the leg", tier: "urgent" },
+      { id: "hrf-hot", sameDay: true, why: "Possible hip joint infection", text: "Severe groin/hip pain with fever, or a hot swollen joint", tier: "urgent" },
+      { id: "hrf-child", why: "Hip problems in growing children (such as a slipped growth plate) need a doctor to check first", text: "This is for a child or teenager with a limp or groin/knee pain", tier: "urgent" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1340,10 +1340,10 @@ export const EXTRA_REGIONS = {
   ankle: {
     name: "Ankle, foot & shin",
     redFlags: [
-      { id: "arf-pop", text: "A sudden 'pop' in the calf or heel and now you cannot push off or rise onto your toes", tier: "emergency" },
-      { id: "arf-dvt", text: "A calf that is very swollen, warm, red or tender — especially with breathlessness or chest pain", tier: "emergency" },
-      { id: "arf-walk", text: "After an injury you cannot take four steps, or there is bony tenderness at the ankle knobs or midfoot", tier: "urgent" },
-      { id: "arf-hot", text: "A hot, red, swollen foot with fever — or any foot wound/swelling and you have diabetes", tier: "urgent" }
+      { id: "arf-pop", why: "Possible Achilles tendon rupture, which is treated best when seen quickly", text: "A sudden 'pop' in the calf or heel and now you cannot push off or rise onto your toes", tier: "emergency" },
+      { id: "arf-dvt", why: "Possible blood clot in the leg, which can travel to the lungs", text: "A calf that is very swollen, warm, red or tender — especially with breathlessness or chest pain", tier: "emergency" },
+      { id: "arf-walk", sameDay: true, why: "Possible fracture: the Ottawa ankle rules say an X-ray is needed", text: "After an injury you cannot take four steps, or there is bony tenderness at the ankle knobs or midfoot", tier: "urgent" },
+      { id: "arf-hot", sameDay: true, why: "Possible infection, which is more serious with diabetes", text: "A hot, red, swollen foot with fever — or any foot wound/swelling and you have diabetes", tier: "urgent" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [

@@ -72,8 +72,14 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
 - **Up to 8 questions per region.** The patient is shown at most 5 of them,
   chosen by their earlier answers. A region's lead question ("where is it?")
   can be marked to go first.
-- **Tiers decide safety, not the AI.** `emergency` → 911 and no booking;
-  `urgent` → physician first, booking offered afterwards.
+- **Safety comes first, and tiers decide it, not the AI.** Right after the
+  drawing, page 1 asks every `emergency` flag for the areas drawn (a "yes"
+  → 911, no booking, with the flag's reason shown), then page 2 every
+  `urgent` flag (a "yes" → "see your doctor", with booking offered now and
+  the questionnaire continuing; the advice stays on the results). Flags
+  marked `sameDay` (giant cell arteritis, a possible clot, a hot joint with
+  fever, a possible fracture) say "see a doctor today". Only flags that
+  depend on the answers wait for a short final check.
 - **Neighbouring areas share.** A red flag that asks the same thing in two
   areas (heart, aorta, spinal cord…) is shown once. A condition with the same
   name in two areas is shown once, so keep its text identical in both files

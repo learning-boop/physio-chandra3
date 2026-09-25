@@ -261,10 +261,10 @@ export const REGIONS = {
   knee: {
     name:"Knee",
     redFlags:[
-      {id:"rf-4steps", text:"Since an injury, you cannot take four steps in a row (it won't take your weight)", tier:"urgent"},
-      {id:"rf-popswell", text:"The knee gave way with a pop during an injury and swelled up within an hour or two", tier:"urgent"},
-      {id:"rf-hotknee", text:"The knee is hot, red and swollen, and you feel feverish or unwell", tier:"urgent"},
-      {id:"rf-calf", text:"Your calf is swollen, warm, and tender compared to the other side", tier:"urgent"}
+      {id:"rf-4steps", sameDay: true, why: "Possible fracture: not being able to take weight after an injury needs an X-ray", text:"Since an injury, you cannot take four steps in a row (it won't take your weight)", tier:"urgent"},
+      {id:"rf-popswell", why: "Possible ligament tear or bleeding inside the joint (such as an ACL tear)", text:"The knee gave way with a pop during an injury and swelled up within an hour or two", tier:"urgent"},
+      {id:"rf-hotknee", sameDay: true, why: "Possible joint infection or gout, which needs a doctor the same day", text:"The knee is hot, red and swollen, and you feel feverish or unwell", tier:"urgent"},
+      {id:"rf-calf", sameDay: true, why: "Possible blood clot in the leg (deep vein thrombosis)", text:"Your calf is swollen, warm, and tender compared to the other side", tier:"urgent"}
     ],
     context:[
       {id:"age", text:"Your age?", options:[

@@ -322,6 +322,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('summary records what the AI reasoning pass changed',
     /AI reasoning pass: .*dropped nslbp \(leg symptoms dominate\)/.test(withReview), withReview.match(/AI reasoning pass[^\n]*/))
   check('summary never claims to be a diagnosis', /not a diagnosis/.test(text))
+  const flagged = buildClinicianSummary({ zones, referral, keys: ['lowback'], answers, qaPairs: [], ranked, behaviour, psych, painType,
+    reportedFlags: [{ text: 'Your calf is swollen, warm, and tender', why: 'Possible blood clot in the leg', sameDay: true }] })
+  check('summary lists "see a doctor" flags the patient reported, same-day marked',
+    /RED FLAGS REPORTED/.test(flagged) && flagged.includes('[SAME DAY] Your calf') && !/Red flags: none reported/.test(flagged))
 }
 
 // ── 12. Referral map (Referred Pain Clinical Reference) ──

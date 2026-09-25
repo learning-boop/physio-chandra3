@@ -168,7 +168,7 @@ const UNIVERSAL_CHECKS = [
   { id: 'sc-systemic', tier: 'urgent', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain',
     why: { title: 'Possible infection or systemic cause',
       text: 'Pain accompanied by fever, weight loss, or a cancer history can have a medical rather than a mechanical cause. That has to be excluded by a doctor first, as it is treated quite differently.' } },
-  { id: 'sc-trauma', tier: 'urgent', text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
+  { id: 'sc-trauma', tier: 'urgent', sameDay: true, text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
     why: { title: 'A fracture should be excluded',
       text: 'After a significant impact — or any fall where bone strength may be reduced — imaging is usually needed to rule out a fracture before the area is loaded or mobilised.' } },
 ]
@@ -552,13 +552,20 @@ export default function PainAssessment() {
     return ranked.filter((x) => !dropped.has(x.c.id))
       .sort((a, b) => (rank.has(a.c.id) ? rank.get(a.c.id) : 99) - (rank.has(b.c.id) ? rank.get(b.c.id) : 99))
   }, [ranked, review])
-  const modelSmall = ['intro', 'questions', 'review', 'safety', 'injury', 'urgent', 'ok'].includes(stage)
+  const modelSmall = ['emergency', 'physician', 'intro', 'questions', 'review', 'safety', 'injury', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
   // Only red flags route away from the result; a caution does not.
   const cautionIds = CAUTION_CHECKS.map((c) => c.id)
-  const anyFlagged = flags.some((f) => f !== '__other' && !cautionIds.includes(f)) || otherFlagged
-  /* ── The safety check is built for the area actually marked ───────────
+  /* ── Safety screening, right after the drawing ─────────────────────────
+     Everything that would send someone to 911 is asked first, on its own
+     page; then everything that means "see a doctor first"; only then the
+     questions. Someone with saddle numbness or a thunderclap headache is
+     routed in the first minute instead of after the whole questionnaire.
+     The few checks that depend on the answers (constant night pain, the
+     inflammatory pattern) come in a short final check before the results.
+
+     The flags are built for the area actually marked ───────────
      Every region in the guide carries its own red flags — a swollen warm calf
      for a knee, clumsiness in both hands for a neck, a sudden pop in the calf
      for an ankle. Those are the questions that make this screen worth asking,
@@ -570,7 +577,10 @@ export default function PainAssessment() {
      when one of those areas is marked (the neck's shoulder-tip flags). Its
      `why` line from the region document titles the explanation. */
   const injuryApplies = useMemo(() => injuryScreenApplies(flowZ), [flowZ])
-  const safetyChecks = useMemo(() => {
+  // Organ-referral and systemic maps the drawing alone matches; the ones that
+  // need answers (the inflammatory pattern) are left for the final check.
+  const earlyPatterns = useMemo(() => patternChecks(zones, {}, 7), [zones])
+  const screening = useMemo(() => {
     const regional = regionRedFlags(flowZ, zones)
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
     const list = regional.map((f) => ({
@@ -584,12 +594,6 @@ export default function PainAssessment() {
       GENERAL_RED_FLAGS.filter((f) => !covered.test(f.text))
         .forEach((f) => list.push({ ...f, why: TIER_WHY.urgent }))
     }
-    // Pain that nothing eases, constant or waking them at night, was reported
-    // on the pain-behaviour screen: put the matching flag to them to confirm.
-    const night = GENERAL_RED_FLAGS.find((f) => f.id === 'grf-night')
-    if (behaviour.nightConcern && night && !list.some((f) => f.id === night.id)) {
-      list.push({ ...night, why: TIER_WHY.urgent })
-    }
     // Organ-referral and systemic maps the drawing matches (../data/patternChecks.js).
     // These use every marked area, not the folded-down flow zones, because the
     // maps are about WHERE it is felt — right shoulder blade, left arm, flank.
@@ -598,12 +602,37 @@ export default function PainAssessment() {
     // about recent injuries in its own, more precise way.
     const ownCardiac = list.some((f) => /cardiac/.test(f.id))
     const universal = injuryApplies ? UNIVERSAL_CHECKS.filter((f) => f.id !== 'sc-trauma') : UNIVERSAL_CHECKS
-    const pattern = patternChecks(zones, answers, 3).filter((f) => !(ownCardiac && f.id === 'pc-cardiac')).slice(0, 2)
-    return [...list, ...universal, ...pattern]
-  }, [flowZ, zones, injuryApplies, answers, behaviour.nightConcern])
+    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac')).slice(0, 2)
+    const all = [...list, ...pattern]
+    return {
+      emergency: all.filter((f) => f.tier === 'emergency'),
+      physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
+    }
+  }, [flowZ, zones, injuryApplies, earlyPatterns])
+
+  // The final check, after the questions: what only the answers can raise.
+  const finalChecks = useMemo(() => {
+    const out = []
+    // Pain that nothing eases, constant or waking them at night, was reported
+    // on the pain-behaviour screen: put the matching flag to them to confirm.
+    const night = GENERAL_RED_FLAGS.find((f) => f.id === 'grf-night')
+    if (behaviour.nightConcern && night) out.push({ ...night, why: TIER_WHY.urgent })
+    const early = new Set(earlyPatterns.map((p) => p.id))
+    patternChecks(zones, answers, 7).filter((p) => !early.has(p.id)).slice(0, 2).forEach((p) => out.push(p))
+    return out
+  }, [zones, answers, behaviour.nightConcern, earlyPatterns])
+
+  const safetyChecks = useMemo(
+    () => [...screening.emergency, ...screening.physician, ...finalChecks],
+    [screening, finalChecks],
+  )
+  const flaggedIn = (list) => list.some((f) => flags.includes(f.id))
+  // The page a red flag was ticked on, so Back from the urgent screen returns there.
+  const [flaggedAt, setFlaggedAt] = useState(null)
+  const routeUrgent = (from) => { setFlaggedAt(from); setStage('urgent') }
 
   /* ── Injury screens (../data/injuryScreen.js: neck, shoulder, upper arm) ──
-     Straight after the safety check when the neck is drawn. Its answers are
+     Straight after the physician-first page, when one applies. Its answers are
      kept in `answers` as "<screen>:<question>"; `injuryPath` is the questions
      shown, for Back.
      Its outcome joins the flags: 'emergency' → 911, 'urgent' → physician. */
@@ -612,14 +641,29 @@ export default function PainAssessment() {
   const [injuryDraft, setInjuryDraft] = useState(undefined) // its uncommitted pick
   const injury = useMemo(() => injuryFlow(flowZ, answers, answers.age), [flowZ, answers])
   const injuryOutcome = injury.route === 'emergency' || injury.route === 'urgent' ? injury : null
-  const injuryFlag = injuryOutcome && stage === 'urgent'
-    ? { id: '__injury', tier: injuryOutcome.route, text: (SCREENS.find((sc) => sc.id === injuryOutcome.screen) || {}).flag || 'A recent injury (injury screen)',
+  const injuryFlag = injuryOutcome
+    ? { id: '__injury', tier: injuryOutcome.route, sameDay: injuryOutcome.sameDay,
+      text: (SCREENS.find((sc) => sc.id === injuryOutcome.screen) || {}).flag || 'A recent injury (injury screen)',
       why: { title: injuryOutcome.why, text: TIER_WHY[injuryOutcome.route].text } }
     : null
 
   const pickedFlags = [...safetyChecks.filter((f) => flags.includes(f.id)), ...(injuryFlag ? [injuryFlag] : [])]
   // Emergency-tier flags (e.g. cauda equina signs) mean 911 now, not a booking.
   const emergencyFlagged = pickedFlags.some((f) => f.tier === 'emergency')
+  /* "See a doctor" flags do not end the visit. The person is advised to see
+     their doctor — today for the same-day ones (giant cell arteritis, a
+     possible clot, a hot joint with fever, a possible fracture) — and can
+     book with Chandra now and carry on to their results, which repeat the
+     advice. Physiotherapy never replaces the medical check. */
+  const doctorFlags = pickedFlags.filter((f) => f.tier !== 'emergency')
+  const doctorFlagged = doctorFlags.length > 0 || otherFlagged
+  const sameDayFlagged = doctorFlags.some((f) => f.sameDay)
+  // Where "Continue" goes from the see-a-doctor screen: on through the flow.
+  const continueAfterDoctor = () => {
+    if (flaggedAt === 'physician') { if (injuryApplies) startInjury(); else setStage('intro') }
+    else if (flaggedAt === 'injury') setStage('intro')
+    else setShowNotice(true)
+  }
   // Cautions never withhold booking — they shape the first assessment, and
   // they are listed on the result screen and in Chandra's summary.
   const pickedCautions = CAUTION_CHECKS.filter((f) => flags.includes(f.id))
@@ -707,9 +751,11 @@ export default function PainAssessment() {
       zones, referral, keys, answers: scopedAnswers, qaPairs, notes: notesText,
       ranked: shown, behaviour, psych, painType, cautions: pickedCautions,
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
+      reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
+        ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
       review,
     })
-    : ''), [stage, zones, referral, keys, scopedAnswers, qaPairs, notesText, shown, behaviour, psych, painType, pickedCautions, safetyChecks, flags, review])
+    : ''), [stage, zones, referral, keys, scopedAnswers, qaPairs, notesText, shown, behaviour, psych, painType, pickedCautions, safetyChecks, flags, review, doctorFlags, otherFlagged, flagOther])
 
   // The screen a review-screen entry lives on (the opening answers share 0).
   const screenOf = (q) =>
@@ -782,14 +828,14 @@ export default function PainAssessment() {
     setAnswers(next)
     setInjuryPath((p) => [...p, injuryQ])
     if (r.next) { setInjuryQ(r.next); setInjuryDraft(undefined); return }
-    if (r.route === 'emergency' || r.route === 'urgent') setStage('urgent')
-    else setShowNotice(true)
+    if (r.route === 'emergency' || r.route === 'urgent') routeUrgent('injury')
+    else setStage('intro')
   }
   // Back one question; answers after it are cleared so a changed route
   // never reuses them without asking.
   const backInjury = () => {
     const p = injuryPath.filter((id) => id !== injuryQ)
-    if (!p.length) { setAnswers((a) => withoutInjury(a)); setStage('safety'); return }
+    if (!p.length) { setAnswers((a) => withoutInjury(a)); setStage('physician'); return }
     const prev = p[p.length - 1]
     setInjuryDraft(answers[prev])
     setAnswers((a) => withoutInjury(a, p.slice(0, -1)))
@@ -803,6 +849,7 @@ export default function PainAssessment() {
   })
 
   const restart = () => {
+    setFlaggedAt(null)
     setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
     setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined)
@@ -1079,7 +1126,7 @@ export default function PainAssessment() {
                     className="pa-primary"
                     style={{ ...goldBtn, opacity: zones.length ? 1 : 0.45, cursor: zones.length ? 'pointer' : 'not-allowed' }}
                     disabled={!zones.length}
-                    onClick={() => setStage('intro')}
+                    onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('rotate')}>Back</button>
                 </div>
@@ -1125,7 +1172,7 @@ export default function PainAssessment() {
                     disabled={!focusKey}
                     onClick={() => setStage('intro')}
                   >Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
+                  <button style={ghostBtn} onClick={() => setStage('intro')}>Back</button>
                 </div>
               </Fade>
             )}
@@ -1164,7 +1211,7 @@ export default function PainAssessment() {
                 </p>
                 <div className="pa-actions">
                   <button className="pa-primary" style={goldBtn} onClick={startQuestions}>Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage(needsAreaChoice(flowZ, null) ? 'area' : 'draw')}>Back</button>
+                  <button style={ghostBtn} onClick={() => setStage('physician')}>Back</button>
                 </div>
               </Fade>
             )}
@@ -1347,20 +1394,77 @@ export default function PainAssessment() {
               </Fade>
             )}
 
-            {/* SAFETY CHECK — four screening options (A–D) + E manual entry */}
+            {/* SAFETY FIRST — two pages straight after the drawing. Page 1 holds
+                everything that means 911 now; page 2 everything that means
+                "see a doctor first". Any tick stops the questionnaire there. */}
+            {(stage === 'emergency' || stage === 'physician') && (() => {
+              const emergency = stage === 'emergency'
+              const list = emergency ? screening.emergency : screening.physician
+              const ticked = flaggedIn(list)
+              const next = () => {
+                if (ticked) { routeUrgent(stage); return }
+                if (emergency) setStage('physician')
+                else if (injuryApplies) startInjury()
+                else setStage('intro')
+              }
+              return (
+                <Fade k={stage}>
+                  <span style={label}>Safety First{screening.emergency.length ? ` · ${emergency ? '1' : '2'} of 2` : ''}</span>
+                  <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 14px', maxWidth: 520 }}>
+                    {emergency
+                      ? <>First, a few quick <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety questions</em></>
+                      : <>A few more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>checks</em></>}
+                  </h2>
+                  <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '0 0 20px', maxWidth: 520 }}>
+                    {emergency
+                      ? 'Most people answer no to all of these. If any of them is happening to you now, tick it and we will tell you what to do next.'
+                      : 'These are signs a doctor should look at before physiotherapy starts. Tick any that apply to you at present.'}
+                  </p>
+                  {list.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
+                      {list.map((f, i) => {
+                        const sel = flags.includes(f.id)
+                        return (
+                          <button key={f.id} style={chip(sel)}
+                            onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
+                            <span style={letterStyle(sel)}>{LETTERS[i] || '·'}</span>
+                            <span>{f.text}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <p style={{ ...body, fontSize: 15, maxWidth: 520 }}>Nothing on this page applies to the area you marked.</p>
+                  )}
+                  <div className="pa-actions" style={{ marginTop: 20 }}>
+                    <button className="pa-primary" style={goldBtn} onClick={next}>
+                      {ticked ? 'Continue' : 'None of These Apply — Continue'}
+                    </button>
+                    <button style={ghostBtn} onClick={() => setStage(emergency || !screening.emergency.length ? 'draw' : 'emergency')}>Back</button>
+                  </div>
+                </Fade>
+              )
+            })()}
+
+            {/* FINAL CHECK — before the results: the few flags only the answers
+                can raise (constant night pain, the inflammatory pattern), an
+                "other" box, and the cautions that shape the first appointment. */}
             {stage === 'safety' && (
               <Fade k="safety">
-                <span style={label}>Final Safety Check</span>
+                <span style={label}>Before Your Results</span>
                 <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 14px', maxWidth: 520 }}>
-                  Do any of these <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>apply to you?</em>
+                  {finalChecks.length
+                    ? <>One more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety check</em></>
+                    : <>Anything else <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>we should know?</em></>}
                 </h2>
                 <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '0 0 20px', maxWidth: 520 }}>
-                  Certain symptoms fall outside the scope of physiotherapy and require medical
-                  assessment first. Please select any that apply to you at present.
+                  {finalChecks.length
+                    ? 'Your answers raised a question a doctor may need to look at first. Please tick it if it applies.'
+                    : 'If another symptom worries you, add it here. The items below help plan your first appointment.'}
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
-                  {safetyChecks.map((f, i) => {
+                  {finalChecks.map((f, i) => {
                     const sel = flags.includes(f.id)
                     return (
                       <button key={f.id} style={chip(sel)}
@@ -1376,7 +1480,7 @@ export default function PainAssessment() {
                       <>
                         <button style={chip(sel)}
                           onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== '__other') : [...cur, '__other'])}>
-                          <span style={letterStyle(sel)}>{LETTERS[safetyChecks.length] || '·'}</span>
+                          <span style={letterStyle(sel)}>{LETTERS[finalChecks.length] || '·'}</span>
                           <span>Other — enter your own answer</span>
                         </button>
                         {sel && (
@@ -1418,11 +1522,10 @@ export default function PainAssessment() {
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary" style={goldBtn}
                     onClick={() => {
-                      if (anyFlagged) setStage('urgent')
-                      else if (injuryApplies) startInjury()
+                      if (flaggedIn(finalChecks) || otherFlagged) routeUrgent('safety')
                       else setShowNotice(true)
                     }}>
-                    {anyFlagged || pickedCautions.length ? 'Continue' : 'None Apply — Continue'}
+                    {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length ? 'Continue' : 'None Apply — Continue'}
                   </button>
                   <button style={ghostBtn} onClick={() => setStage('review')}>Back</button>
                 </div>
@@ -1464,7 +1567,7 @@ export default function PainAssessment() {
               <Fade k="urgent">
                 <span style={label}>Medical Review Recommended</span>
 
-                {(pickedFlags.length > 0 || otherFlagged) && (
+                {!emergencyFlagged && (pickedFlags.length > 0 || otherFlagged) && (
                   <div style={{ ...card, maxWidth: 520, margin: '12px 0 12px' }}>
                     <span style={{ ...label, fontSize: 11.5 }}>You selected</span>
                     <ul style={{ margin: '10px 0 0', paddingLeft: 20, fontSize: 15, lineHeight: 1.75, color: 'rgba(255,255,255,0.82)' }}>
@@ -1485,17 +1588,35 @@ export default function PainAssessment() {
                       attention. Please call 911 or go to your nearest emergency department
                       now. Do not wait for a physiotherapy appointment.
                     </p>
+                    {/* Why, for each emergency answer: the reason from the
+                        region document, next to what the person ticked. */}
+                    <span style={{ ...label, display: 'block', margin: '18px 0 0', fontSize: 11.5, color: '#fca5a5' }}>Why this needs emergency care</span>
+                    <div style={{ display: 'grid', gap: 12, marginTop: 10 }}>
+                      {pickedFlags.filter((f) => f.tier === 'emergency').map((f) => (
+                        <div key={f.id}>
+                          <p style={{ fontSize: 16, color: '#fff', margin: 0, lineHeight: 1.45, fontWeight: 600 }}>{f.why.title}</p>
+                          <p style={{ ...body, fontSize: 14, margin: '4px 0 0', color: 'rgba(255,255,255,0.72)' }}>You told us: {f.text}</p>
+                        </div>
+                      ))}
+                    </div>
                     <a href="tel:911" style={{ ...goldBtn, background: '#ef4444', color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', marginTop: 16 }}>
                       Call 911
                     </a>
                   </div>
                 ) : (
                   <div style={{ ...card, borderColor: 'rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', maxWidth: 520 }}>
-                    <strong style={{ color: '#fcd34d', fontSize: 19, lineHeight: 1.4 }}>Please See a Physician First</strong>
+                    <strong style={{ color: '#fcd34d', fontSize: 19, lineHeight: 1.4 }}>
+                      {sameDayFlagged ? 'Please See a Doctor Today' : 'Please See Your Doctor About This'}
+                    </strong>
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '12px 0 0' }}>
-                      The symptoms you selected should be reviewed by a physician before
-                      beginning physiotherapy. Please book a visit with your family physician,
-                      or a walk-in clinic if you do not have one.
+                      {sameDayFlagged
+                        ? 'Something you ticked should be checked by a doctor today: your family doctor, a walk-in clinic, or an urgent care centre.'
+                        : 'What you ticked should be checked by your doctor. Please book a visit with your family doctor, or a walk-in clinic if you do not have one.'}
+                    </p>
+                    <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
+                      {sameDayFlagged
+                        ? 'You can still book your physiotherapy assessment now. Chandra will check that a doctor has looked at this before treatment starts.'
+                        : 'Physiotherapy can go ahead alongside that, and you can book with Chandra now: your assessment will look at these symptoms in detail, and Chandra can work with your doctor on the next steps.'}
                     </p>
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
                       <strong style={{ color: '#fff' }}>If your symptoms are severe or getting worse quickly, call 911.</strong>
@@ -1503,12 +1624,15 @@ export default function PainAssessment() {
                   </div>
                 )}
 
-                {pickedFlags.length > 0 && (
+                {!emergencyFlagged && pickedFlags.length > 0 && (
                   <>
-                    <span style={{ ...label, display: 'block', margin: '22px 0 0' }}>Why these need review first</span>
+                    <span style={{ ...label, display: 'block', margin: '22px 0 0' }}>Why a doctor should check this</span>
                     <div style={{ marginTop: 12 }}>
-                      {pickedFlags.slice(0, 3).map((f) => (
+                      {pickedFlags.map((f) => (
                         <div key={f.id} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
+                          {f.sameDay && (
+                            <span style={{ ...label, display: 'block', fontSize: 11, color: '#fcd34d', marginBottom: 6 }}>See a doctor today</span>
+                          )}
                           <p style={{ fontSize: 16, color: GOLD_LIGHT, margin: 0, lineHeight: 1.45, fontWeight: 500 }}>{f.why.title}</p>
                           <p style={{ ...body, fontSize: 14.5, margin: '7px 0 0' }}>{f.why.text}</p>
                         </div>
@@ -1527,10 +1651,10 @@ export default function PainAssessment() {
                     flagged symptom — but never for an emergency-tier flag. */}
                 {!emergencyFlagged && (
                   <>
-                    <span style={{ ...label, display: 'block', margin: '26px 0 0' }}>After Your Physician Review</span>
+                    <span style={{ ...label, display: 'block', margin: '26px 0 0' }}>Book With Chandra</span>
                     <p style={{ ...body, fontSize: 15, margin: '10px 0 14px', maxWidth: 520 }}>
-                      Once your physician has confirmed that physiotherapy is appropriate, you are
-                      welcome to book an assessment with Chandra at any of these clinics.
+                      Choose a clinic to book your assessment, or carry on to finish the
+                      questions and see what your answers can be associated with.
                     </p>
                     <ClinicPicker />
                   </>
@@ -1538,13 +1662,18 @@ export default function PainAssessment() {
 
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary" style={goldBtn} onClick={() => {
-                    if (!injuryOutcome) { setStage('safety'); return }
+                    if (flaggedAt !== 'injury' || !injuryOutcome) { setStage(flaggedAt || 'safety'); return }
                     // Back to the injury question that routed here.
                     const last = injuryPath[injuryPath.length - 1]
                     setInjuryDraft(answers[last])
                     setAnswers((a) => withoutInjury(a, injuryPath.slice(0, -1)))
                     setInjuryPath(injuryPath.slice(0, -1)); setInjuryQ(last); setStage('injury')
                   }}>Back</button>
+                  {!emergencyFlagged && (
+                    <button style={ghostBtn} onClick={continueAfterDoctor}>
+                      {flaggedAt === 'safety' ? 'See My Results' : 'Finish the Questions'}
+                    </button>
+                  )}
                   <button style={ghostBtn} onClick={restart}>Start Over</button>
                 </div>
               </Fade>
@@ -1557,6 +1686,23 @@ export default function PainAssessment() {
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 18px' }}>
                   What your answers <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>can be associated with</em>
                 </h2>
+
+                {/* The see-a-doctor advice from the safety questions stays at
+                    the top of the results. */}
+                {doctorFlagged && (
+                  <div style={{ ...card, borderColor: 'rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', maxWidth: 520, marginBottom: 14 }}>
+                    <strong style={{ color: '#fcd34d', fontSize: 17, lineHeight: 1.4 }}>
+                      {sameDayFlagged ? 'Remember: please see a doctor today' : 'Remember: please see your doctor'}
+                    </strong>
+                    <ul style={{ margin: '8px 0 0', paddingLeft: 20, fontSize: 14.5, lineHeight: 1.6, color: 'rgba(255,255,255,0.82)' }}>
+                      {doctorFlags.map((f) => <li key={f.id}>{f.why && f.why.title ? f.why.title : f.text}</li>)}
+                      {otherFlagged && <li>Other: {flagOther.trim()}</li>}
+                    </ul>
+                    <p style={{ ...body, fontSize: 14, margin: '8px 0 0' }}>
+                      The information below is general education and does not replace that check.
+                    </p>
+                  </div>
+                )}
 
                 {/* THE POSSIBLE REASONS COME FIRST. Matched from the answers by
                     the scoring engine — a condition only appears once it scores

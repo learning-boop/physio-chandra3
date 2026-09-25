@@ -12,7 +12,7 @@ import {
   specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
 } from '../src/data/assessmentFlow.js'
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
-import { injuryFlow } from '../src/data/injuryScreen.js'
+import { injuryFlow, ageFrom } from '../src/data/injuryScreen.js'
 import { MAX_HYPOTHESES } from '../src/data/clinicianSummary.js'
 
 const TESTS = {
@@ -365,15 +365,18 @@ function run(rk, t) {
   const all = toScreen(keys, rk, t.answers)
   // Injury screens: a test's plain I1… answers belong to its own region's
   // screen; any other screen's gate is answered "No" (not injured there).
+  // They come before the age question on the site, so no age is passed; the
+  // neck's "65 or older?" is answered from the patient's age.
   {
     const own = SCREEN_OF[rk]
     const ia = {}
     let s
-    while ((s = injuryFlow(flowZ, ia, all.age)).next) {
+    while ((s = injuryFlow(flowZ, ia, undefined)).next) {
       seen.asked.push(s.next)
       const [sid, qid] = s.next.split(':')
       ia[s.next] = sid === own ? t.answers[qid] : undefined
       if (ia[s.next] === undefined && qid === 'I1') ia[s.next] = 'no'
+      if (ia[s.next] === undefined && s.next === 'neck:I3') ia[s.next] = ageFrom(t.answers.age) >= 65 ? 'yes' : 'no'
       if (ia[s.next] === undefined) return { ...seen, error: `injury question ${s.next} has no answer in the test` }
     }
     if (s.route === 'emergency' || s.route === 'urgent') return { ...seen, route: s.route }

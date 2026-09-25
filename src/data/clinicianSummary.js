@@ -95,7 +95,7 @@ export function buildClinicianSummary(ctx = {}) {
   const {
     zones = [], referral = [], keys = [], answers = {}, qaPairs = [], notes = '',
     ranked = [], behaviour = {}, psych = {}, painType = null,
-    cautions = [], declinedFlags = [], review = null, date = new Date(),
+    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(),
   } = ctx
 
   const L = []
@@ -185,7 +185,15 @@ export function buildClinicianSummary(ctx = {}) {
 
   // ── Safety and cautions (question 4) ──
   push('SAFETY SCREEN')
-  push('  Red flags: none reported (the patient reached the result screen, which red flags prevent).')
+  if (reportedFlags.length) {
+    // "See a doctor" flags no longer end the visit: the patient was advised to
+    // see their doctor (today for the same-day ones) and may have booked.
+    push('  RED FLAGS REPORTED — medical review advised before treatment:')
+    push(...listOf(reportedFlags.map((r) => `${r.sameDay ? '[SAME DAY] ' : ''}${r.text}${r.why ? ` — ${r.why}` : ''}`), '      · '))
+    push('  Confirm at the first contact that a doctor has seen this.')
+  } else {
+    push('  Red flags: none reported (an emergency flag would have routed the patient to 911).')
+  }
   if (declinedFlags.length) push(`  Screened and denied: ${declinedFlags.join('; ')}`)
   if (cautions.length) {
     push('  CAUTIONS reported — adjust the first physical examination:')
