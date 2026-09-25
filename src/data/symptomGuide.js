@@ -18,7 +18,7 @@ export const REGIONS = {
   lowback: {
     name:"Low back & pelvis",
     redFlags:[
-      {id:"rf-saddle", tier:"emergency", why:"Possible cauda equina syndrome",
+      {id:"rf-saddle", tier:"emergency", group:"saddle", why:"Possible cauda equina syndrome",
         text:"Do you have new numbness or tingling between your legs, around your bottom, or in your genitals (the area you would sit on a saddle)?"},
       {id:"rf-bladder", tier:"emergency", group:"cauda", why:"Possible cauda equina syndrome",
         text:"Have you had new trouble starting to pass urine, not being able to feel when your bladder is full, leaking urine, or losing control of your bowels?"},
@@ -592,6 +592,7 @@ Object.assign(ZONE_TO_REGION, {
   tlj: 'tlj',
   flank: 'tlj',
   sij: 'sij',
+  coccyx: 'coccyx',
   elbow: 'elbow',
   wrist: 'wrist',
   hip: 'hip',

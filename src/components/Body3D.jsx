@@ -65,6 +65,7 @@ const AREA = {
   flankR:    { type: 'flank',     label: 'Right Side, Below the Ribs' },
   lowerback: { type: 'lowerback', label: 'Lower Back' },
   sij:       { type: 'sij',       label: 'Back of Pelvis & Buttock' },
+  coccyx:    { type: 'coccyx',    label: 'Tailbone' },
   elbowL:    { type: 'elbow',     label: 'Left Elbow' },
   elbowR:    { type: 'elbow',     label: 'Right Elbow' },
   wristL:    { type: 'wrist',     label: 'Left Wrist' },
@@ -101,6 +102,11 @@ const TLJ_BOTTOM = 0.09
 // The belt line on the back. Below it — the dimples, sacrum and buttocks —
 // is the back of the pelvis, with the sacroiliac questions (content/regions/sij.md).
 const SIJ_TOP = 0.02
+// The tailbone: a narrow midline strip where the buttock crease begins
+// (content/regions/coccyx.md). Height band and half-width, as fractions.
+const COCCYX_TOP = -0.005
+const COCCYX_BOTTOM = -0.07
+const COCCYX_HALF = 0.025
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -131,7 +137,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v12'
+const CLASSIFIER_VERSION = 'zones-v13'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -179,7 +185,9 @@ function classify(wx, wy, wz) {
     if (fy > CTJ_BOTTOM) return 'ctj'
     if (fy > TLJ_TOP) return 'upperback'
     if (fy > TLJ_BOTTOM) return 'tlj'
-    return fy > SIJ_TOP ? 'lowerback' : 'sij'
+    if (fy > SIJ_TOP) return 'lowerback'
+    if (fy <= COCCYX_TOP && fy > COCCYX_BOTTOM && absZ < COCCYX_HALF) return 'coccyx'
+    return 'sij'
   }
 
   // ── FRONT of the body ──

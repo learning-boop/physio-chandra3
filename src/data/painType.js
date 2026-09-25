@@ -48,7 +48,7 @@ const LIMB_CHAINS = [
   ['sij', 'hip', 'knee', 'ankle'],
 ]
 const SPINE = ['neck', 'lowerback']
-const AXIAL_CHAIN = ['neck', 'ctj', 'upperback', 'tlj', 'lowerback', 'sij']
+const AXIAL_CHAIN = ['neck', 'ctj', 'upperback', 'tlj', 'lowerback', 'sij', 'coccyx']
 
 const PERSISTENT = ['o3m', 'years']
 

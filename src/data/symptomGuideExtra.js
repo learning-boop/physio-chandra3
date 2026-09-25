@@ -637,6 +637,114 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
+  /* ══════════════ TAILBONE (COCCYX) ══════════════
+     From Chandra's "Coccyx assessment" region document (DRAFT 23 Sep 2026;
+     the source text is content/regions/coccyx.md). Sources: Maigne 2000,
+     Lirette 2014, Garg & Ahuja 2021, IFOMPT red flags framework 2020.
+     Reached from a narrow midline strip on the body map where the buttock
+     crease begins (COCCYX_* in src/components/Body3D.jsx).
+     Conditions: content/conditions/coccyx-*.md. */
+  coccyx: {
+    name: "Tailbone (coccyx)",
+    redFlags: [
+      { id: "xrf-saddle", tier: "emergency", group: "saddle", why: "Possible cauda equina syndrome",
+        text: "Do you have new numbness or tingling between your legs, around your bottom, or in your genitals?" },
+      { id: "xrf-bladder", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
+        text: "Have you had new trouble passing urine, leaking urine, or losing control of your bowels?" },
+      { id: "xrf-bowel", tier: "urgent", why: "Bowel causes can be felt at the tailbone",
+        text: "Have you noticed bleeding from your bottom, black stools, or a change in your bowel habit lasting more than 3 weeks?" },
+      { id: "xrf-pilonidal", tier: "urgent", why: "Possible pilonidal abscess or infection",
+        text: "Is there swelling, redness, or discharge near the top of the buttock crease, or do you have a fever?" },
+      { id: "xrf-constant", tier: "urgent", why: "Tailbone pain that is not linked to sitting is unusual",
+        text: "Is the pain there all the time, worse at night, and not affected by sitting?" },
+      { id: "xrf-cancer", tier: "urgent", group: "cancer", why: "Rare tumours can occur here",
+        text: "Have you ever had cancer, or can you feel a lump near your tailbone?" },
+      { id: "xrf-osteo", tier: "urgent", group: "osteo", why: "Possible stress (insufficiency) fracture of the sacrum",
+        text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+      { id: "xrf-sphincter", tier: "urgent", why: "Possible pelvic floor or sphincter injury: see a doctor or pelvic health service",
+        text: "Since giving birth, have you had trouble controlling wind or your bowels?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "fall", label: "After a fall onto my tailbone" },
+        { id: "birth", label: "After giving birth" },
+        { id: "sitting", label: "After long periods sitting, cycling, or rowing" },
+        { id: "surgery", label: "After surgery or a procedure" },
+        { id: "gradual", label: "Gradually, no clear reason" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d2m", label: "2 weeks to 2 months" },
+        { id: "o2m", label: "More than 2 months" }
+      ]}
+    ],
+    questions: [
+      // Asked first: where it is decides between the tailbone patterns.
+      { id: "X1", text: "If you point to the worst spot with one finger, where is it?", priority: () => true, options: [
+        { id: "tip", label: "Right on the tip of the tailbone" },
+        { id: "above", label: "Just above the tailbone, at the lower end of the spine" },
+        { id: "crease", label: "Beside the tailbone, in the buttock crease" },
+        { id: "deep", label: "Deep inside, in the pelvis or back passage", special: "pelvicHealth" },
+        { id: "spread", label: "Spread across the low back and buttocks", special: "lowbackSource" }
+      ]},
+      { id: "X2", text: "What happens when you sit? Tick all that apply.", options: [
+        { id: "hard", label: "Sitting on hard seats hurts" },
+        { id: "leanback", label: "Leaning back while sitting makes it worse" },
+        { id: "leanfwd", label: "Leaning forward onto my thighs eases it" },
+        { id: "onebuttock", label: "Sitting on one buttock eases it" },
+        { id: "fine", label: "Sitting does not bother me" }
+      ]},
+      { id: "X3", text: "What happens when you stand up from sitting?", options: [
+        { id: "sharp", label: "A sharp pain as I stand up" },
+        { id: "eases", label: "The pain eases once I am standing" },
+        { id: "carries", label: "The pain carries on while I stand" },
+        { id: "nochange", label: "No change" }
+      ]},
+      { id: "X4", text: "Which of these apply? Tick all that apply.", options: [
+        { id: "bowels", label: "Pain when opening my bowels", special: "pelvicHealth" },
+        { id: "sex", label: "Pain during or after sex", special: "pelvicHealth" },
+        { id: "pressure", label: "A feeling of pressure, or a ball, inside the back passage", special: "pelvicHealth" },
+        { id: "constipation", label: "Constipation or straining" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "X5", text: "About the injury or birth: which apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "fall" || ra.onset === "birth",
+        options: [
+          { id: "landed", label: "I landed straight onto my tailbone" },
+          { id: "crack", label: "I heard or felt a crack" },
+          { id: "bruise", label: "Bruising at the top of the buttock crease" },
+          { id: "assisted", label: "A long or assisted delivery (forceps or ventouse)" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "X6", text: "Does bending forward or arching your low back bring on the tailbone pain?", options: [
+        { id: "yes", label: "Yes", special: "lowbackSource" },
+        { id: "no", label: "No" },
+        { id: "ns", label: "Not sure" }
+      ]},
+      { id: "X7", text: "Which of these apply? Tick all that apply.", options: [
+        { id: "sit", label: "I sit for most of the day" },
+        { id: "cycle", label: "I cycle or row regularly" },
+        { id: "weight", label: "My weight has changed a lot recently" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "X8", text: "Have you noticed anything on the skin at the top of the buttock crease?",
+        askIf: ({ ra }) => [].concat(ra.X1 || []).includes("crease"),
+        options: [
+          { id: "nothing", label: "Nothing" },
+          { id: "pit", label: "A small pit or hole in the skin", special: "pilonidal" },
+          { id: "lump", label: "A tender lump", special: "pilonidal" }
+        ]}
+    ],
+    conditions: []
+  },
+
   /* ══════════════ ELBOW ══════════════ */
   elbow: {
     name: "Elbow & forearm",
@@ -991,6 +1099,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain across the low back, or pain that changes a lot when you bend forward or arch back, usually comes from the <strong>low back</strong> rather than the sacroiliac joint. Consider running the <strong>Low back</strong> guide too. Your assessment will check both." },
   sijSource: { title: "Pain over the dimple at the back of the pelvis",
     body: "Pain you can point to over the dimple at the back of the pelvis often comes from the <strong>sacroiliac joint</strong>. If that is where it is worst, mark the <strong>back of your pelvis</strong> on the body map to answer the questions about it." },
+  pelvicHealth: { title: "A pelvic health physiotherapist can help",
+    body: "Pain deep in the pelvis or back passage, or pain with bowel movements or sex, often involves the <strong>pelvic floor muscles</strong>. A <strong>pelvic health physiotherapist</strong> assesses and treats these muscles, often with an internal examination if you are comfortable with it. It is worth mentioning to your doctor too, so bowel and gynaecological causes can be checked." },
+  pilonidal: { title: "A pit or lump in the buttock crease: see your doctor",
+    body: "A small pit or a tender lump at the top of the buttock crease can be a <strong>pilonidal sinus</strong>, a skin problem that can become infected. It is treated by a doctor rather than physiotherapy, so please have it checked, sooner if it becomes red, swollen or starts to leak." },
   ribcage: { title: "Pain with deep breaths",
     body: "Sharp pain with a deep breath often involves the <strong>rib joints</strong> where they meet the spine — usually mechanical and treatable. But if breath pain comes with fever, breathlessness, or follows an accident, see a doctor promptly." }
 }

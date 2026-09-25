@@ -25,10 +25,13 @@ export const REGION_CHAINS = [
   // The TL junction refers to the low back, side of the hip and groin.
   // The back of the pelvis (sacroiliac) sits between them.
   ['tlj', 'lowback', 'sij', 'hip', 'knee', 'ankle'],
+  // The tailbone, between the back of the pelvis and the perineum.
+  ['tlj', 'lowback', 'sij', 'coccyx'],
+  ['coccyx', 'hip'],
 ]
 
 const AREA_WORD = {
-  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', shoulder: 'shoulder',
+  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', shoulder: 'shoulder',
   elbow: 'elbow', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
 }
 
@@ -113,10 +116,11 @@ function mapAge(bucketId, q) {
 
 const DURATIONS = [
   { id: 'd2w', label: 'Less than 2 weeks', to: ['d2w'] },
-  { id: 'd6w', label: '2 – 6 weeks', to: ['d6w'] },
-  { id: 'd3m', label: '6 weeks – 3 months', to: ['d3m', 'd6m'] },
-  { id: 'o3m', label: 'More than 3 months', to: ['o3m', 'd6m'] },
-  { id: 'years', label: 'Comes and goes over years', to: ['years', 'o3m', 'd6m'] },
+  // d2m / o2m: the tailbone's own bands (2 weeks to 2 months, more than 2 months).
+  { id: 'd6w', label: '2 – 6 weeks', to: ['d6w', 'd2m'] },
+  { id: 'd3m', label: '6 weeks – 3 months', to: ['d3m', 'd6m', 'o2m'] },
+  { id: 'o3m', label: 'More than 3 months', to: ['o3m', 'd6m', 'o2m'] },
+  { id: 'years', label: 'Comes and goes over years', to: ['years', 'o3m', 'd6m', 'o2m'] },
 ]
 function mapDuration(id, q) {
   const d = DURATIONS.find((x) => x.id === id)

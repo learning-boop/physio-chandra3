@@ -99,6 +99,12 @@ export const REFERRAL_MAP = {
     muscles: ['Gluteus medius (posterior iliac crest, SIJ, outer buttock)', 'Quadratus lumborum (SIJ, top of the hip bone, buttock)', 'Piriformis (middle of the buttock, posterior thigh)', 'Lumbar multifidus (sacrum, buttock)'],
     organs: ['Rectum, bladder neck, prostate, cervix (sacrum and perineum, S2–S4)', 'Uterus (lumbosacral, SIJ; linked to periods or pregnancy)', 'Colon (sacrum)'],
   },
+  coccyx: {
+    joints: ['Sacrococcygeal joint and coccyx (sitting pain, worse leaning back)', 'Lumbar discs (referred to the tailbone)'],
+    roots: ['S3–S5 (sacrum, tailbone, perineum)'],
+    muscles: ['Pelvic floor / levator ani (tailbone, back passage, perineum)', 'Gluteus maximus (buttock crease)'],
+    organs: ['Rectum and colon (S2–S4)', 'Prostate', 'Cervix and uterus', 'Skin of the buttock crease (pilonidal sinus)'],
+  },
   hip: {
     joints: ['Hip joint (buttock 71%, groin 55%)', 'Sacroiliac joint (buttock 94%, groin 14%)', 'L3–L5 facets (buttock, greater trochanter)', 'L1–L3 facets (groin)'],
     roots: ['L2 (groin, upper anterior thigh)', 'S2–S4 (perineum, saddle area)'],

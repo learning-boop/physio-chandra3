@@ -181,6 +181,31 @@ const TESTS = {
       // Either low-back card answers the document's "message suggesting the low back".
       expect: { notTop: ['sij/sij'], special: ['lowbackSource', 'backref'], route: 'results' } },
   ],
+  coccyx: [
+    { name: '1. Bruised tailbone after a fall',
+      lines: [['coccyx']],
+      answers: { age: '30-49', onset: 'fall', duration: 'd2m', X1: ['tip'], X2: ['hard', 'leanback', 'leanfwd'], X5: ['landed', 'bruise'], X6: ['no'] },
+      expect: { top: 'coccyx/trauma', not: ['coccyx/pelvicfloor'], notRegion: ['lowback'], route: 'results' } },
+    { name: '2. Unstable tailbone after an assisted birth',
+      lines: [['coccyx']],
+      answers: { age: '30-49', onset: 'birth', duration: 'o2m', X1: ['tip'], X2: ['hard'], X3: ['sharp'], X5: ['assisted'] },
+      expect: { top: 'coccyx/unstable', notRegion: ['lowback'], route: 'results' } },
+    { name: '3. Pelvic floor muscle pain',
+      lines: [['coccyx']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'o2m', X1: ['deep'], X2: ['fine'], X3: ['nochange'],
+        X4: ['bowels', 'pressure', 'constipation'] },
+      expect: { top: 'coccyx/pelvicfloor', notTop: ['coccyx/trauma', 'coccyx/unstable'], special: 'pelvicHealth', route: 'results' } },
+    { name: '4. Saddle numbness (cauda equina)',
+      lines: [['coccyx'], ['hipL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd2w' },
+      flags: ['xrf-saddle'],
+      expect: { route: 'emergency' } },
+    { name: '5. Pilonidal look-alike: lump in the buttock crease',
+      lines: [['coccyx']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'd2m', X1: ['crease'], X8: ['lump'] },
+      flags: ['xrf-pilonidal'],
+      expect: { route: 'urgent' } },
+  ],
 }
 
 const zonesOf = (lines) => {
