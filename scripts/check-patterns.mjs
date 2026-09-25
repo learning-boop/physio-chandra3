@@ -43,8 +43,8 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   check('questions come from the NECK only (not shoulder/elbow/wrist)', JSON.stringify(keys) === '["neck"]', keys)
   check('no "choose an area" screen', !needsAreaChoice(fz, null))
   const drawn = drawnAnswers(ref)
-  check('drawing pre-answers N1 = ["past the elbow"] (as a multi-answer list)', JSON.stringify(drawn.N1) === '["arm"]', drawn)
-  const ranked = rankAcross(keys, { ...drawn, N2: 'hand', age: 'o50' })
+  check('drawing pre-answers N2 = ["past the elbow"] (as a multi-answer list)', JSON.stringify(drawn.N2) === '["pastelbow"]', drawn)
+  const ranked = rankAcross(keys, { N2: [...drawn.N2, 'fingers'], N3: ['arm'], age: '50-64' })
   check('top result is cervical radiculopathy', ranked[0] && ranked[0].c.id === 'radic', ranked.map((x) => x.rk + '/' + x.c.id))
   const oldKeys = questionRegions(zones, null)
   console.log('      (before the fix the same line asked: ' + oldKeys.join(', ') + ')')
@@ -149,7 +149,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const armLine = { kind: 'arm', region: 'neck', reach: 'wrist', felt: ['shoulderL', 'elbowL', 'wristL'], side: 'left' }
   const armShort = { ...armLine, reach: 'elbow', felt: ['shoulderL', 'elbowL'] }
   check('burning into the hand → nerve-type (radicular)', referralMechanism(armLine, { painQuality: ['burning'] }) === 'radicular')
-  check('neck answer "into the hand/fingers" → nerve-type', referralMechanism(armLine, { N2: ['hand'] }) === 'radicular')
+  check('neck answer "pins and needles in particular fingers" → nerve-type', referralMechanism(armLine, { N2: ['fingers'] }) === 'radicular')
   check('dull ache, no nerve symptoms, not past the elbow → referred ache (somatic)',
     referralMechanism(armShort, { painQuality: ['ache'] }) === 'somatic')
   check('reaches the hand but no nerve symptoms → left unclear, not called nerve pain',

@@ -12,7 +12,7 @@
    at most MAX_SCORED_QUESTIONS of them.
    ───────────────────────────────────────────────────────────────────────── */
 import {
-  REGIONS, ZONE_TO_REGION, computeResults, shouldStop, isRelevant, answeredRegionCount, questionValue,
+  REGIONS, ZONE_TO_REGION, computeResults, computeRaw, shouldStop, isRelevant, answeredRegionCount, questionValue,
 } from './symptomGuide.js'
 
 /* Regions on one anatomical chain, from the spine outwards. */
@@ -192,8 +192,15 @@ function gaveSignal(questions, ra) {
       the most (questionValue), with silent areas pushed back.
     - Areas where one condition is already clearly ahead are skipped, and it
       stops after `budget` questions.
-    `askedIds` = scored questions already shown, answered or not. */
-export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTIONS) {
+    - A question with `askIf` (e.g. the neck's arm-symptom question, asked
+      only when the drawing reaches the arm) is skipped when it returns false;
+      one whose `priority` returns true is asked ahead of the rest.
+    `askedIds` = scored questions already shown, answered or not.
+    `ctx.draw` = the drawn zone types (leave out when unknown: askIf then
+    asks), `ctx.all` = every answer, including unscored ones (pain quality). */
+export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTIONS, ctx = {}) {
+  const draw = ctx.draw ? new Set(ctx.draw) : null
+  const all = { ...answers, ...(ctx.all || {}) }
   if (askedIds.length >= budget) return null
   const live = []
   for (const k of keys) {
@@ -204,7 +211,8 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
     const weight = askedHere.length && !gaveSignal(askedHere, ra) ? SILENT_AREA_WEIGHT : 1
     for (const q of region.questions) {
       if (askedIds.includes(q.id) || !isRelevant(q, region, ra)) continue
-      live.push({ id: q.id, unseenArea: askedHere.length === 0, v: questionValue(q, region, ra) * weight })
+      if (q.askIf && !q.askIf({ draw, ra, all })) continue
+      live.push({ id: q.id, unseenArea: askedHere.length === 0, v: questionValue(q, region, ra) * weight + (q.priority && q.priority({ draw, ra, all }) ? 1 : 0) })
     }
   }
   const pool = keys.length > 1 && live.some((x) => x.unseenArea) ? live.filter((x) => x.unseenArea) : live
@@ -226,4 +234,34 @@ export function rankAcross(keys, answers, max = 3) {
     if (!picked.includes(x)) picked.push(x)
   }
   return picked.sort(byRank)
+}
+
+/** Education cards the answers call for (e.g. "this may be coming from your
+    shoulder"), across every asked region, without repeats. */
+export function specialsAcross(keys, answers) {
+  const out = []
+  for (const k of keys) {
+    for (const s of computeRaw(REGIONS[k], regionAnswers(keys, k, answers)).specials) if (!out.includes(s)) out.push(s)
+  }
+  return out
+}
+
+/** The drawn regions' own red flags, emergency tier first, without repeats.
+    `flowZ` = the zones the questions are asked about, `zones` = every drawn
+    zone; a flag with `drawn` (e.g. the neck's shoulder-tip flags) is only
+    asked when one of those zone types is marked. */
+export function regionRedFlags(flowZ = [], zones = flowZ) {
+  const keys = [...new Set(flowZ.map((z) => ZONE_TO_REGION[z.type]).filter((k) => k && REGIONS[k]))]
+  const drawn = new Set(zones.map((z) => z.type))
+  const out = []
+  for (const tier of ['emergency', 'urgent']) {
+    for (const k of keys) {
+      for (const f of REGIONS[k].redFlags) {
+        if (f.tier !== tier || out.includes(f)) continue
+        if (f.drawn && !f.drawn.some((t) => drawn.has(t))) continue
+        out.push(f)
+      }
+    }
+  }
+  return out
 }

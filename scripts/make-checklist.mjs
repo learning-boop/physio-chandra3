@@ -10,8 +10,6 @@ const OUT = process.argv[2] || 'review-checklist.html'
 // Concerns raised during extraction. Each is a specific thing to check, not a
 // general "please review" — those get ignored.
 const FLAGS = {
-  'neck/whiplash': 'Pointer <b>“More than 6 weeks”</b> looks wrong — whiplash-type strain is usually acute. <b>“Less than 2 weeks”</b> is probably the right pointer.',
-  'neck/cheadache': 'Reachable but not separable: the neck questions <b>never ask about headache</b>. Consider adding a headache option to N1, or this can only ever be inferred indirectly.',
   'hip/hamstring': 'From a hamstring (posterior thigh) guideline, filed under Hip &amp; groin because the app has no thigh region. Check the pointers make sense to someone answering <em>hip</em> questions.',
   'hip/hipinstab': 'Pointers overlap the existing <code>fai</code> and <code>snap</code> conditions. Check the three can still be told apart.',
   'knee/hipreferred': 'Overlaps <code>hip/hipoa</code>. Decide whether the knee region should carry a hip condition at all.',

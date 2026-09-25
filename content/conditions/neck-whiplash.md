@@ -5,11 +5,17 @@ name: Whiplash-type neck strain
 clin: Neck pain with movement coordination impairments (whiplash-associated disorder)
 # DRAFT extracted from: Neck Pain: Clinical Practice Guidelines Revision 2017 (JOSPT)
 # Reviewed by: (add your name once you have checked every line)
+# Pointers re-mapped 24 Sep 2026 to the neck questions in content/regions/neck.md
+# (Question 5 is asked only after an accident or injury).
 pointers:
-  "A sudden movement or awkward lift": 2
-  "In the neck itself": 1
-  "Turning the head": 2
-  "More than 6 weeks": 1
+  "After a car accident or whiplash-type jolt": 3
+  "After a fall, sport, or knock to the head or neck": 2
+  "My neck gets tired holding my head up": 2
+  "The pain has spread to my shoulders, upper back, or arms": 2
+  "Trouble concentrating or sleeping since it happened": 2
+  "My neck is very sensitive to touch or cold": 2
+  "It is settling a bit more each week": 1
+  "It is stiff or painful turning both ways": 1
 ---
 
 ## blurb

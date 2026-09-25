@@ -858,33 +858,45 @@ export const AUTHORED = [
     },
     "resolved": [
       {
-        "qid": "N3",
-        "oid": "look",
-        "label": "Looking up, or holding one head position for long",
+        "qid": "N4",
+        "oid": "onesided",
+        "label": "One-sided, starting at the back of the neck or head",
         "weight": 3
       },
       {
-        "qid": "N3",
-        "oid": "turn",
-        "label": "Turning the head (e.g., checking a blind spot)",
-        "weight": 2
+        "qid": "N4",
+        "oid": "movement",
+        "label": "Brought on by neck movement or holding one position",
+        "weight": 3
+      },
+      {
+        "qid": "N4",
+        "oid": "band",
+        "label": "Both sides, like a tight band or pressure",
+        "weight": -2
+      },
+      {
+        "qid": "N4",
+        "oid": "throb",
+        "label": "Throbbing, with feeling sick or finding light hard to take",
+        "weight": -2
+      },
+      {
+        "qid": "N4",
+        "oid": "none",
+        "label": "I do not get headaches",
+        "weight": -3
       },
       {
         "qid": "N1",
-        "oid": "neckonly",
-        "label": "In the neck itself",
-        "weight": 1
+        "oid": "onestiff",
+        "label": "It is stiff or painful turning to one side",
+        "weight": 2
       },
       {
-        "qid": "N5",
-        "oid": "morning",
-        "label": "Worst in the morning, loosens with movement",
-        "weight": 1
-      },
-      {
-        "qid": "N2",
-        "oid": "none",
-        "label": "No tingling or numbness",
+        "qid": "N6",
+        "oid": "desk",
+        "label": "Long spells at a desk, screen, or driving",
         "weight": 1
       }
     ]
@@ -914,26 +926,50 @@ export const AUTHORED = [
     "resolved": [
       {
         "qid": "onset",
-        "oid": "move",
-        "label": "A sudden movement or awkward lift",
+        "oid": "car",
+        "label": "After a car accident or whiplash-type jolt",
+        "weight": 3
+      },
+      {
+        "qid": "onset",
+        "oid": "fall",
+        "label": "After a fall, sport, or knock to the head or neck",
         "weight": 2
       },
       {
-        "qid": "N1",
-        "oid": "neckonly",
-        "label": "In the neck itself",
+        "qid": "N5",
+        "oid": "tired",
+        "label": "My neck gets tired holding my head up (reading, screens)",
+        "weight": 2
+      },
+      {
+        "qid": "N5",
+        "oid": "spread",
+        "label": "The pain has spread to my shoulders, upper back, or arms",
+        "weight": 2
+      },
+      {
+        "qid": "N5",
+        "oid": "concentrate",
+        "label": "Trouble concentrating or sleeping since it happened",
+        "weight": 2
+      },
+      {
+        "qid": "N5",
+        "oid": "sensitive",
+        "label": "My neck is very sensitive to touch or cold",
+        "weight": 2
+      },
+      {
+        "qid": "N5",
+        "oid": "settling",
+        "label": "It is settling a bit more each week",
         "weight": 1
       },
       {
-        "qid": "N3",
-        "oid": "turn",
-        "label": "Turning the head (e.g., checking a blind spot)",
-        "weight": 2
-      },
-      {
-        "qid": "duration",
-        "oid": "d6m",
-        "label": "More than 6 weeks",
+        "qid": "N1",
+        "oid": "bothstiff",
+        "label": "It is stiff or painful turning both ways",
         "weight": 1
       }
     ]

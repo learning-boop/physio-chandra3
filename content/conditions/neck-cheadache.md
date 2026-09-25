@@ -5,12 +5,16 @@ name: Neck-related headache
 clin: Cervicogenic headache
 # DRAFT extracted from: Neck Pain: Clinical Practice Guidelines Revision 2017 (JOSPT)
 # Reviewed by: (add your name once you have checked every line)
+# Pointers re-mapped 24 Sep 2026 to the neck questions in content/regions/neck.md
+# (Question 4 now asks about headache directly).
 pointers:
-  "Looking up, or holding one head position for long": 3
-  "Turning the head": 2
-  "In the neck itself": 1
-  "Worst in the morning, loosens with movement": 1
-  "No tingling or numbness": 1
+  "One-sided, starting at the back of the neck or head": 3
+  "Brought on by neck movement or holding one position": 3
+  "Both sides, like a tight band or pressure": -2
+  "Throbbing, with feeling sick": -2
+  "I do not get headaches": -3
+  "It is stiff or painful turning to one side": 2
+  "Long spells at a desk, screen, or driving": 1
 ---
 
 ## blurb

@@ -63,7 +63,7 @@ export function flowZones(zones, referral) {
 }
 
 /** Answers the drawing already gives. A line reaching the hand has
-    answered "shooting down the arm, past the elbow"; one reaching the
+    answered "pain goes down the arm past the elbow"; one reaching the
     foot, "pain below the knee". They are only defaults — the questions
     still show them selected, and the person can change them.
     Arrays, because every region question is multi-answer (symptomGuide.js);
@@ -71,7 +71,7 @@ export function flowZones(zones, referral) {
 export function drawnAnswers(referral) {
   const out = {}
   for (const r of referral) {
-    if (r.kind === 'arm' && r.reach === 'wrist') out.N1 = ['arm']
+    if (r.kind === 'arm' && r.reach === 'wrist') out.N2 = ['pastelbow']
     if (r.kind === 'leg' && r.reach === 'ankle') out.L2 = ['belowknee']
   }
   return out
@@ -94,9 +94,10 @@ const NERVE_QUALITY = ['burning', 'tingling', 'Burning or tingling']
 export function referralMechanism(r, answers = {}) {
   const quality = [...asList(answers.painQuality), ...asList(answers.q2)]
   const nerveWords = quality.some((q) => NERVE_QUALITY.includes(q))
-  // The region questions' own nerve answers: neck N2 "into the forearm, hand
-  // or fingers"; low back L2 "pins & needles or numbness into the foot".
-  const nerveAnswer = asList(answers.N2).includes('hand') || asList(answers.L2).includes('pins')
+  // The region questions' own nerve answers: neck N2 "pins and needles or
+  // numbness in particular fingers"; low back L2 "pins & needles or numbness
+  // into the foot".
+  const nerveAnswer = asList(answers.N2).includes('fingers') || asList(answers.L2).includes('pins')
   const distal = r.reach === 'wrist' || r.reach === 'ankle'
   if (nerveWords || nerveAnswer) return 'radicular'
   if (!distal) return 'somatic'

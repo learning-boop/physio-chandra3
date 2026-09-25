@@ -53,6 +53,7 @@ npm run import:conditions   # turn condition files into site data
 npm run check:data          # every condition can actually be reached
 npm run check:accuracy      # simulated patients reach the right condition
 npm run check:patterns      # drawing, referral, pain-type and safety rules
+npm run check:regions       # each region document's test patients, pass/fail
 npm run build
 ```
 

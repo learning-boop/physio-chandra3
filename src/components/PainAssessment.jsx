@@ -5,16 +5,17 @@ import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import ClinicianSummary from './ClinicianSummary'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
-import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS } from '../data/symptomGuide'
+import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextQuestion, rankAcross, MAX_SCORED_QUESTIONS,
+  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial } from '../data/psychosocial'
 import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism } from '../data/painType'
 import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
 import { patternChecks } from '../data/patternChecks'
+import { INJURY_QUESTIONS, injuryStep, injuryScreenApplies } from '../data/injuryScreen'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -51,7 +52,7 @@ const QUESTIONS = [
   { id: 'q5', text: 'Is there anything further you would like the physiotherapist to know?', textarea: true,
     placeholder: 'Other symptoms, previous injuries, relevant medical history, or any concerns…' },
 ]
-const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+const LETTERS = 'ABCDEFGHIJKLMNOPQRST'.split('')
 const BEHAV_ID = '__behav'
 const PSYCH_ID = '__psych'
 /* Unscored screens that always close the questions, in this order. */
@@ -434,15 +435,17 @@ export default function PainAssessment() {
   // yellow flags (../data/psychosocial.js). The generic set already asks about
   // easing (q4), so it is left out of the behaviour screen there.
   const activeQuestions = useMemo(() => {
-    // Region flows also ask pain quality here; the generic set asks it as q2.
+    // Region flows ask pain quality on the opening screen, so a region question
+    // can depend on it (the neck asks about arm symptoms when there are pins
+    // and needles or shooting pain); the generic set asks it as q2.
     const behav = (easers) => ({
       id: BEHAV_ID, text: 'How your pain behaves',
-      group: easers === null ? behaviourQuestions(null) : [PAIN_QUALITY, ...behaviourQuestions(easers)],
+      group: behaviourQuestions(easers),
       hint: 'Tap an answer for each — some questions let you choose more than one.',
     })
     if (keys.length) {
       return [
-        { id: '__ctx', group: ctxQuestions, text: 'A few details to start' },
+        { id: '__ctx', group: [...ctxQuestions, PAIN_QUALITY], text: 'A few details to start' },
         ...regionQuestions,
         behav(REGION_EASERS[keys[0]] || undefined),
         PSYCH_SCREEN,
@@ -473,7 +476,7 @@ export default function PainAssessment() {
   // question's answer must not quietly shape the result.
   const scopedAnswers = useMemo(() => {
     if (!keys.length) return answers
-    // Answers the drawing gave (e.g. N1 "past the elbow") count even when that
+    // Answers the drawing gave (e.g. N2 "past the elbow") count even when that
     // question was not shown.
     const keep = new Set([...ctxQuestions.map((q) => q.id), ...askedIds, ...Object.keys(drawn), 'notes'])
     const out = {}
@@ -485,6 +488,7 @@ export default function PainAssessment() {
     () => (keys.length
       ? [
           ...ctxQuestions,
+          PAIN_QUALITY,
           ...askedIds.map((id) => regionQuestions.find((q) => q.id === id)).filter(Boolean),
           ...tailIndexes.filter((i) => path.includes(i)).flatMap((i) => activeQuestions[i].group),
         ]
@@ -515,6 +519,12 @@ export default function PainAssessment() {
     // Two hypotheses, matching the summary Chandra receives (MAX_HYPOTHESES).
     try { return rankAcross(keys, scopedAnswers, MAX_HYPOTHESES) } catch { return [] }
   }, [keys, scopedAnswers])
+  // Education cards the answers call for, e.g. "this may be coming from your
+  // shoulder" when moving the arm hurts more than moving the neck.
+  const specials = useMemo(() => {
+    if (!keys.length) return []
+    try { return specialsAcross(keys, scopedAnswers).filter((s) => SPECIAL_CARDS[s]) } catch { return [] }
+  }, [keys, scopedAnswers])
   // What the AI overview explains: exactly these conditions, in this order.
   const matched = useMemo(() => ranked.map((x) => ({ region: x.rk, id: x.c.id })), [ranked])
   // An earlier review belongs to earlier answers: changing an answer clears it
@@ -529,7 +539,7 @@ export default function PainAssessment() {
     return ranked.filter((x) => !dropped.has(x.c.id))
       .sort((a, b) => (rank.has(a.c.id) ? rank.get(a.c.id) : 99) - (rank.has(b.c.id) ? rank.get(b.c.id) : 99))
   }, [ranked, review])
-  const modelSmall = ['intro', 'questions', 'review', 'safety', 'urgent', 'ok'].includes(stage)
+  const modelSmall = ['intro', 'questions', 'review', 'safety', 'injury', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
   // Only red flags route away from the result; a caution does not.
@@ -539,21 +549,20 @@ export default function PainAssessment() {
      Every region in the guide carries its own red flags — a swollen warm calf
      for a knee, clumsiness in both hands for a neck, a sudden pop in the calf
      for an ankle. Those are the questions that make this screen worth asking,
-     so they come first, emergency tier before urgent. Two checks that apply
-     to any body part are appended, and the whole list is capped so the screen
-     stays short. */
+     so they come first, emergency tier before urgent. Checks that apply to
+     any body part are appended.
+     Every one of the region's own flags is asked: they were capped at three
+     to keep the screen short, which silently dropped clinician-authored
+     emergency checks (the neck has ten). A flag with `drawn` is asked only
+     when one of those areas is marked (the neck's shoulder-tip flags). Its
+     `why` line from the region document titles the explanation. */
+  const injuryApplies = useMemo(() => injuryScreenApplies(zones), [zones])
   const safetyChecks = useMemo(() => {
-    const keys = [...new Set(flowZ.map((z) => ZONE_TO_REGION[z.type]).filter((k) => k && REGIONS[k]))]
-    const regional = []
-    const seen = new Set()
-    for (const tier of ['emergency', 'urgent']) {
-      for (const k of keys) {
-        for (const f of REGIONS[k].redFlags) {
-          if (f.tier === tier && !seen.has(f.id)) { seen.add(f.id); regional.push(f) }
-        }
-      }
-    }
-    const list = regional.slice(0, 3).map((f) => ({ ...f, why: TIER_WHY[f.tier] || TIER_WHY.urgent }))
+    const regional = regionRedFlags(flowZ, zones)
+    const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
+    const list = regional.map((f) => ({
+      ...f, why: typeof f.why === 'string' ? { title: f.why, text: tierWhy(f).text } : tierWhy(f),
+    }))
     // Areas with no authored region (currently only the head) fall back to the
     // general flags — but only those the universal checks below do not already
     // cover, otherwise the same question appears twice on one screen.
@@ -571,10 +580,30 @@ export default function PainAssessment() {
     // Organ-referral and systemic maps the drawing matches (../data/patternChecks.js).
     // These use every marked area, not the folded-down flow zones, because the
     // maps are about WHERE it is felt — right shoulder blade, left arm, flank.
-    return [...list, ...UNIVERSAL_CHECKS, ...patternChecks(zones, answers, 2)]
-  }, [flowZ, zones, answers, behaviour.nightConcern])
+    // A region that asks its own heart question (the neck) replaces the
+    // drawing's generic one. When the neck injury screen follows, it asks
+    // about recent injuries in its own, more precise way.
+    const ownCardiac = list.some((f) => /cardiac/.test(f.id))
+    const universal = injuryApplies ? UNIVERSAL_CHECKS.filter((f) => f.id !== 'sc-trauma') : UNIVERSAL_CHECKS
+    const pattern = patternChecks(zones, answers, 3).filter((f) => !(ownCardiac && f.id === 'pc-cardiac')).slice(0, 2)
+    return [...list, ...universal, ...pattern]
+  }, [flowZ, zones, injuryApplies, answers, behaviour.nightConcern])
 
-  const pickedFlags = safetyChecks.filter((f) => flags.includes(f.id))
+  /* ── Neck injury screen (Canadian C-Spine Rule, ../data/injuryScreen.js) ──
+     Straight after the safety check when the neck is drawn. Its answers are
+     kept in `answers` (I1–I7); `injuryPath` is the questions shown, for Back.
+     Its outcome joins the flags: 'emergency' → 911, 'urgent' → physician. */
+  const [injuryPath, setInjuryPath] = useState([])
+  const [injuryQ, setInjuryQ] = useState(null)       // question on screen
+  const [injuryDraft, setInjuryDraft] = useState(undefined) // its uncommitted pick
+  const injury = useMemo(() => injuryStep(answers, answers.age), [answers])
+  const injuryOutcome = injury.route === 'emergency' || injury.route === 'urgent' ? injury : null
+  const injuryFlag = injuryOutcome && stage === 'urgent'
+    ? { id: '__injury', tier: injuryOutcome.route, text: 'A neck injury in the last 7 days (injury screen)',
+      why: { title: injuryOutcome.why, text: TIER_WHY[injuryOutcome.route].text } }
+    : null
+
+  const pickedFlags = [...safetyChecks.filter((f) => flags.includes(f.id)), ...(injuryFlag ? [injuryFlag] : [])]
   // Emergency-tier flags (e.g. cauda equina signs) mean 911 now, not a booking.
   const emergencyFlagged = pickedFlags.some((f) => f.tier === 'emergency')
   // Cautions never withhold booking — they shape the first assessment, and
@@ -637,6 +666,10 @@ export default function PainAssessment() {
       .filter((q) => !q.textarea)
       .map((q) => ({ question: q.area ? `${q.area}: ${q.text}` : q.text, answer: answerText(q) }))
       .filter((pair) => pair.answer && pair.answer !== '—'),
+    ...INJURY_QUESTIONS.filter((q) => answers[q.id] !== undefined).map((q) => ({
+      question: `Neck injury screen: ${q.text}`,
+      answer: [].concat(answers[q.id]).map((id) => (q.options.find((o) => o.id === id) || {}).label).filter(Boolean).join(' · '),
+    })),
     ...referral.map((r) => ({
       question: 'Drawn pattern (from the body diagram)',
       answer: `One continuous line from the ${r.kind === 'arm' ? 'neck' : 'low back'} down the ${r.side ? r.side + ' ' : ''}${r.kind} to the ${r.reach} — ${({ radicular: 'nerve-type referral', somatic: 'a referred ache, NOT nerve pain', unclear: 'referred pain, nerve involvement unclear' })[referralMechanism(r, answers)]}`,
@@ -690,7 +723,10 @@ export default function PainAssessment() {
       if (t >= 0) {
         next = t + 1 < tailIndexes.length ? tailIndexes[t + 1] : -1
       } else {
-        const id = nextQuestion(keys, scopedAnswers, askedIds)
+        // The drawing and every answer so far decide which questions apply
+        // (a question's `askIf`), e.g. the neck's arm questions.
+        const id = nextQuestion(keys, scopedAnswers, askedIds, MAX_SCORED_QUESTIONS,
+          { draw: zones.map((z) => z.type), all: answers })
         next = id ? activeQuestions.findIndex((s) => s.id === id) : tailIndexes[0]
       }
     } else if (qIndex + 1 < activeQuestions.length) {
@@ -708,9 +744,50 @@ export default function PainAssessment() {
     setQIndex(p[p.length - 1])
   }
 
+  // Injury screen. Answers only count once Continue is pressed, so ticking
+  // one box of a "tick all that apply" question does not move straight on.
+  const INJURY_IDS = INJURY_QUESTIONS.map((q) => q.id)
+  const withoutInjury = (a, keep = []) => {
+    const out = { ...a }
+    for (const id of INJURY_IDS) if (!keep.includes(id)) delete out[id]
+    return out
+  }
+  const startInjury = () => {
+    setAnswers((a) => withoutInjury(a))
+    setInjuryPath([]); setInjuryDraft(undefined)
+    setInjuryQ(injuryStep({}, answers.age).next)
+    setStage('injury')
+  }
+  const continueInjury = () => {
+    const next = { ...answers, [injuryQ]: injuryDraft }
+    const r = injuryStep(next, answers.age)
+    setAnswers(next)
+    setInjuryPath((p) => [...p, injuryQ])
+    if (r.next) { setInjuryQ(r.next); setInjuryDraft(undefined); return }
+    if (r.route === 'emergency' || r.route === 'urgent') setStage('urgent')
+    else setShowNotice(true)
+  }
+  // Back one question; answers after it are cleared so a changed route
+  // never reuses them without asking.
+  const backInjury = () => {
+    const p = injuryPath.filter((id) => id !== injuryQ)
+    if (!p.length) { setAnswers((a) => withoutInjury(a)); setStage('safety'); return }
+    const prev = p[p.length - 1]
+    setInjuryDraft(answers[prev])
+    setAnswers((a) => withoutInjury(a, p.slice(0, -1)))
+    setInjuryPath(p.slice(0, -1)); setInjuryQ(prev)
+  }
+  const pickInjury = (q, oid) => setInjuryDraft((cur) => {
+    if (!q.multi) return oid
+    const list = Array.isArray(cur) ? cur : []
+    if (list.includes(oid)) return list.filter((x) => x !== oid)
+    return oid === 'none' ? ['none'] : [...list.filter((x) => x !== 'none'), oid]
+  })
+
   const restart = () => {
     setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
     setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(false); setReview(null)
+    setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined)
   }
 
   return (
@@ -1322,13 +1399,46 @@ export default function PainAssessment() {
 
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary" style={goldBtn}
-                    onClick={() => { if (anyFlagged) setStage('urgent'); else setShowNotice(true) }}>
+                    onClick={() => {
+                      if (anyFlagged) setStage('urgent')
+                      else if (injuryApplies) startInjury()
+                      else setShowNotice(true)
+                    }}>
                     {anyFlagged || pickedCautions.length ? 'Continue' : 'None Apply — Continue'}
                   </button>
                   <button style={ghostBtn} onClick={() => setStage('review')}>Back</button>
                 </div>
               </Fade>
             )}
+
+            {/* NECK INJURY SCREEN — Canadian C-Spine Rule, one question at a
+                time (../data/injuryScreen.js). The first answer that routes
+                ends it: to 911, to a physician, or on to the results. */}
+            {stage === 'injury' && (() => {
+              const q = INJURY_QUESTIONS.find((x) => x.id === injuryQ)
+              if (!q) return null
+              const picked = (oid) => (q.multi ? Array.isArray(injuryDraft) && injuryDraft.includes(oid) : injuryDraft === oid)
+              const ready = q.multi ? Array.isArray(injuryDraft) && injuryDraft.length > 0 : injuryDraft !== undefined
+              return (
+                <Fade k={`injury-${q.id}`}>
+                  <span style={label}>Recent Neck Injury</span>
+                  <h2 style={{ ...h2, fontSize: 'clamp(23px,5.4vw,32px)', margin: '12px 0 18px', maxWidth: 520 }}>{q.text}</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
+                    {q.options.map((o, i) => (
+                      <button key={o.id} style={chip(picked(o.id))} onClick={() => pickInjury(q, o.id)}>
+                        <span style={letterStyle(picked(o.id))}>{LETTERS[i] || '·'}</span>
+                        <span>{o.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="pa-actions" style={{ marginTop: 20 }}>
+                    <button className="pa-primary" style={{ ...goldBtn, opacity: ready ? 1 : 0.45, cursor: ready ? 'pointer' : 'not-allowed' }}
+                      disabled={!ready} onClick={continueInjury}>Continue</button>
+                    <button style={ghostBtn} onClick={backInjury}>Back</button>
+                  </div>
+                </Fade>
+              )
+            })()}
 
             {/* URGENT-CARE RESULT */}
             {stage === 'urgent' && (
@@ -1408,7 +1518,14 @@ export default function PainAssessment() {
                 )}
 
                 <div className="pa-actions" style={{ marginTop: 20 }}>
-                  <button className="pa-primary" style={goldBtn} onClick={() => setStage('safety')}>Back</button>
+                  <button className="pa-primary" style={goldBtn} onClick={() => {
+                    if (!injuryOutcome) { setStage('safety'); return }
+                    // Back to the injury question that routed here.
+                    const last = injuryPath[injuryPath.length - 1]
+                    setInjuryDraft(answers[last])
+                    setAnswers((a) => withoutInjury(a, injuryPath.slice(0, -1)))
+                    setInjuryPath(injuryPath.slice(0, -1)); setInjuryQ(last); setStage('injury')
+                  }}>Back</button>
                   <button style={ghostBtn} onClick={restart}>Start Over</button>
                 </div>
               </Fade>
@@ -1442,6 +1559,13 @@ export default function PainAssessment() {
                     </div>
                   )
                 })}
+
+                {specials.map((s) => (
+                  <div key={s} style={{ ...card, maxWidth: 520, marginBottom: 14 }}>
+                    <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{SPECIAL_CARDS[s].title}</p>
+                    <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }} dangerouslySetInnerHTML={{ __html: SPECIAL_CARDS[s].body }} />
+                  </div>
+                ))}
 
                 {/* Raised by the reasoning pass, not by the red-flag rules: a
                     picture worth a medical opinion as well. Booking stays

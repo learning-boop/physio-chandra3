@@ -9,83 +9,143 @@
 
 export const EXTRA_REGIONS = {
 
-  /* ══════════════ NECK ══════════════ */
+  /* ══════════════ NECK ══════════════
+     From Chandra's "Cervical assessment" region document (DRAFT 23 Sep 2026;
+     the source text is content/regions/neck.md). Sources: JOSPT Neck Pain CPG
+     2017, IFOMPT cervical framework 2023, Canadian C-Spine Rule 2001, Wainner
+     2003, Cook 2010. The injury screen (Canadian C-Spine Rule) is in
+     ./injuryScreen.js. Cervicogenic headache and whiplash are authored
+     conditions (content/conditions/neck-*.md) that point at these answers.
+
+     askIf: the question is only asked when this returns true. `draw` is the
+     set of drawn zone types (null when unknown, which asks it), `ra` this
+     region's answers, `all` every answer so far.
+     Red flags with `drawn` are only asked when one of those areas is drawn. */
   neck: {
-    name: "Neck & upper spine",
+    name: "Neck (cervical spine)",
     redFlags: [
-      { id: "nrf-clumsy", text: "Growing clumsiness in BOTH hands (buttons, writing, dropping things) or new trouble with balance and walking", tier: "emergency" },
-      { id: "nrf-artery", text: "Dizziness, double vision, slurred speech, fainting, or face numbness that comes on with certain neck positions", tier: "emergency" },
-      { id: "nrf-bladder", text: "New bladder or bowel changes alongside your neck symptoms", tier: "emergency" },
-      { id: "nrf-armweak", text: "Arm or hand weakness that is clearly getting worse week by week", tier: "urgent" }
+      { id: "nrf-thunderclap", tier: "emergency", why: "Possible bleed or artery tear in the neck or head",
+        text: "Have you had a sudden, severe headache, the worst you have ever had?" },
+      { id: "nrf-artery", tier: "emergency", why: "Stroke or neck artery warning signs",
+        text: "Since this started, have you had any of these: room spinning or dizziness, double vision, slurred speech, trouble swallowing, sudden falls or blackouts, numb face, weakness on one side, or unsteady walking?" },
+      { id: "nrf-cord", tier: "emergency", why: "Acute pressure on the spinal cord",
+        text: "Along with the neck pain, have you lost control of your bladder or bowels, or had new numbness or weakness in both legs?" },
+      { id: "nrf-mening", tier: "emergency", why: "Possible meningitis",
+        text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
+      { id: "nrf-cardiac", tier: "emergency", why: "Heart pain can be felt in the neck, jaw, and arm",
+        text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
+      { id: "nrf-kehr", tier: "emergency", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
+        text: "Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?" },
+      { id: "nrf-myelo", tier: "urgent", why: "Possible pressure on the spinal cord (myelopathy)",
+        text: "Have your hands become clumsy (buttons, writing, dropping things), or has your walking become unsteady?" },
+      { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability",
+        text: "Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
+      { id: "nrf-cad", tier: "urgent", why: "An early sign of a neck artery tear can be pain alone",
+        text: "Did a new neck pain or headache, unlike anything you have had before, start suddenly after a neck manipulation, a sudden jerk, or a minor knock?" },
+      { id: "nrf-tip", tier: "urgent", drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder tip",
+        text: "Is the pain at the tip of your shoulder worse when you breathe in deeply, or does it come on after fatty meals?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u30", label: "Under 30" },
-        { id: "30-50", label: "30 – 50" },
-        { id: "o50", label: "Over 50", weights: { radic: 1 } }
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64", weights: { radic: 1 } },
+        { id: "o64", label: "65 or over" }
       ]},
       { id: "onset", text: "How did it start?", options: [
-        { id: "desk", label: "Gradually with desk work or phone use", weights: { mech: 2, ctj: 1 } },
         { id: "woke", label: "Woke up with it", weights: { mech: 2 } },
-        { id: "move", label: "A sudden movement or awkward lift", weights: { mech: 1, radic: 1 } },
-        { id: "gradual", label: "Gradually, no clear cause", weights: { mech: 1 } },
-        { id: "ns", label: "Not sure" }
+        { id: "gradual", label: "Gradually, no clear reason", weights: { mech: 1 } },
+        { id: "car", label: "After a car accident or whiplash-type jolt" },
+        { id: "fall", label: "After a fall, sport, or knock to the head or neck" },
+        { id: "desk", label: "After long hours at a desk, screen, or in one position", weights: { mech: 2 } },
+        { id: "lift", label: "After lifting or a sudden movement", weights: { mech: 1, radic: 1 } }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
-        { id: "d6w", label: "2 – 6 weeks" },
-        { id: "d6m", label: "More than 6 weeks" },
-        { id: "years", label: "Comes and goes over years", weights: { ctj: 1 } }
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
       ]}
     ],
     questions: [
-      { id: "N1", text: "Where do you feel it most?", options: [
-        { id: "neckonly", label: "In the neck itself", weights: { mech: 2 } },
-        { id: "blade", label: "Neck plus around the shoulder blade", weights: { ctj: 2, mech: 1, radic: 1 } },
-        { id: "arm", label: "Shooting down the arm, past the elbow", weights: { radic: 3 } },
-        { id: "base", label: "The base of the neck, where neck meets upper back — stiff like a hinge", weights: { ctj: 3 } },
-        { id: "ns", label: "Not sure" }
+      { id: "N1", text: "When you turn your head to look over your shoulder, what happens?", options: [
+        { id: "full", label: "I can turn fully both ways", weights: { mech: -2 } },
+        { id: "onestiff", label: "It is stiff or painful turning to one side", weights: { mech: 3, radic: 1 } },
+        { id: "bothstiff", label: "It is stiff or painful turning both ways", weights: { mech: 2 } },
+        { id: "locked", label: "It is locked and I can barely turn it at all", weights: { mech: 1 } }
       ]},
-      { id: "N2", text: "Any tingling, pins & needles, or numbness in the arm or hand?", options: [
-        { id: "hand", label: "Yes — into the forearm, hand or fingers", weights: { radic: 3 } },
-        { id: "upper", label: "Only in the upper arm / shoulder area", weights: { mech: 1, ctj: 1 } },
-        { id: "none", label: "No tingling or numbness", weights: { radic: -2 } }
+      { id: "N2", text: "Which of these describe your arm symptoms? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["shoulder", "elbow", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "pastelbow", label: "Pain goes down the arm past the elbow", weights: { radic: 3 } },
+          { id: "armworse", label: "The arm pain is worse than the neck pain", weights: { radic: 2 } },
+          { id: "fingers", label: "Pins and needles or numbness in particular fingers", weights: { radic: 3 } },
+          { id: "handhead", label: "Resting my hand on top of my head eases the arm pain", weights: { radic: 2 } },
+          { id: "shoulderonly", label: "Pain stops at the top of the shoulder or upper arm", weights: { radic: -2, mech: 1 } }
+        ]},
+      { id: "N3", text: "Does looking up, or tilting your head toward the sore side, bring on pain or tingling down the arm?",
+        askIf: ({ ra }) => [].concat(ra.N2 || []).some((o) => o === "pastelbow" || o === "fingers"),
+        options: [
+          { id: "arm", label: "Yes, it goes down the arm", weights: { radic: 3 } },
+          { id: "neckonly", label: "It hurts in the neck, but not the arm", weights: { mech: 1, radic: -1 } },
+          { id: "neither", label: "No, neither", weights: { radic: -2 } }
+        ]},
+      { id: "N4", text: "If you get headaches with this, what are they like?",
+        askIf: ({ draw, ra }) => (draw && draw.has("head")) || !ra.age || ["u18", "18-29", "30-49"].includes(ra.age),
+        options: [
+          { id: "onesided", label: "One-sided, starting at the back of the neck or head" },
+          { id: "movement", label: "Brought on by neck movement or holding one position" },
+          { id: "band", label: "Both sides, like a tight band or pressure" },
+          { id: "throb", label: "Throbbing, with feeling sick or finding light hard to take" },
+          { id: "none", label: "I do not get headaches" }
+        ]},
+      { id: "N5", text: "Since your accident or injury, which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "car" || ra.onset === "fall",
+        options: [
+          { id: "tired", label: "My neck gets tired holding my head up (reading, screens)" },
+          { id: "spread", label: "The pain has spread to my shoulders, upper back, or arms" },
+          { id: "concentrate", label: "Trouble concentrating or sleeping since it happened" },
+          { id: "sensitive", label: "My neck is very sensitive to touch or cold" },
+          { id: "settling", label: "It is settling a bit more each week" }
+        ]},
+      { id: "N6", text: "Which of these make it worse? Tick all that apply.", options: [
+        { id: "desk", label: "Long spells at a desk, screen, or driving", weights: { mech: 1 } },
+        { id: "down", label: "Looking down (phone, reading, cooking)", weights: { mech: 1 } },
+        { id: "up", label: "Looking up (overhead work, reaching high shelves)", weights: { radic: 1 } },
+        { id: "lying", label: "Lying on it, or certain pillows" },
+        { id: "lifting", label: "Lifting or carrying" }
       ]},
-      { id: "N3", text: "What clearly makes it worse?", options: [
-        { id: "turn", label: "Turning the head (e.g., checking a blind spot)", weights: { mech: 2, radic: 1 } },
-        { id: "look", label: "Looking up, or holding one head position for long", weights: { mech: 2, ctj: 1 } },
-        { id: "deskhrs", label: "Hours of desk / screen work", weights: { ctj: 2, mech: 1 } },
-        { id: "cough", label: "Coughing or sneezing shoots pain into the arm", weights: { radic: 2 } },
-        { id: "ns", label: "Not sure" }
+      { id: "N7", text: "How does your neck feel when you start moving after being still for a while?", options: [
+        { id: "eases", label: "Stiff at first, then eases as I move", weights: { mech: 2 } },
+        { id: "worse", label: "Gets worse the more I move", weights: { radic: 1 } },
+        { id: "same", label: "About the same either way" }
       ]},
-      { id: "N4", text: "Does anything ease the arm symptoms?", options: [
-        { id: "handhead", label: "Resting the hand on top of my head eases the arm", weights: { radic: 2 } },
-        { id: "moving", label: "Gentle movement or changing position helps", weights: { mech: 1, ctj: 1 } },
-        { id: "nothing", label: "Nothing obvious" },
-        { id: "na", label: "I don't have arm symptoms", weights: { radic: -1 } }
-      ]},
-      { id: "N5", text: "How does the stiffness behave?", options: [
-        { id: "morning", label: "Worst in the morning, loosens with movement", weights: { mech: 2 } },
-        { id: "endday", label: "Builds up by the end of a working day", weights: { ctj: 2 } },
-        { id: "constant", label: "About the same all day", weights: { mech: 1 } }
-      ]}
+      { id: "N8", text: "Which hurts more: moving your neck, or moving your shoulder and arm (reaching, lifting the arm)?",
+        askIf: ({ draw }) => !draw || draw.has("shoulder"),
+        // Asked early when the drawing stops at the shoulder: the look-alike case.
+        priority: ({ draw }) => !!draw && draw.has("shoulder") && !draw.has("elbow") && !draw.has("wrist"),
+        options: [
+          { id: "neck", label: "Moving my neck", weights: { mech: 1, radic: 1 } },
+          // The shoulder look-alike (test patient 4): pulls the neck patterns
+          // down and points to the shoulder guide instead.
+          { id: "shoulder", label: "Moving my shoulder and arm", weights: { mech: -3, radic: -3 }, special: "shoulderSource" },
+          { id: "both", label: "Both about the same" },
+          { id: "neither", label: "Neither brings it on" }
+        ]}
     ],
     conditions: [
-      { id: "mech", name: "Mechanical neck pain", clin: "Non-specific / postural neck pain",
+      { id: "mech", name: "Mechanical neck pain", clin: "Neck pain with mobility deficits (JOSPT 2017)",
         blurb: "The most common neck pattern: joints and muscles that are irritated or guarded — often from posture, sleep position, or an awkward movement — without any serious structural problem.",
         noticed: ["Aching or sharp catches with certain head movements", "Stiffness that eases as you move through the day", "Tension around the neck and shoulder muscles"],
         homeCare: ["Keep the neck gently moving — frequent, comfortable range rather than rest", "Change positions often during desk work; raise the screen to eye level", "A warm pack on the neck/shoulder muscles can ease guarding", "Sleep with one supportive pillow keeping the neck level"],
         seePhysioIf: ["Pain or stiffness lasts more than 1–2 weeks", "It keeps returning with work or sleep", "It limits driving, work, or exercise"] },
-      { id: "radic", name: "Cervical radiculopathy (nerve-root irritation)", clin: "Referred arm pain from an irritated neck nerve",
+      { id: "radic", name: "Cervical radiculopathy (nerve-root irritation)", clin: "Neck pain with radiating pain (JOSPT 2017)",
         blurb: "A nerve in the neck being irritated or compressed can refer sharp, electric pain plus tingling or numbness down the arm — often more bothersome than the neck itself.",
         noticed: ["Arm pain below the elbow, often into specific fingers", "Pins & needles or numbness in the hand", "Coughing/sneezing can shoot pain down the arm", "Resting the hand on the head may ease it"],
         homeCare: ["Avoid positions that clearly shoot pain down the arm", "Short, frequent gentle neck movement within comfort", "Try easing positions (e.g., hand resting on head) when the arm flares"],
-        seePhysioIf: ["Arm pain, tingling or numbness lasts beyond a few days", "You notice any hand weakness", "You want a plan — most cases settle well with guided conservative care"] },
-      { id: "ctj", name: "Cervicothoracic junction stiffness", clin: "Stiffness where the neck meets the upper back",
-        blurb: "The hinge where the mobile neck meets the stiffer upper back can become restricted with prolonged desk postures — the neck then overworks, causing pain at the base of the neck and around the shoulder blades.",
-        noticed: ["A stiff 'hinge' feeling at the base of the neck", "Ache spreading toward the shoulder blades", "Builds up over the working day, eases with movement"],
-        homeCare: ["Break up sitting every 30–45 minutes", "Gentle upper-back extension over the chair back and rotation movements", "Set up the desk so the screen is at eye level and forearms supported"],
-        seePhysioIf: ["Recurring end-of-day neck/upper-back ache", "Stiffness limits looking up or over the shoulder", "You want targeted mobility and strengthening for desk work"] }
+        seePhysioIf: ["Arm pain, tingling or numbness lasts beyond a few days", "You notice any hand weakness", "You want a plan — most cases settle well with guided conservative care"] }
     ]
   },
 
@@ -498,6 +558,8 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Buttock pain that travels <strong>below the knee</strong> often comes from the <strong>low back</strong> rather than the hip itself. It's worth running the <strong>Low back &amp; pelvis</strong> guide as well." },
   tarsal: { title: "Burning on the inner ankle or sole",
     body: "Burning, tingling or numbness on the inner ankle or sole can involve a nerve (tarsal tunnel), especially with flat feet or after ankle swelling. Worth assessment if it persists — nerve symptoms respond best to early care." },
+  shoulderSource: { title: "This may be coming from your shoulder",
+    body: "Pain at the top of the shoulder or upper arm that is worse when you move the <strong>arm</strong> than when you move the neck usually comes from the <strong>shoulder</strong> itself: the rotator cuff, the AC joint at the top of the shoulder, or a stiffening shoulder joint. Consider running the <strong>Shoulder</strong> guide too. Your assessment will check both the neck and the shoulder." },
   ribcage: { title: "Pain with deep breaths",
     body: "Sharp pain with a deep breath often involves the <strong>rib joints</strong> where they meet the spine — usually mechanical and treatable. But if breath pain comes with fever, breathlessness, or follows an accident, see a doctor promptly." }
 }
