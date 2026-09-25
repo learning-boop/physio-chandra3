@@ -45,9 +45,10 @@ const GENERIC_Q2 = {
 const LIMB_CHAINS = [
   ['neck', 'shoulder', 'elbow', 'wrist'],
   ['lowerback', 'hip', 'knee', 'ankle'],
+  ['sij', 'hip', 'knee', 'ankle'],
 ]
 const SPINE = ['neck', 'lowerback']
-const AXIAL_CHAIN = ['neck', 'ctj', 'upperback', 'tlj', 'lowerback']
+const AXIAL_CHAIN = ['neck', 'ctj', 'upperback', 'tlj', 'lowerback', 'sij']
 
 const PERSISTENT = ['o3m', 'years']
 

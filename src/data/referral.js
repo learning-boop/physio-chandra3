@@ -27,7 +27,9 @@ const zoneType = (id) => id.replace(/[LR]$/, '').replace('lowerback', 'lowback')
    outlet at the base of the neck (content/regions/ctj.md). */
 const LIMBS = [
   { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'elbow', 'wrist'] },
-  { kind: 'leg', region: 'lowback', spine: ['lowback'], sources: ['lowerback'], chain: ['hip', 'knee', 'ankle'] },
+  // A leg line from the back of the pelvis (sacroiliac) asks both it and the
+  // low back, where nerve-root leg pain comes from (content/regions/sij.md).
+  { kind: 'leg', region: 'lowback', spine: ['lowback', 'sij'], sources: ['lowerback'], chain: ['hip', 'knee', 'ankle'] },
 ]
 
 /* Areas a mark implies even when it is not drawn. Pain from the TL junction
@@ -53,7 +55,9 @@ export function detectReferral(lines = []) {
       const limbZone = ids.find((id) => limb.chain.includes(zoneType(id)))
       const side = limbZone ? limbZone.slice(-1) : null
       out.push({
-        kind: limb.kind, region: limb.region, sources: limb.sources, reach: limb.chain[reach],
+        kind: limb.kind, region: limb.region, reach: limb.chain[reach],
+        // The limb's own sources plus any spinal area the line starts in.
+        sources: [...new Set([...limb.sources, ...types.filter((t) => limb.spine.includes(t) && t !== 'lowback')])],
         // Zone ids of the limb this line runs down — felt there, not sourced there.
         felt: ids.filter((id) => limb.chain.includes(zoneType(id))),
         side: side === 'L' ? 'left' : side === 'R' ? 'right' : null,
@@ -89,7 +93,7 @@ export function drawnAnswers(referral) {
   const out = {}
   for (const r of referral) {
     if (r.kind === 'arm' && r.reach === 'wrist') out.N2 = ['pastelbow']
-    if (r.kind === 'leg' && r.reach === 'ankle') out.L1 = ['belowknee']
+    if (r.kind === 'leg' && r.reach === 'ankle') { out.L1 = ['belowknee']; out.P4 = ['belowknee'] }
   }
   return out
 }

@@ -154,6 +154,33 @@ const TESTS = {
       flags: ['rf-spondy'],
       expect: { route: 'urgent' } },
   ],
+  sij: [
+    { name: '1. Sacroiliac joint after a jarring landing',
+      lines: [['sij']],
+      answers: { age: '30-49', onset: 'landing', duration: 'd3m', P1: ['belowdimple'], P2: ['oneleg', 'stairs'], P3: ['one'], P4: ['buttock'], P7: ['no'] },
+      expect: { top: 'sij/sij', not: ['lowback/nslbp', 'lowback/radicular'], route: 'results' } },
+    // Both dimples plus the pubic bone at the front (a hip-zone mark).
+    { name: '2. Pregnancy-related pelvic girdle pain',
+      lines: [['sij'], ['hipL']],
+      answers: { age: '30-49', onset: 'pregnancy', duration: 'd6w', P1: ['dimple'], P2: ['oneleg', 'roll'], P3: ['both'],
+        P5: ['pubic', 'aslr', 'turning'] },
+      expect: { top: 'sij/pgp', notRegion: ['lowback'], route: 'results' } },
+    { name: '3. Inflammatory look-alike (axial spondyloarthritis)',
+      lines: [['sij']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'o3m', P3: ['switch'], P6: ['morning', 'exercise'] },
+      flags: ['prf-axspa'],
+      expect: { route: 'urgent' } },
+    { name: '4. Saddle numbness (cauda equina)',
+      lines: [['sij'], ['hipL'], ['hipR']],
+      answers: { age: '50-64', onset: 'lift', duration: 'd2w' },
+      flags: ['prf-cauda'],
+      expect: { route: 'emergency' } },
+    { name: '5. Low back look-alike: dimple to the foot',
+      lines: [['sij', 'hipR', 'kneeR', 'ankleR']],
+      answers: { age: '30-49', onset: 'lift', duration: 'd6w', P1: ['lowback'], P4: ['belowknee'], P7: ['lot'] },
+      // Either low-back card answers the document's "message suggesting the low back".
+      expect: { notTop: ['sij/sij'], special: ['lowbackSource', 'backref'], route: 'results' } },
+  ],
 }
 
 const zonesOf = (lines) => {
@@ -242,7 +269,7 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     for (const c of e.notTop || []) if ((r.shown || [])[0] === c) why.push(`${c} is on top`)
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)
     for (const q of e.notAsked || []) if (r.asked.includes(q)) why.push(`asked ${q}`)
-    if (e.special && !(r.specials || []).includes(e.special)) why.push(`no "${e.special}" card`)
+    if (e.special && ![].concat(e.special).some((c) => (r.specials || []).includes(c))) why.push(`no "${[].concat(e.special).join('" or "')}" card`)
     if (why.length) failed++
     console.log(`${why.length ? 'FAIL' : 'PASS'}  ${t.name}`)
     console.log(`      areas ${r.keys.join(' + ')} · asked ${r.asked.join(' ') || '—'} · ${r.route}` +

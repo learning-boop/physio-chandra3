@@ -40,7 +40,7 @@ export const REGIONS = {
         text:"Does the pain come in waves from your side to your groin, or come with a fever, burning when you pass urine, or blood in your urine?"},
       {id:"rf-spondy", tier:"urgent", why:"Possible stress fracture of the spine (spondylolysis); needs imaging",
         text:"Are you under 20, and does it hurt to arch your back, especially with sport such as gymnastics, dance, cricket bowling, or tennis?"},
-      {id:"rf-pelvic", tier:"urgent", why:"Pelvic organ and prostate problems can be felt in the low back",
+      {id:"rf-pelvic", tier:"urgent", group:"pelvic", why:"Pelvic organ and prostate problems can be felt in the low back",
         text:"Is the pain linked to your periods, or do you have unusual vaginal bleeding, or (for men) new trouble passing urine?"}
     ],
     context:[
@@ -67,7 +67,8 @@ export const REGIONS = {
       ]}
     ],
     questions:[
-      {id:"L1", text:"How far does the pain go?", options:[
+      // Asked first: questions 2, 3 and 5 depend on how far it goes.
+      {id:"L1", text:"How far does the pain go?", priority: () => true, options:[
         {id:"back", label:"Low back only"},
         {id:"buttock", label:"Into the buttock"},
         {id:"thigh", label:"Down the thigh, stopping above the knee"},
@@ -107,7 +108,7 @@ export const REGIONS = {
       {id:"L6", text:"If you point to the worst spot with one finger, where is it?", options:[
         {id:"centre", label:"In the middle of the low back, on the spine"},
         {id:"side", label:"On one side, beside the spine above the belt line"},
-        {id:"dimple", label:"Over the dimple at the back of my pelvis"},
+        {id:"dimple", label:"Over the dimple at the back of my pelvis", special:"sijSource"},
         {id:"wide", label:"Spread over a wide area; I cannot point to one spot"}
       ]},
       {id:"L7", text:"Which of these apply? Tick all that apply.", options:[
@@ -590,6 +591,7 @@ Object.assign(ZONE_TO_REGION, {
   chest: 'upperback',
   tlj: 'tlj',
   flank: 'tlj',
+  sij: 'sij',
   elbow: 'elbow',
   wrist: 'wrist',
   hip: 'hip',

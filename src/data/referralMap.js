@@ -93,6 +93,12 @@ export const REFERRAL_MAP = {
     muscles: ['Quadratus lumborum', 'Iliopsoas (vertical band beside the lumbar spine)', 'Lumbar multifidus (sacrum, buttock)', 'Gluteus medius (posterior iliac crest, SIJ)'],
     organs: ['Aorta / aneurysm', 'Kidney', 'Small intestine and colon (mid lumbar)', 'Prostate', 'Uterus / ovary (lumbosacral, linked to periods)', 'Bladder (lower back, sacrum)'],
   },
+  sij: {
+    joints: ['Sacroiliac joint (buttock 94%, lower lumbar 72%, thigh 48%, below the knee 28%, groin 14%, foot 12%; Fortin finger test within 1 cm of the PSIS)', 'L5–S1 facet (buttock, dimple area)', 'Lumbar disc', 'Hip joint (buttock 71%)', 'SI and iliolumbar ligaments'],
+    roots: ['S1 (buttock, posterior thigh)', 'S2–S4 (sacrum, perineum, saddle area)'],
+    muscles: ['Gluteus medius (posterior iliac crest, SIJ, outer buttock)', 'Quadratus lumborum (SIJ, top of the hip bone, buttock)', 'Piriformis (middle of the buttock, posterior thigh)', 'Lumbar multifidus (sacrum, buttock)'],
+    organs: ['Rectum, bladder neck, prostate, cervix (sacrum and perineum, S2–S4)', 'Uterus (lumbosacral, SIJ; linked to periods or pregnancy)', 'Colon (sacrum)'],
+  },
   hip: {
     joints: ['Hip joint (buttock 71%, groin 55%)', 'Sacroiliac joint (buttock 94%, groin 14%)', 'L3–L5 facets (buttock, greater trochanter)', 'L1–L3 facets (groin)'],
     roots: ['L2 (groin, upper anterior thigh)', 'S2–S4 (perineum, saddle area)'],

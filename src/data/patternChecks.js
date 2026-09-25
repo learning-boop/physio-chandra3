@@ -97,7 +97,7 @@ const PATTERNS = [
   {
     id: 'pc-urinary', tier: 'urgent', why: WHY.urinary,
     text: 'Pain spreading from your side or flank toward the groin, or fever, blood in the urine, or burning when passing urine',
-    when: (z) => has(z, 'lowerback', 'tlj', 'flank', 'abdomen', 'hip'),
+    when: (z) => has(z, 'lowerback', 'tlj', 'flank', 'sij', 'abdomen', 'hip'),
   },
   {
     id: 'pc-inflammatory', tier: 'urgent', why: WHY.systemic,

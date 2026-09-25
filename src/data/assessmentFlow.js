@@ -23,11 +23,12 @@ export const REGION_CHAINS = [
   // The base of the neck feeds the arm too (first rib, thoracic outlet).
   ['ctj', 'shoulder', 'elbow', 'wrist'],
   // The TL junction refers to the low back, side of the hip and groin.
-  ['tlj', 'lowback', 'hip', 'knee', 'ankle'],
+  // The back of the pelvis (sacroiliac) sits between them.
+  ['tlj', 'lowback', 'sij', 'hip', 'knee', 'ankle'],
 ]
 
 const AREA_WORD = {
-  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', shoulder: 'shoulder',
+  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', shoulder: 'shoulder',
   elbow: 'elbow', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
 }
 

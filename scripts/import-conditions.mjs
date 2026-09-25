@@ -100,6 +100,15 @@ for (const file of files) {
     if (bad.length) { fail(file, `ages: no such age option in "${meta.region}": ${bad.join(', ')}`); continue }
     gates = { ages }
   }
+  // Optional `onset: pregnancy, postpartum` — only shown when "How did it
+  // start?" is one of these option ids (e.g. pregnancy-related pelvic pain).
+  if (meta.onset) {
+    const onsets = meta.onset.split(',').map((x) => x.trim()).filter(Boolean)
+    const onsetQ = region.context.find((q) => q.id === 'onset')
+    const bad = onsets.filter((a) => !onsetQ || !onsetQ.options.some((o) => o.id === a))
+    if (bad.length) { fail(file, `onset: no such start option in "${meta.region}": ${bad.join(', ')}`); continue }
+    gates = { ...(gates || {}), requiresOnset: onsets }
+  }
 
   authored.push({ region: meta.region, cond: {
     id: meta.id, name: meta.name, clin: meta.clin || '', ...(gates ? { gates } : {}),

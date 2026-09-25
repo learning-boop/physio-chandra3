@@ -525,6 +525,118 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
+  /* ══════════════ SACROILIAC JOINT & BACK OF THE PELVIS ══════════════
+     From Chandra's "SI assessment" region document (DRAFT 23 Sep 2026; the
+     source text is content/regions/sij.md). Sources: Laslett 2005, European
+     pelvic girdle pain guidelines (Vleeming 2008), Szadek 2009, Fortin &
+     Falco 1997, ASAS inflammatory back pain 2009, IFOMPT red flags framework
+     2020, Slipman 2000, Travell & Simons 2019.
+     Reached from the body map's back of the pelvis and buttocks (below the
+     belt line). A line from there down the leg also asks the low back.
+     Conditions: content/conditions/sij-*.md. */
+  sij: {
+    name: "Sacroiliac joint & back of the pelvis",
+    redFlags: [
+      { id: "prf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
+        text: "Do you have new numbness or tingling between your legs, around your bottom, or in your genitals, or new trouble passing urine or controlling your bowels?" },
+      { id: "prf-fracture", tier: "emergency", why: "Possible pelvic or hip fracture",
+        text: "After a fall or accident, are you unable to stand or put weight on your leg?" },
+      { id: "prf-pregnancy", tier: "emergency", why: "Possible labour or pregnancy complication",
+        text: "Are you pregnant and have severe pelvic or back pain with bleeding, fluid leaking, or regular tightenings?" },
+      { id: "prf-osteo", tier: "urgent", group: "osteo", why: "Possible stress (insufficiency) fracture of the sacrum",
+        text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+      { id: "prf-infection", tier: "urgent", group: "infection", why: "Possible joint infection (septic sacroiliitis)",
+        text: "Do you have a fever or chills with the pain, or have you recently given birth, had surgery, or injected drugs?" },
+      { id: "prf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the pelvis and sacrum",
+        text: "Have you ever had cancer, and is this a new pain?" },
+      { id: "prf-axspa", tier: "urgent", why: "Possible inflammatory back pain (axial spondyloarthritis)",
+        text: "Are you under 45, and has the pain lasted more than 3 months, woken you in the second half of the night, and eased with exercise rather than rest?" },
+      { id: "prf-pelvic", tier: "urgent", group: "pelvic", why: "Pelvic organ causes can be felt at the back of the pelvis",
+        text: "Is the pain linked to your periods, or do you have unusual vaginal bleeding or discharge?" },
+      { id: "prf-kidney", tier: "urgent", group: "kidney", why: "Possible kidney stone or infection",
+        text: "Does the pain come in waves from your side to your groin, or come with burning when you pass urine or blood in your urine?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "fall", label: "After a fall onto my bottom" },
+        { id: "landing", label: "After a missed step or a jarring landing on one leg" },
+        { id: "lift", label: "After lifting or twisting" },
+        { id: "pregnancy", label: "During pregnancy" },
+        { id: "postpartum", label: "After giving birth" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "P1", text: "If you point to the worst spot with one finger, where is it?", options: [
+        { id: "dimple", label: "Over the dimple at the back of my pelvis" },
+        { id: "belowdimple", label: "Just below and inside the dimple" },
+        { id: "lowback", label: "Across the low back, above the belt line", special: "lowbackSource" },
+        { id: "midbuttock", label: "Deep in the middle of the buttock" },
+        { id: "sidehip", label: "On the side of the hip" }
+      ]},
+      { id: "P2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "oneleg", label: "Standing on one leg (putting on trousers or shoes)" },
+        { id: "stairs", label: "Climbing stairs, or getting in and out of the car" },
+        { id: "roll", label: "Rolling over in bed" },
+        { id: "standup", label: "Standing up after sitting" },
+        { id: "stride", label: "Walking with long strides or running" }
+      ]},
+      { id: "P3", text: "Which side is it on?", options: [
+        { id: "one", label: "One side only" },
+        { id: "both", label: "Both sides" },
+        { id: "switch", label: "It switches from side to side" }
+      ]},
+      { id: "P4", text: "How far does it spread?", options: [
+        { id: "buttock", label: "It stays in the buttock" },
+        { id: "thigh", label: "Down the back of the thigh, stopping above the knee" },
+        { id: "groin", label: "Into the groin" },
+        { id: "belowknee", label: "Below the knee", special: "backref" }
+      ]},
+      { id: "P5", text: "Which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "pregnancy" || ra.onset === "postpartum",
+        options: [
+          { id: "pubic", label: "Pain at the front, over the pubic bone" },
+          { id: "click", label: "Clicking or grinding at the pubic bone" },
+          { id: "aslr", label: "Lifting a straight leg while lying on my back feels heavy" },
+          { id: "turning", label: "Turning over in bed is very hard" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "P6", text: "Which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => (!ra.age || ["u18", "18-29", "30-49"].includes(ra.age)) && (!ra.duration || ra.duration === "o3m"),
+        options: [
+          { id: "morning", label: "Stiff for more than 30 minutes in the morning", special: "inflammatory" },
+          { id: "exercise", label: "Exercise helps more than rest", special: "inflammatory" },
+          { id: "eye", label: "I have had eye inflammation, psoriasis, or inflammatory bowel disease", special: "inflammatory" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "P7", text: "Does bending forward or arching your low back change the pain?", options: [
+        { id: "lot", label: "Yes, a lot", special: "lowbackSource" },
+        { id: "little", label: "A little" },
+        { id: "no", label: "No" }
+      ]},
+      { id: "P8", text: "Which of these apply? Tick all that apply.", options: [
+        { id: "sport", label: "I run, or do sport landing on one leg" },
+        { id: "hypermobile", label: "I have been told I am very flexible (hypermobile)" },
+        { id: "pelvisout", label: "My pelvis feels ‘out’, or one leg feels longer" },
+        { id: "none", label: "None of these" }
+      ]}
+    ],
+    conditions: []
+  },
+
   /* ══════════════ ELBOW ══════════════ */
   elbow: {
     name: "Elbow & forearm",
@@ -875,6 +987,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain on the front of the chest that is tender to press often comes from the <strong>chest wall</strong>: the joints where the ribs meet the breastbone. But if this is the <strong>first time</strong> you have had chest pain, a doctor should check your heart and lungs before it is treated as a chest-wall problem. If it comes with breathlessness, sweating, or spreads to your arm or jaw, call 911." },
   hipSource: { title: "This may be coming from your hip",
     body: "Groin pain that is worse when you <strong>move your hip</strong> usually comes from the <strong>hip joint</strong> or the muscles around it rather than from the back. Consider running the <strong>Hip</strong> guide too. Your assessment will check both." },
+  lowbackSource: { title: "This may be coming from your low back",
+    body: "Pain across the low back, or pain that changes a lot when you bend forward or arch back, usually comes from the <strong>low back</strong> rather than the sacroiliac joint. Consider running the <strong>Low back</strong> guide too. Your assessment will check both." },
+  sijSource: { title: "Pain over the dimple at the back of the pelvis",
+    body: "Pain you can point to over the dimple at the back of the pelvis often comes from the <strong>sacroiliac joint</strong>. If that is where it is worst, mark the <strong>back of your pelvis</strong> on the body map to answer the questions about it." },
   ribcage: { title: "Pain with deep breaths",
     body: "Sharp pain with a deep breath often involves the <strong>rib joints</strong> where they meet the spine — usually mechanical and treatable. But if breath pain comes with fever, breathlessness, or follows an accident, see a doctor promptly." }
 }

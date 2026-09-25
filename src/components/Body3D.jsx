@@ -64,6 +64,7 @@ const AREA = {
   flankL:    { type: 'flank',     label: 'Left Side, Below the Ribs' },
   flankR:    { type: 'flank',     label: 'Right Side, Below the Ribs' },
   lowerback: { type: 'lowerback', label: 'Lower Back' },
+  sij:       { type: 'sij',       label: 'Back of Pelvis & Buttock' },
   elbowL:    { type: 'elbow',     label: 'Left Elbow' },
   elbowR:    { type: 'elbow',     label: 'Right Elbow' },
   wristL:    { type: 'wrist',     label: 'Left Wrist' },
@@ -97,6 +98,9 @@ const CTJ_BOTTOM = 0.25
 // (flank) on the front. Both have their own questions (content/regions/tlj.md).
 const TLJ_TOP = 0.17
 const TLJ_BOTTOM = 0.09
+// The belt line on the back. Below it — the dimples, sacrum and buttocks —
+// is the back of the pelvis, with the sacroiliac questions (content/regions/sij.md).
+const SIJ_TOP = 0.02
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -127,7 +131,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v11'
+const CLASSIFIER_VERSION = 'zones-v12'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -174,7 +178,8 @@ function classify(wx, wy, wz) {
     // junction, which has its own questions (content/regions/ctj.md).
     if (fy > CTJ_BOTTOM) return 'ctj'
     if (fy > TLJ_TOP) return 'upperback'
-    return fy > TLJ_BOTTOM ? 'tlj' : 'lowerback'
+    if (fy > TLJ_BOTTOM) return 'tlj'
+    return fy > SIJ_TOP ? 'lowerback' : 'sij'
   }
 
   // ── FRONT of the body ──
