@@ -369,11 +369,41 @@ const TESTS = {
       answers: { age: '50-64', onset: 'fall', duration: 'd2w' },
       flags: ['frf-compartment'],
       expect: { route: 'emergency' } },
+  ],  wrist: [
+    { name: "1. De Quervain's after a new baby",
+      lines: [['wristR']],
+      answers: { age: '30-49', onset: 'baby', duration: 'd6w', W1: ['thumb'], W2: ['baby'], W5: ['sharp'] },
+      expect: { top: 'wrist/dq', not: ['wrist/median'], route: 'results' } },
+    { name: '2. Carpal tunnel syndrome',
+      lines: [['wristR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', painQuality: ['tingling'],
+        W3: ['thumb'], W4: ['night', 'posture'], W8: ['wristhand'] },
+      expect: { top: 'wrist/median', notRegion: ['neck'], route: 'results' } },
+    { name: '3. Thumb-side pain after a fall (scaphoid, injury screen)',
+      lines: [['wristL']],
+      answers: { age: '18-29', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    // More than 6 weeks ago, so the injury screen's gate is "No".
+    { name: '4. TFCC after a twist',
+      lines: [['wristR']],
+      answers: { age: '30-49', onset: 'twist', duration: 'd3m', I1: 'no', W1: ['little'], W2: ['rotate'], W6: ['clunk', 'fovea'] },
+      expect: { top: 'wrist/tfcc', not: ['wrist/guyon'], route: 'results' } },
+    { name: '5. Burning, swollen hand after a cast (CRPS)',
+      lines: [['wristR']],
+      answers: { age: '50-64', onset: 'fall', duration: 'd3m' },
+      flags: ['wrf-crps'],
+      expect: { route: 'urgent' } },
+    // A line from the neck to the thumb is read as neck referral.
+    { name: '6. Neck look-alike: neck down the thumb side to the thumb',
+      lines: [['neck', 'shoulderR', 'upperarmR', 'elbowR', 'forearmR', 'wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        W3: ['thumb'], W4: ['posture'], W8: ['neck'] },
+      expect: { notRegion: ['wrist'], areas: ['neck'], route: 'results' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

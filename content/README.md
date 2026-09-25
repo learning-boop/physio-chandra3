@@ -53,13 +53,13 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Upper arm | `arm` | Upper arm assessment | 5 |
 | Elbow | `elbow` | Elbow assessment | 6 |
 | Forearm | `forearm` | Forearm assessment | 5 |
-| Wrist & hand | `wrist` | July 2026 set (not yet rebuilt) | — |
+| Wrist (and the hand, until its own document) | `wrist` | Wrist assessment | 6 |
 | Hip, groin, top of the thigh | `hip` | July 2026 set (not yet rebuilt) | — |
 | Knee (mid-thigh to shin) | `knee` | July 2026 set (not yet rebuilt) | — |
 | Lower shin, ankle & foot | `ankle` | July 2026 set (not yet rebuilt) | — |
 | Stomach | — | generic questions | — |
 
-Still to feed: Wrist, Hand and fingers, Hip, Thigh, Knee,
+Still to feed: Hand and fingers, Hip, Thigh, Knee,
 Lower leg, Ankle, Foot, and the Subjective assessment template. "Arm
 assessment" was replaced by "Upper arm" and "Forearm" and is not used.
 
@@ -87,7 +87,7 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   name in two areas is shown once, so keep its text identical in both files
   (neck/head "Neck-related headache"; base of neck/upper arm "First rib and
   thoracic outlet irritation"; elbow/forearm "Radial tunnel syndrome"). The
-  shoulder, upper arm, elbow and forearm injury
+  shoulder, upper arm, elbow, forearm and wrist injury
   screens share one opening question ("Has your shoulder, upper arm, or
   elbow been hurt…?") when two or more apply, and an injury question worded
   exactly the same in two screens is asked once.

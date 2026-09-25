@@ -1365,86 +1365,134 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
-  /* ══════════════ WRIST & HAND ══════════════ */
+  /* ══════════════ WRIST ══════════════
+     From Chandra's "Wrist assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/wrist.md). Sources:
+     JOSPT carpal tunnel CPG 2019, Graham 2006 (CTS-6), Duckworth 2012
+     (scaphoid), Ilyas 2007 (de Quervain), Tay 2007 (ulnar fovea sign),
+     Harden 2010 (Budapest criteria), Lee & LaStayo 2004, Travell & Simons
+     2019.
+     Reached from the body map's wrist band, which also covers the hand until
+     the hand document is built. Its injury screen is in ./injuryScreen.js.
+     Conditions: content/conditions/wrist-*.md. */
   wrist: {
     name: "Wrist & hand",
     redFlags: [
-      { id: "wrf-fall", sameDay: true, why: "Possible fracture of the scaphoid, a small wrist bone that is easily missed on first look", text: "A fall onto the hand with severe pain, swelling, or tenderness in the 'snuffbox' at the base of the thumb", tier: "urgent" },
-      { id: "wrf-hot", sameDay: true, why: "Possible joint or tendon-sheath infection", text: "A hot, red, swollen wrist or hand with fever or feeling unwell", tier: "urgent" },
-      { id: "wrf-loss", why: "Possible nerve compression that is getting worse and needs medical review", text: "Rapidly worsening numbness, weakness, or visible muscle wasting in the hand", tier: "urgent" }
+      { id: "wrf-hot", tier: "emergency", why: "Possible joint infection (septic arthritis)",
+        text: "Is your wrist hot, red, and swollen, with a fever or feeling very unwell?" },
+      { id: "wrf-bite", tier: "emergency", why: "Possible tendon sheath or deep hand infection; needs urgent surgical review",
+        text: "Did you have a cut, bite, or puncture on the wrist or hand, and is it now swollen, red, and very painful to move the fingers?" },
+      { id: "wrf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+        text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
+      { id: "wrf-crps", tier: "urgent", why: "Possible complex regional pain syndrome (CRPS); early treatment matters",
+        text: "Since a wrist injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that even light touch hurts?" },
+      { id: "wrf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
+        text: "Did your wrist become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
+      { id: "wrf-inflam", tier: "urgent", why: "Possible inflammatory arthritis (for example rheumatoid arthritis)",
+        text: "Are both wrists or several finger joints swollen and stiff for more than an hour in the morning?" },
+      { id: "wrf-numb", tier: "urgent", why: "Severe nerve compression (carpal tunnel) may need a specialist opinion",
+        text: "Is the numbness in your fingers there all the time now, or is the muscle at the base of your thumb getting thinner?" },
+      { id: "wrf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
+        text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+      { id: "wrf-raynaud", tier: "urgent", why: "Possible circulation problem (Raynaud's, or damage to the artery in the palm)",
+        text: "Do your fingers or hand go white, blue, or cold in attacks, or is there a painful cold finger that does not recover?" },
+      { id: "wrf-cancer", tier: "urgent", group: "cancer", why: "A lump or bone lesion needs medical review",
+        text: "Have you ever had cancer, or is there a hard lump at the wrist that is growing, or deep pain at night that does not change with position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u30", label: "Under 30" },
-        { id: "30-50", label: "30 – 50" },
-        { id: "o50", label: "Over 50", weights: { median: 1 } }
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
       ]},
       { id: "onset", text: "How did it start?", options: [
-        { id: "repeat", label: "Gradually with repetitive hand work, texting, or lifting a baby/kettle", weights: { dq: 2 } },
-        { id: "twistinj", label: "After a fall or a forceful twist of the wrist", weights: { tfcc: 2 } },
-        { id: "pushups", label: "With push-ups, yoga, or loaded wrist-back positions", weights: { ganglion: 1, tfcc: 1 } },
-        { id: "gradual", label: "Gradually, no clear cause" },
-        { id: "ns", label: "Not sure" }
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "grip", label: "After a lot of gripping, typing, or tool use" },
+        { id: "baby", label: "Since having a baby, or lifting a baby a lot" },
+        { id: "pregnancy", label: "During pregnancy" },
+        { id: "fall", label: "After a fall onto the hand" },
+        { id: "twist", label: "After a twist (racquet, golf, a drill that caught)" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
-        { id: "d6w", label: "2 – 6 weeks" },
-        { id: "d6m", label: "More than 6 weeks" },
-        { id: "years", label: "Comes and goes over years" }
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
       ]}
     ],
     questions: [
-      { id: "W1", text: "Where exactly is it?", options: [
-        { id: "thumbside", label: "Thumb side of the wrist", weights: { dq: 3 } },
-        { id: "pinkyside", label: "Little-finger side of the wrist", weights: { tfcc: 3 } },
-        { id: "backbump", label: "Back of the wrist — with a visible or feelable bump", weights: { ganglion: 3 } },
-        { id: "palmfingers", label: "Palm and fingers, more numbness than pain", weights: { median: 3 } },
-        { id: "ns", label: "Not sure" }
+      { id: "W1", text: "Where is the pain mainly?", options: [
+        { id: "thumb", label: "Thumb side of the wrist" },
+        { id: "little", label: "Little-finger side of the wrist" },
+        { id: "back", label: "Back of the wrist, in the middle" },
+        { id: "palm", label: "Palm side of the wrist" },
+        { id: "whole", label: "The whole wrist" }
       ]},
-      { id: "W2", text: "Which of these clearly brings it on?", options: [
-        { id: "liftgrip", label: "Lifting a child/kettle, texting, wringing", weights: { dq: 2 } },
-        { id: "rotate", label: "Turning keys/doorknobs, or pushing up from a chair", weights: { tfcc: 2 } },
-        { id: "wristback", label: "Weight on a bent-back wrist (push-ups, yoga)", weights: { ganglion: 2, tfcc: 1 } },
-        { id: "night", label: "Night-time — tingling that eases when I shake the hand", weights: { median: 3 } },
-        { id: "ns", label: "Not sure" }
+      { id: "W2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "grip", label: "Gripping and twisting (opening jars, wringing a cloth)" },
+        { id: "baby", label: "Lifting a baby, or lifting with the thumb up" },
+        { id: "weight", label: "Putting weight through my hand (push-ups, getting up from a chair)" },
+        { id: "rotate", label: "Turning my palm up and down (key, door handle)" },
+        { id: "typing", label: "Typing, or using a mouse or phone" }
       ]},
-      { id: "W3", text: "Is there a lump or bump on the wrist?", options: [
-        { id: "lump", label: "Yes — a smooth lump that can change size", weights: { ganglion: 3 } },
-        { id: "nolump", label: "No lump", weights: { ganglion: -2 } }
+      // The wrist band on the body map covers the hand, so this is always asked.
+      { id: "W3", text: "Which of these do you notice in your hand? Tick all that apply.",
+        // Early when there is tingling (or the drawing is unknown).
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).includes("tingling"),
+        options: [
+          { id: "thumb", label: "Tingling or numbness in the thumb, index, and middle fingers" },
+          { id: "little", label: "Tingling or numbness in the little and ring fingers", special: "ulnarhand" },
+          { id: "whole", label: "The whole hand tingles" },
+          { id: "weak", label: "Weak grip, or dropping things" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "W4", text: "When does the tingling come on? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.W3 || []).includes("thumb"),
+        priority: () => true,
+        options: [
+          { id: "night", label: "It wakes me at night, and shaking my hand helps" },
+          { id: "posture", label: "When driving, holding a phone, or reading" },
+          { id: "constant", label: "The numbness is there all the time", special: "nerveDoctor" },
+          { id: "back", label: "The back of my hand is numb too" },
+          { id: "weakthumb", label: "My thumb feels weak or clumsy", special: "nerveDoctor" }
+        ]},
+      { id: "W5", text: "Tuck your thumb into your palm, close your fingers over it, then gently bend your wrist towards your little finger. What happens?",
+        askIf: ({ ra }) => [].concat(ra.W1 || []).includes("thumb"),
+        priority: () => true,
+        options: [
+          { id: "sharp", label: "Sharp pain on the thumb side of the wrist" },
+          { id: "mild", label: "A mild stretch only" },
+          { id: "skip", label: "I would rather not try" }
+        ]},
+      { id: "W6", text: "On the little-finger side: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.W1 || []).includes("little"),
+        priority: () => true,
+        options: [
+          { id: "clunk", label: "A click or clunk when I turn my palm up and down" },
+          { id: "fovea", label: "Pain when I press the soft spot just beyond the bony bump" },
+          { id: "snap", label: "A tendon that snaps or flicks over the back of the wrist" },
+          { id: "lean", label: "Pain leaning on my hand, or the wrist gives way" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "W7", text: "Is there a lump at your wrist?", options: [
+        { id: "soft", label: "A soft, round lump on the back of the wrist that changes size" },
+        { id: "palmlump", label: "A lump on the palm side, near the thumb" },
+        { id: "hard", label: "A hard lump that is growing", special: "lumpDoctor" },
+        { id: "none", label: "No lump" }
       ]},
-      { id: "W4", text: "Any tingling or numbness in the thumb, index, or middle fingers?", options: [
-        { id: "yes", label: "Yes — in those fingers", weights: { median: 2 } },
-        { id: "other", label: "Tingling, but mainly ring & little fingers", special: "ulnarhand" },
-        { id: "none", label: "No tingling", weights: { median: -2 } }
-      ]},
-      { id: "W5", text: "Any clicking or a painful catch when rotating the forearm (like turning a key)?", options: [
-        { id: "click", label: "Yes — clicking or catching on the little-finger side", weights: { tfcc: 2 } },
-        { id: "thumbcatch", label: "A painful catch with thumb movement", weights: { dq: 2 } },
-        { id: "no", label: "No" }
-      ]}
+      { id: "W8", text: "Which hurts more: moving your neck, moving your elbow, or using your wrist and hand?",
+        askIf: ({ draw, all }) => !draw || ["neck", "ctj", "elbow", "forearm"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "neck", label: "Moving my neck", special: "neckSource" },
+          { id: "elbow", label: "Moving my elbow" },
+          { id: "wristhand", label: "Using my wrist and hand" },
+          { id: "none", label: "None of these bring it on" }
+        ]}
     ],
-    conditions: [
-      { id: "dq", name: "De Quervain's tenosynovitis", clin: "Thumb-side wrist tendon sheath irritation",
-        blurb: "The tendons that move the thumb run through a snug tunnel on the thumb side of the wrist. Repetitive gripping and lifting — classically a new baby, kettle, phone — can irritate that sheath.",
-        noticed: ["Achy or sharp thumb-side wrist pain, sometimes up the forearm", "Worse with gripping, pinching, lifting, texting", "A tender 'strip' or slight swelling near the thumb base", "A painful catch with thumb movement"],
-        homeCare: ["Modify the provoking lift — scoop with the palm up rather than thumb-first", "A thumb-spica splint for aggravating tasks can calm it", "Gradual return to load as pain settles"],
-        seePhysioIf: ["Thumb-side pain lasts more than 1–2 weeks", "It returns whenever you resume normal activity", "Splints or rest alone haven't fixed it — guided loading usually does"] },
-      { id: "tfcc", name: "TFCC irritation / tear", clin: "Triangular fibrocartilage complex (little-finger side)",
-        blurb: "The TFCC is the wrist's 'meniscus' on the little-finger side — a cartilage cushion that stabilises rotation. Falls, forceful twists, or repeated loaded rotation can irritate or tear it.",
-        noticed: ["Pain on the little-finger side of the wrist", "Worse with rotation — keys, doorknobs, pouring", "Clicking or a feeling of weakness pushing up from a chair", "Often after a fall or sudden twist"],
-        homeCare: ["Temporarily avoid forceful rotation and weight on the bent-back wrist", "A wrist support during loaded tasks can help early on", "Keep fingers and grip gently moving"],
-        seePhysioIf: ["Ulnar-side pain or clicking persists beyond 2 weeks", "Weakness with rotation or weight-bearing on the hand", "You want a graded strengthening and stability plan"] },
-      { id: "ganglion", name: "Ganglion cyst", clin: "Fluid-filled cyst from a joint or tendon sheath",
-        blurb: "A smooth, benign fluid-filled lump — most often on the back of the wrist — that can enlarge with activity and fluctuate in size. Usually more annoying than harmful.",
-        noticed: ["A visible/feelable smooth lump that may change size", "Ache with loaded wrist-back positions (push-ups, yoga)", "Sometimes no pain at all"],
-        homeCare: ["Reduce sustained weight on the fully bent-back wrist; use fists or an angled support for floor work", "Don't 'smash' it (old book trick) — that's not recommended", "Monitor size; many settle or fluctuate harmlessly"],
-        seePhysioIf: ["The lump is painful with daily tasks or training", "You're unsure the lump is a typical ganglion — assessment ± ultrasound gives clarity", "It limits wrist strength or mobility"] },
-      { id: "median", name: "Median nerve irritation", clin: "Carpal-tunnel-type median nerve compression",
-        blurb: "The median nerve supplies feeling to the thumb, index, and middle fingers. Compression — most commonly at the wrist — causes night tingling and numbness in that territory, often eased by shaking the hand.",
-        noticed: ["Tingling/numbness in thumb, index & middle fingers", "Worse at night; shaking the hand brings relief", "Clumsiness with buttons or small objects", "Symptoms build with repetitive tasks or certain wrist positions"],
-        homeCare: ["Avoid sleeping with the wrist curled — a neutral night splint often helps", "Break up repetitive hand tasks; keep the wrist neutral at the keyboard", "Gentle nerve-gliding movements within comfort"],
-        seePhysioIf: ["Tingling recurs most nights or persists by day", "Grip or fine motor control is slipping", "Early care (splinting, glides, ergonomics) can prevent progression — persistent numbness needs medical review"] }
-    ]
+    conditions: []
   },
 
   /* ══════════════ HIP ══════════════ */
@@ -1665,6 +1713,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Severe pain behind one eye, with a watery eye or runny nose on the same side, can be a <strong>cluster-type headache</strong>. It needs a doctor's assessment and specific treatment, so please book with your doctor." },
   medOveruse: { title: "Frequent painkillers can keep headaches going",
     body: "Taking painkillers for headaches on <strong>10 or more days a month</strong> (15 or more for simple ones like paracetamol or ibuprofen) can itself keep headaches going, called <strong>medication-overuse headache</strong>. Please review how often you take them with your doctor or pharmacist; do not stop suddenly without advice." },
+  nerveDoctor: { title: "Constant numbness or a weak thumb should be checked by a doctor",
+    body: "Numbness that no longer comes and goes, or a thumb that is getting weak or clumsy, can mean the nerve is being pressed on hard. A doctor should check this. Physiotherapy can help alongside or afterwards." },
+  lumpDoctor: { title: "A hard or growing lump should be checked by a doctor",
+    body: "Most lumps at the wrist are harmless fluid cysts (ganglions) that are soft and change size. A lump that is <strong>hard</strong> or <strong>keeps growing</strong> should be looked at by a doctor first." },
   handWeakness: { title: "Hand weakness should be checked by a doctor",
     body: "Not being able to make an “OK” sign with the thumb and index finger, or to lift the wrist or straighten the fingers, can mean a nerve in the forearm is being pressed on. A doctor should check this. Physiotherapy can help alongside or afterwards." },
   armDoctor: { title: "Please have this checked by a doctor",

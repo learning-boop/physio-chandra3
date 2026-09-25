@@ -84,7 +84,7 @@ const REGION_AGGRAVATORS = {
   arm:       ['Lifting or carrying', 'Reaching overhead', 'Gripping or using tools', 'Sitting at a desk'],
   elbow:     ['Gripping or squeezing', 'Lifting with the palm down', 'Twisting a handle or door knob', 'Repetitive work or sport'],
   forearm:   ['Gripping or typing', 'Turning the palm up and down', 'Repeated wrist movements or sport', 'A tight watch strap or cuff'],
-  wrist:     ['Gripping or twisting', 'Typing or using a mouse', 'Taking weight through the hand', 'Fine tasks such as buttons or jars'],
+  wrist:     ['Gripping or twisting', 'Lifting a baby, or with the thumb up', 'Taking weight through the hand', 'Typing, or using a mouse or phone'],
   hip:       ['Walking or climbing stairs', 'Lying on that side at night', 'Standing on one leg', 'Getting up from a chair'],
   knee:      ['Going up or down stairs', 'Squatting or kneeling', 'Sitting with the knee bent for a long time', 'Running or jumping'],
   ankle:     ['First steps in the morning', 'Walking or standing for a long time', 'Running or jumping', 'Uneven ground or stairs'],

@@ -9,12 +9,13 @@
      arm       fall, blow or sudden force to the upper arm (upper arm, B2)
      elbow     fall, blow or sudden force to the elbow (elbow, B2)
      forearm   fall, blow or crush (forearm, B2)
+     wrist     fall onto the hand, twist or blow (wrist, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
    clear them. When several apply (an upper-arm mark also asks the shoulder),
    they run one after another until one routes. The shoulder, upper arm,
-   elbow and forearm share one opening question when two or more of them apply (see
+   elbow, forearm and wrist share one opening question when two or more of them apply (see
    "One arm gate" below), and a question asked word for word by an earlier
    screen is not asked again.
 
@@ -227,6 +228,28 @@ export const FOREARM_INJURY = [
     sameDay: true, options: yesNo('urgent', 'Possible radial nerve injury') },
 ]
 
+/* ── Wrist: fall onto the hand, twist or blow ──
+   Six weeks back: scaphoid fractures are often missed for weeks. */
+export const WRIST_INJURY = [
+  { id: 'I1', text: 'Has your wrist been hurt in a fall, twist, or blow in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'fall', label: 'Yes, I fell onto my outstretched hand' },
+    { id: 'twist', label: 'Yes, a twist (racquet, golf, a drill that caught)' },
+    { id: 'blow', label: 'Yes, a blow or crush' },
+  ]},
+  { id: 'I2', text: 'Is the wrist a different shape (like a dinner fork), or is bone showing through the skin?',
+    options: yesNo('emergency', 'Possible fracture or dislocation') },
+  { id: 'I3', text: 'Since the injury, is your hand cold, pale, or blue, or is your whole hand numb?',
+    options: yesNo('emergency', 'Possible blood vessel or nerve injury') },
+  { id: 'I4', text: 'Since the injury or a cast was put on, is numbness in your thumb, index, and middle fingers getting quickly worse?',
+    options: yesNo('emergency', 'Possible acute carpal tunnel syndrome after a wrist fracture') },
+  // A possible fracture: same day.
+  { id: 'I5', text: 'Is there pain in the hollow at the base of your thumb, or when you pinch your thumb and index finger together or grip?',
+    sameDay: true, options: yesNo('urgent', 'Possible scaphoid fracture: often normal on the first X-ray, and a missed one can fail to heal') },
+  { id: 'I6', text: 'On the little-finger side: did you feel a clunk, and is it now swollen, painful to turn your palm up and down, or does the wrist give way?',
+    sameDay: true, options: yesNo('urgent', 'Possible TFCC tear, joint instability, or fracture on the little-finger side') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -255,25 +278,30 @@ export const SCREENS = [
     flag: 'An elbow injury in the last 2 weeks (injury screen)', questions: ELBOW_INJURY, step: linearStep(ELBOW_INJURY) },
   { id: 'forearm', zones: ['forearm'], title: 'Recent Forearm Injury',
     flag: 'A forearm injury in the last 2 weeks (injury screen)', questions: FOREARM_INJURY, step: linearStep(FOREARM_INJURY) },
+  { id: 'wrist', zones: ['wrist'], title: 'Recent Wrist Injury',
+    flag: 'A wrist injury in the last 6 weeks (injury screen)', questions: WRIST_INJURY, step: linearStep(WRIST_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──
    When two or more of these screens apply (a line down the arm), their
    first questions ("Has your shoulder / upper arm / elbow been hurt…?")
    are asked once, as "limb:I1", and the answer is passed to each screen as
-   its own I1. The shoulder looks back 6 weeks and the others 2 weeks, so
-   when the shoulder is one of them, "limb:I2" asks when it happened; an
-   injury 2 to 6 weeks ago opens only the shoulder's screen. */
-const LIMB = ['shoulder', 'arm', 'elbow', 'forearm']
-const LIMB_NAME = { shoulder: 'shoulder', arm: 'upper arm', elbow: 'elbow', forearm: 'forearm' }
+   its own I1. The shoulder and wrist look back 6 weeks and the others 2
+   weeks, so when both kinds are drawn, "limb:I2" asks when it happened; an
+   injury 2 to 6 weeks ago opens only the 6-week screens. */
+const LIMB = ['shoulder', 'arm', 'elbow', 'forearm', 'wrist']
+const LIMB_NAME = { shoulder: 'shoulder', arm: 'upper arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist' }
+// How far back each screen looks, in weeks.
+const LIMB_WEEKS = { shoulder: 6, arm: 2, elbow: 2, forearm: 2, wrist: 6 }
 // Each merged answer, as each screen's own I1 answer.
 const LIMB_OPTIONS = [
-  { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no' } },
-  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall', forearm: 'fall' } },
-  { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow', forearm: 'blow' } },
-  { id: 'crush', label: 'Yes, my forearm was crushed or trapped', only: 'forearm', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'crush' } },
-  { id: 'popped', label: 'Yes, my shoulder popped out of place', only: 'shoulder', map: { shoulder: 'popped', arm: 'no', elbow: 'no', forearm: 'no' } },
-  { id: 'pull', label: 'Yes, a sudden pull, jerk, or heavy lift (I may have felt a pop)', map: { shoulder: 'pull', arm: 'pop', elbow: 'pop', forearm: 'no' } },
+  { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no' } },
+  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall', forearm: 'fall', wrist: 'fall' } },
+  { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow', forearm: 'blow', wrist: 'blow' } },
+  { id: 'crush', label: 'Yes, my forearm or wrist was crushed or trapped', onlyAny: ['forearm', 'wrist'], map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'crush', wrist: 'blow' } },
+  { id: 'twist', label: 'Yes, my wrist was twisted (racquet, golf, a drill that caught)', only: 'wrist', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'twist' } },
+  { id: 'popped', label: 'Yes, my shoulder popped out of place', only: 'shoulder', map: { shoulder: 'popped', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no' } },
+  { id: 'pull', label: 'Yes, a sudden pull, jerk, or heavy lift (I may have felt a pop)', onlyAny: ['shoulder', 'arm', 'elbow'], map: { shoulder: 'pull', arm: 'pop', elbow: 'pop', forearm: 'no', wrist: 'no' } },
 ]
 /** What a shared-question answer means as one screen's own I1 answer. */
 export const limbAnswerFor = (optionId, screenId) => ((LIMB_OPTIONS.find((o) => o.id === optionId) || {}).map || {})[screenId]
@@ -284,10 +312,11 @@ function limbQuestion(zones) {
   const ids = limbScreens(zones).map((sc) => sc.id)
   const names = ids.map((id) => LIMB_NAME[id])
   const where = names.length > 2 ? names.slice(0, -1).join(', ') + ', or ' + names[names.length - 1] : names.join(' or ')
-  const weeks = ids.includes('shoulder') ? 6 : 2
-  const how = ids.includes('forearm') ? 'a fall, accident, blow, crush, or heavy lift' : 'a fall, accident, blow, or heavy lift'
+  const weeks = Math.max(...ids.map((id) => LIMB_WEEKS[id]))
+  const how = ids.includes('forearm') || ids.includes('wrist') ? 'a fall, accident, blow, crush, twist, or heavy lift' : 'a fall, accident, blow, or heavy lift'
   return { id: 'I1', text: `Has your ${where} been hurt in ${how} in the last ${weeks} weeks?`,
-    options: LIMB_OPTIONS.filter((o) => !o.only || ids.includes(o.only)).map(({ id, label }) => ({ id, label })) }
+    options: LIMB_OPTIONS.filter((o) => (!o.only || ids.includes(o.only)) && (!o.onlyAny || o.onlyAny.some((x) => ids.includes(x))))
+      .map(({ id, label }) => ({ id, label })) }
 }
 const LIMB_WHEN = { id: 'I2', text: 'When did it happen?', options: [
   { id: 'recent', label: 'In the last 2 weeks' },
@@ -301,10 +330,11 @@ function limbGate(zones, answers) {
   const a1 = answers['limb:I1']
   if (a1 === undefined) return { next: 'limb:I1' }
   const o = LIMB_OPTIONS.find((x) => x.id === a1) || LIMB_OPTIONS[0]
-  const needWhen = o.id !== 'no' && ids.includes('shoulder') && ids.some((id) => id !== 'shoulder')
+  const weeks = ids.map((id) => LIMB_WEEKS[id])
+  const needWhen = o.id !== 'no' && new Set(weeks).size > 1
   if (needWhen && answers['limb:I2'] === undefined) return { next: 'limb:I2' }
   const older = needWhen && answers['limb:I2'] === 'older'
-  return { I1: Object.fromEntries(ids.map((id) => [id, older && id !== 'shoulder' ? 'no' : o.map[id]])) }
+  return { I1: Object.fromEntries(ids.map((id) => [id, older && LIMB_WEEKS[id] < 6 ? 'no' : o.map[id]])) }
 }
 
 /** Every stored answer key, e.g. "shoulder:I2". */
