@@ -84,7 +84,10 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   areas (heart, aorta, spinal cord…) is shown once. A condition with the same
   name in two areas is shown once, so keep its text identical in both files
   (neck/head "Neck-related headache"; base of neck/upper arm "First rib and
-  thoracic outlet irritation").
+  thoracic outlet irritation"). The shoulder, upper arm and elbow injury
+  screens share one opening question ("Has your shoulder, upper arm, or
+  elbow been hurt…?") when two or more apply, and an injury question worded
+  exactly the same in two screens is asked once.
 - **Some marks ask a neighbour too.** A low-back mark also asks the TL
   junction; an upper-arm mark also asks the shoulder; a line from the neck
   down the arm asks the neck and base of the neck.

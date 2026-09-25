@@ -354,5 +354,33 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('a concern naming an organ keeps its signal but not the organ', organ.concern && !/gallbladder/i.test(organ.concern.why), organ.concern)
 }
 
+// Injury screens down the arm: one shared opening question, no repeats.
+{
+  const { injuryFlow, injuryQuestion } = await import('../src/data/injuryScreen.js')
+  const arm = ['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist'].map((type) => ({ type }))
+  const first = injuryFlow(arm, {}).next
+  check('a whole-arm drawing asks one shared injury question first', first === 'limb:I1', first)
+  const text = injuryQuestion('limb:I1', arm).q.text
+  check('the shared question names each area and the longest look-back', text.includes('shoulder, upper arm, or elbow') && /6 weeks/.test(text), text)
+  const walk = (a) => {
+    const asked = []; let r
+    while ((r = injuryFlow(arm, a)).next) {
+      asked.push(r.next)
+      const q = injuryQuestion(r.next, arm).q
+      a[r.next] = (q.options.find((o) => !o.route) || q.options[0]).id
+    }
+    return { asked, route: r.route }
+  }
+  const no = walk({ 'limb:I1': 'no' })
+  check('a "No" to the shared question ends every arm screen', no.asked.length === 0 && no.route === 'continue', no)
+  const fall = walk({ 'limb:I1': 'fall', 'limb:I2': 'recent' })
+  check('a question asked word for word by the upper arm is not asked again by the elbow',
+    fall.asked.includes('arm:I3') && !fall.asked.includes('elbow:I3') && !fall.asked.some((k) => k.endsWith(':I1')), fall.asked)
+  const older = walk({ 'limb:I1': 'fall', 'limb:I2': 'older' })
+  check('an injury 2 to 6 weeks ago opens only the shoulder screen', older.asked.every((k) => k.startsWith('shoulder:')), older.asked)
+  const one = injuryFlow([{ type: 'elbow' }], {}).next
+  check('an elbow on its own keeps its own opening question', one === 'elbow:I1', one)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

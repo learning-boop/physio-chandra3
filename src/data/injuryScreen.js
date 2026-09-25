@@ -7,16 +7,20 @@
                of the neck (its document routes its injury flag here)
      shoulder  fall, dislocation or sudden pull (shoulder document, B2)
      arm       fall, blow or sudden force to the upper arm (upper arm, B2)
+     elbow     fall, blow or sudden force to the elbow or forearm (elbow, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
    clear them. When several apply (an upper-arm mark also asks the shoulder),
-   they run one after another until one routes.
+   they run one after another until one routes. The shoulder, upper arm and
+   elbow share one opening question when two or more of them apply (see
+   "One arm gate" below), and a question asked word for word by an earlier
+   screen is not asked again.
 
-   Answers are stored as "<screen>:<question>", e.g. "neck:I1".
+   Answers are stored as "<screen>:<question>", e.g. "neck:I1"; the shared
+   arm question as "limb:I1" (and "limb:I2", when it happened).
    Pure logic, no React, so scripts/check-region-tests.mjs runs the same rules.
-   FOR CLINICIAN REVIEW: the final route of the neck I7 (I7_PASS_ROUTE) and
-   the upper arm I6 age cut-off.
+   FOR CLINICIAN REVIEW: the final route of the neck I7 (I7_PASS_ROUTE).
    ───────────────────────────────────────────────────────────────────────── */
 
 /* ── Neck: Canadian C-Spine Rule ── */
@@ -227,8 +231,58 @@ export const SCREENS = [
     flag: 'An elbow or forearm injury in the last 2 weeks (injury screen)', questions: ELBOW_INJURY, step: linearStep(ELBOW_INJURY) },
 ]
 
+/* ── One arm gate for the shoulder, upper arm and elbow ──
+   When two or more of these screens apply (a line down the arm), their
+   first questions ("Has your shoulder / upper arm / elbow been hurt…?")
+   are asked once, as "limb:I1", and the answer is passed to each screen as
+   its own I1. The shoulder looks back 6 weeks and the others 2 weeks, so
+   when the shoulder is one of them, "limb:I2" asks when it happened; an
+   injury 2 to 6 weeks ago opens only the shoulder's screen. */
+const LIMB = ['shoulder', 'arm', 'elbow']
+const LIMB_NAME = { shoulder: 'shoulder', arm: 'upper arm', elbow: 'elbow' }
+// Each merged answer, as each screen's own I1 answer.
+const LIMB_OPTIONS = [
+  { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no' } },
+  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall' } },
+  { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow' } },
+  { id: 'popped', label: 'Yes, my shoulder popped out of place', only: 'shoulder', map: { shoulder: 'popped', arm: 'no', elbow: 'no' } },
+  { id: 'pull', label: 'Yes, a sudden pull, jerk, or heavy lift (I may have felt a pop)', map: { shoulder: 'pull', arm: 'pop', elbow: 'pop' } },
+]
+/** What a shared-question answer means as one screen's own I1 answer. */
+export const limbAnswerFor = (optionId, screenId) => ((LIMB_OPTIONS.find((o) => o.id === optionId) || {}).map || {})[screenId]
+const limbScreens = (zones) => screensFor(zones).filter((sc) => LIMB.includes(sc.id))
+const limbMerged = (zones) => limbScreens(zones).length >= 2
+
+function limbQuestion(zones) {
+  const ids = limbScreens(zones).map((sc) => sc.id)
+  // The elbow screen also covers a forearm-only mark.
+  const forearmOnly = zones.some((z) => z.type === 'forearm') && !zones.some((z) => z.type === 'elbow')
+  const names = ids.map((id) => (id === 'elbow' && forearmOnly ? 'forearm' : LIMB_NAME[id]))
+  const where = names.length > 2 ? names.slice(0, -1).join(', ') + ', or ' + names[names.length - 1] : names.join(' or ')
+  const weeks = ids.includes('shoulder') ? 6 : 2
+  return { id: 'I1', text: `Has your ${where} been hurt in a fall, accident, blow, or heavy lift in the last ${weeks} weeks?`,
+    options: LIMB_OPTIONS.filter((o) => !o.only || ids.includes(o.only)).map(({ id, label }) => ({ id, label })) }
+}
+const LIMB_WHEN = { id: 'I2', text: 'When did it happen?', options: [
+  { id: 'recent', label: 'In the last 2 weeks' },
+  { id: 'older', label: '2 to 6 weeks ago' },
+]}
+const LIMB_SCREEN = { id: 'limb', title: 'Recent Arm Injury' }
+
+/** Each screen's I1, from the merged answers: undefined while still needed. */
+function limbGate(zones, answers) {
+  const ids = limbScreens(zones).map((sc) => sc.id)
+  const a1 = answers['limb:I1']
+  if (a1 === undefined) return { next: 'limb:I1' }
+  const o = LIMB_OPTIONS.find((x) => x.id === a1) || LIMB_OPTIONS[0]
+  const needWhen = o.id !== 'no' && ids.includes('shoulder') && ids.some((id) => id !== 'shoulder')
+  if (needWhen && answers['limb:I2'] === undefined) return { next: 'limb:I2' }
+  const older = needWhen && answers['limb:I2'] === 'older'
+  return { I1: Object.fromEntries(ids.map((id) => [id, older && id !== 'shoulder' ? 'no' : o.map[id]])) }
+}
+
 /** Every stored answer key, e.g. "shoulder:I2". */
-export const INJURY_KEYS = SCREENS.flatMap((sc) => sc.questions.map((q) => sc.id + ':' + q.id))
+export const INJURY_KEYS = ['limb:I1', 'limb:I2', ...SCREENS.flatMap((sc) => sc.questions.map((q) => sc.id + ':' + q.id))]
 
 /** The screens these zones call for, in order. Pass the question-flow zones
     (areas a referral line only travels through are left out; implied areas,
@@ -236,9 +290,11 @@ export const INJURY_KEYS = SCREENS.flatMap((sc) => sc.questions.map((q) => sc.id
 export const screensFor = (zones = []) => SCREENS.filter((sc) => zones.some((z) => sc.zones.includes(z.type)))
 export const injuryScreenApplies = (zones = []) => screensFor(zones).length > 0
 
-/** The question "<screen>:<id>" as { screen, q }, or null. */
-export function injuryQuestion(key) {
+/** The question "<screen>:<id>" as { screen, q }, or null. The merged arm
+    question ("limb:I1") is worded for the zones drawn. */
+export function injuryQuestion(key, zones = []) {
   const [sid, qid] = String(key || '').split(':')
+  if (sid === 'limb') return { screen: LIMB_SCREEN, q: qid === 'I2' ? LIMB_WHEN : limbQuestion(zones) }
   const screen = SCREENS.find((sc) => sc.id === sid)
   const q = screen && screen.questions.find((x) => x.id === qid)
   return q ? { screen, q } : null
@@ -248,12 +304,25 @@ export function injuryQuestion(key) {
     Returns { next: "<screen>:<id>" } while a question is needed, else
     { route: 'emergency' | 'urgent', why, screen } or { route: 'continue' }. */
 export function injuryFlow(zones, answers = {}, ageId) {
+  const merged = limbMerged(zones)
+  // A question already answered, word for word, in an earlier screen (the
+  // upper arm's and the elbow's "is your hand cold, pale, or blue…") is not
+  // asked again: its answer carries over.
+  const byText = {}
   for (const sc of screensFor(zones)) {
     const own = {}
+    if (merged && LIMB.includes(sc.id)) {
+      const g = limbGate(zones, answers)
+      if (g.next) return { next: g.next, screen: 'limb' }
+      own.I1 = g.I1[sc.id]
+    }
     for (const q of sc.questions) {
+      if (own[q.id] !== undefined) continue
       const v = answers[sc.id + ':' + q.id]
       if (v !== undefined) own[q.id] = v
+      else if (byText[q.text] !== undefined) own[q.id] = byText[q.text]
     }
+    for (const q of sc.questions) if (own[q.id] !== undefined && byText[q.text] === undefined) byText[q.text] = own[q.id]
     const r = sc.step(own, ageId)
     if (r.next) return { next: sc.id + ':' + r.next, screen: sc.id }
     if (r.route === 'emergency' || r.route === 'urgent') return { ...r, screen: sc.id, sameDay: !!(r.sameDay || (r.route === 'urgent' && sc.sameDayUrgent)) }

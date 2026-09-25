@@ -12,7 +12,7 @@ import {
   specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
 } from '../src/data/assessmentFlow.js'
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
-import { injuryFlow, ageFrom } from '../src/data/injuryScreen.js'
+import { injuryFlow, injuryQuestion, limbAnswerFor as limbAs, ageFrom } from '../src/data/injuryScreen.js'
 import { MAX_HYPOTHESES } from '../src/data/clinicianSummary.js'
 
 const TESTS = {
@@ -397,7 +397,9 @@ function run(rk, t) {
   // Injury screens: a test's plain I1… answers belong to its own region's
   // screen; any other screen's gate is answered "No" (not injured there).
   // They come before the age question on the site, so no age is passed; the
-  // neck's "65 or older?" is answered from the patient's age.
+  // neck's "65 or older?" is answered from the patient's age. The shared
+  // arm question (limb:I1) is answered as the region's own I1 would be; a
+  // follow-up from another area's screen gets the answer that does not route.
   {
     const own = SCREEN_OF[rk]
     const ia = {}
@@ -406,7 +408,16 @@ function run(rk, t) {
       seen.asked.push(s.next)
       const [sid, qid] = s.next.split(':')
       ia[s.next] = sid === own ? t.answers[qid] : undefined
+      if (sid === 'limb') {
+        const q = injuryQuestion(s.next, flowZ).q
+        ia[s.next] = qid === 'I2' ? 'recent'
+          : (q.options.find((o) => limbAs(o.id, own) === t.answers.I1) || { id: 'no' }).id
+      }
       if (ia[s.next] === undefined && qid === 'I1') ia[s.next] = 'no'
+      if (ia[s.next] === undefined && sid !== own && sid !== 'neck') {
+        const q = injuryQuestion(s.next, flowZ).q
+        ia[s.next] = (q.options.find((o) => !o.route) || {}).id
+      }
       if (ia[s.next] === undefined && s.next === 'neck:I3') ia[s.next] = ageFrom(t.answers.age) >= 65 ? 'yes' : 'no'
       if (ia[s.next] === undefined) return { ...seen, error: `injury question ${s.next} has no answer in the test` }
     }

@@ -725,7 +725,7 @@ export default function PainAssessment() {
       .map((q) => ({ question: q.area ? `${q.area}: ${q.text}` : q.text, answer: answerText(q) }))
       .filter((pair) => pair.answer && pair.answer !== '—'),
     ...INJURY_KEYS.filter((k) => answers[k] !== undefined).map((k) => {
-      const { screen, q } = injuryQuestion(k)
+      const { screen, q } = injuryQuestion(k, flowZ)
       return {
         question: `${screen.title} (injury screen): ${q.text}`,
         answer: [].concat(answers[k]).map((id) => (q.options.find((o) => o.id === id) || {}).label).filter(Boolean).join(' · '),
@@ -740,7 +740,7 @@ export default function PainAssessment() {
       answer: [painType.primary, painType.secondary].filter(Boolean)
         .map((t) => `${PAIN_TYPES[t].title} (${PAIN_TYPES[t].term})`).join(', with some features of '),
     }] : []),
-  ], [flatQuestions, answers, painType, referral])
+  ], [flatQuestions, answers, painType, referral, flowZ])
   const notesText = String(answers.notes || answers.q5 || '').trim()
 
   // The summary Chandra receives — built from the same rule output the result
@@ -1536,7 +1536,7 @@ export default function PainAssessment() {
                 upper arm, one question at a time (../data/injuryScreen.js). The first answer that routes
                 ends it: to 911, to a physician, or on to the results. */}
             {stage === 'injury' && (() => {
-              const found = injuryQuestion(injuryQ)
+              const found = injuryQuestion(injuryQ, flowZ)
               if (!found) return null
               const { q, screen } = found
               const picked = (oid) => (q.multi ? Array.isArray(injuryDraft) && injuryDraft.includes(oid) : injuryDraft === oid)
