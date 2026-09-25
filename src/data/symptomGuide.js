@@ -552,6 +552,7 @@ for (const entry of AUTHORED) {
 }
 Object.assign(ZONE_TO_REGION, {
   neck: 'neck',
+  ctj: 'ctj',
   upperback: 'upperback',
   elbow: 'elbow',
   wrist: 'wrist',

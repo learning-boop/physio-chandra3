@@ -19,11 +19,13 @@ import {
 export const REGION_CHAINS = [
   ['neck', 'shoulder', 'elbow', 'wrist'],
   ['lowback', 'hip', 'knee', 'ankle'],
-  ['neck', 'upperback', 'lowback'],
+  ['neck', 'ctj', 'upperback', 'lowback'],
+  // The base of the neck feeds the arm too (first rib, thoracic outlet).
+  ['ctj', 'shoulder', 'elbow', 'wrist'],
 ]
 
 const AREA_WORD = {
-  lowback: 'low back', upperback: 'upper back', neck: 'neck', shoulder: 'shoulder',
+  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', shoulder: 'shoulder',
   elbow: 'elbow', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
 }
 
@@ -59,13 +61,18 @@ export function chainOrder(keys) {
 
 /** Separate areas (not one chain) are separate problems: the person picks one. */
 export function needsAreaChoice(zones, focusKey) {
-  const keys = regionKeysOf(zones)
+  const keys = regionKeysOf(zones.filter((z) => !z.implied))
   return !focusKey && keys.length > 1 && !chainOrder(keys)
 }
 
 /** The regions whose questions will be asked, in asking order. */
 export function questionRegions(zones, focusKey) {
-  if (focusKey && REGIONS[focusKey]) return [focusKey]
+  if (focusKey && REGIONS[focusKey]) {
+    // Areas a referral line implies (the base of the neck, for a line from
+    // the neck down the arm) come with the chosen area they belong to.
+    const implied = regionKeysOf(zones.filter((z) => z.implied)).filter((k) => k !== focusKey)
+    return (implied.length && chainOrder([focusKey, ...implied])) || [focusKey]
+  }
   const keys = regionKeysOf(zones)
   if (keys.length <= 1) return keys
   return chainOrder(keys) || [primaryRegion(zones)]
@@ -263,5 +270,8 @@ export function regionRedFlags(flowZ = [], zones = flowZ) {
       }
     }
   }
-  return out
+  // A flag with `sameAs` asks what another region's flag already asks (the
+  // base of the neck's heart and spinal-cord questions, when the neck's own
+  // are on the screen too): keep one.
+  return out.filter((f) => !(f.sameAs && out.some((o) => o.id === f.sameAs)))
 }

@@ -149,6 +149,132 @@ export const EXTRA_REGIONS = {
     ]
   },
 
+  /* ══════════════ BASE OF THE NECK (CERVICOTHORACIC JUNCTION, C7–T3) ══════════════
+     From Chandra's "CT junction assessment" region document (DRAFT 23 Sep
+     2026; the source text is content/regions/ctj.md). Sources: JOSPT Neck
+     Pain CPG 2017, IFOMPT red flags framework 2020, SVS thoracic outlet
+     reporting standards 2016, IFOMPT cervical framework 2023, Travell &
+     Simons 2019, McGuckin 1986.
+     Reached from the body map's base-of-neck band, and from any line running
+     from the neck or that band down the arm (../data/referral.js), so a
+     thoracic outlet pattern can be found.
+     The conditions are authored in content/conditions/ctj-*.md.
+     The document's injury flag ("started in the last few days after a car
+     crash, a fall from a height, or a hard blow") is not a checkbox here: as
+     the document says, it is routed through the neck injury screen
+     (./injuryScreen.js), which runs whenever this area is drawn.
+     `sameAs`: the flag is left out when the neck's equivalent is also asked. */
+  ctj: {
+    name: "Base of the neck & upper back",
+    redFlags: [
+      { id: "crf-aorta", tier: "emergency", why: "Possible tear in the aorta (aortic dissection)",
+        text: "Did the pain start suddenly as a tearing or ripping pain between your shoulder blades, or spreading into your chest?" },
+      { id: "crf-cardiac", tier: "emergency", sameAs: "nrf-cardiac", why: "Heart pain is often felt between the shoulder blades",
+        text: "Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your left arm or jaw?" },
+      { id: "crf-lung", tier: "emergency", why: "Possible blood clot in the lung or a collapsed lung",
+        text: "Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf?" },
+      { id: "crf-cord", tier: "emergency", sameAs: "nrf-cord", why: "Possible spinal cord compression",
+        text: "Along with the back pain, have you lost control of your bladder or bowels, or had new weakness, numbness, or unsteadiness in both legs?" },
+      { id: "crf-pancoast", tier: "urgent", why: "Possible tumour at the top of the lung (Pancoast)",
+        text: "Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, or noticed a drooping eyelid on the painful side?" },
+      { id: "crf-osteo", tier: "urgent", why: "Possible osteoporotic fracture of the spine",
+        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or take long-term steroid tablets?" },
+      { id: "crf-wasting", tier: "urgent", why: "Nerve compression (C8/T1) or thoracic outlet needs medical review",
+        text: "Are the small muscles of your hand getting thinner, or has your grip become weak?" },
+      { id: "crf-vascular", tier: "urgent", why: "Possible blood vessel compression or clot in the arm (same-day review)",
+        text: "Does your arm or hand turn pale, blue, cold, or swollen, especially when your arm is raised?" },
+      { id: "crf-gallbladder", tier: "urgent", why: "Gallbladder pain can be felt under the right shoulder blade",
+        text: "Is the pain under your right shoulder blade worse after fatty meals, or does it come with feeling sick?" },
+      { id: "crf-shingles", tier: "urgent", why: "Possible shingles",
+        text: "Is there a band of burning pain around one side of your chest or back, with a rash or blisters?" },
+      { id: "crf-oesophagus", tier: "urgent", why: "Oesophagus pain can be felt between the shoulder blades",
+        text: "Does the pain come on when you swallow, or does food feel like it sticks on the way down?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "desk", label: "After long hours at a desk, screen, or looking down" },
+        { id: "lift", label: "After lifting, carrying, or reaching" },
+        { id: "sudden", label: "After a sudden movement, cough, or sneeze" },
+        { id: "fall", label: "After a fall or knock" },
+        { id: "woke", label: "I woke up with it" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "C1", text: "Where is the pain mainly?", options: [
+        { id: "bump", label: "In the middle, at the bump at the base of my neck" },
+        { id: "blades", label: "Between my shoulder blades" },
+        { id: "topblade", label: "Along the top of one shoulder blade" },
+        { id: "supraclav", label: "Above my collarbone, at the base of the neck on one side" },
+        { id: "rib", label: "Around a rib, towards the side or front of my chest" }
+      ]},
+      { id: "C2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "down", label: "Looking down, or bending my neck forward" },
+        { id: "upturn", label: "Looking up, or turning my head" },
+        { id: "twist", label: "Twisting my upper body" },
+        { id: "overhead", label: "Raising my arms overhead" },
+        { id: "carry", label: "Carrying bags, or holding my arms out (driving, typing)" }
+      ]},
+      { id: "C3", text: "Does breathing affect it?", options: [
+        { id: "no", label: "No" },
+        { id: "catch", label: "A deep breath catches at one spot in my upper back" },
+        { id: "ribbreath", label: "A deep breath or cough hurts along a rib, towards the side or front" }
+      ]},
+      { id: "C4", text: "Which describe your arm symptoms? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["shoulder", "elbow", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).includes("tingling"),
+        options: [
+          { id: "ringlittle", label: "Tingling or numbness in the ring and little fingers" },
+          { id: "innerforearm", label: "Tingling along the inner forearm" },
+          { id: "overheadbags", label: "Worse with my arms overhead or carrying bags" },
+          { id: "heavy", label: "My arm feels heavy or tires quickly" },
+          { id: "wholehand", label: "My whole hand tingles, not particular fingers" }
+        ]},
+      { id: "C5", text: "How do you spend most of your day?", options: [
+        { id: "desk", label: "At a desk or laptop" },
+        { id: "lookdown", label: "Looking down (phone, reading, close work)" },
+        { id: "overhead", label: "Working with my arms overhead" },
+        { id: "lifting", label: "Lifting and carrying" },
+        { id: "feet", label: "On my feet, moving around" }
+      ]},
+      { id: "C6", text: "What eases it? Tick all that apply.", options: [
+        { id: "tall", label: "Sitting up tall, or drawing my shoulders back" },
+        { id: "lying", label: "Lying on my back" },
+        { id: "moving", label: "Moving and stretching" },
+        { id: "armrest", label: "Resting my arm on an armrest or my hand on my head" },
+        { id: "nothing", label: "Nothing specific" }
+      ]},
+      { id: "C7", text: "Do you also have any of these? Tick all that apply.", options: [
+        { id: "neckstiff", label: "Neck stiffness" },
+        { id: "headache", label: "Headache at the back of the head" },
+        { id: "shoulder", label: "Shoulder pain when lifting my arm", special: "shoulderSource" },
+        { id: "chestwall", label: "The front of my chest wall is sore to press" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "C8", text: "How does your upper back feel?",
+        askIf: ({ ra }) => [].concat(ra.C1 || []).some((o) => o === "bump" || o === "blades"),
+        options: [
+          { id: "hump", label: "A hump or rounding at the base of my neck has grown" },
+          { id: "stiffcrack", label: "Stiff, and stretching or cracking it eases it" },
+          { id: "notstiff", label: "Not stiff" }
+        ]}
+    ],
+    conditions: []
+  },
+
   /* ══════════════ UPPER / MID BACK ══════════════ */
   upperback: {
     name: "Upper & mid back",

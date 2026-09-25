@@ -112,5 +112,6 @@ export function injuryStep(answers = {}, ageId) {
   return { route: I7_PASS_ROUTE, why: WHY.pass }
 }
 
-/** The injury screen applies when the neck is among the drawn zone types. */
-export const injuryScreenApplies = (zones = []) => zones.some((z) => z.type === 'neck')
+/** The injury screen applies when the neck or the base of the neck is drawn
+    (the base-of-neck document routes its injury flag through this screen). */
+export const injuryScreenApplies = (zones = []) => zones.some((z) => z.type === 'neck' || z.type === 'ctj')

@@ -74,6 +74,7 @@ const OTHER_ID = '__other'
 const REGION_AGGRAVATORS = {
   lowback:   ['Bending forward or lifting', 'Sitting for a long time', 'Standing or walking for a long time', 'Coughing, sneezing, or straining'],
   neck:      ['Looking down at a phone or desk', 'Turning the head to one side', 'Sleeping position', 'Carrying a bag on that shoulder'],
+  ctj:       ['Looking down at a phone or desk', 'Raising the arms overhead', 'Carrying bags', 'Twisting the upper body'],
   upperback: ['Sitting at a desk for a long time', 'Deep breathing or coughing', 'Reaching or lifting overhead', 'Twisting the trunk'],
   shoulder:  ['Reaching overhead', 'Reaching behind your back', 'Lying on that side at night', 'Lifting or carrying'],
   elbow:     ['Gripping or squeezing', 'Lifting with the palm down', 'Twisting a handle or door knob', 'Repetitive work or sport'],
@@ -86,6 +87,7 @@ const REGION_AGGRAVATORS = {
 const REGION_EASERS = {
   lowback:   ['Lying down or resting', 'Gentle walking', 'Changing position often', 'Heat or cold packs'],
   neck:      ['Gentle neck movement', 'Supporting the head or a different pillow', 'Heat packs', 'Rest from screens'],
+  ctj:       ['Sitting up tall', 'Moving and stretching', 'Heat packs', 'Resting the arm on an armrest'],
   upperback: ['Moving and stretching', 'Sitting upright with support', 'Heat packs', 'Rest'],
   shoulder:  ['Resting the arm', 'Supporting the arm in a sling or pocket', 'Gentle pendulum movement', 'Heat or cold packs'],
   elbow:     ['Resting from gripping', 'A brace or strap', 'Ice', 'Gentle stretching'],
@@ -389,7 +391,8 @@ export default function PainAssessment() {
   const drawn = useMemo(() => drawnAnswers(referral), [referral])
   const regionChoices = useMemo(() => {
     const seen = new Set(); const out = []
-    flowZ.forEach((z) => {
+    // Implied areas are not choices: they come with the area they belong to.
+    flowZ.filter((z) => !z.implied).forEach((z) => {
       const k = ZONE_TO_REGION[z.type]
       if (k && REGIONS[k] && !seen.has(k)) { seen.add(k); out.push({ key: k, name: REGIONS[k].name }) }
     })

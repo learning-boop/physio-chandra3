@@ -58,6 +58,7 @@ const AREA = {
   neck:      { type: 'neck',      label: 'Neck' },
   shoulderL: { type: 'shoulder',  label: 'Left Shoulder' },
   shoulderR: { type: 'shoulder',  label: 'Right Shoulder' },
+  ctj:       { type: 'ctj',       label: 'Base of Neck' },
   upperback: { type: 'upperback', label: 'Upper Back' },
   lowerback: { type: 'lowerback', label: 'Lower Back' },
   elbowL:    { type: 'elbow',     label: 'Left Elbow' },
@@ -85,6 +86,9 @@ const ARM_SPLIT = 0.12
 // on this mesh the neck column is only 0.053-0.065 half-wide, so the old 0.09
 // was wider than the neck itself and swallowed the trapezius.
 const NECK_SPLIT = 0.06
+// Lower edge of the base-of-neck band on the back (C7 to about T3), as a
+// fraction of the figure's height. Above it, up to the nape, is 'ctj'.
+const CTJ_BOTTOM = 0.25
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -115,7 +119,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v9'
+const CLASSIFIER_VERSION = 'zones-v10'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -158,6 +162,9 @@ function classify(wx, wy, wz) {
     if (fy > 0.33) return absZ > 0.08 ? 'shoulder' + side : 'neck'
     if (absZ > ARM_SPLIT && fy < 0.18) return (fy > 0.04 ? 'elbow' : 'wrist') + side
     if (absZ > 0.10 && fy >= 0.18) return 'shoulder' + side
+    // Base of the neck and top of the upper back (C7–T3): the cervicothoracic
+    // junction, which has its own questions (content/regions/ctj.md).
+    if (fy > CTJ_BOTTOM) return 'ctj'
     return fy > 0.12 ? 'upperback' : 'lowerback'
   }
 

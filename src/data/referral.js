@@ -20,10 +20,14 @@
 
 const zoneType = (id) => id.replace(/[LR]$/, '').replace('lowerback', 'lowback')
 
-/* Each limb, from the spine outwards. `region` is the spinal question set. */
+/* Each limb, from the spine outwards. `region` is the spinal question set;
+   `spine` the zones a line must start in; `sources` the areas whose
+   questions are asked for it. An arm line from the neck OR the base of the
+   neck asks both: a nerve root in the neck, or the first rib and thoracic
+   outlet at the base of the neck (content/regions/ctj.md). */
 const LIMBS = [
-  { kind: 'arm', region: 'neck', spine: 'neck', chain: ['shoulder', 'elbow', 'wrist'] },
-  { kind: 'leg', region: 'lowback', spine: 'lowback', chain: ['hip', 'knee', 'ankle'] },
+  { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'elbow', 'wrist'] },
+  { kind: 'leg', region: 'lowback', spine: ['lowback'], sources: ['lowback'], chain: ['hip', 'knee', 'ankle'] },
 ]
 
 /* How far down the limb a line must reach to count as referral: past the
@@ -37,13 +41,13 @@ export function detectReferral(lines = []) {
   for (const ids of lines) {
     const types = ids.map(zoneType)
     for (const limb of LIMBS) {
-      if (!types.includes(limb.spine)) continue
+      if (!limb.spine.some((s) => types.includes(s))) continue
       const reach = Math.max(-1, ...types.map((t) => limb.chain.indexOf(t)))
       if (reach < MIN_REACH) continue
       const limbZone = ids.find((id) => limb.chain.includes(zoneType(id)))
       const side = limbZone ? limbZone.slice(-1) : null
       out.push({
-        kind: limb.kind, region: limb.region, reach: limb.chain[reach],
+        kind: limb.kind, region: limb.region, sources: limb.sources, reach: limb.chain[reach],
         // Zone ids of the limb this line runs down — felt there, not sourced there.
         felt: ids.filter((id) => limb.chain.includes(zoneType(id))),
         side: side === 'L' ? 'left' : side === 'R' ? 'right' : null,
@@ -55,11 +59,17 @@ export function detectReferral(lines = []) {
 
 /** Zones for the question flow: a referral line's limb areas are folded into
     its spinal source, so the neck (or low back) questions are asked — once —
-    instead of each limb area's own. Other marks are left untouched. */
+    instead of each limb area's own. Other marks are left untouched.
+    Every source area of the line is included even when it was not drawn
+    (an arm line from the neck also asks about the base of the neck). */
 export function flowZones(zones, referral) {
   if (!referral.length) return zones
   const felt = new Set(referral.flatMap((r) => r.felt))
-  return zones.filter((z) => !felt.has(z.id))
+  const out = zones.filter((z) => !felt.has(z.id))
+  for (const t of referral.flatMap((r) => r.sources || [])) {
+    if (!out.some((z) => z.type === t)) out.push({ id: t, type: t, label: t, implied: true })
+  }
+  return out
 }
 
 /** Answers the drawing already gives. A line reaching the hand has

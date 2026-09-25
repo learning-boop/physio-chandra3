@@ -39,6 +39,7 @@ export function hasValidKey(key) {
 const TYPE_HINTS = [
   ['lowerback', ['lower back', 'low back', 'lumbar']],
   ['upperback', ['upper back', 'mid back', 'thoracic']],
+  ['ctj', ['base of neck', 'base of the neck', 'cervicothoracic']],
   ['neck', ['neck']],
   ['shoulder', ['shoulder']],
   ['elbow', ['elbow', 'forearm']],

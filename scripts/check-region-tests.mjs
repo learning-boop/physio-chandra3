@@ -51,6 +51,33 @@ const TESTS = {
       flags: ['nrf-cardiac'],
       expect: { route: 'emergency' } },
   ],
+  ctj: [
+    { name: '1. Desk worker, stiff at the base of the neck',
+      lines: [['neck', 'ctj']],
+      answers: { age: '30-49', onset: 'desk', duration: 'd3m', C1: ['bump'], C2: ['down'], C5: ['desk'], C6: ['tall'], C8: ['stiffcrack'] },
+      expect: { top: 'ctj/stiffness', not: ['ctj/tos', 'ctj/rib'], route: 'results' } },
+    // "Above the left collarbone and down the inner arm": drawn starting at
+    // the side of the neck, so it reads as one line from the neck to the hand.
+    { name: '2. Thoracic outlet, collarbone to little finger',
+      lines: [['neck', 'shoulderL', 'elbowL', 'wristL']],
+      answers: { age: '18-29', onset: 'lift', duration: 'd6w', C1: ['supraclav'], C2: ['overhead', 'carry'],
+        C4: ['ringlittle', 'overheadbags', 'heavy'], C5: ['overhead'] },
+      expect: { top: 'ctj/tos', notTop: ['ctj/stiffness'], route: 'results' } },
+    { name: '3. Upper rib joint after a sneeze',
+      lines: [['ctj']],
+      answers: { age: '30-49', onset: 'sudden', duration: 'd2w', C1: ['rib'], C2: ['twist'], C3: ['ribbreath'] },
+      expect: { top: 'ctj/rib', not: ['ctj/tos'], route: 'results' } },
+    { name: '4. Tearing pain between the shoulder blades (aorta)',
+      lines: [['ctj']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd2w' },
+      flags: ['crf-aorta'],
+      expect: { route: 'emergency' } },
+    { name: '5. Pancoast look-alike: smoker, hand wasting',
+      lines: [['ctj', 'shoulderR', 'elbowR']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'd3m', C1: ['topblade'], C4: ['ringlittle', 'innerforearm'] },
+      flags: ['crf-pancoast', 'crf-wasting'],
+      expect: { route: 'urgent' } },
+  ],
 }
 
 const zonesOf = (lines) => {

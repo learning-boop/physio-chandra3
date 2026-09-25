@@ -20,6 +20,7 @@ const code = [
   grab(/const FRONT_SIGN = [^\n]+/, 'FRONT_SIGN'),
   grab(/const ARM_SPLIT = [^\n]+/, 'ARM_SPLIT'),
   grab(/const NECK_SPLIT = [^\n]+/, 'NECK_SPLIT'),
+  grab(/const CTJ_BOTTOM = [^\n]+/, 'CTJ_BOTTOM'),
   'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
   grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/, 'classify()'),
   'return { classify, BODY_METRICS }',
@@ -56,7 +57,7 @@ for (let i = 0; i < VC; i++) {
 BODY_METRICS.h = mxy - mny; BODY_METRICS.cx = (mnx + mxx) / 2; BODY_METRICS.cy = (mny + mxy) / 2; BODY_METRICS.cz = (mnz + mxz) / 2
 
 const COLORS = {
-  head: [150, 150, 150], neck: [230, 80, 80], shoulder: [70, 130, 230], upperback: [240, 190, 60],
+  head: [150, 150, 150], neck: [230, 80, 80], shoulder: [70, 130, 230], upperback: [240, 190, 60], ctj: [255, 255, 255],
   lowerback: [240, 130, 40], chest: [160, 90, 200], abdomen: [120, 70, 160], elbow: [60, 190, 190],
   wrist: [40, 150, 90], hip: [200, 110, 170], knee: [110, 200, 90], ankle: [90, 90, 200],
 }

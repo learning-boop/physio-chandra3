@@ -15,7 +15,7 @@ const { interpretPsychosocial } = await imp('src/data/psychosocial.js')
 
 let pass = 0, fail = 0
 const check = (name, ok, got) => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${ok ? '' : '  → got ' + JSON.stringify(got)}`) }
-const TYPES = { neck: 'neck', upperback: 'upperback', lowerback: 'lowerback' }
+const TYPES = { neck: 'neck', ctj: 'ctj', upperback: 'upperback', lowerback: 'lowerback' }
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []
   for (const ids of lines) for (const id of ids) if (!seen.has(id)) { seen.add(id); out.push({ id, type: TYPES[id] || id.replace(/[LR]$/, ''), label: id }) }
@@ -40,7 +40,7 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   check('neck→hand line detected as arm referral reaching the hand', ref.length === 1 && ref[0].kind === 'arm' && ref[0].reach === 'wrist' && ref[0].side === 'left', ref)
   const fz = flowZones(zones, ref)
   const keys = questionRegions(fz, null)
-  check('questions come from the NECK only (not shoulder/elbow/wrist)', JSON.stringify(keys) === '["neck"]', keys)
+  check('questions come from the NECK and BASE OF NECK only (not shoulder/elbow/wrist)', JSON.stringify(keys) === '["neck","ctj"]', keys)
   check('no "choose an area" screen', !needsAreaChoice(fz, null))
   const drawn = drawnAnswers(ref)
   check('drawing pre-answers N2 = ["past the elbow"] (as a multi-answer list)', JSON.stringify(drawn.N2) === '["pastelbow"]', drawn)
@@ -67,7 +67,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
 {
   const lines = [['neck', 'shoulderL', 'elbowL', 'wristL'], ['kneeR']]
   const fz = flowZones(zonesOf(lines), detectReferral(lines))
-  check('neck→hand line + separate knee mark → choose between neck and knee', needsAreaChoice(fz, null) && JSON.stringify(fz.map((z) => z.type)) === '["neck","knee"]', fz.map((z) => z.type))
+  const drawnFz = fz.filter((z) => !z.implied)
+  check('neck→hand line + separate knee mark → choose between neck and knee', needsAreaChoice(fz, null) && JSON.stringify(drawnFz.map((z) => z.type)) === '["neck","knee"]', drawnFz.map((z) => z.type))
+  check('choosing the neck also asks the base of the neck the line implies', JSON.stringify(questionRegions(fz, 'neck')) === '["neck","ctj"]', questionRegions(fz, 'neck'))
+  check('choosing the knee asks the knee only', JSON.stringify(questionRegions(fz, 'knee')) === '["knee"]', questionRegions(fz, 'knee'))
 }
 
 // ── 5. Pain type ──
@@ -176,7 +179,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const src = fs.readFileSync(root + '/src/components/Body3D.jsx', 'utf8')
   const grab = (re) => (src.match(re) || [''])[0]
   const code = [
-    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/),
+    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/), grab(/const CTJ_BOTTOM = [^\n]+/),
     'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
     grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/),
     grab(/function surfaceOf\(wx, wy, wz\) \{[\s\S]*?\n\}/),
@@ -188,7 +191,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('a point BEHIND the knee reads back', surfaceOf(-0.08, -0.2, -0.07) === 'back')
   check('both are still the same knee area', classify(0.05, -0.2, -0.07) === classify(-0.08, -0.2, -0.07), classify(-0.08, -0.2, -0.07))
   check('back of the shoulder is shoulder, not upper back', /^shoulder/.test(classify(-0.08, 0.25, 0.14)), classify(-0.08, 0.25, 0.14))
-  check('the shoulder blade is still upper back', classify(-0.08, 0.25, 0.06) === 'upperback', classify(-0.08, 0.25, 0.06))
+  check('the middle of the shoulder blade is still upper back', classify(-0.08, 0.22, 0.06) === 'upperback', classify(-0.08, 0.22, 0.06))
+  check('the base of the neck from behind (C7–T3) is its own area', classify(-0.08, 0.30, 0.03) === 'ctj', classify(-0.08, 0.30, 0.03))
+  check('the nape is still the neck', classify(-0.08, 0.36, 0.03) === 'neck', classify(-0.08, 0.36, 0.03))
 }
 
 // ── 10. The reasoning pass: what it may and may not change ──
