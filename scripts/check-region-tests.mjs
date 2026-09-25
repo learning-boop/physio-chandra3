@@ -314,10 +314,41 @@ const TESTS = {
       answers: { age: 'o64', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
       expect: { route: 'urgent' } },
   ],
+  elbow: [
+    { name: '1. Tennis elbow',
+      lines: [['elbowR', 'forearmR']],
+      answers: { age: '30-49', onset: 'grip', duration: 'd3m', E1: ['outer'], E2: ['grip'], E5: ['full'] },
+      expect: { top: 'elbow/tennis', not: ['elbow/radialtunnel'], notRegion: ['neck'], route: 'results' } },
+    { name: '2. Ulnar nerve at the elbow',
+      lines: [['elbowL', 'forearmL', 'wristL']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        E2: ['bent'], E3: ['little'], E4: ['tingle'], E6: ['armhand'] },
+      expect: { top: 'elbow/cubital', notTop: ['elbow/golfer'], route: 'results' } },
+    // A line from the neck to the thumb is read as neck referral: the neck
+    // is asked, the elbow is where it is felt.
+    { name: '3. Neck look-alike: neck down the outer arm to the thumb',
+      lines: [['neck', 'shoulderR', 'upperarmR', 'elbowR', 'forearmR', 'wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        E3: ['thumb'], E6: ['neck'], E7: ['fromneck'] },
+      expect: { notRegion: ['elbow'], areas: ['neck'], route: 'results' } },
+    { name: '4. Young thrower whose elbow catches',
+      lines: [['elbowR']],
+      answers: { age: 'u18', onset: 'throw', duration: 'd6w', E1: ['inner'], E5: ['locks'], E8: ['backthrow'] },
+      flags: ['erf-child'],
+      expect: { route: 'urgent' } },
+    { name: '5. Pop at the front of the elbow (injury screen)',
+      lines: [['elbowR']],
+      answers: { age: '30-49', onset: 'pop', duration: 'd2w', I1: 'pop', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '6. Cannot straighten the elbow after a fall (injury screen)',
+      lines: [['elbowL']],
+      answers: { age: '18-29', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'no', I6: 'no' },
+      expect: { route: 'urgent' } },
+  ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

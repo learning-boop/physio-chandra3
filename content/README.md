@@ -51,14 +51,14 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Head | `head` | Head assessment | 5 |
 | Shoulder | `shoulder` | Shoulder assessment | 6 |
 | Upper arm | `arm` | Upper arm assessment | 5 |
-| Elbow, forearm | `elbow` | July 2026 set (not yet rebuilt) | — |
+| Elbow (and the forearm, until its own document) | `elbow` | Elbow assessment | 6 |
 | Wrist & hand | `wrist` | July 2026 set (not yet rebuilt) | — |
 | Hip, groin, top of the thigh | `hip` | July 2026 set (not yet rebuilt) | — |
 | Knee (mid-thigh to shin) | `knee` | July 2026 set (not yet rebuilt) | — |
 | Lower shin, ankle & foot | `ankle` | July 2026 set (not yet rebuilt) | — |
 | Stomach | — | generic questions | — |
 
-Still to feed: Elbow, Forearm, Wrist, Hand and fingers, Hip, Thigh, Knee,
+Still to feed: Forearm, Wrist, Hand and fingers, Hip, Thigh, Knee,
 Lower leg, Ankle, Foot, and the Subjective assessment template. "Arm
 assessment" was replaced by "Upper arm" and "Forearm" and is not used.
 

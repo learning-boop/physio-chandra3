@@ -171,6 +171,33 @@ export const ARM_INJURY = [
     ]},
 ]
 
+/* ── Elbow: fall, blow or sudden force ── */
+export const ELBOW_INJURY = [
+  { id: 'I1', text: 'Has your arm or elbow been hurt in a fall, accident, blow, or heavy lift in the last 2 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'fall', label: 'Yes, I fell onto my hand or elbow' },
+    { id: 'blow', label: 'Yes, a blow to the arm or elbow' },
+    { id: 'pop', label: 'Yes, I felt a pop while lifting or pulling' },
+  ]},
+  { id: 'I2', text: 'Is the arm or elbow a different shape, or is bone showing through the skin?',
+    options: yesNo('emergency', 'Possible fracture or dislocation') },
+  { id: 'I3', text: 'Since the injury, is your hand cold, pale, or blue, or is your whole hand numb?',
+    options: yesNo('emergency', 'Possible blood vessel or nerve injury') },
+  { id: 'I4', text: 'Is the pain in your forearm getting worse and worse, with the forearm tight and swollen, and much worse when your fingers are moved?',
+    options: yesNo('emergency', 'Possible compartment syndrome (pressure building up in the forearm)') },
+  // Asked after a pop only: it does not fit a fall or a blow.
+  { id: 'I5', text: 'Did you feel a pop at the front of the elbow while lifting, and now have bruising there or a bulge in the upper arm that was not there before?',
+    askIf: (a) => a.I1 === 'pop',
+    options: yesNo('urgent', 'Possible torn biceps tendon at the elbow: repair works best within about 2 to 3 weeks') },
+  // The elbow extension test (Appelboam 2008): a possible fracture, so same day.
+  { id: 'I6', text: 'After the fall or blow, can you fully straighten your elbow?',
+    askIf: (a) => a.I1 === 'fall' || a.I1 === 'blow', sameDay: true, options: [
+      { id: 'yes', label: 'Yes, fully' },
+      { id: 'no', label: 'No, it will not straighten fully', route: 'urgent',
+        why: 'Not being able to straighten the elbow after an injury raises the chance of a fracture' },
+    ]},
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -195,6 +222,9 @@ export const SCREENS = [
     flag: 'A shoulder injury in the last 6 weeks (injury screen)', questions: SHOULDER_INJURY, step: linearStep(SHOULDER_INJURY) },
   { id: 'arm', zones: ['upperarm'], title: 'Recent Upper Arm Injury',
     flag: 'An upper arm injury in the last 2 weeks (injury screen)', questions: ARM_INJURY, step: linearStep(ARM_INJURY) },
+  // The forearm uses the elbow's questions until its own document is built.
+  { id: 'elbow', zones: ['elbow', 'forearm'], title: 'Recent Elbow Injury',
+    flag: 'An elbow or forearm injury in the last 2 weeks (injury screen)', questions: ELBOW_INJURY, step: linearStep(ELBOW_INJURY) },
 ]
 
 /** Every stored answer key, e.g. "shoulder:I2". */

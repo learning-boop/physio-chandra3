@@ -1044,7 +1044,10 @@ export const EXTRA_REGIONS = {
         { id: "neckdesk", label: "Moving my neck, or sitting at a desk for long", special: "neckSource" },
         { id: "carry", label: "Carrying bags, or letting the arm hang down" }
       ]},
-      { id: "U3", text: "How does the pain spread? Tick all that apply.", options: [
+      { id: "U3", text: "How does the pain spread? Tick all that apply.",
+        // Early when the drawing runs down the whole arm: spread is what tells the causes apart.
+        priority: ({ draw }) => !!draw && draw.has("upperarm") && draw.has("wrist"),
+        options: [
         { id: "onemuscle", label: "It stays in one muscle area" },
         { id: "line", label: "It runs along a narrow line into particular fingers", special: "neckSource" },
         { id: "fromneck", label: "It starts at the neck or shoulder and travels down the arm", special: "neckSource" },
@@ -1098,70 +1101,134 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
-  /* ══════════════ ELBOW ══════════════ */
+  /* ══════════════ ELBOW ══════════════
+     From Chandra's "Elbow assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/elbow.md). Sources: JOSPT
+     lateral elbow pain CPG 2022, Coombes 2015, Appelboam 2008 (elbow extension
+     test), O'Driscoll 2005 and 2007, Novak 1994, Murphy 2009, Travell & Simons
+     2019.
+     Reached from the body map's elbow band; the forearm uses these questions
+     until its own document is built. Its injury screen is in
+     ./injuryScreen.js. Conditions: content/conditions/elbow-*.md. */
   elbow: {
-    name: "Elbow & forearm",
+    name: "Elbow",
     redFlags: [
-      { id: "erf-hot", sameDay: true, why: "Possible joint or bursa infection, or gout", text: "A hot, red, swollen elbow — especially with fever or feeling unwell", tier: "urgent" },
-      { id: "erf-trauma", sameDay: true, why: "Possible fracture or dislocation of the elbow", text: "A fall or impact with deformity, severe swelling, or inability to bend/straighten the elbow", tier: "urgent" },
-      { id: "erf-wasting", why: "Possible nerve compression that is getting worse and needs medical review", text: "Visible muscle wasting in the hand, or rapidly worsening hand weakness", tier: "urgent" }
+      { id: "erf-hot", tier: "emergency", why: "Possible joint infection (septic arthritis)",
+        text: "Is your elbow hot, red, and swollen, with a fever or feeling very unwell?" },
+      { id: "erf-bursa", sameDay: true, tier: "urgent", why: "Possible infected bursa at the back of the elbow",
+        text: "Is there a swelling at the point of your elbow that is red, warm, or has a cut or graze over it?" },
+      { id: "erf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
+        text: "Did your elbow become suddenly hot, swollen, and very painful overnight, and have you had gout before?" },
+      { id: "erf-nerve", tier: "urgent", why: "Nerve weakness (ulnar or radial nerve) needs medical review",
+        text: "Is your hand becoming weaker, is the muscle between your thumb and index finger getting thinner, or can you not lift your wrist?" },
+      { id: "erf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
+        text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+      { id: "erf-child", tier: "urgent", why: "Possible growth plate injury or osteochondritis dissecans; needs imaging",
+        text: "Are you under 16, and does your elbow hurt with throwing or gymnastics, or has it started to catch or lock?" },
+      { id: "erf-pta", tier: "urgent", group: "pta", why: "Possible nerve inflammation (neuralgic amyotrophy)",
+        text: "Did a sudden, severe arm pain with no injury last several days, and then your arm or hand muscles became weak?" },
+      { id: "erf-cancer", tier: "urgent", group: "cancer", why: "Cancer or a bone lesion needs medical review",
+        text: "Have you ever had cancer, or is there a lump in your arm that is growing, or pain at night that does not change with position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u30", label: "Under 30" },
-        { id: "30-50", label: "30 – 50", weights: { tennis: 1, golfer: 1 } },
-        { id: "o50", label: "Over 50" }
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
       ]},
       { id: "onset", text: "How did it start?", options: [
-        { id: "gripwork", label: "Gradually with gripping work, DIY, or racquet sports", weights: { tennis: 2 } },
-        { id: "throw", label: "Gradually with golf, throwing, or heavy carrying", weights: { golfer: 2 } },
-        { id: "lean", label: "I lean on my elbows a lot / long phone calls", weights: { cubital: 2 } },
-        { id: "gradual", label: "Gradually, no clear cause", },
-        { id: "ns", label: "Not sure" }
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "grip", label: "After a lot of gripping, lifting, or tool or computer use" },
+        { id: "throw", label: "After throwing, or a racquet or golf swing" },
+        { id: "fall", label: "After a fall onto the hand or elbow" },
+        { id: "pop", label: "I felt a pop while lifting or pulling" },
+        { id: "swell", label: "Sudden pain and swelling with no injury" }
       ]},
-    ],
-    questions: [
-      { id: "E1", text: "Where exactly is it?", options: [
-        { id: "outer", label: "The bony bump on the OUTER elbow", weights: { tennis: 3 } },
-        { id: "inner", label: "The bony bump on the INNER elbow", weights: { golfer: 3, cubital: 1 } },
-        { id: "innerarm", label: "Inner elbow, running down toward the ring & little fingers", weights: { cubital: 3 } },
-        { id: "ns", label: "Not sure" }
-      ]},
-      { id: "E2", text: "Any tingling or numbness in the fingers?", options: [
-        { id: "ringlittle", label: "Ring & little fingers — often worse at night or with a bent elbow", weights: { cubital: 3 } },
-        { id: "thumbside", label: "Thumb, index or middle fingers", special: "medianhand" },
-        { id: "none", label: "No tingling", weights: { cubital: -2 } }
-      ]},
-      { id: "E3", text: "What does gripping feel like?", options: [
-        { id: "outerpain", label: "Pain at the outer elbow when gripping a cup or shaking hands", weights: { tennis: 2 } },
-        { id: "innerpain", label: "Pain at the inner elbow with wringing, or lifting palm-up", weights: { golfer: 2 } },
-        { id: "weak", label: "More weakness/clumsiness than pain — I drop things", weights: { cubital: 2 } },
-        { id: "fine", label: "Gripping feels normal" }
-      ]},
-      { id: "E4", text: "What clearly aggravates it?", options: [
-        { id: "typing", label: "Typing, mouse work, or racquet sports", weights: { tennis: 1 } },
-        { id: "carry", label: "Carrying bags, golf, or throwing", weights: { golfer: 1 } },
-        { id: "bent", label: "Sleeping with a bent elbow or leaning on it", weights: { cubital: 2 } },
-        { id: "ns", label: "Not sure" }
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
       ]}
     ],
-    conditions: [
-      { id: "tennis", name: "Tennis elbow", clin: "Lateral epicondylalgia (extensor tendinopathy)",
-        blurb: "An overload of the tendons that lift the wrist and fingers, felt at the outer elbow — despite the name, most cases come from gripping work, desk work, or DIY rather than tennis.",
-        noticed: ["Pain or burning at the outer elbow with wrist movements", "Weakened grip — a full cup or a handshake hurts", "Tenderness on the outer bony bump", "Worse with lifting, gripping, twisting"],
-        homeCare: ["Temporarily reduce the most aggravating grip loads — don't stop using the arm entirely", "Lift with the palm up where possible", "Gradual strengthening of the forearm is the proven path — tendons adapt to progressive load"],
-        seePhysioIf: ["Pain persists beyond 2–3 weeks despite self-care", "Daily tasks like holding a cup are limited", "Strength is gradually dropping — a graded loading program is the evidence-based treatment"] },
-      { id: "golfer", name: "Golfer's elbow", clin: "Medial epicondylalgia (flexor tendinopathy)",
-        blurb: "The mirror image of tennis elbow: overload of the tendons that flex the wrist and grip, felt at the inner elbow — common with golf, throwing, climbing, and heavy carrying.",
-        noticed: ["Ache or sharp pain at the inner elbow", "Worse with gripping, wringing, or lifting palm-up", "May radiate a little down the inner forearm", "Early on only during activity; later can ache at rest"],
-        homeCare: ["Moderate the clearly provoking loads for a while", "Warm up the forearm before sport or heavy tasks", "Progressive forearm-flexor strengthening as symptoms allow"],
-        seePhysioIf: ["Pain lasts more than 2–3 weeks or keeps returning with sport", "Grip strength is dropping", "You want a graded return-to-sport loading plan"] },
-      { id: "cubital", name: "Cubital tunnel syndrome", clin: "Ulnar nerve irritation at the elbow",
-        blurb: "The ulnar nerve runs through a tight tunnel at the inner elbow ('funny bone'). Sustained bending or leaning can irritate it, causing tingling into the ring and little fingers and hand weakness.",
-        noticed: ["Numbness/tingling in the ring & little fingers, worse at night or with bent elbows", "Aching at the inner elbow, sometimes down the forearm", "Weak grip, clumsiness, dropping objects"],
-        homeCare: ["Avoid prolonged fully-bent elbow positions — adjust phone and sleep habits", "Stop leaning on the inner elbow on desks and armrests", "A towel loosely wrapped around the elbow at night keeps it straighter"],
-        seePhysioIf: ["Tingling or numbness persists more than a few weeks", "Grip or fine motor control is worsening", "Early guided care (nerve glides, habit changes) can prevent progression"] }
-    ]
+    questions: [
+      { id: "E1", text: "Where is the pain mainly?", options: [
+        { id: "outer", label: "Outer elbow, on the bony bump on the thumb side" },
+        { id: "inner", label: "Inner elbow, on the bony bump on the little-finger side" },
+        { id: "front", label: "Front of the elbow, in the crease" },
+        { id: "back", label: "Back of the elbow, at the point" },
+        { id: "muscles", label: "In the forearm or upper arm muscles, not at the elbow itself" }
+      ]},
+      { id: "E2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "grip", label: "Gripping, shaking hands, or lifting a mug or kettle" },
+        { id: "twist", label: "Turning a key or screwdriver, or lifting with the palm up" },
+        { id: "throw", label: "Throwing, a golf swing, or a racquet shot" },
+        { id: "lean", label: "Leaning on my elbow" },
+        { id: "bent", label: "Keeping my elbow bent for a long time (phone, sleeping with arm bent)" }
+      ]},
+      { id: "E3", text: "Which of these do you notice in your hand? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || draw.has("wrist") || [].concat(all.painQuality || []).includes("tingling"),
+        // Early when there is tingling (or the drawing is unknown): it
+        // separates the nerve from the tendons.
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).includes("tingling"),
+        options: [
+          { id: "little", label: "Tingling or numbness in the little and ring fingers" },
+          { id: "thumb", label: "Tingling or numbness in the thumb, index, and middle fingers", special: "medianhand" },
+          { id: "weak", label: "Weak grip, or dropping things" },
+          { id: "clumsy", label: "Clumsy with fine movements (buttons, coins)" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "E4", text: "If you keep your elbow fully bent for a minute (like holding a phone to your ear), what happens?",
+        askIf: ({ ra }) => [].concat(ra.E3 || []).includes("little"),
+        priority: () => true,
+        options: [
+          { id: "tingle", label: "Tingling comes on in the little and ring fingers" },
+          { id: "ache", label: "The elbow aches, but no tingling" },
+          { id: "nothing", label: "Nothing changes" },
+          { id: "unsure", label: "Not sure" }
+        ]},
+      { id: "E5", text: "How does your elbow move?",
+        // Early from 50: stiffness or catching points to the joint itself.
+        priority: ({ ra }) => ra.age === "50-64" || ra.age === "o64",
+        options: [
+        { id: "full", label: "It straightens and bends fully" },
+        { id: "nostraight", label: "It will not straighten fully" },
+        { id: "locks", label: "It catches or locks at times" },
+        { id: "clicks", label: "It clicks or feels unstable" },
+        { id: "swelling", label: "There is a soft swelling at the point of the elbow" }
+      ]},
+      { id: "E6", text: "Which hurts more: moving your neck, or using your arm and hand?",
+        askIf: ({ draw, all }) => !draw || ["neck", "ctj", "shoulder", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "neck", label: "Moving my neck", special: "neckSource" },
+          { id: "armhand", label: "Using my arm and hand" },
+          { id: "both", label: "Both about the same" },
+          { id: "neither", label: "Neither brings it on" }
+        ]},
+      { id: "E7", text: "How does the pain spread? Tick all that apply.",
+        askIf: ({ draw }) => !draw || ["neck", "ctj", "shoulder", "upperarm", "forearm", "wrist"].some((t) => draw.has(t)),
+        options: [
+          { id: "fromneck", label: "It starts at the neck or shoulder and travels down the arm", special: "neckSource" },
+          { id: "deep", label: "A deep ache in the top of the forearm, a few finger-widths below the outer elbow" },
+          { id: "line", label: "It runs along a narrow line down the forearm into particular fingers" },
+          { id: "stays", label: "It stays around the elbow" },
+          { id: "whole", label: "It is spread across the whole arm" }
+        ]},
+      { id: "E8", text: "If you throw or play racquet sports: which apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "throw",
+        priority: () => true,
+        options: [
+          { id: "backthrow", label: "Pain on the inside of the elbow as my arm goes back to throw" },
+          { id: "pop", label: "I felt a pop on the inside of the elbow" },
+          { id: "speed", label: "Losing speed or accuracy" },
+          { id: "tingle", label: "Tingling in the little finger when I throw" },
+          { id: "none", label: "None of these" }
+        ]}
+    ],
+    conditions: []
   },
 
   /* ══════════════ WRIST & HAND ══════════════ */
