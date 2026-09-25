@@ -79,7 +79,8 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   `urgent` flag (a "yes" → "see your doctor", with booking offered now and
   the questionnaire continuing; the advice stays on the results). Flags
   marked `sameDay` (giant cell arteritis, a possible clot, a hot joint with
-  fever, a possible fracture, a possible torn biceps tendon) say "see a doctor today". Only flags that
+  fever, a possible fracture, a possible torn biceps tendon, arm
+  cellulitis) say "see a doctor today". Only flags that
   depend on the answers wait for a short final check.
 - **Neighbouring areas share.** A red flag that asks the same thing in two
   areas (heart, aorta, spinal cord…) is shown once. A condition with the same
