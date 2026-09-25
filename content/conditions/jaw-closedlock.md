@@ -4,7 +4,8 @@ id: closedlock
 name: Jaw that locks closed
 clin: TMJ disc displacement without reduction, with limited opening (closed lock; DC/TMD)
 # DRAFT patient text written 25 Sep 2026 from content/regions/jaw.md — not yet reviewed.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "I woke up with it": 1
   "My jaw feels stiff and will not open fully": 3

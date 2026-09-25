@@ -4,7 +4,8 @@ id: pfoa
 name: Kneecap arthritis
 clin: Patellofemoral osteoarthritis (PFOA)
 # DRAFT extracted from: Patellofemoral Pain: Clinical Practice Guidelines (JOSPT, 2019)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Over 50": 3
   "More than 3 months": 2

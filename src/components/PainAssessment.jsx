@@ -435,7 +435,7 @@ export default function PainAssessment() {
   // Each option carries weights pointing at that area's conditions, which is
   // what lets the answers actually decide which condition (and therefore which
   // treatment guidance) is shown. Areas with no authored region — currently
-  // the head, chest and stomach — fall back to the generic set.
+  // only the stomach — fall back to the generic set.
   const keys = useMemo(() => questionRegions(flowZ, focusKey), [flowZ, focusKey])
   const multiArea = keys.length > 1
   // Age / how it started / how long are one-tap answers, so they share a single
@@ -576,7 +576,7 @@ export default function PainAssessment() {
     const list = regional.map((f) => ({
       ...f, why: typeof f.why === 'string' ? { title: f.why, text: tierWhy(f).text } : tierWhy(f),
     }))
-    // Areas with no authored region (currently only the head) fall back to the
+    // Areas with no authored region (currently only the stomach) fall back to the
     // general flags — but only those the universal checks below do not already
     // cover, otherwise the same question appears twice on one screen.
     if (!list.length) {

@@ -17,3 +17,6 @@ server/dist/
 *.log
 .DS_Store
 .model-backup/
+
+# Generated review page (npm run review)
+review/

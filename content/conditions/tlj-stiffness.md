@@ -4,7 +4,8 @@ id: stiffness
 name: Stiffness where the mid and low back meet
 clin: Thoracolumbar joint dysfunction (mobility deficit)
 # DRAFT patient text written 24 Sep 2026 from content/regions/tlj.md — not yet reviewed.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After lifting, twisting, or bending": 2
   "After long hours sitting or driving": 1

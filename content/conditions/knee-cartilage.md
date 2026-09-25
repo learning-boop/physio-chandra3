@@ -4,7 +4,8 @@ id: cartilage
 name: Knee cartilage surface injury
 clin: Articular cartilage lesion (chondral defect)
 # DRAFT extracted from: Knee Pain and Mobility Impairments: Meniscal and Articular Cartilage Lesions, Clinical Practice Guidelines Revision 2018 (JOSPT)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "It swelled within 1–2 hours of an injury": 3
   "Intermittent puffiness after activity": 2

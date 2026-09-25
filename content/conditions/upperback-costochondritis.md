@@ -4,7 +4,8 @@ id: costochondritis
 name: Chest wall pain (costochondritis)
 clin: Costochondritis
 # DRAFT patient text written 24 Sep 2026 from content/regions/upperback.md — not yet reviewed.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "At the front of my chest, on the breastbone or ribs": 3
   "It is tender when I press on the breastbone or where the ribs join it": 3

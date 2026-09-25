@@ -5,7 +5,8 @@ name: Stiffness at the base of the neck
 clin: Cervicothoracic junction stiffness (neck pain with mobility deficits, JOSPT 2017)
 # Patient text moved from the old neck region (July 2026 document set).
 # Pointers from content/regions/ctj.md, 24 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After long hours at a desk, screen, or looking down": 2
   "Gradually, no clear reason": 1

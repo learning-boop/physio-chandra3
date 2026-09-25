@@ -4,7 +4,8 @@ id: discreferred
 name: Disc-related back pain spreading to the buttock or thigh
 clin: Acute low back pain with related (referred) lower extremity pain (flatback syndrome / disc displacement)
 # DRAFT extracted from: Low Back Pain Clinical Practice Guidelines, JOSPT 2012
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Bending forward or sitting": 3
   "An ache into the thigh only": 2

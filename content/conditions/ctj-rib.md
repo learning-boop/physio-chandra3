@@ -4,7 +4,8 @@ id: rib
 name: Upper rib joint strain
 clin: Upper rib joint (costovertebral) dysfunction
 # DRAFT patient text written 24 Sep 2026 from content/regions/ctj.md — not yet reviewed.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After a sudden movement, cough, or sneeze": 3
   "Around a rib, towards the side or front of my chest": 3

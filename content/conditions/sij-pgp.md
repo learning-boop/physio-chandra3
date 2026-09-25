@@ -6,7 +6,8 @@ clin: Pelvic girdle pain in pregnancy or after birth (European guidelines, Vleem
 # Only shown when it started during pregnancy or after giving birth.
 onset: pregnancy, postpartum
 # DRAFT patient text written 25 Sep 2026 from content/regions/sij.md — not yet reviewed.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "During pregnancy": 3
   "After giving birth": 3

@@ -11,6 +11,8 @@
     "check:accuracy": "node scripts/check-accuracy.mjs",
     "check:patterns": "node scripts/check-patterns.mjs",
     "check:regions": "node scripts/check-region-tests.mjs",
+    "check:review": "node scripts/check-review.mjs",
+    "review": "node scripts/make-review.mjs",
     "import:conditions": "node scripts/import-conditions.mjs"
   },
   "dependencies": {

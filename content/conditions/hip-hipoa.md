@@ -4,7 +4,8 @@ id: hipoa
 name: Hip osteoarthritis (wear-and-tear hip joint)
 clin: Hip osteoarthritis (coxarthrosis)
 # DRAFT extracted from: Hip Pain and Mobility Deficits—Hip Osteoarthritis: Revision 2025 (JOSPT, 2025)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Over 50": 3
   "Deep in the groin / front hip crease": 3

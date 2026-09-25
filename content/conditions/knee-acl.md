@@ -4,7 +4,8 @@ id: acl
 name: ACL tear (a major knee ligament injury)
 clin: Anterior cruciate ligament (ACL) tear/rupture
 # DRAFT extracted from: Exercise-Based Knee and Anterior Cruciate Ligament Injury Prevention: Clinical Practice Guidelines (JOSPT, 2018)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "A twist, pivot, or impact injury": 3
   "It swelled within 1–2 hours of an injury": 3

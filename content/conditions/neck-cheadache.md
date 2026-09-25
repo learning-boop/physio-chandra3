@@ -4,7 +4,8 @@ id: cheadache
 name: Neck-related headache
 clin: Cervicogenic headache
 # DRAFT extracted from: Neck Pain: Clinical Practice Guidelines Revision 2017 (JOSPT)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 # Pointers re-mapped 24 Sep 2026 to the neck questions in content/regions/neck.md
 # (Question 4 now asks about headache directly).
 pointers:

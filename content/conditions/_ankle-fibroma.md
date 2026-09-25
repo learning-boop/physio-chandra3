@@ -4,7 +4,8 @@ id: fibroma
 name: A firm lump in the arch
 clin: Proximal plantar fibroma
 # DRAFT extracted from: Heel Pain—Plantar Fasciitis: Revision 2014 (JOSPT Clinical Practice Guidelines)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "The inner ankle / arch": 2
   "Comes and goes over years": 2

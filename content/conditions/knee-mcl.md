@@ -4,7 +4,8 @@ id: mcl
 name: Inner knee ligament sprain
 clin: Medial collateral ligament (MCL) sprain
 # DRAFT extracted from: Knee Stability and Movement Coordination Impairments: Knee Ligament Sprain, Revision 2017 (JOSPT)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "A twist, pivot, or impact injury": 2
   "The inner side, along the joint line": 3

@@ -4,7 +4,8 @@ id: skiersthumb
 name: Thumb ligament sprain (skier's/gamekeeper's thumb)
 clin: Ulnar collateral ligament (UCL) injury of the thumb MCP joint
 # DRAFT extracted from: Wrist and Hand Conditions, Theory Resources (2019)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After a fall or a forceful twist of the wrist": 3
   "Less than 2 weeks": 2

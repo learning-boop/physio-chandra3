@@ -4,7 +4,8 @@ id: calcific
 name: Calcium deposits in the shoulder tendon
 clin: Rotator cuff calcific tendinopathy
 # DRAFT extracted from: Rotator Cuff Tendinopathy Diagnosis, Nonsurgical Medical Care, and Rehabilitation: A Clinical Practice Guideline (JOSPT, 2025)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 # Pointers re-mapped 25 Sep 2026 to the questions in content/regions/shoulder.md.
 pointers:
   "Sudden severe pain with no injury": 3

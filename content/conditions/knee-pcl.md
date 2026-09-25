@@ -4,7 +4,8 @@ id: pcl
 name: Back-of-knee ligament sprain
 clin: Posterior cruciate ligament (PCL) sprain
 # DRAFT extracted from: Knee Stability and Movement Coordination Impairments: Knee Ligament Sprain, Revision 2017 (JOSPT)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "A twist, pivot, or impact injury": 2
   "The whole knee — hard to localize": 1

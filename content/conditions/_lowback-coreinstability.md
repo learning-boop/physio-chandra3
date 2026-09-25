@@ -4,7 +4,8 @@ id: coreinstability
 name: Back pain from poor movement control
 clin: Low back pain with movement coordination impairments (spinal instabilities)
 # DRAFT extracted from: Low Back Pain Clinical Practice Guidelines, JOSPT 2012
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Comes and goes over years": 3
   "Under 30": 2

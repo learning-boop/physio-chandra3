@@ -5,7 +5,8 @@ name: Maigne syndrome (thoracolumbar referred pain)
 clin: Thoracolumbar junction syndrome (Maigne)
 # Patient text moved from the old upper back region (July 2026 document set).
 # Pointers from content/regions/tlj.md, 24 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After a twisting sport (golf, tennis, rowing, hockey)": 2
   "Low back or top of the buttock, over the hip bone": 3

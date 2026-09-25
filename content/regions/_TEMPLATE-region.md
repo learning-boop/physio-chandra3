@@ -2,9 +2,12 @@
 # ─────────────────────────────────────────────────────────────────────────
 # ONE FILE = ONE BODY REGION.  Copy this file, rename it to the region id,
 # fill it in, and tell Claude Code "the <region> file is ready".
+# (A Word document on the "Region assessment" template works just as well.)
 #
 # region : one of
-#   lowback  neck  upperback  shoulder  elbow  wrist  hip  knee  ankle
+#   neck  ctj  upperback  tlj  lowback  sij  coccyx  jaw  head
+#   shoulder  arm  elbow  wrist  hip  knee  ankle
+#   — or a new one: say where it sits on the body map.
 # name   : what the patient sees, e.g. "Low back & pelvis"
 # ─────────────────────────────────────────────────────────────────────────
 region: 
@@ -21,6 +24,14 @@ reviewed_on:
      Write the text the way you would ask a patient. -->
 - text | tier | why
 - text | tier | why
+
+## injury screen
+<!-- Optional. Shown straight after the safety check when this area is drawn.
+     Asked in order; the first answer that routes ends it. Start with a gate
+     ("hurt in the last N weeks?" — No skips the screen). Format:
+       I1: question
+       - answer → skip | emergency | urgent | continue | next question
+     Example: src/data/injuryScreen.js (neck, shoulder, upper arm). -->
 
 ## opening questions
 <!-- Asked once, one answer each. Keep age bands and duration bands as they

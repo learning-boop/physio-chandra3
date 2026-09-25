@@ -4,7 +4,8 @@ id: thumboa
 name: Thumb base arthritis
 clin: Thumb carpometacarpal (CMC) osteoarthritis
 # DRAFT extracted from: Wrist and Hand Conditions, Theory Resources (2019)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Over 50": 3
   "Comes and goes over years": 3

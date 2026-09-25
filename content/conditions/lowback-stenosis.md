@@ -7,7 +7,8 @@ clin: Lumbar spinal stenosis / neurogenic claudication
 ages: 50-64, o64
 # Patient text moved unchanged from the site's original low back region.
 # Pointers from content/regions/lowback.md, 24 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Gradually, no clear reason": 1
   "More than 3 months": 1

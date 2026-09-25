@@ -4,7 +4,8 @@ id: hamstring
 name: Strained hamstring muscle
 clin: Hamstring strain injury (HSI)
 # DRAFT extracted from: Hamstring Strain Injury in Athletes: Clinical Practice Guidelines (JOSPT, 2022)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Suddenly — sprinting, kicking, or changing direction": 3
   "Deep in the buttock": 2

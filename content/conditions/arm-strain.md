@@ -4,7 +4,8 @@ id: strain
 name: Upper arm muscle soreness or strain
 clin: Delayed-onset muscle soreness or muscle strain (biceps, triceps)
 # DRAFT patient text written 25 Sep 2026 from content/regions/arm.md — not yet reviewed.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After the gym, heavy lifting, or a new workout": 3
   "I felt a pop or tear while lifting": 1

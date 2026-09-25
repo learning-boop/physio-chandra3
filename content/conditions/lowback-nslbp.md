@@ -5,7 +5,8 @@ name: Non-specific mechanical low back pain
 clin: Acute low back pain with mobility deficits (JOSPT 2021)
 # Patient text moved unchanged from the site's original low back region.
 # Pointers from content/regions/lowback.md, 24 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After lifting or bending": 2
   "After a twist or sudden movement": 1

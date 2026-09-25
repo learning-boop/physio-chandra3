@@ -5,7 +5,8 @@ name: Mid-back stiffness
 clin: Thoracic spine stiffness (mobility deficit)
 # Patient text moved from the old upper back region (July 2026 document set).
 # Pointers from content/regions/upperback.md, 24 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After long hours sitting, at a desk, or driving": 2
   "Gradually, no clear reason": 1

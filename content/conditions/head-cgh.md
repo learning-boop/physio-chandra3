@@ -5,7 +5,8 @@ name: Neck-related headache
 clin: Cervicogenic headache (ICHD-3; JOSPT 2017 neck pain with headache)
 # Patient text shared with neck-cheadache.md: keep the two in step.
 # Pointers from content/regions/head.md, 25 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After long hours at a desk or screen": 1
   "After a knock to the head or a whiplash injury": 1

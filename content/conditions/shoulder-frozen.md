@@ -7,7 +7,8 @@ clin: adhesive capsulitis
 ages: 30-49, 50-64, o64
 # Patient text moved unchanged from the site's original shoulder region.
 # Pointers from content/regions/shoulder.md, 25 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Gradually, no clear reason": 1
   "Deep inside, or at the front of the shoulder": 2

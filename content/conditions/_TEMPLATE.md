@@ -6,11 +6,19 @@
 # region : which body area this belongs to. One of:
 #          lowback  neck  ctj  upperback  tlj  sij  coccyx  jaw  head  shoulder  arm  elbow  wrist  hip  knee  ankle
 # id     : short unique code, lowercase, no spaces (e.g. achilles)
+#
+# Optional gates (leave out if not needed):
+#   ages: 50-64, o64            only shown for these age answers
+#   onset: pregnancy, postpartum only shown when "How did it start?" is one of these
+# A condition with the same name as one in a neighbouring region is shown
+# once; keep its text identical in both files.
 # ─────────────────────────────────────────────────────────────────────────
 region: ankle
 id: peroneal
 name: Peroneal tendon pain
 clin: peroneal tendinopathy
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 
 # POINTERS — this is what makes the condition appear.
 # Quote the answer text EXACTLY as the patient sees it on screen, and give it

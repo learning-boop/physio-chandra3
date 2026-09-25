@@ -5,7 +5,8 @@ name: Sacroiliac joint pain
 clin: Sacroiliac joint pain (Laslett 2005; European pelvic girdle pain guidelines 2008)
 # Patient text moved unchanged from the low back region (the site's original).
 # Pointers from content/regions/sij.md, 25 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After a missed step or a jarring landing on one leg": 2
   "After a fall onto my bottom": 2

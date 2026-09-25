@@ -5,7 +5,8 @@ name: Rotator-cuff-related shoulder pain
 clin: includes subacromial shoulder pain
 # Patient text moved unchanged from the site's original shoulder region.
 # Pointers from content/regions/shoulder.md, 25 Sep 2026.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After a lot of overhead work, lifting, or sport": 2
   "Gradually, no clear reason": 1

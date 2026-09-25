@@ -1,6 +1,9 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   EXTRA REGIONS for the symptom guide — authored from Physio Chandra's
-   clinical education documents (78 condition docs, July 2026 set).
+   EXTRA REGIONS for the symptom guide. Most are built from Chandra's region
+   assessment documents (Sep 2026; the text of each is in content/regions/).
+   Elbow, wrist, hip and ankle are still the earlier July 2026 set, until
+   their region documents are built. (Low back, shoulder and knee live in
+   ./symptomGuide.js.)
    Same schema and scoring rules as the original guide:
      weights 3 = strong pointer, 2 = moderate, 1 = weak, negative = rules against
      results need score ≥ 3 AND ≥ 40% of that condition's max.
@@ -50,16 +53,16 @@ export const EXTRA_REGIONS = {
         { id: "u18", label: "Under 18" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
-        { id: "50-64", label: "50 to 64", weights: { radic: 1 } },
+        { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
       ]},
       { id: "onset", text: "How did it start?", options: [
-        { id: "woke", label: "Woke up with it", weights: { mech: 2 } },
-        { id: "gradual", label: "Gradually, no clear reason", weights: { mech: 1 } },
+        { id: "woke", label: "Woke up with it" },
+        { id: "gradual", label: "Gradually, no clear reason" },
         { id: "car", label: "After a car accident or whiplash-type jolt" },
         { id: "fall", label: "After a fall, sport, or knock to the head or neck" },
-        { id: "desk", label: "After long hours at a desk, screen, or in one position", weights: { mech: 2 } },
-        { id: "lift", label: "After lifting or a sudden movement", weights: { mech: 1, radic: 1 } }
+        { id: "desk", label: "After long hours at a desk, screen, or in one position" },
+        { id: "lift", label: "After lifting or a sudden movement" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -70,27 +73,27 @@ export const EXTRA_REGIONS = {
     ],
     questions: [
       { id: "N1", text: "When you turn your head to look over your shoulder, what happens?", options: [
-        { id: "full", label: "I can turn fully both ways", weights: { mech: -2 } },
-        { id: "onestiff", label: "It is stiff or painful turning to one side", weights: { mech: 3, radic: 1 } },
-        { id: "bothstiff", label: "It is stiff or painful turning both ways", weights: { mech: 2 } },
-        { id: "locked", label: "It is locked and I can barely turn it at all", weights: { mech: 1 } }
+        { id: "full", label: "I can turn fully both ways" },
+        { id: "onestiff", label: "It is stiff or painful turning to one side" },
+        { id: "bothstiff", label: "It is stiff or painful turning both ways" },
+        { id: "locked", label: "It is locked and I can barely turn it at all" }
       ]},
       { id: "N2", text: "Which of these describe your arm symptoms? Tick all that apply.",
         askIf: ({ draw, all }) => !draw || ["shoulder", "elbow", "wrist"].some((t) => draw.has(t)) ||
           [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
         options: [
-          { id: "pastelbow", label: "Pain goes down the arm past the elbow", weights: { radic: 3 } },
-          { id: "armworse", label: "The arm pain is worse than the neck pain", weights: { radic: 2 } },
-          { id: "fingers", label: "Pins and needles or numbness in particular fingers", weights: { radic: 3 } },
-          { id: "handhead", label: "Resting my hand on top of my head eases the arm pain", weights: { radic: 2 } },
-          { id: "shoulderonly", label: "Pain stops at the top of the shoulder or upper arm", weights: { radic: -2, mech: 1 } }
+          { id: "pastelbow", label: "Pain goes down the arm past the elbow" },
+          { id: "armworse", label: "The arm pain is worse than the neck pain" },
+          { id: "fingers", label: "Pins and needles or numbness in particular fingers" },
+          { id: "handhead", label: "Resting my hand on top of my head eases the arm pain" },
+          { id: "shoulderonly", label: "Pain stops at the top of the shoulder or upper arm" }
         ]},
       { id: "N3", text: "Does looking up, or tilting your head toward the sore side, bring on pain or tingling down the arm?",
         askIf: ({ ra }) => [].concat(ra.N2 || []).some((o) => o === "pastelbow" || o === "fingers"),
         options: [
-          { id: "arm", label: "Yes, it goes down the arm", weights: { radic: 3 } },
-          { id: "neckonly", label: "It hurts in the neck, but not the arm", weights: { mech: 1, radic: -1 } },
-          { id: "neither", label: "No, neither", weights: { radic: -2 } }
+          { id: "arm", label: "Yes, it goes down the arm" },
+          { id: "neckonly", label: "It hurts in the neck, but not the arm" },
+          { id: "neither", label: "No, neither" }
         ]},
       { id: "N4", text: "If you get headaches with this, what are they like?",
         askIf: ({ draw, ra }) => (draw && draw.has("head")) || !ra.age || ["u18", "18-29", "30-49"].includes(ra.age),
@@ -111,15 +114,15 @@ export const EXTRA_REGIONS = {
           { id: "settling", label: "It is settling a bit more each week" }
         ]},
       { id: "N6", text: "Which of these make it worse? Tick all that apply.", options: [
-        { id: "desk", label: "Long spells at a desk, screen, or driving", weights: { mech: 1 } },
-        { id: "down", label: "Looking down (phone, reading, cooking)", weights: { mech: 1 } },
-        { id: "up", label: "Looking up (overhead work, reaching high shelves)", weights: { radic: 1 } },
+        { id: "desk", label: "Long spells at a desk, screen, or driving" },
+        { id: "down", label: "Looking down (phone, reading, cooking)" },
+        { id: "up", label: "Looking up (overhead work, reaching high shelves)" },
         { id: "lying", label: "Lying on it, or certain pillows" },
         { id: "lifting", label: "Lifting or carrying" }
       ]},
       { id: "N7", text: "How does your neck feel when you start moving after being still for a while?", options: [
-        { id: "eases", label: "Stiff at first, then eases as I move", weights: { mech: 2 } },
-        { id: "worse", label: "Gets worse the more I move", weights: { radic: 1 } },
+        { id: "eases", label: "Stiff at first, then eases as I move" },
+        { id: "worse", label: "Gets worse the more I move" },
         { id: "same", label: "About the same either way" }
       ]},
       { id: "N8", text: "Which hurts more: moving your neck, or moving your shoulder and arm (reaching, lifting the arm)?",
@@ -127,26 +130,15 @@ export const EXTRA_REGIONS = {
         // Asked early when the drawing stops at the shoulder: the look-alike case.
         priority: ({ draw }) => !!draw && draw.has("shoulder") && !draw.has("elbow") && !draw.has("wrist"),
         options: [
-          { id: "neck", label: "Moving my neck", weights: { mech: 1, radic: 1 } },
+          { id: "neck", label: "Moving my neck" },
           // The shoulder look-alike (test patient 4): pulls the neck patterns
           // down and points to the shoulder guide instead.
-          { id: "shoulder", label: "Moving my shoulder and arm", weights: { mech: -3, radic: -3 }, special: "shoulderSource" },
+          { id: "shoulder", label: "Moving my shoulder and arm", special: "shoulderSource" },
           { id: "both", label: "Both about the same" },
           { id: "neither", label: "Neither brings it on" }
         ]}
     ],
-    conditions: [
-      { id: "mech", name: "Mechanical neck pain", clin: "Neck pain with mobility deficits (JOSPT 2017)",
-        blurb: "The most common neck pattern: joints and muscles that are irritated or guarded — often from posture, sleep position, or an awkward movement — without any serious structural problem.",
-        noticed: ["Aching or sharp catches with certain head movements", "Stiffness that eases as you move through the day", "Tension around the neck and shoulder muscles"],
-        homeCare: ["Keep the neck gently moving — frequent, comfortable range rather than rest", "Change positions often during desk work; raise the screen to eye level", "A warm pack on the neck/shoulder muscles can ease guarding", "Sleep with one supportive pillow keeping the neck level"],
-        seePhysioIf: ["Pain or stiffness lasts more than 1–2 weeks", "It keeps returning with work or sleep", "It limits driving, work, or exercise"] },
-      { id: "radic", name: "Cervical radiculopathy (nerve-root irritation)", clin: "Neck pain with radiating pain (JOSPT 2017)",
-        blurb: "A nerve in the neck being irritated or compressed can refer sharp, electric pain plus tingling or numbness down the arm — often more bothersome than the neck itself.",
-        noticed: ["Arm pain below the elbow, often into specific fingers", "Pins & needles or numbness in the hand", "Coughing/sneezing can shoot pain down the arm", "Resting the hand on the head may ease it"],
-        homeCare: ["Avoid positions that clearly shoot pain down the arm", "Short, frequent gentle neck movement within comfort", "Try easing positions (e.g., hand resting on head) when the arm flares"],
-        seePhysioIf: ["Arm pain, tingling or numbness lasts beyond a few days", "You notice any hand weakness", "You want a plan — most cases settle well with guided conservative care"] }
-    ]
+    conditions: []
   },
 
   /* ══════════════ BASE OF THE NECK (CERVICOTHORACIC JUNCTION, C7–T3) ══════════════

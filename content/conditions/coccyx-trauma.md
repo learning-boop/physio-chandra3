@@ -4,7 +4,8 @@ id: trauma
 name: Bruised tailbone after a fall
 clin: Traumatic coccydynia (Maigne 2000)
 # DRAFT patient text written 25 Sep 2026 from content/regions/coccyx.md — not yet reviewed.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After a fall onto my tailbone": 3
   "Less than 2 weeks": 1

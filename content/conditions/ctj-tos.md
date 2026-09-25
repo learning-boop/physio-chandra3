@@ -5,7 +5,8 @@ name: First rib and thoracic outlet irritation
 clin: First rib dysfunction / neurogenic thoracic outlet syndrome (SVS reporting standards 2016)
 # DRAFT patient text written 24 Sep 2026 from content/regions/ctj.md — not yet reviewed.
 # Vascular signs and hand-muscle wasting are red flags in the region file, not this pattern.
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "After lifting, carrying, or reaching": 2
   "Above my collarbone, at the base of the neck on one side": 3

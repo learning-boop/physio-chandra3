@@ -4,7 +4,8 @@ id: fearavoidance
 name: Back pain kept going by stress or worry about movement
 clin: Acute or subacute low back pain with related cognitive or affective tendencies
 # DRAFT extracted from: Low Back Pain Clinical Practice Guidelines, JOSPT 2012
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "More than 6 weeks": 2
   "Comes and goes over years": 2

@@ -4,7 +4,8 @@ id: discderangement
 name: Disc-related back pain that changes with position
 clin: Lumbar disc derangement / directional preference (Mechanical Diagnosis and Therapy)
 # DRAFT extracted from: Interventions for the Management of Acute and Chronic Low Back Pain: Revision 2021 (JOSPT Clinical Practice Guideline)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 # Pointers re-mapped 24 Sep 2026 to the questions in content/regions/lowback.md.
 pointers:
   "Bending forward, or sitting": 3

@@ -4,7 +4,8 @@ id: spondylo
 name: Heel pain linked to a joint condition
 clin: Spondyloarthritis-associated heel enthesitis
 # DRAFT extracted from: Heel Pain—Plantar Fasciitis: Revision 2014 (JOSPT Clinical Practice Guidelines)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "Comes and goes over years": 2
   "The back of the heel / Achilles tendon": 1

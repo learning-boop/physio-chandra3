@@ -4,7 +4,8 @@ id: cai
 name: Long-term ankle instability
 clin: Chronic ankle instability (CAI)
 # DRAFT extracted from: Ankle Stability and Movement Coordination Impairments: Lateral Ankle Ligament Sprains, Revision 2021 (JOSPT Clinical Practice Guidelines)
-# Reviewed by: (add your name once you have checked every line)
+# reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+reviewed:
 pointers:
   "A twist or 'rolled' ankle": 2
   "Comes and goes over years": 3
