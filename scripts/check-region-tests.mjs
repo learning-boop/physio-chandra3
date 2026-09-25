@@ -344,11 +344,36 @@ const TESTS = {
       lines: [['elbowL']],
       answers: { age: '18-29', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'no', I6: 'no' },
       expect: { route: 'urgent' } },
+  ],  forearm: [
+    { name: '1. Intersection syndrome',
+      lines: [['forearmR']],
+      answers: { age: '18-29', onset: 'newtask', duration: 'd2w', F1: ['distal'], F2: ['wrist'], F3: ['squeak', 'swelling'] },
+      expect: { top: 'forearm/intersection', not: ['forearm/pronator', 'forearm/radialtunnel', 'forearm/wartenberg'], route: 'results' } },
+    { name: '2. Pronator syndrome',
+      lines: [['forearmR', 'wristR']],
+      answers: { age: '30-49', onset: 'grip', duration: 'd3m', painQuality: ['tingling'],
+        F1: ['volar'], F4: ['thumb'], F5: ['use'], F6: ['wristhand'] },
+      expect: { top: 'forearm/pronator', notRegion: ['neck'], route: 'results' } },
+    { name: '3. Arm pump in both forearms',
+      lines: [['forearmL'], ['forearmR']],
+      answers: { age: '18-29', onset: 'sport', duration: 'd3m', F2: ['sport'], F3: ['tight'], F8: ['tight', 'eases'] },
+      expect: { top: 'forearm/armpump', notRegion: ['neck'], route: 'results' } },
+    // A line from the neck to the thumb is read as neck referral.
+    { name: '4. Neck look-alike: neck down the thumb side of the forearm',
+      lines: [['neck', 'shoulderR', 'upperarmR', 'elbowR', 'forearmR', 'wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        F4: ['thumb'], F5: ['notingle'], F6: ['neck'], F7: ['fromneck'] },
+      expect: { notRegion: ['forearm'], areas: ['neck'], route: 'results' } },
+    { name: '5. Tight, swelling forearm in a cast',
+      lines: [['forearmL']],
+      answers: { age: '50-64', onset: 'fall', duration: 'd2w' },
+      flags: ['frf-compartment'],
+      expect: { route: 'emergency' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

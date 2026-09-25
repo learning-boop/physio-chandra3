@@ -361,7 +361,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const first = injuryFlow(arm, {}).next
   check('a whole-arm drawing asks one shared injury question first', first === 'limb:I1', first)
   const text = injuryQuestion('limb:I1', arm).q.text
-  check('the shared question names each area and the longest look-back', text.includes('shoulder, upper arm, or elbow') && /6 weeks/.test(text), text)
+  check('the shared question names each area and the longest look-back', text.includes('shoulder, upper arm, elbow, or forearm') && /6 weeks/.test(text), text)
   const walk = (a) => {
     const asked = []; let r
     while ((r = injuryFlow(arm, a)).next) {
@@ -374,8 +374,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const no = walk({ 'limb:I1': 'no' })
   check('a "No" to the shared question ends every arm screen', no.asked.length === 0 && no.route === 'continue', no)
   const fall = walk({ 'limb:I1': 'fall', 'limb:I2': 'recent' })
-  check('a question asked word for word by the upper arm is not asked again by the elbow',
-    fall.asked.includes('arm:I3') && !fall.asked.includes('elbow:I3') && !fall.asked.some((k) => k.endsWith(':I1')), fall.asked)
+  check('a question asked word for word by the upper arm is not asked again by the elbow or forearm',
+    fall.asked.includes('arm:I3') && !fall.asked.includes('elbow:I3') && !fall.asked.includes('forearm:I3') && !fall.asked.includes('forearm:I6') && !fall.asked.some((k) => k.endsWith(':I1')), fall.asked)
   const older = walk({ 'limb:I1': 'fall', 'limb:I2': 'older' })
   check('an injury 2 to 6 weeks ago opens only the shoulder screen', older.asked.every((k) => k.startsWith('shoulder:')), older.asked)
   const one = injuryFlow([{ type: 'elbow' }], {}).next

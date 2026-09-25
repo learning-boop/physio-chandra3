@@ -1,22 +1,21 @@
 ---
-region: elbow
+region: forearm
 id: radialtunnel
 name: Radial tunnel syndrome
 clin: Posterior interosseous nerve irritation at the radial tunnel
-# DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
-# Patient text shared with forearm-radialtunnel.md: keep the two in step.
+# Patient text shared with elbow-radialtunnel.md: keep the two in step.
+# Pointers from content/regions/forearm.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "A deep ache in the top of the forearm, a few finger-widths below the outer elbow": 3
-  "In the forearm or upper arm muscles, not at the elbow itself": 2
-  "Turning a key or screwdriver, or lifting with the palm up": 2
-  "Outer elbow, on the bony bump on the thumb side": 1
-  "Gripping, shaking hands, or lifting a mug or kettle": 1
-  "After a lot of gripping, lifting, or tool or computer use": 1
-  "Tingling or numbness in the little and ring fingers": -2
+  "A deep ache below the outer elbow, without numbness": 3
+  "Top of the forearm near the elbow, on the thumb side": 2
+  "Turning my palm up and down (screwdriver, key, door handle)": 2
+  "Gripping, typing, or using tools": 1
+  "After a lot of gripping, typing, or tool use": 1
+  "It starts at the outer elbow and spreads down": 1
   "Tingling or numbness in the thumb, index, and middle fingers": -2
-  "It stays around the elbow": -1
+  "Tingling or numbness in the little and ring fingers": -2
   "Moving my neck": -2
 ---
 

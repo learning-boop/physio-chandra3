@@ -61,7 +61,7 @@ export const REFERRAL_MAP = {
     joints: [],
     roots: ['C6 (outer forearm to the thumb)', 'C7 (back of the forearm to the middle finger)', 'C8 (inner forearm to the little finger)'],
     muscles: ['Forearm extensors, supinator and brachioradialis (top of the forearm, back of the hand)', 'Infraspinatus (thumb side of the forearm)', 'Radial tunnel (deep ache below the outer elbow)', 'Median nerve at the pronator (underside of the forearm)'],
-    organs: ['Heart (inner forearm, left, with effort)'],
+    organs: ['Heart (inner forearm, left, with effort)', 'Lung apex / Pancoast (little-finger side of the forearm)'],
   },
   elbow: {
     joints: ['Glenohumeral joint (upper arm)'],

@@ -991,7 +991,7 @@ export const EXTRA_REGIONS = {
         text: "Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "arf-rhabdo", tier: "emergency", why: "Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
         text: "After very hard exercise, is your arm hugely swollen and very painful, and is your urine dark like cola?" },
-      { id: "arf-cellulitis", tier: "urgent", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
+      { id: "arf-cellulitis", tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
         text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
       { id: "arf-clot", sameDay: true, tier: "urgent", why: "Possible blood clot in the arm (same-day review)",
         text: "Has your whole arm become swollen, heavy, or bluish over a day or two, especially after a drip or line in the arm, or heavy overhead exercise?" },
@@ -1107,8 +1107,7 @@ export const EXTRA_REGIONS = {
      lateral elbow pain CPG 2022, Coombes 2015, Appelboam 2008 (elbow extension
      test), O'Driscoll 2005 and 2007, Novak 1994, Murphy 2009, Travell & Simons
      2019.
-     Reached from the body map's elbow band; the forearm uses these questions
-     until its own document is built. Its injury screen is in
+     Reached from the body map's elbow band. Its injury screen is in
      ./injuryScreen.js. Conditions: content/conditions/elbow-*.md. */
   elbow: {
     name: "Elbow",
@@ -1225,6 +1224,141 @@ export const EXTRA_REGIONS = {
           { id: "pop", label: "I felt a pop on the inside of the elbow" },
           { id: "speed", label: "Losing speed or accuracy" },
           { id: "tingle", label: "Tingling in the little finger when I throw" },
+          { id: "none", label: "None of these" }
+        ]}
+    ],
+    conditions: []
+  },
+
+  /* ══════════════ FOREARM ══════════════
+     From Chandra's "Forearm assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/forearm.md). Sources: Lee
+     & LaStayo 2004 (pronator syndrome), Moradi 2015 (radial tunnel), JOSPT
+     lateral elbow pain CPG 2022, Murphy 2009, van Alfen 2006, Travell &
+     Simons 2019.
+     Reached from the body map's forearm band, between the elbow and the
+     wrist. Its injury screen is in ./injuryScreen.js. Conditions:
+     content/conditions/forearm-*.md. */
+  forearm: {
+    name: "Forearm",
+    // Drawn with the elbow, a forearm mark is often elbow pain spreading down:
+    // it then gets no guaranteed first question (see nextQuestion).
+    yieldsTo: ["elbow"],
+    redFlags: [
+      { id: "frf-compartment", tier: "emergency", why: "Possible compartment syndrome (pressure building up in the forearm)",
+        text: "Is your forearm pain getting worse and worse, with the forearm tight and swollen and much worse when your fingers are moved, especially under a cast or tight bandage?" },
+      { id: "frf-necfasc", tier: "emergency", why: "Possible severe skin and tissue infection (necrotising fasciitis)",
+        text: "Is there a hot, swollen, red area on your forearm that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
+      { id: "frf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt down the inside of the arm and forearm",
+        text: "Is the pain on the inside of your left forearm or arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
+      { id: "frf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+        text: "Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
+      { id: "frf-cellulitis", tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
+        text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
+      { id: "frf-nerve", tier: "urgent", why: "Nerve weakness (radial or anterior interosseous nerve) needs medical review",
+        text: "Is your hand becoming weaker, can you not lift your wrist, or can you not make an “OK” sign with your thumb and index finger?" },
+      { id: "frf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
+        text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+      { id: "frf-pancoast", tier: "urgent", group: "pancoast", why: "Possible tumour at the top of the lung (Pancoast)",
+        text: "Do you smoke or used to smoke, and does pain run down the little-finger side of your forearm, with a cough that will not go away, or a drooping eyelid?" },
+      { id: "frf-stress", tier: "urgent", why: "Possible stress fracture or growth plate injury; needs imaging",
+        text: "Are you a young gymnast or weight-bearing athlete with a deep, pinpoint bone pain in the forearm that is worse with loading?" },
+      { id: "frf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
+        text: "Is there a band of burning pain down the forearm, with a rash or blisters in the same strip?" },
+      { id: "frf-cancer", tier: "urgent", group: "cancer", why: "Cancer or a bone lesion needs medical review",
+        text: "Have you ever had cancer, or is there a lump in your forearm that is growing, or deep bone pain at night that does not change with position?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "grip", label: "After a lot of gripping, typing, or tool use" },
+        { id: "newtask", label: "After a new or increased repeated task (rowing, paddling, weights, a new job)" },
+        { id: "sport", label: "It comes on during sport and eases when I stop" },
+        { id: "fall", label: "After a fall onto the hand, or a blow" },
+        { id: "rash", label: "It came with a rash, or after an illness or vaccine" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "F1", text: "Where is the pain mainly?", options: [
+        { id: "radial", label: "Top of the forearm near the elbow, on the thumb side" },
+        { id: "distal", label: "Top of the forearm about four finger-widths above the wrist, on the thumb side" },
+        { id: "volar", label: "Underside of the forearm near the elbow (palm side)" },
+        { id: "ulnar", label: "Little-finger side of the forearm" },
+        { id: "whole", label: "The whole forearm" }
+      ]},
+      { id: "F2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "grip", label: "Gripping, typing, or using tools" },
+        { id: "twist", label: "Turning my palm up and down (screwdriver, key, door handle)" },
+        { id: "wrist", label: "Repeated wrist movements (rowing, paddling, weights)" },
+        { id: "sport", label: "It builds during sport and eases within minutes of stopping" },
+        { id: "strap", label: "A tight watch strap, cuff, or bracelet" }
+      ]},
+      { id: "F3", text: "Which of these do you notice? Tick all that apply.", options: [
+        { id: "squeak", label: "A squeaking or creaking feeling when I move my wrist" },
+        { id: "swelling", label: "Swelling along the top of the forearm" },
+        { id: "tight", label: "The forearm goes tight and hard with use" },
+        { id: "burning", label: "Burning or tingling over the back of the thumb and wrist" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "F4", text: "Which of these do you notice in your hand? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || draw.has("wrist") || [].concat(all.painQuality || []).includes("tingling"),
+        // Early when there is tingling (or the drawing is unknown): it
+        // separates the nerves from the muscles and tendons.
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).includes("tingling"),
+        options: [
+          { id: "thumb", label: "Tingling or numbness in the thumb, index, and middle fingers" },
+          { id: "little", label: "Tingling or numbness in the little and ring fingers", special: "ulnarhand" },
+          { id: "pinch", label: "Weak pinch, or cannot make an “OK” sign with thumb and index finger", special: "handWeakness" },
+          { id: "wristdrop", label: "Cannot lift the wrist or straighten the fingers well", special: "handWeakness" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "F5", text: "Does tingling in your fingers wake you at night?",
+        askIf: ({ ra }) => [].concat(ra.F4 || []).includes("thumb"),
+        priority: () => true,
+        options: [
+          { id: "night", label: "Yes, often, and shaking the hand helps", special: "medianhand" },
+          { id: "use", label: "No; it comes on when I use my forearm, with an ache in the forearm" },
+          { id: "notingle", label: "I do not get tingling" }
+        ]},
+      { id: "F6", text: "Which hurts more: moving your neck, moving your elbow, or using your wrist and hand?",
+        askIf: ({ draw, all }) => !draw || ["neck", "ctj", "shoulder", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "neck", label: "Moving my neck", special: "neckSource" },
+          { id: "elbow", label: "Moving my elbow" },
+          { id: "wristhand", label: "Using my wrist and hand" },
+          { id: "none", label: "None of these bring it on" }
+        ]},
+      { id: "F7", text: "How does the pain spread? Tick all that apply.",
+        askIf: ({ draw }) => !draw || ["neck", "ctj", "shoulder", "upperarm", "elbow", "wrist"].some((t) => draw.has(t)),
+        options: [
+          { id: "stays", label: "It stays in the forearm" },
+          { id: "fromelbow", label: "It starts at the outer elbow and spreads down" },
+          { id: "fromneck", label: "It starts at the neck or shoulder and travels down the arm", special: "neckSource" },
+          { id: "deep", label: "A deep ache below the outer elbow, without numbness" },
+          { id: "line", label: "It runs along a narrow line into particular fingers" }
+        ]},
+      { id: "F8", text: "If it comes on during sport (rowing, motocross, climbing, paddling): which apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "sport" || [].concat(ra.F2 || []).includes("sport"),
+        priority: () => true,
+        options: [
+          { id: "tight", label: "The forearm goes tight and hard" },
+          { id: "numb", label: "The hand goes numb or weak during exercise" },
+          { id: "eases", label: "It eases within 10 to 30 minutes of stopping" },
+          { id: "lasts", label: "It lasts into the next day" },
           { id: "none", label: "None of these" }
         ]}
     ],
@@ -1531,6 +1665,8 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Severe pain behind one eye, with a watery eye or runny nose on the same side, can be a <strong>cluster-type headache</strong>. It needs a doctor's assessment and specific treatment, so please book with your doctor." },
   medOveruse: { title: "Frequent painkillers can keep headaches going",
     body: "Taking painkillers for headaches on <strong>10 or more days a month</strong> (15 or more for simple ones like paracetamol or ibuprofen) can itself keep headaches going, called <strong>medication-overuse headache</strong>. Please review how often you take them with your doctor or pharmacist; do not stop suddenly without advice." },
+  handWeakness: { title: "Hand weakness should be checked by a doctor",
+    body: "Not being able to make an “OK” sign with the thumb and index finger, or to lift the wrist or straighten the fingers, can mean a nerve in the forearm is being pressed on. A doctor should check this. Physiotherapy can help alongside or afterwards." },
   armDoctor: { title: "Please have this checked by a doctor",
     body: "A rash or blisters in a strip, severe pain followed by weakness, swollen glands in the armpit, or an arm or hand that goes <strong>pale, cold, swollen or bluish</strong> when you raise it or carry something, are signs a doctor should look at. They can point to shingles, an inflamed nerve, an infection, or pressure on the blood vessels. Physiotherapy can help afterwards if it is needed." },
   ribcage: { title: "Pain with deep breaths",

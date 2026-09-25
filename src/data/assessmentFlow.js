@@ -17,11 +17,11 @@ import {
 
 /* Regions on one anatomical chain, from the spine outwards. */
 export const REGION_CHAINS = [
-  ['neck', 'shoulder', 'arm', 'elbow', 'wrist'],
+  ['neck', 'shoulder', 'arm', 'elbow', 'forearm', 'wrist'],
   ['lowback', 'hip', 'knee', 'ankle'],
   ['neck', 'ctj', 'upperback', 'tlj', 'lowback'],
   // The base of the neck feeds the arm too (first rib, thoracic outlet).
-  ['ctj', 'shoulder', 'arm', 'elbow', 'wrist'],
+  ['ctj', 'shoulder', 'arm', 'elbow', 'forearm', 'wrist'],
   // The TL junction refers to the low back, side of the hip and groin.
   // The back of the pelvis (sacroiliac) sits between them.
   ['tlj', 'lowback', 'sij', 'hip', 'knee', 'ankle'],
@@ -34,7 +34,7 @@ export const REGION_CHAINS = [
 
 const AREA_WORD = {
   lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head', arm: 'upper arm', shoulder: 'shoulder',
-  elbow: 'elbow', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
+  elbow: 'elbow', forearm: 'forearm', wrist: 'wrist or hand', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
 }
 
 /** Region keys (with an authored question set) of the drawn zones, in drawing order. */
@@ -189,6 +189,10 @@ export const MAX_SCORED_QUESTIONS = 5
 // is probably not where the problem is; its questions are asked only when
 // nothing better is left.
 const SILENT_AREA_WEIGHT = 0.25
+// An area drawn next to the one it yields to (a forearm mark beside the
+// elbow): its first question comes after the main area's. Once its own
+// answers point somewhere, it counts in full.
+const YIELD_WEIGHT = 0.2
 
 /** True when any of these asked questions got an answer that points at a condition. */
 function gaveSignal(questions, ra) {
@@ -205,6 +209,9 @@ function gaveSignal(questions, ra) {
 /** The id of the next scored question to ask, or null when done.
     - Each drawn area first gets its single most useful question, so a line
       from the shoulder to the elbow finds out early which area is involved.
+      An area with `yieldsTo` (the forearm, next to the elbow) gives that
+      slot up, and its questions count for less until it has been asked,
+      when one of those areas is asked too.
     - After that, across all areas, the question that can still move the result
       the most (questionValue), with silent areas pushed back.
     - Areas where one condition is already clearly ahead are skipped, and it
@@ -225,11 +232,12 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
     const ra = regionAnswers(keys, k, answers)
     if (answeredRegionCount(region, ra) >= 2 && shouldStop(region, ra)) continue
     const askedHere = region.questions.filter((q) => askedIds.includes(q.id))
-    const weight = askedHere.length && !gaveSignal(askedHere, ra) ? SILENT_AREA_WEIGHT : 1
+    const yields = (region.yieldsTo || []).some((y) => keys.includes(y))
+    const weight = askedHere.length ? (gaveSignal(askedHere, ra) ? 1 : SILENT_AREA_WEIGHT) : yields ? YIELD_WEIGHT : 1
     for (const q of region.questions) {
       if (askedIds.includes(q.id) || !isRelevant(q, region, ra)) continue
       if (q.askIf && !q.askIf({ draw, ra, all })) continue
-      live.push({ id: q.id, unseenArea: askedHere.length === 0, v: questionValue(q, region, ra) * weight + (q.priority && q.priority({ draw, ra, all }) ? 1 : 0) })
+      live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: questionValue(q, region, ra) * weight + (q.priority && q.priority({ draw, ra, all }) ? 1 : 0) })
     }
   }
   const pool = keys.length > 1 && live.some((x) => x.unseenArea) ? live.filter((x) => x.unseenArea) : live

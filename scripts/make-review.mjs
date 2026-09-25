@@ -11,11 +11,11 @@ import { SCREENS } from '../src/data/injuryScreen.js'
 import { regionSignoff, conditionSignoff } from './check-review.mjs'
 
 const OUT_DIR = 'review'
-const ORDER = ['neck', 'ctj', 'upperback', 'tlj', 'lowback', 'sij', 'coccyx', 'jaw', 'head', 'shoulder', 'arm', 'elbow', 'wrist', 'hip', 'knee', 'ankle']
+const ORDER = ['neck', 'ctj', 'upperback', 'tlj', 'lowback', 'sij', 'coccyx', 'jaw', 'head', 'shoulder', 'arm', 'elbow', 'forearm', 'wrist', 'hip', 'knee', 'ankle']
 const AREA = {
   neck: 'Neck', ctj: 'Base of neck (C7–T3)', upperback: 'Mid back and front of chest', tlj: 'Mid-to-low back and flank',
   lowback: 'Lower back', sij: 'Back of pelvis and buttock', coccyx: 'Tailbone', jaw: 'Jaw', head: 'Head',
-  shoulder: 'Shoulder', arm: 'Upper arm', elbow: 'Elbow (and forearm for now)', wrist: 'Wrist and hand', hip: 'Hip, groin, top of the thigh',
+  shoulder: 'Shoulder', arm: 'Upper arm', elbow: 'Elbow', forearm: 'Forearm', wrist: 'Wrist and hand', hip: 'Hip, groin, top of the thigh',
   knee: 'Knee (mid-thigh to shin)', ankle: 'Lower shin, ankle and foot',
 }
 

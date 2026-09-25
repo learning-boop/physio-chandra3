@@ -634,8 +634,7 @@ Object.assign(ZONE_TO_REGION, {
   jaw: 'jaw',
   head: 'head',
   upperarm: 'arm',
-  // The forearm uses the elbow's questions until its own document is built.
-  forearm: 'elbow',
+  forearm: 'forearm',
   elbow: 'elbow',
   wrist: 'wrist',
   hip: 'hip',

@@ -7,13 +7,14 @@
                of the neck (its document routes its injury flag here)
      shoulder  fall, dislocation or sudden pull (shoulder document, B2)
      arm       fall, blow or sudden force to the upper arm (upper arm, B2)
-     elbow     fall, blow or sudden force to the elbow or forearm (elbow, B2)
+     elbow     fall, blow or sudden force to the elbow (elbow, B2)
+     forearm   fall, blow or crush (forearm, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
    clear them. When several apply (an upper-arm mark also asks the shoulder),
-   they run one after another until one routes. The shoulder, upper arm and
-   elbow share one opening question when two or more of them apply (see
+   they run one after another until one routes. The shoulder, upper arm,
+   elbow and forearm share one opening question when two or more of them apply (see
    "One arm gate" below), and a question asked word for word by an earlier
    screen is not asked again.
 
@@ -202,6 +203,30 @@ export const ELBOW_INJURY = [
     ]},
 ]
 
+/* ── Forearm: fall, blow or crush ── */
+export const FOREARM_INJURY = [
+  { id: 'I1', text: 'Has your forearm been hurt in a fall, accident, blow, or crush in the last 2 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'fall', label: 'Yes, I fell onto my hand' },
+    { id: 'blow', label: 'Yes, a blow to the forearm' },
+    { id: 'crush', label: 'Yes, it was crushed or trapped' },
+  ]},
+  { id: 'I2', text: 'Is the forearm a different shape, or is bone showing through the skin?',
+    options: yesNo('emergency', 'Possible fracture') },
+  { id: 'I3', text: 'Since the injury, is your hand cold, pale, or blue, or is your whole hand numb?',
+    options: yesNo('emergency', 'Possible blood vessel or nerve injury') },
+  // Asked after a crush only: the question starts "Was the forearm crushed".
+  { id: 'I4', text: 'Was the forearm crushed, and is the pain now getting worse, with the forearm tight and much worse when the fingers are moved?',
+    askIf: (a) => a.I1 === 'crush',
+    options: yesNo('emergency', 'Possible compartment syndrome (pressure building up in the forearm)') },
+  // A possible fracture into the elbow or wrist joint: same day.
+  { id: 'I5', text: 'Since the injury, can you not turn your palm up and down, or is there pain at the elbow or wrist as well as the forearm?',
+    sameDay: true, options: yesNo('urgent', 'Possible forearm fracture that involves the elbow or wrist joint') },
+  // Worded as the upper arm's I5, so it is asked once when both apply.
+  { id: 'I6', text: 'Since the injury, can you not lift your wrist or straighten your fingers?',
+    sameDay: true, options: yesNo('urgent', 'Possible radial nerve injury') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -226,9 +251,10 @@ export const SCREENS = [
     flag: 'A shoulder injury in the last 6 weeks (injury screen)', questions: SHOULDER_INJURY, step: linearStep(SHOULDER_INJURY) },
   { id: 'arm', zones: ['upperarm'], title: 'Recent Upper Arm Injury',
     flag: 'An upper arm injury in the last 2 weeks (injury screen)', questions: ARM_INJURY, step: linearStep(ARM_INJURY) },
-  // The forearm uses the elbow's questions until its own document is built.
-  { id: 'elbow', zones: ['elbow', 'forearm'], title: 'Recent Elbow Injury',
-    flag: 'An elbow or forearm injury in the last 2 weeks (injury screen)', questions: ELBOW_INJURY, step: linearStep(ELBOW_INJURY) },
+  { id: 'elbow', zones: ['elbow'], title: 'Recent Elbow Injury',
+    flag: 'An elbow injury in the last 2 weeks (injury screen)', questions: ELBOW_INJURY, step: linearStep(ELBOW_INJURY) },
+  { id: 'forearm', zones: ['forearm'], title: 'Recent Forearm Injury',
+    flag: 'A forearm injury in the last 2 weeks (injury screen)', questions: FOREARM_INJURY, step: linearStep(FOREARM_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──
@@ -238,15 +264,16 @@ export const SCREENS = [
    its own I1. The shoulder looks back 6 weeks and the others 2 weeks, so
    when the shoulder is one of them, "limb:I2" asks when it happened; an
    injury 2 to 6 weeks ago opens only the shoulder's screen. */
-const LIMB = ['shoulder', 'arm', 'elbow']
-const LIMB_NAME = { shoulder: 'shoulder', arm: 'upper arm', elbow: 'elbow' }
+const LIMB = ['shoulder', 'arm', 'elbow', 'forearm']
+const LIMB_NAME = { shoulder: 'shoulder', arm: 'upper arm', elbow: 'elbow', forearm: 'forearm' }
 // Each merged answer, as each screen's own I1 answer.
 const LIMB_OPTIONS = [
-  { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no' } },
-  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall' } },
-  { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow' } },
-  { id: 'popped', label: 'Yes, my shoulder popped out of place', only: 'shoulder', map: { shoulder: 'popped', arm: 'no', elbow: 'no' } },
-  { id: 'pull', label: 'Yes, a sudden pull, jerk, or heavy lift (I may have felt a pop)', map: { shoulder: 'pull', arm: 'pop', elbow: 'pop' } },
+  { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no' } },
+  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall', forearm: 'fall' } },
+  { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow', forearm: 'blow' } },
+  { id: 'crush', label: 'Yes, my forearm was crushed or trapped', only: 'forearm', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'crush' } },
+  { id: 'popped', label: 'Yes, my shoulder popped out of place', only: 'shoulder', map: { shoulder: 'popped', arm: 'no', elbow: 'no', forearm: 'no' } },
+  { id: 'pull', label: 'Yes, a sudden pull, jerk, or heavy lift (I may have felt a pop)', map: { shoulder: 'pull', arm: 'pop', elbow: 'pop', forearm: 'no' } },
 ]
 /** What a shared-question answer means as one screen's own I1 answer. */
 export const limbAnswerFor = (optionId, screenId) => ((LIMB_OPTIONS.find((o) => o.id === optionId) || {}).map || {})[screenId]
@@ -255,12 +282,11 @@ const limbMerged = (zones) => limbScreens(zones).length >= 2
 
 function limbQuestion(zones) {
   const ids = limbScreens(zones).map((sc) => sc.id)
-  // The elbow screen also covers a forearm-only mark.
-  const forearmOnly = zones.some((z) => z.type === 'forearm') && !zones.some((z) => z.type === 'elbow')
-  const names = ids.map((id) => (id === 'elbow' && forearmOnly ? 'forearm' : LIMB_NAME[id]))
+  const names = ids.map((id) => LIMB_NAME[id])
   const where = names.length > 2 ? names.slice(0, -1).join(', ') + ', or ' + names[names.length - 1] : names.join(' or ')
   const weeks = ids.includes('shoulder') ? 6 : 2
-  return { id: 'I1', text: `Has your ${where} been hurt in a fall, accident, blow, or heavy lift in the last ${weeks} weeks?`,
+  const how = ids.includes('forearm') ? 'a fall, accident, blow, crush, or heavy lift' : 'a fall, accident, blow, or heavy lift'
+  return { id: 'I1', text: `Has your ${where} been hurt in ${how} in the last ${weeks} weeks?`,
     options: LIMB_OPTIONS.filter((o) => !o.only || ids.includes(o.only)).map(({ id, label }) => ({ id, label })) }
 }
 const LIMB_WHEN = { id: 'I2', text: 'When did it happen?', options: [
