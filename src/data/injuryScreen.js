@@ -16,6 +16,7 @@
      knee      twist, blow or fall: the Ottawa knee rule, adapted (knee, B2)
      leg       kick, fall or sudden calf pain (lower leg, B2)
      ankle     rolled, twisted or landed badly: the Ottawa ankle rules, adapted (ankle, B2)
+     foot      twist, crush, stubbed toe or landing: the Ottawa foot rule, adapted (foot, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
@@ -430,6 +431,38 @@ export const ANKLE_INJURY = [
     sameDay: true, options: yesNo('urgent', 'Possible growth plate fracture: in children these are more common than sprains') },
 ]
 
+/* ── Foot: twist, crush, stubbed toe or landing (Ottawa foot rule, adapted).
+   Tenderness over the navicular and the base of the 5th metatarsal can only
+   be checked in person. ── */
+export const FOOT_INJURY = [
+  { id: 'I1', text: 'Has your foot been hurt in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'twist', label: 'Yes, I rolled or twisted it' },
+    { id: 'crush', label: 'Yes, something heavy fell on it, or it was crushed' },
+    { id: 'stub', label: 'Yes, I stubbed or jammed a toe' },
+    { id: 'landing', label: 'Yes, I landed on it from a height, or my foot was bent under me' },
+  ]},
+  { id: 'I2', text: 'Is the foot or a toe out of shape, or is bone showing through the skin?',
+    options: yesNo('emergency', 'Possible fracture or dislocation') },
+  // The questions that start "After a crush", "After rolling the ankle" and
+  // "After the big toe was bent back" are asked after that injury only.
+  { id: 'I3', text: 'After a crush, is the foot getting tighter and more painful by the hour, with pain on moving the toes?',
+    askIf: (a) => a.I1 === 'crush',
+    options: yesNo('emergency', 'Possible compartment syndrome of the foot') },
+  // Possible fractures: same day. Worded as the ankle's I4, so it is asked once
+  // when both apply.
+  { id: 'I4', text: 'Could you not take 4 steps straight after the injury, and still cannot?',
+    sameDay: true, options: yesNo('urgent', 'Ottawa foot rule: an X-ray is needed to rule out a fracture') },
+  { id: 'I5', text: 'Is there bruising on the sole in the middle of the foot, or pain in the middle of the foot when you stand on your toes?',
+    sameDay: true, options: yesNo('urgent', 'Possible Lisfranc (midfoot) injury: often missed, and it may need surgery') },
+  { id: 'I6', text: 'After rolling the ankle, is the pain on the outer edge of the foot, halfway along, rather than at the ankle?',
+    askIf: (a) => a.I1 === 'twist', sameDay: true,
+    options: yesNo('urgent', 'Possible fracture at the base of the 5th metatarsal') },
+  { id: 'I7', text: 'After the big toe was bent back hard (on artificial turf, or jammed), is it swollen and painful to push off?',
+    askIf: (a) => a.I1 === 'stub' || a.I1 === 'landing',
+    options: yesNo('urgent', 'Possible "turf toe" (big toe joint ligament injury)') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -472,6 +505,8 @@ export const SCREENS = [
     flag: 'A lower leg injury in the last 6 weeks (injury screen)', questions: LEG_INJURY, step: linearStep(LEG_INJURY) },
   { id: 'ankle', zones: ['ankle'], title: 'Recent Ankle Injury',
     flag: 'An ankle injury in the last 6 weeks (injury screen)', questions: ANKLE_INJURY, step: linearStep(ANKLE_INJURY) },
+  { id: 'foot', zones: ['foot'], title: 'Recent Foot Injury',
+    flag: 'A foot injury in the last 6 weeks (injury screen)', questions: FOOT_INJURY, step: linearStep(FOOT_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──

@@ -679,4 +679,5 @@ Object.assign(ZONE_TO_REGION, {
   hip: 'hip',
   thigh: 'thigh',
   ankle: 'ankle',
+  foot: 'foot',
 })

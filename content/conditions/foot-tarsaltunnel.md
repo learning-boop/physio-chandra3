@@ -1,20 +1,18 @@
 ---
-region: ankle
+region: foot
 id: tarsaltunnel
 name: Pinched nerve behind the inner ankle
 clin: Tarsal tunnel syndrome (McSweeney & Cichero 2015)
-# DRAFT extracted from: Heel Pain—Plantar Fasciitis: Revision 2014 (JOSPT Clinical Practice Guidelines)
-# Pointers moved to the rebuilt ankle questions (content/regions/ankle.md), 25 Sep 2026.
-# Patient text shared with foot-tarsaltunnel.md: keep the two in step.
+# Patient text shared with ankle-tarsaltunnel.md: keep the two in step.
+# Pointers from content/regions/foot.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Burning or tingling into the sole and inner heel, worse standing": 3
+  "Burning or tingling in the heel or sole": 3
   "Pins and needles or numbness in the sole or heel": 3
-  "Inner ankle, behind or below the bony bump": 2
-  "After a long walk, or standing a lot": 1
-  "My arch is getting flatter on that side": -1
+  "Standing or walking a long time": 1
   "Burning or numbness in both feet, like socks": -2
+  "Moving my low back": -2
 ---
 
 ## blurb

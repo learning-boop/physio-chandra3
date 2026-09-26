@@ -65,7 +65,7 @@ export function againstFindings(regionKey, conditionId, answers = {}) {
   return out
 }
 
-const AREA_ORDER = ['jaw', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'sij', 'coccyx', 'abdomen', 'shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'head']
+const AREA_ORDER = ['jaw', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'sij', 'coccyx', 'abdomen', 'shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot', 'head']
 
 /** P1 / P2 / P3 — the drawn areas, spine first, with surface and side.
     Areas a referral line merely travels through are where the pain is FELT,

@@ -135,6 +135,12 @@ export const REFERRAL_MAP = {
     muscles: ['Gluteus minimus (outer and back of the thigh, "pseudo-sciatica")', 'Tensor fascia lata (outer thigh)', 'Piriformis (back of the thigh)', 'Vastus medialis / lateralis (front of the thigh, knee)', 'Adductor longus / brevis (inner thigh)', 'Iliopsoas (front of the thigh)'],
     organs: ['Leg veins: clot (swollen, warm, tender thigh or calf)', 'Leg arteries: claudication (cramp on walking, eases standing still)', 'Kidney, ureter and pelvic organs (upper inner thigh)'],
   },
+  foot: {
+    joints: ['Lumbar facets and discs (can refer to the foot without a nerve root)'],
+    roots: ['L4 (inner arch)', 'L5 (top of the foot and the big toe)', 'S1 (sole, heel and outer edge of the foot)'],
+    muscles: ['Gastrocnemius (instep) and soleus (heel)', 'Tibialis posterior and long toe flexors (sole, underside of the toes)', 'Long toe extensors and tibialis anterior (top of the foot, big toe)', 'Abductor hallucis, quadratus plantae, flexor digitorum brevis (heel, ball of the foot)', 'Peroneus longus and brevis (outer edge of the foot)'],
+    organs: ['Peripheral nerves: neuropathy (both feet)', 'Leg arteries: cold, pale feet, rest pain', 'Gout, inflammatory or reactive arthritis', 'Charcot foot, diabetic ulcer or infection'],
+  },
   lowerleg: {
     joints: ['Lumbar facets and discs, sacroiliac joint (can refer into the calf without a nerve root)'],
     roots: ['L4 (inner shin to the inner ankle)', 'L5 (outer shin and top of the foot to the big toe)', 'S1 (calf, outer foot and sole)'],
@@ -162,7 +168,7 @@ export const REFERRAL_MAP = {
 }
 
 /* Order the summary lists areas in: spine first, then out along the limbs. */
-const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle']
+const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot']
 
 /** The drawn zone types that have an entry, in summary order, without repeats. */
 export function mappedTypes(zones = []) {

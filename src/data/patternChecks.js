@@ -37,7 +37,7 @@ const limbSpread = (zones, side) => {
   // Upper arm, elbow and forearm count as one stretch of the arm, so the
   // whole-limb rule still means shoulder, mid-arm and hand.
   const arm = [['shoulder'], ['upperarm', 'elbow', 'forearm'], ['wrist', 'hand']].filter((ts) => onSide(zones, side, ...ts)).length
-  const leg = [['hip'], ['thigh', 'knee', 'lowerleg'], ['ankle']].filter((ts) => onSide(zones, side, ...ts)).length
+  const leg = [['hip'], ['thigh', 'knee', 'lowerleg'], ['ankle', 'foot']].filter((ts) => onSide(zones, side, ...ts)).length
   return Math.max(arm, leg)
 }
 
@@ -104,13 +104,13 @@ const PATTERNS = [
   {
     id: 'pc-inflammatory', tier: 'urgent', why: WHY.systemic,
     text: 'The same joints painful, stiff or swollen on BOTH sides, with morning stiffness lasting more than 30 minutes',
-    when: (z, a) => ['wrist', 'hand', 'knee', 'ankle', 'elbow', 'shoulder', 'thigh'].some((t) => bothSides(z, t))
+    when: (z, a) => ['wrist', 'hand', 'knee', 'ankle', 'foot', 'elbow', 'shoulder', 'thigh'].some((t) => bothSides(z, t))
       && [].concat(a.pattern24 || []).includes('amLong'),
   },
   {
     id: 'pc-polyneuropathy', tier: 'urgent', why: WHY.neuropathy,
     text: 'Numbness, tingling or burning in BOTH hands or BOTH feet, like wearing gloves or socks',
-    when: (z) => bothSides(z, 'wrist') || bothSides(z, 'hand') || bothSides(z, 'lowerleg') || bothSides(z, 'ankle'),
+    when: (z) => bothSides(z, 'wrist') || bothSides(z, 'hand') || bothSides(z, 'lowerleg') || bothSides(z, 'ankle') || bothSides(z, 'foot'),
   },
   {
     id: 'pc-limb', tier: 'urgent', why: WHY.limb,

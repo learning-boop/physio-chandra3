@@ -179,7 +179,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const src = fs.readFileSync(root + '/src/components/Body3D.jsx', 'utf8')
   const grab = (re) => (src.match(re) || [''])[0]
   const code = [
-    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/), grab(/const CTJ_BOTTOM = [^\n]+/), grab(/const TLJ_TOP = [^\n]+/), grab(/const TLJ_BOTTOM = [^\n]+/), grab(/const SIJ_TOP = [^\n]+/), grab(/const COCCYX_TOP = [^\n]+/), grab(/const COCCYX_BOTTOM = [^\n]+/), grab(/const COCCYX_HALF = [^\n]+/), grab(/const JAW_TOP = [^\n]+/), grab(/const UPPERARM_BOTTOM = [^\n]+/), grab(/const ELBOW_BOTTOM = [^\n]+/), grab(/const FOREARM_BOTTOM = [^\n]+/), grab(/const WRIST_BOTTOM = [^\n]+/), grab(/const THIGH_TOP_FRONT = [^\n]+/), grab(/const THIGH_TOP_BACK = [^\n]+/), grab(/const KNEE_TOP = [^\n]+/), grab(/const KNEE_BOTTOM = [^\n]+/), grab(/const ANKLE_TOP = [^\n]+/), grab(/const armBand = [^\n]+/),
+    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/), grab(/const CTJ_BOTTOM = [^\n]+/), grab(/const TLJ_TOP = [^\n]+/), grab(/const TLJ_BOTTOM = [^\n]+/), grab(/const SIJ_TOP = [^\n]+/), grab(/const COCCYX_TOP = [^\n]+/), grab(/const COCCYX_BOTTOM = [^\n]+/), grab(/const COCCYX_HALF = [^\n]+/), grab(/const JAW_TOP = [^\n]+/), grab(/const UPPERARM_BOTTOM = [^\n]+/), grab(/const ELBOW_BOTTOM = [^\n]+/), grab(/const FOREARM_BOTTOM = [^\n]+/), grab(/const WRIST_BOTTOM = [^\n]+/), grab(/const THIGH_TOP_FRONT = [^\n]+/), grab(/const THIGH_TOP_BACK = [^\n]+/), grab(/const KNEE_TOP = [^\n]+/), grab(/const KNEE_BOTTOM = [^\n]+/), grab(/const ANKLE_TOP = [^\n]+/), grab(/const SOLE_TOP = [^\n]+/), grab(/const FOOT_FRONT = [^\n]+/), grab(/const armBand = [^\n]+/),
     'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
     grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/),
     grab(/function surfaceOf\(wx, wy, wz\) \{[\s\S]*?\n\}/),
@@ -207,9 +207,12 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('down the leg at the back: buttock, back of the thigh, knee',
     ['sij', 'thigh', 'knee'].every((t, i) => classify(-0.08, [-0.05, -0.09, -0.2][i], 0.07).startsWith(t)),
     [-0.05, -0.09, -0.2].map((y) => classify(-0.08, y, 0.07)))
-  check('below the knee: lower leg, then ankle and foot',
-    ['knee', 'lowerleg', 'ankle'].every((t, i) => classify(0.03, [-0.2, -0.3, -0.45][i], 0.07).startsWith(t)),
-    [-0.2, -0.3, -0.45].map((y) => classify(0.03, y, 0.07)))
+  check('below the knee: lower leg, then the ankle',
+    ['knee', 'lowerleg', 'ankle'].every((t, i) => classify(-0.02, [-0.2, -0.3, -0.45][i], 0.07).startsWith(t)),
+    [-0.2, -0.3, -0.45].map((y) => classify(-0.02, y, 0.07)))
+  check('the ankle bone and the back of the heel are the ankle; the top of the foot and the sole are the foot',
+    [classify(-0.03, -0.45, 0.07), classify(-0.06, -0.47, 0.07), classify(0.05, -0.47, 0.07), classify(0.0, -0.49, 0.07)].join() === 'ankleR,ankleR,footR,footR',
+    [classify(-0.03, -0.45, 0.07), classify(-0.06, -0.47, 0.07), classify(0.05, -0.47, 0.07), classify(0.0, -0.49, 0.07)])
   check('down the arm: upper arm, elbow, forearm, wrist, then hand',
     ['upperarm', 'elbow', 'forearm', 'wrist', 'hand'].every((t, i) => classify(0.02, [0.18, 0.11, 0.05, 0.02, -0.03][i], 0.16).startsWith(t)),
     [0.18, 0.11, 0.05, 0.02, -0.03].map((y) => classify(0.02, y, 0.16)))

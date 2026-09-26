@@ -88,8 +88,10 @@ const AREA = {
   kneeR:     { type: 'knee',      label: 'Right Knee' },
   lowerlegL: { type: 'lowerleg',  label: 'Left Lower Leg' },
   lowerlegR: { type: 'lowerleg',  label: 'Right Lower Leg' },
-  ankleL:    { type: 'ankle',     label: 'Left Ankle / Foot' },
-  ankleR:    { type: 'ankle',     label: 'Right Ankle / Foot' },
+  ankleL:    { type: 'ankle',     label: 'Left Ankle' },
+  ankleR:    { type: 'ankle',     label: 'Right Ankle' },
+  footL:     { type: 'foot',      label: 'Left Foot & Toes' },
+  footR:     { type: 'foot',      label: 'Right Foot & Toes' },
 }
 export const ZONE_LABELS = Object.fromEntries(Object.entries(AREA).map(([id, d]) => [id, d.label]))
 export const ZONE_TYPES = Object.fromEntries(Object.entries(AREA).map(([id, d]) => [id, d.type]))
@@ -147,6 +149,13 @@ const KNEE_TOP = -0.155
 // kneecap), and the ankle is narrowest at about -0.42 before the heel.
 const KNEE_BOTTOM = -0.24
 const ANKLE_TOP = -0.40
+// Below that line the foot (content/regions/foot.md) is the sole and heel pad
+// (below SOLE_TOP) and the top of the foot in front of the shin (lx beyond
+// FOOT_FRONT); the ankle bones, the front crease and the back of the heel
+// stay the ankle. Measured on this mesh the shin's front edge is at lx
+// -0.005, the foot reaches forward from fy -0.44, and the sole is below -0.48.
+const SOLE_TOP = -0.48
+const FOOT_FRONT = 0.01
 const armBand = (fy) => (fy > UPPERARM_BOTTOM ? 'upperarm' : fy > ELBOW_BOTTOM ? 'elbow' : fy > FOREARM_BOTTOM ? 'forearm' : fy > WRIST_BOTTOM ? 'wrist' : 'hand')
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
@@ -178,7 +187,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v18'
+const CLASSIFIER_VERSION = 'zones-v19'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -200,7 +209,7 @@ function classify(wx, wy, wz) {
   // Legs first, by height alone. Safe because this model's arm points all sit
   // above fy -0.10, while the feet spread to |z| 0.1385 — wider than ARM_SPLIT
   // — so testing the arm first would read the edge of a foot as a wrist.
-  if (fy < ANKLE_TOP) return 'ankle' + side
+  if (fy < ANKLE_TOP) return (fy < SOLE_TOP || lx > FOOT_FRONT ? 'foot' : 'ankle') + side
   if (fy < KNEE_BOTTOM) return 'lowerleg' + side
   if (fy < KNEE_TOP) return 'knee' + side
   if (fy < -0.10) return 'thigh' + side
@@ -1036,7 +1045,7 @@ export default function Body3D({
   // Areas where the trunk itself does not already say front or back, so the
   // surface has to be carried on the zone (a knee is one area; its front and
   // back are different problems).
-  const SURFACE_MATTERS = new Set(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'neck', 'head'])
+  const SURFACE_MATTERS = new Set(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot', 'neck', 'head'])
 
   // Merge the zones from EVERY line into one selection list, and report each
   // line's own ordered zone types separately — one continuous line from the

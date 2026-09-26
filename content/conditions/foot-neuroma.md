@@ -2,12 +2,20 @@
 region: foot
 id: neuroma
 name: Morton's neuroma
-clin: Interdigital nerve thickening (usually 3rd–4th toes)
+clin: Interdigital nerve thickening (usually between the 3rd and 4th toes; Bhatia & Thomson 2020)
 # Patient text moved unchanged from the site's original ankle region (July 2026 set).
-# Parked until the foot document is built: add pointers to the foot questions then.
+# Pointers from content/regions/foot.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
+  "Burning, tingling, or shooting into two toes, better with shoes off": 3
+  "Feels like walking on a pebble or a folded sock": 2
+  "Tight, narrow, or high-heeled shoes": 3
+  "The ball of the foot, under the toes": 2
+  "Between the toes, or in the toes": 1
+  "Pain on one bone that is worse with every step or hopping": -2
+  "Pain under one toe joint, with swelling on top": -1
+  "Moving my low back": -2
 ---
 
 ## blurb

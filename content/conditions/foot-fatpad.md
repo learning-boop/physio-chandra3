@@ -2,17 +2,19 @@
 region: foot
 id: fatpad
 name: Thinning heel cushion (fat pad atrophy)
-clin: Fat-pad atrophy
+clin: Heel fat pad irritation or atrophy
 # DRAFT extracted from: Heel Pain—Plantar Fasciitis: Revision 2014 (JOSPT Clinical Practice Guidelines)
-# Parked until the foot document is built (heel pain belongs to the foot).
+# Pointers from content/regions/foot.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "The bottom of the heel": 3
-  "No, mornings are fine": 3
-  "Over 50": 2
-  "Gradually with lots of standing or walking": 2
-  "Comes and goes over years": 1
+  "A deep bruised feeling in the middle of the heel, worse on hard floors": 3
+  "Walking barefoot or on hard floors": 3
+  "Under the heel": 2
+  "65 or over": 1
+  "50 to 64": 1
+  "Worst on the first steps in the morning, then eases, returns after standing": -1
+  "Moving my low back": -2
 ---
 
 ## blurb

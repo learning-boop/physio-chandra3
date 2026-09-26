@@ -44,8 +44,8 @@ const GENERIC_Q2 = {
 /* Zone types along one limb, from the spine outwards. */
 const LIMB_CHAINS = [
   ['neck', 'shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand'],
-  ['lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle'],
-  ['sij', 'thigh', 'knee', 'lowerleg', 'ankle'],
+  ['lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'],
+  ['sij', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'],
 ]
 const SPINE = ['neck', 'lowerback']
 const AXIAL_CHAIN = ['neck', 'ctj', 'upperback', 'tlj', 'lowerback', 'sij', 'coccyx']

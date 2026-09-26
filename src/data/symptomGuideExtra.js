@@ -2060,12 +2060,12 @@ export const EXTRA_REGIONS = {
      2019, Vuurberg 2018, Sman 2015 (syndesmosis), Maffulli 1998 (Achilles
      rupture), Kohls-Gatzoulis 2004 (tibialis posterior), McSweeney & Cichero
      2015 (tarsal tunnel), Travell & Simons 2019.
-     Reached from the body map's ankle band (ANKLE_TOP in Body3D.jsx), which
-     also covers the foot until the foot document is built. Its injury
+     Reached from the body map's ankle band (ANKLE_TOP in Body3D.jsx): the
+     ankle bones, the front crease and the back of the heel. Its injury
      screen (the Ottawa ankle rules, adapted) is in ./injuryScreen.js.
      Conditions: content/conditions/ankle-*.md. */
   ankle: {
-    name: "Ankle & foot",
+    name: "Ankle",
     redFlags: [
       { id: "af-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
         text: "Is your ankle hot, red, and swollen, with a fever or feeling unwell?" },
@@ -2075,13 +2075,13 @@ export const EXTRA_REGIONS = {
         text: "Has your foot suddenly become cold, pale, numb, or painful at rest?" },
       { id: "af-necfasc", tier: "emergency", group: "legnecfasc", why: "Possible severe skin and tissue infection",
         text: "Is there a hot, red area around your ankle that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
-      { id: "af-charcot", sameDay: true, tier: "urgent", why: "Possible Charcot foot or diabetic foot infection; same-day review protects the foot",
+      { id: "af-charcot", sameDay: true, tier: "urgent", group: "charcot", why: "Possible Charcot foot or diabetic foot infection; same-day review protects the foot",
         text: "Do you have diabetes, and is your foot or ankle hot, red, and swollen (even if it does not hurt much), or is there a wound that is not healing?" },
       { id: "af-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); same-day review",
         text: "Is your calf or ankle swollen, warm, or tender, especially after surgery, a cast or boot, a long journey, time in bed, or starting the pill?" },
-      { id: "af-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
+      { id: "af-gout", tier: "urgent", group: "footgout", why: "Possible gout or other crystal arthritis",
         text: "Did your ankle or big toe become suddenly hot, swollen, and very painful overnight, and have you had gout before?" },
-      { id: "af-inflam", tier: "urgent", why: "Possible inflammatory or reactive arthritis affecting the tendons",
+      { id: "af-inflam", tier: "urgent", group: "footinflam", why: "Possible inflammatory or reactive arthritis affecting the tendons",
         text: "Do you have heel or Achilles pain along with back stiffness in the morning, psoriasis, eye inflammation, other swollen joints, or a recent stomach bug or sexually transmitted infection?" },
       { id: "af-quinolone", tier: "urgent", why: "These medicines raise the risk of Achilles rupture; the prescriber should review",
         text: "Have you recently taken a quinolone antibiotic (such as ciprofloxacin) or steroid tablets, and now have Achilles pain?" },
@@ -2190,6 +2190,150 @@ export const EXTRA_REGIONS = {
       ]}
     ],
     conditions: []
+  },
+
+  /* ══════════════ FOOT & TOES ══════════════
+     From Chandra's "Foot assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/foot.md). Sources: JOSPT
+     heel pain CPG 2023, Ottawa ankle and foot rules (Stiell 1993), Warden
+     2014 (bone stress injuries), Welck 2015 (Lisfranc), Bhatia & Thomson
+     2020 (Morton's neuroma), EULAR gout 2016, NICE NG19 (diabetic foot),
+     McSweeney & Cichero 2015, Travell & Simons 2019.
+     Reached from the body map's foot area: the sole and heel pad, and the
+     top of the foot in front of the ankle (SOLE_TOP and FOOT_FRONT in
+     Body3D.jsx). Question ids are B1 to B8. Its injury screen (the Ottawa
+     foot rule, adapted) is in ./injuryScreen.js. Conditions:
+     content/conditions/foot-*.md. */
+  foot: {
+    name: "Foot & toes",
+    redFlags: [
+      { id: "ft-ischaemia", tier: "emergency", group: "limbischaemia", why: "Possible blocked artery",
+        text: "Has your foot or toes suddenly become cold, pale, blue, or numb, or very painful at rest?" },
+      { id: "ft-necfasc", tier: "emergency", group: "legnecfasc", why: "Possible severe skin and tissue infection",
+        text: "Is there a hot, red area on your foot that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
+      { id: "ft-diabeticinfection", tier: "emergency", why: "Diabetic foot infection can threaten the limb",
+        text: "Do you have diabetes, and a foot wound with spreading redness, pus, a bad smell, or a fever?" },
+      { id: "ft-puncture", sameDay: true, tier: "urgent", why: "Possible deep puncture infection; same-day review",
+        text: "Did something go through your shoe into your foot (nail, glass), and is the foot now swollen, red, or painful to walk on?" },
+      { id: "ft-charcot", sameDay: true, tier: "urgent", group: "charcot", why: "Possible Charcot foot or diabetic foot ulcer; same-day review protects the foot",
+        text: "Do you have diabetes, and is your foot hot, red, or swollen (even if it does not hurt much), or is there a wound or ulcer that is not healing?" },
+      { id: "ft-gout", tier: "urgent", group: "footgout", why: "Possible gout",
+        text: "Did your big toe joint (or another joint) become suddenly hot, swollen, red, and too painful to touch, often overnight?" },
+      { id: "ft-inflam", tier: "urgent", group: "footinflam", why: "Possible inflammatory or reactive arthritis",
+        text: "Is a whole toe swollen like a sausage, or do you have heel pain with back stiffness, psoriasis, eye inflammation, or after a stomach bug or sexually transmitted infection?" },
+      { id: "ft-claudication", tier: "urgent", group: "claudication", why: "Possible narrowed leg arteries",
+        text: "Do you get a cramping pain in your foot or calf when walking that eases within minutes of standing still, or are your toes cold, shiny, and slow to heal?" },
+      { id: "ft-neuropathy", tier: "urgent", group: "neuropathy", why: "Possible peripheral neuropathy; needs medical review and foot checks",
+        text: "Do both feet feel numb, burning, or tingling, like wearing socks?" },
+      { id: "ft-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS)",
+        text: "Since a foot injury, surgery, or cast, is your foot burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts?" },
+      { id: "ft-stress", tier: "urgent", why: "Possible stress fracture; navicular and 5th metatarsal stress fractures are high-risk and need imaging",
+        text: "Do you run, march, or train hard, and is there pain on one foot bone (heel, midfoot, or a metatarsal) that is worse with every step or hopping, or aches at night?" },
+      { id: "ft-footdrop", tier: "urgent", group: "footdrop", why: "Foot drop (peroneal nerve or L5) needs medical review",
+        text: "Is your foot slapping down or your toes catching when you walk?" },
+      { id: "ft-lump", tier: "urgent", group: "cancer", why: "A growing lump or nail mark needs medical review",
+        text: "Is there a lump in the foot that is growing, a new dark mark under a toenail, or deep pain at night that does not change with position?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "load", label: "After increasing running, walking, or standing" },
+        { id: "shoes", label: "After new or different shoes, or going barefoot" },
+        { id: "injury", label: "After an injury (twist, crush, stubbed toe)" },
+        { id: "sudden", label: "It came on suddenly overnight, with swelling", special: "hotJoint" },
+        { id: "weight", label: "After weight gain, pregnancy, or a change in work" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "B1", text: "Where is the pain mainly?", options: [
+        { id: "heel", label: "Under the heel" },
+        { id: "arch", label: "The arch, or the top of the midfoot" },
+        { id: "ball", label: "The ball of the foot, under the toes" },
+        { id: "bigtoe", label: "The big toe joint" },
+        { id: "toes", label: "Between the toes, or in the toes" }
+      ]},
+      { id: "B2", text: "About the heel: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.B1 || []).includes("heel"),
+        priority: () => true,
+        options: [
+          { id: "firststep", label: "Worst on the first steps in the morning, then eases, returns after standing" },
+          { id: "bruised", label: "A deep bruised feeling in the middle of the heel, worse on hard floors" },
+          { id: "squeeze", label: "Pain when squeezing the sides of the heel, or hopping", special: "footStress" },
+          { id: "burning", label: "Burning or tingling in the heel or sole" },
+          { id: "child", label: "Heel pain in a child aged about 8 to 14, worse with sport" }
+        ]},
+      { id: "B3", text: "About the ball of the foot: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.B1 || []).includes("ball"),
+        priority: () => true,
+        options: [
+          { id: "neuroma", label: "Burning, tingling, or shooting into two toes, better with shoes off" },
+          { id: "pebble", label: "Feels like walking on a pebble or a folded sock" },
+          { id: "plate", label: "Pain under one toe joint, with swelling on top" },
+          { id: "bone", label: "Pain on one bone that is worse with every step or hopping", special: "footStress" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "B4", text: "About the big toe: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.B1 || []).includes("bigtoe"),
+        priority: () => true,
+        options: [
+          { id: "bunion", label: "A bump on the side of the joint, the toe leaning towards the others" },
+          { id: "rigidus", label: "Stiff, and painful when I push off or rise on my toes" },
+          { id: "dorsal", label: "A bony lump on top of the joint" },
+          { id: "sesamoid", label: "Pain under the joint, on the small bones (sesamoids)" },
+          { id: "hot", label: "Came on suddenly, hot and too tender to touch", special: "hotJoint" }
+        ]},
+      { id: "B5", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "standing", label: "Standing or walking a long time" },
+        { id: "running", label: "Running or jumping" },
+        { id: "tightshoes", label: "Tight, narrow, or high-heeled shoes" },
+        { id: "barefoot", label: "Walking barefoot or on hard floors" },
+        { id: "tiptoe", label: "Rising up onto my toes" }
+      ]},
+      { id: "B6", text: "Which of these do you notice in the foot? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["lowerleg", "thigh", "lowerback", "sij"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        // Early with nerve-type pain (or when the drawing is unknown).
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "top", label: "Pins and needles or numbness on the top of the foot" },
+          { id: "sole", label: "Pins and needles or numbness in the sole or heel" },
+          { id: "both", label: "Burning or numbness in both feet, like socks", special: "calfDoctor" },
+          { id: "fromback", label: "Pain that starts in the back or buttock and travels down", special: "lowbackHip" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "B7", text: "Which hurts more: moving your low back, moving your ankle, or standing and walking on the foot?",
+        askIf: ({ draw, ra }) => !draw || ["ankle", "lowerleg", "lowerback", "sij"].some((t) => draw.has(t)) ||
+          [].concat(ra.B6 || []).some((o) => o !== "none"),
+        // Early when the low back or buttock is drawn too: the back look-alike.
+        priority: ({ draw }) => !!draw && ["lowerback", "sij"].some((t) => draw.has(t)),
+        options: [
+          { id: "back", label: "Moving my low back", special: "lowbackHip" },
+          { id: "ankle", label: "Moving my ankle" },
+          { id: "foot", label: "Standing and walking on the foot" },
+          { id: "none", label: "None of these bring it on" }
+        ]},
+      { id: "B8", text: "Do any of these apply? Tick all that apply.", options: [
+        { id: "diabetes", label: "I have diabetes", special: "footDoctor" },
+        { id: "cold", label: "My feet are often cold, pale, or slow to heal", special: "footDoctor" },
+        { id: "psoriasis", label: "I have psoriasis, or other joints are swollen", special: "footDoctor" },
+        { id: "gout", label: "I have had gout before", special: "footDoctor" },
+        { id: "none", label: "None of these" }
+      ]}
+    ],
+    conditions: []
   }
 }
 
@@ -2215,6 +2359,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Achilles pain 2 to 6 cm above the heel is usually the middle part of the tendon, which is assessed and treated a little differently from pain where it attaches to the heel. Consider running the <strong>Lower leg</strong> guide too. Your assessment will check the whole tendon." },
   hotJoint: { title: "A hot, red, swollen joint should be checked by a doctor today",
     body: "A joint that is hot, red, and swollen can be gout, another crystal arthritis, or an infection. A doctor should see it the same day, and straight away if you have a fever or feel unwell. Physiotherapy can help once it has settled." },
+  footStress: { title: "This could be a stress fracture: see a doctor first",
+    body: "Pain on one bone of the foot that is worse with every step or hopping, or pain when the sides of the heel are squeezed, can be a <strong>stress fracture</strong>. It needs a doctor and usually imaging before more running or long walks. Physiotherapy helps with the return to activity afterwards." },
+  footDoctor: { title: "Worth checking with your doctor as well",
+    body: "With diabetes, feet that are often cold, pale, or slow to heal, psoriasis or other swollen joints, or gout in the past, foot pain can have a medical side as well: circulation, nerves, skin, or inflammation. Keep your doctor or foot specialist involved, and check your feet daily if you have diabetes. Physiotherapy can help alongside." },
   footDrop: { title: "A dropping foot should be checked by a doctor",
     body: "A foot that slaps down or toes that catch when you walk mean the muscles that lift the foot are weak. This can come from a nerve pressed at the outer knee (after crossing the legs, a tight cast, or a knee injury) or from the low back. A doctor should check it soon. Physiotherapy can help alongside or afterwards." },
   thighDoctor: { title: "Please have this checked by a doctor",

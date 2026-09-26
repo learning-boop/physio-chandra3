@@ -90,6 +90,7 @@ const REGION_AGGRAVATORS = {
   hip:       ['Lying on that side at night', 'Putting on socks and shoes, or getting in and out of a car', 'Sitting in a low chair or deep squatting', 'Climbing stairs or standing on that leg'],
   leg:       ['Running or jumping', 'Walking a distance', 'Rising onto my toes', 'Sport or marching'],
   knee:      ['Going down stairs or squatting', 'Jumping or landing', 'Twisting or turning on the leg', 'Kneeling'],
+  foot:      ['Standing or walking a long time', 'Running or jumping', 'Tight, narrow, or high-heeled shoes', 'Walking barefoot or on hard floors'],
   ankle:     ['Walking on uneven ground', 'Running, jumping, or hopping', 'Squatting, lunging, or going down stairs', 'The first steps in the morning'],
   head:      ['Long screen time or reading', 'Stress or poor sleep', 'Certain neck or jaw positions', 'Bright light or noisy places'],
 }
@@ -113,6 +114,7 @@ const REGION_EASERS = {
   knee:      ['Rest and elevation', 'Ice', 'A support or brace', 'Gentle movement'],
   leg:       ['Rest from running', 'Stopping for a few minutes', 'Gentle stretching', 'Ice or heat'],
   ankle:     ['Rest and elevation', 'Ice', 'Supportive footwear', 'Gentle stretching'],
+  foot:      ['Rest', 'Supportive, cushioned shoes', 'Taking shoes off', 'Ice or a cold bottle under the foot'],
   head:      ['Rest in a quiet, dark room', 'Gentle neck movement or a short walk', 'A heat pack across the neck and shoulders', 'Regular meals and plenty of water'],
 }
 

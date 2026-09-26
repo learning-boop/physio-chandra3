@@ -573,11 +573,40 @@ const TESTS = {
       answers: { age: '50-64', onset: 'gradual', duration: 'd6w', A8: ['hot'] },
       flags: ['af-charcot'],
       expect: { route: 'urgent' } },
+  ],  foot: [
+    { name: '1. Plantar heel pain',
+      lines: [['footR']],
+      answers: { age: '30-49', onset: 'load', duration: 'd3m', B1: ['heel'], B2: ['firststep'] },
+      expect: { top: 'foot/pf', route: 'results' } },
+    { name: "2. Morton's neuroma",
+      lines: [['footL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', painQuality: ['burning'],
+        B1: ['ball'], B3: ['neuroma'], B5: ['tightshoes'] },
+      expect: { top: 'foot/neuroma', notRegion: ['lowback'], route: 'results' } },
+    { name: '3. Pain on one metatarsal (stress fracture)',
+      lines: [['footR']],
+      answers: { age: '18-29', onset: 'load', duration: 'd6w', B1: ['ball'], B3: ['bone'] },
+      flags: ['ft-stress'],
+      expect: { route: 'urgent' } },
+    { name: '4. Sudden hot big toe (gout)',
+      lines: [['footR']],
+      answers: { age: '50-64', onset: 'sudden', duration: 'd2w', B1: ['bigtoe'], B4: ['hot'], B8: ['gout'] },
+      flags: ['ft-gout'],
+      expect: { route: 'urgent' } },
+    { name: '5. Midfoot pain after the foot was bent under (Lisfranc, injury screen)',
+      lines: [['footL']],
+      answers: { age: '30-49', onset: 'injury', duration: 'd2w', I1: 'landing', I2: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '6. Burning in both feet (neuropathy)',
+      lines: [['footL'], ['footR']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', B6: ['both'], B8: ['diabetes'] },
+      flags: ['ft-neuropathy'],
+      expect: { route: 'urgent' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'leg', ankle: 'ankle' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'leg', ankle: 'ankle', foot: 'foot' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []
