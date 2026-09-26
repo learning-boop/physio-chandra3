@@ -1113,8 +1113,14 @@ export default function PainAssessment() {
                     <div className="pa-actions" style={{ margin: '0 auto' }}>
                       <button className="pa-primary" style={goldBtn} onClick={() => setStage('rotate')}>start</button>
                     </div>
-                    <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', margin: '18px auto 0', maxWidth: 520 }}>
-                      It takes about 2 to 5 minutes. Careful answers give the most useful results.
+                    {/* How long it takes, set apart in a soft gold panel. */}
+                    <p style={{
+                      fontSize: 'clamp(17px, 4.4vw, 19px)', lineHeight: 1.55, color: '#fff', fontWeight: 500,
+                      margin: '20px auto 0', maxWidth: 520, padding: '14px 20px', borderRadius: 14,
+                      background: 'rgba(201,169,110,0.22)', border: '1px solid rgba(201,169,110,0.55)',
+                    }}>
+                      It takes about <span style={{ color: GOLD_LIGHT }}>2 to 5 minutes</span>.
+                      Careful answers give the most useful results.
                     </p>
                     <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '20px auto 0', maxWidth: 520 }}>
                       This guide offers general information to help you describe your symptoms.
