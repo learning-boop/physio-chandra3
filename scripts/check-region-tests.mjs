@@ -6,7 +6,7 @@
    content/regions/<region>.md. They answer only the questions the flow
    actually asks them; anything their document entry does not mention is left
    unanswered, as a real visitor might.                                     */
-import { REGIONS } from '../src/data/symptomGuide.js'
+import { REGIONS, ZONE_TO_REGION } from '../src/data/symptomGuide.js'
 import {
   questionRegions, needsAreaChoice, buildScreens, nextQuestion, rankAcross, regionAnswers,
   specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
@@ -14,6 +14,11 @@ import {
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
 import { injuryFlow, injuryQuestion, limbAnswerFor as limbAs, ageFrom } from '../src/data/injuryScreen.js'
 import { MAX_HYPOTHESES } from '../src/data/clinicianSummary.js'
+import { summarizeZone, locationAnswers, minorZoneIds } from '../src/data/drawnLocation.js'
+
+/* Where on an area a test patient drew: a small cluster of body coordinates
+   around { fy, az, lx } (see ../src/data/drawnLocation.js). */
+const spot = (fy, az, lx) => [-1, 0, 1].flatMap((i) => [-1, 0, 1].map((j) => ({ fy: fy + i * 0.003, az: az + j * 0.003, lx: lx + (i + j) * 0.002 })))
 
 const TESTS = {
   neck: [
@@ -344,6 +349,13 @@ const TESTS = {
       lines: [['elbowL']],
       answers: { age: '18-29', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'no', I6: 'no' },
       expect: { route: 'urgent' } },
+    // A mark on the outer elbow whose end grazed the forearm: the elbow is the
+    // main area and is asked first; the drawing answers its location.
+    { name: '7. Outer elbow with a graze into the forearm (main area first)',
+      lines: [['elbowR', 'forearmR']], ink: { elbowR: 0.88, forearmR: 0.12 },
+      points: { elbowR: spot(0.1, 0.188, -0.01) },
+      answers: { age: '30-49', onset: 'grip', duration: 'd3m', E2: ['grip'], E5: ['full'] },
+      expect: { top: 'elbow/tennis', firstAsked: 'E', notAsked: ['E1'], route: 'results' } },
   ],  forearm: [
     { name: '1. Intersection syndrome',
       lines: [['forearmR']],
@@ -516,6 +528,11 @@ const TESTS = {
       answers: { age: 'o64', onset: 'surgery', duration: 'd2w', K5: ['back'] },
       flags: ['kf-dvt'],
       expect: { route: 'urgent' } },
+    // Drawn at the back of the knee: the drawing answers "Where is the pain?".
+    { name: "7. Drawn at the back of the knee: Baker's cyst (location from the drawing)",
+      lines: [['kneeR']], points: { kneeR: spot(-0.19, 0.068, -0.042) },
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', K3: ['swelling'], K5: ['back'] },
+      expect: { top: 'knee/baker', notAsked: ['K1'], route: 'results' } },
   ],  leg: [
     { name: '1. Shin splints in both shins',
       lines: [['lowerlegL'], ['lowerlegR']],
@@ -602,6 +619,11 @@ const TESTS = {
       answers: { age: 'o64', onset: 'gradual', duration: 'o3m', B6: ['both'], B8: ['diabetes'] },
       flags: ['ft-neuropathy'],
       expect: { route: 'urgent' } },
+    // Drawn under the heel: the drawing answers "Where is the pain?".
+    { name: '7. Drawn under the heel: plantar heel pain (location from the drawing)',
+      lines: [['footR']], points: { footR: spot(-0.49, 0.09, -0.04) },
+      answers: { age: '30-49', onset: 'load', duration: 'd3m', B2: ['firststep'] },
+      expect: { top: 'foot/pf', notAsked: ['B1'], route: 'results' } },
   ],
 }
 
@@ -631,6 +653,11 @@ function toScreen(keys, rk, own) {
 
 function run(rk, t) {
   const zones = zonesOf(t.lines)
+  // Optional: where on each area the marks sit, and each area's share of the ink.
+  for (const z of zones) {
+    if (t.points && t.points[z.id]) z.at = summarizeZone(z.type, t.points[z.id])
+    if (t.ink && t.ink[z.id] !== undefined) z.ink = t.ink[z.id]
+  }
   const referral = detectReferral(t.lines)
   const flowZ = flowZones(zones, referral)
   const focus = needsAreaChoice(flowZ, null) ? (t.focus || rk) : null
@@ -684,11 +711,16 @@ function run(rk, t) {
 
   // Questions: opening screen, then whatever the flow picks.
   const { context } = buildScreens(keys)
-  const ans = { ...drawnAnswers(referral) }
+  const ans = { ...drawnAnswers(referral), ...locationAnswers(flowZ) }
+  const minorIds = minorZoneIds(flowZ)
+  const minor = new Set(keys.filter((k) => {
+    const own = flowZ.filter((z) => !z.implied && ZONE_TO_REGION[z.type] === k)
+    return own.length && own.every((z) => minorIds.has(z.id))
+  }))
   for (const q of context) if (all[q.id] !== undefined) ans[q.id] = all[q.id]
   let id
   while ((id = nextQuestion(keys, ans, seen.asked.filter((x) => !x.includes(':')), MAX_SCORED_QUESTIONS,
-    { draw: zones.map((z) => z.type), all }))) {
+    { draw: zones.map((z) => z.type), all, minor }))) {
     seen.asked.push(id)
     if (all[id] !== undefined) ans[id] = all[id]
   }
@@ -714,6 +746,7 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)
     for (const q of e.notAsked || []) if (r.asked.includes(q)) why.push(`asked ${q}`)
     for (const k of e.areas || []) if (!(r.keys || []).includes(k)) why.push(`${k} was not asked`)
+    if (e.firstAsked) { const first = (r.asked || []).find((x) => !x.includes(':')); if (!first || !first.startsWith(e.firstAsked)) why.push(`first question ${first}, expected one of ${e.firstAsked}…`) }
     if (e.special && ![].concat(e.special).some((c) => (r.specials || []).includes(c))) why.push(`no "${[].concat(e.special).join('" or "')}" card`)
     if (why.length) failed++
     console.log(`${why.length ? 'FAIL' : 'PASS'}  ${t.name}`)

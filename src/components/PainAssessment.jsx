@@ -14,6 +14,7 @@ import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial } from '../data/psychosocial'
 import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism } from '../data/painType'
 import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
+import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
 import { patternChecks } from '../data/patternChecks'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -408,7 +409,22 @@ export default function PainAssessment() {
   const [lines, setLines] = useState([])
   const referral = useMemo(() => detectReferral(lines), [lines])
   const flowZ = useMemo(() => flowZones(zones, referral), [zones, referral])
-  const drawn = useMemo(() => drawnAnswers(referral), [referral])
+  // Answers the drawing gives: a line down a limb ("past the elbow"), and
+  // where in an area the marks sit ("back of the knee"), which answers that
+  // area's location question so it is not asked again (../data/drawnLocation.js).
+  const drawn = useMemo(() => ({ ...drawnAnswers(referral), ...locationAnswers(flowZ) }), [referral, flowZ])
+  // Areas the marks only grazed (a sliver of a line that caught the next
+  // area): their questions come after the main area's.
+  const minorKeys = useMemo(() => {
+    const minor = minorZoneIds(flowZ)
+    const byKey = {}
+    for (const z of flowZ) {
+      const k = ZONE_TO_REGION[z.type]
+      if (z.implied || !k) continue
+      ;(byKey[k] = byKey[k] || []).push(minor.has(z.id))
+    }
+    return new Set(Object.entries(byKey).filter(([, v]) => v.every(Boolean)).map(([k]) => k))
+  }, [flowZ])
   const regionChoices = useMemo(() => {
     const seen = new Set(); const out = []
     // Implied areas are not choices: they come with the area they belong to.
@@ -732,11 +748,23 @@ export default function PainAssessment() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   // The rule-based pain type is passed along too, so the overview does not
   // describe a different kind of pain from the card above it.
+  // "Where is the pain?" answers the drawing gave (not asked as questions),
+  // for the review screen and the summary.
+  const drawnLocationPairs = useMemo(() => Object.entries(locationAnswers(flowZ))
+    .filter(([qid]) => !askedIds.includes(qid))
+    .map(([qid, oids]) => {
+      const r = keys.map((k) => REGIONS[k]).find((x) => x && x.questions.some((q) => q.id === qid))
+      const q = r && r.questions.find((x) => x.id === qid)
+      return q && { area: r.name, question: q.text, answer: oids.map((id) => (q.options.find((o) => o.id === id) || {}).label).filter(Boolean).join(' · ') }
+    })
+    .filter(Boolean), [flowZ, keys, askedIds])
   const qaPairs = useMemo(() => [
     ...flatQuestions
       .filter((q) => !q.textarea)
       .map((q) => ({ question: q.area ? `${q.area}: ${q.text}` : q.text, answer: answerText(q) }))
       .filter((pair) => pair.answer && pair.answer !== '—'),
+    // Location answers taken from the drawing, for questions not shown.
+    ...drawnLocationPairs.map((p) => ({ question: `${p.area}: ${p.question} (from the drawing)`, answer: p.answer })),
     ...INJURY_KEYS.filter((k) => answers[k] !== undefined).map((k) => {
       const { screen, q } = injuryQuestion(k, flowZ)
       return {
@@ -753,7 +781,7 @@ export default function PainAssessment() {
       answer: [painType.primary, painType.secondary].filter(Boolean)
         .map((t) => `${PAIN_TYPES[t].title} (${PAIN_TYPES[t].term})`).join(', with some features of '),
     }] : []),
-  ], [flatQuestions, answers, painType, referral, flowZ])
+  ], [flatQuestions, answers, painType, referral, flowZ, drawnLocationPairs])
   const notesText = String(answers.notes || answers.q5 || '').trim()
 
   // The summary Chandra receives — built from the same rule output the result
@@ -804,7 +832,7 @@ export default function PainAssessment() {
         const id = nextQuestion(keys, scopedAnswers, askedIds, MAX_SCORED_QUESTIONS,
           // Types, plus type@surface (e.g. head@back) for questions that
           // depend on which side of the body was marked.
-          { draw: zones.flatMap((z) => (z.face ? [z.type, `${z.type}@${z.face}`] : [z.type])), all: answers })
+          { draw: zones.flatMap((z) => (z.face ? [z.type, `${z.type}@${z.face}`] : [z.type])), all: answers, minor: minorKeys })
         next = id ? activeQuestions.findIndex((s) => s.id === id) : tailIndexes[0]
       }
     } else if (qIndex + 1 < activeQuestions.length) {
@@ -1368,6 +1396,19 @@ export default function PainAssessment() {
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 10 }}>
                     {zones.map((z) => <span key={z.id} style={pill}>{z.label}</span>)}
                   </div>
+                  {/* Where the pain is, read from the drawing instead of asked. */}
+                  {drawnLocationPairs.length > 0 && (
+                    <div style={{ marginTop: 12 }}>
+                      {drawnLocationPairs.map((p) => (
+                        <p key={p.area} style={{ fontSize: 14.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>
+                          <span style={{ color: 'rgba(255,255,255,0.55)' }}>{p.area}, from your drawing: </span>{p.answer}
+                        </p>
+                      ))}
+                      <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.45)', margin: '8px 0 0', lineHeight: 1.5 }}>
+                        Not quite right? Go back to the drawing and mark the spot again.
+                      </p>
+                    </div>
+                  )}
                 </div>
                 {flatQuestions.map((q, i) => (
                   <div key={q.id} style={{ ...card, marginBottom: 10, maxWidth: 520, display: 'flex', justifyContent: 'space-between', gap: 12 }}>

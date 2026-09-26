@@ -11,6 +11,7 @@
    at all. nextQuestion() keeps it short: the most useful question each time,
    at most MAX_SCORED_QUESTIONS of them.
    ───────────────────────────────────────────────────────────────────────── */
+import { LOCATION_QUESTION_IDS } from './drawnLocation.js'
 import {
   REGIONS, ZONE_TO_REGION, computeResults, computeRaw, shouldStop, isRelevant, answeredRegionCount, questionValue,
 } from './symptomGuide.js'
@@ -223,7 +224,11 @@ function gaveSignal(questions, ra) {
       one whose `priority` returns true is asked ahead of the rest.
     `askedIds` = scored questions already shown, answered or not.
     `ctx.draw` = the drawn zone types (leave out when unknown: askIf then
-    asks), `ctx.all` = every answer, including unscored ones (pain quality). */
+    asks), `ctx.all` = every answer, including unscored ones (pain quality),
+    `ctx.minor` = region keys the drawing only grazed (./drawnLocation.js):
+    like an area with `yieldsTo`, they give up their first slot.
+    A "Where is the pain?" question the drawing has already answered
+    (LOCATION_QUESTION_IDS) is not asked again. */
 export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTIONS, ctx = {}) {
   const draw = ctx.draw ? new Set(ctx.draw) : null
   const all = { ...answers, ...(ctx.all || {}) }
@@ -234,10 +239,11 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
     const ra = regionAnswers(keys, k, answers)
     if (answeredRegionCount(region, ra) >= 2 && shouldStop(region, ra)) continue
     const askedHere = region.questions.filter((q) => askedIds.includes(q.id))
-    const yields = (region.yieldsTo || []).some((y) => keys.includes(y))
+    const yields = (region.yieldsTo || []).some((y) => keys.includes(y)) || !!(ctx.minor && ctx.minor.has(k))
     const weight = askedHere.length ? (gaveSignal(askedHere, ra) ? 1 : SILENT_AREA_WEIGHT) : yields ? YIELD_WEIGHT : 1
     for (const q of region.questions) {
       if (askedIds.includes(q.id) || !isRelevant(q, region, ra)) continue
+      if (LOCATION_QUESTION_IDS.has(q.id) && [].concat(answers[q.id] ?? []).length) continue
       if (q.askIf && !q.askIf({ draw, ra, all })) continue
       live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: questionValue(q, region, ra) * weight + (q.priority && q.priority({ draw, ra, all }) ? 1 : 0) })
     }

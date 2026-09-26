@@ -97,6 +97,14 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   screens share one opening question ("Has your shoulder, upper arm, or
   elbow been hurt…?") when two or more apply, and an injury question worded
   exactly the same in two screens is asked once.
+- **The drawing answers "Where is the pain?"** On the knee, lower leg, ankle,
+  foot, hip, thigh, elbow, forearm and wrist, where the marks sit (front or
+  back of the limb, inner or outer side, how high) answers the area's first
+  question when it is clear, and that question is skipped; the review screen
+  shows it (src/data/drawnLocation.js). Keep those questions' option ids
+  when editing a region, or update the rules there. An area a mark only
+  grazed (under 35% of the ink of the main area) gets its questions after the
+  main area's.
 - **Some marks ask a neighbour too.** A low-back mark also asks the TL
   junction; an upper-arm mark also asks the shoulder; a line from the neck
   down the arm asks the neck and base of the neck. A forearm mark beside

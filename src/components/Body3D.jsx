@@ -2,6 +2,7 @@ import { Component, useRef, useState, useMemo, Suspense, useCallback, useEffect 
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Lightformer, Line, useGLTF, Html } from '@react-three/drei'
 import * as THREE from 'three'
+import { summarizeZone } from '../data/drawnLocation'
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh'
 
 // Raycasting drives every drawn point, and this mesh has ~218k triangles.
@@ -287,6 +288,19 @@ function classify(wx, wy, wz) {
 // gallbladder map. Same test as classify() uses internally.
 function surfaceOf(wx, wy, wz) {
   return ((wx - BODY_METRICS.cx) / BODY_METRICS.h) * FRONT_SIGN < -0.04 ? 'back' : 'front'
+}
+
+// A point in body coordinates, as classify() sees it: height (fy), distance
+// from the centre line (az) and front(+)/back(-) (lx), as fractions of the
+// figure's height. ../data/drawnLocation.js reads where in an area the marks
+// sit from these.
+function bodyCoords(wx, wy, wz) {
+  const H = BODY_METRICS.h
+  return {
+    fy: (wy - BODY_METRICS.cy) / H,
+    az: Math.abs(((wz - BODY_METRICS.cz) / H) * FRONT_SIGN),
+    lx: ((wx - BODY_METRICS.cx) / H) * FRONT_SIGN,
+  }
 }
 
 // Base of the neck: the lower neck, the notch above the sternum and the upper
@@ -1050,11 +1064,25 @@ export default function Body3D({
   // Merge the zones from EVERY line into one selection list, and report each
   // line's own ordered zone types separately — one continuous line from the
   // neck to the hand is a referral pattern, which a merged list cannot show.
-  // Each zone also carries the SURFACE it was drawn on (front / back).
+  // Each zone also carries the SURFACE it was drawn on (front / back), its
+  // share of all the ink (`ink`: an area the marks only grazed holds little,
+  // and its questions come after the main area's), and where in the area the
+  // marks sit (`at`, ../data/drawnLocation.js), which can answer its "Where
+  // is the pain?" question.
   const emitZones = (allPaths) => {
     const seen = new Set()
     const zones = []
     const lines = []
+    const pointsOf = {}
+    let inked = 0
+    for (const pts of allPaths) {
+      for (const p of pts) {
+        const id = classify(p.x, p.y, p.z)
+        if (!id) continue
+        inked++
+        ;(pointsOf[id] || (pointsOf[id] = [])).push(bodyCoords(p.x, p.y, p.z))
+      }
+    }
     allPaths.forEach((pts) => {
       const ids = detect(pts)
       lines.push(ids)
@@ -1073,7 +1101,8 @@ export default function Body3D({
         const face = t.back > t.front ? 'back' : 'front'
         const type = ZONE_TYPES[id]
         const label = ZONE_LABELS[id] + (face === 'back' && SURFACE_MATTERS.has(type) ? ' — back' : '')
-        zones.push({ id, type, label, face })
+        const own = pointsOf[id] || []
+        zones.push({ id, type, label, face, ink: inked ? own.length / inked : 0, at: summarizeZone(type, own) })
       })
     })
     onLinesChange?.(lines)

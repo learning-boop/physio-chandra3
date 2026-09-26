@@ -405,5 +405,37 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('no two regions share a question id', clash.length === 0, clash)
 }
 
+// Where in an area the marks sit (../src/data/drawnLocation.js).
+{
+  const { summarizeZone, locationAnswers, minorZoneIds } = await import('../src/data/drawnLocation.js')
+  const { nextQuestion } = await import('../src/data/assessmentFlow.js')
+  const spot = (fy, az, lx) => [-1, 0, 1].flatMap((i) => [-1, 0, 1].map((j) => ({ fy: fy + i * 0.003, az: az + j * 0.003, lx: lx + (i + j) * 0.002 })))
+  const where = (type, pts) => locationAnswers([{ id: type + 'R', type, at: summarizeZone(type, pts) }])
+  const cases = [
+    ['back of the knee', 'knee', spot(-0.19, 0.068, -0.042), { K1: ['back'] }],
+    ['inner side of the knee', 'knee', spot(-0.19, 0.036, 0.0), { K1: ['inner'] }],
+    ['front of the knee, just below the kneecap', 'knee', spot(-0.21, 0.07, 0.03), { K1: ['below'] }],
+    ['back of the lower leg, low down', 'lowerleg', spot(-0.385, 0.086, -0.055), { V1: ['achilles'] }],
+    ['inner edge of the shin', 'lowerleg', spot(-0.3, 0.047, 0.0), { V1: ['medial'] }],
+    ['inner ankle', 'ankle', spot(-0.43, 0.069, -0.02), { A1: ['inner'] }],
+    ['sole under the forefoot', 'foot', spot(-0.49, 0.09, 0.07), { B1: ['ball'] }],
+    ['thumb side of the wrist', 'wrist', spot(0.02, 0.228, 0.03), { W1: ['thumb'] }],
+    ['inner side of the thigh', 'thigh', spot(-0.12, 0.022, 0.0), { R1: ['inner'] }],
+  ]
+  for (const [name, type, pts, want] of cases) {
+    const got = where(type, pts)
+    check('drawing answers the location: ' + name, JSON.stringify(got) === JSON.stringify(want), got)
+  }
+  // Marks all round the knee: no single location, so the question is asked.
+  const around = [...spot(-0.19, 0.036, 0.0), ...spot(-0.19, 0.1, 0.0), ...spot(-0.19, 0.068, -0.042), ...spot(-0.19, 0.068, 0.03)]
+  check('marks all round the knee answer no location', Object.keys(where('knee', around)).length === 0, where('knee', around))
+  check('an area holding a sliver of the ink is minor', JSON.stringify([...minorZoneIds([{ id: 'elbowR', ink: 0.85 }, { id: 'forearmR', ink: 0.15 }])]) === '["forearmR"]')
+  const first = nextQuestion(['elbow', 'forearm'], {}, [], 5, { draw: ['elbow', 'forearm'], all: {}, minor: new Set(['forearm']) })
+  check('with the forearm only grazed, the elbow is asked first', /^E/.test(first), first)
+  const asked = []; let id; const a = { K1: ['back'] }
+  while ((id = nextQuestion(['knee'], a, asked, 5, { draw: ['knee'], all: {} }))) asked.push(id)
+  check('a location the drawing answered is not asked again', !asked.includes('K1'), asked)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
