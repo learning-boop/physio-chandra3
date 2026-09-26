@@ -82,6 +82,8 @@ const AREA = {
   hipR:      { type: 'hip',       label: 'Right Hip' },
   chest:     { type: 'chest',     label: 'Chest' },
   abdomen:   { type: 'abdomen',   label: 'Stomach / Abdomen' },
+  thighL:    { type: 'thigh',     label: 'Left Thigh' },
+  thighR:    { type: 'thigh',     label: 'Right Thigh' },
   kneeL:     { type: 'knee',      label: 'Left Knee' },
   kneeR:     { type: 'knee',      label: 'Right Knee' },
   ankleL:    { type: 'ankle',     label: 'Left Ankle / Foot' },
@@ -129,6 +131,14 @@ const UPPERARM_BOTTOM = 0.13
 const ELBOW_BOTTOM = 0.08
 const FOREARM_BOTTOM = 0.03
 const WRIST_BOTTOM = 0.005
+// Down the leg: the hip and groin at the front, and the buttock at the back,
+// end where the thigh begins; the thigh runs down to the knee
+// (content/regions/thigh.md). Measured on this mesh the legs part at about
+// fy -0.04, the buttock crease sits at about -0.07 (the tailbone strip's
+// lower edge), and the leg is narrowest just above the knee at about -0.18.
+const THIGH_TOP_FRONT = -0.05
+const THIGH_TOP_BACK = -0.07
+const KNEE_TOP = -0.155
 const armBand = (fy) => (fy > UPPERARM_BOTTOM ? 'upperarm' : fy > ELBOW_BOTTOM ? 'elbow' : fy > FOREARM_BOTTOM ? 'forearm' : fy > WRIST_BOTTOM ? 'wrist' : 'hand')
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
@@ -160,7 +170,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v15'
+const CLASSIFIER_VERSION = 'zones-v17'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -183,7 +193,8 @@ function classify(wx, wy, wz) {
   // above fy -0.10, while the feet spread to |z| 0.1385 — wider than ARM_SPLIT
   // — so testing the arm first would read the edge of a foot as a wrist.
   if (fy < -0.34) return 'ankle' + side
-  if (fy < -0.12) return 'knee' + side
+  if (fy < KNEE_TOP) return 'knee' + side
+  if (fy < -0.10) return 'thigh' + side
 
   // ── BACK of the body ──
   // The arms hang clear of the trunk from the shoulder blades down: measured on
@@ -210,6 +221,8 @@ function classify(wx, wy, wz) {
     if (fy > TLJ_BOTTOM) return 'tlj'
     if (fy > SIJ_TOP) return 'lowerback'
     if (fy <= COCCYX_TOP && fy > COCCYX_BOTTOM && absZ < COCCYX_HALF) return 'coccyx'
+    // Below the buttock crease: the back of the thigh (hamstrings).
+    if (fy < THIGH_TOP_BACK) return 'thigh' + side
     return 'sij'
   }
 
@@ -245,6 +258,7 @@ function classify(wx, wy, wz) {
   if (fy > 0.16) return 'chest'
   if (fy > TLJ_BOTTOM && absZ > 0.05) return 'flank' + side   // side, just below the ribs
   if (fy > 0.02) return absZ > 0.08 ? 'hip' + side : 'abdomen'
+  if (fy < THIGH_TOP_FRONT) return 'thigh' + side   // below the groin
   return 'hip' + side                  // pelvis / groin
 }
 
@@ -1013,7 +1027,7 @@ export default function Body3D({
   // Areas where the trunk itself does not already say front or back, so the
   // surface has to be carried on the zone (a knee is one area; its front and
   // back are different problems).
-  const SURFACE_MATTERS = new Set(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'knee', 'ankle', 'neck', 'head'])
+  const SURFACE_MATTERS = new Set(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'ankle', 'neck', 'head'])
 
   // Merge the zones from EVERY line into one selection list, and report each
   // line's own ordered zone types separately — one continuous line from the

@@ -12,6 +12,7 @@
      wrist     fall onto the hand, twist or blow (wrist, B2)
      hand      jammed, bent back, caught, crushed or cut (hand and fingers, B2)
      hip       fall, twist or sudden pull (hip, B2)
+     thigh     sudden pain, knock or fall (thigh, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
@@ -315,6 +316,32 @@ export const HIP_INJURY = [
     options: yesNo('urgent', 'Possible growth plate avulsion fracture') },
 ]
 
+/* ── Thigh: sudden pain, knock or fall ── */
+export const THIGH_INJURY = [
+  { id: 'I1', text: 'Has your thigh been hurt in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'sprint', label: 'Yes, a sudden sharp pain while sprinting, kicking, or stretching' },
+    { id: 'knock', label: 'Yes, a hard knock to the thigh (knee, tackle, fall onto it)' },
+    { id: 'fall', label: 'Yes, a fall or accident' },
+  ]},
+  { id: 'I2', text: 'Is the thigh a different shape, can you not stand on the leg, or was it a high-speed crash or a fall from a height?',
+    options: yesNo('emergency', 'Possible thigh bone (femur) fracture') },
+  // The questions that start "After a knock", "Did you feel a pop" and "A few
+  // weeks after a knock" are asked after that injury only.
+  { id: 'I3', text: 'After a knock: is the thigh getting tighter and more painful by the hour, rather than settling?',
+    askIf: (a) => a.I1 === 'knock' || a.I1 === 'fall',
+    options: yesNo('emergency', 'Possible compartment syndrome') },
+  // A torn tendon that is best repaired early: same day, as in the hip screen.
+  { id: 'I4', text: 'Did you feel a pop or tearing high in the back of the thigh or buttock, with a large bruise, or a gap you can feel under the sit bone?',
+    askIf: (a) => a.I1 === 'sprint', sameDay: true,
+    options: yesNo('urgent', 'Possible hamstring tendon tear from the sit bone: repair works best within weeks') },
+  { id: 'I5', text: 'Since the injury, can you not walk without limping badly, or bend your knee more than halfway?',
+    options: yesNo('urgent', 'A severe muscle tear or deep bruise: it needs assessment') },
+  { id: 'I6', text: 'A few weeks after a knock, is there a hard lump in the thigh muscle, and is the knee still stiff?',
+    askIf: (a) => a.I1 === 'knock',
+    options: yesNo('urgent', 'Possible bone forming in the muscle after a bruise (myositis ossificans): it needs imaging') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -349,6 +376,8 @@ export const SCREENS = [
     flag: 'A hand or finger injury in the last 6 weeks (injury screen)', questions: HAND_INJURY, step: linearStep(HAND_INJURY) },
   { id: 'hip', zones: ['hip'], title: 'Recent Hip or Groin Injury',
     flag: 'A hip or groin injury in the last 6 weeks (injury screen)', questions: HIP_INJURY, step: linearStep(HIP_INJURY) },
+  { id: 'thigh', zones: ['thigh'], title: 'Recent Thigh Injury',
+    flag: 'A thigh injury in the last 6 weeks (injury screen)', questions: THIGH_INJURY, step: linearStep(THIGH_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──

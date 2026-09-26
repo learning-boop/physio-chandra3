@@ -1,16 +1,26 @@
 ---
-region: hip
+region: thigh
 id: hamstring
-name: Strained hamstring muscle
-clin: Hamstring strain injury (HSI)
+name: Hamstring strain
+clin: Hamstring strain injury (JOSPT CPG 2022): sprinting type in the muscle belly, stretching type high near the sit bone
 # DRAFT extracted from: Hamstring Strain Injury in Athletes: Clinical Practice Guidelines (JOSPT, 2022)
+# Moved from the hip (it was parked there as _hip-hamstring.md); pointers from content/regions/thigh.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Suddenly — sprinting, kicking, or changing direction": 3
-  "Deep in the buttock": 2
-  "Only into the back of the thigh": 2
-  "Kicking, side lunges, or sprinting": 2
+  "Back of the thigh": 3
+  "Sprinting, kicking, or jumping": 3
+  "Stretching, or bending forward with straight legs": 1
+  "A sudden sharp pain during activity, with bruising after": 3
+  "A sudden sharp pain while sprinting or kicking": 3
+  "A sudden pain while stretching, dancing, or doing the splits": 2
+  "Using the thigh muscle (running, kicking, stretching)": 2
+  "Pain goes below the knee": -2
+  "Sore and stiff 1 to 3 days after exercise, then easing": -1
+  "Moving my low back": -2
+  "Pins and needles or numbness in the leg or foot": -2
+  "Front of the thigh": -3
+  "Inner thigh": -2
 ---
 
 ## blurb

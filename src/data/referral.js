@@ -29,7 +29,7 @@ const LIMBS = [
   { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand'] },
   // A leg line from the back of the pelvis (sacroiliac) asks both it and the
   // low back, where nerve-root leg pain comes from (content/regions/sij.md).
-  { kind: 'leg', region: 'lowback', spine: ['lowback', 'sij'], sources: ['lowerback'], chain: ['hip', 'knee', 'ankle'] },
+  { kind: 'leg', region: 'lowback', spine: ['lowback', 'sij'], sources: ['lowerback'], chain: ['hip', 'thigh', 'knee', 'ankle'] },
 ]
 
 /* Areas a mark implies even when it is not drawn. Pain from the TL junction
@@ -132,7 +132,7 @@ export function referralMechanism(r, answers = {}) {
 
 const REACH_WORDS = {
   upperarm: 'the upper arm', elbow: 'the upper arm and elbow', forearm: 'the forearm', wrist: 'the forearm and wrist', hand: 'the forearm and hand',
-  knee: 'the thigh and knee', ankle: 'the lower leg and foot',
+  thigh: 'the thigh', knee: 'the thigh and knee', ankle: 'the lower leg and foot',
 }
 
 /* What the travelling pain is most consistent with, per mechanism. `unclear`

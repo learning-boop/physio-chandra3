@@ -1,18 +1,19 @@
 ---
-region: hip
+region: thigh
 id: meralgia
 name: Numb or burning outer thigh (meralgia paraesthetica)
 clin: Lateral femoral cutaneous nerve entrapment
-# DRAFT patient text written 25 Sep 2026 from content/regions/hip.md — not yet reviewed.
-# Patient text shared with thigh-meralgia.md: keep the two in step.
+# Patient text shared with hip-meralgia.md: keep the two in step.
+# Pointers from content/regions/thigh.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
   "Burning or numb patch on the front and outer thigh": 3
   "A burning or numb patch on the outer thigh, with no weakness": 3
-  "During pregnancy, or since having a baby": 1
-  "Pins and needles or numbness in the leg or foot": -1
+  "Standing or walking, easing when I sit, with tight belts or trousers making it worse": 3
+  "Weakness: the knee gives way on stairs": -2
   "Moving my low back": -2
+  "Pins and needles or numbness in the leg or foot": -2
 ---
 
 ## blurb

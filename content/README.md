@@ -56,11 +56,12 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Wrist | `wrist` | Wrist assessment | 6 |
 | Hand & fingers | `hand` | Hand and fingers assessment | 6 |
 | Hip & groin | `hip` | Hip assessment (question ids G1–G8) | 6 |
-| Knee (mid-thigh to shin) | `knee` | July 2026 set (not yet rebuilt) | — |
+| Thigh | `thigh` | Thigh assessment (question ids R1–R8) | 6 |
+| Knee (from just above the kneecap to mid-shin) | `knee` | July 2026 set (not yet rebuilt) | — |
 | Lower shin, ankle & foot | `ankle` | July 2026 set (not yet rebuilt) | — |
 | Stomach | — | generic questions | — |
 
-Still to feed: Thigh, Knee,
+Still to feed: Knee,
 Lower leg, Ankle, Foot, and the Subjective assessment template. "Arm
 assessment" was replaced by "Upper arm" and "Forearm" and is not used.
 
@@ -87,7 +88,8 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   areas (heart, aorta, spinal cord…) is shown once. A condition with the same
   name in two areas is shown once, so keep its text identical in both files
   (neck/head "Neck-related headache"; base of neck/upper arm "First rib and
-  thoracic outlet irritation"; elbow/forearm "Radial tunnel syndrome"; wrist/hand "Carpal tunnel syndrome"
+  thoracic outlet irritation"; elbow/forearm "Radial tunnel syndrome"; hip/thigh "Numb or burning outer
+  thigh"; wrist/hand "Carpal tunnel syndrome"
   and "Thumb base arthritis"). The
   shoulder, upper arm, elbow, forearm, wrist and hand injury
   screens share one opening question ("Has your shoulder, upper arm, or

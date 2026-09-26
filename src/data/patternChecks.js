@@ -37,7 +37,7 @@ const limbSpread = (zones, side) => {
   // Upper arm, elbow and forearm count as one stretch of the arm, so the
   // whole-limb rule still means shoulder, mid-arm and hand.
   const arm = [['shoulder'], ['upperarm', 'elbow', 'forearm'], ['wrist', 'hand']].filter((ts) => onSide(zones, side, ...ts)).length
-  const leg = ['hip', 'knee', 'ankle'].filter((t) => onSide(zones, side, t)).length
+  const leg = [['hip'], ['thigh', 'knee'], ['ankle']].filter((ts) => onSide(zones, side, ...ts)).length
   return Math.max(arm, leg)
 }
 
@@ -104,7 +104,7 @@ const PATTERNS = [
   {
     id: 'pc-inflammatory', tier: 'urgent', why: WHY.systemic,
     text: 'The same joints painful, stiff or swollen on BOTH sides, with morning stiffness lasting more than 30 minutes',
-    when: (z, a) => ['wrist', 'hand', 'knee', 'ankle', 'elbow', 'shoulder'].some((t) => bothSides(z, t))
+    when: (z, a) => ['wrist', 'hand', 'knee', 'ankle', 'elbow', 'shoulder', 'thigh'].some((t) => bothSides(z, t))
       && [].concat(a.pattern24 || []).includes('amLong'),
   },
   {

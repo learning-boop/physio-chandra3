@@ -639,5 +639,6 @@ Object.assign(ZONE_TO_REGION, {
   wrist: 'wrist',
   hand: 'hand',
   hip: 'hip',
+  thigh: 'thigh',
   ankle: 'ankle',
 })

@@ -456,11 +456,43 @@ const TESTS = {
       lines: [['hipL']],
       answers: { age: 'o64', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'yes' },
       expect: { route: 'emergency' } },
+  ],  thigh: [
+    { name: '1. Hamstring strain while sprinting',
+      lines: [['thighR']],
+      answers: { age: '18-29', onset: 'sprint', duration: 'd2w', I1: 'sprint', I2: 'no', I4: 'no', I5: 'no',
+        R1: ['back'], R2: ['sprint', 'stretch'], R3: ['sharp'] },
+      expect: { top: 'thigh/hamstring', route: 'results' } },
+    { name: '2. Dead leg after a knee in football',
+      lines: [['thighL']],
+      answers: { age: '18-29', onset: 'knock', duration: 'd2w', I1: 'knock', I2: 'no', I3: 'no', I5: 'no', I6: 'no',
+        R3: ['bruise'], R4: ['half'] },
+      expect: { top: 'thigh/contusion', notTop: ['thigh/quadstrain'], route: 'results' } },
+    { name: '3. Meralgia paraesthetica',
+      lines: [['thighR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd3m', R1: ['patch'], R2: ['standing'], R5: ['patch'] },
+      expect: { top: 'thigh/meralgia', route: 'results' } },
+    // A line from the low back down the thigh into the calf is read as
+    // referral from the back: the back is asked.
+    { name: '4. Low back look-alike: back down the thigh into the calf',
+      lines: [['lowerback', 'thighL', 'kneeL']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['burning'],
+        R1: ['back'], R5: ['pins', 'belowknee'], R6: ['back'] },
+      expect: { notRegion: ['thigh'], areas: ['lowback'], route: 'results' } },
+    { name: '5. Swollen thigh and calf after knee surgery (clot)',
+      lines: [['thighR', 'kneeR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd2w', R8: ['whole'] },
+      flags: ['tgf-dvt'],
+      expect: { route: 'urgent' } },
+    { name: '6. Runner with a deep thigh ache (stress fracture)',
+      lines: [['thighL']],
+      answers: { age: '18-29', onset: 'running', duration: 'd6w', R1: ['front'] },
+      flags: ['tgf-stress'],
+      expect: { route: 'urgent' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

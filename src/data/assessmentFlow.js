@@ -18,13 +18,15 @@ import {
 /* Regions on one anatomical chain, from the spine outwards. */
 export const REGION_CHAINS = [
   ['neck', 'shoulder', 'arm', 'elbow', 'forearm', 'wrist', 'hand'],
-  ['lowback', 'hip', 'knee', 'ankle'],
+  ['lowback', 'hip', 'thigh', 'knee', 'ankle'],
   ['neck', 'ctj', 'upperback', 'tlj', 'lowback'],
   // The base of the neck feeds the arm too (first rib, thoracic outlet).
   ['ctj', 'shoulder', 'arm', 'elbow', 'forearm', 'wrist', 'hand'],
   // The TL junction refers to the low back, side of the hip and groin.
   // The back of the pelvis (sacroiliac) sits between them.
-  ['tlj', 'lowback', 'sij', 'hip', 'knee', 'ankle'],
+  ['tlj', 'lowback', 'sij', 'hip', 'thigh', 'knee', 'ankle'],
+  // The back of the thigh sits directly below the buttock.
+  ['sij', 'thigh'],
   // The tailbone, between the back of the pelvis and the perineum.
   ['tlj', 'lowback', 'sij', 'coccyx'],
   ['coccyx', 'hip'],
@@ -34,7 +36,7 @@ export const REGION_CHAINS = [
 
 const AREA_WORD = {
   lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head', arm: 'upper arm', shoulder: 'shoulder',
-  elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand or fingers', hip: 'hip', knee: 'knee', ankle: 'ankle or foot',
+  elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand or fingers', hip: 'hip', thigh: 'thigh', knee: 'knee', ankle: 'ankle or foot',
 }
 
 /** Region keys (with an authored question set) of the drawn zones, in drawing order. */

@@ -129,6 +129,12 @@ export const REFERRAL_MAP = {
     muscles: ['Pelvic floor / levator ani (tailbone, back passage, perineum)', 'Gluteus maximus (buttock crease)'],
     organs: ['Rectum and colon (S2–S4)', 'Prostate', 'Cervix and uterus', 'Skin of the buttock crease (pilonidal sinus)'],
   },
+  thigh: {
+    joints: ['Hip joint (front of the thigh 57%; knee via the obturator nerve; Lesher 2008)', 'Lumbar facets and discs L1–L3 (front of the thigh), L4–S1 (outer and back of the thigh)', 'Sacroiliac joint (buttock and back of the thigh)', 'Thoracolumbar junction T12–L1 (upper inner thigh)'],
+    roots: ['L2–L4 (front and inner thigh to the knee)', 'L5–S1 (outer and back of the thigh)'],
+    muscles: ['Gluteus minimus (outer and back of the thigh, "pseudo-sciatica")', 'Tensor fascia lata (outer thigh)', 'Piriformis (back of the thigh)', 'Vastus medialis / lateralis (front of the thigh, knee)', 'Adductor longus / brevis (inner thigh)', 'Iliopsoas (front of the thigh)'],
+    organs: ['Leg veins: clot (swollen, warm, tender thigh or calf)', 'Leg arteries: claudication (cramp on walking, eases standing still)', 'Kidney, ureter and pelvic organs (upper inner thigh)'],
+  },
   hip: {
     joints: ['Hip joint (buttock 71%, groin 55%)', 'Sacroiliac joint (buttock 94%, groin 14%)', 'L3–L5 facets (buttock, greater trochanter)', 'L1–L3 facets (groin)'],
     roots: ['L2 (groin, upper anterior thigh)', 'S2–S4 (perineum, saddle area)'],
@@ -150,7 +156,7 @@ export const REFERRAL_MAP = {
 }
 
 /* Order the summary lists areas in: spine first, then out along the limbs. */
-const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hand', 'hip', 'knee', 'ankle']
+const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'ankle']
 
 /** The drawn zone types that have an entry, in summary order, without repeats. */
 export function mappedTypes(zones = []) {

@@ -1656,13 +1656,13 @@ export const EXTRA_REGIONS = {
         text: "Is there a lump in your groin that is hard, very painful, will not go back in, and are you vomiting?" },
       { id: "hpf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
         text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
-      { id: "hpf-sufe", tier: "urgent", why: "Possible slipped growth plate at the hip (SUFE); hip problems in children are often felt at the knee",
+      { id: "hpf-sufe", tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE); hip problems in children are often felt at the knee",
         text: "Is a child aged about 9 to 16 limping, with pain in the hip, groin, thigh, or knee?" },
       { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip (femoral neck); needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep groin ache that is worse with running or hopping, or aches at night?" },
       { id: "hpf-avn", tier: "urgent", why: "Possible loss of blood supply to the hip bone (avascular necrosis)",
         text: "Do you take long-term steroid tablets, drink heavily, or have sickle cell disease, and have a deep groin ache?" },
-      { id: "hpf-dvt", sameDay: true, tier: "urgent", why: "Possible blood clot (DVT); emergency if you are also short of breath",
+      { id: "hpf-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); emergency if you are also short of breath",
         text: "Is your leg swollen, warm, or tender in the calf or thigh, especially after surgery, a long journey, or time in bed?" },
       { id: "hpf-hernia", tier: "urgent", why: "Possible hernia",
         text: "Is there a soft lump in your groin that appears when you cough, strain, or stand?" },
@@ -1764,6 +1764,140 @@ export const EXTRA_REGIONS = {
           { id: "testicle", label: "Testicle pain", special: "groinDoctor" },
           { id: "none", label: "None of these" }
         ]}
+    ],
+    conditions: []
+  },
+
+  /* ══════════════ THIGH ══════════════
+     From Chandra's "Thigh assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/thigh.md). Sources:
+     JOSPT hamstring strain CPG 2022, Munich consensus 2013, British athletics
+     muscle injury classification 2014, Askling 2007, Kary 2010 (quadriceps
+     strains and contusions), Harney & Patijn 2007 (meralgia), Lesher 2008,
+     Murphy 2009, Travell & Simons 2019.
+     Reached from the body map's thigh band, between the hip (front) or the
+     buttock (back) and the knee (THIGH_TOP_FRONT, THIGH_TOP_BACK and
+     KNEE_TOP in Body3D.jsx). Question ids are R1 to R8. Its injury screen is
+     in ./injuryScreen.js. Conditions: content/conditions/thigh-*.md. */
+  thigh: {
+    name: "Thigh",
+    redFlags: [
+      { id: "tgf-pe", tier: "emergency", why: "Possible blood clot that has travelled to the lung",
+        text: "Is your thigh or calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
+      { id: "tgf-compartment", tier: "emergency", why: "Possible compartment syndrome of the thigh",
+        text: "Is your thigh pain getting worse and worse, with the thigh tense and swollen, especially after a heavy knock or crush?" },
+      { id: "tgf-rhabdo", tier: "emergency", why: "Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
+        text: "After very hard exercise, is your thigh hugely swollen and very painful, and is your urine dark like cola?" },
+      { id: "tgf-necfasc", tier: "emergency", why: "Possible severe skin and tissue infection",
+        text: "Is there a hot, red area on your thigh that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
+      { id: "tgf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
+        text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
+      { id: "tgf-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); same-day review",
+        text: "Is your thigh or calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill?" },
+      { id: "tgf-cellulitis", sameDay: true, tier: "urgent", why: "Possible skin infection (cellulitis); same-day review",
+        text: "Is there spreading redness, a red streak up the leg, or a hot, swollen area, with a fever?" },
+      { id: "tgf-stress", tier: "urgent", why: "Possible stress fracture of the thigh bone; needs imaging before more running",
+        text: "Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night?" },
+      { id: "tgf-tumour", tier: "urgent", why: "Bone or soft-tissue lumps in the thigh need imaging to rule out a tumour",
+        text: "Are you under 25 with a deep thigh ache that wakes you at night, or a lump or swelling in the thigh that is growing?" },
+      { id: "tgf-sufe", tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE), often felt in the thigh or knee",
+        text: "Is a child aged about 9 to 16 limping, with pain in the thigh or knee?" },
+      { id: "tgf-claudication", tier: "urgent", why: "Possible narrowed leg arteries (vascular claudication)",
+        text: "Do you get a cramping pain in the thigh or buttock when walking that eases within minutes of standing still, and do you smoke or have diabetes?" },
+      { id: "tgf-femoral", tier: "urgent", why: "Nerve weakness (femoral nerve or L3–L4) needs medical review",
+        text: "Has your thigh muscle become weak or thin, or does your knee give way, with no injury?" },
+      { id: "tgf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the thigh bone",
+        text: "Have you ever had cancer, or do you have deep thigh pain at night that does not change with position, with weight loss?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "sprint", label: "A sudden sharp pain while sprinting or kicking" },
+        { id: "stretch", label: "A sudden pain while stretching, dancing, or doing the splits" },
+        { id: "knock", label: "After a hard knock to the thigh" },
+        { id: "running", label: "After increasing running or training" },
+        { id: "workout", label: "After a new or harder workout" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "R1", text: "Where is the pain mainly?", options: [
+        { id: "front", label: "Front of the thigh" },
+        { id: "back", label: "Back of the thigh" },
+        { id: "inner", label: "Inner thigh" },
+        { id: "outer", label: "Outer thigh" },
+        { id: "patch", label: "Burning or numb patch on the front and outer thigh" }
+      ]},
+      { id: "R2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "sprint", label: "Sprinting, kicking, or jumping" },
+        { id: "stretch", label: "Stretching, or bending forward with straight legs" },
+        { id: "sitting", label: "Sitting for a long time" },
+        { id: "walking", label: "Walking a distance, easing when I sit or bend forward", special: "lowbackHip" },
+        { id: "standing", label: "Standing or walking, easing when I sit, with tight belts or trousers making it worse" }
+      ]},
+      { id: "R3", text: "About the muscle: which apply? Tick all that apply.", options: [
+        { id: "doms", label: "Sore and stiff 1 to 3 days after exercise, then easing" },
+        { id: "sharp", label: "A sudden sharp pain during activity, with bruising after" },
+        { id: "knot", label: "A tender spot in the muscle that sends pain elsewhere when pressed" },
+        { id: "bruise", label: "A deep bruise after a knock" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "R4", text: "Since the injury, how far can you bend your knee (lying on your front, heel towards your bottom)?",
+        askIf: ({ ra }) => ra.onset === "knock",
+        priority: () => true,
+        options: [
+          { id: "full", label: "Fully, or nearly fully" },
+          { id: "half", label: "More than halfway" },
+          { id: "less", label: "Less than halfway" },
+          { id: "nottried", label: "I have not tried" }
+        ]},
+      { id: "R5", text: "Which of these do you notice? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["knee", "ankle", "hip", "lowerback", "sij"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "pins", label: "Pins and needles or numbness in the leg or foot", special: "lowbackHip" },
+          { id: "belowknee", label: "Pain goes below the knee", special: "backref" },
+          { id: "patch", label: "A burning or numb patch on the outer thigh, with no weakness" },
+          { id: "weak", label: "Weakness: the knee gives way on stairs", special: "thighDoctor" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "R6", text: "Which hurts more: moving your low back, moving your hip, or using the thigh muscle?",
+        askIf: ({ draw, ra }) => !draw || ["lowerback", "sij", "hip"].some((t) => draw.has(t)) ||
+          [].concat(ra.R5 || []).some((o) => o !== "none"),
+        // Early when the low back or buttock is drawn too: the back look-alike.
+        priority: ({ draw }) => !!draw && ["lowerback", "sij"].some((t) => draw.has(t)),
+        options: [
+          { id: "back", label: "Moving my low back", special: "lowbackHip" },
+          { id: "hip", label: "Moving my hip", special: "hipSource" },
+          { id: "muscle", label: "Using the thigh muscle (running, kicking, stretching)" },
+          { id: "none", label: "None of these bring it on" }
+        ]},
+      { id: "R7", text: "When walking, what happens?",
+        askIf: ({ ra }) => [].concat(ra.R2 || []).includes("walking") || ra.age === "50-64" || ra.age === "o64",
+        options: [
+          { id: "cramp", label: "A cramp in the thigh or buttock that eases within minutes of standing still", special: "thighDoctor" },
+          { id: "sitease", label: "Leg pain that eases when I sit or bend forward", special: "lowbackHip" },
+          { id: "nochange", label: "No change with walking" }
+        ]},
+      { id: "R8", text: "Is there any swelling or lump?", options: [
+        { id: "bruise", label: "Swelling and bruising after an injury" },
+        { id: "hardlump", label: "A hard lump in the muscle weeks after a knock", special: "thighDoctor" },
+        { id: "growing", label: "A lump that is growing, with no injury", special: "thighDoctor" },
+        { id: "whole", label: "The whole thigh or calf is swollen", special: "thighDoctor" },
+        { id: "none", label: "No swelling or lump" }
+      ]}
     ],
     conditions: []
   },
@@ -1878,6 +2012,8 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain at the top of the shoulder or upper arm that is worse when you move the <strong>arm</strong> than when you move the neck usually comes from the <strong>shoulder</strong> itself: the rotator cuff, the AC joint at the top of the shoulder, or a stiffening shoulder joint. Consider running the <strong>Shoulder</strong> guide too. Your assessment will check both the neck and the shoulder." },
   chestFirst: { title: "If this is your first chest pain, see a doctor as well",
     body: "Pain on the front of the chest that is tender to press often comes from the <strong>chest wall</strong>: the joints where the ribs meet the breastbone. But if this is the <strong>first time</strong> you have had chest pain, a doctor should check your heart and lungs before it is treated as a chest-wall problem. If it comes with breathlessness, sweating, or spreads to your arm or jaw, call 911." },
+  thighDoctor: { title: "Please have this checked by a doctor",
+    body: "Weakness with the knee giving way, a cramp in the thigh or buttock on walking that eases within minutes of standing still, a hard lump in the muscle weeks after a knock, a lump that is growing, or a whole thigh or calf that is swollen are signs a doctor should look at. They can point to a nerve or circulation problem, bone forming in a bruised muscle, a lump that needs imaging, or a clot. Physiotherapy can help alongside or afterwards." },
   lowbackHip: { title: "This may be coming from your low back",
     body: "Hip, buttock or thigh pain that is worse when you <strong>move your low back</strong>, comes with <strong>pins and needles</strong>, or builds with walking and eases when you sit or bend forward, often comes from the <strong>low back</strong> rather than the hip itself. Consider running the <strong>Low back</strong> guide too. Your assessment will check both." },
   groinDoctor: { title: "Please have this checked by a doctor as well",
