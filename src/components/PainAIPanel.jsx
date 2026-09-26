@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import SymptomGuide from './SymptomGuide'
 import { ZONE_TO_REGION, REGIONS } from '../data/symptomGuide'
 
@@ -19,7 +20,14 @@ const API_URL = import.meta.env.VITE_API_URL || ''
 // `onReview` receives the server's validated reasoning pass ({ order, dropped,
 // noMatch, concern }) so the result cards above can follow the same order the
 // overview explains — or step back to "no clear match" when nothing fits.
-export default function PainAIPanel({ zones, aiOnly = false, answers = null, notes = '', matched = null, onReview = null }) {
+/* Privacy: on the results screen (aiOnly) nothing is sent until the person
+   chooses to see the overview. Their wellbeing answers (`privateAnswers`)
+   and their own notes go only if they also tick the box for them. See the
+   privacy notice (src/pages/PrivacyPage.jsx). */
+export default function PainAIPanel({ zones, aiOnly = false, answers = null, privateAnswers = null, notes = '', matched = null, onReview = null }) {
+  const [consent, setConsent] = useState(false)
+  const [includePrivate, setIncludePrivate] = useState(false)
+  const hasPrivate = (Array.isArray(privateAnswers) && privateAnswers.length > 0) || !!(notes && notes.trim())
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
@@ -39,12 +47,13 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
   // results screen passes them so the overview reflects what the person said,
   // not just where they drew).
   const ansKey = useMemo(
-    () => JSON.stringify([answers || null, notes || '', matched || null]),
-    [answers, notes, matched],
+    () => JSON.stringify([answers || null, includePrivate ? [privateAnswers || null, notes || ''] : null, matched || null, consent]),
+    [answers, privateAnswers, notes, matched, includePrivate, consent],
   )
 
   useEffect(() => {
     if (useGuide) { setResult(null); setError(null); setLoading(false); return }
+    if (aiOnly && !consent) { setResult(null); setError(null); setLoading(false); return }
     if (!zones || zones.length === 0) {
       setResult(null)
       setError(null)
@@ -62,8 +71,11 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
         // type lets the server retrieve the approved condition records for
         // these exact regions, so the overview is grounded in that data.
         zones: zones.map(z => ({ type: z.type, label: z.label })),
-        answers: Array.isArray(answers) && answers.length ? answers : undefined,
-        notes: notes && notes.trim() ? notes.trim() : undefined,
+        answers: (() => {
+          const all = [...(Array.isArray(answers) ? answers : []), ...(includePrivate && Array.isArray(privateAnswers) ? privateAnswers : [])]
+          return all.length ? all : undefined
+        })(),
+        notes: includePrivate && notes && notes.trim() ? notes.trim() : undefined,
         // An empty list is meaningful: it tells the server nothing matched,
         // so the overview stays general instead of picking conditions itself.
         matched: Array.isArray(matched) ? matched : undefined,
@@ -103,6 +115,35 @@ export default function PainAIPanel({ zones, aiOnly = false, answers = null, not
   if (useGuide) {
     const guideKey = regionOptions.map((r) => r.regionKey).join('|')
     return <SymptomGuide key={guideKey} regionOptions={regionOptions} />
+  }
+
+  if (aiOnly && !consent) {
+    return (
+      <div style={panelStyle}>
+        <p style={{ margin: '0 0 10px', fontSize: 15, lineHeight: 1.65, color: 'rgba(255,255,255,0.85)' }}>
+          This optional overview explains your results in plain language. It is written by an AI
+          service: to create it, your drawing and answers are sent securely to this website's
+          server and processed by Anthropic, an AI company in the United States.
+        </p>
+        <p style={{ margin: '0 0 14px', fontSize: 13.5, lineHeight: 1.65, color: 'rgba(255,255,255,0.6)' }}>
+          Your name and contact details are not sent. This website does not store what is sent,
+          and your results above do not depend on it.{' '}
+          <Link to="/privacy" style={{ color: GOLD, textDecoration: 'underline' }}>Read the privacy notice</Link>.
+        </p>
+        {hasPrivate && (
+          <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', margin: '0 0 16px', fontSize: 14, lineHeight: 1.55, color: 'rgba(255,255,255,0.8)', cursor: 'pointer' }}>
+            <input type="checkbox" checked={includePrivate} onChange={(e) => setIncludePrivate(e.target.checked)}
+              style={{ width: 18, height: 18, marginTop: 2, accentColor: GOLD, flexShrink: 0 }} />
+            <span>Optional: also include my answers about mood, sleep and work, and anything I typed in my own words.</span>
+          </label>
+        )}
+        <button onClick={() => setConsent(true)}
+          style={{
+            border: 'none', borderRadius: 999, background: GOLD, color: '#081527', fontWeight: 600,
+            fontSize: 14.5, padding: '12px 22px', minHeight: 44, cursor: 'pointer',
+          }}>Show my AI overview</button>
+      </div>
+    )
   }
 
   return (

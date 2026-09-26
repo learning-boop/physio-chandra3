@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Body3D from './Body3D'
+import { Link } from 'react-router-dom'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import ClinicianSummary from './ClinicianSummary'
@@ -579,7 +580,7 @@ export default function PainAssessment() {
     return ranked.filter((x) => !dropped.has(x.c.id))
       .sort((a, b) => (rank.has(a.c.id) ? rank.get(a.c.id) : 99) - (rank.has(b.c.id) ? rank.get(b.c.id) : 99))
   }, [ranked, review])
-  const modelSmall = ['emergency', 'physician', 'intro', 'questions', 'review', 'safety', 'injury', 'urgent', 'ok'].includes(stage)
+  const modelSmall = ['emergency', 'physician', 'questions', 'review', 'safety', 'injury', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
   // Only red flags route away from the result; a caution does not.
@@ -710,8 +711,8 @@ export default function PainAssessment() {
   const sameDayFlagged = doctorFlags.some((f) => f.sameDay)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
-    if (flaggedAt === 'physician') { if (injuryApplies) startInjury(); else setStage('intro') }
-    else if (flaggedAt === 'injury') setStage('intro')
+    if (flaggedAt === 'physician') { if (injuryApplies) startInjury(); else startQuestions() }
+    else if (flaggedAt === 'injury') startQuestions()
     else setShowNotice(true)
   }
   // Cautions never withhold booking — they shape the first assessment, and
@@ -803,6 +804,13 @@ export default function PainAssessment() {
         .map((t) => `${PAIN_TYPES[t].title} (${PAIN_TYPES[t].term})`).join(', with some features of '),
     }] : []),
   ], [flatQuestions, answers, painType, referral, flowZ, drawnLocationPairs])
+  // For the optional AI overview: the wellbeing answers (mood, sleep, work)
+  // are sent only if the person also agrees to include them.
+  const aiAnswers = useMemo(() => {
+    const wellbeing = new Set(PSYCHOSOCIAL_QUESTIONS.map((q) => q.text))
+    const isWell = (p) => wellbeing.has(p.question) || [...wellbeing].some((t) => p.question.endsWith(`: ${t}`))
+    return { core: qaPairs.filter((p) => !isWell(p)), wellbeing: qaPairs.filter(isWell) }
+  }, [qaPairs])
   const notesText = String(answers.notes || answers.q5 || '').trim()
 
   // The summary Chandra receives — built from the same rule output the result
@@ -837,6 +845,17 @@ export default function PainAssessment() {
     setPath([0])
     goToQuestion(0)
   }
+  // Back from the first question (or the area choice): the last safety step
+  // answered, the injury questions when they applied.
+  const backToSafety = () => setStage(injuryApplies && injuryQ ? 'injury' : 'physician')
+  // The questions come in parts: emergency signs, then signs for a doctor
+  // (with the injury questions), then the pain itself. An area with no
+  // emergency page starts at the doctor part.
+  const PART_NAMES = { emergency: 'Emergency Check', physician: 'Doctor Check', pain: 'About Your Pain' }
+  const partLabel = (part) => {
+    const parts = ['emergency', 'physician', 'pain'].filter((p) => p !== 'emergency' || screening.emergency.length)
+    return `Part ${parts.indexOf(part) + 1} of ${parts.length} · ${PART_NAMES[part]}`
+  }
   // Region flows ask whichever question is most useful next, or finish; the
   // generic set (areas without their own questions) simply goes in order.
   const nextFromQuestion = () => {
@@ -865,7 +884,7 @@ export default function PainAssessment() {
   }
   const backFromQuestion = () => {
     if (fromReview) { setFromReview(false); setStage('review'); return }
-    if (path.length <= 1) { setStage('intro'); return }
+    if (path.length <= 1) { backToSafety(); return }
     const p = path.slice(0, -1)
     setPath(p)
     setQIndex(p[p.length - 1])
@@ -888,10 +907,10 @@ export default function PainAssessment() {
     const next = { ...answers, [injuryQ]: injuryDraft }
     const r = injuryFlow(flowZ, next, answers.age)
     setAnswers(next)
-    setInjuryPath((p) => [...p, injuryQ])
+    setInjuryPath((p) => (p.includes(injuryQ) ? p : [...p, injuryQ]))
     if (r.next) { setInjuryQ(r.next); setInjuryDraft(undefined); return }
     if (r.route === 'emergency' || r.route === 'urgent') routeUrgent('injury')
-    else setStage('intro')
+    else startQuestions()
   }
   // Back one question; answers after it are cleared so a changed route
   // never reuses them without asking.
@@ -1125,7 +1144,9 @@ export default function PainAssessment() {
                     <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '20px auto 0', maxWidth: 520 }}>
                       This guide offers general information to help you describe your symptoms.
                       It is not a diagnosis and does not replace an assessment by a qualified
-                      health professional.
+                      health professional. Your answers stay on this device unless you choose to
+                      share them: the optional AI overview, or emailing your summary to Chandra
+                      (<Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>).
                     </p>
                   </div>
                 </div>
@@ -1241,48 +1262,9 @@ export default function PainAssessment() {
                     className="pa-primary"
                     style={{ ...goldBtn, opacity: focusKey ? 1 : 0.45, cursor: focusKey ? 'pointer' : 'not-allowed' }}
                     disabled={!focusKey}
-                    onClick={() => setStage('intro')}
+                    onClick={startQuestions}
                   >Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage('intro')}>Back</button>
-                </div>
-              </Fade>
-            )}
-
-            {/* NOTICE BEFORE THE QUESTIONS */}
-            {stage === 'intro' && (
-              <Fade k="intro">
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '4px 0 10px' }}>
-                  Please answer a few <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>questions</em>
-                </h2>
-                {multiPattern && zones.length > 1 && (
-                  <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '0 0 14px', maxWidth: 460 }}>
-                    {referral.length > 0 && keys.length === 1 ? (
-                      <>
-                        Your line travels from the {referral[0].kind === 'arm' ? 'neck down the arm' : 'low back down the leg'}.
-                        Pain that travels this way often starts in the {referral[0].kind === 'arm' ? 'neck' : 'back'}, so
-                        the questions focus on the {REGIONS[keys[0]].name.toLowerCase()} first.
-                      </>
-                    ) : multiArea ? (
-                      <>
-                        Your marks travel from the {zones[0].label.toLowerCase()} toward
-                        the {zones[zones.length - 1].label.toLowerCase()}, so the questions cover
-                        the {(() => {
-                          const n = keys.map((k) => REGIONS[k].name.toLowerCase())
-                          return `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}`
-                        })()}.
-                      </>
-                    ) : keys.length === 1 ? (
-                      <>The questions focus on the {REGIONS[keys[0]].name.toLowerCase()}.</>
-                    ) : null}
-                  </p>
-                )}
-                <p style={{ ...body, margin: '0 0 24px', maxWidth: 460 }}>
-                  There are up to {plannedScreens} short questions, and your answers shape
-                  the information you will see at the end.
-                </p>
-                <div className="pa-actions">
-                  <button className="pa-primary" style={goldBtn} onClick={startQuestions}>Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage('physician')}>Back</button>
+                  <button style={ghostBtn} onClick={backToSafety}>Back</button>
                 </div>
               </Fade>
             )}
@@ -1307,10 +1289,34 @@ export default function PainAssessment() {
                     : a !== undefined
               return (
                 <Fade k={'q' + qIndex}>
+                  {/* On the first question only: the move from the safety
+                      checks to the pain questions, and why these areas when
+                      the drawing covers more than one. */}
+                  {step === 1 && !fromReview && (
+                    <p style={{ fontSize: 15, lineHeight: 1.6, color: GOLD_LIGHT, margin: '0 0 18px', maxWidth: 520 }}>
+                      <span style={{ ...label, display: 'block', marginBottom: 4 }}>{partLabel('pain')}</span>
+                      Safety checks complete. Now, a few questions about your pain, to match
+                      it with the conditions a physiotherapist commonly treats.
+                    </p>
+                  )}
                   <span style={label}>{q.area ? `${q.area} · ` : ''}Question {step} of {Math.max(plannedScreens, step)}</span>
                   <div style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, margin: '12px 0 20px', maxWidth: 520 }}>
                     <motion.div animate={{ width: `${(step / Math.max(plannedScreens, step)) * 100}%` }} style={{ height: 3, background: GOLD, borderRadius: 2 }} />
                   </div>
+                  {step === 1 && !fromReview && multiPattern && zones.length > 1 && (referral.length > 0 && keys.length === 1 ? (
+                    <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', margin: '0 0 12px', maxWidth: 520 }}>
+                      Pain that travels down the {referral[0].kind} often starts in
+                      the {referral[0].kind === 'arm' ? 'neck' : 'back'}, so these questions start with
+                      the {REGIONS[keys[0]].name.toLowerCase()}.
+                    </p>
+                  ) : multiArea ? (
+                    <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', margin: '0 0 12px', maxWidth: 520 }}>
+                      These questions cover the {(() => {
+                        const n = keys.map((k) => REGIONS[k].name.toLowerCase())
+                        return `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}`
+                      })()}, the areas you marked.
+                    </p>
+                  ) : null)}
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '0 0 8px', maxWidth: 520 }}>{q.text}</h2>
                   {!q.textarea && (
                     <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.55)', margin: '0 0 18px' }}>
@@ -1489,20 +1495,20 @@ export default function PainAssessment() {
                 if (ticked) { routeUrgent(stage); return }
                 if (emergency) setStage('physician')
                 else if (injuryApplies) startInjury()
-                else setStage('intro')
+                else startQuestions()
               }
               return (
                 <Fade k={stage}>
-                  <span style={label}>Safety First{screening.emergency.length ? ` · ${emergency ? '1' : '2'} of 2` : ''}</span>
+                  <span style={label}>{partLabel(emergency ? 'emergency' : 'physician')}</span>
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 14px', maxWidth: 520 }}>
                     {emergency
-                      ? <>First, a few quick <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety questions</em></>
-                      : <>A few more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>checks</em></>}
+                      ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
+                      : <>Next, signs that need a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>doctor first</em></>}
                   </h2>
                   <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '0 0 20px', maxWidth: 520 }}>
                     {emergency
-                      ? 'Most people answer no to all of these. If any of them is happening to you now, tick it and we will tell you what to do next.'
-                      : 'These are signs a doctor should look at before physiotherapy starts. Tick any that apply to you at present.'}
+                      ? 'These questions check for anything that needs urgent medical care right now. Most people answer no to all of them. If any applies to you now, select it and we will tell you what to do.'
+                      : 'These can point to a problem your doctor should check before physiotherapy begins. You can still book with Chandra. Select any that apply to you now.'}
                   </p>
                   {list.length > 0 ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
@@ -1627,7 +1633,7 @@ export default function PainAssessment() {
               const ready = q.multi ? Array.isArray(injuryDraft) && injuryDraft.length > 0 : injuryDraft !== undefined
               return (
                 <Fade k={`injury-${injuryQ}`}>
-                  <span style={label}>{screen.title}</span>
+                  <span style={label}>{partLabel('physician')} · {screen.title}</span>
                   <h2 style={{ ...h2, fontSize: 'clamp(23px,5.4vw,32px)', margin: '12px 0 18px', maxWidth: 520 }}>{q.text}</h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
                     {q.options.map((o, i) => (
@@ -1966,9 +1972,9 @@ export default function PainAssessment() {
                   </>
                 )}
 
-                <span style={{ ...label, marginBottom: 12 }}>Overview of your traced pattern</span>
+                <span style={{ ...label, marginBottom: 12 }}>AI Overview · Optional</span>
                 <div style={{ maxWidth: 520, margin: '12px 0 26px' }}>
-                  <PainAIPanel zones={zones} answers={qaPairs} notes={notesText} matched={matched} onReview={setReview} aiOnly />
+                  <PainAIPanel zones={zones} answers={aiAnswers.core} privateAnswers={aiAnswers.wellbeing} notes={notesText} matched={matched} onReview={setReview} aiOnly />
                 </div>
 
                 <span style={{ ...label, marginBottom: 12 }}>Your Next Step · Book an Assessment</span>

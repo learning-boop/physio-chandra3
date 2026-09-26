@@ -12,7 +12,7 @@ export default function Footer() {
           </p>
         </div>
         {[
-          ['Navigation', [['Home', '/'], ['About', '/about'], ['Conditions', '/conditions'], ['Education', '/education']]],
+          ['Navigation', [['Home', '/'], ['About', '/about'], ['Conditions', '/conditions'], ['Education', '/education'], ['Privacy', '/privacy']]],
           ['Clinics', [['Arka Physiotherapy', '/conditions'], ['BC Ice', '/conditions'], ['Performance Health Group', '/conditions']]],
           ['Contact', [['Call: (604) 555-0101', 'tel:+16045550101'], ['chandra@physiochandra.ca', 'mailto:chandra@physiochandra.ca']]],
         ].map(([title, items]) => (

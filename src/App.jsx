@@ -4,6 +4,7 @@ import AboutPage from './pages/AboutPage'
 import ConditionsPage from './pages/ConditionsPage'
 import EducationPage from './pages/EducationPage'
 import PainMapperPage from './pages/PainMapperPage'
+import PrivacyPage from './pages/PrivacyPage'
 import ScrollToTop from './components/ScrollToTop'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/conditions" element={<ConditionsPage />} />
         <Route path="/education"  element={<EducationPage />} />
         <Route path="/pain-mapper" element={<PainMapperPage />} />
+        <Route path="/privacy"    element={<PrivacyPage />} />
       </Routes>
     </>
   )

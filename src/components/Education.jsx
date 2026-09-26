@@ -1,19 +1,24 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+/* Health information here must be accurate, verifiable and consistent with
+   current evidence (CHCPBC Marketing, Advertising, and Promotion standard,
+   1.1 and 3). Keep claims measured, and give each article its sources. */
+
 const articles = [
   {
     category: 'Injury Prevention',
     title: 'Understanding Posture & Its Impact on Pain',
-    excerpt: 'Poor posture is one of the leading contributors to neck, upper back, and shoulder pain. Learn how spinal alignment affects your daily comfort and what evidence-based corrections you can make.',
+    excerpt: 'The link between posture and neck or back pain is weaker than many people think. Changing position often, staying active and building strength usually matter more than holding one "correct" posture.',
     readTime: '5 min read',
     icon: '🏃',
     tips: [
-      'Keep screens at eye level to reduce neck flexion load',
-      'Use a lumbar support when sitting for extended periods',
-      'Take a 2-minute movement break every 45 minutes',
-      'Strengthen deep cervical flexors with chin-tuck exercises',
+      'No single posture is right for everyone; comfortable variety is the aim',
+      'Setting a screen near eye level can make long desk work more comfortable',
+      'Regular short movement breaks help break up long periods of sitting',
+      'Neck strengthening exercises can help some types of neck pain',
     ],
+    sources: ['Slater D, et al. "Sit up straight": time to re-evaluate. J Orthop Sports Phys Ther. 2019;49(8):562-564.'],
   },
   {
     category: 'Rehabilitation',
@@ -22,63 +27,73 @@ const articles = [
     readTime: '6 min read',
     icon: '🔬',
     tips: [
-      'Isometric loading can reduce tendon pain quickly',
-      'Avoid complete rest — tendons need progressive load to heal',
-      'Ice is less effective than previously thought for tendinopathy',
-      'Heavy slow resistance training is highly effective for chronic tendon pain',
+      'Holding exercises (isometrics) may ease tendon pain in the short term for some people',
+      'Complete rest is rarely advised: tendons usually respond to gradually increasing load',
+      'There is little evidence that ice helps tendon pain in the long term',
+      'Heavy, slow strengthening exercise has shown good results in studies of long-standing tendon pain',
+    ],
+    sources: [
+      'Rio E, et al. Isometric exercise induces analgesia and reduces inhibition in patellar tendinopathy. Br J Sports Med. 2015;49(19):1277-1283.',
+      'Beyer R, et al. Heavy slow resistance versus eccentric training as treatment for Achilles tendinopathy. Am J Sports Med. 2015;43(7):1704-1711.',
     ],
   },
   {
     category: 'Back Pain',
     title: 'Why Most Back Pain Is Not Structural',
-    excerpt: 'Imaging findings like disc bulges are common in pain-free populations. Understanding the biopsychosocial model of pain empowers patients to recover confidently.',
+    excerpt: 'Imaging findings like disc bulges are common in pain-free populations. Understanding how pain works can help people stay active and recover with more confidence.',
     readTime: '7 min read',
     icon: '🦴',
     tips: [
-      'Movement is medicine — avoid prolonged bed rest',
-      'Disc bulges are present in 60% of asymptomatic 50-year-olds',
-      'Fear-avoidance behaviour prolongs recovery',
-      'Graded exposure to activity is the gold standard',
+      'Staying active is usually recommended; long bed rest is not',
+      'In one large review, about 60% of 50-year-olds without back pain had a disc bulge on imaging',
+      'Avoiding movement out of fear is linked with slower recovery',
+      'Exercise and a gradual return to activity are recommended in clinical guidelines',
+    ],
+    sources: [
+      'Brinjikji W, et al. Systematic literature review of imaging features of spinal degeneration in asymptomatic populations. AJNR Am J Neuroradiol. 2015;36(4):811-816.',
+      'National Institute for Health and Care Excellence. Low back pain and sciatica in over 16s: assessment and management (NG59). 2016, updated 2020.',
     ],
   },
   {
     category: 'Exercise',
     title: 'Clinical Pilates vs Regular Pilates',
-    excerpt: 'Physiotherapist-led clinical Pilates is assessment-driven and tailored to individual injury profiles. Here\'s how it differs from gym-based Pilates and when each is appropriate.',
+    excerpt: 'Clinical Pilates led by a physiotherapist starts from an assessment and is adapted to your injury. Here is how it differs from a general Pilates class, and when each may suit you.',
     readTime: '4 min read',
     icon: '🧘',
     tips: [
       'Clinical Pilates begins with a movement screen',
       'Exercises are progressed based on clinical response',
       'Breathing mechanics are assessed and retrained',
-      'Core stability targets deep stabilisers, not just superficial muscles',
+      'Exercises are chosen to suit your injury, goals and fitness',
     ],
   },
   {
     category: 'Sports',
     title: 'Return to Sport: A Criteria-Based Approach',
-    excerpt: 'Time-based return to sport protocols are outdated. Modern rehabilitation uses functional criteria, load tolerance, and psychological readiness to guide athletes back safely.',
+    excerpt: 'Current rehabilitation uses strength and movement tests, how well the body copes with load, and confidence, not time alone, to guide the return to sport.',
     readTime: '8 min read',
     icon: '⚡',
     tips: [
-      'Limb symmetry index should exceed 90% before return',
-      'Psychological readiness is a key predictor of re-injury',
-      'Sport-specific movement patterns must be tested, not assumed',
-      'Gradual load progression reduces re-injury risk significantly',
+      'After knee ligament surgery, a common target is strength in the injured leg of at least 90% of the other leg',
+      'Feeling confident and ready is linked with a successful return to sport',
+      'Sport-specific movements are tested, not assumed',
+      'Building load gradually is recommended to lower the risk of re-injury',
     ],
+    sources: ['Grindem H, et al. Simple decision rules can reduce reinjury risk by 84% after ACL reconstruction: the Delaware-Oslo ACL cohort study. Br J Sports Med. 2016;50(13):804-808.'],
   },
   {
     category: 'Chronic Pain',
     title: 'Pain Education: Changing How You Think About Pain',
-    excerpt: 'Pain is an output of the brain, not simply a signal from damaged tissue. Pain neuroscience education reduces catastrophising and improves outcomes in chronic pain patients.',
+    excerpt: 'Pain is produced by the nervous system and is not simply a measure of tissue damage. Learning how pain works, alongside exercise, can help people with long-standing pain.',
     readTime: '9 min read',
     icon: '🧠',
     tips: [
       'Pain does not equal tissue damage',
       'The nervous system can become sensitised — and desensitised',
       'Sleep, stress, and mood all influence pain intensity',
-      'Active engagement in rehabilitation produces better outcomes than passive treatment alone',
+      'Guidelines favour active treatment, such as exercise, over passive treatment alone',
     ],
+    sources: ['Louw A, et al. The efficacy of pain neuroscience education on musculoskeletal pain: a systematic review of the literature. Physiother Theory Pract. 2016;32(5):332-355.'],
   },
 ]
 
@@ -108,7 +123,7 @@ export default function Education() {
           lineHeight: 1.75, color: 'var(--text-mid)',
           maxWidth: '560px', fontWeight: 300,
         }}>
-          Evidence-based articles to help you understand your condition, speed up your recovery, and make informed decisions about your care.
+          Evidence-informed information to help you understand your condition and make informed decisions about your care.
         </p>
       </div>
 
@@ -217,6 +232,17 @@ export default function Education() {
                         </motion.li>
                       ))}
                     </ul>
+                    {a.sources && (
+                      <div style={{ marginTop: 22 }}>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, marginBottom: 8 }}>Sources</p>
+                        {a.sources.map((src) => (
+                          <p key={src} style={{ fontFamily: 'var(--font-body)', fontSize: '12.5px', lineHeight: 1.6, color: 'rgba(255,255,255,0.5)', margin: '0 0 6px' }}>{src}</p>
+                        ))}
+                      </div>
+                    )}
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12.5px', lineHeight: 1.6, color: 'rgba(255,255,255,0.45)', marginTop: 16 }}>
+                      General information only. Ask a health professional about your own situation.
+                    </p>
                   </div>
                 </motion.div>
               )}
