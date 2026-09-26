@@ -13,6 +13,7 @@
      hand      jammed, bent back, caught, crushed or cut (hand and fingers, B2)
      hip       fall, twist or sudden pull (hip, B2)
      thigh     sudden pain, knock or fall (thigh, B2)
+     knee      twist, blow or fall: the Ottawa knee rule, adapted (knee, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
@@ -342,6 +343,35 @@ export const THIGH_INJURY = [
     options: yesNo('urgent', 'Possible bone forming in the muscle after a bruise (myositis ossificans): it needs imaging') },
 ]
 
+/* ── Knee: twist, blow or fall (Ottawa knee rule, adapted; Stiell 1996) ──
+   Tenderness of the kneecap and the head of the fibula can only be checked in
+   person, so those Ottawa items are left out. */
+export const KNEE_INJURY = [
+  { id: 'I1', text: 'Has your knee been hurt in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'twist', label: 'Yes, a twist or pivot in sport' },
+    { id: 'blow', label: 'Yes, a blow to the knee (tackle, car dashboard)' },
+    { id: 'fall', label: 'Yes, a fall onto the knee' },
+    { id: 'kneecap', label: 'Yes, the kneecap slipped out of place' },
+  ]},
+  { id: 'I2', text: 'Is the knee out of shape, or is the kneecap still out of place?',
+    options: yesNo('emergency', 'Possible knee or kneecap dislocation that has not gone back') },
+  { id: 'I3', text: 'Since the injury, is your foot cold, pale, or numb?',
+    options: yesNo('emergency', 'Possible artery or nerve injury after a knee dislocation') },
+  // A possible fracture: same day.
+  { id: 'I4', text: 'Are you 55 or over, or could you not take 4 steps straight after the injury (and still cannot), or can you not bend the knee to a right angle?',
+    sameDay: true, options: yesNo('urgent', 'Ottawa knee rule: an X-ray is needed to rule out a fracture') },
+  // Bleeding in the joint, which can mean a fracture: same day.
+  { id: 'I5', text: 'Did you hear or feel a pop, and did the knee swell up within 2 hours?',
+    sameDay: true, options: yesNo('urgent', 'Quick swelling means bleeding in the joint: possible ACL tear or fracture') },
+  { id: 'I6', text: 'Is the knee stuck, so you cannot straighten it fully?',
+    options: yesNo('urgent', 'Possible locked knee from a torn meniscus (bucket-handle tear): it needs an early surgical opinion') },
+  // Asked after "the kneecap slipped out of place" only.
+  { id: 'I7', text: 'Did the kneecap pop out and go back in?',
+    askIf: (a) => a.I1 === 'kneecap',
+    options: yesNo('urgent', 'A first kneecap dislocation: imaging to check for a loose bone or cartilage fragment') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -378,6 +408,8 @@ export const SCREENS = [
     flag: 'A hip or groin injury in the last 6 weeks (injury screen)', questions: HIP_INJURY, step: linearStep(HIP_INJURY) },
   { id: 'thigh', zones: ['thigh'], title: 'Recent Thigh Injury',
     flag: 'A thigh injury in the last 6 weeks (injury screen)', questions: THIGH_INJURY, step: linearStep(THIGH_INJURY) },
+  { id: 'knee', zones: ['knee'], title: 'Recent Knee Injury',
+    flag: 'A knee injury in the last 6 weeks (injury screen)', questions: KNEE_INJURY, step: linearStep(KNEE_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──

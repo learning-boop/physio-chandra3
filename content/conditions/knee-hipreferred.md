@@ -2,15 +2,19 @@
 region: knee
 id: hipreferred
 name: Hip problem felt in the knee
-clin: Hip osteoarthritis with referred knee pain
+clin: Hip joint pain referred to the knee (obturator nerve; Lesher 2008)
 # DRAFT extracted from: Patellofemoral Pain: Clinical Practice Guidelines (JOSPT, 2019)
+# Pointers moved to the rebuilt knee questions (content/regions/knee.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Over 50": 3
-  "The whole knee — hard to localize": 2
-  "Gradually, no clear cause": 2
-  "More than 3 months": 1
+  "Moving my hip": 3
+  "65 or over": 1
+  "50 to 64": 1
+  "Under 18": 1
+  "Bending and loading my knee": -2
+  "Moving my low back": -2
+  "Yes": 3
 ---
 
 ## blurb

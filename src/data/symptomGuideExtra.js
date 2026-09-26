@@ -1782,7 +1782,7 @@ export const EXTRA_REGIONS = {
   thigh: {
     name: "Thigh",
     redFlags: [
-      { id: "tgf-pe", tier: "emergency", why: "Possible blood clot that has travelled to the lung",
+      { id: "tgf-pe", tier: "emergency", group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
         text: "Is your thigh or calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
       { id: "tgf-compartment", tier: "emergency", why: "Possible compartment syndrome of the thigh",
         text: "Is your thigh pain getting worse and worse, with the thigh tense and swollen, especially after a heavy knock or crush?" },
@@ -1866,6 +1866,8 @@ export const EXTRA_REGIONS = {
       { id: "R5", text: "Which of these do you notice? Tick all that apply.",
         askIf: ({ draw, all }) => !draw || ["knee", "ankle", "hip", "lowerback", "sij"].some((t) => draw.has(t)) ||
           [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        // Early with nerve-type pain (or when the drawing is unknown).
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
         options: [
           { id: "pins", label: "Pins and needles or numbness in the leg or foot", special: "lowbackHip" },
           { id: "belowknee", label: "Pain goes below the knee", special: "backref" },
@@ -2012,6 +2014,8 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain at the top of the shoulder or upper arm that is worse when you move the <strong>arm</strong> than when you move the neck usually comes from the <strong>shoulder</strong> itself: the rotator cuff, the AC joint at the top of the shoulder, or a stiffening shoulder joint. Consider running the <strong>Shoulder</strong> guide too. Your assessment will check both the neck and the shoulder." },
   chestFirst: { title: "If this is your first chest pain, see a doctor as well",
     body: "Pain on the front of the chest that is tender to press often comes from the <strong>chest wall</strong>: the joints where the ribs meet the breastbone. But if this is the <strong>first time</strong> you have had chest pain, a doctor should check your heart and lungs before it is treated as a chest-wall problem. If it comes with breathlessness, sweating, or spreads to your arm or jaw, call 911." },
+  footDrop: { title: "A dropping foot should be checked by a doctor",
+    body: "A foot that slaps down or toes that catch when you walk mean the muscles that lift the foot are weak. This can come from a nerve pressed at the outer knee (after crossing the legs, a tight cast, or a knee injury) or from the low back. A doctor should check it soon. Physiotherapy can help alongside or afterwards." },
   thighDoctor: { title: "Please have this checked by a doctor",
     body: "Weakness with the knee giving way, a cramp in the thigh or buttock on walking that eases within minutes of standing still, a hard lump in the muscle weeks after a knock, a lump that is growing, or a whole thigh or calf that is swollen are signs a doctor should look at. They can point to a nerve or circulation problem, bone forming in a bruised muscle, a lump that needs imaging, or a clot. Physiotherapy can help alongside or afterwards." },
   lowbackHip: { title: "This may be coming from your low back",

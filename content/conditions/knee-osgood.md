@@ -1,17 +1,19 @@
 ---
 region: knee
 id: osgood
-name: Growing pain below the kneecap
-clin: Tibial tuberosity apophysitis (Osgood-Schlatter disease)
+name: Growing pain below the kneecap (Osgood-Schlatter)
+clin: Osgood-Schlatter disease (tibial tubercle apophysitis)
+ages: u18
 # DRAFT extracted from: Patellofemoral Pain: Clinical Practice Guidelines (JOSPT, 2019)
+# Pointers moved to the rebuilt knee questions (content/regions/knee.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Under 30": 2
-  "Just below the kneecap, on the tendon": 2
-  "After increasing running, jumping, or hiking": 2
-  "Gradually, no clear cause": 1
-  "Jumping, landing, or sprinting": 1
+  "A tender bony bump just below the kneecap (in a teenager)": 3
+  "Just below the kneecap": 2
+  "After increasing running or jumping": 1
+  "Jumping or landing": 1
+  "Kneeling": 1
 ---
 
 ## blurb

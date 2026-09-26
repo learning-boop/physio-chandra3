@@ -88,7 +88,7 @@ const REGION_AGGRAVATORS = {
   hand:      ['Pinching (keys, jars, buttons)', 'Gripping firmly', 'Texting or gaming with the thumbs', 'Cold weather'],
   thigh:     ['Sprinting, kicking, or jumping', 'Stretching, or bending forward with straight legs', 'Sitting for a long time', 'Walking a distance'],
   hip:       ['Lying on that side at night', 'Putting on socks and shoes, or getting in and out of a car', 'Sitting in a low chair or deep squatting', 'Climbing stairs or standing on that leg'],
-  knee:      ['Going up or down stairs', 'Squatting or kneeling', 'Sitting with the knee bent for a long time', 'Running or jumping'],
+  knee:      ['Going down stairs or squatting', 'Jumping or landing', 'Twisting or turning on the leg', 'Kneeling'],
   ankle:     ['First steps in the morning', 'Walking or standing for a long time', 'Running or jumping', 'Uneven ground or stairs'],
   head:      ['Long screen time or reading', 'Stress or poor sleep', 'Certain neck or jaw positions', 'Bright light or noisy places'],
 }
@@ -607,8 +607,11 @@ export default function PainAssessment() {
     // drawing's generic one. When an injury screen follows, it asks
     // about recent injuries in its own, more precise way.
     const ownCardiac = list.some((f) => /cardiac/.test(f.id))
+    // A region that asks about a leg clot itself (group "legclot") replaces
+    // the drawing's generic calf-clot question.
+    const ownClot = list.some((f) => f.group === 'legclot')
     const universal = injuryApplies ? UNIVERSAL_CHECKS.filter((f) => f.id !== 'sc-trauma') : UNIVERSAL_CHECKS
-    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac')).slice(0, 2)
+    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt')).slice(0, 2)
     const all = [...list, ...pattern]
     return {
       emergency: all.filter((f) => f.tier === 'emergency'),

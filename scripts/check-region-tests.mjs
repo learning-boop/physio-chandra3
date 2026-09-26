@@ -488,11 +488,39 @@ const TESTS = {
       answers: { age: '18-29', onset: 'running', duration: 'd6w', R1: ['front'] },
       flags: ['tgf-stress'],
       expect: { route: 'urgent' } },
+  ],  knee: [
+    { name: '1. Patellofemoral pain',
+      lines: [['kneeR']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'd3m', K1: ['kneecap'], K2: ['stairs'], K3: ['none'] },
+      expect: { top: 'knee/pfp', not: ['knee/oa', 'knee/meniscus'], route: 'results' } },
+    { name: '2. Knee osteoarthritis',
+      lines: [['kneeL']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', K1: ['inner'], K3: ['stiff', 'swelling'], K6: ['no'] },
+      expect: { top: 'knee/oa', notTop: ['knee/meniscus'], notRegion: ['hip'], route: 'results' } },
+    { name: '3. Pop and quick swelling after a twist (injury screen)',
+      lines: [['kneeR']],
+      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'twist', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '4. A 13-year-old with thigh and knee pain (slipped growth plate)',
+      lines: [['thighL', 'kneeL']],
+      answers: { age: 'u18', onset: 'gradual', duration: 'd6w', K1: ['kneecap'], K6: ['yes'] },
+      flags: ['kf-sufe'],
+      expect: { route: 'urgent' } },
+    // More than 6 weeks ago, so the injury screen's gate is "No".
+    { name: '5. Meniscal tear after a twist',
+      lines: [['kneeR']],
+      answers: { age: '30-49', onset: 'twist', duration: 'd3m', I1: 'no', K1: ['inner'], K2: ['twist'], K3: ['click'], K4: ['nextday'] },
+      expect: { top: 'knee/meniscus', not: ['knee/oa'], notTop: ['knee/acl'], route: 'results' } },
+    { name: '6. Swollen calf after a knee replacement (clot)',
+      lines: [['kneeR']],
+      answers: { age: 'o64', onset: 'surgery', duration: 'd2w', K5: ['back'] },
+      flags: ['kf-dvt'],
+      expect: { route: 'urgent' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

@@ -2,16 +2,23 @@
 region: knee
 id: pfoa
 name: Kneecap arthritis
-clin: Patellofemoral osteoarthritis (PFOA)
+clin: Patellofemoral osteoarthritis
 # DRAFT extracted from: Patellofemoral Pain: Clinical Practice Guidelines (JOSPT, 2019)
+# Pointers moved to the rebuilt knee questions (content/regions/knee.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Over 50": 3
-  "More than 3 months": 2
-  "Front — behind or around the kneecap": 2
-  "A few minutes of stiffness, then it loosens": 2
-  "Stairs (especially down) and prolonged sitting": 1
+  "Around or behind the kneecap": 2
+  "Going down stairs, squatting, or sitting a long time with the knee bent": 2
+  "Stiff for less than 30 minutes in the morning or after sitting, then eases": 2
+  "50 to 64": 2
+  "65 or over": 2
+  "More than 3 months": 1
+  "18 to 29": -2
+  "Under 18": -2
+  "Moving my low back": -2
+  "Inner side of the knee": -2
+  "Outer side of the knee": -2
 ---
 
 ## blurb

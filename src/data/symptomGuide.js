@@ -258,106 +258,143 @@ export const REGIONS = {
     conditions:[]
   },
 
+  /* ══════════════ KNEE ══════════════
+     From Chandra's "Knee assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/knee.md). Sources: JOSPT
+     patellofemoral pain CPG 2019, JOSPT meniscal and cartilage CPG 2018,
+     JOSPT knee ligament CPG 2017, Ottawa knee rule (Stiell 1996), NICE NG226
+     (2022), Malliaras 2015 (patellar tendinopathy), Peck 2017 (SUFE), Lesher
+     2008, Travell & Simons 2019.
+     Reached from the body map's knee band (KNEE_TOP in Body3D.jsx). Its
+     injury screen (the Ottawa knee rule, adapted) is in ./injuryScreen.js.
+     Conditions: content/conditions/knee-*.md. */
   knee: {
-    name:"Knee",
-    redFlags:[
-      {id:"rf-4steps", sameDay: true, why: "Possible fracture: not being able to take weight after an injury needs an X-ray", text:"Since an injury, you cannot take four steps in a row (it won't take your weight)", tier:"urgent"},
-      {id:"rf-popswell", why: "Possible ligament tear or bleeding inside the joint (such as an ACL tear)", text:"The knee gave way with a pop during an injury and swelled up within an hour or two", tier:"urgent"},
-      {id:"rf-hotknee", sameDay: true, why: "Possible joint infection or gout, which needs a doctor the same day", text:"The knee is hot, red and swollen, and you feel feverish or unwell", tier:"urgent"},
-      {id:"rf-calf", sameDay: true, why: "Possible blood clot in the leg (deep vein thrombosis)", text:"Your calf is swollen, warm, and tender compared to the other side", tier:"urgent"}
+    name: "Knee",
+    redFlags: [
+      { id: "kf-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
+        text: "Is your knee hot, red, and swollen, with a fever or feeling unwell, especially after an injection, surgery, or a cut?" },
+      { id: "kf-pe", tier: "emergency", group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
+        text: "Is your calf or thigh swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
+      { id: "kf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
+        text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
+      { id: "kf-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT). A burst cyst at the back of the knee looks the same and also needs checking",
+        text: "Is your calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill?" },
+      { id: "kf-replacement", sameDay: true, tier: "urgent", why: "Possible infection or loosening of the replacement",
+        text: "Do you have a knee replacement, and is it newly painful, warm, swollen, or is the wound red or leaking?" },
+      { id: "kf-sufe", tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE): hip problems in children are often felt only at the knee",
+        text: "Is a child aged about 9 to 16 limping with knee or thigh pain, or does moving the hip hurt?" },
+      { id: "kf-perthes", tier: "urgent", why: "Possible Perthes disease or other hip problem felt at the knee",
+        text: "Is a child aged about 4 to 10 limping, with knee or hip pain, but no injury?" },
+      { id: "kf-tumour", tier: "urgent", why: "Bone tumours in young people are most common around the knee; needs imaging",
+        text: "Are you under 25 with a deep ache around the knee that wakes you at night, or a lump near the knee that is growing?" },
+      { id: "kf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
+        text: "Did your knee become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
+      { id: "kf-inflam", tier: "urgent", why: "Possible inflammatory or reactive arthritis",
+        text: "Are other joints swollen too, or is the knee swollen with a rash, psoriasis, eye inflammation, or after a stomach bug or sexually transmitted infection?" },
+      { id: "kf-artery", tier: "urgent", why: "Possible artery problem (popliteal aneurysm or narrowed arteries)",
+        text: "Is there a pulsing lump behind your knee, or a cramping calf pain on walking that eases within minutes of standing still?" },
+      { id: "kf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the bones around the knee",
+        text: "Have you ever had cancer, or do you have deep knee pain at night that does not change with position, with weight loss?" }
     ],
-    context:[
-      {id:"age", text:"Your age?", options:[
-        {id:"u30", label:"Under 30", weights:{pfp:1}},
-        {id:"30-50", label:"30 – 50"},
-        {id:"o50", label:"Over 50", weights:{oa:2}}
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
       ]},
-      {id:"onset", text:"How did it start?", options:[
-        {id:"twist", label:"A twist, pivot, or impact injury", weights:{ligament:2, meniscus:2}},
-        {id:"gradual", label:"Gradually, no clear cause", weights:{pfp:1, oa:1}},
-        {id:"activity", label:"After increasing running, jumping, or hiking", weights:{pt:2, itb:2, pfp:1}},
-        {id:"ns", label:"Not sure"}
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "twist", label: "A twist or pivot in sport" },
+        { id: "blow", label: "After a fall or a blow to the knee" },
+        { id: "running", label: "After increasing running or jumping" },
+        { id: "kneeling", label: "After a lot of kneeling or squatting" },
+        { id: "surgery", label: "After knee surgery or a knee replacement" }
       ]},
-      {id:"duration", text:"How long has it been going on?", options:[
-        {id:"d2w", label:"Less than 2 weeks"},
-        {id:"d6w", label:"2 – 6 weeks"},
-        {id:"d3m", label:"6 weeks – 3 months"},
-        {id:"o3m", label:"More than 3 months"}
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
       ]}
     ],
-    questions:[
-      {id:"K1", text:"Where do you feel it most?", options:[
-        {id:"front", label:"Front — behind or around the kneecap", weights:{pfp:3}},
-        // Inner and outer are separate options: the inner and outer knee
-        // ligament sprains point at one side each, and a single "inner or outer"
-        // option left the two tied on every answer.
-        {id:"innerline", label:"The inner side, along the joint line", weights:{meniscus:2, oa:2}},
-        {id:"outerline", label:"The outer side, along the joint line", weights:{meniscus:2, oa:2}},
-        {id:"belowcap", label:"Just below the kneecap, on the tendon", weights:{pt:3}},
-        {id:"outside", label:"Outside of the knee, slightly above the joint", weights:{itb:3}},
-        {id:"back", label:"The back of the knee"},
-        {id:"whole", label:"The whole knee — hard to localize", weights:{oa:1}},
-        {id:"ns", label:"Not sure"}
+    questions: [
+      { id: "K1", text: "Where is the pain mainly?", options: [
+        { id: "kneecap", label: "Around or behind the kneecap" },
+        { id: "below", label: "Just below the kneecap" },
+        { id: "inner", label: "Inner side of the knee" },
+        { id: "outer", label: "Outer side of the knee" },
+        { id: "back", label: "Back of the knee" }
       ]},
-      {id:"K2", text:"Which activities are worst?", options:[
-        {id:"stairs", label:"Stairs (especially down) and prolonged sitting", weights:{pfp:3}},
-        {id:"squat", label:"Squatting, twisting, or pivoting", weights:{meniscus:3}},
-        {id:"firststeps", label:"First steps after rest — better once moving", weights:{oa:2}},
-        {id:"jumping", label:"Jumping, landing, or sprinting", weights:{pt:3}},
-        {id:"longruns", label:"Long runs — starts at a predictable distance", weights:{itb:3}},
-        {id:"ns", label:"Not sure"}
+      { id: "K2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "stairs", label: "Going down stairs, squatting, or sitting a long time with the knee bent" },
+        { id: "jump", label: "Jumping or landing" },
+        { id: "twist", label: "Twisting or turning on the leg" },
+        { id: "running", label: "Running, coming on after the same distance each time" },
+        { id: "kneeling", label: "Kneeling" }
       ]},
-      {id:"K3", text:"Any of these mechanical symptoms?", options:[
-        {id:"locking", label:"True locking — it gets stuck and I must wiggle it free", weights:{meniscus:3}},
-        {id:"givingway", label:"Giving way / buckling since an injury", weights:{ligament:3}},
-        {id:"kneecap", label:"The kneecap shifted or popped out to the side"},
-        {id:"click", label:"Clicking without pain", special:"click"},
-        {id:"none", label:"None of these"}
+      { id: "K3", text: "Which of these apply? Tick all that apply.", options: [
+        { id: "click", label: "Clicking, catching, or locking" },
+        { id: "giveway", label: "The knee gives way" },
+        { id: "swelling", label: "Swelling after activity" },
+        { id: "stiff", label: "Stiff for less than 30 minutes in the morning or after sitting, then eases" },
+        { id: "none", label: "None of these" }
       ]},
-      {id:"K4", text:"What about swelling?", options:[
-        {id:"fast", label:"It swelled within 1–2 hours of an injury", weights:{ligament:3}},
-        {id:"nextday", label:"Mild swelling the day after activity or injury", weights:{meniscus:2}},
-        {id:"puffy", label:"Intermittent puffiness after activity", weights:{oa:2}},
-        {id:"none", label:"No swelling", weights:{ligament:-2}}
+      { id: "K4", text: "About the twisting injury: which apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "twist",
+        priority: () => true,
+        options: [
+          { id: "pop", label: "I felt or heard a pop" },
+          { id: "fast", label: "It swelled within a couple of hours" },
+          { id: "nextday", label: "It swelled the next day" },
+          { id: "stop", label: "I could not carry on playing" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "K5", text: "Is there any swelling or lump in one place?", options: [
+        { id: "prepatellar", label: "Swelling on the front of the kneecap (after kneeling)" },
+        { id: "back", label: "A lump or fullness at the back of the knee" },
+        { id: "bump", label: "A tender bony bump just below the kneecap (in a teenager)" },
+        { id: "puffy", label: "The whole knee is puffy" },
+        { id: "none", label: "No swelling or lump" }
       ]},
-      {id:"K5", text:"Morning stiffness in the knee?", options:[
-        {id:"fewmin", label:"A few minutes of stiffness, then it loosens", weights:{oa:3}},
-        {id:"none", label:"No"},
-        {id:"ns", label:"Not sure"}
-      ]}
+      { id: "K6", text: "Does it hurt to move your hip (putting on socks, turning your leg in and out in bed)?",
+        askIf: ({ draw, ra }) => !draw || ["thigh", "hip"].some((t) => draw.has(t)) ||
+          ["u18", "50-64", "o64"].includes(ra.age),
+        // Early for a child, or when the thigh or hip is drawn too: hip
+        // problems (in children, a slipped growth plate) are often felt only
+        // at the knee.
+        priority: ({ draw, ra }) => !draw || ["thigh", "hip"].some((t) => draw.has(t)) || ra.age === "u18",
+        options: [
+          { id: "yes", label: "Yes", special: "hipSource" },
+          { id: "no", label: "No" },
+          { id: "unsure", label: "Not sure" }
+        ]},
+      { id: "K7", text: "Which of these do you notice in the leg? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["thigh", "hip", "lowerback", "sij", "ankle"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        // Early with nerve-type pain (or when the drawing is unknown).
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "pins", label: "Pins and needles or numbness in the leg or foot", special: "lowbackHip" },
+          { id: "fromback", label: "Pain that starts in the back or buttock and travels to the knee", special: "lowbackHip" },
+          { id: "saphenous", label: "A burning or numb patch on the inner knee or shin" },
+          { id: "footslap", label: "The foot slaps down, or the toes catch when walking", special: "footDrop" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "K8", text: "Which hurts more: moving your low back, moving your hip, or bending and loading your knee?",
+        askIf: ({ draw, ra }) => !draw || ["thigh", "hip", "lowerback", "sij"].some((t) => draw.has(t)) ||
+          [].concat(ra.K6 || []).includes("yes") || [].concat(ra.K7 || []).some((o) => o !== "none"),
+        // Early when the low back or buttock is drawn too: the back look-alike.
+        priority: ({ draw }) => !!draw && ["lowerback", "sij"].some((t) => draw.has(t)),
+        options: [
+          { id: "back", label: "Moving my low back", special: "lowbackHip" },
+          { id: "hip", label: "Moving my hip", special: "hipSource" },
+          { id: "knee", label: "Bending and loading my knee" },
+          { id: "none", label: "None of these bring it on" }
+        ]}
     ],
-    conditions:[
-      {id:"pfp", name:"Patellofemoral pain", clin:"kneecap-related pain",
-        blurb:"Pain from the joint between the kneecap and thigh bone, usually when it's asked to handle more load than it's currently conditioned for. Very common in active people and very treatable with graded strength work.",
-        noticed:["Ache behind or around the kneecap","Worse on stairs (especially down), squatting, or after long sitting ('movie-goer's knee')","Usually no significant swelling"],
-        homeCare:["Trim (don't stop) the aggravating dose — fewer flights, shorter runs, then rebuild","Hip and thigh strengthening within comfort","Avoid prolonged deep knee bend positions while irritable"],
-        seePhysioIf:["It's not settling after ~2 weeks of load management","It limits sport, stairs, or work","You'd like a graded strengthening plan — the best-evidenced treatment"]},
-      {id:"oa", name:"Knee osteoarthritis pattern", clin:"age-related joint change — often painless on scans", gates:{ages:["30-50","o50"]},
-        blurb:"A gradual change in the joint's cartilage and bone, common from midlife onward. Important: exercise is proven treatment, not a threat — stronger legs mean less pain, and activity does not 'wear the knee out'.",
-        noticed:["Aching with first steps after rest, easing as you get going","Brief morning stiffness (minutes, not hours)","Intermittent puffiness after busier days"],
-        homeCare:["Regular strength work for thighs and hips — the single best-evidenced treatment","Keep walking or cycling; motion is lotion","Weight management where relevant makes a measurable difference","Heat for stiffness, brief ice for flare-ups"],
-        seePhysioIf:["Pain or stiffness limits walking, stairs, or sleep","You'd like a structured program (e.g., GLA:D-style) with proven outcomes","You're weighing options and want conservative care optimized first"]},
-      {id:"meniscus", name:"Meniscal irritation pattern", clin:"meniscus tear or irritation",
-        blurb:"The knee's cartilage shock-absorbers can be irritated by twisting, deep squatting, or gradual change with age. Many meniscal problems do well without surgery, with strength and movement retraining.",
-        noticed:["Pain along the joint line, worse twisting or squatting","Catching, or true locking in some cases","Swelling that appears the day after activity"],
-        homeCare:["Avoid deep squats and forceful pivoting while irritable","Keep straight-line walking and cycling going","Gentle range-of-motion work within comfort"],
-        seePhysioIf:["Joint-line pain persists beyond ~2 weeks","There's catching or locking","You want a rehab-first plan — outcomes rival surgery for many age-related tears"]},
-      {id:"ligament", name:"Ligament sprain pattern", clin:"e.g., MCL or ACL injury", gates:{requiresOnset:["twist"]},
-        blurb:"An injury that stretches or tears one of the knee's stabilizing ligaments — typically from a twist, pivot, or impact. Rapid swelling and a feeling of instability are the key signals that it should be assessed.",
-        noticed:["A specific injury moment, sometimes with a pop","Swelling — rapid swelling suggests a more significant injury","Giving way or a sense of not trusting the knee"],
-        homeCare:["Relative rest, ice, compression, elevation in the first days","Keep gentle range of motion within comfort","Avoid pivoting sports until assessed"],
-        seePhysioIf:["Any injury with rapid swelling or giving way deserves assessment","You want a guided return to sport or work","Instability persists after the initial phase"]},
-      {id:"pt", name:"Patellar tendinopathy", clin:"jumper's knee",
-        blurb:"The tendon just below the kneecap can become sensitive when jumping, landing, or sprinting loads rise faster than the tendon adapts. Classic in jumping sports and running.",
-        noticed:["Pointable pain on the tendon just below the kneecap","Worse with jumping, landing, stairs, or sprinting","Often warms up during activity, then aches after"],
-        homeCare:["Manage the spike: reduce jump/sprint volume, keep strength work","Isometric holds (e.g., wall sit within comfort) can ease pain short-term","Avoid complete rest — tendons adapt to load, not to rest"],
-        seePhysioIf:["Pain persists or returns each session","You want a staged tendon-loading program — the core of good care","It's affecting performance or daily stairs"]},
-      {id:"itb", name:"Iliotibial band syndrome", clin:"ITB / runner's knee (outer)",
-        blurb:"Irritation where the long band on the outside of the thigh crosses the knee — classically in runners and cyclists, starting at a predictable distance into a session.",
-        noticed:["Sharp or burning pain on the outside of the knee","Starts at a predictable point in a run or ride","Settles with rest, returns with the same dose"],
-        homeCare:["Temporarily shorten sessions to below the symptom threshold","Check for sudden increases in mileage, hills, or camber","Hip strength work within comfort"],
-        seePhysioIf:["It recurs at the same distance despite adjustments","You'd like a running-load and strength plan","Pain starts appearing in daily activities too"]}
-    ]
+    conditions: []
   }
 };
 

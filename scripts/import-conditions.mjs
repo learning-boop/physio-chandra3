@@ -79,10 +79,17 @@ for (const file of files) {
   // Resolve each pointer's answer text to a real option in this region.
   const resolved = []
   for (const [text, weight] of Object.entries(pointers)) {
+    // An option whose whole text matches wins; otherwise the first option that
+    // contains the text. ("Kneeling" is an option of its own, and also part
+    // of "After a lot of kneeling or squatting".)
     let hit = null
-    for (const q of allQuestions(region)) {
-      const o = (q.options || []).find((x) => x.label.toLowerCase().includes(text.toLowerCase()))
-      if (o) { hit = { qid: q.id, oid: o.id, label: o.label }; break }
+    const want = text.toLowerCase()
+    for (const exact of [true, false]) {
+      for (const q of allQuestions(region)) {
+        const o = (q.options || []).find((x) => (exact ? x.label.toLowerCase() === want : x.label.toLowerCase().includes(want)))
+        if (o) { hit = { qid: q.id, oid: o.id, label: o.label }; break }
+      }
+      if (hit) break
     }
     if (!hit) fail(file, `no answer option in "${meta.region}" matches "${text}"`)
     else resolved.push({ ...hit, weight })

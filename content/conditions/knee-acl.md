@@ -2,16 +2,20 @@
 region: knee
 id: acl
 name: ACL tear (a major knee ligament injury)
-clin: Anterior cruciate ligament (ACL) tear/rupture
+clin: Anterior cruciate ligament injury (JOSPT CPG 2017)
 # DRAFT extracted from: Exercise-Based Knee and Anterior Cruciate Ligament Injury Prevention: Clinical Practice Guidelines (JOSPT, 2018)
+# Pointers moved to the rebuilt knee questions (content/regions/knee.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "A twist, pivot, or impact injury": 3
-  "It swelled within 1–2 hours of an injury": 3
-  "Giving way / buckling since an injury": 3
-  "Jumping, landing, or sprinting": 2
-  "Under 30": 1
+  "I felt or heard a pop": 3
+  "It swelled within a couple of hours": 3
+  "The knee gives way": 3
+  "A twist or pivot in sport": 2
+  "I could not carry on playing": 2
+  "Twisting or turning on the leg": 1
+  "It swelled the next day": -2
+  "Moving my low back": -2
 ---
 
 ## blurb
