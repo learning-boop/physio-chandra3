@@ -37,7 +37,7 @@ const limbSpread = (zones, side) => {
   // Upper arm, elbow and forearm count as one stretch of the arm, so the
   // whole-limb rule still means shoulder, mid-arm and hand.
   const arm = [['shoulder'], ['upperarm', 'elbow', 'forearm'], ['wrist', 'hand']].filter((ts) => onSide(zones, side, ...ts)).length
-  const leg = [['hip'], ['thigh', 'knee'], ['ankle']].filter((ts) => onSide(zones, side, ...ts)).length
+  const leg = [['hip'], ['thigh', 'knee', 'lowerleg'], ['ankle']].filter((ts) => onSide(zones, side, ...ts)).length
   return Math.max(arm, leg)
 }
 
@@ -87,7 +87,7 @@ const PATTERNS = [
     // Spec: back of the knee / calf — "swollen calf + red/warm → screen DVT".
     id: 'pc-dvt', tier: 'urgent', sameDay: true, why: WHY.dvt,
     text: 'Swelling, warmth or redness in the calf or the back of the knee',
-    when: (z) => onFace(z, 'back', 'knee', 'ankle'),
+    when: (z) => onFace(z, 'back', 'knee', 'lowerleg', 'ankle'),
   },
   {
     id: 'pc-visceral', tier: 'urgent', why: WHY.organ,
@@ -110,7 +110,7 @@ const PATTERNS = [
   {
     id: 'pc-polyneuropathy', tier: 'urgent', why: WHY.neuropathy,
     text: 'Numbness, tingling or burning in BOTH hands or BOTH feet, like wearing gloves or socks',
-    when: (z) => bothSides(z, 'wrist') || bothSides(z, 'hand') || bothSides(z, 'ankle'),
+    when: (z) => bothSides(z, 'wrist') || bothSides(z, 'hand') || bothSides(z, 'lowerleg') || bothSides(z, 'ankle'),
   },
   {
     id: 'pc-limb', tier: 'urgent', why: WHY.limb,

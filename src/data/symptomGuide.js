@@ -625,6 +625,7 @@ export const ZONE_TO_REGION = {
   lowerback: 'lowback',
   shoulder: 'shoulder',
   knee: 'knee',
+  lowerleg: 'leg',
 }
 
 /* ── Merge in the extra regions authored from Chandra's document library ── */

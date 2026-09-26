@@ -14,6 +14,7 @@
      hip       fall, twist or sudden pull (hip, B2)
      thigh     sudden pain, knock or fall (thigh, B2)
      knee      twist, blow or fall: the Ottawa knee rule, adapted (knee, B2)
+     leg       kick, fall or sudden calf pain (lower leg, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
@@ -372,6 +373,32 @@ export const KNEE_INJURY = [
     options: yesNo('urgent', 'A first kneecap dislocation: imaging to check for a loose bone or cartilage fragment') },
 ]
 
+/* ── Lower leg: kick, fall or sudden pain in the calf ── */
+export const LEG_INJURY = [
+  { id: 'I1', text: 'Has your lower leg been hurt in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'kick', label: 'Yes, a kick or blow to the shin or calf' },
+    { id: 'fall', label: 'Yes, a fall or accident' },
+    { id: 'calf', label: 'Yes, a sudden pain or “kick” in the calf or back of the ankle while pushing off' },
+  ]},
+  { id: 'I2', text: 'Is the leg a different shape, is bone showing, or can you not stand on the leg?',
+    options: yesNo('emergency', 'Possible fracture of the shin bones') },
+  { id: 'I3', text: 'After the injury, is the pain getting worse by the hour, with the leg tight and much worse when you move your toes?',
+    options: yesNo('emergency', 'Possible acute compartment syndrome (most common after a shin fracture)') },
+  // Asked after a sudden calf pain only. A torn tendon is best treated early,
+  // and a calf tear can look like a clot: both same day.
+  { id: 'I4', text: 'Did it feel like someone kicked the back of your ankle or calf, and now you cannot push up onto your toes on that leg, or feel a gap in the tendon?',
+    askIf: (a) => a.I1 === 'calf', sameDay: true,
+    options: yesNo('urgent', 'Possible Achilles tendon rupture: early treatment matters') },
+  { id: 'I5', text: 'Did you feel a sudden sharp pain in the inner calf (like being hit), with bruising down to the ankle after?',
+    askIf: (a) => a.I1 === 'calf', sameDay: true,
+    options: yesNo('urgent', 'Possible calf muscle tear ("tennis leg"): a clot can look the same, so it needs checking') },
+  // Asked after a kick or blow only.
+  { id: 'I6', text: 'After a kick to the outer knee or shin, is your foot weak or numb on top?',
+    askIf: (a) => a.I1 === 'kick',
+    options: yesNo('urgent', 'Possible peroneal nerve injury') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -410,6 +437,8 @@ export const SCREENS = [
     flag: 'A thigh injury in the last 6 weeks (injury screen)', questions: THIGH_INJURY, step: linearStep(THIGH_INJURY) },
   { id: 'knee', zones: ['knee'], title: 'Recent Knee Injury',
     flag: 'A knee injury in the last 6 weeks (injury screen)', questions: KNEE_INJURY, step: linearStep(KNEE_INJURY) },
+  { id: 'leg', zones: ['lowerleg'], title: 'Recent Lower Leg Injury',
+    flag: 'A lower leg injury in the last 6 weeks (injury screen)', questions: LEG_INJURY, step: linearStep(LEG_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──

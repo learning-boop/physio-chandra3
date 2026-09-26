@@ -57,12 +57,13 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Hand & fingers | `hand` | Hand and fingers assessment | 6 |
 | Hip & groin | `hip` | Hip assessment (question ids G1–G8) | 6 |
 | Thigh | `thigh` | Thigh assessment (question ids R1–R8) | 6 |
-| Knee (from just above the kneecap to mid-shin) | `knee` | Knee assessment (question ids K1–K8) | 6 |
-| Lower shin, ankle & foot | `ankle` | July 2026 set (not yet rebuilt) | — |
+| Knee (from just above the kneecap to just below it) | `knee` | Knee assessment (question ids K1–K8) | 6 |
+| Lower leg (calf & shin) | `leg` (zone type `lowerleg`) | Lower leg assessment (question ids V1–V8) | 6 |
+| Ankle & foot (from just above the ankle bones) | `ankle` | July 2026 set (not yet rebuilt) | — |
 | Stomach | — | generic questions | — |
 
 Still to feed:
-Lower leg, Ankle, Foot, and the Subjective assessment template. "Arm
+Ankle, Foot, and the Subjective assessment template. "Arm
 assessment" was replaced by "Upper arm" and "Forearm" and is not used.
 
 ## Rules that keep it working

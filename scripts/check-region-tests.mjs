@@ -516,11 +516,40 @@ const TESTS = {
       answers: { age: 'o64', onset: 'surgery', duration: 'd2w', K5: ['back'] },
       flags: ['kf-dvt'],
       expect: { route: 'urgent' } },
+  ],  leg: [
+    { name: '1. Shin splints in both shins',
+      lines: [['lowerlegL'], ['lowerlegR']],
+      answers: { age: '18-29', onset: 'running', duration: 'd6w', V1: ['medial'], V2: ['warmup'], V3: ['long'] },
+      expect: { top: 'leg/mtss', not: ['leg/cecs'], route: 'results' } },
+    { name: '2. One sore spot on the shin (stress fracture)',
+      lines: [['lowerlegR']],
+      answers: { age: '18-29', onset: 'running', duration: 'd6w', V1: ['anterior'], V2: ['hop'], V3: ['spot'] },
+      flags: ['lgf-stress'],
+      expect: { route: 'urgent' } },
+    { name: '3. Exertional compartment syndrome in both legs',
+      lines: [['lowerlegL'], ['lowerlegR']],
+      answers: { age: '18-29', onset: 'exercise', duration: 'o3m', V2: ['builds'], V4: ['tight', 'numb', 'eases'] },
+      expect: { top: 'leg/cecs', notTop: ['leg/mtss'], route: 'results' } },
+    { name: '4. Sudden inner calf pain at tennis (injury screen)',
+      lines: [['lowerlegL']],
+      answers: { age: '30-49', onset: 'pushoff', duration: 'd2w', I1: 'calf', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '5. Calf cramp on walking (claudication)',
+      lines: [['lowerlegL'], ['lowerlegR']],
+      answers: { age: 'o64', onset: 'walking', duration: 'o3m', V5: ['cramp'], V8: ['skin'] },
+      flags: ['lgf-claudication'],
+      expect: { route: 'urgent' } },
+    // A line from the low back down to the foot is read as referral from the back.
+    { name: '6. Low back look-alike: back down the outer shin to the foot',
+      lines: [['lowerback', 'thighR', 'kneeR', 'lowerlegR', 'ankleR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['burning'],
+        V1: ['lateral'], V6: ['outer'], V7: ['back'] },
+      expect: { notRegion: ['leg'], areas: ['lowback'], route: 'results' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'leg' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

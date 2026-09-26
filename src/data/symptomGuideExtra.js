@@ -1794,7 +1794,7 @@ export const EXTRA_REGIONS = {
         text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
       { id: "tgf-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); same-day review",
         text: "Is your thigh or calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill?" },
-      { id: "tgf-cellulitis", sameDay: true, tier: "urgent", why: "Possible skin infection (cellulitis); same-day review",
+      { id: "tgf-cellulitis", sameDay: true, tier: "urgent", group: "legcellulitis", why: "Possible skin infection (cellulitis); same-day review",
         text: "Is there spreading redness, a red streak up the leg, or a hot, swollen area, with a fever?" },
       { id: "tgf-stress", tier: "urgent", why: "Possible stress fracture of the thigh bone; needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night?" },
@@ -1802,7 +1802,7 @@ export const EXTRA_REGIONS = {
         text: "Are you under 25 with a deep thigh ache that wakes you at night, or a lump or swelling in the thigh that is growing?" },
       { id: "tgf-sufe", tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE), often felt in the thigh or knee",
         text: "Is a child aged about 9 to 16 limping, with pain in the thigh or knee?" },
-      { id: "tgf-claudication", tier: "urgent", why: "Possible narrowed leg arteries (vascular claudication)",
+      { id: "tgf-claudication", tier: "urgent", group: "claudication", why: "Possible narrowed leg arteries (vascular claudication)",
         text: "Do you get a cramping pain in the thigh or buttock when walking that eases within minutes of standing still, and do you smoke or have diabetes?" },
       { id: "tgf-femoral", tier: "urgent", why: "Nerve weakness (femoral nerve or L3–L4) needs medical review",
         text: "Has your thigh muscle become weak or thin, or does your knee give way, with no injury?" },
@@ -1899,6 +1899,155 @@ export const EXTRA_REGIONS = {
         { id: "growing", label: "A lump that is growing, with no injury", special: "thighDoctor" },
         { id: "whole", label: "The whole thigh or calf is swollen", special: "thighDoctor" },
         { id: "none", label: "No swelling or lump" }
+      ]}
+    ],
+    conditions: []
+  },
+
+  /* ══════════════ LOWER LEG (CALF & SHIN) ══════════════
+     From Chandra's "Lower leg assessment" region document (reviewed by
+     Chandra, 25 Sep 2026; the source text is content/regions/leg.md).
+     Sources: Winters 2018 (MTSS), Warden 2014 (bone stress injuries),
+     Pedowitz 1990 (chronic compartment syndrome), JOSPT midportion Achilles
+     tendinopathy CPG 2024, Maffulli 1998 (Achilles rupture), Wells 2003
+     (DVT), ESC peripheral arterial disease guidelines 2017, Murphy 2009,
+     Travell & Simons 2019.
+     Reached from the body map's lower leg band, between the knee and the
+     ankle (KNEE_BOTTOM and ANKLE_TOP in Body3D.jsx; the zone type is
+     "lowerleg"). Question ids are V1 to V8. Its injury screen is in
+     ./injuryScreen.js. Conditions: content/conditions/leg-*.md. */
+  leg: {
+    name: "Lower leg (calf & shin)",
+    redFlags: [
+      { id: "lgf-pe", tier: "emergency", group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
+        text: "Is your calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
+      { id: "lgf-compartment", tier: "emergency", why: "Possible acute compartment syndrome",
+        text: "Is your lower leg pain getting worse and worse, with the leg tight and swollen and much worse when your toes are moved, especially after an injury or under a cast?" },
+      { id: "lgf-ischaemia", tier: "emergency", why: "Possible blocked artery (acute limb ischaemia)",
+        text: "Has your foot or lower leg suddenly become cold, pale, numb, or painful at rest?" },
+      { id: "lgf-necfasc", tier: "emergency", why: "Possible severe skin and tissue infection",
+        text: "Is there a hot, red area on your leg that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
+      { id: "lgf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
+        text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
+      { id: "lgf-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); same-day review. A burst cyst from the back of the knee can look the same",
+        text: "Is your calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, pregnancy, or starting the pill?" },
+      { id: "lgf-cellulitis", sameDay: true, tier: "urgent", group: "legcellulitis", why: "Possible skin infection (cellulitis) or circulation problem; same-day review",
+        text: "Is there spreading redness, a red streak up the leg, or a hot, swollen area with a fever, or a leg ulcer that is not healing?" },
+      { id: "lgf-claudication", tier: "urgent", group: "claudication", why: "Possible narrowed leg arteries (vascular claudication)",
+        text: "Do you get a cramping calf pain when walking that eases within minutes of standing still, and do you smoke, have diabetes, or are over 50?" },
+      { id: "lgf-stress", tier: "urgent", why: "Possible tibial stress fracture; needs imaging before more running",
+        text: "Do you run or train hard, and is there a sore spot on the shin bone that you can point to with one finger, or pain when hopping or at night?" },
+      { id: "lgf-footdrop", tier: "urgent", why: "Foot drop (peroneal nerve or L5) needs medical review",
+        text: "Is your foot slapping down or your toes catching when you walk?" },
+      { id: "lgf-neuropathy", tier: "urgent", why: "Possible peripheral neuropathy; needs medical review and foot checks",
+        text: "Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes?" },
+      { id: "lgf-tumour", tier: "urgent", why: "Bone lumps need imaging to rule out a tumour",
+        text: "Are you under 25 with a deep shin ache that wakes you at night, or a lump on the shin that is growing?" },
+      { id: "lgf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the leg bones",
+        text: "Have you ever had cancer, or do you have deep leg pain at night that does not change with position, with weight loss?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "running", label: "After increasing running, jumping, or marching" },
+        { id: "exercise", label: "It comes on during exercise and eases when I stop" },
+        { id: "pushoff", label: "A sudden pain in the calf while pushing off" },
+        { id: "kick", label: "After a kick, blow, or fall" },
+        { id: "walking", label: "It comes on with walking and eases when I stand still or sit" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "V1", text: "Where is the pain mainly?",
+        // Early, so the knee (with many more conditions) does not crowd out
+        // the question that tells shin, calf and Achilles apart.
+        priority: () => true,
+        options: [
+        { id: "medial", label: "Along the inner edge of the shin bone" },
+        { id: "anterior", label: "Front of the shin, on the outer side of the bone" },
+        { id: "lateral", label: "Outer side of the lower leg" },
+        { id: "calf", label: "Calf" },
+        { id: "achilles", label: "Back of the lower leg, just above the heel (Achilles)" }
+      ]},
+      { id: "V2", text: "How does the pain behave with running or exercise?",
+        // Early when it started with exercise or running: it separates shin
+        // splints, a stress fracture and compartment syndrome.
+        priority: ({ ra }) => ra.onset === "exercise" || ra.onset === "running",
+        options: [
+        { id: "warmup", label: "Sore at the start, eases as I warm up, worse after" },
+        { id: "builds", label: "Builds up during exercise at the same point, and eases within minutes of stopping" },
+        { id: "hop", label: "Gets worse the more I run, and hurts to hop", special: "boneStress" },
+        { id: "morning", label: "Sore the morning after, and stiff at first" },
+        { id: "notex", label: "It is not linked to exercise" }
+      ]},
+      { id: "V3", text: "About the tender area on the shin: which is closest?",
+        askIf: ({ ra }) => [].concat(ra.V1 || []).some((o) => o === "medial" || o === "anterior"),
+        priority: () => true,
+        options: [
+          { id: "long", label: "A long stretch (more than 5 cm) along the inner edge of the bone" },
+          { id: "spot", label: "One spot I can cover with a fingertip", special: "boneStress" },
+          { id: "muscle", label: "Not on the bone, in the muscle beside it" },
+          { id: "none", label: "I have no tender spot on the shin" }
+        ]},
+      { id: "V4", text: "During exercise, which of these happen? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.V2 || []).includes("builds"),
+        priority: () => true,
+        options: [
+          { id: "tight", label: "The leg goes tight or hard" },
+          { id: "numb", label: "The foot goes numb, tingly, or weak" },
+          { id: "slap", label: "The foot slaps down or the toes catch", special: "footDrop" },
+          { id: "eases", label: "It eases within 10 to 30 minutes of stopping" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "V5", text: "When walking, what happens?",
+        askIf: ({ ra }) => ra.onset === "walking" || ra.age === "50-64" || ra.age === "o64",
+        options: [
+          { id: "cramp", label: "Calf cramp that eases within minutes of standing still", special: "calfDoctor" },
+          { id: "sitease", label: "Leg pain that eases only when I sit or bend forward", special: "lowbackHip" },
+          { id: "rest", label: "Pain at rest or at night that eases with the leg hanging down", special: "calfDoctor" },
+          { id: "nochange", label: "No change with walking" }
+        ]},
+      { id: "V6", text: "Which of these do you notice in the leg or foot? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["thigh", "hip", "lowerback", "sij", "ankle"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        // Early with nerve-type pain (or when the drawing is unknown).
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "inner", label: "Pins and needles or numbness on the inner shin" },
+          { id: "outer", label: "Pins and needles or numbness on the outer shin and top of the foot" },
+          { id: "calfsole", label: "Pins and needles or numbness in the calf, outer foot, or sole", special: "lowbackHip" },
+          { id: "both", label: "Burning or numbness in both feet, like socks", special: "calfDoctor" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "V7", text: "Which hurts more: moving your low back, or loading your leg (walking, running, rising on your toes)?",
+        askIf: ({ draw, ra }) => !draw || ["lowerback", "sij", "thigh", "hip"].some((t) => draw.has(t)) ||
+          [].concat(ra.V6 || []).some((o) => o !== "none"),
+        // Early when the low back or buttock is drawn too: the back look-alike.
+        priority: ({ draw }) => !!draw && ["lowerback", "sij"].some((t) => draw.has(t)),
+        options: [
+          { id: "back", label: "Moving my low back", special: "lowbackHip" },
+          { id: "leg", label: "Loading my leg" },
+          { id: "both", label: "Both about the same" },
+          { id: "neither", label: "Neither brings it on" }
+        ]},
+      { id: "V8", text: "Is there any swelling or change in the skin?", options: [
+        { id: "calf", label: "Swelling of the whole calf", special: "calfDoctor" },
+        { id: "bruise", label: "Swelling and bruising after an injury" },
+        { id: "ankles", label: "Swollen ankles at the end of the day, or varicose veins" },
+        { id: "skin", label: "Skin that is shiny, cold, hairless, or slow to heal", special: "calfDoctor" },
+        { id: "none", label: "No swelling or skin change" }
       ]}
     ],
     conditions: []
@@ -2014,6 +2163,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain at the top of the shoulder or upper arm that is worse when you move the <strong>arm</strong> than when you move the neck usually comes from the <strong>shoulder</strong> itself: the rotator cuff, the AC joint at the top of the shoulder, or a stiffening shoulder joint. Consider running the <strong>Shoulder</strong> guide too. Your assessment will check both the neck and the shoulder." },
   chestFirst: { title: "If this is your first chest pain, see a doctor as well",
     body: "Pain on the front of the chest that is tender to press often comes from the <strong>chest wall</strong>: the joints where the ribs meet the breastbone. But if this is the <strong>first time</strong> you have had chest pain, a doctor should check your heart and lungs before it is treated as a chest-wall problem. If it comes with breathlessness, sweating, or spreads to your arm or jaw, call 911." },
+  boneStress: { title: "This could be a stress fracture: see a doctor before more running",
+    body: "Shin pain that gets worse the more you run and hurts to hop, or one spot on the bone you can cover with a fingertip, can be a <strong>stress fracture</strong> rather than shin splints. It needs a doctor and usually imaging before you run again. Physiotherapy helps with the return to running afterwards." },
+  calfDoctor: { title: "Please have this checked by a doctor",
+    body: "A calf cramp on walking that eases within minutes of standing still, pain at rest that eases with the leg hanging down, skin that is shiny, cold, hairless, or slow to heal, burning or numbness in both feet, or a whole calf that is swollen can point to a circulation problem, a nerve condition, or a clot. A doctor should check these. Physiotherapy can help alongside or afterwards." },
   footDrop: { title: "A dropping foot should be checked by a doctor",
     body: "A foot that slaps down or toes that catch when you walk mean the muscles that lift the foot are weak. This can come from a nerve pressed at the outer knee (after crossing the legs, a tight cast, or a knee injury) or from the low back. A doctor should check it soon. Physiotherapy can help alongside or afterwards." },
   thighDoctor: { title: "Please have this checked by a doctor",

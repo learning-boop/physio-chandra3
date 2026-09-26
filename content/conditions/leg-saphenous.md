@@ -1,18 +1,17 @@
 ---
-region: knee
+region: leg
 id: saphenous
 name: Inner knee nerve irritation (saphenous nerve)
 clin: Saphenous nerve irritation
-# DRAFT patient text written 25 Sep 2026 from content/regions/knee.md — not yet reviewed.
-# Patient text shared with leg-saphenous.md: keep the two in step.
+# Patient text shared with knee-saphenous.md: keep the two in step.
+# Pointers from content/regions/leg.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "A burning or numb patch on the inner knee or shin": 3
-  "Inner side of the knee": 1
-  "After knee surgery or a knee replacement": 1
-  "Pins and needles or numbness in the leg or foot": -1
-  "Moving my low back": -2
+  "Pins and needles or numbness on the inner shin": 3
+  "Along the inner edge of the shin bone": 1
+  "Moving my low back": -3
+  "Burning or numbness in both feet, like socks": -2
 ---
 
 ## blurb

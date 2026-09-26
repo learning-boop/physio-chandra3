@@ -135,6 +135,12 @@ export const REFERRAL_MAP = {
     muscles: ['Gluteus minimus (outer and back of the thigh, "pseudo-sciatica")', 'Tensor fascia lata (outer thigh)', 'Piriformis (back of the thigh)', 'Vastus medialis / lateralis (front of the thigh, knee)', 'Adductor longus / brevis (inner thigh)', 'Iliopsoas (front of the thigh)'],
     organs: ['Leg veins: clot (swollen, warm, tender thigh or calf)', 'Leg arteries: claudication (cramp on walking, eases standing still)', 'Kidney, ureter and pelvic organs (upper inner thigh)'],
   },
+  lowerleg: {
+    joints: ['Lumbar facets and discs, sacroiliac joint (can refer into the calf without a nerve root)'],
+    roots: ['L4 (inner shin to the inner ankle)', 'L5 (outer shin and top of the foot to the big toe)', 'S1 (calf, outer foot and sole)'],
+    muscles: ['Gluteus minimus (outer and back of the calf, "pseudo-sciatica")', 'Gastrocnemius and soleus (calf, back of the knee, heel)', 'Tibialis anterior (front of the shin)', 'Peroneus longus and brevis (outer lower leg)', 'Tibialis posterior and long toe flexors (calf, Achilles, sole)'],
+    organs: ['Leg veins: clot (calf swollen, warm, tender)', 'Leg arteries: claudication or critical ischaemia', 'Peripheral nerves: neuropathy (both feet and shins)', 'Skin: cellulitis'],
+  },
   hip: {
     joints: ['Hip joint (buttock 71%, groin 55%)', 'Sacroiliac joint (buttock 94%, groin 14%)', 'L3–L5 facets (buttock, greater trochanter)', 'L1–L3 facets (groin)'],
     roots: ['L2 (groin, upper anterior thigh)', 'S2–S4 (perineum, saddle area)'],
@@ -156,7 +162,7 @@ export const REFERRAL_MAP = {
 }
 
 /* Order the summary lists areas in: spine first, then out along the limbs. */
-const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'ankle']
+const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle']
 
 /** The drawn zone types that have an entry, in summary order, without repeats. */
 export function mappedTypes(zones = []) {

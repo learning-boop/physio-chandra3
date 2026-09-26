@@ -35,6 +35,8 @@ const code = [
   grab(/const THIGH_TOP_FRONT = [^\n]+/, 'THIGH_TOP_FRONT'),
   grab(/const THIGH_TOP_BACK = [^\n]+/, 'THIGH_TOP_BACK'),
   grab(/const KNEE_TOP = [^\n]+/, 'KNEE_TOP'),
+  grab(/const KNEE_BOTTOM = [^\n]+/, 'KNEE_BOTTOM'),
+  grab(/const ANKLE_TOP = [^\n]+/, 'ANKLE_TOP'),
   grab(/const armBand = [^\n]+/, 'armBand'),
   'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
   grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/, 'classify()'),
@@ -74,7 +76,7 @@ BODY_METRICS.h = mxy - mny; BODY_METRICS.cx = (mnx + mxx) / 2; BODY_METRICS.cy =
 const COLORS = {
   head: [150, 150, 150], neck: [230, 80, 80], shoulder: [70, 130, 230], upperback: [240, 190, 60], ctj: [255, 255, 255], tlj: [255, 90, 200], flank: [0, 255, 170], sij: [120, 220, 255], coccyx: [255, 0, 0], jaw: [255, 255, 0], upperarm: [255, 140, 0], forearm: [140, 255, 140],
   lowerback: [240, 130, 40], chest: [160, 90, 200], abdomen: [120, 70, 160], elbow: [60, 190, 190],
-  wrist: [40, 150, 90], hand: [255, 60, 120], thigh: [230, 230, 120], hip: [200, 110, 170], knee: [110, 200, 90], ankle: [90, 90, 200],
+  wrist: [40, 150, 90], hand: [255, 60, 120], thigh: [230, 230, 120], lowerleg: [255, 170, 60], hip: [200, 110, 170], knee: [110, 200, 90], ankle: [90, 90, 200],
 }
 const typeOf = (id) => (id || '').replace(/[LR]$/, '')
 
