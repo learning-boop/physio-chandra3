@@ -49,3 +49,12 @@ ground, and it usually settles with graded strengthening.
 - It is not settling after about two weeks
 - The ankle keeps giving way
 - You would like a strengthening plan to return to sport
+
+## doctorFirst
+(Optional: delete this section unless the condition must see a doctor first.
+The note is shown at the top of its results card, e.g. "Please see your
+family doctor soon. These symptoms need a medical assessment.")
+
+## clinicNotes
+- (Optional: notes for Chandra's clinician summary, never shown to patients.
+  Delete this section if not needed.)

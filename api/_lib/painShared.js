@@ -156,6 +156,7 @@ export function analysisKnowledge(regionKeys, matched = []) {
   return knowledgeBlocks(regionKeys, 7000, (c) =>
     `• ${cap(c.name, 60)}${c.clin ? ` (${cap(c.clin, 60)})` : ''}\n` +
     `  What it is: ${cap(c.blurb, 200)}\n` +
+    (c.doctorFirst ? `  Refer first (say so): ${cap(c.doctorFirst, 160)}\n` : '') +
     `  People notice: ${(c.noticed || []).slice(0, 3).map((s) => cap(s, 85)).join('; ')}\n` +
     `  Home care: ${(c.homeCare || []).slice(0, 3).map((s) => cap(s, 85)).join('; ')}\n` +
     `  See a physio if: ${(c.seePhysioIf || []).slice(0, 2).map((s) => cap(s, 85)).join('; ')}`,

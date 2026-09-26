@@ -23,24 +23,36 @@ export const EXTRA_REGIONS = {
      askIf: the question is only asked when this returns true. `draw` is the
      set of drawn zone types (null when unknown, which asks it), `ra` this
      region's answers, `all` every answer so far.
-     Red flags with `drawn` are only asked when one of those areas is drawn. */
+     Red flags with `drawn` are only asked when one of those areas is drawn.
+
+     Spinal cord (degenerative cervical myelopathy), from Chandra's "Cervical
+     Myelopathy" condition document (draft v0.1, 26 Sep 2026): the slow
+     pattern is no longer a single yes/no flag. N9 asks for the cord signs
+     one by one, N10 asks how they have behaved, and the scored condition
+     (content/conditions/neck-dcm.md) carries a "see your doctor first" note.
+     Only the fast pattern (worse over days or weeks) stays on the safety
+     screen, as a same-day flag. The stroke flag asks about symptoms that
+     came on suddenly, so a slowly changing walk is not sent to 911. */
   neck: {
     name: "Neck (cervical spine)",
     redFlags: [
       { id: "nrf-thunderclap", tier: "emergency", group: "thunderclap", why: "Possible bleed or artery tear in the neck or head",
         text: "Have you had a sudden, severe headache, the worst you have ever had?" },
       { id: "nrf-artery", tier: "emergency", group: "stroke", why: "Stroke or neck artery warning signs",
-        text: "Since this started, have you had any of these: room spinning or dizziness, double vision, slurred speech, trouble swallowing, sudden falls or blackouts, numb face, weakness on one side, or unsteady walking?" },
+        text: "Since this started, have any of these come on suddenly: room spinning or dizziness, double vision, slurred speech, trouble swallowing, falls or blackouts, numb face, weakness on one side, or unsteady walking?" },
       { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord",
-        text: "Along with the neck pain, have you lost control of your bladder or bowels, or had new numbness or weakness in both legs?" },
+        text: "Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs?" },
+      { id: "nrf-manip", tier: "emergency", why: "New nerve or spinal cord symptoms after a neck manipulation",
+        text: "Since a neck manipulation or adjustment (having your neck \"cracked\"), have you had new numbness or weakness in your arms or legs?" },
       { id: "nrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
         text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
       { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
         text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
       { id: "nrf-kehr", tier: "emergency", group: "kehr", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
         text: "Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?" },
-      { id: "nrf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord (myelopathy)",
-        text: "Have your hands become clumsy (buttons, writing, dropping things), or has your walking become unsteady?" },
+      // The slow pattern is asked in N9/N10 and scored (neck-dcm.md).
+      { id: "nrf-myelo", sameDay: true, tier: "urgent", group: "myelo", why: "Spinal cord pressure that is getting worse quickly needs a doctor today",
+        text: "Over the last few days or weeks, have your hands been getting quickly clumsier (buttons, writing, dropping things), or your walking quickly more unsteady?" },
       { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability",
         text: "Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
       { id: "nrf-cad", tier: "urgent", group: "cad", why: "An early sign of a neck artery tear can be pain alone",
@@ -136,6 +148,29 @@ export const EXTRA_REGIONS = {
           { id: "shoulder", label: "Moving my shoulder and arm", special: "shoulderSource" },
           { id: "both", label: "Both about the same" },
           { id: "neither", label: "Neither brings it on" }
+        ]},
+      // Spinal cord signs (DCM). Asked of everyone with neck pain, and early:
+      // it replaced a safety-screen question everyone was asked, and neck
+      // pain is often mild or absent in DCM, so nothing else would bring it
+      // up. "None of these" rules DCM out and the flow moves on.
+      { id: "N9", text: "Have you noticed any of these changes? Tick all that apply.",
+        priority: () => true,
+        options: [
+          { id: "bothhands", label: "Numbness or pins and needles in both hands" },
+          { id: "clumsy", label: "My hands have become clumsy: buttons, writing, using a phone, or dropping things" },
+          { id: "walking", label: "My walking or balance has changed: unsteady, tripping, or legs feel stiff or heavy" },
+          { id: "lhermitte", label: "Bending my head forward sends an electric feeling down my back, arms, or legs" },
+          { id: "none", label: "None of these" }
+        ]},
+      // Fast change (days or weeks) was asked on the safety screen (nrf-myelo).
+      // Asked straight after any cord sign, before the question budget runs out.
+      { id: "N10", text: "How have these hand or walking changes behaved over time?",
+        askIf: ({ ra }) => [].concat(ra.N9 || []).some((o) => o !== "none"),
+        priority: () => true,
+        options: [
+          { id: "slowworse", label: "Slowly getting worse over months or years" },
+          { id: "steady", label: "Staying about the same, or coming and going" },
+          { id: "better", label: "Getting better" }
         ]}
     ],
     conditions: []

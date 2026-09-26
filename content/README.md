@@ -40,7 +40,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 
 | Area on the body map | Region | Built from | Test patients |
 | --- | --- | --- | --- |
-| Neck | `neck` | Cervical assessment | 6 |
+| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10) | 11 |
 | Base of neck (C7–T3) | `ctj` | CT junction assessment | 5 |
 | Mid back, front of chest | `upperback` | Thoracic assessment | 5 |
 | Mid-to-low back, flank | `tlj` | TL-junction assessment | 5 |
@@ -84,7 +84,8 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   the questionnaire continuing; the advice stays on the results). Flags
   marked `sameDay` (giant cell arteritis, a possible clot, a hot joint with
   fever, a possible fracture, a possible torn biceps or finger tendon, arm
-  cellulitis, a fingertip infection, a painful knee replacement) say "see a doctor today". Only flags that
+  cellulitis, a fingertip infection, a painful knee replacement, hands or
+  walking getting quickly worse) say "see a doctor today". Only flags that
   depend on the answers wait for a short final check.
 - **Neighbouring areas share.** A red flag that asks the same thing in two
   areas (heart, aorta, spinal cord…) is shown once. A condition with the same
@@ -109,6 +110,10 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   junction; an upper-arm mark also asks the shoulder; a line from the neck
   down the arm asks the neck and base of the neck. A forearm mark beside
   the elbow is asked after the elbow (it is often elbow pain spreading down).
+- **Refer-first conditions carry a doctor note.** A condition file with a
+  `## doctorFirst` section (cervical myelopathy) shows that note at the top
+  of its results card; `## clinicNotes` go to Chandra's clinician summary
+  only.
 - **Look-alikes become cards, not conditions.** "May be coming from your
   neck / shoulder / hip / low back", migraine, and see-a-doctor messages are
   cards shown with the results.

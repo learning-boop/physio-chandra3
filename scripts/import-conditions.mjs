@@ -121,6 +121,10 @@ for (const file of files) {
     id: meta.id, name: meta.name, clin: meta.clin || '', ...(gates ? { gates } : {}),
     blurb: sections.blurb, noticed: sections.noticed,
     homeCare: sections.homeCare, seePhysioIf: sections.seePhysioIf,
+    // Optional: a refer-first condition's "see your doctor" note, shown at
+    // the top of its results card, and notes for the clinician summary only.
+    ...(sections.doctorFirst ? { doctorFirst: [].concat(sections.doctorFirst).join(' ') } : {}),
+    ...(sections.clinicNotes ? { clinicNotes: [].concat(sections.clinicNotes) } : {}),
   }, resolved })
   console.log(`  ok     ${file} -> ${meta.region}/${meta.id}  (${resolved.length} pointers)`)
 }

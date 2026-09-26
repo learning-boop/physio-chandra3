@@ -153,7 +153,10 @@ export function classifyPainMechanism({ zones = [], answers = {}, behaviour = {}
   const settle = answers.sinSettle
   const persistent = PERSISTENT.includes(answers.duration)
   const psychCount = ['yfFear', 'yfOutlook', 'yfMood', 'yfSleep', 'yfRoles'].filter((id) => answers[id] === 'agree').length
-  const nerveWords = q.has('burning') || q.has('tingling')
+  // Spinal cord signs from the neck's N9 (numb or clumsy hands, a changed
+  // walk, an electric feeling on bending the head) count as nerve evidence.
+  const cordSigns = as(answers.N9).filter((id) => id !== 'none')
+  const nerveWords = q.has('burning') || q.has('tingling') || cordSigns.length > 0
 
   const score = { nociceptive: 0, neuropathic: 0, nociplastic: 0 }
   const reasons = { nociceptive: [], neuropathic: [], nociplastic: [] }
@@ -179,6 +182,7 @@ export function classifyPainMechanism({ zones = [], answers = {}, behaviour = {}
   if (q.has('tingling')) add('neuropathic', 3, 'there is pins and needles or numbness')
   if (d.spreadsDownLimb) add('neuropathic', 2, 'it spreads from the spine along the limb')
   if (q.has('touch')) add('neuropathic', 1, null)
+  if (cordSigns.length) add('neuropathic', 3, 'your hands or walking have changed, which points to the nerves or spinal cord')
 
   // Sensitised — only ever for pain lasting more than 3 months.
   if (persistent) {

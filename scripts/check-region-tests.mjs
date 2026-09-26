@@ -55,6 +55,38 @@ const TESTS = {
       answers: { age: '50-64', onset: 'gradual', duration: 'd2w', N1: ['full'], N6: ['lifting'] },
       flags: ['nrf-cardiac'],
       expect: { route: 'emergency' } },
+    // From the "Cervical Myelopathy" condition document (26 Sep 2026).
+    { name: '7. Numb, clumsy hands and an unsteady walk (cervical myelopathy)',
+      lines: [['neck']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', N1: ['bothstiff'],
+        N9: ['bothhands', 'clumsy', 'walking'], N10: ['slowworse'] },
+      expect: { top: 'neck/dcm', firstAsked: 'N9', route: 'results' } },
+    // Tingling as the pain type also brings in the arm question; the
+    // progression question must still be asked, right after the cord signs.
+    { name: '7b. The same, with tingling as the pain type',
+      lines: [['neck']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', painQuality: ['tingling'], N1: ['bothstiff'],
+        N9: ['bothhands', 'clumsy', 'walking'], N10: ['slowworse'] },
+      expect: { top: 'neck/dcm', asked: ['N9', 'N10'], route: 'results' } },
+    { name: '8. Neck pain, no hand or walking changes: myelopathy ruled out',
+      lines: [['neck']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', N1: ['onestiff'], N9: ['none'], N6: ['desk'], N7: ['eases'] },
+      expect: { top: 'neck/mech', not: ['neck/dcm'], notAsked: ['N10'], route: 'results' } },
+    { name: '9. One arm in a strip, walking normal (radiculopathy, not myelopathy)',
+      lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', N9: ['none'],
+        N2: ['pastelbow', 'armworse', 'fingers', 'handhead'], N3: ['arm'] },
+      expect: { top: 'neck/radic', not: ['neck/dcm'], route: 'results' } },
+    { name: '10. Hands and walking getting quickly worse over weeks',
+      lines: [['neck']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'd6w' },
+      flags: ['nrf-myelo'],
+      expect: { route: 'urgent' } },
+    { name: '11. New arm numbness after a neck manipulation',
+      lines: [['neck']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd2w' },
+      flags: ['nrf-manip'],
+      expect: { route: 'emergency' } },
   ],
   ctj: [
     { name: '1. Desk worker, stiff at the base of the neck',
@@ -745,6 +777,7 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     for (const c of e.notTop || []) if ((r.shown || [])[0] === c) why.push(`${c} is on top`)
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)
     for (const q of e.notAsked || []) if (r.asked.includes(q)) why.push(`asked ${q}`)
+    for (const q of e.asked || []) if (!r.asked.includes(q)) why.push(`${q} was not asked`)
     for (const k of e.areas || []) if (!(r.keys || []).includes(k)) why.push(`${k} was not asked`)
     if (e.firstAsked) { const first = (r.asked || []).find((x) => !x.includes(':')); if (!first || !first.startsWith(e.firstAsked)) why.push(`first question ${first}, expected one of ${e.firstAsked}…`) }
     if (e.special && ![].concat(e.special).some((c) => (r.specials || []).includes(c))) why.push(`no "${[].concat(e.special).join('" or "')}" card`)

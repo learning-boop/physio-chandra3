@@ -1847,6 +1847,13 @@ export default function PainAssessment() {
                           <span style={{ ...label, fontSize: 15, display: 'block', marginBottom: 8 }}>{REGIONS[rk].name}</span>
                         )}
                         <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{c.name}</p>
+                        {/* A refer-first condition (cervical myelopathy): its
+                            see-your-doctor note comes before anything else. */}
+                        {c.doctorFirst && (
+                          <p style={{ fontSize: 14.5, lineHeight: 1.55, color: '#fcd34d', margin: '10px 0 0', padding: '10px 12px', border: '1px solid rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', borderRadius: 10 }}>
+                            {c.doctorFirst}
+                          </p>
+                        )}
                         <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{c.blurb}</p>
                         <Bullets title="What people often notice" items={c.noticed} />
                         <Bullets title="What often helps" items={c.homeCare} />

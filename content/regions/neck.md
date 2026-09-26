@@ -7,17 +7,30 @@ name: Neck (cervical spine)
 source: Blanpied PR et al. Neck Pain: Revision 2017. JOSPT 47(7), 2017; Rushton A et al. International IFOMPT Cervical Framework. JOSPT 53(1), 2023; Stiell IG et al. The Canadian C-Spine Rule. JAMA 286, 2001; Wainner RS et al. Radiculopathy test cluster. Spine 28, 2003; Cook C et al. Cervical myelopathy clinical findings cluster. JOSPT 40, 2010; Bogduk N. Definitions and physiology of back pain, referred pain, and radicular pain. Pain 147, 2009; Cloward RB. Cervical diskography. Ann Surg 150, 1959; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction, 3rd ed., 2019
 reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
+# 26 Sep 2026: spinal cord (DCM) pattern added from "Cervical Myelopathy.docx"
+# (Conditions/Neck and headache, draft v0.1): questions 9 and 10, condition
+# content/conditions/neck-dcm.md, test patients 7 to 11, and the flag changes
+# marked (DCM) below.
 ---
 
 ## red flags
 <!-- "Ask only if" is an addition: the two shoulder-tip flags are asked only
      when a shoulder is drawn. -->
 - Have you had a sudden, severe headache, the worst you have ever had? | emergency | Possible bleed or artery tear in the neck or head
-- Since this started, have you had any of these: room spinning or dizziness, double vision, slurred speech, trouble swallowing, sudden falls or blackouts, numb face, weakness on one side, or unsteady walking? | emergency | Stroke or cervical artery warning signs (IFOMPT framework)
-- Along with the neck pain, have you lost control of your bladder or bowels, or had new numbness or weakness in both legs? | emergency | Acute spinal cord compression
+- Since this started, have any of these come on suddenly: room spinning or dizziness, double vision, slurred speech, trouble swallowing, falls or blackouts, numb face, weakness on one side, or unsteady walking? | emergency | Stroke or cervical artery warning signs (IFOMPT framework)
+<!-- (DCM) The stroke flag now asks what came on suddenly, so a walk that
+     has changed slowly over months goes to the myelopathy questions, not 911.
+     "Unable to pass urine" and the manipulation flag are from the DCM
+     document's red flags. New numbness after a fall or injury is already
+     asked by the injury screen (I5). -->
+- Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs? | emergency | Acute spinal cord compression
+- Since a neck manipulation or adjustment (having your neck "cracked"), have you had new numbness or weakness in your arms or legs? | emergency | New nerve or spinal cord symptoms after a neck manipulation
 - Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at? | emergency | Possible meningitis
 - Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain can be felt in the neck, jaw, and arm
-- Have your hands become clumsy (buttons, writing, dropping things), or has your walking become unsteady? | urgent | Possible pressure on the spinal cord (myelopathy)
+<!-- (DCM) Was: "Have your hands become clumsy (buttons, writing, dropping
+     things), or has your walking become unsteady?" (urgent). The slow pattern
+     is now asked in questions 9 and 10 and scored; only fast change stays here. -->
+- Over the last few days or weeks, have your hands been getting quickly clumsier (buttons, writing, dropping things), or your walking quickly more unsteady? | urgent, same day | Spinal cord pressure that is getting worse quickly needs a doctor today
 - Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth? | urgent | Possible upper neck instability
 - Did a new neck pain or headache, unlike anything you have had before, start suddenly after a neck manipulation, a sudden jerk, or a minor knock? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
 - Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | emergency | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign) | Ask only if: a shoulder is drawn
@@ -142,6 +155,23 @@ Q: Which hurts more: moving your neck, or moving your shoulder and arm (reaching
 - Neither brings it on
 Ask only if: the drawing includes the top of the shoulder or upper arm
 
+<!-- (DCM) Questions 9 and 10 go beyond the 8-question guide on purpose:
+     question 9 replaced a safety-screen question everyone was asked, so it
+     is asked of everyone, first. -->
+Q: Have you noticed any of these changes? Tick all that apply.
+- Numbness or pins and needles in both hands
+- My hands have become clumsy: buttons, writing, using a phone, or dropping things
+- My walking or balance has changed: unsteady, tripping, or legs feel stiff or heavy
+- Bending my head forward sends an electric feeling down my back, arms, or legs
+- None of these
+Ask first, always.
+
+Q: How have these hand or walking changes behaved over time?
+- Slowly getting worse over months or years
+- Staying about the same, or coming and going
+- Getting better
+Ask only if: question 9 is anything but "None of these"; then asked straight after it. (Getting quickly worse over days or weeks is the same-day safety flag.)
+
 ## referral patterns
 - Neck → back of the head, temple, or behind the eye | Headache coming from the upper neck (cervicogenic, C1–C3) | Migraine, tension-type headache; vascular causes if red flags ticked
 - Neck → shoulder blade or upper back | Referred pain from lower neck joints or discs (C5–C7) | Upper back and rib joints; heart or lung if left-sided and brought on by effort
@@ -152,6 +182,7 @@ Ask only if: the drawing includes the top of the shoulder or upper arm
 - Lower neck discs (C5–C7) → inner edge of the shoulder blade | Disc-referred pain (Cloward's areas); often comes before any arm symptoms | Upper back and rib joints; heart if left-sided and brought on by effort
 - Scalene muscles → front of the chest, inner shoulder blade, down the outer arm to the thumb and index finger | Muscle trigger point referral | C6 nerve root, thoracic outlet, heart
 - Levator scapulae → angle of the neck and inner edge of the shoulder blade | Muscle trigger point referral ("stiff neck") | C3–C4 joint
+- Neck (spinal cord) → both hands, and the legs; neck pain may be mild or absent | Degenerative cervical myelopathy: both hands numb or clumsy, walking changes, not in one nerve strip | Carpal tunnel in both hands (no walking change), radiculopathy (one arm in a strip), lumbar stenosis (legs only, eased by sitting), peripheral neuropathy (starts in the feet), MS or B12 deficiency
 - Sternocleidomastoid → forehead, around the eye, ear, back of the head; may bring a watery eye or runny nose | Muscle trigger point referral with autonomic signs | Sinus pain, ear problems, cervicogenic headache
 
 ## test patients
@@ -190,3 +221,33 @@ Drawing: Left side of the neck, left jaw, and inside of the left arm
 Answers: Age = 50 to 64; Gradually, no clear reason; Less than 2 weeks; Q1 = I can turn fully both ways; Q6 = lifting or carrying
 Flags: Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?
 Expect: top condition = none; must not show = any neck condition, any booking, radiculopathy; route = 911
+
+CASE: 7. Numb, clumsy hands and an unsteady walk (cervical myelopathy)
+Drawing: Centre of the neck
+Answers: Age = 65 or over; Gradually, no clear reason; More than 3 months; Q1 = stiff or painful turning both ways; Q9 = both hands + clumsy + walking; Q10 = slowly getting worse over months or years
+Flags: none
+Expect: top condition = cervical myelopathy, with its see-your-doctor note; first question = Q9; route = results
+
+CASE: 8. Neck pain, no hand or walking changes
+Drawing: Centre of the neck
+Answers: Age = 50 to 64; Gradually, no clear reason; More than 3 months; Q1 = stiff or painful turning to one side; Q9 = None of these; Q6 = long spells at a desk; Q7 = stiff at first, then eases
+Flags: none
+Expect: top condition = mechanical neck pain; must not show = myelopathy; Q10 not asked; route = results
+
+CASE: 9. One arm in a strip, walking normal
+Drawing: Neck and down the right arm to the hand
+Answers: Age = 50 to 64; Gradually, no clear reason; 6 weeks to 3 months; Q9 = None of these; Q2 = past the elbow + arm worse than neck + particular fingers + hand on head eases it; Q3 = yes, it goes down the arm
+Flags: none
+Expect: top condition = radiculopathy; must not show = myelopathy; route = results
+
+CASE: 10. Hands and walking getting quickly worse over weeks
+Drawing: Centre of the neck
+Answers: Age = 65 or over; Gradually, no clear reason; 2 to 6 weeks
+Flags: Over the last few days or weeks, have your hands been getting quickly clumsier…?
+Expect: route = see a doctor today
+
+CASE: 11. New arm numbness after a neck manipulation
+Drawing: Centre of the neck
+Answers: Age = 30 to 49; Gradually, no clear reason; Less than 2 weeks
+Flags: Since a neck manipulation or adjustment…, have you had new numbness or weakness in your arms or legs?
+Expect: route = 911

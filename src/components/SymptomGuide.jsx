@@ -291,6 +291,7 @@ export default function SymptomGuide({ regionOptions }) {
         <div key={x.c.id} style={{ ...card, ...(i === 0 ? { borderColor: GOLD, background: 'rgba(201,169,110,0.1)' } : {}) }}>
           <strong style={{ color: i === 0 ? GOLD_LIGHT : '#fff', fontSize: 14 }}>{i + 1}. {x.c.name}</strong>
           {x.c.clin && <div style={{ fontSize: 10.5, letterSpacing: '0.1em', textTransform: 'uppercase', color: GOLD, marginTop: 3 }}>{x.c.clin}</div>}
+          {x.c.doctorFirst && <p style={{ fontSize: 12.5, lineHeight: 1.6, color: '#fcd34d', margin: '8px 0 0' }}>{x.c.doctorFirst}</p>}
           <p style={{ fontSize: 12.5, lineHeight: 1.65, color: 'rgba(255,255,255,0.75)', margin: '8px 0 0' }} dangerouslySetInnerHTML={{ __html: x.c.blurb }} />
           {x.c.noticed?.length > 0 && (
             <>

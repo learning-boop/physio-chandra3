@@ -226,6 +226,8 @@ export function buildClinicianSummary(ctx = {}) {
       push(...listOf(support.map((s) => `${s.answer}  (${s.question})`), '      · '))
       const against = againstFindings(x.rk, c.id, answers)
       if (against.length) push(`      Against: ${against.join('; ')}`)
+      // Refer-first conditions carry their own clinic notes (e.g. the Cook cluster for DCM).
+      if (c.clinicNotes && c.clinicNotes.length) push(...listOf(c.clinicNotes, '      ! '))
     })
   }
   if (review) {
