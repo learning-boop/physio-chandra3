@@ -572,7 +572,11 @@ export const EXTRA_REGIONS = {
       ]}
     ],
     questions: [
-      { id: "P1", text: "If you point to the worst spot with one finger, where is it?", options: [
+      { id: "P1", text: "If you point to the worst spot with one finger, where is it?",
+        // Early, so a neighbouring area with more conditions (the hip) does not
+        // crowd out the question that tells the sacroiliac joint apart.
+        priority: () => true,
+        options: [
         { id: "dimple", label: "Over the dimple at the back of my pelvis" },
         { id: "belowdimple", label: "Just below and inside the dimple" },
         { id: "lowback", label: "Across the low back, above the belt line", special: "lowbackSource" },
@@ -1627,94 +1631,141 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
-  /* ══════════════ HIP ══════════════ */
+  /* ══════════════ HIP & GROIN ══════════════
+     From Chandra's "Hip assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/hip.md). Sources: JOSPT
+     hip osteoarthritis CPG 2017, JOSPT nonarthritic hip pain CPG 2023,
+     Warwick Agreement 2016 (FAI), Grimaldi 2015 (gluteal tendinopathy), Doha
+     agreement 2015 (groin pain), Lesher 2008 (hip referral), Peck 2017
+     (SUFE), IFOMPT red flags framework 2020, Travell & Simons 2019.
+     Reached from the body map's hip band. Question ids are G1 to G8 (the
+     hand has H). Its injury screen is in ./injuryScreen.js. Conditions:
+     content/conditions/hip-*.md. */
   hip: {
     name: "Hip & groin",
     redFlags: [
-      { id: "hrf-fall", sameDay: true, why: "Possible hip fracture", text: "A fall or impact after which you cannot put weight on the leg", tier: "urgent" },
-      { id: "hrf-hot", sameDay: true, why: "Possible hip joint infection", text: "Severe groin/hip pain with fever, or a hot swollen joint", tier: "urgent" },
-      { id: "hrf-child", why: "Hip problems in growing children (such as a slipped growth plate) need a doctor to check first", text: "This is for a child or teenager with a limp or groin/knee pain", tier: "urgent" }
+      { id: "hpf-aaa", tier: "emergency", why: "Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
+        text: "Do you have a sudden, severe pain in your back, tummy, or groin, with a pulsing feeling in your tummy, or feeling faint or sweaty?" },
+      { id: "hpf-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
+        text: "Is your hip very painful with a fever, and can you not put weight on the leg (or is a child suddenly refusing to walk and feverish)?" },
+      { id: "hpf-ectopic", tier: "emergency", why: "Possible ectopic pregnancy",
+        text: "Could you be pregnant, and do you have sudden one-sided pain low in your tummy or groin, bleeding, or feeling faint?" },
+      { id: "hpf-torsion", tier: "emergency", why: "Possible testicular torsion",
+        text: "Do you have sudden, severe pain in a testicle?" },
+      { id: "hpf-strangulated", tier: "emergency", why: "Possible trapped (strangulated) hernia",
+        text: "Is there a lump in your groin that is hard, very painful, will not go back in, and are you vomiting?" },
+      { id: "hpf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
+        text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
+      { id: "hpf-sufe", tier: "urgent", why: "Possible slipped growth plate at the hip (SUFE); hip problems in children are often felt at the knee",
+        text: "Is a child aged about 9 to 16 limping, with pain in the hip, groin, thigh, or knee?" },
+      { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip (femoral neck); needs imaging before more running",
+        text: "Do you run or train hard, and do you have a deep groin ache that is worse with running or hopping, or aches at night?" },
+      { id: "hpf-avn", tier: "urgent", why: "Possible loss of blood supply to the hip bone (avascular necrosis)",
+        text: "Do you take long-term steroid tablets, drink heavily, or have sickle cell disease, and have a deep groin ache?" },
+      { id: "hpf-dvt", sameDay: true, tier: "urgent", why: "Possible blood clot (DVT); emergency if you are also short of breath",
+        text: "Is your leg swollen, warm, or tender in the calf or thigh, especially after surgery, a long journey, or time in bed?" },
+      { id: "hpf-hernia", tier: "urgent", why: "Possible hernia",
+        text: "Is there a soft lump in your groin that appears when you cough, strain, or stand?" },
+      { id: "hpf-kidney", tier: "urgent", why: "Possible kidney stone or infection",
+        text: "Does the pain come in waves from your side to your groin, or come with burning when you pass urine or blood in your urine?" },
+      { id: "hpf-pelvic", tier: "urgent", why: "Pelvic organ problems can be felt in the groin and inner thigh",
+        text: "Is the groin pain linked to your periods, or do you have unusual vaginal bleeding or discharge?" },
+      { id: "hpf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the pelvis and hip",
+        text: "Have you ever had cancer, or do you have deep pain at night that does not change with position, with weight loss?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u30", label: "Under 30", weights: { fai: 1, add: 1 } },
-        { id: "30-50", label: "30 – 50" },
-        { id: "o50", label: "Over 50", weights: { gtps: 1 } }
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
       ]},
       { id: "onset", text: "How did it start?", options: [
-        { id: "sprint", label: "Suddenly — sprinting, kicking, or changing direction", weights: { add: 3 } },
-        { id: "run", label: "Gradually with running, standing, or hills", weights: { gtps: 1 } },
-        { id: "sport", label: "Gradually with pivot sports or deep squats", weights: { fai: 2 } },
-        { id: "sit", label: "Gradually — lots of sitting", weights: { piri: 1, fai: 1 } },
-        { id: "ns", label: "Not sure" }
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "sport", label: "After increasing running or sport" },
+        { id: "walk", label: "After a long walk, standing, or lying on my side" },
+        { id: "twist", label: "A sudden twist, kick, or change of direction" },
+        { id: "fall", label: "After a fall" },
+        { id: "pregnancy", label: "During pregnancy, or since having a baby" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
-        { id: "d6w", label: "2 – 6 weeks" },
-        { id: "d6m", label: "More than 6 weeks" },
-        { id: "years", label: "Comes and goes over years" }
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
       ]}
     ],
     questions: [
-      { id: "H1", text: "Where do you feel it most?", options: [
-        // Snapping is felt at the outer hip (IT band) or the front (hip flexor),
-        // so someone with a snapping hip can point to where it is — without
-        // this the location question gave snapping hip nothing to go on.
-        { id: "outside", label: "The outside of the hip — tender to lie on", weights: { gtps: 3, snap: 1 } },
-        { id: "groin", label: "Deep in the groin / front hip crease", weights: { fai: 3, snap: 1 } },
-        { id: "innerthigh", label: "The inner thigh", weights: { add: 3 } },
-        { id: "buttock", label: "Deep in the buttock", weights: { piri: 3 } },
-        { id: "ns", label: "Not sure" }
+      { id: "G1", text: "Where is the pain mainly?", options: [
+        { id: "groin", label: "Groin, or the front of the hip" },
+        { id: "outer", label: "Outer hip, over the bony point at the side" },
+        { id: "buttock", label: "Buttock" },
+        { id: "inner", label: "Inner thigh, close to the groin" },
+        { id: "patch", label: "Burning or numb patch on the front and outer thigh" }
       ]},
-      { id: "H2", text: "What clearly makes it worse?", options: [
-        { id: "lying", label: "Lying on that side at night", weights: { gtps: 3 } },
-        { id: "squat", label: "Deep squats, long sitting, or pivoting — a 'pinch' in the groin", weights: { fai: 2 } },
-        { id: "kick", label: "Kicking, side lunges, or sprinting", weights: { add: 2 } },
-        { id: "sitting", label: "Sitting on hard surfaces; sometimes tingling into the leg", weights: { piri: 2 } },
-        { id: "stairs", label: "Stairs and single-leg standing", weights: { gtps: 1, fai: 1 } },
-        { id: "ns", label: "Not sure" }
+      { id: "G2", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "lying", label: "Lying on that side at night" },
+        { id: "socks", label: "Putting on socks and shoes, or getting in and out of a car" },
+        { id: "lowchair", label: "Sitting in a low chair, or deep squatting" },
+        { id: "stairs", label: "Climbing stairs, or standing on that leg" },
+        { id: "walking", label: "Walking a distance, easing when I sit or bend forward", special: "lowbackHip" }
       ]},
-      { id: "H3", text: "Any clicking, clunking, or snapping with movement?", options: [
-        { id: "snap", label: "Yes — an audible or feelable snap/clunk", weights: { snap: 3, fai: 1 } },
-        { id: "no", label: "No", weights: { snap: -2 } }
+      { id: "G3", text: "Which of these apply? Tick all that apply.", options: [
+        { id: "amstiff", label: "Stiff in the morning for less than an hour, then it eases" },
+        { id: "sitstiff", label: "Stiff after sitting, then eases after a few steps" },
+        { id: "click", label: "Clicking, catching, or locking deep in the groin" },
+        { id: "giveway", label: "The hip gives way" },
+        { id: "none", label: "None of these" }
       ]},
-      { id: "H4", text: "Does pain or tingling travel down the back of the leg?", options: [
-        { id: "belowknee", label: "Yes — below the knee", special: "backref", weights: { piri: 1 } },
-        { id: "thigh", label: "Only into the back of the thigh", weights: { piri: 2 } },
-        { id: "no", label: "No" }
+      { id: "G4", text: "If you show someone where it hurts, what does your hand do?", options: [
+        { id: "csign", label: "Grips the side of my hip in a “C” shape, thumb at the back and fingers in the groin" },
+        { id: "spot", label: "Points to one spot on the outer hip" },
+        { id: "groin", label: "Points into the groin" },
+        { id: "back", label: "Points to my buttock or low back" }
       ]},
-      { id: "H5", text: "How does it react to squeezing the knees together (e.g., getting out of a car)?", options: [
-        { id: "sqz", label: "That reproduces the inner-thigh/groin pain", weights: { add: 2, fai: 1 } },
-        { id: "no", label: "No effect" }
-      ]}
+      { id: "G5", text: "If it came on with sport (kicking, sprinting, changing direction): which apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "sport" || ra.onset === "twist",
+        priority: () => true,
+        options: [
+          { id: "adductor", label: "Pain where the inner thigh muscle meets the pubic bone" },
+          { id: "inguinal", label: "Pain just above the groin crease, worse with coughing or sit-ups" },
+          { id: "iliopsoas", label: "Pain at the front of the hip when lifting my knee" },
+          { id: "joint", label: "Deep pain in the hip joint with twisting" },
+          { id: "pubic", label: "Pain in the middle, over the pubic bone" }
+        ]},
+      { id: "G6", text: "Which of these do you notice in the leg? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["knee", "ankle"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "belowknee", label: "Pain below the knee", special: "backref" },
+          { id: "pins", label: "Pins and needles or numbness in the leg or foot", special: "lowbackHip" },
+          { id: "patch", label: "A burning or numb patch on the outer thigh, with no weakness" },
+          { id: "knee", label: "Knee pain, with the hip hardly hurting" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "G7", text: "Which hurts more: moving your low back, or moving your hip (bending it up, turning the leg in and out)?",
+        askIf: ({ draw, ra }) => !draw || ["lowerback", "sij"].some((t) => draw.has(t)) ||
+          [].concat(ra.G1 || []).includes("buttock") || [].concat(ra.G6 || []).some((o) => o !== "none"),
+        // Early when the low back or buttock is drawn too: the back look-alike.
+        priority: ({ draw }) => !!draw && ["lowerback", "sij"].some((t) => draw.has(t)),
+        options: [
+          { id: "back", label: "Moving my low back", special: "lowbackHip" },
+          { id: "hip", label: "Moving my hip", special: "hipSource" },
+          { id: "both", label: "Both about the same" },
+          { id: "neither", label: "Neither brings it on" }
+        ]},
+      { id: "G8", text: "Does any of these come with the groin pain? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.G1 || []).some((o) => o === "groin" || o === "inner"),
+        options: [
+          { id: "periods", label: "Pain linked to my periods", special: "groinDoctor" },
+          { id: "urine", label: "Burning when I pass urine, or blood in my urine", special: "groinDoctor" },
+          { id: "lump", label: "A lump in the groin when I cough or stand", special: "groinDoctor" },
+          { id: "testicle", label: "Testicle pain", special: "groinDoctor" },
+          { id: "none", label: "None of these" }
+        ]}
     ],
-    conditions: [
-      { id: "gtps", name: "Greater trochanteric pain syndrome", clin: "Gluteal tendinopathy / trochanteric bursitis",
-        blurb: "Irritation of the gluteal tendons and bursa over the bony point of the outer hip — the classic 'can't lie on that side' hip. Common in runners and in women over 40.",
-        noticed: ["Pain over the outer hip bone, tender to lie on", "Worse with stairs, hills, standing on one leg", "Aches after long walking or standing", "Sometimes spreads down the outer thigh"],
-        homeCare: ["Avoid sustained hip 'hanging' postures (standing on one hip) and crossing legs", "A pillow between the knees when side-sleeping", "Gradual gluteal strengthening — tendons here respond to load, not rest"],
-        seePhysioIf: ["Night pain on that side persists beyond 2 weeks", "Walking distance or stairs are limited", "You want a progressive loading program — the evidence-based treatment"] },
-      { id: "fai", name: "Hip impingement / labral irritation", clin: "Femoroacetabular impingement (FAI) ± labral tear",
-        blurb: "The hip's ball and socket can pinch its cartilage rim (labrum) in deep flexion and rotation, causing a sharp groin 'pinch' with squats, long sitting, and pivoting — common in active younger adults.",
-        noticed: ["Deep groin pain or pinching, often shown with a C-shaped hand cup over the hip", "Worse with deep squats, long sitting, pivoting", "Occasional clicking or catching", "Stiffness bringing the knee toward the chest"],
-        homeCare: ["Temporarily limit the deepest, most pinching ranges (very deep squats, prolonged low sitting)", "Raise seat height; avoid sitting cross-legged for long", "Strengthen the hip in comfortable ranges"],
-        seePhysioIf: ["Groin pinching persists beyond 2–3 weeks or limits sport", "Catching or clicking with pain", "Conservative rehab has strong evidence — worth optimising before considering anything else"] },
-      { id: "add", name: "Adductor strain", clin: "Groin / inner-thigh muscle strain",
-        blurb: "A strain of the inner-thigh muscles that control side-to-side movement — the classic sports groin injury from sprinting, kicking, or a sudden change of direction.",
-        noticed: ["Sudden inner-thigh/groin pain during sport", "Pain squeezing the knees together or side-lunging", "Tenderness along the inner thigh", "Bruising in larger strains"],
-        homeCare: ["Relative rest from sprinting/kicking early on — keep walking as comfortable", "Early gentle range, then progressive adductor strengthening (e.g., ball squeezes)", "Return to sport gradually via straight-line running before cutting"],
-        seePhysioIf: ["Pain limits walking beyond a few days", "You want a criteria-based return-to-sport plan — re-injury is common without one", "Groin pain keeps recurring each season"] },
-      { id: "piri", name: "Deep gluteal / piriformis syndrome", clin: "Sciatic nerve irritation in the deep buttock",
-        blurb: "The sciatic nerve passes under the deep buttock muscles; tightness or overload there can irritate it, causing deep buttock pain and sometimes tingling into the thigh — a pattern that mimics low-back sciatica.",
-        noticed: ["Deep, hard-to-point-at buttock pain", "Worse with prolonged sitting, especially hard surfaces", "Sometimes tingling into the back of the thigh", "Tender deep in the buttock muscles"],
-        homeCare: ["Break up long sitting; use a cushion on hard chairs", "Gentle figure-4 stretches and hip mobility", "Gradual gluteal strengthening"],
-        seePhysioIf: ["Buttock pain persists beyond 2 weeks", "Any leg tingling — the low back must be ruled out as the true source", "Sitting tolerance is limiting work or driving"] },
-      { id: "snap", name: "Snapping hip", clin: "Coxa saltans — tendon snapping over bone",
-        blurb: "A tendon flicking over a bony point — outer hip (IT band over the trochanter) or front (hip flexor over the pelvis). Often painless; treated when it's painful or bothersome.",
-        noticed: ["An audible or feelable snap/clunk with hip movement", "Front snapping when straightening from a flexed hip", "Outer snapping with walking or rotation", "Ache may develop around the snapping area with repetition"],
-        homeCare: ["Reduce the specific repetitive movement that snaps for a while", "Hip flexor and IT-band-area mobility work", "Strengthen the deep hip stabilisers"],
-        seePhysioIf: ["The snapping has become painful", "It's affecting dance, sport, or gait", "Painless clicking alone often needs only reassurance — but persistent painful snapping deserves assessment"] }
-    ]
+    conditions: []
   },
 
   /* ══════════════ ANKLE / FOOT / SHIN ══════════════ */
@@ -1827,6 +1878,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain at the top of the shoulder or upper arm that is worse when you move the <strong>arm</strong> than when you move the neck usually comes from the <strong>shoulder</strong> itself: the rotator cuff, the AC joint at the top of the shoulder, or a stiffening shoulder joint. Consider running the <strong>Shoulder</strong> guide too. Your assessment will check both the neck and the shoulder." },
   chestFirst: { title: "If this is your first chest pain, see a doctor as well",
     body: "Pain on the front of the chest that is tender to press often comes from the <strong>chest wall</strong>: the joints where the ribs meet the breastbone. But if this is the <strong>first time</strong> you have had chest pain, a doctor should check your heart and lungs before it is treated as a chest-wall problem. If it comes with breathlessness, sweating, or spreads to your arm or jaw, call 911." },
+  lowbackHip: { title: "This may be coming from your low back",
+    body: "Hip, buttock or thigh pain that is worse when you <strong>move your low back</strong>, comes with <strong>pins and needles</strong>, or builds with walking and eases when you sit or bend forward, often comes from the <strong>low back</strong> rather than the hip itself. Consider running the <strong>Low back</strong> guide too. Your assessment will check both." },
+  groinDoctor: { title: "Please have this checked by a doctor as well",
+    body: "Groin pain that is linked to your periods, comes with burning or blood when passing urine, comes with a lump that appears when you cough or stand, or comes with testicle pain can come from the <strong>organs</strong> or a <strong>hernia</strong> rather than the hip. A doctor should check this. Physiotherapy can help alongside or afterwards if the hip is involved too." },
   hipSource: { title: "This may be coming from your hip",
     body: "Groin pain that is worse when you <strong>move your hip</strong> usually comes from the <strong>hip joint</strong> or the muscles around it rather than from the back. Consider running the <strong>Hip</strong> guide too. Your assessment will check both." },
   lowbackSource: { title: "This may be coming from your low back",

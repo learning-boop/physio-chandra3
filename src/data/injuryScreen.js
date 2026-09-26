@@ -11,6 +11,7 @@
      forearm   fall, blow or crush (forearm, B2)
      wrist     fall onto the hand, twist or blow (wrist, B2)
      hand      jammed, bent back, caught, crushed or cut (hand and fingers, B2)
+     hip       fall, twist or sudden pull (hip, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
@@ -283,6 +284,37 @@ export const HAND_INJURY = [
     sameDay: true, options: yesNo('urgent', 'Possible finger fracture with rotation, or a central slip (boutonnière) injury') },
 ]
 
+/* ── Hip and groin: fall, twist or sudden pull ── */
+export const HIP_INJURY = [
+  { id: 'I1', text: 'Has your hip or groin been hurt in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'fall', label: 'Yes, I fell onto my hip' },
+    { id: 'vehicle', label: 'Yes, a car or other vehicle accident' },
+    { id: 'twist', label: 'Yes, a twist or tackle in sport' },
+    { id: 'pop', label: 'Yes, I felt a pop or pull while sprinting, kicking, or doing the splits' },
+  ]},
+  // The questions that start "Since the fall or accident", "After a minor
+  // fall" and "did you feel a pop" are asked after that injury only.
+  { id: 'I2', text: 'Since the fall or accident, can you not stand or walk on the leg, or does the leg look shorter or turned out?',
+    askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle',
+    options: yesNo('emergency', 'Possible hip fracture or dislocation') },
+  { id: 'I3', text: 'Was it a high-speed crash, or a fall from higher than a few stairs?',
+    askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle',
+    options: yesNo('emergency', 'A high-energy injury: possible pelvic or hip fracture') },
+  // A possible fracture: same day.
+  { id: 'I4', text: 'After a minor fall, can you walk but with groin pain when you put weight on the leg, and are you 65 or over or have osteoporosis?',
+    askIf: (a) => a.I1 === 'fall', sameDay: true,
+    options: yesNo('urgent', 'Possible hidden hip or pelvic fracture: these are often missed on the first X-ray') },
+  // A torn tendon that is best repaired early: same day, as for the biceps.
+  { id: 'I5', text: 'Did you feel a pop in the buttock or back of the thigh (splits, water-skiing, slipping), with a large bruise after?',
+    askIf: (a) => a.I1 === 'pop' || a.I1 === 'twist', sameDay: true,
+    options: yesNo('urgent', 'Possible hamstring tendon tear from the sit bone: repair works best within weeks') },
+  // A possible avulsion fracture: same day.
+  { id: 'I6', text: 'Are you under 18, and did you feel a pop at the front or side of the hip while sprinting or kicking?',
+    askIf: (a) => a.I1 === 'pop' || a.I1 === 'twist', sameDay: true,
+    options: yesNo('urgent', 'Possible growth plate avulsion fracture') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -315,6 +347,8 @@ export const SCREENS = [
     flag: 'A wrist injury in the last 6 weeks (injury screen)', questions: WRIST_INJURY, step: linearStep(WRIST_INJURY) },
   { id: 'hand', zones: ['hand'], title: 'Recent Hand or Finger Injury',
     flag: 'A hand or finger injury in the last 6 weeks (injury screen)', questions: HAND_INJURY, step: linearStep(HAND_INJURY) },
+  { id: 'hip', zones: ['hip'], title: 'Recent Hip or Groin Injury',
+    flag: 'A hip or groin injury in the last 6 weeks (injury screen)', questions: HIP_INJURY, step: linearStep(HIP_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──

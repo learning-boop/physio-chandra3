@@ -428,11 +428,39 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
         H4: ['thumb'], H5: ['use'], H8: ['neck'] },
       expect: { notRegion: ['hand'], areas: ['neck'], route: 'results' } },
+  ],  hip: [
+    { name: '1. Gluteal tendinopathy',
+      lines: [['hipR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', G1: ['outer'], G2: ['lying', 'stairs'], G4: ['spot'] },
+      expect: { top: 'hip/gtps', notTop: ['hip/hipoa'], route: 'results' } },
+    { name: '2. Hip osteoarthritis',
+      lines: [['hipL']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', G1: ['groin'], G2: ['socks'], G3: ['amstiff'], G4: ['csign'] },
+      expect: { top: 'hip/hipoa', notTop: ['hip/gtps'], route: 'results' } },
+    { name: '3. FAI syndrome in a young athlete',
+      lines: [['hipR']],
+      answers: { age: '18-29', onset: 'sport', duration: 'd3m', I1: 'no', G1: ['groin'], G2: ['lowchair'], G3: ['click'], G4: ['csign'], G5: ['joint'] },
+      expect: { top: 'hip/fai', notTop: ['hip/add'], route: 'results' } },
+    // Low back, buttock and front of the thigh: the back is asked too.
+    { name: '4. Low back look-alike: back, buttock and thigh with pins and needles',
+      lines: [['lowerback', 'sij', 'hipR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        G1: ['buttock'], G6: ['pins'], G7: ['back'] },
+      expect: { notRegion: ['hip'], special: 'lowbackHip', route: 'results' } },
+    { name: '5. Runner with a deep groin ache (stress fracture)',
+      lines: [['hipR']],
+      answers: { age: '18-29', onset: 'sport', duration: 'd6w', G1: ['groin'] },
+      flags: ['hpf-stress'],
+      expect: { route: 'urgent' } },
+    { name: '6. Cannot stand after a fall (injury screen)',
+      lines: [['hipL']],
+      answers: { age: 'o64', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'yes' },
+      expect: { route: 'emergency' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

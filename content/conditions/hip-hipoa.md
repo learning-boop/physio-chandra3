@@ -2,16 +2,27 @@
 region: hip
 id: hipoa
 name: Hip osteoarthritis (wear-and-tear hip joint)
-clin: Hip osteoarthritis (coxarthrosis)
+clin: Hip osteoarthritis (JOSPT CPG 2017)
 # DRAFT extracted from: Hip Pain and Mobility Deficits—Hip Osteoarthritis: Revision 2025 (JOSPT, 2025)
+# Pointers moved to the rebuilt hip questions (content/regions/hip.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Over 50": 3
-  "Deep in the groin / front hip crease": 3
-  "Gradually with running, standing, or hills": 2
-  "Stairs and single-leg standing": 2
-  "Comes and goes over years": 2
+  "Grips the side of my hip in a “C” shape, thumb at the back and fingers in the groin": 3
+  "Putting on socks and shoes, or getting in and out of a car": 3
+  "Stiff in the morning for less than an hour, then it eases": 3
+  "Stiff after sitting, then eases after a few steps": 2
+  "Groin, or the front of the hip": 2
+  "Climbing stairs, or standing on that leg": 1
+  "Moving my hip": 1
+  "65 or over": 2
+  "50 to 64": 1
+  "More than 3 months": 1
+  "Gradually, no clear reason": 1
+  "18 to 29": -2
+  "Under 18": -2
+  "Points to one spot on the outer hip": -1
+  "Moving my low back": -2
 ---
 
 ## blurb

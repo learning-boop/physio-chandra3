@@ -55,12 +55,12 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Forearm | `forearm` | Forearm assessment | 5 |
 | Wrist | `wrist` | Wrist assessment | 6 |
 | Hand & fingers | `hand` | Hand and fingers assessment | 6 |
-| Hip, groin, top of the thigh | `hip` | July 2026 set (not yet rebuilt) | — |
+| Hip & groin | `hip` | Hip assessment (question ids G1–G8) | 6 |
 | Knee (mid-thigh to shin) | `knee` | July 2026 set (not yet rebuilt) | — |
 | Lower shin, ankle & foot | `ankle` | July 2026 set (not yet rebuilt) | — |
 | Stomach | — | generic questions | — |
 
-Still to feed: Hip, Thigh, Knee,
+Still to feed: Thigh, Knee,
 Lower leg, Ankle, Foot, and the Subjective assessment template. "Arm
 assessment" was replaced by "Upper arm" and "Forearm" and is not used.
 

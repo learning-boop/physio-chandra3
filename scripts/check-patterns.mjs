@@ -382,5 +382,16 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('an elbow on its own keeps its own opening question', one === 'elbow:I1', one)
 }
 
+// Answers are stored by question id, so two regions must never share one.
+{
+  const { REGIONS } = await import('../src/data/symptomGuide.js')
+  const owner = {}, clash = []
+  for (const [k, r] of Object.entries(REGIONS)) for (const q of r.questions) {
+    if (owner[q.id] && owner[q.id] !== k) clash.push(`${q.id}: ${owner[q.id]} and ${k}`)
+    owner[q.id] = k
+  }
+  check('no two regions share a question id', clash.length === 0, clash)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
