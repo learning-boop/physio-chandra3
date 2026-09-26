@@ -1503,7 +1503,7 @@ export default function PainAssessment() {
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 14px', maxWidth: 520 }}>
                     {emergency
                       ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
-                      : <>Next, symptoms a doctor should <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>check first</em></>}
+                      : <>Next, symptoms that may need a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>doctor's attention</em></>}
                   </h2>
                   <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '0 0 20px', maxWidth: 520 }}>
                     {emergency
