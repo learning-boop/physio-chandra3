@@ -1,10 +1,11 @@
 ---
 region: leg
 id: achilles
-name: Achilles tendinopathy
-clin: Mid-portion or insertional Achilles tendinopathy
-# Patient text and name shared with the old ankle region (src/data/symptomGuideExtra.js),
-# so it shows once when both are asked. Pointers from content/regions/leg.md, 25 Sep 2026.
+name: Mid-portion Achilles tendinopathy
+clin: Mid-portion Achilles tendinopathy (JOSPT CPG 2024)
+# Patient text moved unchanged from the site's original ankle region (July 2026 set);
+# the rebuilt ankle leaves it to the lower leg, and covers pain at the heel itself
+# (ankle-insertional.md), so three lines now say "above the heel" instead of "back of the heel". Pointers from content/regions/leg.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -19,10 +20,10 @@ pointers:
 ---
 
 ## blurb
-The Achilles dislikes sudden jumps in training load. It responds with pain and morning stiffness at the back of the heel — and, importantly, it recovers through graded loading, not rest.
+The Achilles dislikes sudden jumps in training load. It responds with pain and morning stiffness in the tendon a few centimetres above the heel — and, importantly, it recovers through graded loading, not rest.
 
 ## noticed
-- Pain and stiffness at the back of the heel, worst on first steps
+- Pain and stiffness in the tendon 2 to 6 cm above the heel, worst on first steps
 - Worse after running, hills, or jumping
 - Local tenderness or slight thickening of the tendon
 - Tight calves
@@ -30,7 +31,7 @@ The Achilles dislikes sudden jumps in training load. It responds with pain and m
 ## homeCare
 - Trim (don't stop) the aggravating training; avoid sudden spikes in load
 - Begin gentle calf raises within comfortable pain and progress gradually
-- A small heel raise in the shoe can ease insertional cases short-term
+- A small heel raise in the shoe can ease it short-term
 
 ## seePhysioIf
 - Heel/calf pain lasts more than 1–2 weeks or keeps flaring

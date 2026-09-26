@@ -1788,7 +1788,7 @@ export const EXTRA_REGIONS = {
         text: "Is your thigh pain getting worse and worse, with the thigh tense and swollen, especially after a heavy knock or crush?" },
       { id: "tgf-rhabdo", tier: "emergency", why: "Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
         text: "After very hard exercise, is your thigh hugely swollen and very painful, and is your urine dark like cola?" },
-      { id: "tgf-necfasc", tier: "emergency", why: "Possible severe skin and tissue infection",
+      { id: "tgf-necfasc", tier: "emergency", group: "legnecfasc", why: "Possible severe skin and tissue infection",
         text: "Is there a hot, red area on your thigh that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
       { id: "tgf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
         text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
@@ -1923,9 +1923,9 @@ export const EXTRA_REGIONS = {
         text: "Is your calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
       { id: "lgf-compartment", tier: "emergency", why: "Possible acute compartment syndrome",
         text: "Is your lower leg pain getting worse and worse, with the leg tight and swollen and much worse when your toes are moved, especially after an injury or under a cast?" },
-      { id: "lgf-ischaemia", tier: "emergency", why: "Possible blocked artery (acute limb ischaemia)",
+      { id: "lgf-ischaemia", tier: "emergency", group: "limbischaemia", why: "Possible blocked artery (acute limb ischaemia)",
         text: "Has your foot or lower leg suddenly become cold, pale, numb, or painful at rest?" },
-      { id: "lgf-necfasc", tier: "emergency", why: "Possible severe skin and tissue infection",
+      { id: "lgf-necfasc", tier: "emergency", group: "legnecfasc", why: "Possible severe skin and tissue infection",
         text: "Is there a hot, red area on your leg that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
       { id: "lgf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
         text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
@@ -1937,9 +1937,9 @@ export const EXTRA_REGIONS = {
         text: "Do you get a cramping calf pain when walking that eases within minutes of standing still, and do you smoke, have diabetes, or are over 50?" },
       { id: "lgf-stress", tier: "urgent", why: "Possible tibial stress fracture; needs imaging before more running",
         text: "Do you run or train hard, and is there a sore spot on the shin bone that you can point to with one finger, or pain when hopping or at night?" },
-      { id: "lgf-footdrop", tier: "urgent", why: "Foot drop (peroneal nerve or L5) needs medical review",
+      { id: "lgf-footdrop", tier: "urgent", group: "footdrop", why: "Foot drop (peroneal nerve or L5) needs medical review",
         text: "Is your foot slapping down or your toes catching when you walk?" },
-      { id: "lgf-neuropathy", tier: "urgent", why: "Possible peripheral neuropathy; needs medical review and foot checks",
+      { id: "lgf-neuropathy", tier: "urgent", group: "neuropathy", why: "Possible peripheral neuropathy; needs medical review and foot checks",
         text: "Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes?" },
       { id: "lgf-tumour", tier: "urgent", why: "Bone lumps need imaging to rule out a tumour",
         text: "Are you under 25 with a deep shin ache that wakes you at night, or a lump on the shin that is growing?" },
@@ -2053,99 +2053,143 @@ export const EXTRA_REGIONS = {
     conditions: []
   },
 
-  /* ══════════════ ANKLE / FOOT / SHIN ══════════════ */
+  /* ══════════════ ANKLE ══════════════
+     From Chandra's "Ankle assessment" region document (reviewed by Chandra,
+     25 Sep 2026; the source text is content/regions/ankle.md). Sources: JOSPT
+     lateral ankle sprain CPG 2021, Ottawa ankle rules (Stiell 1993), ROAST
+     2019, Vuurberg 2018, Sman 2015 (syndesmosis), Maffulli 1998 (Achilles
+     rupture), Kohls-Gatzoulis 2004 (tibialis posterior), McSweeney & Cichero
+     2015 (tarsal tunnel), Travell & Simons 2019.
+     Reached from the body map's ankle band (ANKLE_TOP in Body3D.jsx), which
+     also covers the foot until the foot document is built. Its injury
+     screen (the Ottawa ankle rules, adapted) is in ./injuryScreen.js.
+     Conditions: content/conditions/ankle-*.md. */
   ankle: {
-    name: "Ankle, foot & shin",
+    name: "Ankle & foot",
     redFlags: [
-      { id: "arf-pop", why: "Possible Achilles tendon rupture, which is treated best when seen quickly", text: "A sudden 'pop' in the calf or heel and now you cannot push off or rise onto your toes", tier: "emergency" },
-      { id: "arf-dvt", why: "Possible blood clot in the leg, which can travel to the lungs", text: "A calf that is very swollen, warm, red or tender — especially with breathlessness or chest pain", tier: "emergency" },
-      { id: "arf-walk", sameDay: true, why: "Possible fracture: the Ottawa ankle rules say an X-ray is needed", text: "After an injury you cannot take four steps, or there is bony tenderness at the ankle knobs or midfoot", tier: "urgent" },
-      { id: "arf-hot", sameDay: true, why: "Possible infection, which is more serious with diabetes", text: "A hot, red, swollen foot with fever — or any foot wound/swelling and you have diabetes", tier: "urgent" }
+      { id: "af-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
+        text: "Is your ankle hot, red, and swollen, with a fever or feeling unwell?" },
+      { id: "af-pe", tier: "emergency", group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
+        text: "Is your calf or ankle swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
+      { id: "af-ischaemia", tier: "emergency", group: "limbischaemia", why: "Possible blocked artery",
+        text: "Has your foot suddenly become cold, pale, numb, or painful at rest?" },
+      { id: "af-necfasc", tier: "emergency", group: "legnecfasc", why: "Possible severe skin and tissue infection",
+        text: "Is there a hot, red area around your ankle that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
+      { id: "af-charcot", sameDay: true, tier: "urgent", why: "Possible Charcot foot or diabetic foot infection; same-day review protects the foot",
+        text: "Do you have diabetes, and is your foot or ankle hot, red, and swollen (even if it does not hurt much), or is there a wound that is not healing?" },
+      { id: "af-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); same-day review",
+        text: "Is your calf or ankle swollen, warm, or tender, especially after surgery, a cast or boot, a long journey, time in bed, or starting the pill?" },
+      { id: "af-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
+        text: "Did your ankle or big toe become suddenly hot, swollen, and very painful overnight, and have you had gout before?" },
+      { id: "af-inflam", tier: "urgent", why: "Possible inflammatory or reactive arthritis affecting the tendons",
+        text: "Do you have heel or Achilles pain along with back stiffness in the morning, psoriasis, eye inflammation, other swollen joints, or a recent stomach bug or sexually transmitted infection?" },
+      { id: "af-quinolone", tier: "urgent", why: "These medicines raise the risk of Achilles rupture; the prescriber should review",
+        text: "Have you recently taken a quinolone antibiotic (such as ciprofloxacin) or steroid tablets, and now have Achilles pain?" },
+      { id: "af-footdrop", tier: "urgent", group: "footdrop", why: "Foot drop (peroneal nerve or L5) needs medical review",
+        text: "Is your foot slapping down or your toes catching when you walk?" },
+      { id: "af-neuropathy", tier: "urgent", group: "neuropathy", why: "Possible peripheral neuropathy; needs medical review and foot checks",
+        text: "Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes?" },
+      { id: "af-cancer", tier: "urgent", group: "cancer", why: "A lump or bone lesion needs medical review",
+        text: "Have you ever had cancer, or is there a lump that is growing, or deep pain at night that does not change with position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u30", label: "Under 30" },
-        { id: "30-50", label: "30 – 50" },
-        { id: "o50", label: "Over 50", weights: { pf: 1, tibpost: 1 } }
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
       ]},
       { id: "onset", text: "How did it start?", options: [
-        { id: "twist", label: "A twist or 'rolled' ankle", weights: { atfl: 3 } },
-        { id: "training", label: "Gradually after increasing running/training or changing shoes", weights: { mtss: 2, ach: 1, pf: 1 } },
-        { id: "standing", label: "Gradually with lots of standing or walking", weights: { pf: 1, tibpost: 1 } },
-        { id: "gradual", label: "Gradually, no clear cause" },
-        { id: "ns", label: "Not sure" }
+        { id: "twist", label: "I rolled or twisted it" },
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "running", label: "After increasing running, jumping, or hill walking" },
+        { id: "walking", label: "After a long walk, or standing a lot" },
+        { id: "shoes", label: "After new or different shoes" },
+        { id: "landing", label: "After landing badly or a fall" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
-        // A fresh sprain is recent by definition; without this the sprain and
-        // long-term instability scored identically for someone rolling their
-        // ankle for years.
-        { id: "d2w", label: "Less than 2 weeks", weights: { atfl: 2 } },
-        { id: "d6w", label: "2 – 6 weeks", weights: { atfl: 1 } },
-        { id: "d6m", label: "More than 6 weeks" },
-        { id: "years", label: "Comes and goes over years" }
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
       ]}
     ],
     questions: [
-      { id: "A1", text: "Where do you feel it most?", options: [
-        { id: "heel", label: "The bottom of the heel", weights: { pf: 3 } },
-        { id: "achilles", label: "The back of the heel / Achilles tendon", weights: { ach: 3 } },
-        { id: "outer", label: "The outer ankle", weights: { atfl: 3 } },
-        { id: "inner", label: "The inner ankle / arch", weights: { tibpost: 3 } },
-        { id: "ball", label: "The ball of the foot, between the toes", weights: { neuroma: 3 } },
-        { id: "shin", label: "The inner edge of the shin bone", weights: { mtss: 3 } }
+      { id: "A1", text: "Where is the pain mainly?", options: [
+        { id: "outer", label: "Outer ankle, in front of or below the bony bump" },
+        { id: "inner", label: "Inner ankle, behind or below the bony bump" },
+        { id: "front", label: "Front of the ankle, in the crease" },
+        { id: "heel", label: "Back of the heel, where the heel cord attaches" },
+        { id: "high", label: "Just above the ankle, at the front between the two leg bones" }
       ]},
-      { id: "A2", text: "Are the first steps in the morning the worst moment?", options: [
-        { id: "yes", label: "Yes — sharp first steps, then it eases", weights: { pf: 2, ach: 1 } },
-        { id: "no", label: "No, mornings are fine" }
+      { id: "A2", text: "Have you sprained this ankle before?",
+        askIf: ({ ra }) => [].concat(ra.A1 || []).includes("outer") || ra.onset === "twist",
+        priority: () => true,
+        options: [
+          { id: "once", label: "Once or twice, and it recovered" },
+          { id: "recurrent", label: "It keeps rolling, or feels like it will give way" },
+          { id: "recent", label: "I rolled it recently, felt a pop, and it bruised" },
+          { id: "never", label: "Never" }
+        ]},
+      { id: "A3", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "uneven", label: "Walking on uneven ground" },
+        { id: "running", label: "Running, jumping, or hopping" },
+        { id: "squat", label: "Squatting, lunging, or going down stairs" },
+        { id: "firststeps", label: "The first steps in the morning, or after sitting" },
+        { id: "shoes", label: "Shoes pressing on the back of the heel" }
       ]},
-      { id: "A3", text: "Any tingling, burning, or a 'pebble under the foot' feeling?", options: [
-        { id: "pebble", label: "Yes — pebble feeling or toe tingling, worse in tight shoes", weights: { neuroma: 2 } },
-        { id: "soleburn", label: "Burning/tingling on the inner ankle or sole", special: "tarsal" },
-        { id: "none", label: "No", weights: { neuroma: -2 } }
-      ]},
-      { id: "A4", text: "How does the ankle feel with activity?", options: [
-        { id: "giveway", label: "Unstable — it 'gives way' or I fear re-rolling it", weights: { atfl: 2 } },
-        { id: "duringrun", label: "Shin pain starts during running and now lingers after", weights: { mtss: 2 } },
-        { id: "afterrun", label: "Achilles/heel is worst after activity and next morning", weights: { ach: 2, pf: 1 } },
-        { id: "ns", label: "None of these" }
-      ]},
-      { id: "A5", text: "Have you noticed the arch flattening, or trouble doing a single-leg heel raise?", options: [
-        { id: "yes", label: "Yes — flatter arch, 'tired' feet, or a hard/painful heel raise", weights: { tibpost: 2 } },
-        { id: "no", label: "No", weights: { tibpost: -1 } }
+      { id: "A4", text: "Some weeks after a sprain, which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.A2 || []).some((o) => o !== "never") && (ra.duration === "d3m" || ra.duration === "o3m"),
+        priority: () => true,
+        options: [
+          { id: "swells", label: "It still swells after activity" },
+          { id: "catching", label: "Catching or locking deep in the ankle" },
+          { id: "deepache", label: "A deep ache inside the ankle after activity" },
+          { id: "unstable", label: "It still feels unstable" },
+          { id: "normal", label: "It feels back to normal" }
+        ]},
+      { id: "A5", text: "About the inner ankle: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.A1 || []).includes("inner"),
+        priority: () => true,
+        options: [
+          { id: "flat", label: "My arch is getting flatter on that side" },
+          { id: "tiptoe", label: "I cannot rise onto my toes on that leg as well as the other" },
+          { id: "swelling", label: "Swelling behind the inner ankle bone" },
+          { id: "burning", label: "Burning or tingling into the sole and inner heel, worse standing" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "A6", text: "About the back of the heel: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.A1 || []).includes("heel"),
+        priority: () => true,
+        options: [
+          { id: "bump", label: "A tender bump at the back of the heel, sore in shoes" },
+          { id: "higher", label: "The pain is higher, 2 to 6 cm above the heel", special: "achillesHigher" },
+          { id: "morning", label: "Stiff and sore for the first steps in the morning" },
+          { id: "creak", label: "Creaking when I move the ankle" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "A7", text: "Which of these do you notice in the foot? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || ["lowerleg", "thigh", "lowerback", "sij"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        // Early with nerve-type pain (or when the drawing is unknown).
+        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "top", label: "Pins and needles or numbness on the top of the foot" },
+          { id: "sole", label: "Pins and needles or numbness in the sole or heel" },
+          { id: "both", label: "Burning or numbness in both feet, like socks", special: "calfDoctor" },
+          { id: "slap", label: "The foot slaps down, or the toes catch", special: "footDrop" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "A8", text: "What does any swelling look like?", options: [
+        { id: "injury", label: "Swelling and bruising after an injury" },
+        { id: "bothankles", label: "Both ankles swell by the end of the day" },
+        { id: "activity", label: "Swelling after activity, settling overnight" },
+        { id: "hot", label: "A hot, red, swollen joint", special: "hotJoint" },
+        { id: "none", label: "No swelling" }
       ]}
     ],
-    conditions: [
-      { id: "pf", name: "Plantar fasciitis", clin: "Plantar heel pain / fasciopathy",
-        blurb: "Irritation of the strong tissue band supporting the arch, where it anchors into the heel — the classic sharp heel pain with the first steps of the morning.",
-        noticed: ["Sharp bottom-of-heel pain on first morning steps", "Aches after long standing or walking, often worse after activity than during", "Stiffness and tenderness in the arch and heel"],
-        homeCare: ["Calf and plantar-fascia stretches (toes pulled up) morning and evening", "Supportive footwear; avoid long barefoot walking on hard floors for now", "A frozen-bottle roll under the arch can soothe; build activity gradually"],
-        seePhysioIf: ["Heel pain lasts more than 2 weeks", "Mornings or long standing remain painful", "You want a loading and footwear plan — most cases settle with the right progression"] },
-      { id: "ach", name: "Achilles tendinopathy", clin: "Mid-portion or insertional Achilles tendinopathy",
-        blurb: "The Achilles dislikes sudden jumps in training load. It responds with pain and morning stiffness at the back of the heel — and, importantly, it recovers through graded loading, not rest.",
-        noticed: ["Pain and stiffness at the back of the heel, worst on first steps", "Worse after running, hills, or jumping", "Local tenderness or slight thickening of the tendon", "Tight calves"],
-        homeCare: ["Trim (don't stop) the aggravating training; avoid sudden spikes in load", "Begin gentle calf raises within comfortable pain and progress gradually", "A small heel raise in the shoe can ease insertional cases short-term"],
-        seePhysioIf: ["Heel/calf pain lasts more than 1–2 weeks or keeps flaring", "Stairs, walking, or running are limited", "You want a structured loading program — the proven treatment for tendinopathy"] },
-      { id: "atfl", name: "Lateral ankle sprain (ATFL)", clin: "Anterior talofibular ligament injury",
-        blurb: "The most commonly injured ligament in the body — stretched or torn when the ankle rolls inward. Heals well, but without rehab the ankle often stays 'wobbly' and re-sprains.",
-        noticed: ["Outer ankle pain and swelling after a roll/twist", "Bruising in the first days", "A sense of instability or fear of re-rolling", "Repeated sprains if past ones weren't rehabbed"],
-        homeCare: ["First days: relative rest, elevation, gentle movement; protect but don't immobilise completely", "Early weight-bearing as tolerated once fracture is ruled out", "Then balance work — single-leg standing — is the key to preventing re-sprains"],
-        seePhysioIf: ["You can't walk comfortably within a few days", "The ankle still feels unstable after 2 weeks", "You've sprained the same ankle more than once — balance retraining prevents the cycle"] },
-      { id: "tibpost", name: "Tibialis posterior dysfunction", clin: "Posterior tibial tendinopathy / adult-acquired flatfoot",
-        blurb: "The tibialis posterior tendon holds up the arch from the inner ankle. When overloaded it aches behind the inner ankle bone and, over time, can let the arch flatten — early treatment matters.",
-        noticed: ["Pain along the inner ankle/arch, behind the inner ankle bone", "A flatter arch or 'too many toes' look from behind", "Feet that tire quickly; difficulty or pain with single-leg heel raises"],
-        homeCare: ["Supportive footwear; temporary arch support can offload the tendon", "Avoid pushing through long walks that flare it", "Begin gentle heel-raise strengthening within comfort"],
-        seePhysioIf: ["Inner-ankle pain with any new arch flattening — early care shortens recovery", "Pain with stairs, hills, or longer standing", "A single-leg heel raise is painful or impossible"] },
-      { id: "neuroma", name: "Morton's neuroma", clin: "Interdigital nerve thickening (usually 3rd–4th toes)",
-        blurb: "A small nerve between the toes becomes irritated and thickened — classically felt as burning ball-of-foot pain and a 'pebble in the shoe' sensation, aggravated by tight footwear.",
-        noticed: ["Burning/stabbing pain in the ball of the foot, often between 3rd–4th toes", "'Marble or pebble under the foot' feeling", "Toe tingling or numbness", "Worse in tight or high-heeled shoes; eases barefoot"],
-        homeCare: ["Switch to shoes with a wide toe box and lower heel", "A small metatarsal pad (just behind the ball of the foot) often helps", "Reduce time in the provoking footwear"],
-        seePhysioIf: ["Ball-of-foot pain or the pebble feeling persists after 1–2 weeks of footwear changes", "Toe tingling or numbness continues", "You want gait and footwear assessment before considering injections"] },
-      { id: "mtss", name: "Shin splints (MTSS)", clin: "Medial tibial stress syndrome",
-        blurb: "Overload of the inner shin-bone lining from a jump in running volume, harder surfaces, or worn shoes — pain starts during exercise and can become persistent if pushed through.",
-        noticed: ["Aching along the inner edge of the shin bone", "Starts during running, eases with rest, returns with activity", "Tender to press along several centimetres of the inner shin"],
-        homeCare: ["Cut running volume/intensity temporarily — swap in cycling or swimming", "Check shoe age and surface; increase training gradually (≤10%/week) when returning", "Calf strengthening and gradual reloading"],
-        seePhysioIf: ["Shin pain persists despite 2 weeks of reduced load", "Pain is becoming sharper and more focal (needs a stress-fracture check)", "You want a running load and biomechanics review"] }
-    ]
+    conditions: []
   }
 }
 
@@ -2167,6 +2211,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Shin pain that gets worse the more you run and hurts to hop, or one spot on the bone you can cover with a fingertip, can be a <strong>stress fracture</strong> rather than shin splints. It needs a doctor and usually imaging before you run again. Physiotherapy helps with the return to running afterwards." },
   calfDoctor: { title: "Please have this checked by a doctor",
     body: "A calf cramp on walking that eases within minutes of standing still, pain at rest that eases with the leg hanging down, skin that is shiny, cold, hairless, or slow to heal, burning or numbness in both feet, or a whole calf that is swollen can point to a circulation problem, a nerve condition, or a clot. A doctor should check these. Physiotherapy can help alongside or afterwards." },
+  achillesHigher: { title: "This may be the Achilles tendon higher up",
+    body: "Achilles pain 2 to 6 cm above the heel is usually the middle part of the tendon, which is assessed and treated a little differently from pain where it attaches to the heel. Consider running the <strong>Lower leg</strong> guide too. Your assessment will check the whole tendon." },
+  hotJoint: { title: "A hot, red, swollen joint should be checked by a doctor today",
+    body: "A joint that is hot, red, and swollen can be gout, another crystal arthritis, or an infection. A doctor should see it the same day, and straight away if you have a fever or feel unwell. Physiotherapy can help once it has settled." },
   footDrop: { title: "A dropping foot should be checked by a doctor",
     body: "A foot that slaps down or toes that catch when you walk mean the muscles that lift the foot are weak. This can come from a nerve pressed at the outer knee (after crossing the legs, a tight cast, or a knee injury) or from the low back. A doctor should check it soon. Physiotherapy can help alongside or afterwards." },
   thighDoctor: { title: "Please have this checked by a doctor",

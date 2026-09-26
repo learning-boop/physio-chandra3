@@ -15,6 +15,7 @@
      thigh     sudden pain, knock or fall (thigh, B2)
      knee      twist, blow or fall: the Ottawa knee rule, adapted (knee, B2)
      leg       kick, fall or sudden calf pain (lower leg, B2)
+     ankle     rolled, twisted or landed badly: the Ottawa ankle rules, adapted (ankle, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
@@ -399,6 +400,36 @@ export const LEG_INJURY = [
     options: yesNo('urgent', 'Possible peroneal nerve injury') },
 ]
 
+/* ── Ankle: rolled, twisted or landed badly (Ottawa ankle rules, adapted;
+   Stiell 1993). Bone tenderness can only be checked in person, so those
+   Ottawa items are left out. ── */
+export const ANKLE_INJURY = [
+  { id: 'I1', text: 'Has your ankle been hurt in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'inversion', label: 'Yes, I rolled it inwards' },
+    { id: 'eversion', label: 'Yes, the foot twisted outwards with the foot planted' },
+    { id: 'landing', label: 'Yes, I landed badly or fell from a height' },
+    { id: 'kick', label: 'Yes, it felt like a kick to the back of the ankle' },
+  ]},
+  { id: 'I2', text: 'Is the ankle out of shape, or is bone showing through the skin?',
+    options: yesNo('emergency', 'Possible fracture or dislocation') },
+  { id: 'I3', text: 'Since the injury, is your foot cold, pale, or numb?',
+    options: yesNo('emergency', 'Possible artery or nerve injury') },
+  // A possible fracture: same day.
+  { id: 'I4', text: 'Could you not take 4 steps straight after the injury, and still cannot?',
+    sameDay: true, options: yesNo('urgent', 'Ottawa ankle rule: an X-ray is needed to rule out a fracture') },
+  // Asked after "a kick to the back of the ankle" only. Same day, as for the
+  // lower leg's Achilles question.
+  { id: 'I5', text: 'Did it feel like a kick to the back of the ankle, and now you cannot rise onto your toes on that leg, or feel a gap in the tendon?',
+    askIf: (a) => a.I1 === 'kick', sameDay: true,
+    options: yesNo('urgent', 'Possible Achilles tendon rupture: early treatment matters') },
+  { id: 'I6', text: 'Is the pain higher up, at the front just above the ankle between the two leg bones, and worse when pushing off or twisting?',
+    options: yesNo('urgent', 'Possible high ankle (syndesmosis) sprain: some need surgery') },
+  // A possible growth plate fracture: same day.
+  { id: 'I7', text: 'Are you under 16, with pain on the bone just above the ankle?',
+    sameDay: true, options: yesNo('urgent', 'Possible growth plate fracture: in children these are more common than sprains') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -439,6 +470,8 @@ export const SCREENS = [
     flag: 'A knee injury in the last 6 weeks (injury screen)', questions: KNEE_INJURY, step: linearStep(KNEE_INJURY) },
   { id: 'leg', zones: ['lowerleg'], title: 'Recent Lower Leg Injury',
     flag: 'A lower leg injury in the last 6 weeks (injury screen)', questions: LEG_INJURY, step: linearStep(LEG_INJURY) },
+  { id: 'ankle', zones: ['ankle'], title: 'Recent Ankle Injury',
+    flag: 'An ankle injury in the last 6 weeks (injury screen)', questions: ANKLE_INJURY, step: linearStep(ANKLE_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──

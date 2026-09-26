@@ -3,8 +3,8 @@ region: leg
 id: mtss
 name: Shin splints (MTSS)
 clin: Medial tibial stress syndrome
-# Patient text and name shared with the old ankle region (src/data/symptomGuideExtra.js),
-# so it shows once when both are asked. Pointers from content/regions/leg.md, 25 Sep 2026.
+# Patient text moved unchanged from the site's original ankle region (July 2026 set);
+# the rebuilt ankle leaves it to the lower leg. Pointers from content/regions/leg.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:

@@ -545,11 +545,39 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['burning'],
         V1: ['lateral'], V6: ['outer'], V7: ['back'] },
       expect: { notRegion: ['leg'], areas: ['lowback'], route: 'results' } },
+  ],  ankle: [
+    { name: '1. Lateral ankle sprain',
+      lines: [['ankleR']],
+      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I6: 'no', I7: 'no',
+        A1: ['outer'], A2: ['recent'], A8: ['injury'] },
+      expect: { top: 'ankle/atfl', not: ['ankle/highankle'], route: 'results' } },
+    { name: '2. Could not take four steps after rolling it (injury screen)',
+      lines: [['ankleL']],
+      answers: { age: '30-49', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '3. Kick to the back of the ankle (Achilles rupture, injury screen)',
+      lines: [['ankleR', 'lowerlegR']],
+      answers: { age: '30-49', onset: 'landing', duration: 'd2w', I1: 'kick', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '4. Tibialis posterior tendon dysfunction',
+      lines: [['ankleL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', A1: ['inner'], A5: ['flat', 'tiptoe'] },
+      expect: { top: 'ankle/tibpost', notTop: ['ankle/tarsaltunnel'], route: 'results' } },
+    // More than 6 weeks ago, so the injury screen's gate is "No".
+    { name: '5. Chronic ankle instability',
+      lines: [['ankleR']],
+      answers: { age: '18-29', onset: 'twist', duration: 'o3m', I1: 'no', A1: ['outer'], A2: ['recurrent'], A3: ['uneven'], A4: ['unstable'] },
+      expect: { top: 'ankle/cai', notTop: ['ankle/atfl'], route: 'results' } },
+    { name: '6. Hot, red, swollen foot with diabetes (Charcot)',
+      lines: [['ankleR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd6w', A8: ['hot'] },
+      flags: ['af-charcot'],
+      expect: { route: 'urgent' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'leg' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'leg', ankle: 'ankle' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

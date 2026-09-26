@@ -1,9 +1,10 @@
 ---
-region: ankle
+region: foot
 id: fatpad
 name: Thinning heel cushion (fat pad atrophy)
 clin: Fat-pad atrophy
 # DRAFT extracted from: Heel Pain—Plantar Fasciitis: Revision 2014 (JOSPT Clinical Practice Guidelines)
+# Parked until the foot document is built (heel pain belongs to the foot).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:

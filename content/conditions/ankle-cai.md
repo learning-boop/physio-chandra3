@@ -4,13 +4,19 @@ id: cai
 name: Long-term ankle instability
 clin: Chronic ankle instability (CAI)
 # DRAFT extracted from: Ankle Stability and Movement Coordination Impairments: Lateral Ankle Ligament Sprains, Revision 2021 (JOSPT Clinical Practice Guidelines)
+# Pointers moved to the rebuilt ankle questions (content/regions/ankle.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "A twist or 'rolled' ankle": 2
-  "Comes and goes over years": 3
-  "The outer ankle": 2
-  "Unstable — it 'gives way' or I fear re-rolling it": 3
+  "It keeps rolling, or feels like it will give way": 3
+  "It still feels unstable": 3
+  "Walking on uneven ground": 3
+  "More than 3 months": 2
+  "6 weeks to 3 months": 1
+  "I rolled or twisted it": 1
+  "Outer ankle, in front of or below the bony bump": 1
+  "I rolled it recently, felt a pop, and it bruised": -1
+  "Less than 2 weeks": -2
 ---
 
 ## blurb

@@ -90,7 +90,7 @@ const REGION_AGGRAVATORS = {
   hip:       ['Lying on that side at night', 'Putting on socks and shoes, or getting in and out of a car', 'Sitting in a low chair or deep squatting', 'Climbing stairs or standing on that leg'],
   leg:       ['Running or jumping', 'Walking a distance', 'Rising onto my toes', 'Sport or marching'],
   knee:      ['Going down stairs or squatting', 'Jumping or landing', 'Twisting or turning on the leg', 'Kneeling'],
-  ankle:     ['First steps in the morning', 'Walking or standing for a long time', 'Running or jumping', 'Uneven ground or stairs'],
+  ankle:     ['Walking on uneven ground', 'Running, jumping, or hopping', 'Squatting, lunging, or going down stairs', 'The first steps in the morning'],
   head:      ['Long screen time or reading', 'Stress or poor sleep', 'Certain neck or jaw positions', 'Bright light or noisy places'],
 }
 const REGION_EASERS = {
