@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
@@ -667,6 +667,26 @@ export default function PainAssessment() {
      Its outcome joins the flags: 'emergency' → 911, 'urgent' → physician. */
   const [injuryPath, setInjuryPath] = useState([])
   const [injuryQ, setInjuryQ] = useState(null)       // question on screen
+
+  /* Each new screen starts at its top. Pressing Continue at the bottom of a
+     long screen used to leave the page scrolled down, so the next screen
+     opened part-way through. The panel's top is brought just below the menu
+     bar. The drawing steps keep their position, so the body stays in view. */
+  const panelRef = useRef(null)
+  const firstScreen = useRef(true)
+  const screenKey = `${stage}|${qIndex}|${injuryQ}|${showNotice}`
+  useEffect(() => {
+    if (firstScreen.current) { firstScreen.current = false; return }
+    if (stage === 'landing' || stage === 'rotate' || stage === 'draw') return
+    const el = panelRef.current
+    if (!el || typeof window === 'undefined') return
+    const nav = document.querySelector('.nav-bar')
+    const offset = (nav ? nav.getBoundingClientRect().height : 80) + 12
+    const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - offset)
+    if (Math.abs(window.scrollY - top) < 4) return
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' })
+  }, [screenKey]) // eslint-disable-line react-hooks/exhaustive-deps
   const [injuryDraft, setInjuryDraft] = useState(undefined) // its uncommitted pick
   const injury = useMemo(() => injuryFlow(flowZ, answers, answers.age), [flowZ, answers])
   const injuryOutcome = injury.route === 'emergency' || injury.route === 'urgent' ? injury : null
@@ -1077,7 +1097,7 @@ export default function PainAssessment() {
         `}</style>
 
         {/* ── LEFT: the guided panel ── */}
-        <div style={{ minWidth: 0, paddingTop: 8 }}>
+        <div ref={panelRef} style={{ minWidth: 0, paddingTop: 8 }}>
           <AnimatePresence mode="wait">
 
             {/* LANDING — heading + Start only. The 3D body is not shown here;
