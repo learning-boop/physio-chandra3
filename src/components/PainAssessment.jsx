@@ -4,6 +4,7 @@ import Body3D from './Body3D'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import ClinicianSummary from './ClinicianSummary'
+import GuideVideo from './GuideVideo'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
@@ -1112,6 +1113,9 @@ export default function PainAssessment() {
                     <div className="pa-actions" style={{ margin: '0 auto' }}>
                       <button className="pa-primary" style={goldBtn} onClick={() => setStage('rotate')}>start</button>
                     </div>
+                    <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', margin: '18px auto 0', maxWidth: 520 }}>
+                      It takes about 2 to 5 minutes. Careful answers give the most useful results.
+                    </p>
                     <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '20px auto 0', maxWidth: 520 }}>
                       This guide offers general information to help you describe your symptoms.
                       It is not a diagnosis and does not replace an assessment by a qualified
@@ -2005,6 +2009,9 @@ export default function PainAssessment() {
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
+            {/* A short video on how the guide works, top right, on the first
+                step after Start (shown once public/videos/guide-intro.mp4 exists). */}
+            {stage === 'rotate' && <GuideVideo />}
             {stage === 'rotate' && !hasTurned && (
               <div className="pa-swipe" aria-hidden="true">
                 <span className="pa-swipe__track">
