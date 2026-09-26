@@ -75,6 +75,12 @@ export const REFERRAL_MAP = {
     muscles: ['Scalenes (thumb and index)', 'Infraspinatus (radial hand)', 'Pectoralis major / minor and latissimus dorsi (ulnar fingers)', 'Subscapularis (band around the wrist)', 'Wrist extensors (dorsal hand)'],
     organs: ['Heart (ulnar hand)', 'Lung apex / Pancoast (ulnar hand)'],
   },
+  hand: {
+    joints: ['Upper thoracic spine T2–T7 (T4 syndrome: glove-like pins and needles or coldness in both hands; diagnosis of exclusion)'],
+    roots: ['C6 (thumb and index finger)', 'C7 (middle finger)', 'C8 (ring and little fingers)'],
+    muscles: ['Scalenes, infraspinatus and brachialis (thumb and index finger)', 'Latissimus dorsi, serratus posterior superior and pectoralis minor (little finger)', 'Finger extensors (back of the middle and ring fingers)', 'Adductor and opponens pollicis, first dorsal interosseous (base of the thumb, side of the index)', 'Finger flexors (palm side of the fingers)'],
+    organs: ['Heart (ulnar hand)', 'Lung apex / Pancoast (ulnar hand)'],
+  },
   chest: {
     joints: ['Costovertebral joints (along the rib to the front of the chest)', 'Costochondral joints (breastbone)'],
     roots: ['Thoracic roots (a band around the chest)'],
@@ -144,7 +150,7 @@ export const REFERRAL_MAP = {
 }
 
 /* Order the summary lists areas in: spine first, then out along the limbs. */
-const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hip', 'knee', 'ankle']
+const ORDER = ['head', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'abdomen', 'shoulder', 'elbow', 'wrist', 'hand', 'hip', 'knee', 'ankle']
 
 /** The drawn zone types that have an entry, in summary order, without repeats. */
 export function mappedTypes(zones = []) {

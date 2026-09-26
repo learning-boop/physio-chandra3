@@ -399,11 +399,40 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
         W3: ['thumb'], W4: ['posture'], W8: ['neck'] },
       expect: { notRegion: ['wrist'], areas: ['neck'], route: 'results' } },
+  ],  hand: [
+    { name: '1. Thumb base arthritis',
+      lines: [['handR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', H1: ['thumbbase'], H3: ['pinch'], H6: ['bony'] },
+      expect: { top: 'hand/thumboa', route: 'results' } },
+    { name: '2. Trigger finger',
+      lines: [['handR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', H1: ['palm'], H2: ['trigger', 'nodule'] },
+      expect: { top: 'hand/trigger', notTop: ['hand/handoa'], route: 'results' } },
+    { name: '3. Drooping fingertip after a jam (mallet finger, injury screen)',
+      lines: [['handL']],
+      answers: { age: '30-49', onset: 'injury', duration: 'd2w', I1: 'jammed', I2: 'no', I4: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '4. Swollen knuckle after a punch (fight bite)',
+      lines: [['handR']],
+      answers: { age: '18-29', onset: 'crush', duration: 'd2w' },
+      flags: ['hnd-bite'],
+      expect: { route: 'emergency' } },
+    { name: '5. Knuckles of both hands swollen and stiff',
+      lines: [['handL'], ['handR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd3m', H1: ['knuckles'], H6: ['both'], H7: ['stiff'] },
+      flags: ['hnd-inflam'],
+      expect: { route: 'urgent' } },
+    // A line from the neck to the thumb is read as neck referral.
+    { name: '6. Neck look-alike: neck to the thumb and index finger',
+      lines: [['neck', 'shoulderR', 'upperarmR', 'elbowR', 'forearmR', 'wristR', 'handR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
+        H4: ['thumb'], H5: ['use'], H8: ['neck'] },
+      expect: { notRegion: ['hand'], areas: ['neck'], route: 'results' } },
   ],
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

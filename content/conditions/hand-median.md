@@ -1,26 +1,22 @@
 ---
-region: wrist
+region: hand
 id: median
 name: Carpal tunnel syndrome
 clin: Median nerve compression at the wrist (CTS-6; JOSPT CPG 2019)
-# Patient text moved unchanged from the site's original wrist region.
-# Pointers from content/regions/wrist.md, 25 Sep 2026.
+# Patient text shared with wrist-median.md: keep the two in step.
+# Pointers from content/regions/hand.md, 25 Sep 2026: people often draw carpal tunnel on the fingers.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-# Patient text shared with hand-median.md: keep the two in step.
 reviewed:
 pointers:
   "Tingling or numbness in the thumb, index, and middle fingers": 3
   "It wakes me at night, and shaking my hand helps": 3
-  "When driving, holding a phone, or reading": 2
-  "My thumb feels weak or clumsy": 1
-  "The numbness is there all the time": 1
-  "Palm side of the wrist": 2
-  "The whole hand tingles": 1
-  "Typing, or using a mouse or phone": 1
-  "During pregnancy": 2
-  "50 to 64": 1
-  "Using my wrist and hand": 1
+  "When I use my hand, or hold a phone": 1
+  "It is there all the time": 1
+  "During pregnancy, or since having a baby": 2
+  "A whole finger, or the fingertips": 1
+  "Using my fingers": 1
   "The back of my hand is numb too": -3
+  "Tingling in the fingertips of both hands": -1
   "Moving my neck": -2
 ---
 

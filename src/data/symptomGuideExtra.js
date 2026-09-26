@@ -1372,29 +1372,29 @@ export const EXTRA_REGIONS = {
      (scaphoid), Ilyas 2007 (de Quervain), Tay 2007 (ulnar fovea sign),
      Harden 2010 (Budapest criteria), Lee & LaStayo 2004, Travell & Simons
      2019.
-     Reached from the body map's wrist band, which also covers the hand until
-     the hand document is built. Its injury screen is in ./injuryScreen.js.
+     Reached from the body map's wrist band; the hand and fingers below it
+     are their own region (hand). Its injury screen is in ./injuryScreen.js.
      Conditions: content/conditions/wrist-*.md. */
   wrist: {
-    name: "Wrist & hand",
+    name: "Wrist",
     redFlags: [
-      { id: "wrf-hot", tier: "emergency", why: "Possible joint infection (septic arthritis)",
+      { id: "wrf-hot", tier: "emergency", group: "handhot", why: "Possible joint infection (septic arthritis)",
         text: "Is your wrist hot, red, and swollen, with a fever or feeling very unwell?" },
-      { id: "wrf-bite", tier: "emergency", why: "Possible tendon sheath or deep hand infection; needs urgent surgical review",
+      { id: "wrf-bite", tier: "emergency", group: "handbite", why: "Possible tendon sheath or deep hand infection; needs urgent surgical review",
         text: "Did you have a cut, bite, or puncture on the wrist or hand, and is it now swollen, red, and very painful to move the fingers?" },
       { id: "wrf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
-      { id: "wrf-crps", tier: "urgent", why: "Possible complex regional pain syndrome (CRPS); early treatment matters",
+      { id: "wrf-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS); early treatment matters",
         text: "Since a wrist injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that even light touch hurts?" },
-      { id: "wrf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
+      { id: "wrf-gout", tier: "urgent", group: "handgout", why: "Possible gout or other crystal arthritis",
         text: "Did your wrist become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
-      { id: "wrf-inflam", tier: "urgent", why: "Possible inflammatory arthritis (for example rheumatoid arthritis)",
+      { id: "wrf-inflam", tier: "urgent", group: "handinflam", why: "Possible inflammatory arthritis (for example rheumatoid arthritis)",
         text: "Are both wrists or several finger joints swollen and stiff for more than an hour in the morning?" },
-      { id: "wrf-numb", tier: "urgent", why: "Severe nerve compression (carpal tunnel) may need a specialist opinion",
+      { id: "wrf-numb", tier: "urgent", group: "handnumb", why: "Severe nerve compression (carpal tunnel) may need a specialist opinion",
         text: "Is the numbness in your fingers there all the time now, or is the muscle at the base of your thumb getting thinner?" },
       { id: "wrf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
-      { id: "wrf-raynaud", tier: "urgent", why: "Possible circulation problem (Raynaud's, or damage to the artery in the palm)",
+      { id: "wrf-raynaud", tier: "urgent", group: "raynaud", why: "Possible circulation problem (Raynaud's, or damage to the artery in the palm)",
         text: "Do your fingers or hand go white, blue, or cold in attacks, or is there a painful cold finger that does not recover?" },
       { id: "wrf-cancer", tier: "urgent", group: "cancer", why: "A lump or bone lesion needs medical review",
         text: "Have you ever had cancer, or is there a hard lump at the wrist that is growing, or deep pain at night that does not change with position?" }
@@ -1437,8 +1437,8 @@ export const EXTRA_REGIONS = {
         { id: "rotate", label: "Turning my palm up and down (key, door handle)" },
         { id: "typing", label: "Typing, or using a mouse or phone" }
       ]},
-      // The wrist band on the body map covers the hand, so this is always asked.
       { id: "W3", text: "Which of these do you notice in your hand? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || draw.has("hand") || [].concat(all.painQuality || []).includes("tingling"),
         // Early when there is tingling (or the drawing is unknown).
         priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).includes("tingling"),
         options: [
@@ -1489,6 +1489,138 @@ export const EXTRA_REGIONS = {
           { id: "neck", label: "Moving my neck", special: "neckSource" },
           { id: "elbow", label: "Moving my elbow" },
           { id: "wristhand", label: "Using my wrist and hand" },
+          { id: "none", label: "None of these bring it on" }
+        ]}
+    ],
+    conditions: []
+  },
+
+  /* ══════════════ HAND & FINGERS ══════════════
+     From Chandra's "Hand and fingers assessment" region document (reviewed
+     by Chandra, 25 Sep 2026; the source text is content/regions/hand.md).
+     Sources: Leggit & Meko 2006 (acute finger injuries, parts I and II),
+     EULAR hand osteoarthritis 2018, ACR/EULAR rheumatoid arthritis criteria
+     2010, Makkouk 2008 (trigger finger), Hyatt & Bagg 2017 (flexor
+     tenosynovitis), JOSPT carpal tunnel CPG 2019, Harden 2010 (Budapest
+     criteria), Travell & Simons 2019.
+     Reached from the body map's hand band, below the wrist (WRIST_BOTTOM in
+     Body3D.jsx). Its injury screen is in ./injuryScreen.js. Conditions:
+     content/conditions/hand-*.md. */
+  hand: {
+    name: "Hand & fingers",
+    redFlags: [
+      { id: "hnd-bite", tier: "emergency", group: "handbite", why: "Possible tendon sheath or joint infection; needs urgent surgical review",
+        text: "Did you have a cut, bite, or puncture on your hand or finger (including hitting someone's teeth), and is it now swollen, red, and very painful to straighten the finger?" },
+      { id: "hnd-inject", tier: "emergency", why: "High-pressure injection injury: serious damage hides under a small wound",
+        text: "Was paint, grease, oil, or fluid injected into your hand under pressure (spray gun, grease gun), even if the wound looks tiny?" },
+      { id: "hnd-hot", tier: "emergency", group: "handhot", why: "Possible joint infection (septic arthritis)",
+        text: "Is a finger or thumb hot, red, and swollen, with a fever or feeling very unwell?" },
+      { id: "hnd-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+        text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
+      { id: "hnd-felon", sameDay: true, tier: "urgent", why: "Possible fingertip or nail-fold infection (felon or paronychia); same-day review",
+        text: "Is there a tense, throbbing, swollen fingertip, or pus around the nail?" },
+      { id: "hnd-gout", tier: "urgent", group: "handgout", why: "Possible gout or other crystal arthritis",
+        text: "Did a finger joint become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
+      { id: "hnd-inflam", tier: "urgent", group: "handinflam", why: "Possible inflammatory arthritis (rheumatoid or psoriatic)",
+        text: "Are the knuckles in both hands swollen and stiff for more than an hour in the morning, or is a whole finger swollen like a sausage (especially with psoriasis)?" },
+      { id: "hnd-raynaud", tier: "urgent", group: "raynaud", why: "Possible Raynaud's or another circulation problem",
+        text: "Do your fingers go white, then blue, in the cold, or is there a sore or ulcer on a fingertip?" },
+      { id: "hnd-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS)",
+        text: "Since a hand injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts?" },
+      { id: "hnd-numb", tier: "urgent", group: "handnumb", why: "Severe nerve compression needs a specialist opinion",
+        text: "Is the numbness in your fingers there all the time, or is the muscle at the base of your thumb or between your thumb and index finger getting thinner?" },
+      { id: "hnd-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
+        text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+      { id: "hnd-lump", tier: "urgent", why: "A growing lump or nail streak needs medical review",
+        text: "Is there a hard lump that is growing, or a new dark streak under a nail?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u18", label: "Under 18" },
+        { id: "18-29", label: "18 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      { id: "onset", text: "How did it start?", options: [
+        { id: "gradual", label: "Gradually, no clear reason" },
+        { id: "grip", label: "After a lot of gripping, pinching, typing, or phone use" },
+        { id: "injury", label: "A finger was jammed, bent back, or caught" },
+        { id: "crush", label: "It was crushed or cut" },
+        { id: "baby", label: "During pregnancy, or since having a baby" },
+        { id: "joints", label: "Other joints in my body are swollen or stiff too", special: "handDoctor" }
+      ]},
+      { id: "duration", text: "How long has it been going on?", options: [
+        { id: "d2w", label: "Less than 2 weeks" },
+        { id: "d6w", label: "2 to 6 weeks" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      { id: "H1", text: "Where is the pain mainly?", options: [
+        { id: "thumbbase", label: "Base of the thumb, where it meets the wrist" },
+        { id: "knuckles", label: "Knuckles at the base of the fingers" },
+        { id: "fingerjoints", label: "Middle or end joints of the fingers" },
+        { id: "palm", label: "Palm, at the base of a finger or thumb" },
+        { id: "whole", label: "A whole finger, or the fingertips" }
+      ]},
+      { id: "H2", text: "Which of these apply? Tick all that apply.", options: [
+        { id: "trigger", label: "A finger or thumb clicks, catches, or locks bent" },
+        { id: "nodule", label: "A tender lump in the palm at the base of that finger" },
+        { id: "dupuytren", label: "A finger is slowly bending into my palm, and I cannot lay my hand flat" },
+        { id: "nodes", label: "Hard bony bumps on the finger joints" },
+        { id: "none", label: "None of these" }
+      ]},
+      { id: "H3", text: "Which of these bring it on? Tick all that apply.", options: [
+        { id: "pinch", label: "Pinching (turning a key, opening a jar, doing up buttons)" },
+        { id: "grip", label: "Gripping firmly" },
+        { id: "thumbs", label: "Typing, texting, or gaming with the thumbs" },
+        { id: "push", label: "Pushing up with my hand (getting out of a chair)" },
+        { id: "cold", label: "Cold weather" }
+      ]},
+      { id: "H4", text: "Which of these do you notice in your hand? Tick all that apply.",
+        askIf: ({ draw, all }) => !draw || [].concat(all.painQuality || []).includes("tingling"),
+        priority: () => true,
+        options: [
+          { id: "thumb", label: "Tingling or numbness in the thumb, index, and middle fingers" },
+          { id: "little", label: "Tingling or numbness in the little and ring fingers", special: "ulnarhand" },
+          { id: "digital", label: "Numbness down one side of one finger only" },
+          { id: "both", label: "Tingling in the fingertips of both hands", special: "handDoctor" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "H5", text: "When does the tingling come on? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.H4 || []).includes("thumb"),
+        priority: () => true,
+        options: [
+          { id: "night", label: "It wakes me at night, and shaking my hand helps", special: "medianhand" },
+          { id: "use", label: "When I use my hand, or hold a phone" },
+          { id: "constant", label: "It is there all the time", special: "nerveDoctor" },
+          { id: "back", label: "The back of my hand is numb too" }
+        ]},
+      { id: "H6", text: "What does any swelling look like?", options: [
+        { id: "sausage", label: "One whole finger swollen like a sausage", special: "handDoctor" },
+        { id: "both", label: "Several knuckles swollen in both hands", special: "handDoctor" },
+        { id: "hot", label: "One joint hot and puffy", special: "handDoctor" },
+        { id: "bony", label: "Hard, bony swelling of the finger joints" },
+        { id: "none", label: "No swelling" }
+      ]},
+      { id: "H7", text: "Which of these do you notice? Tick all that apply.",
+        askIf: ({ ra }) => ra.duration === "d3m" || ra.duration === "o3m" || [].concat(ra.H6 || []).some((o) => o !== "none"),
+        options: [
+          { id: "raynaud", label: "Fingers go white, then blue, then red in the cold", special: "handDoctor" },
+          { id: "colour", label: "Since an injury, my hand is a different colour or temperature from the other one", special: "handDoctor" },
+          { id: "nails", label: "Pitting or ridges in my nails, or psoriasis", special: "handDoctor" },
+          { id: "stiff", label: "Stiff for more than 30 minutes in the morning", special: "handDoctor" },
+          { id: "none", label: "None of these" }
+        ]},
+      { id: "H8", text: "Which hurts more: moving your neck, moving your wrist, or using your fingers?",
+        askIf: ({ draw, all }) => !draw || ["neck", "ctj", "forearm", "wrist"].some((t) => draw.has(t)) ||
+          [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        options: [
+          { id: "neck", label: "Moving my neck", special: "neckSource" },
+          { id: "wrist", label: "Moving my wrist" },
+          { id: "fingers", label: "Using my fingers" },
           { id: "none", label: "None of these bring it on" }
         ]}
     ],
@@ -1684,7 +1816,7 @@ export const EXTRA_REGIONS = {
 // Special education cards used by the new regions
 export const EXTRA_SPECIAL_CARDS = {
   medianhand: { title: "Tingling in the thumb-side fingers",
-    body: "Tingling in the thumb, index or middle fingers usually points to the <strong>median nerve</strong> — most often compressed at the wrist rather than the elbow. Consider running the <strong>Wrist &amp; hand</strong> guide too." },
+    body: "Tingling in the thumb, index or middle fingers usually points to the <strong>median nerve</strong> — most often compressed at the wrist rather than the elbow. Consider running the <strong>Wrist</strong> guide too." },
   ulnarhand: { title: "Tingling in the ring & little fingers",
     body: "Tingling in the ring and little fingers usually points to the <strong>ulnar nerve</strong>, which is most often irritated at the <strong>elbow</strong> (cubital tunnel). Consider running the <strong>Elbow</strong> guide too." },
   backref: { title: "Pain travelling below the knee",
@@ -1713,6 +1845,8 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Severe pain behind one eye, with a watery eye or runny nose on the same side, can be a <strong>cluster-type headache</strong>. It needs a doctor's assessment and specific treatment, so please book with your doctor." },
   medOveruse: { title: "Frequent painkillers can keep headaches going",
     body: "Taking painkillers for headaches on <strong>10 or more days a month</strong> (15 or more for simple ones like paracetamol or ibuprofen) can itself keep headaches going, called <strong>medication-overuse headache</strong>. Please review how often you take them with your doctor or pharmacist; do not stop suddenly without advice." },
+  handDoctor: { title: "Please have this checked by a doctor",
+    body: "A whole finger swollen like a sausage, knuckles swollen in both hands, a hot puffy joint, long morning stiffness, nail pitting with psoriasis, other joints swollen too, tingling in both hands, fingers that go white then blue in the cold, or a hand that has changed colour or temperature since an injury are signs a doctor should look at. They can point to inflammatory arthritis, gout, a circulation problem, a nerve condition, or complex regional pain syndrome. Physiotherapy can help alongside or afterwards." },
   nerveDoctor: { title: "Constant numbness or a weak thumb should be checked by a doctor",
     body: "Numbness that no longer comes and goes, or a thumb that is getting weak or clumsy, can mean the nerve is being pressed on hard. A doctor should check this. Physiotherapy can help alongside or afterwards." },
   lumpDoctor: { title: "A hard or growing lump should be checked by a doctor",

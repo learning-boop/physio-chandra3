@@ -76,6 +76,8 @@ const AREA = {
   forearmR:  { type: 'forearm',   label: 'Right Forearm' },
   wristL:    { type: 'wrist',     label: 'Left Wrist' },
   wristR:    { type: 'wrist',     label: 'Right Wrist' },
+  handL:     { type: 'hand',      label: 'Left Hand & Fingers' },
+  handR:     { type: 'hand',      label: 'Right Hand & Fingers' },
   hipL:      { type: 'hip',       label: 'Left Hip' },
   hipR:      { type: 'hip',       label: 'Right Hip' },
   chest:     { type: 'chest',     label: 'Chest' },
@@ -118,11 +120,16 @@ const COCCYX_HALF = 0.025
 // Above it (temples, forehead, scalp) stays the head.
 const JAW_TOP = 0.445
 // Down the arm, below the shoulder: upper arm (content/regions/arm.md), the
-// elbow joint, the forearm, then the wrist and hand. Heights as fractions.
+// elbow joint, the forearm, the wrist, then the hand and fingers. Heights as
+// fractions. Measured on this mesh the forearm is narrowest at about 0.025
+// and the palm starts widening at 0.02 (the wrist crease), so the wrist band
+// runs from just above the crease to the upper palm (base of the thumb), and
+// the hand and fingers are below it (content/regions/hand.md).
 const UPPERARM_BOTTOM = 0.13
 const ELBOW_BOTTOM = 0.08
-const FOREARM_BOTTOM = 0.01
-const armBand = (fy) => (fy > UPPERARM_BOTTOM ? 'upperarm' : fy > ELBOW_BOTTOM ? 'elbow' : fy > FOREARM_BOTTOM ? 'forearm' : 'wrist')
+const FOREARM_BOTTOM = 0.03
+const WRIST_BOTTOM = 0.005
+const armBand = (fy) => (fy > UPPERARM_BOTTOM ? 'upperarm' : fy > ELBOW_BOTTOM ? 'elbow' : fy > FOREARM_BOTTOM ? 'forearm' : fy > WRIST_BOTTOM ? 'wrist' : 'hand')
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
 // fy -0.5 = soles, +0.5 = top of the head, and lz/lx are distances from the
@@ -982,7 +989,7 @@ export default function Body3D({
       // at the base of the neck is traced from the neck, even when its first
       // points fall just below the thin neck band. Without this, neck-to-hand
       // began as "Chest" and was never recognised as referral from the neck.
-      if (!out.includes('neck') && out.some((id) => /^(upperarm|elbow|forearm|wrist)/.test(id))) {
+      if (!out.includes('neck') && out.some((id) => /^(upperarm|elbow|forearm|wrist|hand)/.test(id))) {
         const n = Math.max(3, Math.ceil(pts.length * 0.15))
         const ends = [...pts.slice(0, n), ...pts.slice(-n)]   // drawn either direction
         if (ends.some((p) => nearNeckBase(p.x, p.y, p.z))) {
@@ -1006,7 +1013,7 @@ export default function Body3D({
   // Areas where the trunk itself does not already say front or back, so the
   // surface has to be carried on the zone (a knee is one area; its front and
   // back are different problems).
-  const SURFACE_MATTERS = new Set(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hip', 'knee', 'ankle', 'neck', 'head'])
+  const SURFACE_MATTERS = new Set(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'knee', 'ankle', 'neck', 'head'])
 
   // Merge the zones from EVERY line into one selection list, and report each
   // line's own ordered zone types separately — one continuous line from the

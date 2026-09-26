@@ -179,7 +179,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const src = fs.readFileSync(root + '/src/components/Body3D.jsx', 'utf8')
   const grab = (re) => (src.match(re) || [''])[0]
   const code = [
-    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/), grab(/const CTJ_BOTTOM = [^\n]+/), grab(/const TLJ_TOP = [^\n]+/), grab(/const TLJ_BOTTOM = [^\n]+/), grab(/const SIJ_TOP = [^\n]+/), grab(/const COCCYX_TOP = [^\n]+/), grab(/const COCCYX_BOTTOM = [^\n]+/), grab(/const COCCYX_HALF = [^\n]+/), grab(/const JAW_TOP = [^\n]+/), grab(/const UPPERARM_BOTTOM = [^\n]+/), grab(/const ELBOW_BOTTOM = [^\n]+/), grab(/const FOREARM_BOTTOM = [^\n]+/), grab(/const armBand = [^\n]+/),
+    grab(/const FRONT_SIGN = [^\n]+/), grab(/const ARM_SPLIT = [^\n]+/), grab(/const NECK_SPLIT = [^\n]+/), grab(/const CTJ_BOTTOM = [^\n]+/), grab(/const TLJ_TOP = [^\n]+/), grab(/const TLJ_BOTTOM = [^\n]+/), grab(/const SIJ_TOP = [^\n]+/), grab(/const COCCYX_TOP = [^\n]+/), grab(/const COCCYX_BOTTOM = [^\n]+/), grab(/const COCCYX_HALF = [^\n]+/), grab(/const JAW_TOP = [^\n]+/), grab(/const UPPERARM_BOTTOM = [^\n]+/), grab(/const ELBOW_BOTTOM = [^\n]+/), grab(/const FOREARM_BOTTOM = [^\n]+/), grab(/const WRIST_BOTTOM = [^\n]+/), grab(/const armBand = [^\n]+/),
     'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
     grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/),
     grab(/function surfaceOf\(wx, wy, wz\) \{[\s\S]*?\n\}/),
@@ -201,9 +201,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('the midline where the buttock crease begins is the tailbone', classify(-0.08, -0.03, 0.01) === 'coccyx', classify(-0.08, -0.03, 0.01))
   check('the lower face in front of the ear is the jaw', /^jaw/.test(classify(0.02, 0.42, 0.05)), classify(0.02, 0.42, 0.05))
   check('the temple and forehead are still the head', classify(0.05, 0.47, 0.05) === 'head', classify(0.05, 0.47, 0.05))
-  check('down the arm: upper arm, elbow, forearm, then hand',
-    ['upperarm', 'elbow', 'forearm', 'wrist'].every((t, i) => classify(0.02, [0.18, 0.11, 0.05, -0.03][i], 0.16).startsWith(t)),
-    [0.18, 0.11, 0.05, -0.03].map((y) => classify(0.02, y, 0.16)))
+  check('down the arm: upper arm, elbow, forearm, wrist, then hand',
+    ['upperarm', 'elbow', 'forearm', 'wrist', 'hand'].every((t, i) => classify(0.02, [0.18, 0.11, 0.05, 0.02, -0.03][i], 0.16).startsWith(t)),
+    [0.18, 0.11, 0.05, 0.02, -0.03].map((y) => classify(0.02, y, 0.16)))
   check('the nape is still the neck', classify(-0.08, 0.36, 0.03) === 'neck', classify(-0.08, 0.36, 0.03))
 }
 
@@ -377,7 +377,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('a question asked word for word by the upper arm is not asked again by the elbow or forearm',
     fall.asked.includes('arm:I3') && !fall.asked.includes('elbow:I3') && !fall.asked.includes('forearm:I3') && !fall.asked.includes('forearm:I6') && !fall.asked.some((k) => k.endsWith(':I1')), fall.asked)
   const older = walk({ 'limb:I1': 'fall', 'limb:I2': 'older' })
-  check('an injury 2 to 6 weeks ago opens only the 6-week screens (shoulder, wrist)', older.asked.every((k) => k.startsWith('shoulder:') || k.startsWith('wrist:')), older.asked)
+  check('an injury 2 to 6 weeks ago opens only the 6-week screens (shoulder, wrist, hand)', older.asked.every((k) => /^(shoulder|wrist|hand):/.test(k)), older.asked)
   const one = injuryFlow([{ type: 'elbow' }], {}).next
   check('an elbow on its own keeps its own opening question', one === 'elbow:I1', one)
 }

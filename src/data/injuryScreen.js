@@ -10,12 +10,13 @@
      elbow     fall, blow or sudden force to the elbow (elbow, B2)
      forearm   fall, blow or crush (forearm, B2)
      wrist     fall onto the hand, twist or blow (wrist, B2)
+     hand      jammed, bent back, caught, crushed or cut (hand and fingers, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
    clear them. When several apply (an upper-arm mark also asks the shoulder),
    they run one after another until one routes. The shoulder, upper arm,
-   elbow, forearm and wrist share one opening question when two or more of them apply (see
+   elbow, forearm, wrist and hand share one opening question when two or more of them apply (see
    "One arm gate" below), and a question asked word for word by an earlier
    screen is not asked again.
 
@@ -250,6 +251,38 @@ export const WRIST_INJURY = [
     sameDay: true, options: yesNo('urgent', 'Possible TFCC tear, joint instability, or fracture on the little-finger side') },
 ]
 
+/* ── Hand and fingers: jammed, bent back, caught, crushed or cut ──
+   Many finger injuries need a splint or surgery within days, so these
+   route early. */
+export const HAND_INJURY = [
+  { id: 'I1', text: 'Has your hand, finger, or thumb been hurt in the last 6 weeks?', options: [
+    { id: 'no', label: 'No', route: 'skip' },
+    { id: 'jammed', label: 'Yes, a finger was jammed (ball, wall)' },
+    { id: 'bentback', label: 'Yes, my thumb was bent back (ski pole, fall)' },
+    { id: 'caught', label: 'Yes, a finger caught in clothing, a door, or a jersey' },
+    { id: 'crushcut', label: 'Yes, it was crushed or cut' },
+  ]},
+  { id: 'I2', text: 'Is a finger still out of place, or is bone showing through the skin?',
+    options: yesNo('emergency', 'A dislocation that has not been put back, or an open fracture') },
+  // The questions that start "After a cut", "After grabbing or catching" and
+  // "After your thumb was bent back" are asked after that injury only.
+  { id: 'I3', text: 'After a cut: can you not bend or straighten the finger, or is one side of the finger or the fingertip numb?',
+    askIf: (a) => a.I1 === 'crushcut',
+    options: yesNo('emergency', 'Possible cut tendon or nerve: repair is time-sensitive') },
+  { id: 'I4', text: 'Does the tip of the finger droop, and it will not straighten on its own?',
+    options: yesNo('urgent', 'Possible mallet finger: it needs a splint within about a week') },
+  // A torn tendon that needs surgery within days: same day, as for the biceps.
+  { id: 'I5', text: 'After grabbing or catching a finger (often the ring finger), can you not bend the tip of that finger?',
+    askIf: (a) => a.I1 === 'caught', sameDay: true,
+    options: yesNo('urgent', 'Possible "jersey finger" (a torn flexor tendon): surgery works best within days') },
+  { id: 'I6', text: 'After your thumb was bent back, is there pain on the index-finger side of the thumb knuckle, or is pinching weak?',
+    askIf: (a) => a.I1 === 'bentback',
+    options: yesNo('urgent', "Possible thumb ligament tear (skier's thumb): some need surgery") },
+  // A possible fracture: same day.
+  { id: 'I7', text: 'When you make a fist, does one finger cross over or point towards another, or is the middle finger joint swollen and will not straighten?',
+    sameDay: true, options: yesNo('urgent', 'Possible finger fracture with rotation, or a central slip (boutonnière) injury') },
+]
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -280,6 +313,8 @@ export const SCREENS = [
     flag: 'A forearm injury in the last 2 weeks (injury screen)', questions: FOREARM_INJURY, step: linearStep(FOREARM_INJURY) },
   { id: 'wrist', zones: ['wrist'], title: 'Recent Wrist Injury',
     flag: 'A wrist injury in the last 6 weeks (injury screen)', questions: WRIST_INJURY, step: linearStep(WRIST_INJURY) },
+  { id: 'hand', zones: ['hand'], title: 'Recent Hand or Finger Injury',
+    flag: 'A hand or finger injury in the last 6 weeks (injury screen)', questions: HAND_INJURY, step: linearStep(HAND_INJURY) },
 ]
 
 /* ── One arm gate for the shoulder, upper arm and elbow ──
@@ -289,19 +324,22 @@ export const SCREENS = [
    its own I1. The shoulder and wrist look back 6 weeks and the others 2
    weeks, so when both kinds are drawn, "limb:I2" asks when it happened; an
    injury 2 to 6 weeks ago opens only the 6-week screens. */
-const LIMB = ['shoulder', 'arm', 'elbow', 'forearm', 'wrist']
-const LIMB_NAME = { shoulder: 'shoulder', arm: 'upper arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist' }
+const LIMB = ['shoulder', 'arm', 'elbow', 'forearm', 'wrist', 'hand']
+const LIMB_NAME = { shoulder: 'shoulder', arm: 'upper arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand' }
 // How far back each screen looks, in weeks.
-const LIMB_WEEKS = { shoulder: 6, arm: 2, elbow: 2, forearm: 2, wrist: 6 }
+const LIMB_WEEKS = { shoulder: 6, arm: 2, elbow: 2, forearm: 2, wrist: 6, hand: 6 }
 // Each merged answer, as each screen's own I1 answer.
 const LIMB_OPTIONS = [
-  { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no' } },
-  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall', forearm: 'fall', wrist: 'fall' } },
-  { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow', forearm: 'blow', wrist: 'blow' } },
-  { id: 'crush', label: 'Yes, my forearm or wrist was crushed or trapped', onlyAny: ['forearm', 'wrist'], map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'crush', wrist: 'blow' } },
-  { id: 'twist', label: 'Yes, my wrist was twisted (racquet, golf, a drill that caught)', only: 'wrist', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'twist' } },
-  { id: 'popped', label: 'Yes, my shoulder popped out of place', only: 'shoulder', map: { shoulder: 'popped', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no' } },
-  { id: 'pull', label: 'Yes, a sudden pull, jerk, or heavy lift (I may have felt a pop)', onlyAny: ['shoulder', 'arm', 'elbow'], map: { shoulder: 'pull', arm: 'pop', elbow: 'pop', forearm: 'no', wrist: 'no' } },
+  { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'no' } },
+  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall', forearm: 'fall', wrist: 'fall', hand: 'jammed' } },
+  { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow', forearm: 'blow', wrist: 'blow', hand: 'jammed' } },
+  { id: 'crush', label: 'Yes, it was crushed, trapped, or cut', onlyAny: ['forearm', 'wrist', 'hand'], map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'crush', wrist: 'blow', hand: 'crushcut' } },
+  { id: 'twist', label: 'Yes, my wrist was twisted (racquet, golf, a drill that caught)', only: 'wrist', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'twist', hand: 'no' } },
+  { id: 'jammed', label: 'Yes, a finger was jammed (ball, wall)', only: 'hand', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'jammed' } },
+  { id: 'bentback', label: 'Yes, my thumb was bent back (ski pole, fall)', only: 'hand', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'bentback' } },
+  { id: 'caught', label: 'Yes, a finger caught in clothing, a door, or a jersey', only: 'hand', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'caught' } },
+  { id: 'popped', label: 'Yes, my shoulder popped out of place', only: 'shoulder', map: { shoulder: 'popped', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'no' } },
+  { id: 'pull', label: 'Yes, a sudden pull, jerk, or heavy lift (I may have felt a pop)', onlyAny: ['shoulder', 'arm', 'elbow'], map: { shoulder: 'pull', arm: 'pop', elbow: 'pop', forearm: 'no', wrist: 'no', hand: 'no' } },
 ]
 /** What a shared-question answer means as one screen's own I1 answer. */
 export const limbAnswerFor = (optionId, screenId) => ((LIMB_OPTIONS.find((o) => o.id === optionId) || {}).map || {})[screenId]
@@ -313,7 +351,8 @@ function limbQuestion(zones) {
   const names = ids.map((id) => LIMB_NAME[id])
   const where = names.length > 2 ? names.slice(0, -1).join(', ') + ', or ' + names[names.length - 1] : names.join(' or ')
   const weeks = Math.max(...ids.map((id) => LIMB_WEEKS[id]))
-  const how = ids.includes('forearm') || ids.includes('wrist') ? 'a fall, accident, blow, crush, twist, or heavy lift' : 'a fall, accident, blow, or heavy lift'
+  const how = ids.includes('hand') ? 'a fall, accident, blow, crush, cut, or twist'
+    : ids.includes('forearm') || ids.includes('wrist') ? 'a fall, accident, blow, crush, twist, or heavy lift' : 'a fall, accident, blow, or heavy lift'
   return { id: 'I1', text: `Has your ${where} been hurt in ${how} in the last ${weeks} weeks?`,
     options: LIMB_OPTIONS.filter((o) => (!o.only || ids.includes(o.only)) && (!o.onlyAny || o.onlyAny.some((x) => ids.includes(x))))
       .map(({ id, label }) => ({ id, label })) }

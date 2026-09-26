@@ -26,7 +26,7 @@ const zoneType = (id) => id.replace(/[LR]$/, '').replace('lowerback', 'lowback')
    neck asks both: a nerve root in the neck, or the first rib and thoracic
    outlet at the base of the neck (content/regions/ctj.md). */
 const LIMBS = [
-  { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist'] },
+  { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand'] },
   // A leg line from the back of the pelvis (sacroiliac) asks both it and the
   // low back, where nerve-root leg pain comes from (content/regions/sij.md).
   { kind: 'leg', region: 'lowback', spine: ['lowback', 'sij'], sources: ['lowerback'], chain: ['hip', 'knee', 'ankle'] },
@@ -97,7 +97,7 @@ export function flowZones(zones, referral = []) {
 export function drawnAnswers(referral) {
   const out = {}
   for (const r of referral) {
-    if (r.kind === 'arm' && r.reach === 'wrist') out.N2 = ['pastelbow']
+    if (r.kind === 'arm' && (r.reach === 'wrist' || r.reach === 'hand')) out.N2 = ['pastelbow']
     if (r.kind === 'leg' && r.reach === 'ankle') { out.L1 = ['belowknee']; out.P4 = ['belowknee'] }
   }
   return out
@@ -124,14 +124,14 @@ export function referralMechanism(r, answers = {}) {
   // numbness in particular fingers"; low back L3 "pins and needles or numbness
   // in the foot or toes".
   const nerveAnswer = asList(answers.N2).includes('fingers') || asList(answers.L3).includes('pins')
-  const distal = r.reach === 'wrist' || r.reach === 'ankle'
+  const distal = r.reach === 'wrist' || r.reach === 'hand' || r.reach === 'ankle'
   if (nerveWords || nerveAnswer) return 'radicular'
   if (!distal) return 'somatic'
   return 'unclear'
 }
 
 const REACH_WORDS = {
-  upperarm: 'the upper arm', elbow: 'the upper arm and elbow', forearm: 'the forearm', wrist: 'the forearm and hand',
+  upperarm: 'the upper arm', elbow: 'the upper arm and elbow', forearm: 'the forearm', wrist: 'the forearm and wrist', hand: 'the forearm and hand',
   knee: 'the thigh and knee', ankle: 'the lower leg and foot',
 }
 
