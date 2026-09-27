@@ -19,6 +19,8 @@ const POSTER = '/videos/guide-intro.jpg'
 const CAPTIONS = '/videos/guide-intro.vtt'
 
 const gold = '#C9A96E'
+const teal = '#5CC8C2'
+const tealLight = '#7DD8D3'
 
 export default function GuideVideo() {
   const [available, setAvailable] = useState(false)
@@ -70,20 +72,26 @@ export default function GuideVideo() {
     const length = seconds ? (seconds < 60 ? `${seconds}-sec` : `${Math.round(seconds / 60)}-min`) : 'short'
     return (
       <div style={{ margin: '-6px 0 22px', maxWidth: 460 }}>
-        <button onClick={() => setOpen(true)}
+        {/* Teal, not gold: it stands out on the navy without being mistaken
+            for Continue, which stays the one gold button. */}
+        <button onClick={() => setOpen(true)} className="gv-offer"
           style={{
-            display: 'inline-flex', alignItems: 'center', gap: 10, minHeight: 40, padding: '4px 0',
-            border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left',
-            fontFamily: 'var(--font-body)', fontSize: 'clamp(14px, 3.5vw, 15px)', color: gold,
+            display: 'inline-flex', alignItems: 'center', gap: 10, minHeight: 44, padding: '6px 18px 6px 6px',
+            border: 'none', borderRadius: 999, background: teal, cursor: 'pointer', textAlign: 'left',
+            fontFamily: 'var(--font-body)', fontSize: 'clamp(14px, 3.5vw, 15px)', fontWeight: 600, color: '#081527',
+            boxShadow: '0 6px 18px rgba(92,200,194,0.28)',
           }}>
           <span aria-hidden="true" style={{
-            width: 30, height: 30, borderRadius: '50%', border: `1px solid ${gold}`, flex: '0 0 auto',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, paddingLeft: 2,
+            width: 32, height: 32, borderRadius: '50%', background: '#081527', color: teal, flex: '0 0 auto',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, paddingLeft: 2,
           }}>▶</span>
-          <span style={{ textDecoration: 'underline', textUnderlineOffset: 3, textDecorationColor: 'rgba(201,169,110,0.5)' }}>
-            Watch a {length} video on how this works
-          </span>
+          Watch a {length} video on how this works
         </button>
+        <style>{`
+          .gv-offer { transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
+          .gv-offer:hover { background: ${tealLight} !important; transform: translateY(-1px); box-shadow: 0 8px 22px rgba(92,200,194,0.4) !important; }
+          .gv-offer:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+        `}</style>
         {/* Read the length for the link without loading the whole video. */}
         <video src={SRC} preload="metadata" style={{ display: 'none' }}
           onLoadedMetadata={(e) => setSeconds(Math.round(e.currentTarget.duration) || null)} />
