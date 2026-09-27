@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-/* A short "how this guide works" video, offered in the top-right corner of
-   the body panel on the first step after Start.
+/* A short "how this guide works" video, offered as a quiet link under the
+   instructions on the first step after Start, just above Continue — where a
+   visitor unsure of the gestures is reading, without covering the body or
+   competing with the main button.
 
    It shows only once the video file exists (public/videos/guide-intro.mp4),
-   so the site never shows a broken player. It never plays on its own: a small
-   button opens it, it starts on that tap, and it can be closed at any time.
+   so the site never shows a broken player. It never plays on its own: the
+   link opens it, it starts on that tap, and it can be closed at any time.
    It opens large, centred over the page, so the recorded screen and the
    captions are easy to read (Escape, Close or a tap outside closes it).
-   Closing it is remembered on this device. Captions, if provided
-   (public/videos/guide-intro.vtt), are on by default. The recording script
-   is in content/guide-video-script.md. */
+   Captions, if provided (public/videos/guide-intro.vtt), are on by default.
+   The recording script is in content/guide-video-script.md. */
 
 const SRC = '/videos/guide-intro.mp4'
 const POSTER = '/videos/guide-intro.jpg'
 const CAPTIONS = '/videos/guide-intro.vtt'
-const DISMISSED = 'pc-guide-video-dismissed'
 
 const gold = '#C9A96E'
 
@@ -24,19 +24,9 @@ export default function GuideVideo() {
   const [available, setAvailable] = useState(false)
   const [hasCaptions, setHasCaptions] = useState(false)
   const [open, setOpen] = useState(false)
-  const [dismissed, setDismissed] = useState(() => {
-    try { return localStorage.getItem(DISMISSED) === '1' } catch { return false }
-  })
   const [seconds, setSeconds] = useState(null)
   const [cue, setCue] = useState('')
   const videoRef = useRef(null)
-  // On a phone the body is small: a round play button keeps its head clear.
-  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640)
-  useEffect(() => {
-    const onResize = () => setNarrow(window.innerWidth < 640)
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
 
   // Captions are shown in a solid bar under the video, not over it: the
   // track is read but not drawn by the browser.
@@ -69,58 +59,32 @@ export default function GuideVideo() {
     return () => { alive = false }
   }, [])
 
-  if (!available || dismissed) return null
+  if (!available) return null
 
   const close = () => {
     setOpen(false)
     videoRef.current?.pause()
   }
-  const dismiss = () => {
-    close()
-    setDismissed(true)
-    try { localStorage.setItem(DISMISSED, '1') } catch { /* private mode: fine */ }
-  }
-
-  const wrap = {
-    position: 'absolute', top: 10, right: 10, zIndex: 6, pointerEvents: 'auto',
-    fontFamily: 'var(--font-body)',
-  }
-
-  if (!open && narrow) {
-    return (
-      <div style={{ ...wrap, top: 6, right: 6 }}>
-        <button onClick={() => setOpen(true)} aria-label="Watch a short video on how this guide works"
-          style={{
-            width: 44, height: 44, borderRadius: '50%', border: `1px solid ${gold}`, background: 'rgba(8,21,39,0.82)',
-            color: gold, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            backdropFilter: 'blur(6px)', paddingLeft: 3,
-          }}>▶</button>
-        <span style={{ display: 'block', marginTop: 3, fontSize: 10.5, color: 'rgba(255,255,255,0.7)', textAlign: 'center' }}>Video</span>
-      </div>
-    )
-  }
 
   if (!open) {
+    const length = seconds ? (seconds < 60 ? `${seconds}-sec` : `${Math.round(seconds / 60)}-min`) : 'short'
     return (
-      <div style={{ ...wrap, display: 'flex', alignItems: 'center', gap: 4 }}>
-        <button onClick={() => setOpen(true)} aria-label="Watch a short video on how this guide works"
+      <div style={{ margin: '-6px 0 22px', maxWidth: 460 }}>
+        <button onClick={() => setOpen(true)}
           style={{
-            display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px 8px 10px', minHeight: 40,
-            borderRadius: 999, border: `1px solid ${gold}`, background: 'rgba(8,21,39,0.82)', color: '#fff',
-            fontSize: 13.5, cursor: 'pointer', backdropFilter: 'blur(6px)',
+            display: 'inline-flex', alignItems: 'center', gap: 10, minHeight: 40, padding: '4px 0',
+            border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left',
+            fontFamily: 'var(--font-body)', fontSize: 'clamp(14px, 3.5vw, 15px)', color: gold,
           }}>
           <span aria-hidden="true" style={{
-            width: 22, height: 22, borderRadius: '50%', background: gold, color: '#081527',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10,
+            width: 30, height: 30, borderRadius: '50%', border: `1px solid ${gold}`, flex: '0 0 auto',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, paddingLeft: 2,
           }}>▶</span>
-          How this guide works{seconds ? ` · ${seconds < 60 ? `${seconds} s` : `${Math.round(seconds / 60)} min`}` : ''}
+          <span style={{ textDecoration: 'underline', textUnderlineOffset: 3, textDecorationColor: 'rgba(201,169,110,0.5)' }}>
+            Watch a {length} video on how this works
+          </span>
         </button>
-        <button onClick={dismiss} aria-label="Hide the video offer"
-          style={{
-            width: 32, height: 32, borderRadius: '50%', border: 'none', background: 'rgba(8,21,39,0.6)',
-            color: 'rgba(255,255,255,0.7)', fontSize: 16, cursor: 'pointer', lineHeight: 1,
-          }}>×</button>
-        {/* Read the length for the button without loading the whole video. */}
+        {/* Read the length for the link without loading the whole video. */}
         <video src={SRC} preload="metadata" style={{ display: 'none' }}
           onLoadedMetadata={(e) => setSeconds(Math.round(e.currentTarget.duration) || null)} />
       </div>

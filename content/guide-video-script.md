@@ -1,7 +1,8 @@
 # "How this guide works" video
 
-The pain guide offers a short video in the top-right corner of the body, on
-the first step after Start (src/components/GuideVideo.jsx). The button only
+The pain guide offers a short video as a link under the instructions, just
+above Continue, on the first step after Start (src/components/GuideVideo.jsx).
+The link only
 appears once the video file is in place, so nothing shows until it is added.
 
 ## Files

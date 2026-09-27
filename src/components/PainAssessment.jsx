@@ -1187,6 +1187,9 @@ export default function PainAssessment() {
                     </li>
                   ))}
                 </ul>
+                {/* A short video on how the guide works, for anyone unsure of
+                    the gestures (shown once public/videos/guide-intro.mp4 exists). */}
+                <GuideVideo />
                 <div className="pa-actions">
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
                   <button style={ghostBtn} onClick={restart}>Back</button>
@@ -2028,9 +2031,6 @@ export default function PainAssessment() {
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
-            {/* A short video on how the guide works, top right, on the first
-                step after Start (shown once public/videos/guide-intro.mp4 exists). */}
-            {stage === 'rotate' && <GuideVideo />}
             {stage === 'rotate' && !hasTurned && (
               <div className="pa-swipe" aria-hidden="true">
                 <span className="pa-swipe__track">
