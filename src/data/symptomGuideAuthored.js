@@ -3851,6 +3851,14 @@ export const AUTHORED = [
       "seePhysioIf": [
         "These headaches are happening several times a week even after adjusting your habits",
         "The headache and neck stiffness are starting to affect your sleep or work"
+      ],
+      "clinicNotes": [
+        "CPG group: neck pain with headache (cervicogenic). Expect: positive cervical flexion-rotation test; headache reproduced with upper cervical segmental provocation; limited cervical ROM; restricted upper cervical segmental mobility; neck muscle strength, endurance and coordination deficits.",
+        "Before any cervical thrust: screen with the IFOMPT cervical framework.",
+        "Acute: active mobility exercise (B); C1-2 self-SNAG (C).",
+        "Subacute: cervical thrust manipulation and mobilisation (B); C1-2 self-SNAG (C).",
+        "Chronic: cervical thrust manipulation and mobilisation (B); thoracic thrust manipulation (B); combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B).",
+        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
     "resolved": [
@@ -7054,6 +7062,14 @@ export const AUTHORED = [
       "seePhysioIf": [
         "These headaches are happening several times a week even after adjusting your habits",
         "The headache and neck stiffness are starting to affect your sleep or work"
+      ],
+      "clinicNotes": [
+        "CPG group: neck pain with headache (cervicogenic). Expect: positive cervical flexion-rotation test; headache reproduced with upper cervical segmental provocation; limited cervical ROM; restricted upper cervical segmental mobility; neck muscle strength, endurance and coordination deficits.",
+        "Before any cervical thrust: screen with the IFOMPT cervical framework.",
+        "Acute: active mobility exercise (B); C1-2 self-SNAG (C).",
+        "Subacute: cervical thrust manipulation and mobilisation (B); C1-2 self-SNAG (C).",
+        "Chronic: cervical thrust manipulation and mobilisation (B); thoracic thrust manipulation (B); combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B).",
+        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
     "resolved": [
@@ -7240,6 +7256,14 @@ export const AUTHORED = [
         "Pain or stiffness lasts more than 1–2 weeks",
         "It keeps returning with work or sleep",
         "It limits driving, work, or exercise"
+      ],
+      "clinicNotes": [
+        "CPG group: neck pain with mobility deficits. Expect: limited cervical ROM; pain at end-range active and passive ROM; cervical and thoracic segmental restriction; pain reproduced with segmental provocation; strength and motor control deficits if subacute or chronic.",
+        "Before any cervical thrust: screen with the IFOMPT cervical framework.",
+        "Acute: thoracic thrust manipulation (B); cervical ROM exercise (B); home ROM exercise (B); supervised upper-quarter strength and endurance exercise (B); stretching (B); cervical thrust manipulation or mobilisation (C).",
+        "Subacute: supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (C); cervical thrust manipulation or mobilisation (C).",
+        "Chronic: multimodal approach (B); combined cervical/thoracic exercise plus thrust manipulation or mobilisation (B); neuromuscular exercise for the cervical and scapulothoracic regions (B); supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (B); general fitness (B); dry needling, laser, intermittent traction (B); advice to stay active (C).",
+        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
     "resolved": [
@@ -7357,6 +7381,14 @@ export const AUTHORED = [
         "Arm pain, tingling or numbness lasts beyond a few days",
         "You notice any hand weakness",
         "You want a plan — most cases settle well with guided conservative care"
+      ],
+      "clinicNotes": [
+        "CPG group: neck pain with radiating pain. Expect: positive Wainner cluster (ULTT A, Spurling's, distraction, ipsilateral rotation under 60 degrees); possible dermatomal sensory, myotomal strength or reflex deficits: record a baseline neurological exam.",
+        "Progressive weakness or signs of cord involvement: refer (see the myelopathy screen).",
+        "Acute: exercise with mobilising and stabilising elements (C); low-level laser (C); possible short-term collar use (C).",
+        "Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.",
+        "Chronic: combined exercise (stretching and strength) plus cervical and thoracic manual therapy (B); education to encourage occupational and exercise activity (B); intermittent traction (B).",
+        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
     "resolved": [
@@ -7400,6 +7432,12 @@ export const AUTHORED = [
         "qid": "N2",
         "oid": "handhead",
         "label": "Resting my hand on top of my head eases the arm pain",
+        "weight": 2
+      },
+      {
+        "qid": "N2",
+        "oid": "weak",
+        "label": "Weakness in that arm or hand, such as a weaker grip",
         "weight": 2
       },
       {
@@ -7472,6 +7510,14 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Things aren't settling down after a few weeks of trying to stay active",
         "You're also dealing with ongoing dizziness, memory fog, or strong worry about the injury"
+      ],
+      "clinicNotes": [
+        "CPG group: neck pain with movement coordination impairments (WAD). Expect: positive craniocervical flexion test; positive neck flexor endurance test; positive pressure algometry; neck strength and endurance deficits; mid-range pain worsening at end range; myofascial trigger point tenderness; sensorimotor impairment; referred pain.",
+        "Common symptoms per the CPG include dizziness and nausea, headache, concentration or memory difficulty, hypersensitivity and heightened distress: note them, and re-screen dizziness for vascular or vestibular causes.",
+        "Acute: advice to remain active (B); home ROM and postural exercise (B); minimise collar use (B); combined exercise plus manual therapy (B); exercise for ROM, strength, endurance, posture, coordination, aerobic and function (B); TENS (C); monitor progress (F).",
+        "Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.",
+        "Chronic: education on prognosis, pain management and reassurance (C); combined exercise plus manual therapy (C); cervical mobilisation plus individualised exercise with cognitive behavioural principles (C); TENS (C).",
+        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
     "resolved": [

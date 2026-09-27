@@ -134,6 +134,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('both knees WITHOUT long morning stiffness → no inflammatory question',
     !ids(['kneeL', 'kneeR']).some((x) => x.startsWith('pc-inflammatory')), ids(['kneeL', 'kneeR']))
   check('whole left leg → limb colour/swelling question', ids(['hipL', 'kneeL', 'ankleL']).includes('pc-limb:urgent'), ids(['hipL', 'kneeL', 'ankleL']))
+  check('dizzy since a head injury → see-a-doctor-today confirmation in the final check',
+    ids(['head'], { D8: ['dizzy'] }).includes('pc-trauma5d:urgent'), ids(['head'], { D8: ['dizzy'] }))
+  check('head injury without dizziness → no trauma confirmation',
+    !ids(['head'], { D8: ['screens'] }).some((x) => x.startsWith('pc-trauma5d')), ids(['head'], { D8: ['screens'] }))
   check('one knee only → no pattern questions at all', patternChecks(zonesOf([['kneeL']]), {}, 3).length === 0, ids(['kneeL']))
   check('at most 2 pattern questions are added', patternChecks(zonesOf([['chest', 'shoulderL', 'abdomen', 'lowerback']]), {}, 2).length <= 2)
   const shape = drawingShape(zonesOf([['neck', 'shoulderL', 'elbowL'], ['kneeR']]), [['neck', 'shoulderL', 'elbowL'], ['kneeR']])

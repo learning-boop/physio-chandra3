@@ -17,6 +17,13 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      through the neck injury screen (content/regions/neck.md), which runs
      whenever the neck or the base of the neck is drawn. The heart and spinal
      cord flags are left out when the neck's own versions are on the screen. -->
+<!-- Added 26 Sep 2026 at Chandra's instruction: after a car accident or a hard
+     knock to the head or neck, ongoing dizziness or any of the 5 Ds and 3 Ns
+     -> a doctor today; getting quickly worse, or new in the last few days ->
+     Emergency. However long ago, and whether or not it came on suddenly.
+     Shared by the neck, base of the neck and head: each asked once. -->
+- Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | emergency | Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain (5 Ds and 3 Ns)
+- Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | urgent, same day | Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today
 - Did the pain start suddenly as a tearing or ripping pain between your shoulder blades, or spreading into your chest? | emergency | Possible tear in the aorta (aortic dissection)
 - Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your left arm or jaw? | emergency | Heart pain is often felt between the shoulder blades
 - Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf? | emergency | Possible blood clot in the lung or a collapsed lung

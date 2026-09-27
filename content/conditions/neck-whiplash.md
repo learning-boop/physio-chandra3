@@ -35,3 +35,11 @@ This kind of neck pain usually follows a sudden jolt, twist, or strain — like 
 ## seePhysioIf
 - Things aren't settling down after a few weeks of trying to stay active
 - You're also dealing with ongoing dizziness, memory fog, or strong worry about the injury
+
+## clinicNotes
+- CPG group: neck pain with movement coordination impairments (WAD). Expect: positive craniocervical flexion test; positive neck flexor endurance test; positive pressure algometry; neck strength and endurance deficits; mid-range pain worsening at end range; myofascial trigger point tenderness; sensorimotor impairment; referred pain.
+- Common symptoms per the CPG include dizziness and nausea, headache, concentration or memory difficulty, hypersensitivity and heightened distress: note them, and re-screen dizziness for vascular or vestibular causes.
+- Acute: advice to remain active (B); home ROM and postural exercise (B); minimise collar use (B); combined exercise plus manual therapy (B); exercise for ROM, strength, endurance, posture, coordination, aerobic and function (B); TENS (C); monitor progress (F).
+- Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.
+- Chronic: education on prognosis, pain management and reassurance (C); combined exercise plus manual therapy (C); cervical mobilisation plus individualised exercise with cognitive behavioural principles (C); TENS (C).
+- Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit.

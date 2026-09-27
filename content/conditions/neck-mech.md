@@ -42,3 +42,11 @@ The most common neck pattern: joints and muscles that are irritated or guarded â
 - Pain or stiffness lasts more than 1â€“2 weeks
 - It keeps returning with work or sleep
 - It limits driving, work, or exercise
+
+## clinicNotes
+- CPG group: neck pain with mobility deficits. Expect: limited cervical ROM; pain at end-range active and passive ROM; cervical and thoracic segmental restriction; pain reproduced with segmental provocation; strength and motor control deficits if subacute or chronic.
+- Before any cervical thrust: screen with the IFOMPT cervical framework.
+- Acute: thoracic thrust manipulation (B); cervical ROM exercise (B); home ROM exercise (B); supervised upper-quarter strength and endurance exercise (B); stretching (B); cervical thrust manipulation or mobilisation (C).
+- Subacute: supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (C); cervical thrust manipulation or mobilisation (C).
+- Chronic: multimodal approach (B); combined cervical/thoracic exercise plus thrust manipulation or mobilisation (B); neuromuscular exercise for the cervical and scapulothoracic regions (B); supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (B); general fitness (B); dry needling, laser, intermittent traction (B); advice to stay active (C).
+- Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit.

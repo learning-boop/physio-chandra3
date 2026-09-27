@@ -44,6 +44,13 @@ export const EXTRA_REGIONS = {
         text: "Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs?" },
       { id: "nrf-manip", tier: "emergency", why: "New nerve or spinal cord symptoms after a neck manipulation",
         text: "Since a neck manipulation or adjustment (having your neck \"cracked\"), have you had new numbness or weakness in your arms or legs?" },
+      // The 5 Ds and 3 Ns after a crash or a head or neck knock (Chandra, 26 Sep
+      // 2026): getting quickly worse, or new in the last few days -> 911; ongoing
+      // but not worse -> a doctor today. The stroke flag above asks only sudden ones.
+      { id: "nrf-trauma5d", tier: "emergency", group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
+        text: "Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
+      { id: "nrf-trauma5d-doc", sameDay: true, tier: "urgent", group: "trauma5d-doc", why: "Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today",
+        text: "Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
       { id: "nrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
         text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
       { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
@@ -98,6 +105,8 @@ export const EXTRA_REGIONS = {
           { id: "armworse", label: "The arm pain is worse than the neck pain" },
           { id: "fingers", label: "Pins and needles or numbness in particular fingers" },
           { id: "handhead", label: "Resting my hand on top of my head eases the arm pain" },
+          // Myotomal weakness, a radiating-pain feature in the JOSPT 2017 CPG.
+          { id: "weak", label: "Weakness in that arm or hand, such as a weaker grip" },
           { id: "shoulderonly", label: "Pain stops at the top of the shoulder or upper arm" }
         ]},
       { id: "N3", text: "Does looking up, or tilting your head toward the sore side, bring on pain or tingling down the arm?",
@@ -203,6 +212,11 @@ export const EXTRA_REGIONS = {
         text: "Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf?" },
       { id: "crf-cord", tier: "emergency", group: "cord", why: "Possible spinal cord compression",
         text: "Along with the back pain, have you lost control of your bladder or bowels, or had new weakness, numbness, or unsteadiness in both legs?" },
+      // Shared with the neck and head (group "trauma5d"): asked once.
+      { id: "crf-trauma5d", tier: "emergency", group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
+        text: "Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
+      { id: "crf-trauma5d-doc", sameDay: true, tier: "urgent", group: "trauma5d-doc", why: "Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today",
+        text: "Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
       { id: "crf-pancoast", tier: "urgent", group: "pancoast", why: "Possible tumour at the top of the lung (Pancoast)",
         text: "Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, or noticed a drooping eyelid on the painful side?" },
       { id: "crf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
@@ -909,6 +923,11 @@ export const EXTRA_REGIONS = {
         text: "Do you have a fever with a stiff neck, a new rash, or are you very drowsy?" },
       { id: "hrf-headinjury", tier: "emergency", why: "Possible bleeding after a head injury",
         text: "Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse?" },
+      // Shared with the neck and base of the neck (group "trauma5d"): asked once.
+      { id: "hrf-trauma5d", tier: "emergency", group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
+        text: "Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
+      { id: "hrf-trauma5d-doc", sameDay: true, tier: "urgent", group: "trauma5d-doc", why: "Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today",
+        text: "Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
       { id: "hrf-glaucoma", tier: "emergency", why: "Possible acute glaucoma",
         text: "Is one eye painful and red, with blurred vision or halos around lights?" },
       { id: "hrf-gca", sameDay: true, tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",

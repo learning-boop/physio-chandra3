@@ -65,6 +65,24 @@ export function againstFindings(regionKey, conditionId, answers = {}) {
   return out
 }
 
+/* Stage of the condition, from the duration answer, as the JOSPT Neck Pain
+   CPG (Blanpied 2017) uses it: acute under 6 weeks, subacute 6 weeks to 3
+   months, chronic over 3 months. Bands that straddle a boundary (the jaw's
+   2 weeks to 3 months, the tailbone's) give no stage. */
+const STAGE_OF = { d2w: 'acute', d6w: 'acute', d3m: 'subacute', o3m: 'chronic', years: 'chronic' }
+const STAGE_LABEL = { acute: 'acute (under 6 weeks)', subacute: 'subacute (6 weeks to 3 months)', chronic: 'chronic (over 3 months)' }
+export const stageOf = (duration) => STAGE_OF[duration] || null
+
+/** A condition's clinic notes for this stage. A note starting "Acute:",
+    "Subacute:" or "Chronic:" is kept only for that stage (all of them when
+    the stage is unknown); other notes are always kept. */
+export function notesForStage(notes = [], stage) {
+  return notes.filter((n) => {
+    const m = n.match(/^(Acute|Subacute|Chronic):/)
+    return !m || !stage || m[1].toLowerCase() === stage
+  })
+}
+
 const AREA_ORDER = ['jaw', 'neck', 'ctj', 'upperback', 'chest', 'tlj', 'flank', 'lowerback', 'sij', 'coccyx', 'abdomen', 'shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot', 'head']
 
 /** P1 / P2 / P3 — the drawn areas, spine first, with surface and side.
@@ -215,6 +233,7 @@ export function buildClinicianSummary(ctx = {}) {
 
   // ── Hypotheses with supporting findings (question 6) ──
   push('HYPOTHESES FROM THE SUBJECTIVE SCREEN')
+  const stage = stageOf(answers.duration)
   if (!ranked.length) {
     push('  No pattern in the clinic library matched these answers well enough to name.')
   } else {
@@ -226,8 +245,13 @@ export function buildClinicianSummary(ctx = {}) {
       push(...listOf(support.map((s) => `${s.answer}  (${s.question})`), '      · '))
       const against = againstFindings(x.rk, c.id, answers)
       if (against.length) push(`      Against: ${against.join('; ')}`)
-      // Refer-first conditions carry their own clinic notes (e.g. the Cook cluster for DCM).
-      if (c.clinicNotes && c.clinicNotes.length) push(...listOf(c.clinicNotes, '      ! '))
+      // Clinic notes from the condition file: the Cook cluster for DCM, the
+      // CPG's expected findings and stage-matched interventions for the neck.
+      if (c.clinicNotes && c.clinicNotes.length) {
+        const staged = c.clinicNotes.some((n) => /^(Acute|Subacute|Chronic):/.test(n))
+        if (staged) push(`      Stage: ${stage ? STAGE_LABEL[stage] : 'not known from the duration answer'}`)
+        push(...listOf(notesForStage(c.clinicNotes, stage), '      ! '))
+      }
     })
   }
   if (review) {

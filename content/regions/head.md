@@ -17,6 +17,13 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 <!-- Flags that ask the same thing as the neck's or jaw's (thunderclap,
      stroke, meningitis, giant cell arteritis, neck artery tear) are shown
      once when those areas are drawn too. -->
+<!-- Added 26 Sep 2026 at Chandra's instruction: after a car accident or a hard
+     knock to the head or neck, ongoing dizziness or any of the 5 Ds and 3 Ns
+     -> a doctor today; getting quickly worse, or new in the last few days ->
+     Emergency. However long ago, and whether or not it came on suddenly.
+     Shared by the neck, base of the neck and head: each asked once. -->
+- Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | emergency | Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain (5 Ds and 3 Ns)
+- Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | urgent, same day | Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today
 - Did this headache come on suddenly and reach its worst within a minute, like the worst headache of your life? | emergency | Possible bleed on the brain (thunderclap headache)
 - With the headache, have you had any of these: weakness or numbness on one side, a drooping face, trouble speaking or understanding, confusion, loss of vision or double vision, or trouble walking? | emergency | Possible stroke or other brain cause
 - Do you have a fever with a stiff neck, a new rash, or are you very drowsy? | emergency | Possible meningitis
@@ -100,7 +107,7 @@ Ask only if: Where = "Always the same side, starting from the neck", "Both sides
 
 Q: Since your head injury, which of these apply? Tick all that apply.
 - Headache worse with screens or concentrating
-- Dizzy or off balance
+- Dizzy or off balance   (also confirmed in the final safety check: a "yes" there means a doctor today)
 - Light or noise bothers me more than before
 - Foggy, or trouble sleeping
 - Neck pain since the injury

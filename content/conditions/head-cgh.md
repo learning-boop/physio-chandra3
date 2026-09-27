@@ -43,3 +43,11 @@ Sometimes stiffness and tension in the very top of the neck can send pain up int
 ## seePhysioIf
 - These headaches are happening several times a week even after adjusting your habits
 - The headache and neck stiffness are starting to affect your sleep or work
+
+## clinicNotes
+- CPG group: neck pain with headache (cervicogenic). Expect: positive cervical flexion-rotation test; headache reproduced with upper cervical segmental provocation; limited cervical ROM; restricted upper cervical segmental mobility; neck muscle strength, endurance and coordination deficits.
+- Before any cervical thrust: screen with the IFOMPT cervical framework.
+- Acute: active mobility exercise (B); C1-2 self-SNAG (C).
+- Subacute: cervical thrust manipulation and mobilisation (B); C1-2 self-SNAG (C).
+- Chronic: cervical thrust manipulation and mobilisation (B); thoracic thrust manipulation (B); combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B).
+- Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit.

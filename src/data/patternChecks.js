@@ -42,6 +42,10 @@ const limbSpread = (zones, side) => {
 }
 
 const WHY = {
+  trauma5d: {
+    title: 'Please see a doctor today',
+    text: 'Dizziness that keeps coming back or does not go away after a car accident or a hard knock to the head or neck can come from the inner ear or the neck, but it can also be a sign of damage to a neck artery or the brain. A doctor should check it today, before any treatment of the neck. If it is getting quickly worse, go to an emergency department.',
+  },
   cardiac: {
     title: 'This needs emergency assessment',
     text: 'Pain in the chest, left arm or jaw that comes with sweating, nausea or breathlessness can come from the heart rather than from muscles or joints. It is treated completely differently and cannot wait.',
@@ -75,6 +79,15 @@ const WHY = {
 /* Each entry: shown only when the drawing matches, in this order.
    tier 'emergency' → 911 screen; 'urgent' → see a physician first. */
 const PATTERNS = [
+  {
+    // Dizziness reported after a head injury (the head's D8). The safety
+    // screen asked about it first (groups "trauma5d" and "trauma5d-doc");
+    // this confirms it when the answers say so, so it cannot slip through.
+    // Getting quickly worse was the emergency question on the first page.
+    id: 'pc-trauma5d', tier: 'urgent', sameDay: true, why: WHY.trauma5d,
+    text: 'Since the accident or knock, dizziness that keeps coming back or will not go away, or double vision, slurred speech, trouble swallowing, falls or blackouts, feeling sick, face numbness, or flickering eyes',
+    when: (z, a) => [].concat(a.D8 || []).includes('dizzy'),
+  },
   {
     id: 'pc-cardiac', tier: 'emergency', why: WHY.cardiac,
     text: 'Pain or tightness in the chest, left arm or jaw — especially with sweating, nausea, or shortness of breath',

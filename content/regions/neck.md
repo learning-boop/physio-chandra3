@@ -11,6 +11,12 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # (Conditions/Neck and headache, draft v0.1): questions 9 and 10, condition
 # content/conditions/neck-dcm.md, test patients 7 to 11, and the flag changes
 # marked (DCM) below.
+# 26 Sep 2026: reviewed against the JOSPT 2017 Perspectives for Practice
+# flow chart, and "Translating the Neck Pain Clinical Guidelines Into
+# Practice: An Integrated Framework Approach" (JOSPT Open 2025;3(2)): the four neck conditions already match the CPG's four groups. Added the
+# CPG's expected findings and stage-matched interventions to each
+# condition's ## clinicNotes (clinician summary only), and the arm weakness
+# option to question 2.
 ---
 
 ## red flags
@@ -25,6 +31,13 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      asked by the injury screen (I5). -->
 - Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs? | emergency | Acute spinal cord compression
 - Since a neck manipulation or adjustment (having your neck "cracked"), have you had new numbness or weakness in your arms or legs? | emergency | New nerve or spinal cord symptoms after a neck manipulation
+<!-- Added 26 Sep 2026 at Chandra's instruction: after a car accident or a hard
+     knock to the head or neck, ongoing dizziness or any of the 5 Ds and 3 Ns
+     -> a doctor today; getting quickly worse, or new in the last few days ->
+     Emergency. However long ago, and whether or not it came on suddenly.
+     Shared by the neck, base of the neck and head: each asked once. -->
+- Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | emergency | Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain (5 Ds and 3 Ns)
+- Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | urgent, same day | Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today
 - Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at? | emergency | Possible meningitis
 - Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain can be felt in the neck, jaw, and arm
 <!-- (DCM) Was: "Have your hands become clumsy (buttons, writing, dropping
@@ -111,6 +124,7 @@ Q: Which of these describe your arm symptoms? Tick all that apply.
 - The arm pain is worse than the neck pain
 - Pins and needles or numbness in particular fingers
 - Resting my hand on top of my head eases the arm pain
+- Weakness in that arm or hand, such as a weaker grip   (added 26 Sep 2026: myotomal weakness, JOSPT 2017 CPG)
 - Pain stops at the top of the shoulder or upper arm
 Ask only if: the drawing reaches the arm, or pain quality = "Pins and needles or numbness" or "Burning, shooting or electric"
 
