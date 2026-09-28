@@ -270,63 +270,6 @@ const toolBtn = (disabled) => ({
 })
 const card = { border: '1px solid rgba(201,169,110,0.25)', background: 'rgba(201,169,110,0.05)', borderRadius: 14, padding: 'clamp(16px, 4.5vw, 22px)' }
 
-/* ── Shown after the safety check clears, before the result is revealed.
-   Wording follows the CHCPBC Practice Standards: it states plainly that the
-   output is not a diagnosis, describes it as general information rather than
-   a clinical finding, and makes no guarantee about any outcome. ───────── */
-function NoticeDialog({ onOk, onBack }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      onClick={onBack}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 200, display: 'flex',
-        alignItems: 'center', justifyContent: 'center', padding: 20,
-        background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
-      }}
-    >
-      <motion.div
-        role="dialog" aria-modal="true" aria-labelledby="pa-notice-title"
-        initial={{ opacity: 0, y: 18, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.32, ease: EASE }}
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '100%', maxWidth: 480, boxSizing: 'border-box',
-          borderRadius: 20, padding: 'clamp(22px, 6vw, 28px)',
-          background: 'rgba(12,28,50,0.97)', border: '1px solid rgba(201,169,110,0.3)',
-          boxShadow: '0 24px 70px rgba(0,0,0,0.6)', maxHeight: '86svh', overflowY: 'auto',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.6" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" />
-          </svg>
-          <h3 id="pa-notice-title" style={{ ...h2, fontSize: 'clamp(21px,5.4vw,25px)', fontWeight: 400, margin: 0 }}>
-            Please note
-          </h3>
-        </div>
-
-        <p style={{ ...body, fontSize: 15.5, margin: '0 0 12px' }}>
-          This is <strong style={{ color: '#fff' }}>not a confirmed diagnosis</strong>. What
-          follows is a general suggestion based only on the answers you provided.
-        </p>
-        <p style={{ ...body, fontSize: 15.5, margin: '0 0 12px' }}>
-          It cannot examine you, review your medical history, or determine the cause of your
-          symptoms. Only an individual assessment by a physiotherapist or physician can do that.
-        </p>
-        <p style={{ ...body, fontSize: 15.5, margin: '0 0 22px' }}>
-          Every person is different, and no particular result or outcome is implied or guaranteed.
-        </p>
-
-        <div className="pa-actions" style={{ maxWidth: 'none', marginTop: 0 }}>
-          <button className="pa-primary" style={goldBtn} onClick={onOk} autoFocus>OK</button>
-          <button style={ghostBtn} onClick={onBack}>Back</button>
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
-
 /* Multi-select needs a visible "chosen" marker beyond the colour change. */
 function Tick({ on }) {
   if (!on) return null
@@ -363,9 +306,10 @@ function Fade({ children, k }) {
 
 /* ═════════════════════════════════════════════════════════════════════
    Guided journey:
-   landing → rotate (step 1) → draw (step 2) → area (only when the marks
-   cross more than one area) → intro notice → questions (A–E) → review →
-   safety check → urgent care | results
+   landing → draw (turn and mark on one screen) → area (only when the
+   marks cross more than one area) → intro notice → questions (A–E) →
+   review → safety check → urgent care | results (not-a-diagnosis notice
+   at the top)
 
    Wording throughout follows the CHCPBC Practice Standards: the tool is
    described accurately as general information rather than a diagnosis,
@@ -398,7 +342,6 @@ export default function PainAssessment() {
   const [history, setHistory] = useState({ canUndo: false, canRedo: false, lines: 0 })
   const [fromReview, setFromReview] = useState(false)
   // Gates the result screen behind the "not a diagnosis" notice.
-  const [showNotice, setShowNotice] = useState(false)
   // When the marks cross more than one area, the person chooses which area
   // the questions focus on; each area has its own clinician-authored set.
   const [focusKey, setFocusKey] = useState(null)
@@ -443,6 +386,8 @@ export default function PainAssessment() {
   // model, so they can follow pain that radiates from front to back.
   // Turn is selected when the step opens; the person picks Draw to mark.
   const [drawMode, setDrawMode] = useState(false)
+  // The review screen shows the answers folded: most people check nothing.
+  const [showAnswers, setShowAnswers] = useState(false)
   const drawOn = stage === 'draw' && drawMode
 
   /* ── Every crossed area counts, in at most 8 screens ──────────────────
@@ -676,10 +621,10 @@ export default function PainAssessment() {
      bar. The drawing steps keep their position, so the body stays in view. */
   const panelRef = useRef(null)
   const firstScreen = useRef(true)
-  const screenKey = `${stage}|${qIndex}|${injuryQ}|${showNotice}`
+  const screenKey = `${stage}|${qIndex}|${injuryQ}`
   useEffect(() => {
     if (firstScreen.current) { firstScreen.current = false; return }
-    if (stage === 'landing' || stage === 'rotate' || stage === 'draw') return
+    if (stage === 'landing' || stage === 'draw') return
     const el = panelRef.current
     if (!el || typeof window === 'undefined') return
     const nav = document.querySelector('.nav-bar')
@@ -713,7 +658,7 @@ export default function PainAssessment() {
   const continueAfterDoctor = () => {
     if (flaggedAt === 'physician') { if (injuryApplies) startInjury(); else startQuestions() }
     else if (flaggedAt === 'injury') startQuestions()
-    else setShowNotice(true)
+    else setStage('ok')
   }
   // Cautions never withhold booking — they shape the first assessment, and
   // they are listed on the result screen and in Chandra's summary.
@@ -903,8 +848,8 @@ export default function PainAssessment() {
     setInjuryQ(injuryFlow(flowZ, {}, answers.age).next)
     setStage('injury')
   }
-  const continueInjury = () => {
-    const next = { ...answers, [injuryQ]: injuryDraft }
+  const continueInjury = (draft = injuryDraft) => {
+    const next = { ...answers, [injuryQ]: draft }
     const r = injuryFlow(flowZ, next, answers.age)
     setAnswers(next)
     setInjuryPath((p) => (p.includes(injuryQ) ? p : [...p, injuryQ]))
@@ -928,11 +873,21 @@ export default function PainAssessment() {
     if (list.includes(oid)) return list.filter((x) => x !== oid)
     return oid === 'none' ? ['none'] : [...list.filter((x) => x !== 'none'), oid]
   })
+  // A one-answer question moves on by itself once the tap has shown, so it
+  // costs one tap instead of two. Tick-all questions still wait for Continue.
+  const advanceTimer = useRef(null)
+  useEffect(() => () => clearTimeout(advanceTimer.current), [])
+  const tapInjury = (q, oid) => {
+    pickInjury(q, oid)
+    if (q.multi) return
+    clearTimeout(advanceTimer.current)
+    advanceTimer.current = setTimeout(() => continueInjury(oid), 280)
+  }
 
   const restart = () => {
     setFlaggedAt(null)
     setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
-    setClearSignal((n) => n + 1); setFromReview(false); setShowNotice(false); setDrawMode(false); setReview(null)
+    setClearSignal((n) => n + 1); setFromReview(false); setDrawMode(false); setShowAnswers(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined)
   }
 
@@ -1130,7 +1085,7 @@ export default function PainAssessment() {
                       What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
                     </h1>
                     <div className="pa-actions" style={{ margin: '0 auto' }}>
-                      <button className="pa-primary" style={goldBtn} onClick={() => setStage('rotate')}>start</button>
+                      <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>start</button>
                     </div>
                     {/* How long it takes, set apart in a soft gold panel. */}
                     <p style={{
@@ -1138,7 +1093,7 @@ export default function PainAssessment() {
                       margin: '20px auto 0', maxWidth: 520, padding: '14px 20px', borderRadius: 14,
                       background: 'rgba(201,169,110,0.22)', border: '1px solid rgba(201,169,110,0.55)',
                     }}>
-                      It takes about <span style={{ color: GOLD_LIGHT }}>2 to 5 minutes</span>.
+                      It takes about <span style={{ color: GOLD_LIGHT }}>5 minutes</span>.
                       Careful answers give the most useful results.
                     </p>
                     <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '20px auto 0', maxWidth: 520 }}>
@@ -1153,57 +1108,46 @@ export default function PainAssessment() {
               </Fade>
             )}
 
-            {/* STEP 1 — TURN THE BODY */}
-            {stage === 'rotate' && (
-              <Fade k="rotate">
-                <span style={label}>Step 1 of 2 · Turn the Body</span>
+            {/* MARK YOUR PAIN — turning the body and drawing share one screen:
+                Turn / Draw on the body switch what a drag does. (Turning was
+                a step of its own, which most people just pressed through.) */}
+            {stage === 'draw' && (
+              <Fade k="draw">
+                <span style={label}>Mark Your Pain</span>
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 8px' }}>
-                  Turn the body <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>if you need to</em>
+                  Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
                 </h2>
                 <p className="pa-lede">
-                  Only if the sore side isn't facing you — otherwise just press Continue.
+                  Tap <b>Draw</b> on the body, then trace where it hurts. If the sore side is
+                  facing away, tap <b>Turn</b> first.
                 </p>
                 {/* One arrow, one action, one result. The verb follows the input
                     the visitor actually has: "swipe" means nothing on a mouse,
-                    "scroll" means nothing on a phone. */}
-                <ul className="pa-gestures">
-                  {(isPhone
-                    ? [
-                        ['\u2194', 'Swipe left or right', 'spin the body around'],
-                        ['\u2195', 'Swipe up or down', 'tilt it (see the soles of the feet)'],
-                        ['\u21c4', 'Two fingers', 'slide the picture'],
-                        ['\u2295', 'Pinch', 'zoom in and out'],
-                      ]
-                    : [
-                        ['\u2194', 'Drag left or right', 'spin the body around'],
-                        ['\u2195', 'Drag up or down', 'tilt it (see the soles of the feet)'],
-                        ['\u21c4', 'Drag beside it', 'slide the picture'],
-                        ['\u2295', 'Scroll on it', 'zoom in and out'],
-                      ]
-                  ).map(([arrow, action, result]) => (
-                    <li key={action}>
-                      <span className="pa-gestures__badge" aria-hidden="true">{arrow}</span>
-                      <span><b>{action}</b> — {result}</span>
-                    </li>
-                  ))}
-                </ul>
+                    "scroll" means nothing on a phone. Shown until the first mark. */}
+                {!zones.length && (
+                  <ul className="pa-gestures">
+                    {(isPhone
+                      ? [
+                          ['↔', 'Turn, then swipe', 'spin the body around'],
+                          ['↕', 'Turn, then swipe up or down', 'see the soles of the feet'],
+                          ['⊕', 'Pinch', 'zoom in and out'],
+                        ]
+                      : [
+                          ['↔', 'Turn, then drag', 'spin the body around'],
+                          ['↕', 'Turn, then drag up or down', 'see the soles of the feet'],
+                          ['⊕', 'Scroll on it', 'zoom in and out'],
+                        ]
+                    ).map(([arrow, action, result]) => (
+                      <li key={action}>
+                        <span className="pa-gestures__badge" aria-hidden="true">{arrow}</span>
+                        <span><b>{action}</b> — {result}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 {/* A short video on how the guide works, for anyone unsure of
                     the gestures (shown once public/videos/guide-intro.mp4 exists). */}
-                <GuideVideo />
-                <div className="pa-actions">
-                  <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
-                  <button style={ghostBtn} onClick={restart}>Back</button>
-                </div>
-              </Fade>
-            )}
-
-            {/* STEP 2 — DRAW ALL PAINFUL AREAS */}
-            {stage === 'draw' && (
-              <Fade k="draw">
-                <span style={label}>Step 2 of 2 · Mark Your Pain</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 22px' }}>
-                  Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
-                </h2>
+                {!zones.length && <GuideVideo />}
 
                 {/* Turn / Draw and Undo / Redo sit on the body itself (see the
                     model panel); only the marked areas and Clear All stay here. */}
@@ -1223,7 +1167,7 @@ export default function PainAssessment() {
                     disabled={!zones.length}
                     onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}
                   >Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage('rotate')}>Back</button>
+                  <button style={ghostBtn} onClick={restart}>Back</button>
                 </div>
 
                 {!zones.length && (
@@ -1428,7 +1372,7 @@ export default function PainAssessment() {
               <Fade k="review">
                 <span style={label}>Review &amp; Confirm</span>
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '12px 0 18px' }}>
-                  Please check your <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>answers</em>
+                  Anything to <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>add or change?</em>
                 </h2>
                 <div style={{ ...card, marginBottom: 12, maxWidth: 520 }}>
                   <span style={{ ...label, fontSize: 11.5 }}>Pain areas</span>
@@ -1449,7 +1393,14 @@ export default function PainAssessment() {
                     </div>
                   )}
                 </div>
-                {flatQuestions.map((q, i) => (
+                {/* Folded by default: a list of 20-odd answers is a wall to
+                    scroll past. Opening it shows each with its Change link. */}
+                <button onClick={() => setShowAnswers((v) => !v)} aria-expanded={showAnswers}
+                  style={{ ...card, width: '100%', maxWidth: 520, boxSizing: 'border-box', marginBottom: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#fff', fontSize: 15.5, fontFamily: 'var(--font-body)', textAlign: 'left' }}>
+                  <span>{showAnswers ? 'Hide your answers' : `Check or change your ${flatQuestions.length} answers`}</span>
+                  <span aria-hidden="true" style={{ color: GOLD, fontSize: 18, lineHeight: 1 }}>{showAnswers ? '−' : '+'}</span>
+                </button>
+                {showAnswers && flatQuestions.map((q, i) => (
                   <div key={q.id} style={{ ...card, marginBottom: 10, maxWidth: 520, display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div style={{ minWidth: 0 }}>
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.area ? `${q.area} — ` : ''}{q.text}</p>
@@ -1616,7 +1567,7 @@ export default function PainAssessment() {
                   <button className="pa-primary" style={goldBtn}
                     onClick={() => {
                       if (flaggedIn(finalChecks) || otherFlagged) routeUrgent('safety')
-                      else setShowNotice(true)
+                      else setStage('ok')
                     }}>
                     {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length ? 'Continue' : 'None Apply — Continue'}
                   </button>
@@ -1640,7 +1591,7 @@ export default function PainAssessment() {
                   <h2 style={{ ...h2, fontSize: 'clamp(23px,5.4vw,32px)', margin: '12px 0 18px', maxWidth: 520 }}>{q.text}</h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
                     {q.options.map((o, i) => (
-                      <button key={o.id} style={chip(picked(o.id))} onClick={() => pickInjury(q, o.id)}>
+                      <button key={o.id} style={chip(picked(o.id))} onClick={() => tapInjury(q, o.id)}>
                         <span style={letterStyle(picked(o.id))}>{LETTERS[i] || '·'}</span>
                         <span>{o.label}</span>
                       </button>
@@ -1648,7 +1599,7 @@ export default function PainAssessment() {
                   </div>
                   <div className="pa-actions" style={{ marginTop: 20 }}>
                     <button className="pa-primary" style={{ ...goldBtn, opacity: ready ? 1 : 0.45, cursor: ready ? 'pointer' : 'not-allowed' }}
-                      disabled={!ready} onClick={continueInjury}>Continue</button>
+                      disabled={!ready} onClick={() => continueInjury()}>Continue</button>
                     <button style={ghostBtn} onClick={backInjury}>Back</button>
                   </div>
                 </Fade>
@@ -1779,6 +1730,22 @@ export default function PainAssessment() {
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 18px' }}>
                   What your answers <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>can be associated with</em>
                 </h2>
+
+                {/* Not-a-diagnosis notice, first on the results (CHCPBC Practice
+                    Standards: not a diagnosis, general information, no outcome
+                    guaranteed). It was a pop-up that had to be dismissed first. */}
+                <div style={{ ...card, maxWidth: 520, marginBottom: 14, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.6" aria-hidden="true" style={{ flex: 'none', marginTop: 2 }}>
+                    <circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" />
+                  </svg>
+                  <p style={{ ...body, fontSize: 14.5, margin: 0 }}>
+                    <strong style={{ color: '#fff' }}>This is not a confirmed diagnosis.</strong> It is a
+                    general suggestion based only on your answers. It cannot examine you, review your
+                    medical history, or determine the cause of your symptoms; only an individual
+                    assessment by a physiotherapist or physician can do that. Every person is different,
+                    and no particular result or outcome is implied or guaranteed.
+                  </p>
+                </div>
 
                 {/* The see-a-doctor advice from the safety questions stays at
                     the top of the results. */}
@@ -2014,15 +1981,6 @@ export default function PainAssessment() {
             )}
           </AnimatePresence>
 
-          {/* Not-a-diagnosis notice — must be acknowledged before the result. */}
-          <AnimatePresence>
-            {showNotice && (
-              <NoticeDialog
-                onOk={() => { setShowNotice(false); setStage('ok') }}
-                onBack={() => setShowNotice(false)}
-              />
-            )}
-          </AnimatePresence>
         </div>
 
         {/* ── RIGHT: the 3D model (shrinks after confirm, marks persist) ──
@@ -2031,7 +1989,7 @@ export default function PainAssessment() {
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
-            {stage === 'rotate' && !hasTurned && (
+            {stage === 'draw' && !drawMode && !hasTurned && !zones.length && (
               <div className="pa-swipe" aria-hidden="true">
                 <span className="pa-swipe__track">
                   <span className="pa-swipe__chev">‹</span>
@@ -2069,7 +2027,7 @@ export default function PainAssessment() {
             <Body3D
               onSelectionChange={setZones}
               onLinesChange={setLines}
-              showGestureHint={!(stage === 'rotate' && !hasTurned)}
+              showGestureHint={!(stage === 'draw' && !drawMode && !hasTurned && !zones.length)}
               controlled
               drawOn={drawOn}
               clearSignal={clearSignal}
