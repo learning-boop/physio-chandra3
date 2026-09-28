@@ -234,7 +234,7 @@ const chip = (sel) => ({
   padding: '16px 18px', borderRadius: 14, cursor: 'pointer', fontSize: 16.5, lineHeight: 1.5,
   minHeight: 56, width: '100%', boxSizing: 'border-box',
   border: `1px solid ${sel ? GOLD : 'rgba(255,255,255,0.22)'}`,
-  background: sel ? 'rgba(201,169,110,0.18)' : 'rgba(255,255,255,0.04)',
+  background: sel ? 'rgba(201,169,110,0.22)' : 'rgba(8,21,39,0.55)',
   color: sel ? GOLD_LIGHT : 'rgba(255,255,255,0.85)', transition: 'all 0.15s', textAlign: 'left',
   display: 'flex', gap: 13, alignItems: 'baseline',
 })
@@ -273,6 +273,40 @@ const toolBtn = (disabled) => ({
   display: 'inline-flex', alignItems: 'center', gap: 8,
 })
 const card = { border: '1px solid rgba(201,169,110,0.25)', background: 'rgba(201,169,110,0.05)', borderRadius: 14, padding: 'clamp(16px, 4.5vw, 22px)' }
+
+/* ── Colour roles (Chandra, 28 Sep 2026: highlight questions and headlines)
+   Chosen for people in pain: calm, trusted, never alarming.
+   - Headline band: warm gold, the brand colour, for "where am I" (the
+     page title and progress). Warmth and reassurance.
+   - Question panel: soft teal, the colour most linked with health and
+     calm, for "what to answer". Chosen answers stay gold, which stands
+     out clearly on it.
+   - The emergency check's band is a soft coral (important, not alarming)
+     and the doctor check's a soft amber; strong red stays for the 911 result.
+   All text keeps well over 4.5:1 contrast on the navy. */
+const TEAL = '#5CC8C2'
+const BAND_TONES = {
+  gold: ['rgba(201,169,110,0.26)', 'rgba(201,169,110,0.07)', 'rgba(201,169,110,0.42)', GOLD],
+  coral: ['rgba(240,128,108,0.20)', 'rgba(240,128,108,0.05)', 'rgba(240,128,108,0.42)', '#f3a08e'],
+  amber: ['rgba(245,180,85,0.19)', 'rgba(245,180,85,0.05)', 'rgba(245,180,85,0.40)', '#f5c170'],
+}
+const headBand = (tone = 'gold') => {
+  const [from, to, line, accent] = BAND_TONES[tone]
+  return {
+    background: `linear-gradient(135deg, ${from}, ${to})`, border: `1px solid ${line}`,
+    borderLeft: `4px solid ${accent}`, borderRadius: 18, boxSizing: 'border-box',
+    padding: 'clamp(16px, 4.5vw, 22px) clamp(16px, 4.5vw, 24px)', margin: '0 0 18px', maxWidth: 560,
+  }
+}
+const bandLabel = (tone = 'gold') => ({ ...label, color: BAND_TONES[tone][3] })
+const qPanel = {
+  background: 'rgba(92,200,194,0.10)', border: '1px solid rgba(92,200,194,0.34)',
+  borderRadius: 18, boxSizing: 'border-box', maxWidth: 560,
+  padding: 'clamp(16px, 4.5vw, 22px) clamp(14px, 4vw, 22px)', margin: '0 0 14px',
+}
+// A question inside a panel: the teal marker ties it to its answers.
+const qText = { fontSize: 17, color: '#fff', margin: '0 0 12px', lineHeight: 1.4, fontWeight: 500, display: 'flex', gap: 10 }
+const qMark = { width: 4, borderRadius: 2, background: TEAL, flex: 'none' }
 
 /* Multi-select needs a visible "chosen" marker beyond the colour change. */
 function Tick({ on }) {
@@ -1196,11 +1230,13 @@ export default function PainAssessment() {
                 before drawing on the next page. */}
             {stage === 'guide' && (
               <Fade k="guide">
-                <span style={label}>How It Works</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 14px' }}>
-                  Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
-                </h2>
-                <ul className="pa-gestures">
+                <div style={headBand()}>
+                  <span style={label}>How It Works</span>
+                  <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 0' }}>
+                    Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
+                  </h2>
+                </div>
+                <ul className="pa-gestures" style={qPanel}>
                   {[
                     ['1', 'Turn the body', `so the sore side faces you. Try it now: ${isPhone ? 'swipe' : 'drag'} the body.`],
                     ['2', 'Draw where it hurts', 'tap Draw, then trace every painful area, including where the pain spreads.'],
@@ -1249,14 +1285,16 @@ export default function PainAssessment() {
                 does; how to move the body was explained on the page before. */}
             {stage === 'draw' && (
               <Fade k="draw">
-                <span style={label}>Mark Your Pain</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 8px' }}>
-                  Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
-                </h2>
-                <p className="pa-lede">
-                  Tap <b>Draw</b> on the body, then trace every painful area. Tap <b>Turn</b> to
-                  spin the body.
-                </p>
+                <div style={headBand()}>
+                  <span style={label}>Mark Your Pain</span>
+                  <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 8px' }}>
+                    Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
+                  </h2>
+                  <p className="pa-lede" style={{ margin: 0 }}>
+                    Tap <b>Draw</b> on the body, then trace every painful area. Tap <b>Turn</b> to
+                    spin the body.
+                  </p>
+                </div>
 
                 {/* Turn / Draw and Undo / Redo sit on the body itself (see the
                     model panel); only the marked areas and Clear All stay here. */}
@@ -1308,10 +1346,12 @@ export default function PainAssessment() {
                 so asking beats silently guessing which area the person meant. */}
             {stage === 'area' && (
               <Fade k="area">
+                <div style={headBand()}>
                 <span style={label}>One More Step</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '12px 0 10px' }}>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '12px 0 0' }}>
                   Which area should the questions <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>focus on?</em>
                 </h2>
+                </div>
                 <p style={{ ...body, margin: '0 0 20px', maxWidth: 460 }}>
                   Your marks are in more than one separate area, and each area has its
                   own set of questions. Choose the one that bothers you most — you can run
@@ -1371,9 +1411,19 @@ export default function PainAssessment() {
                       it with the conditions a physiotherapist commonly treats.
                     </p>
                   )}
+                  {/* Headline band: where they are. A grouped screen's title
+                      ("How your pain behaves") sits in it too. */}
+                  <div style={headBand()}>
                   <span style={label}>{q.area ? `${q.area} · ` : ''}Question {step} of {Math.max(plannedScreens, step)}</span>
-                  <div style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, margin: '12px 0 20px', maxWidth: 520 }}>
-                    <motion.div animate={{ width: `${(step / Math.max(plannedScreens, step)) * 100}%` }} style={{ height: 3, background: GOLD, borderRadius: 2 }} />
+                  <div style={{ height: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 2, margin: '12px 0 0', maxWidth: 520 }}>
+                    <motion.div animate={{ width: `${(step / Math.max(plannedScreens, step)) * 100}%` }} style={{ height: 4, background: GOLD, borderRadius: 2 }} />
+                  </div>
+                  {q.group && (
+                    <>
+                      <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '16px 0 6px' }}>{q.text}</h2>
+                      <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.65)', margin: 0 }}>{q.hint || 'Tap an answer for each.'}</p>
+                    </>
+                  )}
                   </div>
                   {step === 1 && !fromReview && multiPattern && zones.length > 1 && (referral.length > 0 && keys.length === 1 ? (
                     <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', margin: '0 0 12px', maxWidth: 520 }}>
@@ -1389,22 +1439,28 @@ export default function PainAssessment() {
                       })()}, the areas you marked.
                     </p>
                   ) : null)}
-                  <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '0 0 8px', maxWidth: 520 }}>{q.text}</h2>
-                  {!q.textarea && (
-                    <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.55)', margin: '0 0 18px' }}>
-                      {q.group
-                        ? (q.hint || 'Tap an answer for each.')
-                        : q.multi
-                          ? 'Select all that apply — or continue if none do.'
-                          : 'Choose one.'}
-                    </p>
+                  {/* Question panel (teal): the question and its answers. A
+                      grouped screen gets one panel per question instead. */}
+                  <div style={q.group ? { maxWidth: 560 } : qPanel}>
+                  {!q.group && (
+                    <>
+                      <h2 style={{ ...h2, fontSize: 'clamp(24px,5.6vw,34px)', margin: '0 0 8px', display: 'flex', gap: 12 }}>
+                        <span aria-hidden="true" style={{ ...qMark, width: 5 }} />
+                        <span>{q.text}</span>
+                      </h2>
+                      {!q.textarea && (
+                        <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.62)', margin: '0 0 16px' }}>
+                          {q.multi ? 'Select all that apply — or continue if none do.' : 'Choose one.'}
+                        </p>
+                      )}
+                    </>
                   )}
 
                   {q.group ? (
-                    <div style={{ maxWidth: 520 }}>
+                    <div>
                       {groupOf(q).map((sub, si, subs) => (
-                        <div key={sub.id} style={{ marginBottom: si === subs.length - 1 ? 0 : 22 }}>
-                          <div style={{ fontSize: 17, color: '#fff', margin: '0 0 10px', lineHeight: 1.4 }}>{sub.text}</div>
+                        <div key={sub.id} style={{ ...qPanel, marginBottom: si === subs.length - 1 ? 0 : 12 }}>
+                          <div style={qText}><span aria-hidden="true" style={qMark} /><span>{sub.text}</span></div>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                             {(sub.id === 'pattern24' && restWorseKnown ? sub.options.filter((o) => o.id !== 'restWorse') : sub.options).map((opt) => {
                               const sel = isPicked(sub, opt.id)
@@ -1415,8 +1471,8 @@ export default function PainAssessment() {
                                     fontSize: 15, lineHeight: 1.35, textAlign: 'left', flex: '0 1 auto',
                                     fontFamily: 'var(--font-body)', transition: 'all 0.15s',
                                     border: `1px solid ${sel ? GOLD : 'rgba(255,255,255,0.22)'}`,
-                                    background: sel ? 'rgba(201,169,110,0.18)' : 'rgba(255,255,255,0.04)',
-                                    color: sel ? GOLD_LIGHT : 'rgba(255,255,255,0.85)',
+                                    background: sel ? 'rgba(201,169,110,0.22)' : 'rgba(8,21,39,0.55)',
+                                    color: sel ? GOLD_LIGHT : 'rgba(255,255,255,0.88)',
                                   }}>{sel && sub.multi ? '✓ ' : ''}{opt.label}</button>
                               )
                             })}
@@ -1478,6 +1534,7 @@ export default function PainAssessment() {
                       })()}
                     </div>
                   )}
+                  </div>
 
                   <div className="pa-actions" style={{ marginTop: 22 }}>
                     <button
@@ -1495,10 +1552,12 @@ export default function PainAssessment() {
             {/* REVIEW & CONFIRM */}
             {stage === 'review' && (
               <Fade k="review">
+                <div style={headBand()}>
                 <span style={label}>Review &amp; Confirm</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '12px 0 18px' }}>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '12px 0 0' }}>
                   Anything to <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>add or change?</em>
                 </h2>
+                </div>
                 <div style={{ ...card, marginBottom: 12, maxWidth: 520 }}>
                   <span style={{ ...label, fontSize: 11.5 }}>Pain areas</span>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 10 }}>
@@ -1584,19 +1643,21 @@ export default function PainAssessment() {
               }
               return (
                 <Fade k={stage}>
-                  <span style={label}>{partLabel(emergency ? 'emergency' : 'physician')}</span>
-                  <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 14px', maxWidth: 520 }}>
+                  <div style={headBand(emergency ? 'coral' : 'amber')}>
+                  <span style={bandLabel(emergency ? 'coral' : 'amber')}>{partLabel(emergency ? 'emergency' : 'physician')}</span>
+                  <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 10px', maxWidth: 520 }}>
                     {emergency
                       ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
                       : <>Next, symptoms that may need a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>doctor's attention</em></>}
                   </h2>
-                  <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '0 0 20px', maxWidth: 520 }}>
+                  <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
                     {emergency
                       ? 'These questions check for anything that needs urgent medical care right now. Most people answer no to all of them. If any applies to you now, select it and we will tell you what to do.'
                       : 'These can point to a problem your doctor should check before physiotherapy begins. You can still book with Chandra. Select any that apply to you now.'}
                   </p>
+                  </div>
                   {list.length > 0 ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
+                    <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
                       {list.map((f, i) => {
                         const sel = flags.includes(f.id)
                         return (
@@ -1626,19 +1687,21 @@ export default function PainAssessment() {
                 "other" box, and the cautions that shape the first appointment. */}
             {stage === 'safety' && (
               <Fade k="safety">
-                <span style={label}>Before Your Results</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 14px', maxWidth: 520 }}>
+                <div style={headBand(finalChecks.length ? 'amber' : 'gold')}>
+                <span style={bandLabel(finalChecks.length ? 'amber' : 'gold')}>Before Your Results</span>
+                <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 10px', maxWidth: 520 }}>
                   {finalChecks.length
                     ? <>One more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety check</em></>
                     : <>Anything else <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>we should know?</em></>}
                 </h2>
-                <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '0 0 20px', maxWidth: 520 }}>
+                <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
                   {finalChecks.length
                     ? 'Your answers raised a question a doctor may need to look at first. Please tick it if it applies.'
                     : 'If another symptom worries you, add it here. The items below help plan your first appointment.'}
                 </p>
+                </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
+                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
                   {finalChecks.map((f, i) => {
                     const sel = flags.includes(f.id)
                     return (
@@ -1678,10 +1741,11 @@ export default function PainAssessment() {
                 {/* Cautions: they change how the first assessment is done,
                     they do not stop it. Kept visually separate so the screen
                     never reads as "more red flags". */}
-                <p style={{ ...label, display: 'block', margin: '26px 0 0', fontSize: 11.5 }}>
-                  Also worth telling us — these do not stop physiotherapy
+                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}>
+                  <span aria-hidden="true" style={qMark} />
+                  <span>Also worth telling us — these do not stop physiotherapy</span>
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520, marginTop: 12 }}>
                   {CAUTION_CHECKS.map((f, i) => {
                     const sel = flags.includes(f.id)
                     return (
@@ -1718,9 +1782,14 @@ export default function PainAssessment() {
               const ready = q.multi ? Array.isArray(injuryDraft) && injuryDraft.length > 0 : injuryDraft !== undefined
               return (
                 <Fade k={`injury-${injuryQ}`}>
-                  <span style={label}>{partLabel('physician')} · {screen.title}</span>
-                  <h2 style={{ ...h2, fontSize: 'clamp(23px,5.4vw,32px)', margin: '12px 0 18px', maxWidth: 520 }}>{q.text}</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
+                  <div style={headBand('amber')}>
+                    <span style={bandLabel('amber')}>{partLabel('physician')} · {screen.title}</span>
+                  </div>
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                  <h2 style={{ ...h2, fontSize: 'clamp(23px,5.4vw,32px)', margin: '0 0 8px', display: 'flex', gap: 12 }}>
+                    <span aria-hidden="true" style={{ ...qMark, width: 5 }} />
+                    <span>{q.text}</span>
+                  </h2>
                     {q.options.map((o, i) => (
                       <button key={o.id} style={chip(picked(o.id))} onClick={() => tapInjury(q, o.id)}>
                         <span style={letterStyle(picked(o.id))}>{LETTERS[i] || '·'}</span>
@@ -1857,10 +1926,12 @@ export default function PainAssessment() {
             {/* NON-URGENT RESULT */}
             {stage === 'ok' && (
               <Fade k="ok">
+                <div style={headBand()}>
                 <span style={label}>Your Results · General Education</span>
-                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 18px' }}>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 0' }}>
                   What your answers <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>can be associated with</em>
                 </h2>
+                </div>
 
                 {/* Not-a-diagnosis notice, first on the results (CHCPBC Practice
                     Standards: not a diagnosis, general information, no outcome
