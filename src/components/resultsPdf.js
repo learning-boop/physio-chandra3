@@ -27,7 +27,7 @@ const AMBER = [180, 110, 0]
 
 /**
  * @param {object} d
- *  code, dateText, images { front, back: { src, width, height }, views: [{ src, width, height, label }] } | null,
+ *  code, dateText, images { views: [{ src, width, height, label }] } | null,
  *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
  *  conditions [{name, blurb}], noMatch string | null, painType string | null,
  *  cautions [string], behaviour [string], answers [{question, answer}], notes string
@@ -105,18 +105,16 @@ export function buildResultsPdf(d) {
     }
   }
 
-  // What the person drew, each from the side they drew it on (the sole seen
-  // from below, not the body standing), then the whole body for context.
+  // What the person drew: each body part on its own, from the side they drew
+  // it on (the sole seen from below, not the body standing). No whole-body
+  // view (Chandra, 28 Sep 2026): a mark on the sole or the side does not show
+  // on it, so it looked as if nothing had been drawn.
   const views = (d.images && d.images.views) || []
   if (views.length) {
     // Two rows of close-ups fit on the first page when they are 200pt tall.
     const boxH = views.length > 2 ? 200 : colW
     heading('Where you drew', NAVY, boxH + 40)
     grid(views.map((v) => ({ img: v, label: v.label })), boxH)
-  }
-  if (d.images && d.images.front && d.images.back) {
-    if (views.length) heading('Whole body', NAVY, 220 + 40)
-    grid([{ img: d.images.front, label: 'FRONT' }, { img: d.images.back, label: 'BACK' }], views.length ? 220 : 300)
   }
 
   if (d.areas.length) { heading('Areas you marked'); text(d.areas.join(', ')) }
@@ -151,10 +149,26 @@ export function buildResultsPdf(d) {
   text('This summary is not a confirmed diagnosis. It is based only on your answers and cannot examine you or review your medical history. Every person is different, and no particular result or outcome is implied or guaranteed. If your symptoms change or worsen, please seek advice from a health professional. In an emergency, call 911.',
     { size: 9.5 })
 
-  // Footer on every page
+  // Footer and a very light diagonal "Physio Chandra" watermark on every
+  // page, drawn over the content (pictures included) at 5% opacity.
   const n = doc.getNumberOfPages()
+  const MARK = 'Physio Chandra'
+  const MARK_SIZE = 78
+  const ANGLE = 35   // degrees, rising left to right
+  const rad = (ANGLE * Math.PI) / 180
   for (let i = 1; i <= n; i++) {
     doc.setPage(i)
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(MARK_SIZE); doc.setTextColor(...NAVY)
+    const tw = doc.getTextWidth(MARK)
+    // jsPDF turns text about its start point: step back half its length
+    // along the slant, and half a cap height across it, to centre it.
+    const cap = MARK_SIZE * 0.36
+    const x = W / 2 - (tw / 2) * Math.cos(rad) + cap * Math.sin(rad)
+    const yy = H / 2 + (tw / 2) * Math.sin(rad) + cap * Math.cos(rad)
+    doc.saveGraphicsState()
+    doc.setGState(new doc.GState({ opacity: 0.05 }))
+    doc.text(MARK, x, yy, { angle: ANGLE })
+    doc.restoreGraphicsState()
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...MUTED)
     doc.text(clean(`Physio Chandra - physiochandra.ca - Reference ${d.code}`), M, H - 28)
     doc.text(`Page ${i} of ${n}`, W - M, H - 28, { align: 'right' })

@@ -400,47 +400,13 @@ function Recentre({ controlsRef, signal }) {
 }
 
 // What the results page can ask of the figure, through Body3D's `apiRef`:
-//   capture() → close-ups of what was drawn, each from the side it was drawn
-//               on (`views`, with a caption), and front and back pictures of
-//               the whole body with the drawn
-//               lines ({ src: JPEG data URL, width, height } each), for the PDF;
+//   capture() → { views }: a close-up of each body part drawn on, from the
+//               side it was drawn on ({ src: JPEG data URL, width, height,
+//               label } each), for the PDF;
 //   strokes() → each drawn line as [fy, lz, lx] points in body proportions
 //               (the same frame classify() uses), for the anonymous copy.
 // The view the person left the body in is put back straight afterwards.
 const MAX_STROKE_POINTS = 150
-// Copies what was just rendered, cropped to the figure, onto white, at most
-// SHOT_MAX_H tall, as a JPEG — a full-size transparent PNG made the PDF ~6MB.
-const SHOT_MAX_H = 900
-function grabFigure(src) {
-  const c = document.createElement('canvas')
-  c.width = src.width; c.height = src.height
-  const cx = c.getContext('2d', { willReadFrequently: true })
-  cx.drawImage(src, 0, 0)
-  const { data } = cx.getImageData(0, 0, c.width, c.height)
-  let x0 = c.width, y0 = c.height, x1 = -1, y1 = -1
-  for (let y = 0; y < c.height; y++) {
-    for (let x = 0; x < c.width; x++) {
-      if (data[(y * c.width + x) * 4 + 3] > 24) {
-        if (x < x0) x0 = x
-        if (x > x1) x1 = x
-        if (y < y0) y0 = y
-        if (y > y1) y1 = y
-      }
-    }
-  }
-  if (x1 < 0) { x0 = 0; y0 = 0; x1 = c.width - 1; y1 = c.height - 1 }
-  const bw = x1 - x0 + 1, bh = y1 - y0 + 1
-  const k = Math.min(1, SHOT_MAX_H / bh)
-  const pad = Math.round(12 * k)
-  const out = document.createElement('canvas')
-  out.width = Math.round(bw * k) + pad * 2
-  out.height = Math.round(bh * k) + pad * 2
-  const ox = out.getContext('2d')
-  ox.fillStyle = '#ffffff'
-  ox.fillRect(0, 0, out.width, out.height)
-  ox.drawImage(c, x0, y0, bw, bh, pad, pad, Math.round(bw * k), Math.round(bh * k))
-  return { src: out.toDataURL('image/jpeg', 0.86), width: out.width, height: out.height }
-}
 // A close-up is square: the middle of the (usually tall) canvas.
 const CLOSE_MAX = 720
 function grabSquare(src) {
@@ -455,48 +421,68 @@ function grabSquare(src) {
   return { src: out.toDataURL('image/jpeg', 0.86), width: out.width, height: out.height }
 }
 
-/* The views that show what the person drew, as they drew it. Every drawn
-   point carries the normal of the skin it was drawn on (`n`, facing the
-   viewer at the time), so their average is the side the line was drawn from:
-   below for the sole, behind for the calf. Lines close together and drawn
-   from much the same side share one view; at most MAX_VIEWS, biggest first. */
-const MAX_VIEWS = 4
+/* The views that show what the person drew, as they drew it: one per body
+   part, so a line from the thigh into the knee gives a thigh picture and a
+   knee picture. Every drawn point carries the normal of the skin it was
+   drawn on (`n`, facing the viewer at the time), which gives the side each
+   part was drawn from: below for the sole, behind for the calf. A part drawn
+   from two sides (front and back of the knee) gets a picture of each side.
+   Brief grazes of a part are left out. Head to feet, at most MAX_VIEWS. */
+const MAX_VIEWS = 8
+const MIN_PART_POINTS = 4
+const sideOf = (n) => {
+  if (!n) return 'front'
+  if (n.y < -0.7) return 'below'
+  if (n.y > 0.7) return 'above'
+  const fx = n.x * FRONT_SIGN
+  return fx > 0.5 ? 'front' : fx < -0.5 ? 'back' : 'side'
+}
+const SEEN = { below: 'seen from below', above: 'seen from above', front: 'seen from the front', back: 'seen from behind', side: 'seen from the side' }
 function drawnViews(paths) {
-  const groups = []
+  const parts = new Map()          // zone id → { total, sides: Map(side → points) }
   for (const pts of paths) {
-    if (pts.length < 2) continue
-    const c = new THREE.Vector3(), n = new THREE.Vector3()
-    pts.forEach((p) => { c.add(p); if (p.n) n.add(p.n) })
-    c.divideScalar(pts.length)
-    const g = groups.find((x) => x.c.distanceTo(c) < 1.4 && x.n.clone().normalize().dot(n.clone().normalize()) > 0.5)
-    if (g) {
-      g.pts.push(...pts)
-      g.c.multiplyScalar(g.count).add(c.multiplyScalar(pts.length)).divideScalar(g.count + pts.length)
-      g.n.add(n); g.count += pts.length
-    } else {
-      groups.push({ pts: [...pts], c, n, count: pts.length })
+    for (const p of pts) {
+      const id = classify(p.x, p.y, p.z)
+      if (!id) continue
+      if (!parts.has(id)) parts.set(id, { total: 0, sides: new Map() })
+      const part = parts.get(id)
+      const s = sideOf(p.n)
+      if (!part.sides.has(s)) part.sides.set(s, [])
+      part.sides.get(s).push(p)
+      part.total++
     }
   }
-  return groups.sort((a, b) => b.count - a.count).slice(0, MAX_VIEWS).map((g) => {
+  const all = [...parts.entries()]
+  const biggest = Math.max(0, ...all.map(([, v]) => v.total))
+  const groups = []
+  all.forEach(([id, part]) => {
+    if (part.total < MIN_PART_POINTS && part.total < biggest) return
+    const sides = [...part.sides.entries()]
+    const most = Math.max(...sides.map(([, pts]) => pts.length))
+    // A side counts when it holds a real share of the part's marks; the
+    // edge of a line rolling round the limb does not.
+    sides.filter(([, pts]) => pts.length === most || pts.length >= Math.max(MIN_PART_POINTS, part.total * 0.25))
+      .forEach(([side, pts]) => groups.push({ id, side, pts }))
+  })
+  return groups.map((g) => {
+    const c = new THREE.Vector3(), n = new THREE.Vector3()
+    g.pts.forEach((p) => { c.add(p); if (p.n) n.add(p.n) })
+    c.divideScalar(g.pts.length)
+    return { ...g, c, n }
+  }).sort((a, b) => b.c.y - a.c.y).slice(0, MAX_VIEWS).map((g) => {
     let dir = g.n.clone()
-    // A line that wraps around (its normals cancel out): look from outside,
+    // Normals that cancel out (a line wrapping round): look from outside,
     // away from the body's vertical axis.
-    if (dir.lengthSq() < 1e-6 * g.count * g.count) dir.set(g.c.x, 0, g.c.z)
+    if (dir.lengthSq() < 1e-6 * g.pts.length * g.pts.length) dir.set(g.c.x, 0, g.c.z)
     if (dir.lengthSq() < 1e-9) dir.set(FRONT_SIGN, 0, 0)
     dir.normalize()
     const radius = Math.max(...g.pts.map((p) => p.distanceTo(g.c)))
-    // Which way the person was looking, in words, for the caption.
-    const fx = dir.x * FRONT_SIGN
-    const seen = dir.y < -0.7 ? 'seen from below' : dir.y > 0.7 ? 'seen from above'
-      : fx < -0.5 ? 'seen from behind' : fx > 0.5 ? 'seen from the front' : 'seen from the side'
-    const areas = []
-    g.pts.forEach((p) => { const id = classify(p.x, p.y, p.z); if (id && !areas.includes(id)) areas.push(id) })
-    return { centre: g.c.clone(), dir, radius, label: `${areas.slice(0, 3).map((id) => ZONE_LABELS[id]).join(', ') || 'Your drawing'} · ${seen}` }
+    return { centre: g.c.clone(), dir, radius, label: `${ZONE_LABELS[g.id] || 'Your drawing'} · ${SEEN[g.side]}` }
   })
 }
 
 function Snapshot({ apiRef, pathsRef }) {
-  const { gl, scene, camera, size } = useThree()
+  const { gl, scene, camera } = useThree()
   useEffect(() => {
     if (!apiRef) return undefined
     apiRef.current = {
@@ -504,18 +490,7 @@ function Snapshot({ apiRef, pathsRef }) {
         const pos = camera.position.clone()
         const quat = camera.quaternion.clone()
         const t = Math.tan((camera.fov * Math.PI) / 180 / 2)
-        const aspect = size.width / Math.max(1, size.height)
-        const dist = Math.max((BODY_HALF_H * 1.04) / t, (BODY_HALF_W * 1.04) / (t * aspect))
-        const target = new THREE.Vector3(0, BODY_CENTRE, 0)
         const up = camera.up.clone()
-        const shots = []
-        for (const facing of [1, -1]) {
-          camera.position.set(dist * FRONT_SIGN * facing, BODY_CENTRE, 0)
-          camera.lookAt(target)
-          camera.updateMatrixWorld()
-          gl.render(scene, camera)
-          shots.push(grabFigure(gl.domElement))
-        }
         // Close-ups of the drawing, each from the side it was drawn on and
         // framed to the lines with room around them (at least a hand's width
         // of body, so the area is recognisable). Looking straight up or down,
@@ -536,7 +511,7 @@ function Snapshot({ apiRef, pathsRef }) {
         camera.quaternion.copy(quat)
         camera.updateMatrixWorld()
         gl.render(scene, camera)
-        return { front: shots[0], back: shots[1], views }
+        return { views }
       },
       strokes() {
         const H = BODY_METRICS.h
@@ -551,7 +526,7 @@ function Snapshot({ apiRef, pathsRef }) {
       },
     }
     return () => { apiRef.current = null }
-  }, [apiRef, pathsRef, gl, scene, camera, size])
+  }, [apiRef, pathsRef, gl, scene, camera])
   return null
 }
 
