@@ -310,7 +310,7 @@ function Fade({ children, k }) {
 
 /* ═════════════════════════════════════════════════════════════════════
    Guided journey:
-   landing → draw (turn and mark on one screen) → area (only when the
+   landing → guide (how it works; try turning the body) → draw → area (only when the
    marks cross more than one area) → intro notice → questions (A–E) →
    review → safety check → urgent care | results (not-a-diagnosis notice
    at the top)
@@ -393,6 +393,13 @@ export default function PainAssessment() {
   // The review screen shows the answers folded: most people check nothing.
   const [showAnswers, setShowAnswers] = useState(false)
   const drawOn = stage === 'draw' && drawMode
+  // "Drag to turn" on the body until it has been turned: on the How it works
+  // page, and on the Draw page while Turn is selected and nothing is marked.
+  // The picture is moved back to the middle as the Draw page opens (a slide on
+  // the How it works page kept the body under the Turn / Draw buttons).
+  const [recentre, setRecentre] = useState(0)
+  useEffect(() => { if (stage === 'draw') setRecentre((n) => n + 1) }, [stage])
+  const swipeHint = !hasTurned && (stage === 'guide' || (stage === 'draw' && !drawMode && !zones.length))
 
   /* ── Every crossed area counts, in at most 8 screens ──────────────────
      A line along one chain (shoulder → elbow, low back → knee) draws on EACH
@@ -662,7 +669,7 @@ export default function PainAssessment() {
   const screenKey = `${stage}|${qIndex}|${injuryQ}`
   useEffect(() => {
     if (firstScreen.current) { firstScreen.current = false; return }
-    if (stage === 'landing' || stage === 'draw') return
+    if (stage === 'landing' || stage === 'guide' || stage === 'draw') return
     const el = panelRef.current
     if (!el || typeof window === 'undefined') return
     const nav = document.querySelector('.nav-bar')
@@ -976,14 +983,17 @@ export default function PainAssessment() {
           }
           .pa-ob.on { background: ${GOLD}; color: #081527; font-weight: 700; border-color: ${GOLD}; }
           .pa-ob:disabled { opacity: 0.35; cursor: not-allowed; }
-          .pa-ob-turn { top: 9%;  right: calc(50% + 64px); }
-          .pa-ob-draw { top: 9%;  left:  calc(50% + 64px); }
-          .pa-ob-undo { bottom: 9%; right: calc(50% + 70px); }
-          .pa-ob-redo { bottom: 9%; left:  calc(50% + 70px); }
+          /* Turn and Draw sit at head height, out above the hands rather than
+             tight beside the head (Chandra, 28 Sep 2026: too close). The
+             offset grows with the body area (20% of its width), from 88px on
+             a phone to 130px on a wide screen. Undo and Redo line up under
+             them where there is room; on a phone they keep 70px. */
+          .pa-ob-turn { top: 9%;  right: calc(50% + clamp(88px, 20%, 130px)); }
+          .pa-ob-draw { top: 9%;  left:  calc(50% + clamp(88px, 20%, 130px)); }
+          .pa-ob-undo { bottom: 9%; right: calc(50% + clamp(70px, 20%, 130px)); }
+          .pa-ob-redo { bottom: 9%; left:  calc(50% + clamp(70px, 20%, 130px)); }
           @media (max-width: 380px) {
             .pa-ob { padding: 9px 14px; font-size: 12.5px; }
-            .pa-ob-turn, .pa-ob-undo { right: calc(50% + 52px); }
-            .pa-ob-draw, .pa-ob-redo { left: calc(50% + 52px); }
           }
 
           .pa-grid {
@@ -1125,7 +1135,7 @@ export default function PainAssessment() {
                       What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
                     </h1>
                     <div className="pa-actions" style={{ margin: '0 auto' }}>
-                      <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>start</button>
+                      <button className="pa-primary" style={goldBtn} onClick={() => setStage('guide')}>start</button>
                     </div>
                     {/* How long it takes, set apart in a soft gold panel. */}
                     <p style={{
@@ -1148,9 +1158,63 @@ export default function PainAssessment() {
               </Fade>
             )}
 
-            {/* MARK YOUR PAIN — turning the body and drawing share one screen:
-                Turn / Draw on the body switch what a drag does. (Turning was
-                a step of its own, which most people just pressed through.) */}
+            {/* HOW IT WORKS — a page of its own after Start (Chandra, 28 Sep
+                2026): the three steps, how to move the body, and the video.
+                The body is shown, so the person can try turning it here
+                before drawing on the next page. */}
+            {stage === 'guide' && (
+              <Fade k="guide">
+                <span style={label}>How It Works</span>
+                <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 14px' }}>
+                  Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
+                </h2>
+                <ul className="pa-gestures">
+                  {[
+                    ['1', 'Turn the body', `so the sore side faces you. Try it now: ${isPhone ? 'swipe' : 'drag'} the body.`],
+                    ['2', 'Draw where it hurts', 'tap Draw, then trace every painful area, including where the pain spreads.'],
+                    ['3', 'Answer a few questions', 'safety questions first, then a few about your pain. About 5 minutes.'],
+                  ].map(([n, action, result]) => (
+                    <li key={n}>
+                      <span className="pa-gestures__badge" aria-hidden="true">{n}</span>
+                      <span><b>{action}</b> — {result}</span>
+                    </li>
+                  ))}
+                </ul>
+                {/* One arrow, one action, one result. The verb follows the input
+                    the visitor actually has: "swipe" means nothing on a mouse,
+                    "scroll" means nothing on a phone. */}
+                <span style={{ ...label, display: 'block', fontSize: 11.5, margin: '4px 0 10px' }}>Moving the body</span>
+                <ul className="pa-gestures">
+                  {(isPhone
+                    ? [
+                        ['↔', 'Swipe left or right', 'spin the body around'],
+                        ['↕', 'Swipe up or down', 'see the soles of the feet'],
+                        ['⊕', 'Pinch', 'zoom in and out'],
+                      ]
+                    : [
+                        ['↔', 'Drag left or right', 'spin the body around'],
+                        ['↕', 'Drag up or down', 'see the soles of the feet'],
+                        ['⊕', 'Scroll on it', 'zoom in and out'],
+                      ]
+                  ).map(([arrow, action, result]) => (
+                    <li key={action}>
+                      <span className="pa-gestures__badge" aria-hidden="true">{arrow}</span>
+                      <span><b>{action}</b> — {result}</span>
+                    </li>
+                  ))}
+                </ul>
+                {/* A short video on how the guide works, for anyone unsure of
+                    the gestures (shown once public/videos/guide-intro.mp4 exists). */}
+                <GuideVideo />
+                <div className="pa-actions">
+                  <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
+                  <button style={ghostBtn} onClick={restart}>Back</button>
+                </div>
+              </Fade>
+            )}
+
+            {/* MARK YOUR PAIN — Turn / Draw on the body switch what a drag
+                does; how to move the body was explained on the page before. */}
             {stage === 'draw' && (
               <Fade k="draw">
                 <span style={label}>Mark Your Pain</span>
@@ -1158,36 +1222,9 @@ export default function PainAssessment() {
                   Draw on every <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>painful area</em>
                 </h2>
                 <p className="pa-lede">
-                  Tap <b>Draw</b> on the body, then trace where it hurts. If the sore side is
-                  facing away, tap <b>Turn</b> first.
+                  Tap <b>Draw</b> on the body, then trace every painful area. Tap <b>Turn</b> to
+                  spin the body.
                 </p>
-                {/* One arrow, one action, one result. The verb follows the input
-                    the visitor actually has: "swipe" means nothing on a mouse,
-                    "scroll" means nothing on a phone. Shown until the first mark. */}
-                {!zones.length && (
-                  <ul className="pa-gestures">
-                    {(isPhone
-                      ? [
-                          ['↔', 'Turn, then swipe', 'spin the body around'],
-                          ['↕', 'Turn, then swipe up or down', 'see the soles of the feet'],
-                          ['⊕', 'Pinch', 'zoom in and out'],
-                        ]
-                      : [
-                          ['↔', 'Turn, then drag', 'spin the body around'],
-                          ['↕', 'Turn, then drag up or down', 'see the soles of the feet'],
-                          ['⊕', 'Scroll on it', 'zoom in and out'],
-                        ]
-                    ).map(([arrow, action, result]) => (
-                      <li key={action}>
-                        <span className="pa-gestures__badge" aria-hidden="true">{arrow}</span>
-                        <span><b>{action}</b> — {result}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {/* A short video on how the guide works, for anyone unsure of
-                    the gestures (shown once public/videos/guide-intro.mp4 exists). */}
-                {!zones.length && <GuideVideo />}
 
                 {/* Turn / Draw and Undo / Redo sit on the body itself (see the
                     model panel); only the marked areas and Clear All stay here. */}
@@ -1207,7 +1244,7 @@ export default function PainAssessment() {
                     disabled={!zones.length}
                     onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}
                   >Continue</button>
-                  <button style={ghostBtn} onClick={restart}>Back</button>
+                  <button style={ghostBtn} onClick={() => setStage('guide')}>Back</button>
                 </div>
 
                 {!zones.length && (
@@ -2029,7 +2066,7 @@ export default function PainAssessment() {
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
-            {stage === 'draw' && !drawMode && !hasTurned && !zones.length && (
+            {swipeHint && (
               <div className="pa-swipe" aria-hidden="true">
                 <span className="pa-swipe__track">
                   <span className="pa-swipe__chev">‹</span>
@@ -2067,12 +2104,13 @@ export default function PainAssessment() {
             <Body3D
               onSelectionChange={setZones}
               onLinesChange={setLines}
-              showGestureHint={!(stage === 'draw' && !drawMode && !hasTurned && !zones.length)}
+              showGestureHint={!swipeHint}
               controlled
               drawOn={drawOn}
               clearSignal={clearSignal}
               undoSignal={undoSignal}
               redoSignal={redoSignal}
+              recentreSignal={recentre}
               onHistoryChange={setHistory}
             />
           </div>

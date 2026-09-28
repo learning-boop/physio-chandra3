@@ -373,6 +373,24 @@ function FitCamera({ controlsRef, interactedRef }) {
   return null
 }
 
+// Moves the picture back to the middle of the frame when `signal` changes,
+// keeping the person's turn, tilt and zoom: the target and the camera shift
+// together. The guided assessment sends it as the Draw page opens, so a
+// picture slid sideways on the page before does not sit under the Turn /
+// Draw buttons.
+function Recentre({ controlsRef, signal }) {
+  const { camera } = useThree()
+  useEffect(() => {
+    const c = controlsRef.current
+    if (!signal || !c) return
+    const d = new THREE.Vector3(CAM_TARGET[0], BODY_CENTRE, CAM_TARGET[2]).sub(c.target)
+    c.target.add(d)
+    camera.position.add(d)
+    c.update()
+  }, [signal, camera, controlsRef])
+  return null
+}
+
 // Invisible capsule roughly matching the body — used for cheap "did the user
 // touch the body?" tests and as a drawing fallback surface.
 function CollisionHull() {
@@ -828,7 +846,7 @@ function PainLine({ points }) {
   )
 }
 
-function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete }) {
+function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete, recentreSignal }) {
   return (
     <>
       <ambientLight intensity={0.9} />
@@ -848,6 +866,7 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
       </Environment>
 
       <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />
+      <Recentre controlsRef={controlsRef} signal={recentreSignal} />
       <InteractionGuard controlsRef={controlsRef} highlightRef={highlightRef} interactedRef={interactedRef} />
       <Suspense fallback={<Loader />}><BodyFigure /></Suspense>
       <CollisionHull />
@@ -929,6 +948,8 @@ export default function Body3D({
   // guidance in the same corner — two hints in one slot is worse than none.
   showGestureHint = true,
   clearSignal = 0, undoSignal = 0, redoSignal = 0, onHistoryChange,
+  // Bump to move the picture back to the middle, keeping the turn and zoom.
+  recentreSignal = 0,
 }) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
   // Touch devices get a one-line gesture hint over the canvas: one finger
@@ -1189,6 +1210,7 @@ export default function Body3D({
             paths={paths} livePath={livePath}
             controlsRef={controlsRef} interactedRef={interactedRef}
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
+            recentreSignal={recentreSignal}
           />
         </Canvas>
         </CanvasErrorBoundary>
