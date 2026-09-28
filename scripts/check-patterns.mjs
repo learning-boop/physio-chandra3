@@ -142,6 +142,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('dizziness ticked on the neck → heart (911) and ear/worsening (doctor today) checks',
     ids(['neck'], { N9: ['dizzy'] }).includes('pc-dizzy-heart:emergency') && ids(['neck'], { N9: ['dizzy'] }).includes('pc-dizzy-doctor:urgent'),
     ids(['neck'], { N9: ['dizzy'] }))
+  check('headaches reported on the neck → headache red flags in the final check (same day)',
+    ids(['neck'], { N4: ['onesided'] }).includes('pc-headache:urgent'), ids(['neck'], { N4: ['onesided'] }))
+  check('no headaches → no headache check', !ids(['neck'], { N4: ['none'] }).some((x) => x.startsWith('pc-headache')), ids(['neck'], { N4: ['none'] }))
+  check('head drawn too → its own safety pages ask these, so no headache check',
+    !patternChecks(zonesOf([['neck', 'head']]), { N4: ['onesided'] }, 3).some((c) => c.id === 'pc-headache'))
   check('neck without dizziness → no dizziness checks',
     !ids(['neck'], { N9: ['none'] }).some((x) => x.startsWith('pc-dizzy')), ids(['neck'], { N9: ['none'] }))
   check('one knee only → no pattern questions at all', patternChecks(zonesOf([['kneeL']]), {}, 3).length === 0, ids(['kneeL']))

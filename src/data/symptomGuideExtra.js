@@ -56,9 +56,9 @@ export const EXTRA_REGIONS = {
       // after a manipulation, jerk or knock + the 5 Ds and 3 Ns getting worse,
       // or new in the last few days, after an accident (Chandra, 26 and 28 Sep).
       { id: "nrf-after", tier: "emergency", group: ["cadsevere", "trauma5d", "manip"], why: "After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain",
-        text: "Since a neck manipulation (\"cracking\"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick, numbness around the lips, or eyes that flicker or jump?" },
+        text: "Since a neck manipulation (\"cracking\"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick or vomiting, a severe or worsening headache, confusion, drowsiness or memory loss, numbness around the lips, or eyes that flicker or jump?" },
       { id: "nrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
-        text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
+        text: "Do you have a fever with a stiff neck, a bad headache, a rash, or feel very unwell, or find bright light hard to look at?" },
       { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
         text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
       { id: "nrf-kehr", tier: "emergency", group: "kehr", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
@@ -72,8 +72,11 @@ export const EXTRA_REGIONS = {
       // The slow pattern is asked in N9/N10 and scored (neck-dcm.md).
       { id: "nrf-myelo", sameDay: true, tier: "urgent", group: ["myelo", "neuro"], why: "Nerve or spinal cord pressure that is getting worse quickly needs a doctor today",
         text: "Over the last few days or weeks, have you become quickly weaker, number or clumsier in an arm, hand or leg, or has your walking become quickly more unsteady?" },
-      { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability",
-        text: "Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
+      // Rheumatoid or other inflammatory arthritis added from the "Neck Pain
+      // Mobility Deficits" document (28 Sep 2026): see the doctor before
+      // hands-on neck treatment (upper neck ligaments can be weakened).
+      { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability: a doctor should check before hands-on neck treatment",
+        text: "Do you have rheumatoid arthritis or another inflammatory arthritis, do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
       // A3.3: shared with the shoulder and base of the neck (group "organ").
       { id: "nrf-tip", tier: "urgent", group: ["organ", "tip", "gallbladder"], drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder",
         text: "Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position?" }
@@ -134,13 +137,23 @@ export const EXTRA_REGIONS = {
           { id: "movement", label: "Brought on by neck movement or holding one position" },
           { id: "band", label: "Both sides, like a tight band or pressure" },
           { id: "throb", label: "Throbbing, with feeling sick or finding light hard to take" },
+          // Cervicogenic headache document Q5 and Q7 (28 Sep 2026). The label
+          // matches the head's question, so neck-related headache reads the same.
+          { id: "press", label: "Pressing at the base of my skull brings on my usual headache" },
+          { id: "meds", label: "I take pain relief for headaches on 10 or more days a month", special: "medOveruse" },
           { id: "none", label: "I do not get headaches" }
         ]},
       { id: "N5", text: "Since your accident or injury, which of these apply? Tick all that apply.",
         askIf: ({ ra }) => ra.onset === "car" || ra.onset === "fall",
         options: [
-          { id: "tired", label: "My neck gets tired holding my head up (reading, screens)" },
-          { id: "spread", label: "The pain has spread to my shoulders, upper back, or arms" },
+          // From the "Whiplash WAD" document (draft v0.1, 28 Sep 2026): its Q2,
+          // Q4, Q5, Q6 and Q7. Q6 (nerve signs) and Q7 (stress after the
+          // injury) do not add to the score; they show a card each.
+          { id: "within2d", label: "The pain or stiffness started within 2 days of the injury" },
+          { id: "tired", label: "My neck feels weak, tired or hard to hold steady (holding my head up, end of the day)" },
+          { id: "spread", label: "Headaches at the back of my head, or pain across my shoulders or upper back" },
+          { id: "nerve", label: "Pins and needles, numbness or weakness in my arms or hands", special: "wadNerve" },
+          { id: "stress", label: "I find it hard to stop thinking about the accident, or I feel on edge or easily startled", special: "wadSupport" },
           { id: "concentrate", label: "Trouble concentrating or sleeping since it happened" },
           { id: "sensitive", label: "My neck is very sensitive to touch or cold" },
           { id: "settling", label: "It is settling a bit more each week" }
@@ -2463,6 +2476,11 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "A small pit or a tender lump at the top of the buttock crease can be a <strong>pilonidal sinus</strong>, a skin problem that can become infected. It is treated by a doctor rather than physiotherapy, so please have it checked, sooner if it becomes red, swollen or starts to leak." },
   neckSource: { title: "This may be coming from your neck",
     body: "Pain around the jaw that does not change when you chew, talk or open wide, especially with neck pain, is often felt in the jaw but comes from the <strong>upper neck</strong> or the neck muscles. Consider running the <strong>Neck</strong> guide too. Your assessment will check both." },
+  // Whiplash (the neck's N5), from the "Whiplash WAD" document.
+  wadNerve: { title: "Nerve symptoms after an injury: see your doctor as well",
+    body: "Pins and needles, numbness or weakness in the arms or hands after a whiplash-type injury can mean a nerve in the neck is involved. Please see your family doctor so the nerves can be checked. Physiotherapy can help alongside. If the numbness or weakness is new in the last few days, or getting worse, go to an emergency department." },
+  wadSupport: { title: "Extra support is available",
+    body: "Finding it hard to stop thinking about an accident, or feeling on edge, is a common reaction. It can make pain harder to shake off, and it is worth mentioning at your assessment: your physiotherapist can work with your doctor or a psychologist so you get the right support alongside your recovery." },
   // Cervicogenic dizziness look-alikes (the neck's N11).
   bppv: { title: "Short spins when you roll over: often the inner ear",
     body: "Short bursts of spinning, under a minute, when you roll over in bed, lie down, or look up are typical of <strong>BPPV</strong>: tiny crystals in the inner ear that have come loose. It is common, and a physiotherapist can check for it and treat it with simple head movements. It can happen alongside neck-related dizziness, so your assessment will check both." },

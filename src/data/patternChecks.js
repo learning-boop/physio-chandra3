@@ -54,6 +54,10 @@ const WHY = {
     title: 'Please see a doctor today',
     text: 'Sudden hearing loss in one ear, or dizziness that is constant and getting worse with vomiting or new headaches, needs a doctor to check the inner ear and the brain before the neck is treated. Sudden hearing loss is treated best when it is seen early.',
   },
+  headacheDoctor: {
+    title: 'Please see a doctor today',
+    text: 'A new headache after 50 with a tender scalp, jaw pain when chewing or changes in vision can be inflammation of the arteries (giant cell arteritis), which needs same-day treatment to protect eyesight. A headache that wakes you with vomiting, is worse lying down, coughing or straining, or is getting steadily worse over weeks, or a new headache in pregnancy or after giving birth, should also be checked by a doctor before the neck is treated.',
+  },
   cardiac: {
     title: 'This needs emergency assessment',
     text: 'Pain in the chest, left arm or jaw that comes with sweating, nausea or breathlessness can come from the heart rather than from muscles or joints. It is treated completely differently and cannot wait.',
@@ -108,6 +112,14 @@ const PATTERNS = [
     id: 'pc-dizzy-doctor', tier: 'urgent', sameDay: true, why: WHY.dizzyDoctor,
     text: 'Sudden hearing loss in one ear, or dizziness that is constant and getting worse, with vomiting or new headaches',
     when: (z, a) => [].concat(a.N9 || []).includes('dizzy'),
+  },
+  // Headaches reported on the neck's N4, from the "Cervicogenic Headache"
+  // document's red flags (SNNOOP10, 28 Sep 2026). The head area asks these on
+  // its own safety pages, so this is only for a neck drawn without the head.
+  {
+    id: 'pc-headache', tier: 'urgent', sameDay: true, why: WHY.headacheDoctor,
+    text: 'With the headaches: a new headache after age 50 with a tender scalp, jaw pain when chewing or vision changes; a headache that wakes you with vomiting, is worse lying down, coughing or straining, or is getting steadily worse over weeks; or a new headache in pregnancy or after giving birth',
+    when: (z, a) => !has(z, 'head') && [].concat(a.N4 || []).some((id) => id !== 'none'),
   },
   {
     id: 'pc-cardiac', tier: 'emergency', why: WHY.cardiac,

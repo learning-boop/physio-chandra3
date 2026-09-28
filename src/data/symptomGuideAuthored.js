@@ -3836,29 +3836,35 @@ export const AUTHORED = [
     "cond": {
       "id": "cgh",
       "name": "Neck-related headache",
-      "clin": "Cervicogenic headache (ICHD-3; JOSPT 2017 neck pain with headache)",
-      "blurb": "Sometimes stiffness and tension in the very top of the neck can send pain up into the head, usually on one side, and it tends to flare with certain neck positions or movements.",
+      "clin": "Cervicogenic headache (ICHD-3 11.2.1) and upper cervical (C0-C3) pain; JOSPT 2017 neck pain with headache",
+      "blurb": "A cervicogenic headache is a headache that comes from the neck. The nerves of the top three joints of the neck share a \"junction box\" in the brainstem with nerves from the head, so a sore or stiff upper neck can be felt as pain in the head, often spreading from the back of the skull towards the forehead or eye on one side. It is common and not dangerous. Because the source is in the neck, treating the neck, with hands-on care and specific exercises, may help reduce how often and how strongly the headaches come.",
       "noticed": [
-        "A headache on one side that seems to start from the neck and travel upward",
-        "Headache gets worse with certain neck movements or after holding your head in one position too long",
-        "Stiffness or tenderness felt at the top of the neck, near the base of the skull"
+        "A dull, steady ache (not usually throbbing) that starts at the back and spreads forward on one side, always the same side",
+        "Neck stiffness, often harder to turn to one side",
+        "Brought on by holding one position (desk, reading, phone, driving), certain neck movements, or sleeping awkwardly",
+        "Pressing on a sore spot at the top of the neck can bring on the usual headache",
+        "Mild light sensitivity or nausea can occur, but less than with migraine"
       ],
       "homeCare": [
-        "Take regular breaks from looking down or holding your head still for long stretches",
-        "Do gentle neck stretching and mobility exercises on a regular basis",
-        "Try light self-massage or a warm pack on tight muscles at the base of the skull"
+        "Break up screen and reading time every 30 to 45 minutes; bring screens to eye level",
+        "Gentle neck movements and heat on the upper neck can ease a building headache",
+        "Keep a simple headache diary: when, how long, and what you were doing",
+        "If you are taking pain relief on most days, talk to your doctor"
       ],
       "seePhysioIf": [
-        "These headaches are happening several times a week even after adjusting your habits",
-        "The headache and neck stiffness are starting to affect your sleep or work"
+        "Your headaches seem to start in your neck, or come with neck stiffness",
+        "They keep returning despite rest or changes to your routine",
+        "You would like a home exercise for the top of the neck to use when a headache starts; no doctor's referral is needed"
       ],
       "clinicNotes": [
-        "CPG group: neck pain with headache (cervicogenic). Expect: positive cervical flexion-rotation test; headache reproduced with upper cervical segmental provocation; limited cervical ROM; restricted upper cervical segmental mobility; neck muscle strength, endurance and coordination deficits.",
-        "Before any cervical thrust: screen with the IFOMPT cervical framework.",
+        "Physio-led after the headache red-flag screen. See the doctor as well if headache medication is used on 10 or more days a month, or if the diagnosis is uncertain.",
+        "ICHD-3 11.2.1 criteria; Sjaastad features. Headache diary (frequency, intensity, duration).",
+        "Cervical flexion-rotation test (positive if under 32 degrees or more than 10 degrees side-to-side difference; C1-C2); upper cervical PAIVMs C0-C3 reproducing familiar headache; craniocervical flexion test.",
+        "IFOMPT cervical framework screening before any upper cervical manual therapy. Public text names mobilisation and SNAGs only; manipulation (ranked highest for pain, slightly higher risk at the upper neck; Xu and Ling 2025) is left to clinical judgement after screening.",
         "Acute: active mobility exercise (B); C1-2 self-SNAG (C).",
         "Subacute: cervical thrust manipulation and mobilisation (B); C1-2 self-SNAG (C).",
         "Chronic: cervical thrust manipulation and mobilisation (B); thoracic thrust manipulation (B); combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B).",
-        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
+        "Sources: ICHD-3 2018; JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Xu and Ling, Front Neurol 2025; Jull et al. 2002; Hall et al. 2007 (self-SNAG); Hall and Robinson 2004 (flexion-rotation test); SNNOOP10 (Do et al. 2019); IFOMPT 2023. Outcomes: HIT-6, NDI, headache frequency."
       ]
     },
     "resolved": [
@@ -7139,29 +7145,35 @@ export const AUTHORED = [
     "cond": {
       "id": "cheadache",
       "name": "Neck-related headache",
-      "clin": "Cervicogenic headache",
-      "blurb": "Sometimes stiffness and tension in the very top of the neck can send pain up into the head, usually on one side, and it tends to flare with certain neck positions or movements.",
+      "clin": "Cervicogenic headache (ICHD-3 11.2.1) and upper cervical (C0-C3) pain; JOSPT 2017 neck pain with headache",
+      "blurb": "A cervicogenic headache is a headache that comes from the neck. The nerves of the top three joints of the neck share a \"junction box\" in the brainstem with nerves from the head, so a sore or stiff upper neck can be felt as pain in the head, often spreading from the back of the skull towards the forehead or eye on one side. It is common and not dangerous. Because the source is in the neck, treating the neck, with hands-on care and specific exercises, may help reduce how often and how strongly the headaches come.",
       "noticed": [
-        "A headache on one side that seems to start from the neck and travel upward",
-        "Headache gets worse with certain neck movements or after holding your head in one position too long",
-        "Stiffness or tenderness felt at the top of the neck, near the base of the skull"
+        "A dull, steady ache (not usually throbbing) that starts at the back and spreads forward on one side, always the same side",
+        "Neck stiffness, often harder to turn to one side",
+        "Brought on by holding one position (desk, reading, phone, driving), certain neck movements, or sleeping awkwardly",
+        "Pressing on a sore spot at the top of the neck can bring on the usual headache",
+        "Mild light sensitivity or nausea can occur, but less than with migraine"
       ],
       "homeCare": [
-        "Take regular breaks from looking down or holding your head still for long stretches",
-        "Do gentle neck stretching and mobility exercises on a regular basis",
-        "Try light self-massage or a warm pack on tight muscles at the base of the skull"
+        "Break up screen and reading time every 30 to 45 minutes; bring screens to eye level",
+        "Gentle neck movements and heat on the upper neck can ease a building headache",
+        "Keep a simple headache diary: when, how long, and what you were doing",
+        "If you are taking pain relief on most days, talk to your doctor"
       ],
       "seePhysioIf": [
-        "These headaches are happening several times a week even after adjusting your habits",
-        "The headache and neck stiffness are starting to affect your sleep or work"
+        "Your headaches seem to start in your neck, or come with neck stiffness",
+        "They keep returning despite rest or changes to your routine",
+        "You would like a home exercise for the top of the neck to use when a headache starts; no doctor's referral is needed"
       ],
       "clinicNotes": [
-        "CPG group: neck pain with headache (cervicogenic). Expect: positive cervical flexion-rotation test; headache reproduced with upper cervical segmental provocation; limited cervical ROM; restricted upper cervical segmental mobility; neck muscle strength, endurance and coordination deficits.",
-        "Before any cervical thrust: screen with the IFOMPT cervical framework.",
+        "Physio-led after the headache red-flag screen. See the doctor as well if headache medication is used on 10 or more days a month, or if the diagnosis is uncertain.",
+        "ICHD-3 11.2.1 criteria; Sjaastad features. Headache diary (frequency, intensity, duration).",
+        "Cervical flexion-rotation test (positive if under 32 degrees or more than 10 degrees side-to-side difference; C1-C2); upper cervical PAIVMs C0-C3 reproducing familiar headache; craniocervical flexion test.",
+        "IFOMPT cervical framework screening before any upper cervical manual therapy. Public text names mobilisation and SNAGs only; manipulation (ranked highest for pain, slightly higher risk at the upper neck; Xu and Ling 2025) is left to clinical judgement after screening.",
         "Acute: active mobility exercise (B); C1-2 self-SNAG (C).",
         "Subacute: cervical thrust manipulation and mobilisation (B); C1-2 self-SNAG (C).",
         "Chronic: cervical thrust manipulation and mobilisation (B); thoracic thrust manipulation (B); combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B).",
-        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
+        "Sources: ICHD-3 2018; JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Xu and Ling, Front Neurol 2025; Jull et al. 2002; Hall et al. 2007 (self-SNAG); Hall and Robinson 2004 (flexion-rotation test); SNNOOP10 (Do et al. 2019); IFOMPT 2023. Outcomes: HIT-6, NDI, headache frequency."
       ]
     },
     "resolved": [
@@ -7179,9 +7191,9 @@ export const AUTHORED = [
       },
       {
         "qid": "N4",
-        "oid": "band",
-        "label": "Both sides, like a tight band or pressure",
-        "weight": -2
+        "oid": "press",
+        "label": "Pressing at the base of my skull brings on my usual headache",
+        "weight": 2
       },
       {
         "qid": "N4",
@@ -7330,32 +7342,36 @@ export const AUTHORED = [
     "region": "neck",
     "cond": {
       "id": "mech",
-      "name": "Mechanical neck pain",
-      "clin": "Neck pain with mobility deficits (JOSPT 2017)",
-      "blurb": "The most common neck pattern: joints and muscles that are irritated or guarded — often from posture, sleep position, or an awkward movement — without any serious structural problem.",
+      "name": "Stiff, sore neck (neck pain with mobility deficits)",
+      "clin": "Neck pain with mobility deficits (non-specific mechanical neck pain; JOSPT 2017)",
+      "blurb": "This is the common type of neck pain where the neck feels stiff and sore, and turning or tilting the head is limited or uncomfortable at the end of the movement. It usually involves the joints and muscles of the neck and upper back, and it is not a sign of damage or \"wear and tear\" that needs a scan. Neck pain like this is very common and usually settles. Keeping the neck moving is one of the most helpful things you can do, and the right exercises can help you move more easily and reduce the chance of it coming back.",
       "noticed": [
-        "Aching or sharp catches with certain head movements",
-        "Stiffness that eases as you move through the day",
-        "Tension around the neck and shoulder muscles"
+        "Stiffness and aching, often more limited turning one way than the other",
+        "A sharp catch at the end of turning, such as shoulder checking or reversing the car",
+        "Tightness across the top of the shoulder; the neck feels \"stuck\" in one direction",
+        "Worse after holding one position (desk, phone, reading in bed, driving) or carrying heavy bags",
+        "Better with gentle movement, changing position, heat or a short walk"
       ],
       "homeCare": [
-        "Keep the neck gently moving — frequent, comfortable range rather than rest",
-        "Change positions often during desk work; raise the screen to eye level",
-        "A warm pack on the neck/shoulder muscles can ease guarding",
-        "Sleep with one supportive pillow keeping the neck level"
+        "Keep moving: gentle turns and tilts within comfort several times a day",
+        "Change position every 30 to 45 minutes; bring your screen up to eye level",
+        "Use heat for comfort, and stay generally active, for example by walking",
+        "Use a pillow that keeps your neck level with your body"
       ],
       "seePhysioIf": [
-        "Pain or stiffness lasts more than 1–2 weeks",
-        "It keeps returning with work or sleep",
-        "It limits driving, work, or exercise"
+        "Your neck is still stiff or sore after a week or two",
+        "It keeps coming back",
+        "It is affecting your work, driving or sleep; a physiotherapy assessment can help you find the right exercises and plan, and no doctor's referral is needed"
       ],
       "clinicNotes": [
-        "CPG group: neck pain with mobility deficits. Expect: limited cervical ROM; pain at end-range active and passive ROM; cervical and thoracic segmental restriction; pain reproduced with segmental provocation; strength and motor control deficits if subacute or chronic.",
-        "Before any cervical thrust: screen with the IFOMPT cervical framework.",
+        "JOSPT 2017 category: neck pain with mobility deficits. Stage: acute (under 6 weeks), subacute (6-12 weeks), chronic (over 12 weeks); rate irritability. Physio-led (direct access).",
+        "Assess: cervical AROM (CROM), cervical flexion-rotation test, cervical and thoracic segmental mobility (PAIVMs) with pain provocation, craniocervical flexion test, deep neck flexor endurance. X-rays or scans are usually not needed without red flags (German guideline 2025).",
+        "IFOMPT cervical framework screening before any cervical manual therapy.",
         "Acute: thoracic thrust manipulation (B); cervical ROM exercise (B); home ROM exercise (B); supervised upper-quarter strength and endurance exercise (B); stretching (B); cervical thrust manipulation or mobilisation (C).",
         "Subacute: supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (C); cervical thrust manipulation or mobilisation (C).",
-        "Chronic: multimodal approach (B); combined cervical/thoracic exercise plus thrust manipulation or mobilisation (B); neuromuscular exercise for the cervical and scapulothoracic regions (B); supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (B); general fitness (B); dry needling, laser, intermittent traction (B); advice to stay active (C).",
-        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
+        "Chronic: multimodal approach (B); combined cervical/thoracic exercise plus thrust manipulation or mobilisation (B); neuromuscular exercise for the cervical and scapulothoracic regions (B); supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (B); general fitness (B); advice to stay active (C).",
+        "Passive modalities: JOSPT 2017 allows TENS, laser, traction and dry needling for chronic neck pain; the German guideline 2025 recommends against laser, electrotherapy, ultrasound, traction and kinesiotaping. Not listed on the public page.",
+        "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; El-Allawy et al., Dtsch Arztebl Int 2025; OPTIMa (Cote et al.) 2016; Cochrane exercise review (Gross et al.) 2015; IFOMPT framework 2023. Record NDI, NPRS and PSFS at the first visit."
       ]
     },
     "resolved": [
@@ -7369,7 +7385,7 @@ export const AUTHORED = [
         "qid": "onset",
         "oid": "gradual",
         "label": "Gradually, no clear reason",
-        "weight": 1
+        "weight": 2
       },
       {
         "qid": "onset",
@@ -7381,7 +7397,7 @@ export const AUTHORED = [
         "qid": "onset",
         "oid": "lift",
         "label": "After lifting or a sudden movement",
-        "weight": 1
+        "weight": 2
       },
       {
         "qid": "N1",
@@ -7423,13 +7439,19 @@ export const AUTHORED = [
         "qid": "N6",
         "oid": "desk",
         "label": "Long spells at a desk, screen, or driving",
-        "weight": 1
+        "weight": 2
       },
       {
         "qid": "N6",
         "oid": "down",
         "label": "Looking down (phone, reading, cooking)",
         "weight": 1
+      },
+      {
+        "qid": "N6",
+        "oid": "up",
+        "label": "Looking up (overhead work, reaching high shelves)",
+        "weight": 2
       },
       {
         "qid": "N7",
@@ -7448,6 +7470,12 @@ export const AUTHORED = [
         "oid": "shoulder",
         "label": "Moving my shoulder and arm",
         "weight": -3
+      },
+      {
+        "qid": "N9",
+        "oid": "none",
+        "label": "None of these",
+        "weight": 1
       }
     ]
   },
@@ -7586,30 +7614,43 @@ export const AUTHORED = [
     "region": "neck",
     "cond": {
       "id": "whiplash",
-      "name": "Whiplash-type neck strain",
-      "clin": "Neck pain with movement coordination impairments (whiplash-associated disorder)",
-      "blurb": "This kind of neck pain usually follows a sudden jolt, twist, or strain — like a fender-bender, a fall, or an awkward quick movement — and the neck's normal coordination and control get thrown off for a while.",
+      "name": "Whiplash (whiplash-associated disorder)",
+      "clin": "Whiplash-associated disorder (WAD); neck pain with movement coordination impairments (post-traumatic, JOSPT 2017)",
+      "gates": {
+        "requiresOnset": [
+          "car",
+          "fall"
+        ]
+      },
+      "blurb": "Whiplash is a neck injury caused by a sudden jolt that throws the head forwards and backwards, most often in a car crash, but also in falls and sports. It usually strains the muscles, ligaments and joints of the neck, and the neck's control of movement can be affected, so it may feel weak, tired, or hard to hold steady. Most people improve, and staying gently active is one of the most helpful things you can do. A neck collar or long rest is not usually needed. Some people take longer to recover, and early support can help.",
       "noticed": [
-        "The pain started right after a sudden jolt, twist, or awkward movement",
-        "Pain may spread into the shoulder blade or upper arm area",
-        "Some people also notice dizziness, headache, or trouble concentrating along with the neck pain"
+        "Pain and stiffness starting within hours to 2 days of the injury; it is common to feel fine at the scene and stiff the next morning",
+        "The neck feels weak, tired or \"heavy\" holding up the head",
+        "Headache at the base of the skull, or pain across the shoulders or upper back",
+        "Worse turning the head (shoulder checking), sitting or driving for long, lifting, and at the end of the day",
+        "Some people notice dizziness, jaw pain, poor sleep, or trouble concentrating"
       ],
       "homeCare": [
-        "Keep moving and return to normal light activities as soon as you comfortably can",
-        "Avoid relying on a neck collar for more than a short time — gentle motion helps recovery more than resting still",
-        "Do slow, pain-free neck turns and tilts a few times through the day"
+        "Keep the neck moving gently within comfort; avoid long rest or a collar unless a doctor advises it",
+        "Use heat and change position regularly; pace driving and screen time",
+        "Return to usual activities step by step; drive only when you can shoulder check comfortably",
+        "Use a supportive pillow and keep a regular sleep routine"
       ],
       "seePhysioIf": [
-        "Things aren't settling down after a few weeks of trying to stay active",
-        "You're also dealing with ongoing dizziness, memory fog, or strong worry about the injury"
+        "You have neck pain or stiffness after a crash, fall or other jolt: an early assessment can help you recover with confidence",
+        "It is not settling after a few weeks, or you have dizziness, headaches or trouble concentrating as well",
+        "In BC, ICBC Enhanced Care covers up to 25 physiotherapy treatments in the first 12 weeks after a crash, whoever was at fault; no doctor's referral is needed (bring your Personal Health Number and ICBC claim number)"
       ],
       "clinicNotes": [
-        "CPG group: neck pain with movement coordination impairments (WAD). Expect: positive craniocervical flexion test; positive neck flexor endurance test; positive pressure algometry; neck strength and endurance deficits; mid-range pain worsening at end range; myofascial trigger point tenderness; sensorimotor impairment; referred pain.",
-        "Common symptoms per the CPG include dizziness and nausea, headache, concentration or memory difficulty, hypersensitivity and heightened distress: note them, and re-screen dizziness for vascular or vestibular causes.",
+        "Physio-led after injury screening. Nerve signs (WAD grade III): physio plus doctor. Suspected fracture (grade IV): Emergency.",
+        "Grade with the Quebec Task Force (0-IV). Canadian C-spine rule if acute; neuro exam (dermatomes, myotomes, reflexes).",
+        "Motor control: craniocervical flexion test, deep neck flexor and extensor endurance, joint position error, smooth pursuit neck torsion, balance. Consider cold hyperalgesia and widespread sensitivity.",
+        "Prognosis: WhipPredict (age 35 or over + NDI 32 or more + IES-R hyperarousal 6 or more: risk of ongoing moderate/severe disability; under 35 + NDI 32 or less: likely full recovery), or SF-Orebro. Screen distress (IES-R, PCL-5) and fear of movement (TSK).",
+        "No cervical manipulation in the acute phase (Australian WAD guideline, 4th ed. draft 2023). Gentle manual therapy alongside neck-specific exercise.",
         "Acute: advice to remain active (B); home ROM and postural exercise (B); minimise collar use (B); combined exercise plus manual therapy (B); exercise for ROM, strength, endurance, posture, coordination, aerobic and function (B); TENS (C); monitor progress (F).",
         "Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.",
         "Chronic: education on prognosis, pain management and reassurance (C); combined exercise plus manual therapy (C); cervical mobilisation plus individualised exercise with cognitive behavioural principles (C); TENS (C).",
-        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
+        "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Australian WAD guideline 4th ed. (draft) 2023; OPTIMa 2016; Ritchie et al. 2013 and 2015 (WhipPredict); Stiell et al. 2001; Quebec Task Force 1995; Treleaven 2017; ICBC first-12-weeks page (checked Sept 2026, review yearly). Record NDI, NPRS and PSFS at the first visit."
       ]
     },
     "resolved": [
@@ -7623,43 +7664,31 @@ export const AUTHORED = [
         "qid": "onset",
         "oid": "fall",
         "label": "After a fall, sport, or knock to the head or neck",
-        "weight": 2
+        "weight": 3
       },
       {
         "qid": "N5",
-        "oid": "tired",
-        "label": "My neck gets tired holding my head up (reading, screens)",
+        "oid": "within2d",
+        "label": "The pain or stiffness started within 2 days of the injury",
         "weight": 2
-      },
-      {
-        "qid": "N5",
-        "oid": "spread",
-        "label": "The pain has spread to my shoulders, upper back, or arms",
-        "weight": 2
-      },
-      {
-        "qid": "N5",
-        "oid": "concentrate",
-        "label": "Trouble concentrating or sleeping since it happened",
-        "weight": 2
-      },
-      {
-        "qid": "N5",
-        "oid": "sensitive",
-        "label": "My neck is very sensitive to touch or cold",
-        "weight": 2
-      },
-      {
-        "qid": "N5",
-        "oid": "settling",
-        "label": "It is settling a bit more each week",
-        "weight": 1
       },
       {
         "qid": "N1",
         "oid": "bothstiff",
         "label": "It is stiff or painful turning both ways",
-        "weight": 1
+        "weight": 2
+      },
+      {
+        "qid": "N5",
+        "oid": "tired",
+        "label": "My neck feels weak, tired or hard to hold steady (holding my head up, end of the day)",
+        "weight": 2
+      },
+      {
+        "qid": "N5",
+        "oid": "spread",
+        "label": "Headaches at the back of my head, or pain across my shoulders or upper back",
+        "weight": 2
       }
     ]
   },

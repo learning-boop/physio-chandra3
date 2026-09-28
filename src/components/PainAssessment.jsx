@@ -670,7 +670,8 @@ export default function PainAssessment() {
     const night = GENERAL_RED_FLAGS.find((f) => f.id === 'grf-night')
     if (behaviour.nightConcern && night) out.push({ ...night, why: TIER_WHY.urgent })
     const early = new Set(earlyPatterns.map((p) => p.id))
-    patternChecks(zones, answers, 7).filter((p) => !early.has(p.id)).slice(0, 2).forEach((p) => out.push(p))
+    // Up to three: dizziness (heart; ear or worsening) and headache can both apply.
+    patternChecks(zones, answers, 7).filter((p) => !early.has(p.id)).slice(0, 3).forEach((p) => out.push(p))
     return out
   }, [zones, answers, behaviour.nightConcern, earlyPatterns])
 

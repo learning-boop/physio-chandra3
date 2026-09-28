@@ -22,6 +22,13 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # question 11, condition content/conditions/neck-cgd.md, two final-check
 # flags (heart; ear or worsening), the BPPV and inner-ear look-alike cards,
 # and test patients 14 to 19. Marked (CGD) below.
+# 28 Sep 2026: "Neck Pain Mobility Deficits.docx" (signed), "Whiplash WAD.docx"
+# and "Cervicogenic Headache.docx" (drafts, not yet signed), all v0.1 in
+# Conditions/Neck and headache: the conditions neck-mech, neck-whiplash and
+# neck-cheadache (with head-cgh) rebuilt from them; question 4 gains two
+# answers, question 5 is rebuilt; the meningitis, upper-neck and
+# after-an-accident flags gain wording; a headache check in the final check;
+# test patients 23 to 30. Marked (docs) below.
 ---
 
 ## red flags
@@ -36,13 +43,13 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      The two shoulder-tip questions are asked only when a shoulder is drawn. -->
 - Since this started, has any of these come on suddenly: the worst headache of your life; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk? | emergency | Possible stroke, bleed, or neck artery tear   (A1.1)
 - Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs? | emergency | Acute spinal cord compression
-- Since a neck manipulation ("cracking"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick, numbness around the lips, or eyes that flicker or jump? | emergency | After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain   (A1.2)
-- Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at? | emergency | Possible meningitis
+- Since a neck manipulation ("cracking"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick or vomiting, a severe or worsening headache, confusion, drowsiness or memory loss, numbness around the lips, or eyes that flicker or jump? | emergency | After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain   (A1.2)
+- Do you have a fever with a stiff neck, a bad headache, a rash, or feel very unwell, or find bright light hard to look at? | emergency | Possible meningitis   (docs: rash, feeling very unwell)
 - Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain can be felt in the neck, jaw, and arm
 - Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | emergency | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign) | Ask only if: a shoulder is drawn
 - Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before? | urgent, same day | After an accident, manipulation, jerk or knock, these need a doctor today   (A2.1)
 - Over the last few days or weeks, have you become quickly weaker, number or clumsier in an arm, hand or leg, or has your walking become quickly more unsteady? | urgent, same day | Nerve or spinal cord pressure that is getting worse quickly needs a doctor today   (A2.2; replaces the general "new or worsening weakness" check for the neck)
-- Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth? | urgent | Possible upper neck instability
+- Do you have rheumatoid arthritis or another inflammatory arthritis, do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth? | urgent | Possible upper neck instability: a doctor should check before hands-on neck treatment   (docs: inflammatory arthritis, mobility deficits document)
 - Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position? | urgent | The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder | Ask only if: a shoulder is drawn   (A3.3; shared with the shoulder and base of the neck)
 
 ## injury screen
@@ -135,12 +142,17 @@ Q: If you get headaches with this, what are they like?
 - Brought on by neck movement or holding one position
 - Both sides, like a tight band or pressure
 - Throbbing, with feeling sick or finding light hard to take
+- Pressing at the base of my skull brings on my usual headache   (docs: headache Q5)
+- I take pain relief for headaches on 10 or more days a month   (docs: headache Q7; shows the medication-overuse card)
 - I do not get headaches
 Ask only if: the drawing includes the head, or age is under 50
 
 Q: Since your accident or injury, which of these apply? Tick all that apply.
-- My neck gets tired holding my head up (reading, screens)
-- The pain has spread to my shoulders, upper back, or arms
+- The pain or stiffness started within 2 days of the injury   (docs: whiplash Q2)
+- My neck feels weak, tired or hard to hold steady (holding my head up, end of the day)   (docs: whiplash Q4)
+- Headaches at the back of my head, or pain across my shoulders or upper back   (docs: whiplash Q5)
+- Pins and needles, numbness or weakness in my arms or hands   (docs: whiplash Q6; not scored; shows "see your doctor as well")
+- I find it hard to stop thinking about the accident, or I feel on edge or easily startled   (docs: whiplash Q7; not scored; shows "extra support is available")
 - Trouble concentrating or sleeping since it happened
 - My neck is very sensitive to touch or cold
 - It is settling a bit more each week
@@ -204,6 +216,9 @@ Ask only if: question 9 includes dizziness; then asked straight after it.
      screen I5, trauma5d). -->
 - With the dizziness: fainting, chest pain, a racing or irregular heartbeat, or shortness of breath | emergency | Heart or blood pressure cause
 - Sudden hearing loss in one ear, or dizziness that is constant and getting worse, with vomiting or new headaches | urgent, same day | Inner ear or brain to be checked first
+<!-- (docs) From the headache document's red flags (SNNOOP10), when question 4
+     reports a headache and the head is not drawn (the head asks these itself). -->
+- With the headaches: a new headache after age 50 with a tender scalp, jaw pain when chewing or vision changes; a headache that wakes you with vomiting, is worse lying down, coughing or straining, or is getting steadily worse over weeks; or a new headache in pregnancy or after giving birth | urgent, same day | Giant cell arteritis or another secondary headache
 
 ## referral patterns
 - Neck → back of the head, temple, or behind the eye | Headache coming from the upper neck (cervicogenic, C1–C3) | Migraine, tension-type headache; vascular causes if red flags ticked
@@ -334,4 +349,37 @@ CASE: 22. New but not severe neck pain after a neck manipulation
 Drawing: Centre of the neck
 Answers: Age = 30 to 49; After lifting or a sudden movement; Less than 2 weeks
 Flags: Did a new neck pain or headache, different from any you have had before but not severe, start suddenly after…?
+Expect: route = see your doctor
+
+<!-- (docs) Test patients 20 to 22 (stroke signs, severe pain after a manipulation) are in scripts/check-region-tests.mjs. -->
+CASE: 23. Woke up with a stiff neck, worse at the desk and looking up (mobility deficits)
+Answers: Age = 30 to 49; Woke up with it; Less than 2 weeks; Q9 = None of these; Q1 = stiff one side; Q6 = desk + looking up; Q7 = stiff at first, then eases
+Expect: top condition = stiff, sore neck (mobility deficits); must not show = whiplash, myelopathy
+
+CASE: 24. Rear-ended 3 weeks ago, stiff both ways, neck tired (whiplash)
+Answers: Age = 30 to 49; After a car accident; 2 to 6 weeks; Q9 = None of these; Q1 = stiff both ways; Q5 = within 2 days + weak or tired + headaches or shoulder pain
+Expect: top condition = whiplash
+
+CASE: 25. No accident: whiplash is never suggested
+Answers: Age = 30 to 49; Gradually; 2 to 6 weeks; Q1 = stiff both ways; Q6 = desk; Q7 = eases
+Expect: must not show = whiplash; Q5 not asked
+
+CASE: 26. After a crash, tingling in the hands
+Answers: After a car accident; Q5 = within 2 days + pins and needles or weakness in the arms or hands
+Expect: "see your doctor as well" card
+
+CASE: 27. After a crash, on edge and reliving it
+Answers: After a car accident; Q5 = within 2 days + weak or tired + on edge
+Expect: top condition = whiplash; "extra support is available" card
+
+CASE: 28. One-sided headache from the neck (neck-related headache)
+Answers: Age = 30 to 49; After long hours at a desk; More than 3 months; Q1 = stiff one side; Q4 = one-sided from the back + brought on by neck movement + pressing the skull brings it on; Q6 = desk
+Expect: top condition = neck-related headache
+
+CASE: 29. Pain relief for headaches on most days
+Answers: as 28, with Q4 = 10 or more days a month of pain relief
+Expect: top condition = neck-related headache; medication-overuse card
+
+CASE: 30. Rheumatoid arthritis with new neck pain
+Flags: Do you have rheumatoid arthritis or another inflammatory arthritis…?
 Expect: route = see your doctor
