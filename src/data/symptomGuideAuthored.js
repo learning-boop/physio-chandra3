@@ -7426,7 +7426,7 @@ export const AUTHORED = [
       {
         "qid": "N2",
         "oid": "shoulderonly",
-        "label": "Pain stops at the top of the shoulder or upper arm",
+        "label": "Pain goes into the upper arm, but not past the elbow",
         "weight": 1
       },
       {
@@ -7483,53 +7483,45 @@ export const AUTHORED = [
     "region": "neck",
     "cond": {
       "id": "radic",
-      "name": "Cervical radiculopathy (nerve-root irritation)",
-      "clin": "Neck pain with radiating pain (JOSPT 2017)",
-      "blurb": "A nerve in the neck being irritated or compressed can refer sharp, electric pain plus tingling or numbness down the arm — often more bothersome than the neck itself.",
+      "name": "Pinched nerve in the neck (cervical radiculopathy)",
+      "clin": "Cervical radiculopathy (cervical radicular pain with or without nerve root deficit)",
+      "blurb": "A nerve in the neck has become irritated or squeezed where it leaves the spine, most often by a disc bulge or by age-related narrowing of the small opening the nerve passes through. Because that nerve travels down into the arm, you may feel pain, pins and needles, numbness or weakness in the arm and hand, sometimes more than in the neck itself. This is common, the nerve is usually sensitive rather than permanently damaged, and most people recover without needing surgery. Staying gently active, finding positions of ease and following a guided plan can help the nerve settle.",
       "noticed": [
-        "Arm pain below the elbow, often into specific fingers",
-        "Pins & needles or numbness in the hand",
-        "Coughing/sneezing can shoot pain down the arm",
-        "Resting the hand on the head may ease it"
+        "Sharp, shooting, burning or \"electric\" pain down one arm, often worse than the neck",
+        "A deep ache in or beside the shoulder blade, often before the arm pain starts",
+        "Pins and needles or numbness in part of the hand, or the arm feeling weak or heavy",
+        "Worse looking up, turning or tilting the head towards the painful side, or after a long spell looking down at a screen or driving",
+        "Coughing or sneezing, carrying a bag on that side, or sleeping on it can bring it on",
+        "Resting the hand on top of the head, or supporting the arm, often eases it"
       ],
       "homeCare": [
-        "Avoid positions that clearly shoot pain down the arm",
-        "Short, frequent gentle neck movement within comfort",
-        "Try easing positions (e.g., hand resting on head) when the arm flares"
+        "Rest your hand on top of your head, or support your arm on a pillow, when the arm pain flares",
+        "Change position often; avoid long spells of looking up or looking down at a screen",
+        "Keep moving gently within comfort; complete rest or a neck collar is rarely needed",
+        "Sleep with a pillow that keeps your neck level, and avoid lying on the painful side if it makes the arm worse"
       ],
       "seePhysioIf": [
-        "Arm pain, tingling or numbness lasts beyond a few days",
-        "You notice any hand weakness",
-        "You want a plan — most cases settle well with guided conservative care"
+        "Arm pain, pins and needles or weakness are affecting your sleep, work or daily tasks",
+        "It has not started to ease after a week or two",
+        "You would like a plan: many people notice clear improvement within the first few months, often sooner, though recovery time varies from person to person",
+        "If you notice any of the warning signs (clumsy hands, both arms, unsteady walking, bladder or bowel changes, weakness getting worse quickly), seek medical care first"
       ],
       "clinicNotes": [
-        "CPG group: neck pain with radiating pain. Expect: positive Wainner cluster (ULTT A, Spurling's, distraction, ipsilateral rotation under 60 degrees); possible dermatomal sensory, myotomal strength or reflex deficits: record a baseline neurological exam.",
-        "Progressive weakness or signs of cord involvement: refer (see the myelopathy screen).",
+        "Record: body chart (arm vs neck dominance, paraesthesia distribution), 24-hour behaviour, irritability, neuropathic descriptors; NPRS, NDI, PSFS; DN4 or painDETECT if the neuropathic component is unclear.",
+        "Wainner cluster: ULNT1 (median) +, Spurling A +, distraction +, ipsilateral rotation under 60 degrees. 3 of 4 +LR 6.1; 4 of 4 +LR 30.3. A negative ULNT1 helps rule out. Shoulder abduction relief sign; neck distraction (Thoomes 2018: Spurling and distraction most useful to rule in, combined with history).",
+        "Neuro exam: dermatomes (light touch, pinprick), myotomes C5-T1, reflexes biceps (C5/6), brachioradialis (C6), triceps (C7). Neurodynamics ULNT1-3 and nerve trunk palpation.",
+        "Level from the finger question (N12): thumb and index C6, middle C7, ring and little C8 (dermatomes overlap; tingling is more level-specific than pain). C7 most often, then C6. Maps: content/reference/cervical-radiculopathy.md.",
+        "Root or peripheral nerve: thumb/index with outer forearm and neck provocation = C6, not median (carpal tunnel: night tingling eased by shaking, thenar palm spared, forearm normal). Ring/little with inner forearm = C8, not ulnar (cubital tunnel: inner forearm normal, ring finger split, worse with the elbow bent). Both can coexist (double crush): screen and treat both.",
+        "UMN screen: Hoffmann, Babinski, clonus, inverted supinator, gait/tandem (Cook cluster 3 of 5 = strong rule-in). Arterial screen per the IFOMPT Cervical Framework before manual therapy.",
+        "Arm pain with front-of-chest pain: C7 can refer to the chest, but exclude a cardiac cause first.",
+        "Refer for medical review or imaging: progressive motor deficit, UMN signs, red flags, or no improvement after 6-8 weeks of well-delivered care.",
         "Acute: exercise with mobilising and stabilising elements (C); low-level laser (C); possible short-term collar use (C).",
         "Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.",
-        "Chronic: combined exercise (stretching and strength) plus cervical and thoracic manual therapy (B); education to encourage occupational and exercise activity (B); intermittent traction (B).",
-        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), Perspectives for Practice flow chart. Grades in brackets. Record NDI (or PROMIS) and NPRS at the first visit."
+        "Chronic: combined exercise (stretching and strength) plus cervical and thoracic manual therapy (B); education to encourage occupational and exercise activity (B); intermittent traction (B); neural mobilisation (Basson 2017).",
+        "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.); Wainner 2003; Thoomes 2018; Wong 2014; Iyer and Kim 2016; Thoomes 2013; Fritz 2014; Basson 2017; Cook 2010; Rushton 2023. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
     "resolved": [
-      {
-        "qid": "age",
-        "oid": "50-64",
-        "label": "50 to 64",
-        "weight": 1
-      },
-      {
-        "qid": "onset",
-        "oid": "lift",
-        "label": "After lifting or a sudden movement",
-        "weight": 1
-      },
-      {
-        "qid": "N1",
-        "oid": "onestiff",
-        "label": "It is stiff or painful turning to one side",
-        "weight": 1
-      },
       {
         "qid": "N2",
         "oid": "pastelbow",
@@ -7538,15 +7530,39 @@ export const AUTHORED = [
       },
       {
         "qid": "N2",
+        "oid": "shoulderonly",
+        "label": "Pain goes into the upper arm, but not past the elbow",
+        "weight": 2
+      },
+      {
+        "qid": "N2",
         "oid": "armworse",
         "label": "The arm pain is worse than the neck pain",
+        "weight": 3
+      },
+      {
+        "qid": "N2",
+        "oid": "armsame",
+        "label": "The arm and neck pain are about as bad as each other",
         "weight": 2
       },
       {
         "qid": "N2",
         "oid": "fingers",
-        "label": "Pins and needles or numbness in particular fingers",
+        "label": "Pins and needles or numbness in one part of the arm or hand: a strip, or particular fingers",
         "weight": 3
+      },
+      {
+        "qid": "N2",
+        "oid": "wholehand",
+        "label": "Pins and needles or numbness in the whole hand",
+        "weight": 1
+      },
+      {
+        "qid": "N2",
+        "oid": "burning",
+        "label": "The arm pain is burning, shooting or electric, or runs in a line down the arm",
+        "weight": 2
       },
       {
         "qid": "N2",
@@ -7558,55 +7574,67 @@ export const AUTHORED = [
         "qid": "N2",
         "oid": "weak",
         "label": "Weakness in that arm or hand, such as a weaker grip",
-        "weight": 2
-      },
-      {
-        "qid": "N2",
-        "oid": "shoulderonly",
-        "label": "Pain stops at the top of the shoulder or upper arm",
-        "weight": -2
+        "weight": 1
       },
       {
         "qid": "N3",
         "oid": "arm",
-        "label": "Yes, it goes down the arm",
+        "label": "Yes, clearly: it goes down the arm",
         "weight": 3
       },
       {
         "qid": "N3",
-        "oid": "neckonly",
-        "label": "It hurts in the neck, but not the arm",
-        "weight": -1
-      },
-      {
-        "qid": "N3",
-        "oid": "neither",
-        "label": "No, neither",
-        "weight": -2
-      },
-      {
-        "qid": "N6",
-        "oid": "up",
-        "label": "Looking up (overhead work, reaching high shelves)",
-        "weight": 1
-      },
-      {
-        "qid": "N7",
-        "oid": "worse",
-        "label": "Gets worse the more I move",
-        "weight": 1
-      },
-      {
-        "qid": "N8",
-        "oid": "neck",
-        "label": "Moving my neck",
+        "oid": "sometimes",
+        "label": "Sometimes",
         "weight": 1
       },
       {
         "qid": "N8",
         "oid": "shoulder",
         "label": "Moving my shoulder and arm",
-        "weight": -3
+        "weight": -2
+      },
+      {
+        "qid": "N9",
+        "oid": "bothhands",
+        "label": "Numbness or pins and needles in both hands",
+        "weight": -16
+      },
+      {
+        "qid": "N9",
+        "oid": "clumsy",
+        "label": "My hands have become clumsy: buttons, writing, using a phone, or dropping things",
+        "weight": -16
+      },
+      {
+        "qid": "N9",
+        "oid": "walking",
+        "label": "My walking or balance has changed: unsteady, tripping, or legs feel stiff or heavy",
+        "weight": -16
+      },
+      {
+        "qid": "N12",
+        "oid": "thumbindex",
+        "label": "Thumb and index finger",
+        "weight": 0
+      },
+      {
+        "qid": "N12",
+        "oid": "middle",
+        "label": "Middle finger",
+        "weight": 0
+      },
+      {
+        "qid": "N12",
+        "oid": "ringlittle",
+        "label": "Ring and little fingers",
+        "weight": 0
+      },
+      {
+        "qid": "N12",
+        "oid": "notsure",
+        "label": "Not sure, or they vary",
+        "weight": 0
       }
     ]
   },

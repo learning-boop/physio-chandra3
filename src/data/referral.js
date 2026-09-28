@@ -120,10 +120,10 @@ const NERVE_QUALITY = ['burning', 'tingling', 'Burning or tingling']
 export function referralMechanism(r, answers = {}) {
   const quality = [...asList(answers.painQuality), ...asList(answers.q2)]
   const nerveWords = quality.some((q) => NERVE_QUALITY.includes(q))
-  // The region questions' own nerve answers: neck N2 "pins and needles or
-  // numbness in particular fingers"; low back L3 "pins and needles or numbness
-  // in the foot or toes".
-  const nerveAnswer = asList(answers.N2).includes('fingers') || asList(answers.L3).includes('pins')
+  // The region questions' own nerve answers: neck N2 pins and needles or
+  // numbness (in one part, or the whole hand) or burning, shooting arm pain;
+  // low back L3 "pins and needles or numbness in the foot or toes".
+  const nerveAnswer = asList(answers.N2).some((a) => ['fingers', 'wholehand', 'burning'].includes(a)) || asList(answers.L3).includes('pins')
   const distal = r.reach === 'wrist' || r.reach === 'hand' || r.reach === 'lowerleg' || r.reach === 'ankle' || r.reach === 'foot'
   if (nerveWords || nerveAnswer) return 'radicular'
   if (!distal) return 'somatic'

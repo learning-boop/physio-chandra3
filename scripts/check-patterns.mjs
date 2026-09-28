@@ -50,6 +50,21 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   console.log('      (before the fix the same line asked: ' + oldKeys.join(', ') + ')')
 }
 
+// ── 2b. Cervical radiculopathy document (v1.1, 28 Sep 2026) ──
+{
+  const { maxScores } = await imp('src/data/symptomGuide.js')
+  const { referralMechanism } = await imp('src/data/referral.js')
+  // The document's single-choice answers share an `excl` group in N2 and N3,
+  // so only one of each counts: 16 from the document + 1 for weakness.
+  check('radiculopathy ceiling is the document\'s 16 (+1 weakness), not the sum of every answer', maxScores(REGIONS.neck).radic === 17, maxScores(REGIONS.neck).radic)
+  const arm = detectReferral([['neck', 'shoulderL', 'elbowL', 'wristL']])[0]
+  check('burning, shooting arm pain reads the arm line as nerve pain', referralMechanism(arm, { N2: ['burning'] }) === 'radicular', referralMechanism(arm, { N2: ['burning'] }))
+  check('tingling in the whole hand reads the arm line as nerve pain', referralMechanism(arm, { N2: ['wholehand'] }) === 'radicular')
+  const keys = ['neck', 'ctj']
+  const cord = rankAcross(keys, { age: '50-64', N9: ['bothhands'], N2: ['pastelbow', 'armworse', 'fingers', 'burning'], N3: ['arm'] })
+  check('both hands numb overrides the radiculopathy score (document Q8)', !cord.some((x) => x.c.id === 'radic'), cord.map((x) => x.rk + '/' + x.c.id))
+}
+
 // ── 3. Low back → foot ──
 {
   const lines = [['lowerback', 'hipR', 'kneeR', 'ankleR']]

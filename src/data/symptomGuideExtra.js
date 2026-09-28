@@ -59,8 +59,10 @@ export const EXTRA_REGIONS = {
         text: "Since a neck manipulation (\"cracking\"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick or vomiting, a severe or worsening headache, confusion, drowsiness or memory loss, numbness around the lips, or eyes that flicker or jump?" },
       { id: "nrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
         text: "Do you have a fever with a stiff neck, a bad headache, a rash, or feel very unwell, or find bright light hard to look at?" },
+      // Radiculopathy document (28 Sep 2026): any arm, chest pain or pressure,
+      // and feeling sick; C7 can refer to the chest, so the heart comes first.
       { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
-        text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
+        text: "Is the pain in your neck, jaw, or arm brought on by effort, or does it come with chest pain, pressure or tightness, shortness of breath, sweating, or feeling sick?" },
       { id: "nrf-kehr", tier: "emergency", group: "kehr", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
         text: "Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?" },
       // A2.1: ongoing dizziness or signs after an accident + new, not severe
@@ -114,21 +116,52 @@ export const EXTRA_REGIONS = {
       { id: "N2", text: "Which of these describe your arm symptoms? Tick all that apply.",
         askIf: ({ draw, all }) => !draw || ["shoulder", "elbow", "wrist"].some((t) => draw.has(t)) ||
           [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
+        // "Cervical Radiculopathy.docx" v1.1 (approved 28 Sep 2026): its Q1
+        // (how far down), Q2 (arm or neck worse), Q3 (where the tingling is),
+        // Q5 (hand on head) and Q6 (what the arm pain feels like) in one.
+        // Options sharing `excl` are the document's single-choice answers:
+        // ticking one clears the other, and only one counts to the maximum.
         options: [
-          { id: "pastelbow", label: "Pain goes down the arm past the elbow" },
-          { id: "armworse", label: "The arm pain is worse than the neck pain" },
-          { id: "fingers", label: "Pins and needles or numbness in particular fingers" },
+          { id: "pastelbow", excl: "reach", label: "Pain goes down the arm past the elbow" },
+          // Was "Pain stops at the top of the shoulder or upper arm": the
+          // document scores the upper arm (2) apart from the neck, top of the
+          // shoulder and shoulder blade (0).
+          { id: "shoulderonly", excl: "reach", label: "Pain goes into the upper arm, but not past the elbow" },
+          { id: "armworse", excl: "worse", label: "The arm pain is worse than the neck pain" },
+          { id: "armsame", excl: "worse", label: "The arm and neck pain are about as bad as each other" },
+          { id: "fingers", excl: "tingle", label: "Pins and needles or numbness in one part of the arm or hand: a strip, or particular fingers" },
+          { id: "wholehand", excl: "tingle", label: "Pins and needles or numbness in the whole hand" },
+          { id: "burning", label: "The arm pain is burning, shooting or electric, or runs in a line down the arm" },
           { id: "handhead", label: "Resting my hand on top of my head eases the arm pain" },
           // Myotomal weakness, a radiating-pain feature in the JOSPT 2017 CPG.
-          { id: "weak", label: "Weakness in that arm or hand, such as a weaker grip" },
-          { id: "shoulderonly", label: "Pain stops at the top of the shoulder or upper arm" }
+          { id: "weak", label: "Weakness in that arm or hand, such as a weaker grip" }
         ]},
-      { id: "N3", text: "Does looking up, or tilting your head toward the sore side, bring on pain or tingling down the arm?",
-        askIf: ({ ra }) => [].concat(ra.N2 || []).some((o) => o === "pastelbow" || o === "fingers"),
+      // The document's Q4 (Spurling-type provocation). Asked whenever the arm
+      // is involved, and early when N2 has a nerve-type answer: it is then the
+      // most telling question left. An ache into the upper arm only is the
+      // stiff-neck pattern too, so it does not jump the queue for that.
+      { id: "N3", text: "Does looking up, or turning or tilting your head towards the sore side, send pain or tingling into your arm?",
+        askIf: ({ ra }) => [].concat(ra.N2 || []).some((o) => ["pastelbow", "shoulderonly", "fingers", "wholehand", "burning"].includes(o)),
+        priority: ({ ra }) => [].concat(ra.N2 || []).some((o) => ["pastelbow", "fingers", "wholehand", "burning"].includes(o)),
         options: [
-          { id: "arm", label: "Yes, it goes down the arm" },
-          { id: "neckonly", label: "It hurts in the neck, but not the arm" },
+          { id: "arm", excl: "provoke", label: "Yes, clearly: it goes down the arm" },
+          { id: "sometimes", excl: "provoke", label: "Sometimes" },
+          { id: "neckonly", excl: "provoke", label: "It hurts in the neck, but not the arm" },
           { id: "neither", label: "No, neither" }
+        ]},
+      // The document's Q9: which fingers the tingling is in. Not scored; a
+      // level estimate for Chandra's summary (thumb and index C6, middle C7,
+      // ring and little C8), read with the hand and nerve maps in
+      // content/reference/cervical-radiculopathy.md. Asked straight after N2
+      // when tingling in one part is ticked.
+      { id: "N12", text: "Which fingers do the pins and needles or numbness affect most?",
+        askIf: ({ ra }) => [].concat(ra.N2 || []).includes("fingers"),
+        priority: ({ ra }) => [].concat(ra.N2 || []).includes("fingers"),
+        options: [
+          { id: "thumbindex", excl: "digit", label: "Thumb and index finger" },
+          { id: "middle", excl: "digit", label: "Middle finger" },
+          { id: "ringlittle", excl: "digit", label: "Ring and little fingers" },
+          { id: "notsure", label: "Not sure, or they vary" }
         ]},
       { id: "N4", text: "If you get headaches with this, what are they like?",
         askIf: ({ draw, ra }) => (draw && draw.has("head")) || !ra.age || ["u18", "18-29", "30-49"].includes(ra.age),

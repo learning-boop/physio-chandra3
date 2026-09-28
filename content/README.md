@@ -40,7 +40,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 
 | Area on the body map | Region | Built from | Test patients |
 | --- | --- | --- | --- |
-| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents) | 28 |
+| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents; + Cervical Radiculopathy document, N2, N3 and N12, reasoning in reference/cervical-radiculopathy.md) | 33 |
 | Base of neck (C7–T3) | `ctj` | CT junction assessment | 5 |
 | Mid back, front of chest | `upperback` | Thoracic assessment | 5 |
 | Mid-to-low back, flank | `tlj` | TL-junction assessment | 5 |

@@ -29,6 +29,16 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # answers, question 5 is rebuilt; the meningitis, upper-neck and
 # after-an-accident flags gain wording; a headache check in the final check;
 # test patients 23 to 30. Marked (docs) below.
+# 28 Sep 2026: "Cervical Radiculopathy.docx" (Conditions/Neck and headache,
+# v1.1, approved): condition content/conditions/neck-radic.md rebuilt from it;
+# question 2 carries its Q1, Q2, Q3, Q5 and Q6 (alternatives share an
+# exclusive group: ticking one clears the other, and only one counts to the
+# maximum); question 3 gains "turning" and "Sometimes" (its Q4); question 12
+# is its Q9 (which fingers, level tag only); its Q8 is question 9 (spinal cord
+# signs override the score). The heart question now asks about any arm, chest
+# pain or pressure, and feeling sick. Its reasoning appendix (dermatomes,
+# radiating patterns, nerve maps) is content/reference/cervical-radiculopathy.md.
+# Test patients 31 to 35. Marked (radic) below.
 ---
 
 ## red flags
@@ -45,7 +55,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs? | emergency | Acute spinal cord compression
 - Since a neck manipulation ("cracking"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick or vomiting, a severe or worsening headache, confusion, drowsiness or memory loss, numbness around the lips, or eyes that flicker or jump? | emergency | After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain   (A1.2)
 - Do you have a fever with a stiff neck, a bad headache, a rash, or feel very unwell, or find bright light hard to look at? | emergency | Possible meningitis   (docs: rash, feeling very unwell)
-- Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain can be felt in the neck, jaw, and arm
+- Is the pain in your neck, jaw, or arm brought on by effort, or does it come with chest pain, pressure or tightness, shortness of breath, sweating, or feeling sick? | emergency | Heart pain can be felt in the neck, jaw, and arm
 - Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | emergency | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign) | Ask only if: a shoulder is drawn
 - Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before? | urgent, same day | After an accident, manipulation, jerk or knock, these need a doctor today   (A2.1)
 - Over the last few days or weeks, have you become quickly weaker, number or clumsier in an arm, hand or leg, or has your walking become quickly more unsteady? | urgent, same day | Nerve or spinal cord pressure that is getting worse quickly needs a doctor today   (A2.2; replaces the general "new or worsening weakness" check for the neck)
@@ -123,19 +133,30 @@ Q: When you turn your head to look over your shoulder, what happens?
 - It is locked and I can barely turn it at all
 
 Q: Which of these describe your arm symptoms? Tick all that apply.
-- Pain goes down the arm past the elbow
-- The arm pain is worse than the neck pain
-- Pins and needles or numbness in particular fingers
-- Resting my hand on top of my head eases the arm pain
+- Pain goes down the arm past the elbow   (radic Q1: 3; one of the two)
+- Pain goes into the upper arm, but not past the elbow   (radic Q1: 2; was "Pain stops at the top of the shoulder or upper arm")
+- The arm pain is worse than the neck pain   (radic Q2: 3; one of the two)
+- The arm and neck pain are about as bad as each other   (radic Q2: 2)
+- Pins and needles or numbness in one part of the arm or hand: a strip, or particular fingers   (radic Q3: 3; one of the two)
+- Pins and needles or numbness in the whole hand   (radic Q3: 1)
+- The arm pain is burning, shooting or electric, or runs in a line down the arm   (radic Q6: 2)
+- Resting my hand on top of my head eases the arm pain   (radic Q5: 2)
 - Weakness in that arm or hand, such as a weaker grip   (added 26 Sep 2026: myotomal weakness, JOSPT 2017 CPG)
-- Pain stops at the top of the shoulder or upper arm
 Ask only if: the drawing reaches the arm, or pain quality = "Pins and needles or numbness" or "Burning, shooting or electric"
 
-Q: Does looking up, or tilting your head toward the sore side, bring on pain or tingling down the arm?
-- Yes, it goes down the arm
+Q: Does looking up, or turning or tilting your head towards the sore side, send pain or tingling into your arm?   (radic Q4)
+- Yes, clearly: it goes down the arm   (3)
+- Sometimes   (1)
 - It hurts in the neck, but not the arm
 - No, neither
-Ask only if: arm symptoms = "Pain goes down the arm past the elbow" or "Pins and needles or numbness in particular fingers"
+Ask only if: question 2 has any arm answer; asked early when it has a nerve-type one (past the elbow, pins and needles, burning)
+
+Q: Which fingers do the pins and needles or numbness affect most?   (radic Q9: level tag only, not scored)
+- Thumb and index finger   (C6)
+- Middle finger   (C7)
+- Ring and little fingers   (C8)
+- Not sure, or they vary
+Ask only if: question 2 = pins and needles in one part; then asked straight after it.
 
 Q: If you get headaches with this, what are they like?
 - One-sided, starting at the back of the neck or head
@@ -267,7 +288,7 @@ Expect: top condition = cervicogenic headache; must not show = migraine or tensi
 CASE: 6. Heart look-alike
 Drawing: Left side of the neck, left jaw, and inside of the left arm
 Answers: Age = 50 to 64; Gradually, no clear reason; Less than 2 weeks; Q1 = I can turn fully both ways; Q6 = lifting or carrying
-Flags: Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?
+Flags: Is the pain in your neck, jaw, or arm brought on by effort, or does it come with chest pain, pressure or tightness, shortness of breath, sweating, or feeling sick?
 Expect: top condition = none; must not show = any neck condition, any booking, radiculopathy; route = 911
 
 CASE: 7. Numb, clumsy hands and an unsteady walk (cervical myelopathy)
@@ -383,3 +404,26 @@ Expect: top condition = neck-related headache; medication-overuse card
 CASE: 30. Rheumatoid arthritis with new neck pain
 Flags: Do you have rheumatoid arthritis or another inflammatory arthritis…?
 Expect: route = see your doctor
+
+<!-- (radic) From "Cervical Radiculopathy.docx" v1.1 (approved 28 Sep 2026). -->
+CASE: 31. Classic nerve root picture into the thumb (C6)
+Drawing: Neck and down the right arm to the wrist
+Answers: Age = 50 to 64; Gradually, no clear reason; 6 weeks to 3 months; Q9 = None of these; Q2 = past the elbow + arm worse than neck + pins and needles in one part + burning or shooting + hand on head eases it; Q3 = yes, clearly; Q12 = thumb and index finger
+Expect: top condition = radiculopathy; Q2, Q3 and Q12 asked; route = results
+
+CASE: 32. Both hands clumsy with an arm line (the document's Q8)
+Answers: Age = 65 or over; Q9 = both hands + clumsy; Q10 = slowly getting worse; Q2 = past the elbow + arm worse + pins and needles in one part; Q3 = yes, clearly
+Expect: top condition = cervical myelopathy with its see-your-doctor note; must not show = radiculopathy
+
+CASE: 33. Ache into the upper arm, neck worse, no tingling
+Drawing: Neck and right shoulder
+Answers: Q9 = None of these; Q1 = stiff one side; Q2 = upper arm, not past the elbow; Q3 = neck but not the arm; Q6 = desk + looking down; Q7 = eases; Q8 = moving my neck
+Expect: must not show = radiculopathy (the document's rule). OPEN: mechanical neck pain is not reached either; with the shoulder drawn, the 5-question budget is spent before questions 1, 6 and 7 (the same before this document).
+
+CASE: 34. The document's "possible" band: 7 points is shown
+Answers: Q2 = past the elbow (3) + about as bad (2) + hand on head (2); Q3 = No, neither
+Expect: top condition = radiculopathy
+
+CASE: 35. Below the band: 6 points is not shown
+Answers: Q2 = past the elbow (3) + whole hand (1) + hand on head (2); Q3 = No, neither
+Expect: must not show = radiculopathy

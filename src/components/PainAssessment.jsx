@@ -796,9 +796,11 @@ export default function PainAssessment() {
     if (cur.includes(oid)) return { ...a, [q.id]: cur.filter((x) => x !== oid) }
     const opt = q.options.find((o) => o.id === oid)
     if (opt && isExclusive(opt)) return { ...a, [q.id]: [oid] }
+    // Alternatives sharing an `excl` key ("past the elbow" / "upper arm
+    // only") clear each other, as in the condition document's own question.
     const kept = cur.filter((id) => {
       const o = q.options.find((x) => x.id === id)
-      return !(o && isExclusive(o))
+      return !(o && (isExclusive(o) || (opt && opt.excl && o.excl === opt.excl)))
     })
     return { ...a, [q.id]: [...kept, oid] }
   })

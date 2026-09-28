@@ -37,7 +37,7 @@ pointers:
   "It is stiff or painful turning to one side": 3
   "It is stiff or painful turning both ways": 2
   "It is locked and I can barely turn it at all": 1
-  "Pain stops at the top of the shoulder or upper arm": 1
+  "Pain goes into the upper arm, but not past the elbow": 1
   "It hurts in the neck, but not the arm": 1
   "Long spells at a desk, screen, or driving": 2
   "Looking down (phone, reading, cooking)": 1

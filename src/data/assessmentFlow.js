@@ -241,11 +241,16 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
     const askedHere = region.questions.filter((q) => askedIds.includes(q.id))
     const yields = (region.yieldsTo || []).some((y) => keys.includes(y)) || !!(ctx.minor && ctx.minor.has(k))
     const weight = askedHere.length ? (gaveSignal(askedHere, ra) ? 1 : SILENT_AREA_WEIGHT) : yields ? YIELD_WEIGHT : 1
+    // A question the drawing pre-answered (N2 "past the elbow") is still to
+    // be asked and can still gain points: judging it as already answered
+    // made the neck's arm question look useless and skipped it.
+    const open = { ...ra }
+    for (const q of region.questions) if (!askedIds.includes(q.id)) delete open[q.id]
     for (const q of region.questions) {
-      if (askedIds.includes(q.id) || !isRelevant(q, region, ra)) continue
+      if (askedIds.includes(q.id) || !isRelevant(q, region, open)) continue
       if (LOCATION_QUESTION_IDS.has(q.id) && [].concat(answers[q.id] ?? []).length) continue
-      if (q.askIf && !q.askIf({ draw, ra, all })) continue
-      live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: questionValue(q, region, ra) * weight + (q.priority && q.priority({ draw, ra, all }) ? 1 : 0) })
+      if (q.askIf && !q.askIf({ draw, ra: open, all })) continue
+      live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: questionValue(q, region, open) * weight + (q.priority && q.priority({ draw, ra: open, all }) ? 1 : 0) })
     }
   }
   const pool = keys.length > 1 && live.some((x) => x.unseenArea) ? live.filter((x) => x.unseenArea) : live

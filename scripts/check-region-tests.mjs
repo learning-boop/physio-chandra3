@@ -24,7 +24,9 @@ const TESTS = {
   neck: [
     { name: '1. Desk worker, stiff one side',
       lines: [['neck', 'upperback']],
-      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N1: ['onestiff'], N6: ['desk', 'down'], N7: ['eases'] },
+      // N9 (asked of everyone first, since 26 Sep) answered as a real patient
+      // would: without it the neck counted as a silent area (28 Sep 2026).
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N9: ['none'], N1: ['onestiff'], N6: ['desk', 'down'], N7: ['eases'] },
       expect: { top: 'neck/mech', not: ['neck/radic'], route: 'results' } },
     { name: '2. Neck to thumb and index finger',
       lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
@@ -192,6 +194,37 @@ const TESTS = {
       answers: { age: '50-64', onset: 'gradual', duration: 'd2w' },
       flags: ['nrf-upperinstab'],
       expect: { route: 'urgent' } },
+    // "Cervical Radiculopathy.docx" v1.1 (approved 28 Sep 2026): its scored
+    // set (max 16, +1 for weakness), shown from 7 points.
+    { name: '31. Classic nerve root picture into the thumb (radiculopathy, C6)',
+      lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', N9: ['none'],
+        N2: ['pastelbow', 'armworse', 'fingers', 'burning', 'handhead'], N3: ['arm'], N12: ['thumbindex'] },
+      expect: { top: 'neck/radic', notTop: ['neck/mech'], asked: ['N2', 'N3', 'N12'], route: 'results' } },
+    { name: '32. Both hands clumsy with an arm line: spinal cord first, not radiculopathy',
+      lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', N9: ['bothhands', 'clumsy'], N10: ['slowworse'],
+        N2: ['pastelbow', 'armworse', 'fingers'], N3: ['arm'] },
+      expect: { top: 'neck/dcm', not: ['neck/radic'], route: 'results' } },
+    { name: '33. Ache into the upper arm, neck worse, no tingling: from the neck joints, not a nerve',
+      lines: [['neck', 'shoulderR']],
+      answers: { age: '30-49', onset: 'desk', duration: 'd6w', N9: ['none'], N1: ['onestiff'],
+        N2: ['shoulderonly'], N3: ['neckonly'], N6: ['desk', 'down'], N7: ['eases'], N8: ['neck'] },
+      // The document's rule: not radiculopathy. Mechanical neck pain is not
+      // reached either: with the shoulder drawn too, the 5-question budget goes
+      // to N9, a shoulder question, N8, N2 and N4 (the same before this
+      // document), so N1, N6 and N7 are never asked. Open for Chandra.
+      expect: { not: ['neck/radic'], route: 'results' } },
+    { name: '34. The document\'s "possible" band: 7 points is shown',
+      lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N9: ['none'],
+        N2: ['pastelbow', 'armsame', 'handhead'], N3: ['neither'] },
+      expect: { top: 'neck/radic', route: 'results' } },
+    { name: '35. Below the document\'s band: 6 points is not shown',
+      lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N9: ['none'],
+        N2: ['pastelbow', 'wholehand', 'handhead'], N3: ['neither'] },
+      expect: { not: ['neck/radic'], route: 'results' } },
     { name: '18. No dizziness: the dizziness question is not asked',
       lines: [['neck']],
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N1: ['onestiff'], N9: ['none'], N6: ['desk'], N7: ['eases'] },

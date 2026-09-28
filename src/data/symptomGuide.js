@@ -471,10 +471,21 @@ export function computeRaw(region, answers) {
   return { scores, unlocks, specials }
 }
 
+/* Options sharing an `excl` key are alternatives within a tick-all question
+   ("past the elbow" or "upper arm only"): ticking one clears the others (the
+   UI), and only the best of them counts towards the ceiling, so a condition
+   document's single-choice question keeps its own maximum here. */
 function bestFromQuestion(q, cid) {
   if (q.multi) {
     let sum = 0
-    q.options.forEach(o => { if (o.weights && o.weights[cid] > 0) sum += o.weights[cid] })
+    const groupBest = {}
+    q.options.forEach(o => {
+      const w = o.weights && o.weights[cid] > 0 ? o.weights[cid] : 0
+      if (!w) return
+      if (o.excl) groupBest[o.excl] = Math.max(groupBest[o.excl] || 0, w)
+      else sum += w
+    })
+    Object.values(groupBest).forEach(w => { sum += w })
     return sum
   }
   let best = 0
