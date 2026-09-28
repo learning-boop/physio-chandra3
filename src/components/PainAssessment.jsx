@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Body3D from './Body3D'
 import { Link } from 'react-router-dom'
@@ -726,24 +726,22 @@ export default function PainAssessment() {
   const [injuryPath, setInjuryPath] = useState([])
   const [injuryQ, setInjuryQ] = useState(null)       // question on screen
 
-  /* Each new screen starts at its top. Pressing Continue at the bottom of a
-     long screen used to leave the page scrolled down, so the next screen
-     opened part-way through. The panel's top is brought just below the menu
-     bar. The drawing steps keep their position, so the body stays in view. */
-  const panelRef = useRef(null)
+  /* Every new screen opens at the top of the assessment, on phone and desktop
+     alike (Chandra, 28 Sep 2026). Pressing Continue at the bottom of a long
+     screen used to leave the page scrolled down, so the next screen opened
+     part-way through or at its bottom — the How it works → Draw step on a
+     phone most of all. The jump is instant: a smooth scroll is cut short on
+     phones by the fade between screens and the body resizing, and it
+     stopped part of the way up. */
+  const sectionRef = useRef(null)
   const firstScreen = useRef(true)
   const screenKey = `${stage}|${qIndex}|${injuryQ}`
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (firstScreen.current) { firstScreen.current = false; return }
-    if (stage === 'landing' || stage === 'guide' || stage === 'draw') return
-    const el = panelRef.current
+    const el = sectionRef.current
     if (!el || typeof window === 'undefined') return
-    const nav = document.querySelector('.nav-bar')
-    const offset = (nav ? nav.getBoundingClientRect().height : 80) + 12
-    const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - offset)
-    if (Math.abs(window.scrollY - top) < 4) return
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' })
+    const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY)
+    if (Math.abs(window.scrollY - top) >= 2) window.scrollTo({ top, behavior: 'instant' })
   }, [screenKey]) // eslint-disable-line react-hooks/exhaustive-deps
   const [injuryDraft, setInjuryDraft] = useState(undefined) // its uncommitted pick
   const injury = useMemo(() => injuryFlow(flowZ, answers, answers.age), [flowZ, answers])
@@ -1005,7 +1003,7 @@ export default function PainAssessment() {
   }
 
   return (
-    <section className="pa-section" style={{
+    <section ref={sectionRef} className="pa-section" style={{
       background: 'var(--black)', fontFamily: 'var(--font-body)',
       // overflowX 'clip' (not 'hidden'): hidden would make this a scroll
       // container and stop the figure sticking as the results are read.
@@ -1188,7 +1186,7 @@ export default function PainAssessment() {
         `}</style>
 
         {/* ── LEFT: the guided panel ── */}
-        <div ref={panelRef} style={{ minWidth: 0, paddingTop: 8 }}>
+        <div style={{ minWidth: 0, paddingTop: 8 }}>
           <AnimatePresence mode="wait">
 
             {/* LANDING — heading + Start only. The 3D body is not shown here;
