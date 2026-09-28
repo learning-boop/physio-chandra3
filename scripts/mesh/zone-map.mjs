@@ -39,6 +39,8 @@ const code = [
   grab(/const ANKLE_TOP = [^\n]+/, 'ANKLE_TOP'),
   grab(/const SOLE_TOP = [^\n]+/, 'SOLE_TOP'),
   grab(/const FOOT_FRONT = [^\n]+/, 'FOOT_FRONT'),
+  grab(/const ARCH_TOP = [^\n]+/, 'ARCH_TOP'),
+  grab(/const HEEL_FRONT = [^\n]+/, 'HEEL_FRONT'),
   grab(/const armBand = [^\n]+/, 'armBand'),
   'const BODY_METRICS = { h: 1, cx: 0, cy: 0, cz: 0 }',
   grab(/function classify\(wx, wy, wz\) \{[\s\S]*?\n\}/, 'classify()'),

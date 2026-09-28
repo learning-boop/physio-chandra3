@@ -157,6 +157,14 @@ const ANKLE_TOP = -0.40
 // -0.005, the foot reaches forward from fy -0.44, and the sole is below -0.48.
 const SOLE_TOP = -0.48
 const FOOT_FRONT = 0.01
+// The arch of the midfoot rises above SOLE_TOP: measured on this mesh the
+// downward-facing sole reaches fy -0.475 on the inner arch, at lx -0.03 to
+// 0.01 (in front of the heel, behind FOOT_FRONT). Those marks read as "ankle"
+// although they are on the sole. In front of the heel the foot now starts at
+// ARCH_TOP; the ankle bones sit higher (about -0.44 to -0.46), and the back
+// of the heel (lx below HEEL_FRONT) still follows SOLE_TOP.
+const ARCH_TOP = -0.468
+const HEEL_FRONT = -0.03
 const armBand = (fy) => (fy > UPPERARM_BOTTOM ? 'upperarm' : fy > ELBOW_BOTTOM ? 'elbow' : fy > FOREARM_BOTTOM ? 'forearm' : fy > WRIST_BOTTOM ? 'wrist' : 'hand')
 
 // The zone bands below are expressed as a FRACTION OF THE WHOLE FIGURE:
@@ -188,7 +196,7 @@ function measureBody(object3d) {
 // console, so if a fix "doesn't take", open DevTools → Console: no line or an
 // older version means the browser is running a stale cached bundle (hard
 // refresh with Ctrl+Shift+R) or the file wasn't replaced.
-const CLASSIFIER_VERSION = 'zones-v19'
+const CLASSIFIER_VERSION = 'zones-v20'
 if (typeof window !== 'undefined' && window.__painZonesV !== CLASSIFIER_VERSION) {
   window.__painZonesV = CLASSIFIER_VERSION
   console.info('[pain-mapper] area classifier ' + CLASSIFIER_VERSION)
@@ -210,7 +218,7 @@ function classify(wx, wy, wz) {
   // Legs first, by height alone. Safe because this model's arm points all sit
   // above fy -0.10, while the feet spread to |z| 0.1385 — wider than ARM_SPLIT
   // — so testing the arm first would read the edge of a foot as a wrist.
-  if (fy < ANKLE_TOP) return (fy < SOLE_TOP || lx > FOOT_FRONT ? 'foot' : 'ankle') + side
+  if (fy < ANKLE_TOP) return (fy < SOLE_TOP || lx > FOOT_FRONT || (fy < ARCH_TOP && lx > HEEL_FRONT) ? 'foot' : 'ankle') + side
   if (fy < KNEE_BOTTOM) return 'lowerleg' + side
   if (fy < KNEE_TOP) return 'knee' + side
   if (fy < -0.10) return 'thigh' + side
@@ -650,6 +658,16 @@ const MIN_STEP_SQ = 0.004 * 0.004
 // surface is further than MAX_SNAP away — that is a genuine miss, not a graze.
 const MAX_SNAP = 0.5 // world units (the body is 4 tall, so this is generous)
 const _snapLocal = new THREE.Vector3()
+const _ta = new THREE.Vector3(), _tb = new THREE.Vector3(), _tc = new THREE.Vector3()
+// World-space normal of one triangle of a body mesh.
+function faceNormal(o, faceIndex) {
+  const pos = o.geometry.attributes.position
+  const idx = o.geometry.index
+  const i = faceIndex * 3
+  const a = idx ? idx.getX(i) : i, b = idx ? idx.getX(i + 1) : i + 1, c = idx ? idx.getX(i + 2) : i + 2
+  _ta.fromBufferAttribute(pos, a); _tb.fromBufferAttribute(pos, b); _tc.fromBufferAttribute(pos, c)
+  return new THREE.Triangle(_ta, _tb, _tc).getNormal(new THREE.Vector3()).transformDirection(o.matrixWorld)
+}
 function snapToBody(body, worldPoint) {
   let best = null
   let bestD = Infinity
@@ -661,7 +679,7 @@ function snapToBody(body, worldPoint) {
     if (!hit || !hit.point) return
     const w = o.localToWorld(hit.point.clone())
     const d = w.distanceTo(worldPoint)
-    if (d < bestD) { bestD = d; best = w }
+    if (d < bestD) { bestD = d; best = w; best.n = faceNormal(o, hit.faceIndex) }
   })
   return best && bestD <= MAX_SNAP ? best : null
 }
@@ -682,7 +700,21 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
     pointer.y = -((cy - rect.top) / rect.height) * 2 + 1
     raycaster.setFromCamera(pointer, camera)
     const body = scene.getObjectByName('bodyModel')
-    if (body) { const h = raycaster.intersectObject(body, true); if (h.length) return h[0].point.clone() }
+    // Each point carries the normal of the skin it was drawn on (`n`, turned
+    // to face the viewer), so PainLine can lift the line straight off the
+    // surface — on the sole of the foot that is downwards, not sideways.
+    const toViewer = (p) => {
+      if (p && p.n && p.n.dot(raycaster.ray.direction) > 0) p.n.negate()
+      return p
+    }
+    if (body) {
+      const h = raycaster.intersectObject(body, true)
+      if (h.length) {
+        const p = h[0].point.clone()
+        if (h[0].face) p.n = h[0].face.normal.clone().transformDirection(h[0].object.matrixWorld)
+        return toViewer(p)
+      }
+    }
     // NEAR MISS: the ray slipped past the silhouette — common in the notch
     // between the neck and the shoulder, or beside the head on a tilted view.
     // The old code recorded the raw hit on the invisible capsule hull, but the
@@ -695,7 +727,7 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
     const hull = scene.getObjectByName('collisionHull')
     if (!hull || !body) return null
     const hh = raycaster.intersectObject(hull, false)
-    return hh.length ? snapToBody(body, hh[0].point) : null
+    return hh.length ? toViewer(snapToBody(body, hh[0].point)) : null
   }, [camera, gl, pointer, raycaster, scene])
 
   const down = (e) => {
@@ -821,22 +853,25 @@ function toCurve(pts) {
   return curve.getPoints(n)
 }
 
+// Lift a drawn point `d` off the skin, so the line floats just above it —
+// no striping/z-fighting against the mesh, yet it still hides behind the body
+// when turned. The lift follows the surface normal the point was drawn on.
+// It used to push every point sideways, away from the body's vertical axis:
+// right for the trunk and legs, but on the sole of the foot that pushed the
+// line INTO the foot, so marks under the midfoot arch were hidden.
+function liftOff(p, d) {
+  if (p.n) return new THREE.Vector3(p.x + p.n.x * d, p.y + p.n.y * d, p.z + p.n.z * d)
+  const len = Math.hypot(p.x, p.z) || 1
+  const k = d / len
+  return new THREE.Vector3(p.x + p.x * k, p.y, p.z + p.z * k)
+}
+
 function PainLine({ points }) {
-  // Lift each point slightly OUT from the body's central axis so the line
-  // floats just above the skin — kills the striping/z-fighting against the
-  // mesh while still hiding correctly behind the body when rotated.
-  const lifted = useMemo(() => toCurve(denoise(points)).map((p) => {
-    const len = Math.hypot(p.x, p.z) || 1
-    const k = 0.03 / len
-    return new THREE.Vector3(p.x + p.x * k, p.y, p.z + p.z * k)
-  }), [points])
-  // Slightly further out again, so the dark halo sits behind the red core
-  // rather than fighting it for the same depth.
-  const haloPts = useMemo(() => lifted.map((p) => {
-    const len = Math.hypot(p.x, p.z) || 1
-    const k = 0.004 / len
-    return new THREE.Vector3(p.x + p.x * k, p.y, p.z + p.z * k)
-  }), [lifted])
+  const lifted = useMemo(() => toCurve(denoise(points.map((p) => liftOff(p, 0.03)))), [points])
+  // The dark halo sits a little closer to the skin, BEHIND the red core, so
+  // the core shows through it. (It used to sit further out, in front, and its
+  // wider stroke covered the core, turning the whole line dark maroon.)
+  const haloPts = useMemo(() => toCurve(denoise(points.map((p) => liftOff(p, 0.024)))), [points])
   return (
     <>
       {/* Dark outline first, so the red core reads on pale skin too */}
