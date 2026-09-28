@@ -399,6 +399,89 @@ function Recentre({ controlsRef, signal }) {
   return null
 }
 
+// What the results page can ask of the figure, through Body3D's `apiRef`:
+//   capture() → front and back pictures of the whole body with the drawn
+//               lines ({ src: JPEG data URL, width, height } each), for the PDF;
+//   strokes() → each drawn line as [fy, lz, lx] points in body proportions
+//               (the same frame classify() uses), for the anonymous copy.
+// The view the person left the body in is put back straight afterwards.
+const MAX_STROKE_POINTS = 150
+// Copies what was just rendered, cropped to the figure, onto white, at most
+// SHOT_MAX_H tall, as a JPEG — a full-size transparent PNG made the PDF ~6MB.
+const SHOT_MAX_H = 900
+function grabFigure(src) {
+  const c = document.createElement('canvas')
+  c.width = src.width; c.height = src.height
+  const cx = c.getContext('2d', { willReadFrequently: true })
+  cx.drawImage(src, 0, 0)
+  const { data } = cx.getImageData(0, 0, c.width, c.height)
+  let x0 = c.width, y0 = c.height, x1 = -1, y1 = -1
+  for (let y = 0; y < c.height; y++) {
+    for (let x = 0; x < c.width; x++) {
+      if (data[(y * c.width + x) * 4 + 3] > 24) {
+        if (x < x0) x0 = x
+        if (x > x1) x1 = x
+        if (y < y0) y0 = y
+        if (y > y1) y1 = y
+      }
+    }
+  }
+  if (x1 < 0) { x0 = 0; y0 = 0; x1 = c.width - 1; y1 = c.height - 1 }
+  const bw = x1 - x0 + 1, bh = y1 - y0 + 1
+  const k = Math.min(1, SHOT_MAX_H / bh)
+  const pad = Math.round(12 * k)
+  const out = document.createElement('canvas')
+  out.width = Math.round(bw * k) + pad * 2
+  out.height = Math.round(bh * k) + pad * 2
+  const ox = out.getContext('2d')
+  ox.fillStyle = '#ffffff'
+  ox.fillRect(0, 0, out.width, out.height)
+  ox.drawImage(c, x0, y0, bw, bh, pad, pad, Math.round(bw * k), Math.round(bh * k))
+  return { src: out.toDataURL('image/jpeg', 0.86), width: out.width, height: out.height }
+}
+function Snapshot({ apiRef, pathsRef }) {
+  const { gl, scene, camera, size } = useThree()
+  useEffect(() => {
+    if (!apiRef) return undefined
+    apiRef.current = {
+      capture() {
+        const pos = camera.position.clone()
+        const quat = camera.quaternion.clone()
+        const t = Math.tan((camera.fov * Math.PI) / 180 / 2)
+        const aspect = size.width / Math.max(1, size.height)
+        const dist = Math.max((BODY_HALF_H * 1.04) / t, (BODY_HALF_W * 1.04) / (t * aspect))
+        const target = new THREE.Vector3(0, BODY_CENTRE, 0)
+        const shots = []
+        for (const facing of [1, -1]) {
+          camera.position.set(dist * FRONT_SIGN * facing, BODY_CENTRE, 0)
+          camera.lookAt(target)
+          camera.updateMatrixWorld()
+          gl.render(scene, camera)
+          shots.push(grabFigure(gl.domElement))
+        }
+        camera.position.copy(pos)
+        camera.quaternion.copy(quat)
+        camera.updateMatrixWorld()
+        gl.render(scene, camera)
+        return { front: shots[0], back: shots[1] }
+      },
+      strokes() {
+        const H = BODY_METRICS.h
+        return pathsRef.current.map((pts) => {
+          const step = Math.max(1, Math.ceil(pts.length / MAX_STROKE_POINTS))
+          return pts.filter((_, i) => i % step === 0 || i === pts.length - 1).map((p) => [
+            (p.y - BODY_METRICS.cy) / H,
+            ((p.z - BODY_METRICS.cz) / H) * FRONT_SIGN,
+            ((p.x - BODY_METRICS.cx) / H) * FRONT_SIGN,
+          ])
+        })
+      },
+    }
+    return () => { apiRef.current = null }
+  }, [apiRef, pathsRef, gl, scene, camera, size])
+  return null
+}
+
 // Invisible capsule roughly matching the body — used for cheap "did the user
 // touch the body?" tests and as a drawing fallback surface.
 function CollisionHull() {
@@ -881,7 +964,7 @@ function PainLine({ points }) {
   )
 }
 
-function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete, recentreSignal }) {
+function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete, recentreSignal, apiRef, pathsRef }) {
   return (
     <>
       <ambientLight intensity={0.9} />
@@ -902,6 +985,7 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
 
       <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />
       <Recentre controlsRef={controlsRef} signal={recentreSignal} />
+      <Snapshot apiRef={apiRef} pathsRef={pathsRef} />
       <InteractionGuard controlsRef={controlsRef} highlightRef={highlightRef} interactedRef={interactedRef} />
       <Suspense fallback={<Loader />}><BodyFigure /></Suspense>
       <CollisionHull />
@@ -985,6 +1069,8 @@ export default function Body3D({
   clearSignal = 0, undoSignal = 0, redoSignal = 0, onHistoryChange,
   // Bump to move the picture back to the middle, keeping the turn and zoom.
   recentreSignal = 0,
+  // Filled with { capture(), strokes() } for the results page (see Snapshot).
+  apiRef,
 }) {
   const [highlight, setHighlight] = useState(false)   // OFF: rotate on body only
   // Touch devices get a one-line gesture hint over the canvas: one finger
@@ -1246,6 +1332,7 @@ export default function Body3D({
             controlsRef={controlsRef} interactedRef={interactedRef}
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
             recentreSignal={recentreSignal}
+            apiRef={apiRef} pathsRef={pathsRef}
           />
         </Canvas>
         </CanvasErrorBoundary>

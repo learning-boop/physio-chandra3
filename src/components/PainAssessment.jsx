@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import ClinicianSummary from './ClinicianSummary'
+import SaveResults from './SaveResults'
 import GuideVideo from './GuideVideo'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
@@ -378,6 +379,10 @@ export default function PainAssessment() {
   const [undoSignal, setUndoSignal] = useState(0)
   const [redoSignal, setRedoSignal] = useState(0)
   const [history, setHistory] = useState({ canUndo: false, canRedo: false, lines: 0 })
+  // The figure's pictures and drawn lines, for the PDF and the anonymous copy.
+  const bodyApi = useRef(null)
+  // Reference code, given once the results are reached (see visitCode below).
+  const [visitCode, setVisitCode] = useState(null)
   const [fromReview, setFromReview] = useState(false)
   // Gates the result screen behind the "not a diagnosis" notice.
   // When the marks cross more than one area, the person chooses which area
@@ -881,6 +886,65 @@ export default function PainAssessment() {
     })
     : ''), [stage, zones, referral, keys, scopedAnswers, qaPairs, notesText, shown, behaviour, psych, painType, pickedCautions, safetyChecks, flags, review, doctorFlags, otherFlagged, flagOther])
 
+  /* ── Reference code ────────────────────────────────────────────────────
+     Given only to someone who completed the guide: asked for when the results
+     open, one per completion (Start Over clears it). The clinic date plus the
+     day's running number from api/visit-code.js — 20261011-001, -002 … If the
+     counter cannot be reached (offline, not set up) the code ends in four
+     letters instead, e.g. 20261011-KXQM, which can never clash with a number. */
+  const codeAsked = useRef(false)
+  useEffect(() => {
+    if (stage !== 'ok' || visitCode || codeAsked.current) return
+    codeAsked.current = true
+    const offline = () => {
+      const d = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Vancouver', year: 'numeric', month: '2-digit', day: '2-digit' })
+        .formatToParts(new Date()).map((p) => [p.type, p.value]))
+      const L = 'ABCDEFGHJKMNPQRSTUVWXYZ'
+      const r = crypto.getRandomValues(new Uint32Array(4))
+      return `${d.year}${d.month}${d.day}-${[...r].map((n) => L[n % L.length]).join('')}`
+    }
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/visit-code`, { method: 'POST' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((j) => setVisitCode(j && /^\d{8}-\d{3,}$/.test(j.code) ? j.code : offline()))
+      .catch(() => setVisitCode(offline()))
+  }, [stage, visitCode])
+
+  // Everything the patient's PDF shows (../components/resultsPdf.js).
+  const pdfData = () => ({
+    code: visitCode,
+    dateText: new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }),
+    images: (() => { try { return bodyApi.current ? bodyApi.current.capture() : null } catch { return null } })(),
+    areas: [...new Set(zones.map((z) => z.label))],
+    doctor: doctorFlagged ? {
+      title: sameDayFlagged ? 'Please see a doctor today' : 'Please see your doctor',
+      items: [...doctorFlags.map((f) => (f.why && f.why.title ? f.why.title : f.text)), ...(otherFlagged ? [`Other: ${flagOther.trim()}`] : [])],
+    } : null,
+    referral: referral.map((r) => referralSummary(r, referralMechanism(r, answers))),
+    conditions: shown.map(({ c }) => ({ name: c.name, blurb: c.blurb })),
+    noMatch: keys.length ? 'No clear match in this guide. Pain often does not fit a textbook pattern, and that is what an in-person assessment is for.' : 'This guide does not yet cover this area in detail. An in-person assessment is the right next step.',
+    painType: painType ? [painType.primary, painType.secondary].filter(Boolean).map((t) => `${PAIN_TYPES[t].title} (${PAIN_TYPES[t].term})`).join(', with some features of ') : null,
+    behaviour: behaviour.notes,
+    cautions: pickedCautions.map((f) => f.text),
+    answers: qaPairs,
+    notes: notesText,
+  })
+
+  // The anonymous copy (api/anon-share.js): drawing and chosen options only.
+  // No reference code, no free text ('notes', '…_other', the "Other" red-flag
+  // text); the server also keeps only answers that are the guide's own options.
+  const anonPayload = () => ({
+    engine: typeof window !== 'undefined' ? window.__painZonesV || null : null,
+    strokes: bodyApi.current ? bodyApi.current.strokes() : [],
+    zones: zones.map((z) => ({ id: z.id, type: z.type, face: z.face, ink: z.ink })),
+    lines,
+    answers: Object.fromEntries(Object.entries(answers).filter(([k, v]) =>
+      !/(^notes$|^q5$|_other$)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
+    flags: flags.filter((f) => f !== '__other'),
+    results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
+    referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null })),
+    painType: painType ? { primary: painType.primary, secondary: painType.secondary || null, subtype: painType.subtype || null } : null,
+  })
+
   // The screen a review-screen entry lives on (the opening answers share 0).
   const screenOf = (q) =>
     activeQuestions.findIndex((s) => s === q || s.id === q.id || (s.group && s.group.includes(q)))
@@ -1000,6 +1064,7 @@ export default function PainAssessment() {
     setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
     setClearSignal((n) => n + 1); setFromReview(false); setDrawMode(false); setShowAnswers(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined)
+    setVisitCode(null); codeAsked.current = false
   }
 
   return (
@@ -1214,7 +1279,8 @@ export default function PainAssessment() {
                       This guide offers general information to help you describe your symptoms.
                       It is not a diagnosis and does not replace an assessment by a qualified
                       health professional. Your answers stay on this device unless you choose to
-                      share them: the optional AI overview, or emailing your summary to Chandra
+                      share them: the optional AI overview, emailing your summary to Chandra, or
+                      an optional anonymous copy to help improve this guide
                       (<Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>).
                     </p>
                   </div>
@@ -1930,6 +1996,10 @@ export default function PainAssessment() {
                   What your answers <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>can be associated with</em>
                 </h2>
                 </div>
+                <p style={{ fontSize: 14.5, color: 'rgba(255,255,255,0.7)', margin: '0 0 14px', maxWidth: 520 }}>
+                  Reference code: <strong style={{ color: '#fff', letterSpacing: '0.05em' }}>{visitCode || '…'}</strong>
+                  <span style={{ color: 'rgba(255,255,255,0.5)' }}> · save your results at the end of this page</span>
+                </p>
 
                 {/* Not-a-diagnosis notice, first on the results (CHCPBC Practice
                     Standards: not a diagnosis, general information, no outcome
@@ -2167,7 +2237,10 @@ export default function PainAssessment() {
                 {/* Everything the screen worked out, in the order of the CPA
                     Orthopaedic Division subjective booklet — for Chandra, and
                     built on the device from the answers already given. */}
-                <ClinicianSummary text={summaryText} />
+                <ClinicianSummary text={visitCode ? `Reference code: ${visitCode}\n\n${summaryText}` : summaryText} />
+
+                <span style={{ ...label, margin: '30px 0 12px' }}>Keep Your Results</span>
+                <SaveResults code={visitCode} pdfData={pdfData} anonPayload={anonPayload} />
 
                 <div className="pa-actions" style={{ marginTop: 22 }}>
                   <button style={ghostBtn} onClick={restart}>Start Over</button>
@@ -2235,6 +2308,7 @@ export default function PainAssessment() {
               redoSignal={redoSignal}
               recentreSignal={recentre}
               onHistoryChange={setHistory}
+              apiRef={bodyApi}
             />
           </div>
           {modelSmall && zones.length > 0 && (

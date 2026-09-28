@@ -7,7 +7,7 @@ import Footer from '../components/Footer'
    Keep it in step with what the site actually does: if the pain guide, the
    AI overview (api/pain-analysis.js) or the hosting changes, update this. */
 
-const UPDATED = 'September 25, 2026'
+const UPDATED = 'September 28, 2026'
 
 const sections = [
   {
@@ -20,7 +20,23 @@ const sections = [
     title: 'The pain guide',
     body: [
       'The pain guide asks where you feel pain and some questions about it, including your age range and, if you choose to answer them, how the pain is affecting your mood, sleep and work. It does not ask for your name or contact details.',
-      'Your drawing and answers are worked through on your own device, in your browser. They are not saved by this website and are cleared when you close or restart the guide.',
+      'Your drawing and answers are worked through on your own device, in your browser. They are not saved by this website and are cleared when you close or restart the guide, unless you choose to share an anonymous copy (see below).',
+    ],
+  },
+  {
+    title: 'Your reference code and PDF',
+    body: [
+      'When you complete the guide you receive a reference code made of the date and a running number for that day, for example 20261011-004. It is shown on your results, on your PDF and in your summary, so the clinic can match them when you book.',
+      'To give out the next number, the website keeps only a count for each day, which is deleted after two days. Your answers are not sent or stored with the code, and the code is never added to the anonymous copy described below.',
+      'The PDF of your results is created on your own device and is not sent to us. You decide where to save or send it.',
+    ],
+  },
+  {
+    title: 'Anonymous copy to improve the guide',
+    body: [
+      'At the end of the guide you can choose to share an anonymous copy of your drawing and the answers you chose. The box for this is not ticked, and nothing is shared unless you tick it and press "Share anonymously".',
+      'The copy is used only to improve and train this guide. It contains the lines you drew, the areas they cover, the options you selected (your age is kept as a range), and the results the guide showed. It does not contain your name, contact details, reference code, anything you typed in your own words, the time you took the guide, your IP address or details of your device. A new random number is given to each copy, so copies cannot be linked to you or to each other.',
+      'The copies are stored with Upstash, the database service this website uses, and only Chandra can open them. They are deleted after about two years. Because a copy cannot be linked to you, it cannot be found again or deleted on request after it has been shared.',
     ],
   },
   {

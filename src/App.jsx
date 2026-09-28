@@ -5,6 +5,7 @@ import ConditionsPage from './pages/ConditionsPage'
 import EducationPage from './pages/EducationPage'
 import PainMapperPage from './pages/PainMapperPage'
 import PrivacyPage from './pages/PrivacyPage'
+import DataReviewPage from './pages/DataReviewPage'
 import ScrollToTop from './components/ScrollToTop'
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/education"  element={<EducationPage />} />
         <Route path="/pain-mapper" element={<PainMapperPage />} />
         <Route path="/privacy"    element={<PrivacyPage />} />
+        <Route path="/data-review" element={<DataReviewPage />} />
       </Routes>
     </>
   )

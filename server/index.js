@@ -22,6 +22,11 @@ import {
   applyReview,
   fallbackAnalysis,
 } from '../api/_lib/painShared.js'
+// The reference-code counter and the anonymous copies: the Vercel functions
+// themselves, mounted here unchanged (they only use req.body/query and res).
+import visitCode from '../api/visit-code.js'
+import anonShare from '../api/anon-share.js'
+import anonReview from '../api/anon-review.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -39,7 +44,7 @@ if (!hasValidKey(API_KEY)) {
 }
 
 app.use(cors()) // for production, restrict to your site: cors({ origin: 'https://physiochandra.com' })
-app.use(express.json())
+app.use(express.json({ limit: '300kb' }))
 
 const anthropic = new Anthropic({ apiKey: API_KEY })
 
@@ -120,6 +125,10 @@ app.post('/api/pain-analysis', async (req, res) => {
     res.json(fallbackAnalysis(labels, found))
   }
 })
+
+app.post('/api/visit-code', visitCode)
+app.post('/api/anon-share', anonShare)
+app.get('/api/anon-review', anonReview)
 
 app.get('/health', (req, res) => res.json({ ok: true }))
 
