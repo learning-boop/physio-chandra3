@@ -46,6 +46,14 @@ const WHY = {
     title: 'Please see a doctor today',
     text: 'Dizziness that keeps coming back or does not go away after a car accident or a hard knock to the head or neck can come from the inner ear or the neck, but it can also be a sign of damage to a neck artery or the brain. A doctor should check it today, before any treatment of the neck. If it is getting quickly worse, go to an emergency department.',
   },
+  dizzyHeart: {
+    title: 'This needs emergency assessment',
+    text: 'Dizziness with fainting, chest pain, a racing or irregular heartbeat, or shortness of breath can come from the heart or blood pressure rather than the neck or inner ear. It needs to be checked straight away.',
+  },
+  dizzyDoctor: {
+    title: 'Please see a doctor today',
+    text: 'Sudden hearing loss in one ear, or dizziness that is constant and getting worse with vomiting or new headaches, needs a doctor to check the inner ear and the brain before the neck is treated. Sudden hearing loss is treated best when it is seen early.',
+  },
   cardiac: {
     title: 'This needs emergency assessment',
     text: 'Pain in the chest, left arm or jaw that comes with sweating, nausea or breathlessness can come from the heart rather than from muscles or joints. It is treated completely differently and cannot wait.',
@@ -87,6 +95,19 @@ const PATTERNS = [
     id: 'pc-trauma5d', tier: 'urgent', sameDay: true, why: WHY.trauma5d,
     text: 'Since the accident or knock, dizziness that keeps coming back or will not go away, or double vision, slurred speech, trouble swallowing, falls or blackouts, feeling sick, face numbness, or flickering eyes',
     when: (z, a) => [].concat(a.D8 || []).includes('dizzy'),
+  },
+  // Dizziness ticked on the neck's N9 (cervicogenic dizziness document,
+  // section 6). Its stroke-type and after-injury flags are on the first safety
+  // pages already; these two only make sense once dizziness is reported.
+  {
+    id: 'pc-dizzy-heart', tier: 'emergency', why: WHY.dizzyHeart,
+    text: 'With the dizziness: fainting, chest pain, a racing or irregular heartbeat, or shortness of breath',
+    when: (z, a) => [].concat(a.N9 || []).includes('dizzy'),
+  },
+  {
+    id: 'pc-dizzy-doctor', tier: 'urgent', sameDay: true, why: WHY.dizzyDoctor,
+    text: 'Sudden hearing loss in one ear, or dizziness that is constant and getting worse, with vomiting or new headaches',
+    when: (z, a) => [].concat(a.N9 || []).includes('dizzy'),
   },
   {
     id: 'pc-cardiac', tier: 'emergency', why: WHY.cardiac,

@@ -138,6 +138,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ids(['head'], { D8: ['dizzy'] }).includes('pc-trauma5d:urgent'), ids(['head'], { D8: ['dizzy'] }))
   check('head injury without dizziness → no trauma confirmation',
     !ids(['head'], { D8: ['screens'] }).some((x) => x.startsWith('pc-trauma5d')), ids(['head'], { D8: ['screens'] }))
+  check('dizziness ticked on the neck → heart (911) and ear/worsening (doctor today) checks',
+    ids(['neck'], { N9: ['dizzy'] }).includes('pc-dizzy-heart:emergency') && ids(['neck'], { N9: ['dizzy'] }).includes('pc-dizzy-doctor:urgent'),
+    ids(['neck'], { N9: ['dizzy'] }))
+  check('neck without dizziness → no dizziness checks',
+    !ids(['neck'], { N9: ['none'] }).some((x) => x.startsWith('pc-dizzy')), ids(['neck'], { N9: ['none'] }))
   check('one knee only → no pattern questions at all', patternChecks(zonesOf([['kneeL']]), {}, 3).length === 0, ids(['kneeL']))
   check('at most 2 pattern questions are added', patternChecks(zonesOf([['chest', 'shoulderL', 'abdomen', 'lowerback']]), {}, 2).length <= 2)
   const shape = drawingShape(zonesOf([['neck', 'shoulderL', 'elbowL'], ['kneeR']]), [['neck', 'shoulderL', 'elbowL'], ['kneeR']])

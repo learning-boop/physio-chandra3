@@ -17,13 +17,22 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # CPG's expected findings and stage-matched interventions to each
 # condition's ## clinicNotes (clinician summary only), and the arm weakness
 # option to question 2.
+# 28 Sep 2026: cervicogenic dizziness added from "Cervicogenic dizziness.docx"
+# (Conditions/Neck and headache, draft v0.1): a dizziness answer on question 9,
+# question 11, condition content/conditions/neck-cgd.md, two final-check
+# flags (heart; ear or worsening), the BPPV and inner-ear look-alike cards,
+# and test patients 14 to 19. Marked (CGD) below.
 ---
 
 ## red flags
 <!-- "Ask only if" is an addition: the two shoulder-tip flags are asked only
      when a shoulder is drawn. -->
 - Have you had a sudden, severe headache, the worst you have ever had? | emergency | Possible bleed or artery tear in the neck or head
-- Since this started, have any of these come on suddenly: room spinning or dizziness, double vision, slurred speech, trouble swallowing, falls or blackouts, numb face, weakness on one side, or unsteady walking? | emergency | Stroke or cervical artery warning signs (IFOMPT framework)
+<!-- (CGD) Chandra, 28 Sep 2026: dizziness alone no longer ticks the stroke
+     flag, so neck-related dizziness is not sent to 911. More sudden stroke
+     signs added; new, sudden dizziness WITH a sign is its own flag. -->
+- Since this started, have any of these come on suddenly: a drooping or numb face, weakness or numbness in an arm or leg on one side, slurred speech or trouble finding or understanding words, loss of sight or double vision, trouble swallowing, sudden confusion, or falls or blackouts? | emergency | Stroke or cervical artery warning signs (IFOMPT framework)
+- Have you had new, sudden dizziness or room spinning together with any of these: being unable to stand or walk without help, vomiting, a new severe headache or neck pain, double vision, slurred speech, a numb face, weakness on one side, or eyes that flicker or jump? | emergency | New, sudden dizziness with these signs can be a stroke at the back of the brain
 <!-- (DCM) The stroke flag now asks what came on suddenly, so a walk that
      has changed slowly over months goes to the myelopathy questions, not 911.
      "Unable to pass urine" and the manipulation flag are from the DCM
@@ -45,7 +54,10 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      is now asked in questions 9 and 10 and scored; only fast change stays here. -->
 - Over the last few days or weeks, have your hands been getting quickly clumsier (buttons, writing, dropping things), or your walking quickly more unsteady? | urgent, same day | Spinal cord pressure that is getting worse quickly needs a doctor today
 - Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth? | urgent | Possible upper neck instability
-- Did a new neck pain or headache, unlike anything you have had before, start suddenly after a neck manipulation, a sudden jerk, or a minor knock? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
+<!-- (CGD) Chandra, 28 Sep 2026: severe pain never felt before, or symptoms
+     changing fast -> Emergency; shared with the head, asked once. -->
+- Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly? | emergency | Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear
+- Did a new neck pain or headache, different from any you have had before but not severe, start suddenly after a neck manipulation, a sudden jerk, or a minor knock? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
 - Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | emergency | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign) | Ask only if: a shoulder is drawn
 - Is the pain at the tip of your shoulder worse when you breathe in deeply, or does it come on after fatty meals? | urgent | Diaphragm, lung lining, liver or gallbladder pain is felt at the shoulder tip (C3–C5) | Ask only if: a shoulder is drawn
 
@@ -177,6 +189,7 @@ Q: Have you noticed any of these changes? Tick all that apply.
 - My hands have become clumsy: buttons, writing, using a phone, or dropping things
 - My walking or balance has changed: unsteady, tripping, or legs feel stiff or heavy
 - Bending my head forward sends an electric feeling down my back, arms, or legs
+- Feeling dizzy, light-headed, or off-balance at times   (CGD: opens question 11; not a cord sign)
 - None of these
 Ask first, always.
 
@@ -184,7 +197,29 @@ Q: How have these hand or walking changes behaved over time?
 - Slowly getting worse over months or years
 - Staying about the same, or coming and going
 - Getting better
-Ask only if: question 9 is anything but "None of these"; then asked straight after it. (Getting quickly worse over days or weeks is the same-day safety flag.)
+Ask only if: question 9 has a cord sign (anything but "None of these" or dizziness); then asked straight after it. (Getting quickly worse over days or weeks is the same-day safety flag.)
+
+<!-- (CGD) The document's seven scored questions in one. Its Q2 (neck pain)
+     is everyone on this path; its Q5 (after an injury) is "How did it start?",
+     and a recent injury goes through the injury screen first. -->
+Q: About the dizziness: which of these apply? Tick all that apply.
+- I feel unsteady or off-balance, rather than the room spinning
+- The room spins   (shows the inner-ear card)
+- It started around the same time as my neck pain
+- Turning my head, or holding it in one position (desk, driving, looking up), brings it on
+- When my neck feels better, the dizziness is better too
+- Rolling over in bed or lying down brings on a short burst of spinning, under a minute   (scores against; shows the BPPV card)
+- Hearing changes, ringing, or a full feeling in one ear   (scores against; shows the inner-ear card)
+Ask only if: question 9 includes dizziness; then asked straight after it.
+
+## final check (answers-dependent)
+<!-- (CGD) Asked after the questions when dizziness is ticked in question 9
+     (src/data/patternChecks.js). The document's other dizziness flags are
+     already on the first safety pages: stroke signs (nrf-artery), sudden
+     severe headache or neck pain (nrf-thunderclap, nrf-cad-severe, nrf-cad), new sudden dizziness with a stroke sign (nrf-dizzystroke), after an injury (injury
+     screen I5, trauma5d). -->
+- With the dizziness: fainting, chest pain, a racing or irregular heartbeat, or shortness of breath | emergency | Heart or blood pressure cause
+- Sudden hearing loss in one ear, or dizziness that is constant and getting worse, with vomiting or new headaches | urgent, same day | Inner ear or brain to be checked first
 
 ## referral patterns
 - Neck → back of the head, temple, or behind the eye | Headache coming from the upper neck (cervicogenic, C1–C3) | Migraine, tension-type headache; vascular causes if red flags ticked
@@ -265,3 +300,54 @@ Drawing: Centre of the neck
 Answers: Age = 30 to 49; Gradually, no clear reason; Less than 2 weeks
 Flags: Since a neck manipulation or adjustment…, have you had new numbness or weakness in your arms or legs?
 Expect: route = 911
+
+<!-- (CGD) Test patients 12 and 13 (post-injury dizziness) are in scripts/check-region-tests.mjs. -->
+CASE: 14. Desk worker, unsteady when holding the head still (cervicogenic dizziness)
+Drawing: Back of the neck and back of the head
+Answers: Age = 30 to 49; After long hours at a desk; More than 3 months; Q1 = stiff or painful turning to one side; Q9 = dizzy; Q11 = unsteady + started with the neck pain + head position brings it on + better when the neck is better; Q6 = long spells at a desk
+Flags: none
+Expect: top condition = cervicogenic dizziness; Q9 and Q11 asked, Q10 not asked; must not show = myelopathy; route = results
+
+CASE: 15. Dizzy since a car accident 3 months ago, linked to the neck
+Drawing: Centre of the neck
+Answers: Age = 30 to 49; After a car accident; 6 weeks to 3 months; Q9 = dizzy; Q11 = unsteady + head position brings it on; Q5 = neck gets tired + pain has spread
+Flags: none ticked in the test. A real patient would usually tick the ongoing-dizziness-after-an-accident flag (see a doctor today); the questions still continue to this result.
+Expect: top condition = cervicogenic dizziness or whiplash; route = results
+
+CASE: 16. BPPV look-alike: short spins rolling over in bed
+Drawing: Centre of the neck
+Answers: Age = 50 to 64; Gradually; 2 to 6 weeks; Q1 = stiff one side; Q9 = dizzy; Q11 = the room spins + short spins rolling over in bed; Q6 = desk
+Flags: none
+Expect: must not show = cervicogenic dizziness; BPPV card; route = results
+
+CASE: 17. Inner-ear look-alike: spinning with ringing in one ear
+Drawing: Centre of the neck
+Answers: Age = 50 to 64; Gradually; 2 to 6 weeks; Q9 = dizzy; Q11 = the room spins + ear symptoms + head position brings it on
+Flags: none
+Expect: must not show = cervicogenic dizziness; inner-ear card; route = results
+
+CASE: 18. No dizziness
+Drawing: Centre of the neck
+Answers: Age = 30 to 49; Gradually; 2 to 6 weeks; Q1 = stiff one side; Q9 = None of these; Q6 = desk; Q7 = stiff at first, then eases
+Flags: none
+Expect: top condition = mechanical neck pain; Q10 and Q11 not asked; route = results
+
+CASE: 19. The document's threshold: 5 points shown (unsteady + head position), 4 points not (unsteady + better when the neck is better)
+
+CASE: 20. New, sudden spinning with vomiting and unable to walk
+Drawing: Centre of the neck
+Answers: Age = 50 to 64; Gradually; Less than 2 weeks
+Flags: Have you had new, sudden dizziness or room spinning together with any of these…?
+Expect: route = 911
+
+CASE: 21. Severe neck pain, never felt before, after a neck manipulation
+Drawing: Centre of the neck
+Answers: Age = 30 to 49; After lifting or a sudden movement; Less than 2 weeks
+Flags: Since a neck manipulation, a sudden jerk, or a minor knock, … severe and unlike anything you have felt before, or … changing quickly?
+Expect: route = 911 (the same flag is asked once when the head is drawn too)
+
+CASE: 22. New but not severe neck pain after a neck manipulation
+Drawing: Centre of the neck
+Answers: Age = 30 to 49; After lifting or a sudden movement; Less than 2 weeks
+Flags: Did a new neck pain or headache, different from any you have had before but not severe, start suddenly after…?
+Expect: route = see your doctor

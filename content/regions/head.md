@@ -35,7 +35,10 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - Did the headache start after a knock to the head or a whiplash injury in the last 4 weeks? | urgent | Possible concussion: medical assessment before physio
 - Did this new headache start after beginning a new medication? | urgent | Medication side effect: the prescriber should review it
 - Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache? | urgent | Possible pre-eclampsia or other pregnancy-related cause
-- Did a new headache with neck pain, unlike anything you have had before, start after a neck manipulation or sudden jolt? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
+<!-- Added 28 Sep 2026 at Chandra's instruction (cervicogenic dizziness review);
+     shared with the neck, asked once. -->
+- Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly? | emergency | Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear
+- Did a new headache with neck pain, different from any you have had before but not severe, start after a neck manipulation or sudden jolt? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
 
 ## opening questions
 Q: Your age?

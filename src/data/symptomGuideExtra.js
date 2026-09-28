@@ -32,14 +32,25 @@ export const EXTRA_REGIONS = {
      (content/conditions/neck-dcm.md) carries a "see your doctor first" note.
      Only the fast pattern (worse over days or weeks) stays on the safety
      screen, as a same-day flag. The stroke flag asks about symptoms that
-     came on suddenly, so a slowly changing walk is not sent to 911. */
+     came on suddenly, so a slowly changing walk is not sent to 911.
+
+     Cervicogenic dizziness, from the "Cervicogenic dizziness" condition
+     document (draft v0.1, 28 Sep 2026): dizziness is a tick in N9, N11 asks
+     its features, and the condition is content/conditions/neck-cgd.md. The
+     heart and ear flags it calls for are in the final check
+     (../data/patternChecks.js). */
   neck: {
     name: "Neck (cervical spine)",
     redFlags: [
       { id: "nrf-thunderclap", tier: "emergency", group: "thunderclap", why: "Possible bleed or artery tear in the neck or head",
         text: "Have you had a sudden, severe headache, the worst you have ever had?" },
+      // Chandra, 28 Sep 2026 (cervicogenic dizziness review): dizziness alone
+      // no longer counts here, so neck-related dizziness is not sent to 911.
+      // New, sudden dizziness WITH a stroke sign is its own emergency flag.
       { id: "nrf-artery", tier: "emergency", group: "stroke", why: "Stroke or neck artery warning signs",
-        text: "Since this started, have any of these come on suddenly: room spinning or dizziness, double vision, slurred speech, trouble swallowing, falls or blackouts, numb face, weakness on one side, or unsteady walking?" },
+        text: "Since this started, have any of these come on suddenly: a drooping or numb face, weakness or numbness in an arm or leg on one side, slurred speech or trouble finding or understanding words, loss of sight or double vision, trouble swallowing, sudden confusion, or falls or blackouts?" },
+      { id: "nrf-dizzystroke", tier: "emergency", group: "dizzystroke", why: "New, sudden dizziness with these signs can be a stroke at the back of the brain",
+        text: "Have you had new, sudden dizziness or room spinning together with any of these: being unable to stand or walk without help, vomiting, a new severe headache or neck pain, double vision, slurred speech, a numb face, weakness on one side, or eyes that flicker or jump?" },
       { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord",
         text: "Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs?" },
       { id: "nrf-manip", tier: "emergency", why: "New nerve or spinal cord symptoms after a neck manipulation",
@@ -62,8 +73,13 @@ export const EXTRA_REGIONS = {
         text: "Over the last few days or weeks, have your hands been getting quickly clumsier (buttons, writing, dropping things), or your walking quickly more unsteady?" },
       { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability",
         text: "Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
+      // Chandra, 28 Sep 2026: severe pain never felt before, or symptoms
+      // changing fast, after a manipulation, jerk or knock -> Emergency.
+      // Shared with the head (group "cadsevere"): asked once.
+      { id: "nrf-cad-severe", tier: "emergency", group: "cadsevere", why: "Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear",
+        text: "Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly?" },
       { id: "nrf-cad", tier: "urgent", group: "cad", why: "An early sign of a neck artery tear can be pain alone",
-        text: "Did a new neck pain or headache, unlike anything you have had before, start suddenly after a neck manipulation, a sudden jerk, or a minor knock?" },
+        text: "Did a new neck pain or headache, different from any you have had before but not severe, start suddenly after a neck manipulation, a sudden jerk, or a minor knock?" },
       { id: "nrf-tip", tier: "urgent", group: "tip", drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder tip",
         text: "Is the pain at the tip of your shoulder worse when you breathe in deeply, or does it come on after fatty meals?" }
     ],
@@ -169,17 +185,37 @@ export const EXTRA_REGIONS = {
           { id: "clumsy", label: "My hands have become clumsy: buttons, writing, using a phone, or dropping things" },
           { id: "walking", label: "My walking or balance has changed: unsteady, tripping, or legs feel stiff or heavy" },
           { id: "lhermitte", label: "Bending my head forward sends an electric feeling down my back, arms, or legs" },
+          // Cervicogenic dizziness: the gateway to N11. Not a cord sign.
+          { id: "dizzy", label: "Feeling dizzy, light-headed, or off-balance at times" },
           { id: "none", label: "None of these" }
         ]},
       // Fast change (days or weeks) was asked on the safety screen (nrf-myelo).
       // Asked straight after any cord sign, before the question budget runs out.
       { id: "N10", text: "How have these hand or walking changes behaved over time?",
-        askIf: ({ ra }) => [].concat(ra.N9 || []).some((o) => o !== "none"),
+        askIf: ({ ra }) => [].concat(ra.N9 || []).some((o) => o !== "none" && o !== "dizzy"),
         priority: () => true,
         options: [
           { id: "slowworse", label: "Slowly getting worse over months or years" },
           { id: "steady", label: "Staying about the same, or coming and going" },
           { id: "better", label: "Getting better" }
+        ]},
+      // Cervicogenic dizziness, from Chandra's "Cervicogenic dizziness"
+      // condition document (draft v0.1, 28 Sep 2026): its seven scored
+      // questions in one, asked straight after dizziness is ticked in N9.
+      // Q2 (neck pain) is everyone on this path; Q5 (injury) is the onset
+      // answer, and a recent injury already goes through the injury screen.
+      // Inner-ear features score against it and show a look-alike card.
+      { id: "N11", text: "About the dizziness: which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.N9 || []).includes("dizzy"),
+        priority: () => true,
+        options: [
+          { id: "unsteady", label: "I feel unsteady or off-balance, rather than the room spinning" },
+          { id: "spin", label: "The room spins", special: "innerEar" },
+          { id: "withneck", label: "It started around the same time as my neck pain" },
+          { id: "headpos", label: "Turning my head, or holding it in one position (desk, driving, looking up), brings it on" },
+          { id: "tracks", label: "When my neck feels better, the dizziness is better too" },
+          { id: "bppv", label: "Rolling over in bed or lying down brings on a short burst of spinning, under a minute", special: "bppv" },
+          { id: "ear", label: "Hearing changes, ringing, or a full feeling in one ear", special: "innerEar" }
         ]}
     ],
     conditions: []
@@ -942,8 +978,11 @@ export const EXTRA_REGIONS = {
         text: "Did this new headache start after beginning a new medication?" },
       { id: "hrf-pregnancy", tier: "urgent", why: "Possible pre-eclampsia or other pregnancy-related cause",
         text: "Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache?" },
+      // Shared with the neck (group "cadsevere", Chandra 28 Sep 2026): asked once.
+      { id: "hrf-cad-severe", tier: "emergency", group: "cadsevere", why: "Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear",
+        text: "Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly?" },
       { id: "hrf-cad", tier: "urgent", group: "cad", why: "Early sign of a neck artery tear can be pain alone (IFOMPT framework)",
-        text: "Did a new headache with neck pain, unlike anything you have had before, start after a neck manipulation or sudden jolt?" }
+        text: "Did a new headache with neck pain, different from any you have had before but not severe, start after a neck manipulation or sudden jolt?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -2437,6 +2476,11 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "A small pit or a tender lump at the top of the buttock crease can be a <strong>pilonidal sinus</strong>, a skin problem that can become infected. It is treated by a doctor rather than physiotherapy, so please have it checked, sooner if it becomes red, swollen or starts to leak." },
   neckSource: { title: "This may be coming from your neck",
     body: "Pain around the jaw that does not change when you chew, talk or open wide, especially with neck pain, is often felt in the jaw but comes from the <strong>upper neck</strong> or the neck muscles. Consider running the <strong>Neck</strong> guide too. Your assessment will check both." },
+  // Cervicogenic dizziness look-alikes (the neck's N11).
+  bppv: { title: "Short spins when you roll over: often the inner ear",
+    body: "Short bursts of spinning, under a minute, when you roll over in bed, lie down, or look up are typical of <strong>BPPV</strong>: tiny crystals in the inner ear that have come loose. It is common, and a physiotherapist can check for it and treat it with simple head movements. It can happen alongside neck-related dizziness, so your assessment will check both." },
+  innerEar: { title: "Spinning or ear symptoms: please see your doctor as well",
+    body: "Dizziness where the room spins for hours or days, or that comes with hearing changes, ringing, or a full feeling in one ear, often comes from the <strong>inner ear</strong> (such as vestibular neuritis or Ménière's disease) or from vestibular migraine rather than the neck. Please see your family doctor so these can be checked. Physiotherapy (vestibular rehabilitation) can help alongside or afterwards. Sudden hearing loss in one ear needs a doctor the same day." },
   migraine: { title: "This pattern can be migraine: worth seeing your doctor",
     body: "Throbbing headaches that switch sides, with feeling sick, sensitivity to light or noise, or zigzag lines beforehand, are typical of <strong>migraine</strong>. Migraine is treated first by a doctor, who can confirm it and discuss medicines that prevent or stop attacks. Physiotherapy can help alongside, especially when neck pain comes with it." },
   cluster: { title: "Headache behind one eye: please see your doctor",

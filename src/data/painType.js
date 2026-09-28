@@ -155,7 +155,8 @@ export function classifyPainMechanism({ zones = [], answers = {}, behaviour = {}
   const psychCount = ['yfFear', 'yfOutlook', 'yfMood', 'yfSleep', 'yfRoles'].filter((id) => answers[id] === 'agree').length
   // Spinal cord signs from the neck's N9 (numb or clumsy hands, a changed
   // walk, an electric feeling on bending the head) count as nerve evidence.
-  const cordSigns = as(answers.N9).filter((id) => id !== 'none')
+  // Dizziness is also ticked there, but it is not a cord sign.
+  const cordSigns = as(answers.N9).filter((id) => id !== 'none' && id !== 'dizzy')
   const nerveWords = q.has('burning') || q.has('tingling') || cordSigns.length > 0
 
   const score = { nociceptive: 0, neuropathic: 0, nociplastic: 0 }
