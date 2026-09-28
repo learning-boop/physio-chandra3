@@ -903,7 +903,11 @@ export default function PainAssessment() {
       const r = crypto.getRandomValues(new Uint32Array(4))
       return `${d.year}${d.month}${d.day}-${[...r].map((n) => L[n % L.length]).join('')}`
     }
-    fetch(`${import.meta.env.VITE_API_URL || ''}/api/visit-code`, { method: 'POST' })
+    // A slow counter must not hold up the Save button: after 6s, go offline.
+    const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null
+    const timer = ctl && setTimeout(() => ctl.abort(), 6000)
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/visit-code`, { method: 'POST', signal: ctl ? ctl.signal : undefined })
+      .finally(() => clearTimeout(timer))
       .then((res) => (res.ok ? res.json() : null))
       .then((j) => setVisitCode(j && /^\d{8}-\d{3,}$/.test(j.code) ? j.code : offline()))
       .catch(() => setVisitCode(offline()))

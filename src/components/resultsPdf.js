@@ -27,7 +27,7 @@ const AMBER = [180, 110, 0]
 
 /**
  * @param {object} d
- *  code, dateText, images { front, back: { src, width, height } } | null,
+ *  code, dateText, images { front, back: { src, width, height }, views: [{ src, width, height, label }] } | null,
  *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
  *  conditions [{name, blurb}], noMatch string | null, painType string | null,
  *  cautions [string], behaviour [string], answers [{question, answer}], notes string
@@ -53,8 +53,9 @@ export function buildResultsPdf(d) {
     lines.forEach((ln) => { room(step); doc.text(ln, M + indent, y + size); y += step })
     y += gap
   }
-  const heading = (s, color = NAVY) => {
-    room(78)   // the heading and at least two lines of what follows
+  // `keep`: how much of what follows must fit under the heading on the same page.
+  const heading = (s, color = NAVY, keep = 40) => {
+    room(38 + keep)   // the heading and at least the start of what follows
     y += 10
     doc.setDrawColor(...GOLD); doc.setLineWidth(1.2); doc.line(M, y, M + 28, y)
     y += 8
@@ -83,21 +84,39 @@ export function buildResultsPdf(d) {
   text('This is general information to help you describe your symptoms. It is not a diagnosis and does not replace an assessment by a physiotherapist or physician. Please bring it, or your reference code, to your appointment.',
     { size: 9.5, color: MUTED, gap: 8 })
 
-  // The body, front and back, with the lines as drawn
+  // Pictures in a two-column grid, each in a box with a caption under it.
+  const colW = (W - 2 * M - 16) / 2
+  const grid = (items, boxH) => {
+    for (let i = 0; i < items.length; i += 2) {
+      const row = items.slice(i, i + 2)
+      const caps = row.map((it) => { doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); return doc.splitTextToSize(clean(it.label), colW - 16) })
+      const capH = Math.max(...caps.map((c) => c.length)) * 11
+      room(boxH + capH + 24)
+      row.forEach((it, j) => {
+        const x0 = M + j * (colW + 16)
+        const k = Math.min((boxH - 8) / it.img.height, (colW - 8) / it.img.width)
+        const iw = it.img.width * k, ih = it.img.height * k
+        doc.setDrawColor(226, 220, 208); doc.setLineWidth(0.8); doc.roundedRect(x0, y, colW, boxH + capH + 12, 6, 6, 'S')
+        try { doc.addImage(it.img.src, 'JPEG', x0 + (colW - iw) / 2, y + 4 + (boxH - 8 - ih) / 2, iw, ih) } catch { /* picture unavailable */ }
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...MUTED)
+        caps[j].forEach((ln, l) => doc.text(ln, x0 + colW / 2, y + boxH + 10 + l * 11, { align: 'center' }))
+      })
+      y += boxH + capH + 24
+    }
+  }
+
+  // What the person drew, each from the side they drew it on (the sole seen
+  // from below, not the body standing), then the whole body for context.
+  const views = (d.images && d.images.views) || []
+  if (views.length) {
+    // Two rows of close-ups fit on the first page when they are 200pt tall.
+    const boxH = views.length > 2 ? 200 : colW
+    heading('Where you drew', NAVY, boxH + 40)
+    grid(views.map((v) => ({ img: v, label: v.label })), boxH)
+  }
   if (d.images && d.images.front && d.images.back) {
-    const colW = (W - 2 * M - 16) / 2
-    const boxH = 300
-    room(boxH + 30)
-    ;[['Front', d.images.front], ['Back', d.images.back]].forEach(([label, img], i) => {
-      const x0 = M + i * (colW + 16)
-      const k = Math.min((boxH - 8) / img.height, (colW - 8) / img.width)
-      const iw = img.width * k, ih = img.height * k
-      doc.setDrawColor(226, 220, 208); doc.setLineWidth(0.8); doc.roundedRect(x0, y, colW, boxH + 22, 6, 6, 'S')
-      try { doc.addImage(img.src, 'JPEG', x0 + (colW - iw) / 2, y + 4 + (boxH - 8 - ih) / 2, iw, ih) } catch { /* picture unavailable */ }
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...MUTED)
-      doc.text(label.toUpperCase(), x0 + colW / 2, y + boxH + 14, { align: 'center' })
-    })
-    y += boxH + 34
+    if (views.length) heading('Whole body', NAVY, 220 + 40)
+    grid([{ img: d.images.front, label: 'FRONT' }, { img: d.images.back, label: 'BACK' }], views.length ? 220 : 300)
   }
 
   if (d.areas.length) { heading('Areas you marked'); text(d.areas.join(', ')) }
