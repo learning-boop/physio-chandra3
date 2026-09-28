@@ -10,7 +10,7 @@ import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlags, inGroup, MAX_SCORED_QUESTIONS,
+  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlagsFor, inGroup, MAX_SCORED_QUESTIONS,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
@@ -357,23 +357,54 @@ export default function PainAssessment() {
   // for display, the AI overview and the pain-type rules.
   const [lines, setLines] = useState([])
   const referral = useMemo(() => detectReferral(lines), [lines])
-  const flowZ = useMemo(() => flowZones(zones, referral), [zones, referral])
-  // Answers the drawing gives: a line down a limb ("past the elbow"), and
-  // where in an area the marks sit ("back of the knee"), which answers that
-  // area's location question so it is not asked again (../data/drawnLocation.js).
-  const drawn = useMemo(() => ({ ...drawnAnswers(referral), ...locationAnswers(flowZ) }), [referral, flowZ])
+  const drawnZ = useMemo(() => flowZones(zones, referral), [zones, referral])
   // Areas the marks only grazed (a sliver of a line that caught the next
-  // area): their questions come after the main area's.
+  // area): they start unticked on the Draw page, and their questions come
+  // after the main area's if the person ticks them.
   const minorKeys = useMemo(() => {
-    const minor = minorZoneIds(flowZ)
+    const minor = minorZoneIds(drawnZ)
     const byKey = {}
-    for (const z of flowZ) {
+    for (const z of drawnZ) {
       const k = ZONE_TO_REGION[z.type]
       if (z.implied || !k) continue
       ;(byKey[k] = byKey[k] || []).push(minor.has(z.id))
     }
     return new Set(Object.entries(byKey).filter(([, v]) => v.every(Boolean)).map(([k]) => k))
-  }, [flowZ])
+  }, [drawnZ])
+  /* The areas the questions are about, confirmed on the Draw page (Chandra,
+     28 Sep 2026). A line drawn on the wrist often catches the forearm too,
+     which used to add the forearm's safety and opening questions. Each drawn
+     area is a chip: the ones drawn on are ticked, the ones only touched are
+     not, and a tap changes either. An unticked area is left out of the
+     questions but keeps its emergency safety questions (regionRedFlagsFor).
+     `areaPick` holds the person's taps, by area; the rest follow the ink. */
+  const [areaPick, setAreaPick] = useState({})
+  useEffect(() => { if (!zones.length) setAreaPick({}) }, [zones])
+  const areaChips = useMemo(() => {
+    const seen = new Set(); const out = []
+    drawnZ.filter((z) => !z.implied).forEach((z) => {
+      const k = ZONE_TO_REGION[z.type]
+      if (k && REGIONS[k] && !seen.has(k)) {
+        seen.add(k)
+        out.push({ key: k, name: REGIONS[k].name, on: areaPick[k] ?? !minorKeys.has(k), touched: minorKeys.has(k) })
+      }
+    })
+    return out
+  }, [drawnZ, areaPick, minorKeys])
+  const leftOut = useMemo(() => new Set(areaChips.filter((c) => !c.on).map((c) => c.key)), [areaChips])
+  const toggleArea = (k) => {
+    const chip = areaChips.find((c) => c.key === k)
+    // At least one area stays ticked.
+    if (chip.on && areaChips.filter((c) => c.on).length === 1) return
+    setAreaPick((p) => ({ ...p, [k]: !chip.on }))
+  }
+  const outOf = (z) => !z.implied && leftOut.has(ZONE_TO_REGION[z.type])
+  const flowZ = useMemo(() => drawnZ.filter((z) => !outOf(z)), [drawnZ, leftOut]) // eslint-disable-line react-hooks/exhaustive-deps
+  const leftOutZ = useMemo(() => drawnZ.filter(outOf), [drawnZ, leftOut]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Answers the drawing gives: a line down a limb ("past the elbow"), and
+  // where in an area the marks sit ("back of the knee"), which answers that
+  // area's location question so it is not asked again (../data/drawnLocation.js).
+  const drawn = useMemo(() => ({ ...drawnAnswers(referral), ...locationAnswers(flowZ) }), [referral, flowZ])
   const regionChoices = useMemo(() => {
     const seen = new Set(); const out = []
     // Implied areas are not choices: they come with the area they belong to.
@@ -593,7 +624,7 @@ export default function PainAssessment() {
   // need answers (the inflammatory pattern) are left for the final check.
   const earlyPatterns = useMemo(() => patternChecks(zones, {}, 7), [zones])
   const screening = useMemo(() => {
-    const regional = regionRedFlags(flowZ, zones)
+    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ)
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
     const list = regional.map((f) => ({
       ...f, why: typeof f.why === 'string' ? { title: f.why, text: tierWhy(f).text } : tierWhy(f),
@@ -629,7 +660,7 @@ export default function PainAssessment() {
       emergency: all.filter((f) => f.tier === 'emergency'),
       physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
     }
-  }, [flowZ, zones, injuryApplies, earlyPatterns])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -1228,12 +1259,28 @@ export default function PainAssessment() {
 
                 {/* Turn / Draw and Undo / Redo sit on the body itself (see the
                     model panel); only the marked areas and Clear All stay here. */}
+                {/* The areas the questions will be about: ticked when drawn on,
+                    unticked when the line only touched them; a tap changes it. */}
                 {zones.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 18 }}>
-                    {zones.map((z) => (
-                      <span key={z.id} style={pill}>{z.label}</span>
-                    ))}
-                    <button style={toolBtn(false)} onClick={() => setClearSignal((n) => n + 1)}>Clear All</button>
+                  <div style={{ marginBottom: 18, maxWidth: 520 }}>
+                    {areaChips.length > 1 && (
+                      <p style={{ fontSize: 14, lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: '0 0 10px' }}>
+                        We will ask about the ticked areas. Tap an area to add or remove it.
+                      </p>
+                    )}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+                      {areaChips.map((c) => (
+                        <button key={c.key} onClick={() => toggleArea(c.key)} aria-pressed={c.on}
+                          disabled={areaChips.length === 1}
+                          style={{
+                            ...pill, cursor: areaChips.length > 1 ? 'pointer' : 'default', fontFamily: 'var(--font-body)',
+                            ...(c.on ? {} : { background: 'transparent', color: 'rgba(255,255,255,0.6)', borderStyle: 'dashed' }),
+                          }}>
+                          {c.on ? '✓ ' : '+ '}{c.on || !c.touched ? c.name : `Also touched: ${c.name}`}
+                        </button>
+                      ))}
+                      <button style={toolBtn(false)} onClick={() => setClearSignal((n) => n + 1)}>Clear All</button>
+                    </div>
                   </div>
                 )}
 
@@ -1454,8 +1501,14 @@ export default function PainAssessment() {
                 <div style={{ ...card, marginBottom: 12, maxWidth: 520 }}>
                   <span style={{ ...label, fontSize: 11.5 }}>Pain areas</span>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 10 }}>
-                    {zones.map((z) => <span key={z.id} style={pill}>{z.label}</span>)}
+                    {zones.filter((z) => !outOf(z)).map((z) => <span key={z.id} style={pill}>{z.label}</span>)}
                   </div>
+                  {/* Areas unticked on the Draw page: drawn, but not asked about. */}
+                  {leftOut.size > 0 && (
+                    <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: '10px 0 0', lineHeight: 1.5 }}>
+                      Also touched, not asked about: {areaChips.filter((c) => !c.on).map((c) => c.name).join(', ')}
+                    </p>
+                  )}
                   {/* Where the pain is, read from the drawing instead of asked. */}
                   {drawnLocationPairs.length > 0 && (
                     <div style={{ marginTop: 12 }}>

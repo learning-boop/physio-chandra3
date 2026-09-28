@@ -118,6 +118,12 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   when editing a region, or update the rules there. An area a mark only
   grazed (under 35% of the ink of the main area) gets its questions after the
   main area's.
+- **The patient confirms the areas.** Under the drawing, each area is a
+  chip: ticked when drawn on, unticked ("Also touched: Forearm") when the
+  line only caught it (under 35% of the main area's ink). A tap changes
+  either; one area always stays ticked. An unticked area gets no pain,
+  opening or "see a doctor" questions, but its emergency questions are still
+  asked (Chandra's cautious rule, 28 Sep 2026).
 - **Some marks ask a neighbour too.** A low-back mark also asks the TL
   junction; an upper-arm mark also asks the shoulder; a line from the neck
   down the arm asks the neck and base of the neck. A forearm mark beside

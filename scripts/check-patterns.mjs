@@ -475,5 +475,27 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     skipPsychosocial({ duration: 'd2w', sinSeverity: 'mild' }) && !skipPsychosocial({ duration: 'd2w', sinSeverity: 'moderate' }) && !skipPsychosocial({ duration: 'd6w', sinSeverity: 'mild' }))
 }
 
+// ── 15. Areas the line only touched (Chandra, 28 Sep 2026: cautious option) ──
+{
+  const { regionRedFlags, regionRedFlagsFor } = await imp('src/data/assessmentFlow.js')
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const all = Z(['wristR', 'forearmR'])
+  const both = regionRedFlags(all, all)
+  const wristOnly = regionRedFlags(Z(['wristR']), all)
+  const cautious = regionRedFlagsFor(Z(['wristR']), all, Z(['forearmR']))
+  // Each forearm emergency question is asked, or an asked question shares its group.
+  const forearmEmergency = regionRedFlags(Z(['forearmR']), all).filter((f) => f.tier === 'emergency')
+  const covered = (x) => cautious.some((f) => f.id === x.id ||
+    (x.group && [].concat(f.group || []).some((g) => [].concat(x.group).includes(g))))
+  check('a touched forearm left out: its emergency questions are still asked',
+    forearmEmergency.every(covered), cautious.map((f) => f.id))
+  check('a touched forearm left out: its doctor questions are not asked',
+    !cautious.some((f) => f.tier !== 'emergency' && /^frf-/.test(f.id)), cautious.map((f) => f.id))
+  check('left out, the safety pages are shorter than with both areas asked',
+    cautious.length < both.length && cautious.length > wristOnly.length - 1, { both: both.length, cautious: cautious.length, wristOnly: wristOnly.length })
+  check('emergency questions still come before doctor questions',
+    cautious.findIndex((f) => f.tier !== 'emergency') > cautious.map((f) => f.tier).lastIndexOf('emergency'), cautious.map((f) => f.tier))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

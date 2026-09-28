@@ -319,5 +319,20 @@ export function regionRedFlags(flowZ = [], zones = flowZ) {
   })
 }
 
+/** The safety flags when the person has left some drawn areas out of the
+    questions (an area the line only touched, unticked on the Draw page).
+    Chandra's cautious rule (28 Sep 2026): a left-out area loses its pain and
+    "see a doctor" questions but keeps its EMERGENCY ones. `excludedZ` = the
+    left-out areas' zones. A left-out area's emergency flag is not added when
+    an asked area already covers every one of its groups. */
+export function regionRedFlagsFor(flowZ = [], zones = flowZ, excludedZ = []) {
+  const main = regionRedFlags(flowZ, zones)
+  if (!excludedZ.length) return main
+  const seen = new Set(main.flatMap((f) => [].concat(f.group || [])))
+  const extra = regionRedFlags(excludedZ, zones).filter((f) => f.tier === 'emergency' && !main.includes(f) &&
+    !(f.group && [].concat(f.group).every((g) => seen.has(g))))
+  return [...main.filter((f) => f.tier === 'emergency'), ...extra, ...main.filter((f) => f.tier !== 'emergency')]
+}
+
 /** True when a flag belongs to this group (a flag's group may be a list). */
 export const inGroup = (f, g) => [].concat(f.group || []).includes(g)
