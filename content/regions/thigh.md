@@ -28,7 +28,7 @@ reviewed_on: 2026-09-25
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your thigh been hurt in the last 6 weeks?
+I1 Have you injured your thigh in the last 6 weeks, for example a strain during sport, a fall, or a knock?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, a sudden sharp pain while sprinting, kicking, or stretching
 - Yes, a hard knock to the thigh (knee, tackle, fall onto it)

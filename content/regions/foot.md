@@ -28,7 +28,7 @@ reviewed_on: 2026-09-25
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your foot been hurt in the last 6 weeks?
+I1 Have you injured your foot in the last 6 weeks, for example in a fall, a twist, or something landing on it?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, I rolled or twisted it
 - Yes, something heavy fell on it, or it was crushed

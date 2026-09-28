@@ -28,7 +28,7 @@ reviewed_on: 2026-09-25
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your wrist been hurt in a fall, twist, or blow in the last 6 weeks?
+I1 Have you injured your wrist in the last 6 weeks, for example in a fall, a twist, or a blow?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, I fell onto my outstretched hand
 - Yes, a twist (racquet, golf, a drill that caught)

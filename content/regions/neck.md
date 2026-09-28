@@ -57,7 +57,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      when the neck is drawn. Asked in order; the first answer that routes ends
      the screen. The site can only send people on to medical care from here,
      never clear them: spinal tenderness can only be checked in person. -->
-I1: Has your neck been hurt in an accident or injury in the last 7 days?
+I1: Have you injured your neck in the last 7 days, for example in an accident, a fall, or sport?   (28 Sep 2026: "injured", not "been hurt")
 - No → skip this screen
 - Yes, a car or other vehicle accident → I2
 - Yes, a fall → I2

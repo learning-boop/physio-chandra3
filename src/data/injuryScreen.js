@@ -34,7 +34,7 @@
 
 /* ── Neck: Canadian C-Spine Rule ── */
 export const INJURY_QUESTIONS = [
-  { id: 'I1', text: 'Has your neck been hurt in an accident or injury in the last 7 days?', options: [
+  { id: 'I1', text: 'Have you injured your neck in the last 7 days, for example in an accident, a fall, or sport?', options: [
     { id: 'no', label: 'No' },
     { id: 'vehicle', label: 'Yes, a car or other vehicle accident' },
     { id: 'fall', label: 'Yes, a fall' },
@@ -140,7 +140,7 @@ const yesNo = (yes, why) => [
 
 /* ── Shoulder: fall, dislocation or sudden pull (BESS pathways) ── */
 export const SHOULDER_INJURY = [
-  { id: 'I1', text: 'Has your shoulder been hurt in a fall, accident, or sport in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your shoulder in the last 6 weeks, for example in a fall, an accident, or sport?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'fall', label: 'Yes, I fell onto my arm or shoulder' },
     { id: 'popped', label: 'Yes, it popped out of place' },
@@ -160,7 +160,7 @@ export const SHOULDER_INJURY = [
 
 /* ── Upper arm: fall, blow or sudden force ── */
 export const ARM_INJURY = [
-  { id: 'I1', text: 'Has your upper arm been hurt in a fall, accident, blow, or heavy lift in the last 2 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your upper arm in the last 2 weeks, for example in a fall, an accident, a blow, or a heavy lift?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'fall', label: 'Yes, a fall' },
     { id: 'blow', label: 'Yes, a blow to the arm' },
@@ -184,7 +184,7 @@ export const ARM_INJURY = [
 
 /* ── Elbow: fall, blow or sudden force ── */
 export const ELBOW_INJURY = [
-  { id: 'I1', text: 'Has your arm or elbow been hurt in a fall, accident, blow, or heavy lift in the last 2 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your arm or elbow in the last 2 weeks, for example in a fall, an accident, a blow, or a heavy lift?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'fall', label: 'Yes, I fell onto my hand or elbow' },
     { id: 'blow', label: 'Yes, a blow to the arm or elbow' },
@@ -213,7 +213,7 @@ export const ELBOW_INJURY = [
 
 /* ── Forearm: fall, blow or crush ── */
 export const FOREARM_INJURY = [
-  { id: 'I1', text: 'Has your forearm been hurt in a fall, accident, blow, or crush in the last 2 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your forearm in the last 2 weeks, for example in a fall, an accident, a blow, or a crush?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'fall', label: 'Yes, I fell onto my hand' },
     { id: 'blow', label: 'Yes, a blow to the forearm' },
@@ -238,7 +238,7 @@ export const FOREARM_INJURY = [
 /* ── Wrist: fall onto the hand, twist or blow ──
    Six weeks back: scaphoid fractures are often missed for weeks. */
 export const WRIST_INJURY = [
-  { id: 'I1', text: 'Has your wrist been hurt in a fall, twist, or blow in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your wrist in the last 6 weeks, for example in a fall, a twist, or a blow?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'fall', label: 'Yes, I fell onto my outstretched hand' },
     { id: 'twist', label: 'Yes, a twist (racquet, golf, a drill that caught)' },
@@ -261,7 +261,7 @@ export const WRIST_INJURY = [
    Many finger injuries need a splint or surgery within days, so these
    route early. */
 export const HAND_INJURY = [
-  { id: 'I1', text: 'Has your hand, finger, or thumb been hurt in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your hand, finger or thumb in the last 6 weeks, for example in a fall, a knock, or catching a ball?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'jammed', label: 'Yes, a finger was jammed (ball, wall)' },
     { id: 'bentback', label: 'Yes, my thumb was bent back (ski pole, fall)' },
@@ -291,7 +291,7 @@ export const HAND_INJURY = [
 
 /* ── Hip and groin: fall, twist or sudden pull ── */
 export const HIP_INJURY = [
-  { id: 'I1', text: 'Has your hip or groin been hurt in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your hip or groin in the last 6 weeks, for example in a fall or during sport?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'fall', label: 'Yes, I fell onto my hip' },
     { id: 'vehicle', label: 'Yes, a car or other vehicle accident' },
@@ -322,7 +322,7 @@ export const HIP_INJURY = [
 
 /* ── Thigh: sudden pain, knock or fall ── */
 export const THIGH_INJURY = [
-  { id: 'I1', text: 'Has your thigh been hurt in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your thigh in the last 6 weeks, for example a strain during sport, a fall, or a knock?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'sprint', label: 'Yes, a sudden sharp pain while sprinting, kicking, or stretching' },
     { id: 'knock', label: 'Yes, a hard knock to the thigh (knee, tackle, fall onto it)' },
@@ -350,7 +350,7 @@ export const THIGH_INJURY = [
    Tenderness of the kneecap and the head of the fibula can only be checked in
    person, so those Ottawa items are left out. */
 export const KNEE_INJURY = [
-  { id: 'I1', text: 'Has your knee been hurt in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your knee in the last 6 weeks, for example in a twist, a fall, or a knock?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'twist', label: 'Yes, a twist or pivot in sport' },
     { id: 'blow', label: 'Yes, a blow to the knee (tackle, car dashboard)' },
@@ -377,7 +377,7 @@ export const KNEE_INJURY = [
 
 /* ── Lower leg: kick, fall or sudden pain in the calf ── */
 export const LEG_INJURY = [
-  { id: 'I1', text: 'Has your lower leg been hurt in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your lower leg in the last 6 weeks, for example in a fall, a knock, or during sport?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'kick', label: 'Yes, a kick or blow to the shin or calf' },
     { id: 'fall', label: 'Yes, a fall or accident' },
@@ -405,7 +405,7 @@ export const LEG_INJURY = [
    Stiell 1993). Bone tenderness can only be checked in person, so those
    Ottawa items are left out. ── */
 export const ANKLE_INJURY = [
-  { id: 'I1', text: 'Has your ankle been hurt in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your ankle in the last 6 weeks, for example by rolling or twisting it, or in a fall?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'inversion', label: 'Yes, I rolled it inwards' },
     { id: 'eversion', label: 'Yes, the foot twisted outwards with the foot planted' },
@@ -435,7 +435,7 @@ export const ANKLE_INJURY = [
    Tenderness over the navicular and the base of the 5th metatarsal can only
    be checked in person. ── */
 export const FOOT_INJURY = [
-  { id: 'I1', text: 'Has your foot been hurt in the last 6 weeks?', options: [
+  { id: 'I1', text: 'Have you injured your foot in the last 6 weeks, for example in a fall, a twist, or something landing on it?', options: [
     { id: 'no', label: 'No', route: 'skip' },
     { id: 'twist', label: 'Yes, I rolled or twisted it' },
     { id: 'crush', label: 'Yes, something heavy fell on it, or it was crushed' },
@@ -509,9 +509,13 @@ export const SCREENS = [
     flag: 'A foot injury in the last 6 weeks (injury screen)', questions: FOOT_INJURY, step: linearStep(FOOT_INJURY) },
 ]
 
-/* ── One arm gate for the shoulder, upper arm and elbow ──
+/* Wording (Chandra, 28 Sep 2026): each first question says "injured" with
+   examples, not "been hurt". To a patient "hurt" can simply mean painful,
+   so someone with weeks of pain and no injury could answer yes.
+
+   ── One arm gate for the shoulder, upper arm and elbow ──
    When two or more of these screens apply (a line down the arm), their
-   first questions ("Has your shoulder / upper arm / elbow been hurt…?")
+   first questions ("Have you injured your shoulder / upper arm / elbow…?")
    are asked once, as "limb:I1", and the answer is passed to each screen as
    its own I1. The shoulder and wrist look back 6 weeks and the others 2
    weeks, so when both kinds are drawn, "limb:I2" asks when it happened; an
@@ -545,7 +549,7 @@ function limbQuestion(zones) {
   const weeks = Math.max(...ids.map((id) => LIMB_WEEKS[id]))
   const how = ids.includes('hand') ? 'a fall, accident, blow, crush, cut, or twist'
     : ids.includes('forearm') || ids.includes('wrist') ? 'a fall, accident, blow, crush, twist, or heavy lift' : 'a fall, accident, blow, or heavy lift'
-  return { id: 'I1', text: `Has your ${where} been hurt in ${how} in the last ${weeks} weeks?`,
+  return { id: 'I1', text: `Have you injured your ${where} in the last ${weeks} weeks, for example in ${how}?`,
     options: LIMB_OPTIONS.filter((o) => (!o.only || ids.includes(o.only)) && (!o.onlyAny || o.onlyAny.some((x) => ids.includes(x))))
       .map(({ id, label }) => ({ id, label })) }
 }

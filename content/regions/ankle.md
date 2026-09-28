@@ -27,7 +27,7 @@ reviewed_on: 2026-09-25
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your ankle been hurt in the last 6 weeks?
+I1 Have you injured your ankle in the last 6 weeks, for example by rolling or twisting it, or in a fall?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, I rolled it inwards
 - Yes, the foot twisted outwards with the foot planted

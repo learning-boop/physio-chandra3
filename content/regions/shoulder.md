@@ -29,7 +29,7 @@ reviewed_on: DRAFT prepared 24 Sep 2026, awaiting Chandra's review
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your shoulder been hurt in a fall, accident, or sport in the last 6 weeks?
+I1 Have you injured your shoulder in the last 6 weeks, for example in a fall, an accident, or sport?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, I fell onto my arm or shoulder
 - Yes, it popped out of place

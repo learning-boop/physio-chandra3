@@ -29,7 +29,7 @@ reviewed_on: DRAFT prepared 24 Sep 2026, awaiting Chandra's review
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your upper arm been hurt in a fall, accident, blow, or heavy lift in the last 2 weeks?
+I1 Have you injured your upper arm in the last 2 weeks, for example in a fall, an accident, a blow, or a heavy lift?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, a fall
 - Yes, a blow to the arm

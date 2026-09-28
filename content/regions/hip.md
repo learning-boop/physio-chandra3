@@ -29,7 +29,7 @@ reviewed_on: 2026-09-25
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your hip or groin been hurt in the last 6 weeks?
+I1 Have you injured your hip or groin in the last 6 weeks, for example in a fall or during sport?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, I fell onto my hip
 - Yes, a car or other vehicle accident

@@ -26,7 +26,7 @@ reviewed_on: 2026-09-25
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your arm or elbow been hurt in a fall, accident, blow, or heavy lift in the last 2 weeks?
+I1 Have you injured your arm or elbow in the last 2 weeks, for example in a fall, an accident, a blow, or a heavy lift?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, I fell onto my hand or elbow
 - Yes, a blow to the arm or elbow

@@ -27,7 +27,7 @@ reviewed_on: 2026-09-25
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
-I1 Has your knee been hurt in the last 6 weeks?
+I1 Have you injured your knee in the last 6 weeks, for example in a twist, a fall, or a knock?   (28 Sep 2026: "injured", not "been hurt")
 - No
 - Yes, a twist or pivot in sport
 - Yes, a blow to the knee (tackle, car dashboard)

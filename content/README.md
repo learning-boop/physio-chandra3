@@ -107,8 +107,8 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   thigh"; wrist/hand "Carpal tunnel syndrome"
   and "Thumb base arthritis"). The
   shoulder, upper arm, elbow, forearm, wrist and hand injury
-  screens share one opening question ("Has your shoulder, upper arm, or
-  elbow been hurt…?") when two or more apply, and an injury question worded
+  screens share one opening question ("Have you injured your shoulder, upper arm,
+  or elbow…?") when two or more apply, and an injury question worded
   exactly the same in two screens is asked once.
 - **The drawing answers "Where is the pain?"** On the knee, lower leg, ankle,
   foot, hip, thigh, elbow, forearm and wrist, where the marks sit (front or
