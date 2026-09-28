@@ -25,41 +25,25 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 ---
 
 ## red flags
-<!-- "Ask only if" is an addition: the two shoulder-tip flags are asked only
-     when a shoulder is drawn. -->
-- Have you had a sudden, severe headache, the worst you have ever had? | emergency | Possible bleed or artery tear in the neck or head
-<!-- (CGD) Chandra, 28 Sep 2026: dizziness alone no longer ticks the stroke
-     flag, so neck-related dizziness is not sent to 911. More sudden stroke
-     signs added; new, sudden dizziness WITH a sign is its own flag. -->
-- Since this started, have any of these come on suddenly: a drooping or numb face, weakness or numbness in an arm or leg on one side, slurred speech or trouble finding or understanding words, loss of sight or double vision, trouble swallowing, sudden confusion, or falls or blackouts? | emergency | Stroke or cervical artery warning signs (IFOMPT framework)
-- Have you had new, sudden dizziness or room spinning together with any of these: being unable to stand or walk without help, vomiting, a new severe headache or neck pain, double vision, slurred speech, a numb face, weakness on one side, or eyes that flicker or jump? | emergency | New, sudden dizziness with these signs can be a stroke at the back of the brain
-<!-- (DCM) The stroke flag now asks what came on suddenly, so a walk that
-     has changed slowly over months goes to the myelopathy questions, not 911.
-     "Unable to pass urine" and the manipulation flag are from the DCM
-     document's red flags. New numbness after a fall or injury is already
-     asked by the injury screen (I5). -->
+<!-- Shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted): questions
+     that asked the same thing are merged (A1: 9 emergency questions -> 5;
+     A2: 6 doctor questions -> 4, counting the general fever/cancer one).
+     Earlier history: the stroke flag asks only what came on suddenly (DCM,
+     26 Sep); dizziness alone does not count (CGD, 28 Sep); the 5 Ds and 3 Ns
+     after an accident (26 Sep); severe pain after a manipulation, jerk or
+     knock is an emergency (28 Sep). A merged question stands in for the
+     head's and base of the neck's matching questions, so each is asked once.
+     The two shoulder-tip questions are asked only when a shoulder is drawn. -->
+- Since this started, has any of these come on suddenly: the worst headache of your life; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk? | emergency | Possible stroke, bleed, or neck artery tear   (A1.1)
 - Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs? | emergency | Acute spinal cord compression
-- Since a neck manipulation or adjustment (having your neck "cracked"), have you had new numbness or weakness in your arms or legs? | emergency | New nerve or spinal cord symptoms after a neck manipulation
-<!-- Added 26 Sep 2026 at Chandra's instruction: after a car accident or a hard
-     knock to the head or neck, ongoing dizziness or any of the 5 Ds and 3 Ns
-     -> a doctor today; getting quickly worse, or new in the last few days ->
-     Emergency. However long ago, and whether or not it came on suddenly.
-     Shared by the neck, base of the neck and head: each asked once. -->
-- Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | emergency | Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain (5 Ds and 3 Ns)
-- Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | urgent, same day | Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today
+- Since a neck manipulation ("cracking"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick, numbness around the lips, or eyes that flicker or jump? | emergency | After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain   (A1.2)
 - Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at? | emergency | Possible meningitis
 - Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain can be felt in the neck, jaw, and arm
-<!-- (DCM) Was: "Have your hands become clumsy (buttons, writing, dropping
-     things), or has your walking become unsteady?" (urgent). The slow pattern
-     is now asked in questions 9 and 10 and scored; only fast change stays here. -->
-- Over the last few days or weeks, have your hands been getting quickly clumsier (buttons, writing, dropping things), or your walking quickly more unsteady? | urgent, same day | Spinal cord pressure that is getting worse quickly needs a doctor today
-- Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth? | urgent | Possible upper neck instability
-<!-- (CGD) Chandra, 28 Sep 2026: severe pain never felt before, or symptoms
-     changing fast -> Emergency; shared with the head, asked once. -->
-- Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly? | emergency | Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear
-- Did a new neck pain or headache, different from any you have had before but not severe, start suddenly after a neck manipulation, a sudden jerk, or a minor knock? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
 - Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | emergency | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign) | Ask only if: a shoulder is drawn
-- Is the pain at the tip of your shoulder worse when you breathe in deeply, or does it come on after fatty meals? | urgent | Diaphragm, lung lining, liver or gallbladder pain is felt at the shoulder tip (C3–C5) | Ask only if: a shoulder is drawn
+- Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before? | urgent, same day | After an accident, manipulation, jerk or knock, these need a doctor today   (A2.1)
+- Over the last few days or weeks, have you become quickly weaker, number or clumsier in an arm, hand or leg, or has your walking become quickly more unsteady? | urgent, same day | Nerve or spinal cord pressure that is getting worse quickly needs a doctor today   (A2.2; replaces the general "new or worsening weakness" check for the neck)
+- Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth? | urgent | Possible upper neck instability
+- Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position? | urgent | The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder | Ask only if: a shoulder is drawn   (A3.3; shared with the shoulder and base of the neck)
 
 ## injury screen
 <!-- Canadian C-Spine Rule (adapted). Shown straight after the safety check

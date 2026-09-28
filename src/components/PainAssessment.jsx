@@ -10,10 +10,10 @@ import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
+  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlags, inGroup, MAX_SCORED_QUESTIONS,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
-import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial } from '../data/psychosocial'
+import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
 import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism } from '../data/painType'
 import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
 import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
@@ -178,7 +178,7 @@ const UNIVERSAL_CHECKS = [
   { id: 'sc-neuro', tier: 'urgent', text: 'New or worsening weakness, numbness, or loss of coordination in an arm or leg',
     why: { title: 'A nerve or spinal cord may be involved',
       text: 'Weakness that is getting worse suggests a nerve is under pressure rather than simply irritated. A physician needs to establish the cause before any physiotherapy loading begins.' } },
-  { id: 'sc-systemic', tier: 'urgent', text: 'Fever, chills, unexplained weight loss, or a history of cancer with new or changing pain',
+  { id: 'sc-systemic', tier: 'urgent', text: 'Fever, chills, unexplained weight loss, a new or growing lump, pain at night that does not change with position, or a history of cancer with new or changing pain',
     why: { title: 'Possible infection or systemic cause',
       text: 'Pain accompanied by fever, weight loss, or a cancer history can have a medical rather than a mechanical cause. That has to be excluded by a doctor first, as it is treated quite differently.' } },
   { id: 'sc-trauma', tier: 'urgent', sameDay: true, text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
@@ -202,6 +202,10 @@ const CAUTION_CHECKS = [
   { id: 'ca-preg', tier: 'caution', text: 'Pregnant, or within 3 months of giving birth',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Positions, hands-on techniques and exercise choices are adjusted during and after pregnancy.' } },
+  // C3 (shorter questionnaire): was a statement on "How it is affecting you".
+  { id: 'ca-claim', tier: 'caution', text: 'A claim, insurance or time-off process is involved (ICBC, WorkSafeBC, or similar)',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Claims come with their own forms and reports, so your first assessment can cover what they need.' } },
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -469,6 +473,24 @@ export default function PainAssessment() {
     for (const [k, v] of Object.entries(answers)) if (keep.has(k.replace(/_other$/, ''))) out[k] = v
     return out
   }, [keys, answers, ctxQuestions, askedIds, drawn])
+  // B2 (shorter questionnaire, 28 Sep 2026): an area that asked "Stiff at
+  // first, then eases as I move" (neck, upper back, mid-to-low back) has
+  // answered the behaviour screen's "After sitting or resting a while, it
+  // eases once I get moving" too. It is filled in from that answer and not
+  // shown again; the inflammatory reading keeps using it.
+  const STIFF_EASES = 'Stiff at first, then eases as I move'
+  const restWorseKnown = useMemo(() => regionQuestions.some((q) => askedIds.includes(q.id) &&
+    [].concat(scopedAnswers[q.id] || []).some((oid) => (q.options.find((o) => o.id === oid) || {}).label === STIFF_EASES)),
+  [regionQuestions, askedIds, scopedAnswers])
+  useEffect(() => {
+    setAnswers((a) => {
+      const cur = [].concat(a.pattern24 || [])
+      if (restWorseKnown === cur.includes('restWorse')) return a
+      return { ...a, pattern24: restWorseKnown ? [...cur.filter((x) => x !== 'none'), 'restWorse'] : cur.filter((x) => x !== 'restWorse') }
+    })
+  }, [restWorseKnown])
+  // The statements on "How it is affecting you" depend on the answers so far.
+  const groupOf = (q) => (q.id === PSYCH_ID ? psychosocialQuestionsFor(answers) : q.group)
   // Flat list for the review screen and the summary: what was actually asked.
   const flatQuestions = useMemo(
     () => (keys.length
@@ -476,15 +498,25 @@ export default function PainAssessment() {
           ...ctxQuestions,
           PAIN_QUALITY,
           ...askedIds.map((id) => regionQuestions.find((q) => q.id === id)).filter(Boolean),
-          ...tailIndexes.filter((i) => path.includes(i)).flatMap((i) => activeQuestions[i].group),
+          ...tailIndexes.filter((i) => path.includes(i)).flatMap((i) => groupOf(activeQuestions[i])),
         ]
       : activeQuestions.flatMap((q) => q.group || [q])),
-    [keys, ctxQuestions, askedIds, regionQuestions, activeQuestions, path, tailIndexes],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [keys, ctxQuestions, askedIds, regionQuestions, activeQuestions, path, tailIndexes, answers.duration, answers.sinSeverity],
   )
   // How the pain behaves (SIN, 24-hour pattern, easing), in plain language.
   const behaviour = useMemo(() => interpretBehaviour(answers), [answers])
   // Yellow flags, read as supportive notes — never a score or a label.
-  const psych = useMemo(() => interpretPsychosocial(answers), [answers])
+  // Only the statements actually asked count (C2, C4); the claim is a tick
+  // box before the results (C3).
+  const skipPsych = skipPsychosocial(answers)
+  const psych = useMemo(() => {
+    const asked = new Set(skipPsych ? [] : psychosocialQuestionsFor(answers).map((q) => q.id))
+    const a = { ...answers }
+    for (const q of PSYCHOSOCIAL_QUESTIONS) if (!asked.has(q.id)) delete a[q.id]
+    if (flags.includes('ca-claim')) a.kfClaim = 'agree'
+    return interpretPsychosocial(a)
+  }, [answers, flags, skipPsych])
   // ── The reasoning pass ───────────────────────────────────────────────────
   // The server reviews the scoring against the whole picture before anything
   // is shown, and may reorder the matched patterns, drop ones that do not fit,
@@ -576,9 +608,15 @@ export default function PainAssessment() {
     const ownCardiac = list.some((f) => /cardiac/.test(f.id))
     // A region that asks about a leg clot itself (group "legclot") replaces
     // the drawing's generic calf-clot question.
-    const ownClot = list.some((f) => f.group === 'legclot')
-    const universal = injuryApplies ? UNIVERSAL_CHECKS.filter((f) => f.id !== 'sc-trauma') : UNIVERSAL_CHECKS
-    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt')).slice(0, 2)
+    const ownClot = list.some((f) => inGroup(f, 'legclot'))
+    // A region that asks about organ pain (group "organ": the shoulder, neck
+    // and base of the neck) replaces the drawing's generic organ question, and
+    // one that asks about worsening weakness (group "neuro": the neck)
+    // replaces the general one (shorter questionnaire A2.2, A3.3).
+    const ownOrgan = list.some((f) => inGroup(f, 'organ'))
+    const ownNeuro = list.some((f) => inGroup(f, 'neuro'))
+    const universal = UNIVERSAL_CHECKS.filter((f) => !(injuryApplies && f.id === 'sc-trauma') && !(ownNeuro && f.id === 'sc-neuro'))
+    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral')).slice(0, 2)
     const all = [...list, ...pattern]
     return {
       emergency: all.filter((f) => f.tier === 'emergency'),
@@ -823,6 +861,8 @@ export default function PainAssessment() {
     } else if (qIndex + 1 < activeQuestions.length) {
       next = qIndex + 1
     }
+    // C4: no "How it is affecting you" screen for new, mild pain.
+    if (next >= 0 && activeQuestions[next].id === PSYCH_ID && skipPsych) next = keys.length || next + 1 >= activeQuestions.length ? -1 : next + 1
     if (next < 0) { setStage('review'); return }
     setPath((p) => [...p, next])
     setQIndex(next)
@@ -1226,7 +1266,7 @@ export default function PainAssessment() {
               const otherPicked = Array.isArray(a) && a.includes(OTHER_ID)
               const otherText = (answers[q.id + '_other'] || '').trim()
               const canNext = q.group
-                ? q.group.every((sub) => (sub.multi
+                ? groupOf(q).every((sub) => (sub.multi
                   ? Array.isArray(answers[sub.id]) && answers[sub.id].length > 0
                   : answers[sub.id] !== undefined))
                 : q.textarea
@@ -1277,11 +1317,11 @@ export default function PainAssessment() {
 
                   {q.group ? (
                     <div style={{ maxWidth: 520 }}>
-                      {q.group.map((sub, si) => (
-                        <div key={sub.id} style={{ marginBottom: si === q.group.length - 1 ? 0 : 22 }}>
+                      {groupOf(q).map((sub, si, subs) => (
+                        <div key={sub.id} style={{ marginBottom: si === subs.length - 1 ? 0 : 22 }}>
                           <div style={{ fontSize: 17, color: '#fff', margin: '0 0 10px', lineHeight: 1.4 }}>{sub.text}</div>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                            {sub.options.map((opt) => {
+                            {(sub.id === 'pattern24' && restWorseKnown ? sub.options.filter((o) => o.id !== 'restWorse') : sub.options).map((opt) => {
                               const sel = isPicked(sub, opt.id)
                               return (
                                 <button key={opt.id} onClick={() => toggleAnswer(sub, opt.id)}
@@ -1360,7 +1400,7 @@ export default function PainAssessment() {
                       style={{ ...goldBtn, opacity: canNext ? 1 : 0.45, cursor: canNext ? 'pointer' : 'not-allowed' }}
                       disabled={!canNext}
                       onClick={nextFromQuestion}
-                    >{fromReview ? 'Save' : (step >= plannedScreens || (keys.length && q.id === TAIL_IDS[TAIL_IDS.length - 1])) ? 'Review Answers' : 'Continue'}</button>
+                    >{fromReview ? 'Save' : (step >= plannedScreens || (keys.length && (q.id === TAIL_IDS[TAIL_IDS.length - 1] || (q.id === BEHAV_ID && skipPsych)))) ? 'Review Answers' : 'Continue'}</button>
                     <button style={ghostBtn} onClick={backFromQuestion}>Back</button>
                   </div>
                 </Fade>

@@ -150,18 +150,19 @@ export const REGIONS = {
         text:"Could you be pregnant, and do you have pain low in your tummy along with pain at the tip of your shoulder?"},
       {id:"srf-lung", tier:"emergency", group:"lungclot", why:"Possible blood clot in the lung or a collapsed lung",
         text:"Do you have a sudden, sharp pain on breathing with shortness of breath?"},
-      {id:"rf-hotjoint", tier:"emergency", why:"Possible joint infection (septic arthritis)",
-        text:"Is your shoulder hot, red, or swollen, with a fever or feeling very unwell?"},
+      {id:"rf-hotjoint", tier:"emergency", group: "hotjoint", why:"Possible joint infection (septic arthritis)",
+        text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?"},
       {id:"srf-pmr", tier:"urgent", why:"Possible polymyalgia rheumatica; needs blood tests and medical care",
         text:"If you are over 50: are both shoulders (and often both hips) stiff and aching, worst in the morning for more than 45 minutes, and do you feel generally unwell?"},
       {id:"srf-pancoast", tier:"urgent", group:"pancoast", why:"Possible tumour at the top of the lung (Pancoast), felt in the shoulder and inner arm",
         text:"Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, a drooping eyelid, or weakness in your hand?"},
-      {id:"srf-cancer", tier:"urgent", group:"cancer", why:"Cancer can spread to the shoulder bones",
-        text:"Have you ever had cancer, or is there a new lump, or pain at night that does not change with position, with weight loss?"},
-      {id:"srf-gallbladder", tier:"urgent", group:"gallbladder", why:"Gallbladder or liver pain is felt in the right shoulder (C3–C5 and T7–T9)",
-        text:"Is the pain at the tip of your right shoulder or under your right shoulder blade worse after fatty meals, or does it come with feeling sick or yellow skin or eyes?"},
-      {id:"srf-tip", tier:"urgent", group:"tip", why:"Diaphragm or lung lining pain is felt at the shoulder tip (C3–C5)",
-        text:"Is the pain at the tip of your shoulder worse when you breathe in deeply?"},
+      // Shorter questionnaire (Chandra, 28 Sep 2026): the gallbladder and
+      // shoulder-tip questions are one, shared with the neck and base of the
+      // neck (group "organ"), and replace the drawing's generic organ question.
+      // The hot-joint question is shared by the arm's joints (group "hotjoint"),
+      // and the cancer question is covered by the general one on this page.
+      {id:"srf-organ", tier:"urgent", group: ["organ", "gallbladder", "tip"], why:"Gallbladder, liver, diaphragm or lung lining pain is felt at the shoulder (C3–C5 and T7–T9)",
+        text: "Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position?"},
       {id:"srf-pta", tier:"urgent", group:"pta", why:"Possible nerve inflammation (neuralgic amyotrophy, Parsonage-Turner)",
         text:"Did a sudden, severe shoulder pain with no injury last several days, and then your shoulder or arm muscles became weak or thin?"}
     ],

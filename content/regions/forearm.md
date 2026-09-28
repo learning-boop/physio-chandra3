@@ -9,6 +9,9 @@ source: Lee MJ, LaStayo PC. Pronator syndrome and other nerve compressions that 
 reviewed_by: Chandra Matla, Registered Physiotherapist
 # The document says "Reviewed by Chandra Matla on 25 Sept 2026".
 reviewed_on: 2026-09-25
+# 28 Sep 2026, shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted):
+# the cancer question is covered by the general one, which now asks about a new or growing lump and night pain that does not change with position (A3.5).
+# The flag lines below are the document as written; src/data holds the merged wording.
 ---
 
 ## red flags

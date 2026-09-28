@@ -9,6 +9,9 @@ name: Upper arm
 source: Blanpied PR et al. Neck Pain: Revision 2017 (neck pain with radiating pain). JOSPT 47(7), 2017; Murphy DR et al. Pain patterns and descriptions in patients with radicular pain. Chiropr Osteopat 17, 2009; Illig KA et al. SVS reporting standards for thoracic outlet syndrome. J Vasc Surg 64(3), 2016; van Alfen N, van Engelen BG. The clinical spectrum of neuralgic amyotrophy. Brain 129(2), 2006; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019; Finucane LM et al. International Framework for Red Flags for Potential Serious Spinal Pathologies. JOSPT 50(7), 2020
 reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: DRAFT prepared 24 Sep 2026, awaiting Chandra's review
+# 28 Sep 2026, shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted):
+# the cancer question is covered by the general one, which now asks about a new or growing lump and night pain that does not change with position (A3.5).
+# The flag lines below are the document as written; src/data holds the merged wording.
 ---
 
 ## red flags

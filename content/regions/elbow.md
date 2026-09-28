@@ -9,6 +9,9 @@ source: Lucado AM et al. Lateral elbow pain and muscle function impairments: cli
 reviewed_by: Chandra Matla, Registered Physiotherapist
 # The document says "DRAFT prepared 24 Sep 2026, Reviewed by Chandra on 28 Sep 2026"; Chandra confirmed the review on 25 Sep 2026.
 reviewed_on: 2026-09-25
+# 28 Sep 2026, shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted):
+# the hot-joint, gout and hand-weakness questions are shared across the arm (A3.1, A3.2, A3.4); the cancer question is covered by the general one (A3.5).
+# The flag lines below are the document as written; src/data holds the merged wording.
 ---
 
 ## red flags

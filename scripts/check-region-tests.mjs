@@ -85,7 +85,7 @@ const TESTS = {
     { name: '11. New arm numbness after a neck manipulation',
       lines: [['neck']],
       answers: { age: '30-49', onset: 'gradual', duration: 'd2w' },
-      flags: ['nrf-manip'],
+      flags: ['nrf-after'],
       expect: { route: 'emergency' } },
     // Chandra, 26 Sep 2026: after a car accident or a hard knock to the head,
     // ongoing dizziness or any of the 5 Ds and 3 Ns -> a doctor today; getting
@@ -93,12 +93,12 @@ const TESTS = {
     { name: '12. Dizzy on and off since a car accident 3 weeks ago, not worse',
       lines: [['neck']],
       answers: { age: '30-49', onset: 'car', duration: 'd6w' },
-      flags: ['nrf-trauma5d-doc'],
+      flags: ['nrf-after-doc'],
       expect: { route: 'urgent' } },
     { name: '12b. Dizziness and double vision getting quickly worse since a car accident',
       lines: [['neck']],
       answers: { age: '30-49', onset: 'car', duration: 'd6w' },
-      flags: ['nrf-trauma5d'],
+      flags: ['nrf-after'],
       expect: { route: 'emergency' } },
     { name: '13. Base of the neck drawn: the same question is asked once',
       lines: [['neck', 'ctj']],
@@ -140,12 +140,12 @@ const TESTS = {
     { name: '20. New, sudden spinning with vomiting and unable to walk',
       lines: [['neck']],
       answers: { age: '50-64', onset: 'gradual', duration: 'd2w' },
-      flags: ['nrf-dizzystroke'],
+      flags: ['nrf-stroke'],
       expect: { route: 'emergency' } },
     { name: '21. Severe neck pain never felt before, after a neck manipulation',
       lines: [['neck']],
       answers: { age: '30-49', onset: 'lift', duration: 'd2w' },
-      flags: ['nrf-cad-severe'],
+      flags: ['nrf-after'],
       expect: { route: 'emergency' } },
     { name: '21b. The same with the head drawn: the shared flag is asked once',
       lines: [['neck', 'head']],
@@ -155,7 +155,7 @@ const TESTS = {
     { name: '22. New but not severe neck pain after a neck manipulation',
       lines: [['neck']],
       answers: { age: '30-49', onset: 'lift', duration: 'd2w' },
-      flags: ['nrf-cad'],
+      flags: ['nrf-after-doc'],
       expect: { route: 'urgent' } },
     { name: '18. No dizziness: the dizziness question is not asked',
       lines: [['neck']],
@@ -397,7 +397,7 @@ const TESTS = {
     { name: '5. Gallbladder look-alike: tip of the right shoulder',
       lines: [['shoulderR']],
       answers: { age: '50-64', onset: 'gradual', duration: 'd6w', S2: ['fullfree'], S7: ['neither'] },
-      flags: ['srf-gallbladder'],
+      flags: ['srf-organ'],
       expect: { route: 'urgent' } },
     { name: '6. Cannot lift the arm after a fall (injury screen)',
       lines: [['upperarmL']],
@@ -782,7 +782,9 @@ function run(rk, t) {
   const allFlags = Object.values(REGIONS).flatMap((r) => r.redFlags)
   const onScreen = (id) => {
     const f = allFlags.find((x) => x.id === id)
-    return offered.find((o) => o.id === id || (f && f.group && o.group === f.group))
+    // A merged flag lists several groups; it stands in for each of them.
+    const gs = [].concat((f && f.group) || [])
+    return offered.find((o) => o.id === id || [].concat(o.group || []).some((g) => gs.includes(g)))
   }
   for (const id of t.flags || []) if (!onScreen(id)) return { ...seen, error: `flag ${id} is not on the safety screen` }
   const tiers = (t.flags || []).map((id) => onScreen(id).tier)

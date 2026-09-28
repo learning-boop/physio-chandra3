@@ -97,7 +97,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   // persistence (CPA Orthopaedic Division subjective framework).
   const hi = interpretBehaviour({ sinSeverity: 'severe', sinProvoke: 'light', sinSettle: 'nextday', pattern24: ['nightWake'], easing: ['none'] })
   check('little activity + severe + settles next day → SEVERE irritability', hi.irritability === 'severe', hi.irritability)
-  check('the grade is justified by three pieces of the patient\'s own evidence', hi.evidence.length === 3 && /Very little activity/.test(hi.evidence[0]), hi.evidence)
+  // B1 (shorter questionnaire, 28 Sep 2026): graded on severity and settling time.
+  check('the grade is justified by two pieces of the patient\'s own evidence', hi.evidence.length === 2 && /Severe at worst/.test(hi.evidence[0]), hi.evidence)
   check('severe irritability limits the first physical examination', /brief and limited/.test(hi.examCaution || ''), hi.examCaution)
   check('nothing eases + wakes at night → night red flag raised for confirmation', hi.nightConcern === true)
   const lo = interpretBehaviour({ sinSeverity: 'mild', sinProvoke: 'heavy', sinSettle: 'minutes', pattern24: ['amShort'], easing: ['Rest'] })
@@ -321,7 +322,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('summary names the pain areas as P1/P2/P3 with the surface', /P1: .*\(back surface\)/.test(text), painAreas(zones))
   check('summary records the referral line, and does not list the leg as a separate area',
     /Referred into the left leg, as far as the ankle/.test(text) && !/P2: Left Knee/.test(text), text.match(/BODY CHART[\s\S]{0,220}/)[0])
-  check('summary grades irritability with its evidence', /Irritability: SEVERE/.test(text) && /Very little activity/.test(text))
+  check('summary grades irritability with its evidence', /Irritability: SEVERE/.test(text) && /Takes until the next day/.test(text))
   check('summary states the implication for the physical examination', /brief and limited/.test(text))
   check('summary lists the pain mechanisms with evidence', /Peripheral neuropathic/.test(text) && /dominant/.test(text))
   check('summary reports a mechanism with no evidence as such', /no supporting evidence in this screen/.test(text))
@@ -444,6 +445,34 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const asked = []; let id; const a = { K1: ['back'] }
   while ((id = nextQuestion(['knee'], a, asked, 5, { draw: ['knee'], all: {} }))) asked.push(id)
   check('a location the drawing answered is not asked again', !asked.includes('K1'), asked)
+}
+
+// ── 14. Shorter questionnaire (Chandra, 28 Sep 2026) ──
+{
+  const { regionRedFlags } = await imp('src/data/assessmentFlow.js')
+  const { psychosocialQuestionsFor, skipPsychosocial, interpretPsychosocial } = await imp('src/data/psychosocial.js')
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const flagsOf = (ids) => regionRedFlags(Z(ids), Z(ids))
+  const neck = flagsOf(['neck'])
+  check('A1: the neck emergency page has 5 questions', neck.filter((f) => f.tier === 'emergency').length === 5, neck.filter((f) => f.tier === 'emergency').map((f) => f.id))
+  check('A2: the neck doctor page has 3 own questions (plus the general fever/cancer one = 4)', neck.filter((f) => f.tier !== 'emergency').length === 3, neck.filter((f) => f.tier !== 'emergency').map((f) => f.id))
+  const nh = flagsOf(['neck', 'head']).map((f) => f.id)
+  check('A1: neck + head asks the sudden headache and stroke signs once (the neck\'s merged question)',
+    nh.includes('nrf-stroke') && !nh.includes('hrf-thunderclap') && !nh.includes('hrf-stroke') && !nh.includes('hrf-cad-severe') && !nh.includes('hrf-trauma5d'), nh)
+  const arm = flagsOf(['shoulderR', 'elbowR', 'wristR', 'handR']).map((f) => f.id)
+  check('A3.1: one hot-joint question across the arm', arm.filter((id) => /hot/.test(id)).length === 1, arm)
+  check('A3.2: one gout question across the arm', arm.filter((id) => /gout/.test(id)).length === 1, arm)
+  check('A3.4: one hand-weakness question across the arm', arm.filter((id) => /erf-nerve|wrf-numb|hnd-numb/.test(id)).length === 1, arm)
+  check('A3.5: no separate arm cancer question (the general one covers it)', !arm.some((id) => /cancer/.test(id)), arm)
+  const ns = flagsOf(['neck', 'shoulderR']).map((f) => f.id)
+  check('A3.3: neck + shoulder asks the organ question once', ns.filter((id) => /tip|organ|gallbladder/.test(id)).length === 1, ns)
+  check('C1: new, moderate pain gets the 5 yellow-flag statements', psychosocialQuestionsFor({ duration: 'd6w', sinSeverity: 'moderate' }).length === 5)
+  check('C2: pain over 6 weeks, or severe, adds the work and outlook statements',
+    psychosocialQuestionsFor({ duration: 'o3m', sinSeverity: 'mild' }).length === 8 && psychosocialQuestionsFor({ duration: 'd2w', sinSeverity: 'severe' }).length === 8)
+  check('C3: the claim is no longer a statement, and still reaches the summary as a black flag',
+    !psychosocialQuestionsFor({ duration: 'o3m' }).some((q) => q.id === 'kfClaim') && interpretPsychosocial({ yfFear: 'disagree', kfClaim: 'agree' }).flags.black.length === 1)
+  check('C4: the screen is skipped only for pain under 2 weeks that is mild',
+    skipPsychosocial({ duration: 'd2w', sinSeverity: 'mild' }) && !skipPsychosocial({ duration: 'd2w', sinSeverity: 'moderate' }) && !skipPsychosocial({ duration: 'd6w', sinSeverity: 'mild' }))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

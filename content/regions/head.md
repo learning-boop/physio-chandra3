@@ -11,6 +11,9 @@ name: Head (headaches)
 source: Do TP et al. Red and orange flags for secondary headaches (SNNOOP10). Neurology 92(3), 2019; Headache Classification Committee of the IHS. ICHD-3. Cephalalgia 38(1), 2018; Blanpied PR et al. Neck Pain: Revision 2017 (neck pain with headache). JOSPT 47(7), 2017; Rushton A et al. International IFOMPT Cervical Framework. JOSPT 53(1), 2023; Donnelly JM et al. Travell, Simons & Simons' Trigger Point Manual, 3rd ed., 2019
 reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
+# 28 Sep 2026, shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted):
+# the neck's merged questions stand in for the sudden headache, stroke signs, severe pain after a manipulation, and the 5 Ds and 3 Ns when the neck is also drawn (A1); asked once.
+# The flag lines below are the document as written; src/data holds the merged wording.
 ---
 
 ## red flags

@@ -87,6 +87,18 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   cellulitis, a fingertip infection, a painful knee replacement, hands or
   walking getting quickly worse) say "see a doctor today". Only flags that
   depend on the answers wait for a short final check.
+- **Merged questions stand in for several.** A red flag's `group` can be a
+  list (the neck's stroke question is also the sudden-headache question): it
+  is asked unless every group is already on the screen, and then no
+  neighbouring area asks any of them again. The hot-joint, gout,
+  hand-weakness and organ-pain questions are shared across the arm, and the
+  general "fever, weight loss, lump, night pain, cancer" check replaces the
+  arm areas' own cancer questions (shorter questionnaire, 28 Sep 2026).
+- **The closing screens are short.** Pain behaviour asks severity, settling
+  time, the 24-hour pattern and easing (irritability is graded on the first
+  two). "How it is affecting you" asks 5 statements, 8 when the pain has
+  lasted over 6 weeks or is severe, none for pain under 2 weeks that is mild;
+  an insurance or work claim is a tick box before the results.
 - **Neighbouring areas share.** A red flag that asks the same thing in two
   areas (heart, aorta, spinal cord…) is shown once. A condition with the same
   name in two areas is shown once, so keep its text identical in both files

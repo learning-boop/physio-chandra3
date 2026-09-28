@@ -10,6 +10,9 @@ name: Base of the neck & upper back (C7–T3)
 source: Blanpied PR et al. Neck Pain: Revision 2017. JOSPT 47(7), 2017; Finucane LM et al. International Framework for Red Flags for Potential Serious Spinal Pathologies. JOSPT 50(7), 2020; Illig KA et al. SVS reporting standards for thoracic outlet syndrome. J Vasc Surg 64(3), 2016; Rushton A et al. International IFOMPT Cervical Framework. JOSPT 53(1), 2023; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction, 3rd ed., 2019; McGuckin N. The T4 syndrome. In: Grieve GP (ed). Modern Manual Therapy of the Vertebral Column, 1986
 reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
+# 28 Sep 2026, shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted):
+# the gallbladder question uses the shared organ wording (A3.3); the 5 Ds and 3 Ns questions are covered by the neck's merged ones when the neck is also drawn (A1, A2).
+# The flag lines below are the document as written; src/data holds the merged wording.
 ---
 
 ## red flags

@@ -42,46 +42,41 @@ export const EXTRA_REGIONS = {
   neck: {
     name: "Neck (cervical spine)",
     redFlags: [
-      { id: "nrf-thunderclap", tier: "emergency", group: "thunderclap", why: "Possible bleed or artery tear in the neck or head",
-        text: "Have you had a sudden, severe headache, the worst you have ever had?" },
-      // Chandra, 28 Sep 2026 (cervicogenic dizziness review): dizziness alone
-      // no longer counts here, so neck-related dizziness is not sent to 911.
-      // New, sudden dizziness WITH a stroke sign is its own emergency flag.
-      { id: "nrf-artery", tier: "emergency", group: "stroke", why: "Stroke or neck artery warning signs",
-        text: "Since this started, have any of these come on suddenly: a drooping or numb face, weakness or numbness in an arm or leg on one side, slurred speech or trouble finding or understanding words, loss of sight or double vision, trouble swallowing, sudden confusion, or falls or blackouts?" },
-      { id: "nrf-dizzystroke", tier: "emergency", group: "dizzystroke", why: "New, sudden dizziness with these signs can be a stroke at the back of the brain",
-        text: "Have you had new, sudden dizziness or room spinning together with any of these: being unable to stand or walk without help, vomiting, a new severe headache or neck pain, double vision, slurred speech, a numb face, weakness on one side, or eyes that flicker or jump?" },
+      // Shorter questionnaire (Chandra, 28 Sep 2026, A1 and A2): questions
+      // that asked the same thing are merged. A flag's `group` can list
+      // several groups: it stands in for each of them, so a neighbouring
+      // area's matching question is not asked again.
+      // A1.1: sudden severe headache + sudden stroke signs + new, sudden
+      // dizziness with signs. Dizziness alone still does not count.
+      { id: "nrf-stroke", tier: "emergency", group: ["stroke", "thunderclap", "dizzystroke"], why: "Possible stroke, bleed, or neck artery tear",
+        text: "Since this started, has any of these come on suddenly: the worst headache of your life; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk?" },
       { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord",
         text: "Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs?" },
-      { id: "nrf-manip", tier: "emergency", why: "New nerve or spinal cord symptoms after a neck manipulation",
-        text: "Since a neck manipulation or adjustment (having your neck \"cracked\"), have you had new numbness or weakness in your arms or legs?" },
-      // The 5 Ds and 3 Ns after a crash or a head or neck knock (Chandra, 26 Sep
-      // 2026): getting quickly worse, or new in the last few days -> 911; ongoing
-      // but not worse -> a doctor today. The stroke flag above asks only sudden ones.
-      { id: "nrf-trauma5d", tier: "emergency", group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
-        text: "Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
-      { id: "nrf-trauma5d-doc", sameDay: true, tier: "urgent", group: "trauma5d-doc", why: "Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today",
-        text: "Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
+      // A1.2: new numbness after a manipulation + severe or fast-changing pain
+      // after a manipulation, jerk or knock + the 5 Ds and 3 Ns getting worse,
+      // or new in the last few days, after an accident (Chandra, 26 and 28 Sep).
+      { id: "nrf-after", tier: "emergency", group: ["cadsevere", "trauma5d", "manip"], why: "After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain",
+        text: "Since a neck manipulation (\"cracking\"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick, numbness around the lips, or eyes that flicker or jump?" },
       { id: "nrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
         text: "Do you have a fever with a stiff neck, a bad headache, or find bright light hard to look at?" },
       { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
         text: "Is the pain in your neck, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
       { id: "nrf-kehr", tier: "emergency", group: "kehr", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
         text: "Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?" },
+      // A2.1: ongoing dizziness or signs after an accident + new, not severe
+      // pain after a manipulation or jerk. The pain part is now same day.
+      { id: "nrf-after-doc", sameDay: true, tier: "urgent", group: ["trauma5d-doc", "cad"], why: "After an accident, manipulation, jerk or knock, these need a doctor today",
+        text: "Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before?" },
+      // A2.2: hands or walking quickly worse + the general "new or worsening
+      // weakness or numbness" (group "neuro" replaces it). Now same day.
       // The slow pattern is asked in N9/N10 and scored (neck-dcm.md).
-      { id: "nrf-myelo", sameDay: true, tier: "urgent", group: "myelo", why: "Spinal cord pressure that is getting worse quickly needs a doctor today",
-        text: "Over the last few days or weeks, have your hands been getting quickly clumsier (buttons, writing, dropping things), or your walking quickly more unsteady?" },
+      { id: "nrf-myelo", sameDay: true, tier: "urgent", group: ["myelo", "neuro"], why: "Nerve or spinal cord pressure that is getting worse quickly needs a doctor today",
+        text: "Over the last few days or weeks, have you become quickly weaker, number or clumsier in an arm, hand or leg, or has your walking become quickly more unsteady?" },
       { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability",
         text: "Do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
-      // Chandra, 28 Sep 2026: severe pain never felt before, or symptoms
-      // changing fast, after a manipulation, jerk or knock -> Emergency.
-      // Shared with the head (group "cadsevere"): asked once.
-      { id: "nrf-cad-severe", tier: "emergency", group: "cadsevere", why: "Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear",
-        text: "Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly?" },
-      { id: "nrf-cad", tier: "urgent", group: "cad", why: "An early sign of a neck artery tear can be pain alone",
-        text: "Did a new neck pain or headache, different from any you have had before but not severe, start suddenly after a neck manipulation, a sudden jerk, or a minor knock?" },
-      { id: "nrf-tip", tier: "urgent", group: "tip", drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder tip",
-        text: "Is the pain at the tip of your shoulder worse when you breathe in deeply, or does it come on after fatty meals?" }
+      // A3.3: shared with the shoulder and base of the neck (group "organ").
+      { id: "nrf-tip", tier: "urgent", group: ["organ", "tip", "gallbladder"], drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder",
+        text: "Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -261,8 +256,8 @@ export const EXTRA_REGIONS = {
         text: "Are the small muscles of your hand getting thinner, or has your grip become weak?" },
       { id: "crf-vascular", sameDay: true, tier: "urgent", why: "Possible blood vessel compression or clot in the arm (same-day review)",
         text: "Does your arm or hand turn pale, blue, cold, or swollen, especially when your arm is raised?" },
-      { id: "crf-gallbladder", tier: "urgent", group: "gallbladder", why: "Gallbladder pain can be felt under the right shoulder blade",
-        text: "Is the pain under your right shoulder blade worse after fatty meals, or does it come with feeling sick?" },
+      { id: "crf-gallbladder", tier: "urgent", group: ["organ", "gallbladder"], why: "Gallbladder pain can be felt under the right shoulder blade",
+        text: "Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position?" },
       { id: "crf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
         text: "Is there a band of burning pain around one side of your chest or back, with a rash or blisters?" },
       { id: "crf-oesophagus", tier: "urgent", why: "Oesophagus pain can be felt between the shoulder blades",
@@ -1100,8 +1095,6 @@ export const EXTRA_REGIONS = {
         text: "Did a sudden, severe arm or shoulder pain with no injury last several days, and then your arm muscles became weak or thin?" },
       { id: "arf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
         text: "Is there a band of burning pain down the arm, with a rash or blisters in the same strip?" },
-      { id: "arf-cancer", tier: "urgent", group: "cancer", why: "Cancer or a bone lesion needs medical review",
-        text: "Have you ever had cancer, or is there a lump in your arm that is growing, or deep bone pain at night that does not change with position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1209,22 +1202,20 @@ export const EXTRA_REGIONS = {
   elbow: {
     name: "Elbow",
     redFlags: [
-      { id: "erf-hot", tier: "emergency", why: "Possible joint infection (septic arthritis)",
-        text: "Is your elbow hot, red, and swollen, with a fever or feeling very unwell?" },
+      { id: "erf-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
+        text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?" },
       { id: "erf-bursa", sameDay: true, tier: "urgent", why: "Possible infected bursa at the back of the elbow",
         text: "Is there a swelling at the point of your elbow that is red, warm, or has a cut or graze over it?" },
-      { id: "erf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
-        text: "Did your elbow become suddenly hot, swollen, and very painful overnight, and have you had gout before?" },
-      { id: "erf-nerve", tier: "urgent", why: "Nerve weakness (ulnar or radial nerve) needs medical review",
-        text: "Is your hand becoming weaker, is the muscle between your thumb and index finger getting thinner, or can you not lift your wrist?" },
+      { id: "erf-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
+        text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
+      { id: "erf-nerve", tier: "urgent", group: "handweak", why: "Nerve weakness (ulnar or radial nerve) needs medical review",
+        text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
       { id: "erf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
       { id: "erf-child", tier: "urgent", why: "Possible growth plate injury or osteochondritis dissecans; needs imaging",
         text: "Are you under 16, and does your elbow hurt with throwing or gymnastics, or has it started to catch or lock?" },
       { id: "erf-pta", tier: "urgent", group: "pta", why: "Possible nerve inflammation (neuralgic amyotrophy)",
         text: "Did a sudden, severe arm pain with no injury last several days, and then your arm or hand muscles became weak?" },
-      { id: "erf-cancer", tier: "urgent", group: "cancer", why: "Cancer or a bone lesion needs medical review",
-        text: "Have you ever had cancer, or is there a lump in your arm that is growing, or pain at night that does not change with position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1362,8 +1353,6 @@ export const EXTRA_REGIONS = {
         text: "Are you a young gymnast or weight-bearing athlete with a deep, pinpoint bone pain in the forearm that is worse with loading?" },
       { id: "frf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
         text: "Is there a band of burning pain down the forearm, with a rash or blisters in the same strip?" },
-      { id: "frf-cancer", tier: "urgent", group: "cancer", why: "Cancer or a bone lesion needs medical review",
-        text: "Have you ever had cancer, or is there a lump in your forearm that is growing, or deep bone pain at night that does not change with position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1475,26 +1464,24 @@ export const EXTRA_REGIONS = {
   wrist: {
     name: "Wrist",
     redFlags: [
-      { id: "wrf-hot", tier: "emergency", group: "handhot", why: "Possible joint infection (septic arthritis)",
-        text: "Is your wrist hot, red, and swollen, with a fever or feeling very unwell?" },
+      { id: "wrf-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
+        text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?" },
       { id: "wrf-bite", tier: "emergency", group: "handbite", why: "Possible tendon sheath or deep hand infection; needs urgent surgical review",
         text: "Did you have a cut, bite, or puncture on the wrist or hand, and is it now swollen, red, and very painful to move the fingers?" },
       { id: "wrf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "wrf-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS); early treatment matters",
         text: "Since a wrist injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that even light touch hurts?" },
-      { id: "wrf-gout", tier: "urgent", group: "handgout", why: "Possible gout or other crystal arthritis",
-        text: "Did your wrist become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
+      { id: "wrf-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
+        text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
       { id: "wrf-inflam", tier: "urgent", group: "handinflam", why: "Possible inflammatory arthritis (for example rheumatoid arthritis)",
         text: "Are both wrists or several finger joints swollen and stiff for more than an hour in the morning?" },
-      { id: "wrf-numb", tier: "urgent", group: "handnumb", why: "Severe nerve compression (carpal tunnel) may need a specialist opinion",
-        text: "Is the numbness in your fingers there all the time now, or is the muscle at the base of your thumb getting thinner?" },
+      { id: "wrf-numb", tier: "urgent", group: "handweak", why: "Severe nerve compression (carpal tunnel) may need a specialist opinion",
+        text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
       { id: "wrf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
       { id: "wrf-raynaud", tier: "urgent", group: "raynaud", why: "Possible circulation problem (Raynaud's, or damage to the artery in the palm)",
         text: "Do your fingers or hand go white, blue, or cold in attacks, or is there a painful cold finger that does not recover?" },
-      { id: "wrf-cancer", tier: "urgent", group: "cancer", why: "A lump or bone lesion needs medical review",
-        text: "Have you ever had cancer, or is there a hard lump at the wrist that is growing, or deep pain at night that does not change with position?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1610,22 +1597,22 @@ export const EXTRA_REGIONS = {
         text: "Did you have a cut, bite, or puncture on your hand or finger (including hitting someone's teeth), and is it now swollen, red, and very painful to straighten the finger?" },
       { id: "hnd-inject", tier: "emergency", why: "High-pressure injection injury: serious damage hides under a small wound",
         text: "Was paint, grease, oil, or fluid injected into your hand under pressure (spray gun, grease gun), even if the wound looks tiny?" },
-      { id: "hnd-hot", tier: "emergency", group: "handhot", why: "Possible joint infection (septic arthritis)",
-        text: "Is a finger or thumb hot, red, and swollen, with a fever or feeling very unwell?" },
+      { id: "hnd-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
+        text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?" },
       { id: "hnd-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "hnd-felon", sameDay: true, tier: "urgent", why: "Possible fingertip or nail-fold infection (felon or paronychia); same-day review",
         text: "Is there a tense, throbbing, swollen fingertip, or pus around the nail?" },
-      { id: "hnd-gout", tier: "urgent", group: "handgout", why: "Possible gout or other crystal arthritis",
-        text: "Did a finger joint become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
+      { id: "hnd-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
+        text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
       { id: "hnd-inflam", tier: "urgent", group: "handinflam", why: "Possible inflammatory arthritis (rheumatoid or psoriatic)",
         text: "Are the knuckles in both hands swollen and stiff for more than an hour in the morning, or is a whole finger swollen like a sausage (especially with psoriasis)?" },
       { id: "hnd-raynaud", tier: "urgent", group: "raynaud", why: "Possible Raynaud's or another circulation problem",
         text: "Do your fingers go white, then blue, in the cold, or is there a sore or ulcer on a fingertip?" },
       { id: "hnd-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS)",
         text: "Since a hand injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts?" },
-      { id: "hnd-numb", tier: "urgent", group: "handnumb", why: "Severe nerve compression needs a specialist opinion",
-        text: "Is the numbness in your fingers there all the time, or is the muscle at the base of your thumb or between your thumb and index finger getting thinner?" },
+      { id: "hnd-numb", tier: "urgent", group: "handweak", why: "Severe nerve compression needs a specialist opinion",
+        text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
       { id: "hnd-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
       { id: "hnd-lump", tier: "urgent", why: "A growing lump or nail streak needs medical review",

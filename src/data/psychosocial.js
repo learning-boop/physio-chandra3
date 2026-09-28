@@ -36,10 +36,31 @@ export const PSYCHOSOCIAL_QUESTIONS = [
   { id: 'yfSleep', colour: 'yellow', text: 'Pain or worry is affecting my sleep.', options: AGREE },
   { id: 'yfRoles', colour: 'yellow', text: 'The pain is causing problems at work or with my daily responsibilities.', options: AGREE },
   { id: 'bfWork', colour: 'blue', text: 'My work makes this harder — the demands are heavy, or I get little support with it.', options: AGREE },
-  { id: 'kfClaim', colour: 'black', text: 'There is a claim, insurance or time-off process involved (ICBC, WorkSafeBC, or similar).', options: AGREE },
   { id: 'pfConfident', colour: 'pink', text: 'I am confident I can keep doing most of my usual activities while this settles.', options: AGREE },
   { id: 'pfExpect', colour: 'pink', text: 'I expect to get back to normal, and I want to take an active part in that.', options: AGREE },
 ]
+
+/* Shorter questionnaire (Chandra, 28 Sep 2026):
+   C1  the five yellow-flag statements are asked of everyone; they carry the
+       risk grading, so the grading is unchanged.
+   C2  the work and outlook statements only once the pain has lasted more than
+       6 weeks, or is severe (7–10).
+   C3  the claim question (ICBC, WorkSafeBC) is a tick box before the results
+       (the component's "ca-claim"); it is read here as kfClaim.
+   C4  the whole screen is skipped when the pain is under 2 weeks and mild. */
+const LATER_IDS = ['bfWork', 'pfConfident', 'pfExpect']
+// Duration answers of more than 6 weeks, across the areas' own bands.
+const OVER_6_WEEKS = ['d3m', 'o3m', 'years', 'd6m', 'o2m']
+const CLAIM = { id: 'kfClaim', colour: 'black', text: 'There is a claim, insurance or time-off process involved (ICBC, WorkSafeBC, or similar).' }
+
+/** The statements to ask, given the answers so far (duration, severity). */
+export function psychosocialQuestionsFor(answers = {}) {
+  const later = OVER_6_WEEKS.includes(answers.duration) || answers.sinSeverity === 'severe'
+  return PSYCHOSOCIAL_QUESTIONS.filter((q) => later || !LATER_IDS.includes(q.id))
+}
+
+/** C4: no screen at all for pain under 2 weeks that is mild at its worst. */
+export const skipPsychosocial = (answers = {}) => answers.duration === 'd2w' && answers.sinSeverity === 'mild'
 
 /** Plain-language, supportive reading of the answers.
     Returns { level: 'low'|'moderate'|'high'|null, notes: string[], moodSupport: boolean } */
@@ -50,7 +71,7 @@ export function interpretPsychosocial(answers) {
   // Yellow flags carry the risk grading; pink ones are protective, so they are
   // counted separately and never added to the risk score.
   const flags = { yellow: [], blue: [], black: [], pink: [] }
-  for (const q of PSYCHOSOCIAL_QUESTIONS) {
+  for (const q of [...PSYCHOSOCIAL_QUESTIONS, CLAIM]) {
     if (yes(q.id)) flags[q.colour].push(q.text)
   }
   const count = flags.yellow.length

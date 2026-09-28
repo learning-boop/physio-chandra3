@@ -9,6 +9,9 @@ source: Erickson M et al. Hand pain and sensory deficits: carpal tunnel syndrome
 reviewed_by: Chandra Matla, Registered Physiotherapist
 # The document still says "DRAFT prepared 24 Sep 2026, awaiting Chandra's review"; Chandra confirmed the review on 25 Sep 2026.
 reviewed_on: 2026-09-25
+# 28 Sep 2026, shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted):
+# the hot-joint, gout and hand-weakness questions are shared across the arm (A3.1, A3.2, A3.4); the cancer question is covered by the general one (A3.5).
+# The flag lines below are the document as written; src/data holds the merged wording.
 ---
 
 ## red flags

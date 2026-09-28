@@ -15,24 +15,13 @@
    educational rules of thumb, not a validated classification.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const BEHAVIOUR_IDS = ['sinSeverity', 'sinProvoke', 'sinSettle', 'pattern24', 'easing']
+export const BEHAVIOUR_IDS = ['sinSeverity', 'sinSettle', 'pattern24', 'easing']
 
-/* Irritability is judged on THREE things (Maitland; Barakatt et al. 2009):
-   how much activity it takes to provoke the symptoms, how severe they are,
-   and how long they take to settle afterwards. Asking only severity and
-   settling time — as this screen first did — leaves out the vigour of the
-   provoking activity, which is the part that decides how gently the first
-   physical examination has to be done. */
-const PROVOKE = {
-  id: 'sinProvoke', text: 'How much activity brings the pain on?',
-  options: [
-    { id: 'heavy', label: 'Only heavy or unusual activity' },
-    { id: 'normal', label: 'Normal daily activities — walking, sitting, housework' },
-    { id: 'light', label: 'Very little — small movements set it off' },
-    { id: 'rest', label: "It's there even at rest" },
-  ],
-}
-
+/* Irritability is judged on how severe the pain is and how long it takes to
+   settle (Maitland; Barakatt et al. 2009). The third dimension, how much
+   activity provokes it ("How much activity brings the pain on?"), was
+   dropped to shorten the questionnaire (Chandra, 28 Sep 2026, B1): pain
+   there even at rest still shows as "It never really settles". */
 const SEVERITY = {
   id: 'sinSeverity', text: 'At its worst, how bad is the pain?',
   options: [
@@ -74,7 +63,7 @@ const DEFAULT_EASERS = ['Rest', 'Gentle movement or stretching', 'Changing posit
 /** The pain-behaviour screen's questions. `easers` = the area's own easing
     options; pass null to leave easing out (the generic set asks it already). */
 export function behaviourQuestions(easers = DEFAULT_EASERS) {
-  const qs = [SEVERITY, PROVOKE, SETTLE, PATTERN_24]
+  const qs = [SEVERITY, SETTLE, PATTERN_24]
   if (easers) {
     qs.push({
       id: 'easing', multi: true, text: 'What eases it?',
@@ -93,14 +82,14 @@ const has = (a, id) => (Array.isArray(a) ? a.includes(id) : a === id)
     Returns { irritability: 'mild'|'moderate'|'severe'|null, evidence: [],
               notes: string[], nightConcern: boolean, examCaution: string|null }
 
-    Irritability is scored on the three Maitland dimensions — provocation,
-    severity, persistence — one point each, and the total decides the grade.
+    Irritability is scored on two Maitland dimensions, severity and
+    persistence, 0 to 2 points each: 3 or 4 is highly irritable, 2 moderate,
+    0 or 1 low (B1).
     `evidence` is the justification, in the patient's own answers, and
     `examCaution` is what that grade means for the first physical examination.
     ⚠ FOR CLINICIAN REVIEW — the point thresholds. */
 export function interpretBehaviour(answers) {
   const sev = answers.sinSeverity
-  const provoke = answers.sinProvoke
   const settle = answers.sinSettle
   const pat = answers.pattern24
   const ease = answers.easing
@@ -111,22 +100,17 @@ export function interpretBehaviour(answers) {
   let examCaution = null
   if (sev && settle) {
     let points = 0
-    // 1. Vigour of activity needed to provoke it.
-    if (provoke === 'rest') { points += 2; evidence.push('Symptoms present at rest') }
-    else if (provoke === 'light') { points += 2; evidence.push('Very little activity provokes the symptoms') }
-    else if (provoke === 'normal') { points += 1; evidence.push('Normal daily activities provoke the symptoms') }
-    else if (provoke === 'heavy') evidence.push('Only heavy or unusual activity provokes the symptoms')
-    // 2. Severity of the symptoms provoked.
+    // 1. Severity of the symptoms provoked.
     if (sev === 'severe') { points += 2; evidence.push('Severe at worst (7–10/10)') }
     else if (sev === 'moderate') { points += 1; evidence.push('Moderate at worst (4–6/10)') }
     else evidence.push('Mild at worst (1–3/10)')
-    // 3. How long they take to settle.
+    // 2. How long they take to settle.
     if (settle === 'constant') { points += 2; evidence.push('Never fully settles') }
     else if (settle === 'nextday') { points += 2; evidence.push('Takes until the next day or longer to settle') }
     else if (settle === 'hours') { points += 1; evidence.push('Takes an hour or more to settle') }
     else evidence.push('Settles within a few minutes')
 
-    irritability = points >= 4 ? 'severe' : points >= 2 ? 'moderate' : 'mild'
+    irritability = points >= 3 ? 'severe' : points >= 2 ? 'moderate' : 'mild'
     examCaution = {
       severe: 'Highly irritable: keep the first physical examination brief and limited — few provoking tests, sub-maximal, and stop at the first reproduction of symptoms. Defer neural mechanosensitivity and end-range testing if symptoms are already provoked.',
       moderate: 'Moderately irritable: examine with care, spacing provoking tests and leaving end-range and neural tension testing until last.',

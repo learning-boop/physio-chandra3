@@ -306,11 +306,18 @@ export function regionRedFlags(flowZ = [], zones = flowZ) {
   // Flags sharing a `group` ask the same thing in neighbouring areas (the
   // heart, aorta or spinal-cord question in the neck, base of the neck, mid
   // back and TL junction): keep the first, which is the most serious tier.
+  // A merged flag lists several groups (the neck's stroke question also
+  // covers the sudden headache): it is kept unless every one is already
+  // asked, and then stands in for all of them.
   const groups = new Set()
   return out.filter((f) => {
     if (!f.group) return true
-    if (groups.has(f.group)) return false
-    groups.add(f.group)
+    const gs = [].concat(f.group)
+    if (gs.every((g) => groups.has(g))) return false
+    gs.forEach((g) => groups.add(g))
     return true
   })
 }
+
+/** True when a flag belongs to this group (a flag's group may be a list). */
+export const inGroup = (f, g) => [].concat(f.group || []).includes(g)
