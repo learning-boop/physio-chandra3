@@ -65,6 +65,23 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   check('both hands numb overrides the radiculopathy score (document Q8)', !cord.some((x) => x.c.id === 'radic'), cord.map((x) => x.rk + '/' + x.c.id))
 }
 
+// ── 2c. Cervicogenic headache and upper neck pain documents (v1.0, 28 Sep 2026) ──
+{
+  const { maxScores } = await imp('src/data/symptomGuide.js')
+  check('upper neck pain ceiling is the document\'s 12', maxScores(REGIONS.neck).upper === 12, maxScores(REGIONS.neck).upper)
+  check('neck-related headache (head) ceiling is 15, so it shows from 6, the document\'s line', maxScores(REGIONS.head).cgh === 15, maxScores(REGIONS.head).cgh)
+  const { locationAnswers, LOCATION_QUESTION_IDS } = await imp('src/data/drawnLocation.js')
+  const neckAt = (fy, lx) => locationAnswers([{ id: 'neck', type: 'neck', at: { fy, az: 0.02, lx } }]).N13
+  check('marked high on the back of the neck → base of the skull', String(neckAt(0.395, -0.06)) === 'skullbase', neckAt(0.395, -0.06))
+  check('marked low on the back of the neck → middle or lower neck', String(neckAt(0.34, -0.06)) === 'lowerneck', neckAt(0.34, -0.06))
+  check('front of the neck → no location answer', neckAt(0.395, 0.03) === undefined, neckAt(0.395, 0.03))
+  check('N13 is still asked after the drawing answers it (it also asks about tenderness)', !LOCATION_QUESTION_IDS.has('N13'))
+  const keys = ['neck']
+  const r = rankAcross(keys, { age: '30-49', onset: 'gradual', N9: ['none'], N13: ['skullbase', 'tender'], N1: ['onestiff'], N4: ['onesided', 'movement', 'press'] })
+  check('headache the main problem ranks neck-related headache above upper neck pain (document Q5)',
+    r[0] && r[0].c.id === 'cheadache', r.map((x) => x.c.id))
+}
+
 // ── 3. Low back → foot ──
 {
   const lines = [['lowerback', 'hipR', 'kneeR', 'ankleR']]
@@ -162,6 +179,17 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('no headaches → no headache check', !ids(['neck'], { N4: ['none'] }).some((x) => x.startsWith('pc-headache')), ids(['neck'], { N4: ['none'] }))
   check('head drawn too → its own safety pages ask these, so no headache check',
     !patternChecks(zonesOf([['neck', 'head']]), { N4: ['onesided'] }, 3).some((c) => c.id === 'pc-headache'))
+  // "Cervicogenic Headache" and "Upper Cervical Pain" documents (v1.0, 28 Sep 2026).
+  check('neck-type headache on the head, neck not drawn → upper-neck instability check',
+    ids(['head'], { D1: ['sameside'] }).includes('pc-upperinstab:urgent'), ids(['head'], { D1: ['sameside'] }))
+  check('neck drawn too → its safety pages ask it, so no instability check',
+    !patternChecks(zonesOf([['neck', 'head']]), { D1: ['sameside'] }, 3).some((c) => c.id === 'pc-upperinstab'))
+  check('tension-type answers → no instability check', !ids(['head'], { D1: ['band'] }).some((x) => x.startsWith('pc-upperinstab')))
+  check('neck pain over 50 → polymyalgia / giant cell arteritis check (same day)',
+    ids(['neck'], { age: 'a50' }).includes('pc-over50stiff:urgent'), ids(['neck'], { age: 'a50' }))
+  check('neck pain under 50 → no polymyalgia check', !ids(['neck'], { age: 'a30' }).some((x) => x.startsWith('pc-over50stiff')))
+  check('over 50 with headaches → the headache check covers it, asked once',
+    !ids(['neck'], { age: 'o64', N4: ['onesided'] }).some((x) => x.startsWith('pc-over50stiff')), ids(['neck'], { age: 'o64', N4: ['onesided'] }))
   check('neck without dizziness → no dizziness checks',
     !ids(['neck'], { N9: ['none'] }).some((x) => x.startsWith('pc-dizzy')), ids(['neck'], { N9: ['none'] }))
   check('one knee only → no pattern questions at all', patternChecks(zonesOf([['kneeL']]), {}, 3).length === 0, ids(['kneeL']))

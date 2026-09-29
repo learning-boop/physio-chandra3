@@ -77,8 +77,12 @@ export const EXTRA_REGIONS = {
       // Rheumatoid or other inflammatory arthritis added from the "Neck Pain
       // Mobility Deficits" document (28 Sep 2026): see the doctor before
       // hands-on neck treatment (upper neck ligaments can be weakened).
+      // Down syndrome, long-term steroids, the head feeling too heavy and a
+      // lump in the throat from the "Cervicogenic Headache" and "Upper
+      // Cervical Pain" documents (v1.0, 28 Sep 2026). The head asks the same
+      // in its final check when the neck is not drawn (patternChecks.js).
       { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability: a doctor should check before hands-on neck treatment",
-        text: "Do you have rheumatoid arthritis or another inflammatory arthritis, do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth?" },
+        text: "Do you have rheumatoid arthritis or another inflammatory arthritis, or Down syndrome, or take steroid tablets long term; does your head feel too heavy to hold up, so you support it with your hands; or does moving your neck bring a lump-in-the-throat feeling or tingling around your lips or mouth?" },
       // A3.3: shared with the shoulder and base of the neck (group "organ").
       { id: "nrf-tip", tier: "urgent", group: ["organ", "tip", "gallbladder"], drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder",
         text: "Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position?" }
@@ -112,6 +116,25 @@ export const EXTRA_REGIONS = {
         { id: "onestiff", label: "It is stiff or painful turning to one side" },
         { id: "bothstiff", label: "It is stiff or painful turning both ways" },
         { id: "locked", label: "It is locked and I can barely turn it at all" }
+      ]},
+      // "Upper Cervical Pain headache related.docx" (v1.0, 28 Sep 2026): its
+      // Q1 (where the pain mainly is: base of the skull 3, middle or lower
+      // neck 1) and Q4 (base of the skull tender, spreading to the back of
+      // the head, 2). Pain down the arm (its Q1 "0, route radiculopathy") is
+      // question N2. Only upper neck pain points at it, so the chooser would
+      // rarely pick it. It is asked early after an occasional ache at the back
+      // of the head (N4), and once turning is stiff (N1) unless the drawing
+      // runs down into the base of the neck, upper back or shoulder: that is
+      // the lower neck, and N6 and N7 are worth more there. A mark high on
+      // the back of the neck answers it from the drawing (drawnLocation.js).
+      { id: "N13", text: "Where in your neck is the pain mainly? Tick all that apply.",
+        priority: ({ draw, ra }) => [].concat(ra.N4 || []).includes("occasional") ||
+          ([].concat(ra.N1 || []).some((o) => o === "onestiff" || o === "bothstiff" || o === "locked") &&
+            !(draw && ["ctj", "upperback", "shoulder"].some((t) => draw.has(t)))),
+        options: [
+        { id: "skullbase", excl: "level", label: "At the base of my skull, or the very top of my neck" },
+        { id: "lowerneck", excl: "level", label: "In the middle or lower part of my neck" },
+        { id: "tender", label: "The base of my skull is tender to press, and the pain spreads to the back of my head" }
       ]},
       { id: "N2", text: "Which of these describe your arm symptoms? Tick all that apply.",
         askIf: ({ draw, all }) => !draw || ["shoulder", "elbow", "wrist"].some((t) => draw.has(t)) ||
@@ -166,7 +189,9 @@ export const EXTRA_REGIONS = {
       { id: "N4", text: "If you get headaches with this, what are they like?",
         askIf: ({ draw, ra }) => (draw && draw.has("head")) || !ra.age || ["u18", "18-29", "30-49"].includes(ra.age),
         options: [
-          { id: "onesided", label: "One-sided, starting at the back of the neck or head" },
+          // "Always the same side" from the "Cervicogenic Headache" document's
+          // Q2 (v1.0, 28 Sep 2026): headaches that switch sides point to migraine.
+          { id: "onesided", label: "One-sided, always the same side, starting at the back of the neck or head" },
           { id: "movement", label: "Brought on by neck movement or holding one position" },
           { id: "band", label: "Both sides, like a tight band or pressure" },
           { id: "throb", label: "Throbbing, with feeling sick or finding light hard to take" },
@@ -174,7 +199,11 @@ export const EXTRA_REGIONS = {
           // matches the head's question, so neck-related headache reads the same.
           { id: "press", label: "Pressing at the base of my skull brings on my usual headache" },
           { id: "meds", label: "I take pain relief for headaches on 10 or more days a month", special: "medOveruse" },
-          { id: "none", label: "I do not get headaches" }
+          // "Upper Cervical Pain" document Q5: an occasional ache at the back
+          // of the head belongs to upper neck pain; a headache that is the
+          // main problem is cervicogenic headache (the answers above).
+          { id: "occasional", excl: "nohead", label: "Only an occasional ache at the back of my head; headaches are not my main problem" },
+          { id: "none", excl: "nohead", label: "I do not get headaches" }
         ]},
       { id: "N5", text: "Since your accident or injury, which of these apply? Tick all that apply.",
         askIf: ({ ra }) => ra.onset === "car" || ra.onset === "fall",
@@ -929,7 +958,13 @@ export const EXTRA_REGIONS = {
         { id: "locks", label: "My jaw catches or locks" },
         { id: "stiff", label: "My jaw feels stiff and will not open fully" }
       ]},
-      { id: "M2", text: "What brings the pain on? Tick all that apply.", options: [
+      // Asked early when the neck is drawn too: the look-alike case, as the
+      // neck's N8 is for the shoulder. Without it the neck's questions, which
+      // tell more conditions apart since the upper neck pain record (28 Sep
+      // 2026), used the last slot and the "coming from your neck" card was lost.
+      { id: "M2", text: "What brings the pain on? Tick all that apply.",
+        priority: ({ draw }) => !!draw && draw.has("neck"),
+        options: [
         { id: "chewing", label: "Chewing, especially hard or chewy food" },
         { id: "talking", label: "Talking for a long time" },
         { id: "yawning", label: "Yawning or opening wide" },
@@ -997,7 +1032,9 @@ export const EXTRA_REGIONS = {
       { id: "hrf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke or other brain cause",
         text: "With the headache, have you had any of these: weakness or numbness on one side, a drooping face, trouble speaking or understanding, confusion, loss of vision or double vision, or trouble walking?" },
       { id: "hrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
-        text: "Do you have a fever with a stiff neck, a new rash, or are you very drowsy?" },
+        // Confusion and feeling very unwell from the "Cervicogenic Headache"
+        // document (v1.0, 28 Sep 2026).
+        text: "Do you have a fever with a stiff neck, a new rash, or are you very drowsy, confused or feeling very unwell?" },
       { id: "hrf-headinjury", tier: "emergency", why: "Possible bleeding after a head injury",
         text: "Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse?" },
       // Shared with the neck and base of the neck (group "trauma5d"): asked once.
@@ -1008,11 +1045,11 @@ export const EXTRA_REGIONS = {
       { id: "hrf-glaucoma", tier: "emergency", why: "Possible acute glaucoma",
         text: "Is one eye painful and red, with blurred vision or halos around lights?" },
       { id: "hrf-gca", sameDay: true, tier: "urgent", group: "gca", why: "Possible giant cell arteritis. Needs same-day medical review to protect eyesight",
-        text: "If you are over 50: is your scalp or temple tender to touch, or do your jaw muscles ache when chewing and ease when you stop?" },
+        text: "If you are over 50: is your scalp or temple tender to touch, do your jaw muscles ache when chewing and ease when you stop, or has your vision changed?" },
       { id: "hrf-new50", tier: "urgent", why: "New or progressive headache needs medical review",
         text: "Is this a new kind of headache that started after age 50, or are your headaches getting steadily worse or changing pattern over weeks?" },
       { id: "hrf-pressure", tier: "urgent", why: "Pressure-related headache can have a brain cause",
-        text: "Is the headache brought on by coughing, sneezing, straining, or exercise, or much worse when you lie down or stand up?" },
+        text: "Is the headache brought on by coughing, sneezing, straining, or exercise, much worse when you lie down or stand up, or there when you wake, with vomiting?" },
       { id: "hrf-concussion", tier: "urgent", why: "Possible concussion: medical assessment before physio",
         text: "Did the headache start after a knock to the head or a whiplash injury in the last 4 weeks?" },
       { id: "hrf-medication", tier: "urgent", why: "Medication side effect: the prescriber should review it",
@@ -1058,13 +1095,22 @@ export const EXTRA_REGIONS = {
         { id: "throb", label: "Throbbing or pulsing", special: "migraine" },
         { id: "sick", label: "Feeling sick or being sick", special: "migraine" },
         { id: "lightnoise", label: "Light or noise bothers me" },
-        { id: "aura", label: "Zigzag lines or blind spots before it starts", special: "migraine" }
+        { id: "aura", label: "Zigzag lines or blind spots before it starts", special: "migraine" },
+        // Occipital neuralgia, a look-alike in the "Cervicogenic Headache" and
+        // "Upper Cervical Pain" documents (v1.0, 28 Sep 2026).
+        { id: "shooting", label: "Brief shooting or electric pains in the scalp, or the scalp is sore to touch or brush", special: "occipital" }
       ]},
       { id: "D3", text: "How does your neck affect the headache? Tick all that apply.",
         askIf: ({ draw, ra }) => !draw || draw.has("neck") || draw.has("head@back") || [].concat(ra.D1 || []).includes("sameside"),
         options: [
-          { id: "neckmove", label: "Neck movement or holding one position brings it on" },
+          // "Cervicogenic Headache" document (v1.0, 28 Sep 2026): Q3 (clearly 3,
+          // sometimes 1), Q4, Q5 (stiff turning to one side) and Q6 (started
+          // with or after neck pain or a neck injury).
+          { id: "neckmove", excl: "provoke", label: "Neck movement or holding one position brings it on" },
+          { id: "neckmovesome", excl: "provoke", label: "Neck movement or holding one position sometimes brings it on" },
           { id: "skullbase", label: "Pressing at the base of my skull brings on my usual headache" },
+          { id: "turnstiff", label: "My neck is stiff, especially turning my head to one side" },
+          { id: "withneck", label: "The headaches started with, or after, neck pain or a neck injury" },
           { id: "stiffnochange", label: "My neck is stiff, but it does not change the headache" },
           { id: "neckfine", label: "My neck is fine" }
         ]},
@@ -2521,6 +2567,9 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Dizziness where the room spins for hours or days, or that comes with hearing changes, ringing, or a full feeling in one ear, often comes from the <strong>inner ear</strong> (such as vestibular neuritis or Ménière's disease) or from vestibular migraine rather than the neck. Please see your family doctor so these can be checked. Physiotherapy (vestibular rehabilitation) can help alongside or afterwards. Sudden hearing loss in one ear needs a doctor the same day." },
   migraine: { title: "This pattern can be migraine: worth seeing your doctor",
     body: "Throbbing headaches that switch sides, with feeling sick, sensitivity to light or noise, or zigzag lines beforehand, are typical of <strong>migraine</strong>. Migraine is treated first by a doctor, who can confirm it and discuss medicines that prevent or stop attacks. Physiotherapy can help alongside, especially when neck pain comes with it." },
+  // Occipital neuralgia (the head's D2), from the "Cervicogenic Headache" document.
+  occipital: { title: "Shooting pains in the scalp: worth checking the nerve",
+    body: "Brief shooting, stabbing or electric pains in the back of the scalp, or a scalp that is sore to touch or brush, can come from an irritated <strong>nerve at the back of the head</strong> (occipital neuralgia) rather than the neck joints. Your physiotherapy assessment can check for it, and it is worth mentioning to your doctor too, as some treatments for it are medical." },
   cluster: { title: "Headache behind one eye: please see your doctor",
     body: "Severe pain behind one eye, with a watery eye or runny nose on the same side, can be a <strong>cluster-type headache</strong>. It needs a doctor's assessment and specific treatment, so please book with your doctor." },
   medOveruse: { title: "Frequent painkillers can keep headaches going",

@@ -39,6 +39,19 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # pain or pressure, and feeling sick. Its reasoning appendix (dermatomes,
 # radiating patterns, nerve maps) is content/reference/cervical-radiculopathy.md.
 # Test patients 31 to 35. Marked (radic) below.
+# 28 Sep 2026: "Cervicogenic Headache 1.docx" and "Upper Cervical Pain headache
+# related.docx" (Conditions/Neck and headache, v1.0 drafts, not yet signed).
+# The old single record is split: neck-cheadache (with head-cgh) is the
+# headache-led picture; content/conditions/neck-upper.md is new, pain at the
+# top of the neck without a main headache. Question 13 is new (where in the
+# neck; the drawing answers it when marked high or low on the back of the
+# neck); question 4 gains "always the same side" and "only an occasional
+# ache"; the upper-neck instability flag gains Down syndrome, steroids, a head
+# too heavy to hold up and a lump in the throat; an over-50 check
+# (polymyalgia rheumatica, giant cell arteritis) in the final check. The
+# jaw's "what brings it on" question is asked early when the neck is drawn
+# too. Reasoning appendix: content/reference/upper-cervical.md. Test
+# patients 36 to 40. Marked (upper) below.
 ---
 
 ## red flags
@@ -59,7 +72,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | emergency | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign) | Ask only if: a shoulder is drawn
 - Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before? | urgent, same day | After an accident, manipulation, jerk or knock, these need a doctor today   (A2.1)
 - Over the last few days or weeks, have you become quickly weaker, number or clumsier in an arm, hand or leg, or has your walking become quickly more unsteady? | urgent, same day | Nerve or spinal cord pressure that is getting worse quickly needs a doctor today   (A2.2; replaces the general "new or worsening weakness" check for the neck)
-- Do you have rheumatoid arthritis or another inflammatory arthritis, do you need to hold your head up with your hands, or does moving your neck cause tingling around your lips or mouth? | urgent | Possible upper neck instability: a doctor should check before hands-on neck treatment   (docs: inflammatory arthritis, mobility deficits document)
+- Do you have rheumatoid arthritis or another inflammatory arthritis, or Down syndrome, or take steroid tablets long term; does your head feel too heavy to hold up, so you support it with your hands; or does moving your neck bring a lump-in-the-throat feeling or tingling around your lips or mouth? | urgent | Possible upper neck instability: a doctor should check before hands-on neck treatment   (docs: inflammatory arthritis, mobility deficits document; upper: Down syndrome, steroids, head too heavy, lump in the throat)
 - Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position? | urgent | The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder | Ask only if: a shoulder is drawn   (A3.3; shared with the shoulder and base of the neck)
 
 ## injury screen
@@ -132,6 +145,13 @@ Q: When you turn your head to look over your shoulder, what happens?
 - It is stiff or painful turning both ways
 - It is locked and I can barely turn it at all
 
+<!-- (upper) "Upper Cervical Pain" document Q1 and Q4. -->
+Q: Where in your neck is the pain mainly? Tick all that apply.   (question 13)
+- At the base of my skull, or the very top of my neck   (upper Q1: 3; one of the two)
+- In the middle or lower part of my neck   (upper Q1: 1)
+- The base of my skull is tender to press, and the pain spreads to the back of my head   (upper Q4: 2)
+Answered by the drawing when marked on the back of the neck, high (base of the skull) or low (middle or lower); still asked, for the tenderness answer, when there is room. Asked early after "only an occasional ache" on question 4, or after stiff turning on question 1 unless the drawing runs into the base of the neck, upper back or shoulder.
+
 Q: Which of these describe your arm symptoms? Tick all that apply.
 - Pain goes down the arm past the elbow   (radic Q1: 3; one of the two)
 - Pain goes into the upper arm, but not past the elbow   (radic Q1: 2; was "Pain stops at the top of the shoulder or upper arm")
@@ -159,12 +179,13 @@ Q: Which fingers do the pins and needles or numbness affect most?   (radic Q9: l
 Ask only if: question 2 = pins and needles in one part; then asked straight after it.
 
 Q: If you get headaches with this, what are they like?
-- One-sided, starting at the back of the neck or head
+- One-sided, always the same side, starting at the back of the neck or head   (upper: "always the same side", headache Q2)
 - Brought on by neck movement or holding one position
 - Both sides, like a tight band or pressure
 - Throbbing, with feeling sick or finding light hard to take
 - Pressing at the base of my skull brings on my usual headache   (docs: headache Q5)
 - I take pain relief for headaches on 10 or more days a month   (docs: headache Q7; shows the medication-overuse card)
+- Only an occasional ache at the back of my head; headaches are not my main problem   (upper: upper neck Q5; one of the two with the next)
 - I do not get headaches
 Ask only if: the drawing includes the head, or age is under 50
 
@@ -240,6 +261,9 @@ Ask only if: question 9 includes dizziness; then asked straight after it.
 <!-- (docs) From the headache document's red flags (SNNOOP10), when question 4
      reports a headache and the head is not drawn (the head asks these itself). -->
 - With the headaches: a new headache after age 50 with a tender scalp, jaw pain when chewing or vision changes; a headache that wakes you with vomiting, is worse lying down, coughing or straining, or is getting steadily worse over weeks; or a new headache in pregnancy or after giving birth | urgent, same day | Giant cell arteritis or another secondary headache
+<!-- (upper) Age 50 or over, the neck drawn without the head, and no headache
+     reported (the headache check above asks about giant cell arteritis). -->
+- New stiffness in both shoulders and your neck lasting more than 45 minutes in the morning, with feeling unwell; or a tender scalp, jaw pain when chewing, or changes in your vision | urgent, same day | Polymyalgia rheumatica or giant cell arteritis
 
 ## referral patterns
 - Neck → back of the head, temple, or behind the eye | Headache coming from the upper neck (cervicogenic, C1–C3) | Migraine, tension-type headache; vascular causes if red flags ticked
@@ -427,3 +451,25 @@ Expect: top condition = radiculopathy
 CASE: 35. Below the band: 6 points is not shown
 Answers: Q2 = past the elbow (3) + whole hand (1) + hand on head (2); Q3 = No, neither
 Expect: must not show = radiculopathy
+
+<!-- (upper) From "Upper Cervical Pain headache related.docx" and "Cervicogenic
+     Headache 1.docx" (v1.0 drafts, 28 Sep 2026). -->
+CASE: 36. Base of the skull, stiff turning one way, worse looking up and at the screen
+Drawing: High on the back of the neck and the back of the head
+Answers: Age = 30 to 49; After long hours at a desk; 2 to 6 weeks; Q9 = None of these; Q13 = base of the skull + tender (the drawing answers base of the skull); Q1 = stiff one side; Q6 = desk + looking up; Q7 = stiff at first, then eases; Q4 = only an occasional ache; head D1 = always the same side; D3 = my neck is fine
+Expect: top condition = upper neck pain; must not be on top = neck-related headache. (36b: the same with the neck only drawn: question 13 is asked.)
+
+CASE: 37. The same picture, but the headache is the main problem
+Answers: Q13 = base of the skull; Q1 = stiff one side; Q4 = one-sided + neck movement + pressing the skull
+Expect: top condition = neck-related headache; upper neck pain not on top
+
+CASE: 38. Pain in the middle and lower neck
+Drawing: Neck into the upper back
+Answers: Q13 = middle or lower neck; Q1 = stiff one side; Q6 = desk + looking down; Q7 = eases
+Expect: top condition = stiff, sore neck (mobility deficits); upper neck pain not on top
+
+CASE: 39. The document's "possible" line: 5 points shown (base of the skull + stiff one way); 4 not (middle of the neck + stiff one way + desk)
+
+CASE: 40. Base-of-the-skull pain since a car accident
+Answers: After a car accident; Q13 = base of the skull + tender; Q1 = stiff one side; Q5 = within 2 days + weak or tired + headaches or shoulder pain
+Expect: top condition = whiplash; must not show = upper neck pain

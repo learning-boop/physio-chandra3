@@ -15,6 +15,7 @@ content/
     _SPEC-the-shape-of-pain.md
   reference/      clinician references the site reasons with (never shown to visitors)
     referred-pain.md   → src/data/referralMap.js
+    cervical-radiculopathy.md, upper-cervical.md   (condition documents' reasoning appendices)
 ```
 
 Files starting with `_` are templates, examples and instructions, never data.
@@ -40,7 +41,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 
 | Area on the body map | Region | Built from | Test patients |
 | --- | --- | --- | --- |
-| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents; + Cervical Radiculopathy document, N2, N3 and N12, reasoning in reference/cervical-radiculopathy.md) | 33 |
+| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents; + Cervical Radiculopathy document, N2, N3 and N12, reasoning in reference/cervical-radiculopathy.md; + Cervicogenic Headache 1 and Upper Cervical Pain documents, N13 and the upper neck pain condition, reasoning in reference/upper-cervical.md) | 47 |
 | Base of neck (C7–T3) | `ctj` | CT junction assessment | 5 |
 | Mid back, front of chest | `upperback` | Thoracic assessment | 5 |
 | Mid-to-low back, flank | `tlj` | TL-junction assessment | 5 |
@@ -48,7 +49,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Back of pelvis & buttock | `sij` | SI assessment | 5 |
 | Tailbone | `coccyx` | Coccyx assessment | 5 |
 | Jaw | `jaw` | TMJ assessment | 5 |
-| Head | `head` | Head assessment | 5 |
+| Head | `head` | Head assessment (+ Cervicogenic Headache 1 document, D2 and D3) | 9 |
 | Shoulder | `shoulder` | Shoulder assessment | 6 |
 | Upper arm | `arm` | Upper arm assessment | 5 |
 | Elbow | `elbow` | Elbow assessment | 6 |
@@ -111,7 +112,7 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   or elbow…?") when two or more apply, and an injury question worded
   exactly the same in two screens is asked once.
 - **The drawing answers "Where is the pain?"** On the knee, lower leg, ankle,
-  foot, hip, thigh, elbow, forearm and wrist, where the marks sit (front or
+  foot, hip, thigh, elbow, forearm, wrist and back of the neck, where the marks sit (front or
   back of the limb, inner or outer side, how high) answers the area's first
   question when it is clear, and that question is skipped; the review screen
   shows it (src/data/drawnLocation.js). Keep those questions' option ids

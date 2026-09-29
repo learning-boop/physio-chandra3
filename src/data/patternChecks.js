@@ -41,6 +41,8 @@ const limbSpread = (zones, side) => {
   return Math.max(arm, leg)
 }
 
+/** Age 50 or over, from any of the age answer ids (a50, 50-64, o64…). */
+const over50 = (id) => !!id && !/^u/.test(id) && Number((/\d+/.exec(id) || [0])[0]) >= 50
 const WHY = {
   trauma5d: {
     title: 'Please see a doctor today',
@@ -57,6 +59,14 @@ const WHY = {
   headacheDoctor: {
     title: 'Please see a doctor today',
     text: 'A new headache after 50 with a tender scalp, jaw pain when chewing or changes in vision can be inflammation of the arteries (giant cell arteritis), which needs same-day treatment to protect eyesight. A headache that wakes you with vomiting, is worse lying down, coughing or straining, or is getting steadily worse over weeks, or a new headache in pregnancy or after giving birth, should also be checked by a doctor before the neck is treated.',
+  },
+  upperInstab: {
+    title: 'Please see a doctor before hands-on neck treatment',
+    text: 'The ligaments that hold the top two neck bones together can be weakened by rheumatoid or other inflammatory arthritis, Down syndrome, long-term steroid tablets or an injury. A head that feels too heavy to hold up, a lump-in-the-throat feeling or tingling around the lips when the neck moves can be signs of that. A doctor should check the upper neck first; physiotherapy can help afterwards.',
+  },
+  over50Stiff: {
+    title: 'Please see a doctor today',
+    text: 'New stiffness in both shoulders and the neck that lasts well into the morning, with feeling generally unwell, can be polymyalgia rheumatica, an inflammatory condition treated by a doctor. With a tender scalp, jaw pain when chewing or changes in vision it can be linked to giant cell arteritis, which needs same-day treatment to protect eyesight.',
   },
   cardiac: {
     title: 'This needs emergency assessment',
@@ -120,6 +130,24 @@ const PATTERNS = [
     id: 'pc-headache', tier: 'urgent', sameDay: true, why: WHY.headacheDoctor,
     text: 'With the headaches: a new headache after age 50 with a tender scalp, jaw pain when chewing or vision changes; a headache that wakes you with vomiting, is worse lying down, coughing or straining, or is getting steadily worse over weeks; or a new headache in pregnancy or after giving birth',
     when: (z, a) => !has(z, 'head') && [].concat(a.N4 || []).some((id) => id !== 'none'),
+  },
+  // A neck-type headache on the head's questions with the neck not drawn:
+  // the neck's upper-neck instability question (nrf-upperinstab) was not on
+  // the safety pages. "Cervicogenic Headache" document v1.0, 28 Sep 2026.
+  {
+    id: 'pc-upperinstab', tier: 'urgent', why: WHY.upperInstab,
+    text: 'Rheumatoid or another inflammatory arthritis, Down syndrome or long-term steroid tablets; a head that feels too heavy to hold up; or a lump-in-the-throat feeling or tingling around the lips when you move your neck',
+    when: (z, a) => !has(z, 'neck') && ([].concat(a.D1 || []).includes('sameside') ||
+      [].concat(a.D3 || []).some((id) => ['neckmove', 'neckmovesome', 'skullbase', 'turnstiff', 'withneck'].includes(id))),
+  },
+  // Over 50 with neck pain: polymyalgia rheumatica and giant cell arteritis
+  // ("Upper Cervical Pain" document v1.0, red flags and look-alikes).
+  // Not when the headache check above already asks about giant cell arteritis.
+  {
+    id: 'pc-over50stiff', tier: 'urgent', sameDay: true, why: WHY.over50Stiff,
+    text: 'New stiffness in both shoulders and your neck lasting more than 45 minutes in the morning, with feeling unwell; or a tender scalp, jaw pain when chewing, or changes in your vision',
+    when: (z, a) => has(z, 'neck') && !has(z, 'head') && over50(a.age) &&
+      ![].concat(a.N4 || []).some((id) => id !== 'none'),
   },
   {
     id: 'pc-cardiac', tier: 'emergency', why: WHY.cardiac,

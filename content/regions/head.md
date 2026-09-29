@@ -14,6 +14,15 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # 28 Sep 2026, shorter questionnaire (Chandra, 28 Sep 2026; "Shorter questionnaire - draft for approval.docx", all of A, B and C accepted):
 # the neck's merged questions stand in for the sudden headache, stroke signs, severe pain after a manipulation, and the 5 Ds and 3 Ns when the neck is also drawn (A1); asked once.
 # The flag lines below are the document as written; src/data holds the merged wording.
+# 28 Sep 2026: "Cervicogenic Headache 1.docx" (Conditions/Neck and headache,
+# v1.0 draft, not yet signed; its region is the head, cross-linked to the
+# neck): condition head-cgh (with neck-cheadache) rebuilt from it; question 3
+# gains "sometimes", stiff turning to one side and "started with neck pain";
+# question 2 gains brief shooting scalp pains (occipital neuralgia card); the
+# meningitis, giant cell arteritis and pressure flags gain wording; the
+# upper-neck instability question in the final check when the neck is not
+# drawn. Reasoning appendix: content/reference/upper-cervical.md. Test
+# patients 6 to 8. Marked (cgh) below.
 ---
 
 ## red flags
@@ -29,12 +38,12 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | urgent, same day | Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today
 - Did this headache come on suddenly and reach its worst within a minute, like the worst headache of your life? | emergency | Possible bleed on the brain (thunderclap headache)
 - With the headache, have you had any of these: weakness or numbness on one side, a drooping face, trouble speaking or understanding, confusion, loss of vision or double vision, or trouble walking? | emergency | Possible stroke or other brain cause
-- Do you have a fever with a stiff neck, a new rash, or are you very drowsy? | emergency | Possible meningitis
+- Do you have a fever with a stiff neck, a new rash, or are you very drowsy, confused or feeling very unwell? | emergency | Possible meningitis   (cgh: confused, very unwell)
 - Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse? | emergency | Possible bleeding after a head injury
 - Is one eye painful and red, with blurred vision or halos around lights? | emergency | Possible acute glaucoma
-- If you are over 50: is your scalp or temple tender to touch, or do your jaw muscles ache when chewing and ease when you stop? | urgent | Possible giant cell arteritis. Needs same-day medical review to protect eyesight
+- If you are over 50: is your scalp or temple tender to touch, do your jaw muscles ache when chewing and ease when you stop, or has your vision changed? | urgent | Possible giant cell arteritis. Needs same-day medical review to protect eyesight   (cgh: vision change)
 - Is this a new kind of headache that started after age 50, or are your headaches getting steadily worse or changing pattern over weeks? | urgent | New or progressive headache needs medical review
-- Is the headache brought on by coughing, sneezing, straining, or exercise, or much worse when you lie down or stand up? | urgent | Pressure-related headache can have a brain cause
+- Is the headache brought on by coughing, sneezing, straining, or exercise, much worse when you lie down or stand up, or there when you wake, with vomiting? | urgent | Pressure-related headache can have a brain cause   (cgh: on waking with vomiting)
 - Did the headache start after a knock to the head or a whiplash injury in the last 4 weeks? | urgent | Possible concussion: medical assessment before physio
 - Did this new headache start after beginning a new medication? | urgent | Medication side effect: the prescriber should review it
 - Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache? | urgent | Possible pre-eclampsia or other pregnancy-related cause
@@ -76,10 +85,14 @@ Q: What does the headache feel like, and what comes with it? Tick all that apply
 - Feeling sick or being sick   (shows the migraine card)
 - Light or noise bothers me
 - Zigzag lines or blind spots before it starts   (shows the migraine card)
+- Brief shooting or electric pains in the scalp, or the scalp is sore to touch or brush   (cgh: shows the occipital nerve card)
 
 Q: How does your neck affect the headache? Tick all that apply.
-- Neck movement or holding one position brings it on
-- Pressing at the base of my skull brings on my usual headache
+- Neck movement or holding one position brings it on   (cgh Q3: 3; one of the two)
+- Neck movement or holding one position sometimes brings it on   (cgh Q3: 1)
+- Pressing at the base of my skull brings on my usual headache   (cgh Q4: 3)
+- My neck is stiff, especially turning my head to one side   (cgh Q5: 2)
+- The headaches started with, or after, neck pain or a neck injury   (cgh Q6: 2)
 - My neck is stiff, but it does not change the headache
 - My neck is fine
 Ask only if: the drawing includes the neck or the back of the head, or Where = "Always the same side, starting from the neck"
@@ -119,6 +132,12 @@ Q: Since your head injury, which of these apply? Tick all that apply.
 - Neck pain since the injury
 Ask only if: How did it start? = "After a knock to the head or a whiplash injury" (and the 4-week red flag was not ticked)
 
+## final check (answers-dependent)
+<!-- (cgh) When the answers point to a neck-related headache (question 1
+     "always the same side", or a neck answer on question 3) and the neck is
+     not drawn: the neck's upper-neck instability question was not asked. -->
+- Rheumatoid or another inflammatory arthritis, Down syndrome or long-term steroid tablets; a head that feels too heavy to hold up; or a lump-in-the-throat feeling or tingling around the lips when you move your neck | urgent | Possible upper neck instability: a doctor should check before hands-on neck treatment
+
 ## referral patterns
 - Upper neck → back of the head, temple, or behind the eye | Headache coming from the neck (cervicogenic, C1–C3); always on the same side | Migraine, tension-type headache, occipital neuralgia
 - Upper trapezius and neck muscles → temple, forehead, around the eye | Muscle-referred pain, often with tension-type headache | Migraine, sinus headache
@@ -157,3 +176,18 @@ Drawing: Both temples
 Answers: Age = 30 to 49; I have had headaches on and off for years; More than 3 months; Q1 = both sides, like a tight band; Q5 = 15 or more; Q6 = 15 or more days
 Flags: none
 Expect: top condition = tension-type headache, with a medication-overuse message to review with a doctor; route = results (suggest doctor review)
+
+<!-- (cgh) From "Cervicogenic Headache 1.docx" (v1.0 draft, 28 Sep 2026):
+     maximum 15, shown from 6, the document's "possible match" line. -->
+CASE: 6. Head only: sometimes brought on by the neck, stiff turning one way, started with neck pain
+Drawing: Back of the head
+Answers: Age = 30 to 49; Gradually; More than 3 months; Q1 = always the same side; Q2 = pressing; Q3 = sometimes + stiff turning one way + started with neck pain; Q5 = 1 to 14; Q7 = desk
+Expect: top condition = neck-related headache; route = results
+
+CASE: 7. Brief shooting pains in the scalp
+Answers: Q1 = always the same side; Q2 = brief shooting pains; Q3 = pressing the skull
+Expect: occipital nerve card
+
+CASE: 8. Neck triggers with throbbing, feeling sick and switching sides
+Answers: Q1 = can switch sides; Q2 = throbbing + feeling sick + light or noise; Q3 = neck movement brings it on
+Expect: migraine card; neck-related headache not on top

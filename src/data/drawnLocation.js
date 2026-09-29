@@ -132,6 +132,16 @@ export const LOCATION_QUESTIONS = {
     if (at.fy < -0.48) return at.lx < -0.02 ? 'heel' : at.lx > 0.04 ? 'ball' : null
     return at.lx < 0.05 ? 'arch' : null
   } },
+  // The back of the neck runs from the shoulder line (fy 0.33) to the base of
+  // the skull (0.41, where the head begins; Body3D.jsx). Marks in its top
+  // part: the base of the skull; low on it: the middle or lower neck. The
+  // front of the neck answers nothing. "Upper Cervical Pain" document Q1
+  // (28 Sep 2026). `stillAsk`: N13 also asks whether the base of the skull
+  // is tender, so the question stays open, with the drawing's answer ticked.
+  neck: { q: 'N13', stillAsk: true, pick: (at) => {
+    if (at.lx > -0.04) return null
+    return at.fy >= 0.385 ? 'skullbase' : at.fy < 0.36 ? 'lowerneck' : null
+  } },
 }
 
 /** The location answers the drawing gives, as { questionId: [optionId] }.
@@ -149,8 +159,9 @@ export function locationAnswers(zones = []) {
   return out
 }
 
-/** Question ids the drawing can answer: these are not asked again once it has. */
-export const LOCATION_QUESTION_IDS = new Set(Object.values(LOCATION_QUESTIONS).map((r) => r.q))
+/** Question ids the drawing can answer: these are not asked again once it has
+    (except a `stillAsk` question, which has more to ask than where). */
+export const LOCATION_QUESTION_IDS = new Set(Object.values(LOCATION_QUESTIONS).filter((r) => !r.stillAsk).map((r) => r.q))
 
 /** Areas the drawing only grazed: an area holding under MINOR_INK of the ink
     of the most-marked area. Their questions come after the main area's. */

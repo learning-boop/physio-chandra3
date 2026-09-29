@@ -2,62 +2,76 @@
 region: neck
 id: cheadache
 name: Neck-related headache
-clin: Cervicogenic headache (ICHD-3 11.2.1) and upper cervical (C0-C3) pain; JOSPT 2017 neck pain with headache
-# From "Cervicogenic Headache.docx" (Conditions/Neck and headache), draft
-# v0.1, 28 Sep 2026. NOT YET SIGNED: sections 10 to 12 are unticked, so it
-# was built with each review item's default (one record for upper neck pain
-# with or without headache; mobilisation and SNAGs named, not manipulation).
+clin: Cervicogenic headache (ICHD-3 11.2.1)
+# From "Cervicogenic Headache 1.docx" (Conditions/Neck and headache), v1.0
+# draft, 28 Sep 2026. It replaces "Cervicogenic Headache.docx" (v0.1), which
+# was one record for upper neck pain with or without headache: upper neck
+# pain without a main headache is now its own record (neck-upper.md).
+# NOT YET SIGNED: section 11 is blank.
 # The patient text is shared with head-cgh.md: keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
-# Pointers follow the document's scored question set (section 4):
-#   Q1 top of the neck / base of the skull 3: read from the headache answers
-#      (one-sided, starting at the back of the neck or head)
-#   Q2 spreading from the back, always the same side 3 (a band on both
-#      sides is tension-type: 0 here)
+# Pointers follow the document's scored question set (section 4) as the
+# neck's questions can carry it:
+#   Q1 starts at the back of the neck, spreads forward 3 and Q2 always the
+#      same side 3: one answer on N4, so 3 (strengths go up to 3)
 #   Q3 brought on by neck movement or holding a position 3
-#   Q4 stiff or harder to turn, especially to one side: one side 2 · Q5 pressing the top of the neck brings on
-#   the usual headache 2 · Q6 migraine features -2
-#   Q7 pain relief on 10 or more days a month: not scored; shows the
-#      medication-overuse card (see your doctor)
-# Kept: no headaches -3, long spells at a desk 1. Maximum 11; shown at 5.
+#   Q4 pressing the base of the skull brings on the usual headache 3 (was 2)
+#   Q5 stiff turning, especially to one side 2
+#   Q6 started with or after neck pain: not scored here, everyone on the neck
+#      path has neck pain (the head's D3 asks it)
+#   Q7 migraine features -3 (was -2)
+#   Q8 pain medicine on 10 or more days a month: not scored; medication-
+#      overuse card. Q9 (secondary headache): the safety pages and the
+#      final headache check.
+#   The upper neck pain document's Q5: an occasional ache at the back of the
+#      head, headache not the main problem, -2 (that is neck-upper).
+# Kept: no headaches -3, long spells at a desk 1. Maximum 12; shown at 5
+# (the document's "possible" line is 6 of 16).
 pointers:
-  "One-sided, starting at the back of the neck or head": 3
+  "One-sided, always the same side, starting at the back of the neck or head": 3
   "Brought on by neck movement or holding one position": 3
-  "Pressing at the base of my skull brings on my usual headache": 2
-  "Throbbing, with feeling sick": -2
+  "Pressing at the base of my skull brings on my usual headache": 3
+  "Throbbing, with feeling sick or finding light hard to take": -3
+  "Only an occasional ache at the back of my head": -2
   "I do not get headaches": -3
   "It is stiff or painful turning to one side": 2
   "Long spells at a desk, screen, or driving": 1
 ---
 
 ## blurb
-A cervicogenic headache is a headache that comes from the neck. The nerves of the top three joints of the neck share a "junction box" in the brainstem with nerves from the head, so a sore or stiff upper neck can be felt as pain in the head, often spreading from the back of the skull towards the forehead or eye on one side. It is common and not dangerous. Because the source is in the neck, treating the neck, with hands-on care and specific exercises, may help reduce how often and how strongly the headaches come.
+A cervicogenic headache is a headache that starts in the joints, muscles or nerves at the top of the neck. The nerves from the upper neck share a relay station in the brainstem with the nerves of the face and head, so a problem in the neck can be felt as pain in the head, even around the eye or forehead. This type of headache is common, it is not a sign of damage to the brain, and many people find their headaches become less frequent and less intense with a combination of neck exercise and hands-on treatment.
 
 ## noticed
-- A dull, steady ache (not usually throbbing) that starts at the back and spreads forward on one side, always the same side
-- Neck stiffness, often harder to turn to one side
-- Brought on by holding one position (desk, reading, phone, driving), certain neck movements, or sleeping awkwardly
-- Pressing on a sore spot at the top of the neck can bring on the usual headache
-- Mild light sensitivity or nausea can occur, but less than with migraine
+- A steady, non-throbbing ache or pressure that starts at the base of the skull and spreads forward, on one side and the same side every time
+- Neck stiffness, often harder to turn to one side; sometimes a vague ache into the shoulder on that side
+- Brought on by holding the head in one position (computer, phone, reading, driving), looking up, turning the head, or sleeping awkwardly
+- Pressing at the base of the skull on the painful side can bring on the usual headache
+- Usually no strong nausea or sensitivity to light
+- Often builds gradually, and neck pain or stiffness usually comes first or at the same time; sometimes it starts after a neck strain or injury
 
 ## homeCare
-- Break up screen and reading time every 30 to 45 minutes; bring screens to eye level
-- Gentle neck movements and heat on the upper neck can ease a building headache
-- Keep a simple headache diary: when, how long, and what you were doing
-- If you are taking pain relief on most days, talk to your doctor
+- Take a short movement break every 30 to 45 minutes at a screen or while driving
+- Keep your screen at eye level so you are not looking up or down for long periods
+- Try gentle chin nods and slow head turns within comfort a few times a day; heat on the neck may help
+- Keep a simple headache diary: when it starts, how long it lasts, what you were doing
+- If you are taking pain medicine for headaches often, talk to your doctor
 
 ## seePhysioIf
-- Your headaches seem to start in your neck, or come with neck stiffness
-- They keep returning despite rest or changes to your routine
-- You would like a home exercise for the top of the neck to use when a headache starts; no doctor's referral is needed
+- Your headaches are happening regularly, or are affecting work or sleep
+- You are taking pain medicine for them often: a physiotherapy assessment can help find out whether your neck is involved, and no doctor's referral is needed
+- You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer. If any of the warning signs apply, see a doctor first
 
 ## clinicNotes
-- Physio-led after the headache red-flag screen. See the doctor as well if headache medication is used on 10 or more days a month, or if the diagnosis is uncertain.
-- ICHD-3 11.2.1 criteria; Sjaastad features. Headache diary (frequency, intensity, duration).
-- Cervical flexion-rotation test (positive if under 32 degrees or more than 10 degrees side-to-side difference; C1-C2); upper cervical PAIVMs C0-C3 reproducing familiar headache; craniocervical flexion test.
-- IFOMPT cervical framework screening before any upper cervical manual therapy. Public text names mobilisation and SNAGs only; manipulation (ranked highest for pain, slightly higher risk at the upper neck; Xu and Ling 2025) is left to clinical judgement after screening.
-- Acute: active mobility exercise (B); C1-2 self-SNAG (C).
-- Subacute: cervical thrust manipulation and mobilisation (B); C1-2 self-SNAG (C).
-- Chronic: cervical thrust manipulation and mobilisation (B); thoracic thrust manipulation (B); combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B).
-- Sources: ICHD-3 2018; JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Xu and Ling, Front Neurol 2025; Jull et al. 2002; Hall et al. 2007 (self-SNAG); Hall and Robinson 2004 (flexion-rotation test); SNNOOP10 (Do et al. 2019); IFOMPT 2023. Outcomes: HIT-6, NDI, headache frequency.
+- Physio-led after the headache red-flag screen (SNNOOP10). Refer to the GP if pain medicine is used on 10 or more days a month, if there are red or orange flags, or if there is no change after 6 to 8 weeks of well-delivered care.
+- Subjective: headache diary (frequency, intensity, duration), side-locking, onset relative to neck pain, triggers, medication days a month, migraine and tension-type features. Outcomes: HIT-6, NDI, PSFS.
+- ICHD-3 11.2.1: evidence of a cervical disorder plus at least two of: temporal relation, parallel improvement, reduced range with provocation, abolition by diagnostic block.
+- Flexion-rotation test: positive at 32 degrees or less, or about 10 degrees less than the other side (sensitivity about 91%, specificity about 90% for C1-2 CGH; Ogince 2007).
+- Jull triad: reduced extension + painful C0-C3 joint dysfunction reproducing the familiar headache + impaired craniocervical flexion test (sensitivity 100%, specificity 94% against migraine and tension-type; Jull 2007). Absence of the triad makes a neck source unlikely.
+- Manual examination C0-C3: reproduction and easing of the familiar headache; suboccipital, upper trapezius and SCM palpation; thoracic and scapular posture.
+- Screen: cervical arterial dysfunction per the IFOMPT framework; upper cervical ligament tests only with risk factors (trauma, RA, Down syndrome, long-term steroids, recent throat infection, connective tissue disorder); cranial nerves and neuro exam if indicated.
+- Management: education (a sensitive upper neck can drive head pain without damage in the head); upper cervical and thoracic manual therapy; progressive deep neck flexor and scapular exercise starting with craniocervical flexion; C1-2 self-SNAG for use when a headache starts (Hall 2007); desk, screen, driving and sleep set-up; work with the GP on medicine use.
+- JOSPT 2017 stage-matched options: acute: active mobility exercise (B), C1-2 self-SNAG (C). Subacute: cervical manipulation and mobilisation (B), C1-2 self-SNAG (C). Chronic: cervical manipulation and mobilisation (B), thoracic manipulation (B), combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B). Public text names hands-on techniques only; manipulation of the upper neck is left to clinical judgement after screening.
+- Look-alikes: migraine (throbbing, switches sides, nausea, light and sound sensitivity, aura); tension-type (pressing band on both sides); occipital neuralgia (brief shooting scalp pain, scalp sore to touch: card); upper neck pain without main headache (neck-upper); TMD (jaw region); post-concussion (head injury path); medication overuse (card); sinus or eye problem (GP or optometrist). Neck pain with migraine features is common: a possible match, suggest assessment, do not force one label.
+- Reasoning appendix (segmental referral, upper cervical nerves and dermatomes, telling headache types apart, tests): content/reference/upper-cervical.md.
+- Sources: ICHD-3 2018; Sjaastad et al. 1998; Bogduk and Govind 2009; Haldeman and Dagenais 2001; Jull et al. 2007 and 2008; Ogince et al. 2007; Jull et al. 2002 (exercise and manipulative therapy RCT); Hall et al. 2007 (self-SNAG); JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Dreyfuss et al. 1994; Lord et al. 1994; SNNOOP10 (Do et al. 2019); IFOMPT 2023 (Rushton et al.); Hutting et al. 2013.
