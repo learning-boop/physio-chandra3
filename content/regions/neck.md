@@ -23,7 +23,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # flags (heart; ear or worsening), the BPPV and inner-ear look-alike cards,
 # and test patients 14 to 19. Marked (CGD) below.
 # 28 Sep 2026: "Neck Pain Mobility Deficits.docx" (signed), "Whiplash WAD.docx"
-# and "Cervicogenic Headache.docx" (drafts, not yet signed), all v0.1 in
+# and "Cervicogenic Headache.docx" (drafts; whiplash signed 28 Sep 2026), all v0.1 in
 # Conditions/Neck and headache: the conditions neck-mech, neck-whiplash and
 # neck-cheadache (with head-cgh) rebuilt from them; question 4 gains two
 # answers, question 5 is rebuilt; the meningitis, upper-neck and
@@ -40,7 +40,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # radiating patterns, nerve maps) is content/reference/cervical-radiculopathy.md.
 # Test patients 31 to 35. Marked (radic) below.
 # 28 Sep 2026: "Cervicogenic Headache 1.docx" and "Upper Cervical Pain headache
-# related.docx" (Conditions/Neck and headache, v1.0 drafts, not yet signed).
+# related.docx" (Conditions/Neck and headache, v1.0, both signed 28 Sep 2026).
 # The old single record is split: neck-cheadache (with head-cgh) is the
 # headache-led picture; content/conditions/neck-upper.md is new, pain at the
 # top of the neck without a main headache. Question 13 is new (where in the

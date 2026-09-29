@@ -6,9 +6,9 @@ clin: Cervicogenic headache (ICHD-3 11.2.1)
 # Patient text shared with neck-cheadache.md: keep the two in step.
 # From "Cervicogenic Headache 1.docx" (Conditions/Neck and headache), v1.0
 # draft, 28 Sep 2026; the document's region is the head, cross-linked to the
-# neck. NOT YET SIGNED: section 11 is blank.
+# neck. Reviewed and approved by Chandra, 28 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
 #   Q1 starts at the back of the neck 3 and Q2 always the same side 3: one
 #      answer on D1, so 3 (strengths go up to 3). Switches sides -2 and

@@ -4,12 +4,11 @@ id: whiplash
 name: Whiplash (whiplash-associated disorder)
 clin: Whiplash-associated disorder (WAD); neck pain with movement coordination impairments (post-traumatic, JOSPT 2017)
 # From "Whiplash WAD.docx" (Conditions/Neck and headache), draft v0.1,
-# 28 Sep 2026. NOT YET SIGNED: section 10 to 12 are unticked, so this was
-# built with each review item's default (one record for both names; no
+# 28 Sep 2026. Reviewed and approved by Chandra, 28 Sep 2026; it was built with each review item's default (one record for both names; no
 # manipulation in the acute phase; no recovery percentages; the ICBC line).
 # The injury screen (Canadian C-spine rule) runs first for recent injuries.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-09-28
 # Only after an accident or injury (the document's Q1 gate).
 onset: car, fall
 # Pointers follow the document's scored question set (section 4):

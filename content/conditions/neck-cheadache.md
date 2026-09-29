@@ -7,10 +7,10 @@ clin: Cervicogenic headache (ICHD-3 11.2.1)
 # draft, 28 Sep 2026. It replaces "Cervicogenic Headache.docx" (v0.1), which
 # was one record for upper neck pain with or without headache: upper neck
 # pain without a main headache is now its own record (neck-upper.md).
-# NOT YET SIGNED: section 11 is blank.
+# Reviewed and approved by Chandra, 28 Sep 2026.
 # The patient text is shared with head-cgh.md: keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4) as the
 # neck's questions can carry it:
 #   Q1 starts at the back of the neck, spreads forward 3 and Q2 always the

@@ -7,7 +7,7 @@ clin: Cervical radiculopathy (cervical radicular pain with or without nerve root
 # approved 28 Sep 2026 (AI review 28 Sep 2026). Replaces the earlier text and
 # scores moved from src/data/symptomGuideExtra.js on 26 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-28)
-reviewed:
+reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4); max 16:
 #   Q1 how far down: past the elbow 3, upper arm only 2 (N2, one of the two)
 #   Q2 arm worse 3, about the same 2 (N2, one of the two)

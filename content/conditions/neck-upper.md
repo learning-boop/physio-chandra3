@@ -4,11 +4,11 @@ id: upper
 name: Pain at the top of the neck and base of the skull
 clin: Upper cervical (craniovertebral, C0-C3) mechanical neck pain
 # From "Upper Cervical Pain headache related.docx" (Conditions/Neck and
-# headache), v1.0 draft, 28 Sep 2026. NOT YET SIGNED: section 11 is blank.
+# headache), v1.0, 28 Sep 2026. Reviewed and approved by Chandra, 28 Sep 2026.
 # Pain and stiffness at the top of the neck without headache as the main
 # problem; a headache-dominant picture is neck-cheadache (and head-cgh).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
 #   Q1 base of the skull or very top of the neck 3, middle or lower neck 1
 #      (N13, one of the two); pain down the arm 0 in the document: -2 past

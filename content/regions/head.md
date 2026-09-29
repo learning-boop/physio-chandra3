@@ -15,7 +15,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # the neck's merged questions stand in for the sudden headache, stroke signs, severe pain after a manipulation, and the 5 Ds and 3 Ns when the neck is also drawn (A1); asked once.
 # The flag lines below are the document as written; src/data holds the merged wording.
 # 28 Sep 2026: "Cervicogenic Headache 1.docx" (Conditions/Neck and headache,
-# v1.0 draft, not yet signed; its region is the head, cross-linked to the
+# v1.0, signed 28 Sep 2026; its region is the head, cross-linked to the
 # neck): condition head-cgh (with neck-cheadache) rebuilt from it; question 3
 # gains "sometimes", stiff turning to one side and "started with neck pain";
 # question 2 gains brief shooting scalp pains (occipital neuralgia card); the
