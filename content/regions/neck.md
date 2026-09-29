@@ -6,7 +6,8 @@ region: neck
 name: Neck (cervical spine)
 source: Blanpied PR et al. Neck Pain: Revision 2017. JOSPT 47(7), 2017; Rushton A et al. International IFOMPT Cervical Framework. JOSPT 53(1), 2023; Stiell IG et al. The Canadian C-Spine Rule. JAMA 286, 2001; Wainner RS et al. Radiculopathy test cluster. Spine 28, 2003; Cook C et al. Cervical myelopathy clinical findings cluster. JOSPT 40, 2010; Bogduk N. Definitions and physiology of back pain, referred pain, and radicular pain. Pain 147, 2009; Cloward RB. Cervical diskography. Ann Surg 150, 1959; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction, 3rd ed., 2019
 reviewed_by: Chandra Matla, Registered Physiotherapist
-reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
+# The document still says "DRAFT prepared 23 Sep 2026, awaiting Chandra's review"; Chandra signed the neck region, and cervical myelopathy, on 28 Sep 2026.
+reviewed_on: 2026-09-28
 # 26 Sep 2026: spinal cord (DCM) pattern added from "Cervical Myelopathy.docx"
 # (Conditions/Neck and headache, draft v0.1): questions 9 and 10, condition
 # content/conditions/neck-dcm.md, test patients 7 to 11, and the flag changes
@@ -52,6 +53,14 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # jaw's "what brings it on" question is asked early when the neck is drawn
 # too. Reasoning appendix: content/reference/upper-cervical.md. Test
 # patients 36 to 40. Marked (upper) below.
+# 28 Sep 2026: "Cervical Neural Mechanosensitivity.docx" (Conditions/Neck and
+# headache, v1.0, approved): condition content/conditions/neck-neural.md.
+# Question 14 is new (its Q1, Q2, Q3, Q5 and Q8), asked early after a
+# nerve-type answer on question 2 and before question 12; question 12 gains
+# a radial tag (its Q7). The cord emergency question adds numbness or
+# weakness spreading quickly in both hands and feet. Reasoning appendix:
+# content/reference/neural-mechanosensitivity.md. Test patients 41 to 45.
+# Marked (neural) below.
 ---
 
 ## red flags
@@ -65,7 +74,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      head's and base of the neck's matching questions, so each is asked once.
      The two shoulder-tip questions are asked only when a shoulder is drawn. -->
 - Since this started, has any of these come on suddenly: the worst headache of your life; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk? | emergency | Possible stroke, bleed, or neck artery tear   (A1.1)
-- Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs? | emergency | Acute spinal cord compression
+- Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, had new numbness or weakness in both legs, or numbness or weakness spreading quickly, over hours or days, in both hands and feet? | emergency | Acute spinal cord compression, or a nerve condition that is spreading quickly   (neural: hands and feet)
 - Since a neck manipulation ("cracking"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick or vomiting, a severe or worsening headache, confusion, drowsiness or memory loss, numbness around the lips, or eyes that flicker or jump? | emergency | After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain   (A1.2)
 - Do you have a fever with a stiff neck, a bad headache, a rash, or feel very unwell, or find bright light hard to look at? | emergency | Possible meningitis   (docs: rash, feeling very unwell)
 - Is the pain in your neck, jaw, or arm brought on by effort, or does it come with chest pain, pressure or tightness, shortness of breath, sweating, or feeling sick? | emergency | Heart pain can be felt in the neck, jaw, and arm
@@ -171,12 +180,26 @@ Q: Does looking up, or turning or tilting your head towards the sore side, send 
 - No, neither
 Ask only if: question 2 has any arm answer; asked early when it has a nerve-type one (past the elbow, pins and needles, burning)
 
+<!-- (neural) The document's Q1, Q2, Q3, Q5 and Q8. Its Q4 (tingling or
+     burning) is question 2 and its Q6 (neck movement changes the arm) is
+     question 3; its Q9 (both hands, clumsy, walking) is question 9. -->
+Q: About the arm symptoms: which of these apply? Tick all that apply.   (question 14)
+- The symptoms run along a line in the arm, for example the inner arm to the little finger, or the front of the forearm to the thumb side   (neural Q1: 3; one of the two)
+- The symptoms are spread over a vague area of the arm   (neural Q1: 1)
+- Positions that stretch the arm clearly bring them on: reaching behind you, the arm out with the wrist bent back, or the elbow fully bent   (neural Q2: 3; one of the two)
+- Those stretch positions sometimes bring them on   (neural Q2: 1)
+- In that position, tilting my head away from the sore side makes it worse   (neural Q3: 2)
+- It is tender to press along the nerve: the inner upper arm, the funny-bone groove, or the front of the wrist   (neural Q5: 1)
+- Numbness that does not go away, weakness, or the hand muscles getting thinner   (neural Q8: not scored; "book promptly" card)
+Ask only if: question 2 has a nerve-type answer (past the elbow, pins and needles, burning); then asked early, before question 12.
+
 Q: Which fingers do the pins and needles or numbness affect most?   (radic Q9: level tag only, not scored)
 - Thumb and index finger   (C6)
 - Middle finger   (C7)
 - Ring and little fingers   (C8)
+- The back of the thumb and the web between the thumb and index finger   (neural Q7: radial nerve tag)
 - Not sure, or they vary
-Ask only if: question 2 = pins and needles in one part; then asked straight after it.
+Ask only if: question 2 = pins and needles in one part; asked early once question 14 is answered. With a line down the arm the base of the neck is asked too, and the 5 questions then usually run out before this one (OPEN for Chandra).
 
 Q: If you get headaches with this, what are they like?
 - One-sided, always the same side, starting at the back of the neck or head   (upper: "always the same side", headache Q2)
@@ -433,7 +456,7 @@ Expect: route = see your doctor
 CASE: 31. Classic nerve root picture into the thumb (C6)
 Drawing: Neck and down the right arm to the wrist
 Answers: Age = 50 to 64; Gradually, no clear reason; 6 weeks to 3 months; Q9 = None of these; Q2 = past the elbow + arm worse than neck + pins and needles in one part + burning or shooting + hand on head eases it; Q3 = yes, clearly; Q12 = thumb and index finger
-Expect: top condition = radiculopathy; Q2, Q3 and Q12 asked; route = results
+Expect: top condition = radiculopathy; Q2 and Q3 asked; route = results. (Q12 was asked until question 14 was added on 28 Sep 2026; it now falls outside the 5 questions here.)
 
 CASE: 32. Both hands clumsy with an arm line (the document's Q8)
 Answers: Age = 65 or over; Q9 = both hands + clumsy; Q10 = slowly getting worse; Q2 = past the elbow + arm worse + pins and needles in one part; Q3 = yes, clearly
@@ -469,6 +492,26 @@ Answers: Q13 = middle or lower neck; Q1 = stiff one side; Q6 = desk + looking do
 Expect: top condition = stiff, sore neck (mobility deficits); upper neck pain not on top
 
 CASE: 39. The document's "possible" line: 5 points shown (base of the skull + stiff one way); 4 not (middle of the neck + stiff one way + desk)
+
+<!-- (neural) From "Cervical Neural Mechanosensitivity.docx" v1.0 (approved 28 Sep 2026). -->
+CASE: 41. Tingling along the inner arm to the little finger, brought on by stretch positions
+Drawing: Neck and down the right arm to the hand
+Answers: Q9 = None of these; Q2 = pins and needles in one part + burning; Q14 = along a line + stretch positions clearly + tilting away + tender; Q3 = No, neither
+Expect: top condition = sensitive nerve in the arm; Q14 asked
+
+CASE: 42. The same, and neck movement clearly sends it down the arm
+Answers: Q2 = past the elbow + arm worse + one part + burning; Q14 = line + stretch + tilting away; Q3 = yes, clearly
+Expect: sensitive nerve and radiculopathy both shown (the document's rule A6)
+
+CASE: 43. The document's "possible" line: 5 points shown (whole hand + vague area + tilting away + tender); 4 not (whole hand + vague + stretch sometimes + tender)
+
+CASE: 44. Numbness that does not go away
+Answers: Q2 = one part; Q14 = line + stretch + numbness that does not go away
+Expect: top condition = sensitive nerve; "book promptly" card
+
+CASE: 45. Both hands numb and clumsy with a nerve-type arm line
+Answers: Age = 65 or over; Q9 = both hands + clumsy; Q10 = slowly worse; Q2 = one part + burning; Q14 = line + stretch + tilting away
+Expect: top condition = cervical myelopathy; must not show = sensitive nerve
 
 CASE: 40. Base-of-the-skull pain since a car accident
 Answers: After a car accident; Q13 = base of the skull + tender; Q1 = stiff one side; Q5 = within 2 days + weak or tired + headaches or shoulder pain

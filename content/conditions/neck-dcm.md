@@ -7,7 +7,7 @@ clin: Degenerative cervical myelopathy (DCM)
 # 26 Sep 2026. Refer-first condition: the ## doctorFirst note is shown at the
 # top of its results card.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
 #   Q1 both hands 3 · Q2 clumsy 3 · Q3 walking 3 · Q4 electric feeling 2
 #   Q5 slowly worse 2 (worse over weeks is the same-day safety flag nrf-myelo)

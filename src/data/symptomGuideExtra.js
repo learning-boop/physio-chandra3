@@ -50,8 +50,11 @@ export const EXTRA_REGIONS = {
       // dizziness with signs. Dizziness alone still does not count.
       { id: "nrf-stroke", tier: "emergency", group: ["stroke", "thunderclap", "dizzystroke"], why: "Possible stroke, bleed, or neck artery tear",
         text: "Since this started, has any of these come on suddenly: the worst headache of your life; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk?" },
-      { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord",
-        text: "Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, or had new numbness or weakness in both legs?" },
+      // Numbness and weakness spreading quickly in both hands and feet (a
+      // fast nerve condition such as Guillain-Barre) from the "Cervical Neural
+      // Mechanosensitivity" document (v1.0, approved 28 Sep 2026).
+      { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord, or a nerve condition that is spreading quickly",
+        text: "Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, had new numbness or weakness in both legs, or numbness or weakness spreading quickly, over hours or days, in both hands and feet?" },
       // A1.2: new numbness after a manipulation + severe or fast-changing pain
       // after a manipulation, jerk or knock + the 5 Ds and 3 Ns getting worse,
       // or new in the last few days, after an accident (Chandra, 26 and 28 Sep).
@@ -172,6 +175,27 @@ export const EXTRA_REGIONS = {
           { id: "neckonly", excl: "provoke", label: "It hurts in the neck, but not the arm" },
           { id: "neither", label: "No, neither" }
         ]},
+      // "Cervical Neural Mechanosensitivity.docx" (v1.0, approved 28 Sep 2026):
+      // its Q1 (along a line 3, vague area 1), Q2 (stretch positions: clearly
+      // 3, sometimes 1), Q3 (tilting the head away makes it worse 2), Q5
+      // (tender along the nerve 1) and Q8 (numbness that stays, weakness or
+      // wasting: not scored, a "book promptly" card). Its Q4 (tingling or
+      // burning) is N2 and its Q6 (neck movement changes the arm) is N3.
+      // Asked early after a nerve-type N2 answer, like N3, and before N12
+      // (a level tag, not scored). An ache into the upper arm only is the
+      // stiff-neck pattern, so it does not open this question.
+      { id: "N14", text: "About the arm symptoms: which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.N2 || []).some((o) => ["pastelbow", "fingers", "wholehand", "burning"].includes(o)),
+        priority: () => true,
+        options: [
+          { id: "line", excl: "spread", label: "The symptoms run along a line in the arm, for example the inner arm to the little finger, or the front of the forearm to the thumb side" },
+          { id: "vague", excl: "spread", label: "The symptoms are spread over a vague area of the arm" },
+          { id: "stretch", excl: "stretch", label: "Positions that stretch the arm clearly bring them on: reaching behind you, the arm out with the wrist bent back, or the elbow fully bent" },
+          { id: "stretchsome", excl: "stretch", label: "Those stretch positions sometimes bring them on" },
+          { id: "tiltaway", label: "In that position, tilting my head away from the sore side makes it worse" },
+          { id: "tender", label: "It is tender to press along the nerve: the inner upper arm, the funny-bone groove, or the front of the wrist" },
+          { id: "loss", label: "Numbness that does not go away, weakness, or the hand muscles getting thinner", special: "nerveLoss" }
+        ]},
       // The document's Q9: which fingers the tingling is in. Not scored; a
       // level estimate for Chandra's summary (thumb and index C6, middle C7,
       // ring and little C8), read with the hand and nerve maps in
@@ -179,11 +203,16 @@ export const EXTRA_REGIONS = {
       // when tingling in one part is ticked.
       { id: "N12", text: "Which fingers do the pins and needles or numbness affect most?",
         askIf: ({ ra }) => [].concat(ra.N2 || []).includes("fingers"),
-        priority: ({ ra }) => [].concat(ra.N2 || []).includes("fingers"),
+        // Early once N14 is answered (28 Sep 2026): with a line down the arm
+        // the base of the neck is asked too, and the 5 slots then go to N9,
+        // the base of the neck, N2, N3 and N14, so this tag is often left out.
+        priority: ({ ra }) => [].concat(ra.N2 || []).includes("fingers") && ra.N14 !== undefined,
         options: [
           { id: "thumbindex", excl: "digit", label: "Thumb and index finger" },
           { id: "middle", excl: "digit", label: "Middle finger" },
           { id: "ringlittle", excl: "digit", label: "Ring and little fingers" },
+          // Radial nerve tag, from the neural mechanosensitivity document's Q7.
+          { id: "backthumb", excl: "digit", label: "The back of the thumb and the web between the thumb and index finger" },
           { id: "notsure", label: "Not sure, or they vary" }
         ]},
       { id: "N4", text: "If you get headaches with this, what are they like?",
@@ -2580,6 +2609,10 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Numbness that no longer comes and goes, or a thumb that is getting weak or clumsy, can mean the nerve is being pressed on hard. A doctor should check this. Physiotherapy can help alongside or afterwards." },
   lumpDoctor: { title: "A hard or growing lump should be checked by a doctor",
     body: "Most lumps at the wrist are harmless fluid cysts (ganglions) that are soft and change size. A lump that is <strong>hard</strong> or <strong>keeps growing</strong> should be looked at by a doctor first." },
+  // Loss of nerve function (the neck's N14), from the "Cervical Neural
+  // Mechanosensitivity" document: book promptly; getting worse, a doctor.
+  nerveLoss: { title: "Numbness that stays, or weakness: please book promptly",
+    body: "Numbness that does not go away, weakness, or hand muscles that are getting thinner can mean a nerve is not carrying its signals as well as it should, not just that it is sensitive. It needs a hands-on check of feeling, strength and reflexes soon, so please book an assessment promptly. If it is <strong>getting worse</strong>, see your doctor as well; nerve conduction tests may be needed." },
   handWeakness: { title: "Hand weakness should be checked by a doctor",
     body: "Not being able to make an “OK” sign with the thumb and index finger, or to lift the wrist or straighten the fingers, can mean a nerve in the forearm is being pressed on. A doctor should check this. Physiotherapy can help alongside or afterwards." },
   armDoctor: { title: "Please have this checked by a doctor",

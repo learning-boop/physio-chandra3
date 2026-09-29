@@ -82,6 +82,15 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
     r[0] && r[0].c.id === 'cheadache', r.map((x) => x.c.id))
 }
 
+// ── 2d. Cervical Neural Mechanosensitivity document (v1.0, approved 28 Sep 2026) ──
+{
+  const { maxScores } = await imp('src/data/symptomGuide.js')
+  check('sensitive-nerve ceiling is the document\'s 12', maxScores(REGIONS.neck).neural === 12, maxScores(REGIONS.neck).neural)
+  const n14 = REGIONS.neck.questions.find((q) => q.id === 'N14')
+  check('an ache into the upper arm only does not open the nerve question', !n14.askIf({ ra: { N2: ['shoulderonly'] } }))
+  check('tingling in one part of the hand opens it', n14.askIf({ ra: { N2: ['fingers'] } }))
+}
+
 // ── 3. Low back → foot ──
 {
   const lines = [['lowerback', 'hipR', 'kneeR', 'ankleR']]
