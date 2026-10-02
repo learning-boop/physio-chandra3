@@ -13,7 +13,7 @@ reviewed_on: 2026-09-25
 
 ## red flags
 - Is your knee hot, red, and swollen, with a fever or feeling unwell, especially after an injection, surgery, or a cut? | emergency | Possible joint infection (septic arthritis)
-- Is your calf or thigh swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | emergency | Possible blood clot that has travelled to the lung
+- Is your calf or thigh swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung
 - Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels? | emergency | Possible cauda equina syndrome
 - Is your calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill? | urgent | Possible blood clot (DVT). A burst cyst at the back of the knee looks the same and also needs checking
 - Do you have a knee replacement, and is it newly painful, warm, swollen, or is the wound red or leaking? | urgent | Possible infection or loosening of the replacement

@@ -110,31 +110,34 @@ export function injuryStep(answers = {}, ageId) {
   if (a.I1 === 'no') return { route: 'skip' }
   if (a.I2 === undefined) return { next: 'I2' }
   const acute = a.I2 === 'h48'
-  const high = acute ? 'emergency' : 'urgent'
+  // An emergency here is 911, keeping the neck still (Chandra, 2 Oct 2026).
+  const em = (why) => ({ route: 'emergency', why, call911: true })
+  const high = (why) => (acute ? em(why) : { route: 'urgent', why })
 
   // Step 1: any high-risk factor.
   const age = ageFrom(ageId)
   const old = age !== null && age >= 65 ? true : a.I3 === 'yes' ? true : age !== null || a.I3 === 'no' ? false : null
   if (old === null) return { next: 'I3' }
-  if (old) return { route: high, why: WHY.age }
+  if (old) return high(WHY.age)
   if (!ticked(a.I4)) return { next: 'I4' }
-  if (list(a.I4).some((x) => x !== 'none')) return { route: high, why: WHY.mechanism }
+  if (list(a.I4).some((x) => x !== 'none')) return high(WHY.mechanism)
   if (a.I5 === undefined) return { next: 'I5' }
-  if (a.I5 === 'yes') return { route: high, why: WHY.nerve }
+  if (a.I5 === 'yes') return high(WHY.nerve)
   // Older injuries with no high-risk factor go on to the region questions.
   if (!acute) return { route: 'continue' }
 
   // Step 2: a low-risk factor that makes it safe to test movement.
   if (!ticked(a.I6)) return { next: 'I6' }
-  if (!list(a.I6).some((x) => x !== 'none')) return { route: 'emergency', why: WHY.noLowRisk }
+  if (!list(a.I6).some((x) => x !== 'none')) return em(WHY.noLowRisk)
   // Step 3: can turn 45° each way.
   if (a.I7 === undefined) return { next: 'I7' }
-  if (a.I7 === 'no') return { route: 'emergency', why: WHY.rotation }
+  if (a.I7 === 'no') return em(WHY.rotation)
   return { route: I7_PASS_ROUTE, why: WHY.pass }
 }
 
-const yesNo = (yes, why) => [
-  { id: 'yes', label: 'Yes', route: yes, why },
+// `extra` marks a 911 answer: { call911: true }.
+const yesNo = (yes, why, extra = {}) => [
+  { id: 'yes', label: 'Yes', route: yes, why, ...extra },
   { id: 'no', label: 'No' },
 ]
 
@@ -302,10 +305,10 @@ export const HIP_INJURY = [
   // fall" and "did you feel a pop" are asked after that injury only.
   { id: 'I2', text: 'Since the fall or accident, can you not stand or walk on the leg, or does the leg look shorter or turned out?',
     askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle',
-    options: yesNo('emergency', 'Possible hip fracture or dislocation') },
+    options: yesNo('emergency', 'Possible hip fracture or dislocation', { call911: true }) },
   { id: 'I3', text: 'Was it a high-speed crash, or a fall from higher than a few stairs?',
     askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle',
-    options: yesNo('emergency', 'A high-energy injury: possible pelvic or hip fracture') },
+    options: yesNo('emergency', 'A high-energy injury: possible pelvic or hip fracture', { call911: true }) },
   // A possible fracture: same day.
   { id: 'I4', text: 'After a minor fall, can you walk but with groin pain when you put weight on the leg, and are you 65 or over or have osteoporosis?',
     askIf: (a) => a.I1 === 'fall', sameDay: true,
@@ -329,7 +332,7 @@ export const THIGH_INJURY = [
     { id: 'fall', label: 'Yes, a fall or accident' },
   ]},
   { id: 'I2', text: 'Is the thigh a different shape, can you not stand on the leg, or was it a high-speed crash or a fall from a height?',
-    options: yesNo('emergency', 'Possible thigh bone (femur) fracture') },
+    options: yesNo('emergency', 'Possible thigh bone (femur) fracture', { call911: true }) },
   // The questions that start "After a knock", "Did you feel a pop" and "A few
   // weeks after a knock" are asked after that injury only.
   { id: 'I3', text: 'After a knock: is the thigh getting tighter and more painful by the hour, rather than settling?',
@@ -472,7 +475,7 @@ function linearStep(questions) {
       if (a[q.id] === undefined) return { next: q.id }
       for (const oid of list(a[q.id])) {
         const o = q.options.find((x) => x.id === oid)
-        if (o && o.route) return { route: o.route, why: o.why, ...(q.sameDay ? { sameDay: true } : {}) }
+        if (o && o.route) return { route: o.route, why: o.why, ...(o.call911 ? { call911: true } : {}), ...(q.sameDay ? { sameDay: true } : {}) }
       }
     }
     return { route: 'continue' }

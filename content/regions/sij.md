@@ -17,8 +17,9 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      (cauda equina, osteoporosis, infection, cancer, pelvic organs, kidney)
      are shown once when both areas are on the screen. -->
 - Do you have new numbness or tingling between your legs, around your bottom, or in your genitals, or new trouble passing urine or controlling your bowels? | emergency | Possible cauda equina syndrome
-- After a fall or accident, are you unable to stand or put weight on your leg? | emergency | Possible pelvic or hip fracture
-- Are you pregnant and have severe pelvic or back pain with bleeding, fluid leaking, or regular tightenings? | emergency | Possible labour or pregnancy complication
+- After a fall or accident, are you unable to stand or put weight on your leg? | 911 | Possible pelvic or hip fracture
+- Are you pregnant and have severe pelvic or back pain with heavy bleeding, or feeling faint? | 911 | Possible serious pregnancy complication   (split 2 Oct 2026)
+- Are you pregnant and have severe pelvic or back pain with fluid leaking, or regular tightenings? | emergency | Possible labour or waters breaking: go to the labour and delivery unit   (split 2 Oct 2026)
 - Did the pain start after a minor fall or with no injury, and you have osteoporosis, take long-term steroid tablets, or are over 70? | urgent | Possible stress (insufficiency) fracture of the sacrum
 - Do you have a fever or chills with the pain, or have you recently given birth, had surgery, or injected drugs? | urgent | Possible joint infection (septic sacroiliitis)
 - Have you ever had cancer, and is this a new pain? | urgent | Cancer can spread to the pelvis and sacrum

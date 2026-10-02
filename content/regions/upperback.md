@@ -15,11 +15,12 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 <!-- Flags that ask the same thing as a neighbouring area's (heart, aorta,
      lung clot, spinal cord, fracture, pancreas, legs, cancer, osteoporosis,
      infection, shingles) appear once when both areas are drawn. -->
-- Did the pain start suddenly as a tearing or ripping pain in your mid back or between your shoulder blades, or spreading into your chest? | emergency | Possible tear in the aorta (aortic dissection)
-- Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your arm or jaw? | emergency | Heart pain can be felt in the mid back
-- Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf? | emergency | Possible blood clot in the lung or a collapsed lung
+- Did the pain start suddenly as a tearing or ripping pain in your mid back or between your shoulder blades, or spreading into your chest? | 911 | Possible tear in the aorta (aortic dissection)
+- Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your arm or jaw? | 911 | Heart pain can be felt in the mid back
+- Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf? | 911 | Possible blood clot in the lung or a collapsed lung
 - Do you have severe pain in the upper tummy that goes straight through to your back, with vomiting? | emergency | Possible pancreatitis or perforated ulcer
-- Along with the back pain, have you lost control of your bladder or bowels, or had sudden weakness or numbness in both legs? | emergency | Possible spinal cord compression
+- Along with the back pain, have you lost control of your bladder or bowels? | emergency | Possible spinal cord compression   (split 2 Oct 2026)
+- Along with the back pain, have you had sudden weakness or numbness in both legs? | 911 | Possible spinal cord compression   (split 2 Oct 2026)
 - Did this start in the last few days after a car crash, a fall from a height, or a hard blow to the back? | emergency | Possible spinal fracture
 - Have your legs gradually become stiff, heavy, or clumsy when you walk? | urgent | Possible slow pressure on the spinal cord (thoracic myelopathy)
 - Have you ever had cancer, and is this a new mid-back pain? | urgent | The thoracic spine is a common site for cancer to spread

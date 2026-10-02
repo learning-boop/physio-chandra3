@@ -15,10 +15,10 @@ reviewed_on: DRAFT prepared 24 Sep 2026, awaiting Chandra's review
 ---
 
 ## red flags
-- Is the pain in your shoulder, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain is often felt in the left shoulder and inner arm
-- Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | emergency | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign)
-- Could you be pregnant, and do you have pain low in your tummy along with pain at the tip of your shoulder? | emergency | Possible ectopic pregnancy: blood under the diaphragm is felt at the shoulder tip
-- Do you have a sudden, sharp pain on breathing with shortness of breath? | emergency | Possible blood clot in the lung or a collapsed lung
+- Is the pain in your shoulder, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | 911 | Heart pain is often felt in the left shoulder and inner arm
+- Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy? | 911 | Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign)
+- Could you be pregnant, and do you have pain low in your tummy along with pain at the tip of your shoulder? | 911 | Possible ectopic pregnancy: blood under the diaphragm is felt at the shoulder tip
+- Do you have a sudden, sharp pain on breathing with shortness of breath? | 911 | Possible blood clot in the lung or a collapsed lung
 - Is your shoulder hot, red, or swollen, with a fever or feeling very unwell? | emergency | Possible joint infection (septic arthritis)
 - If you are over 50: are both shoulders (and often both hips) stiff and aching, worst in the morning for more than 45 minutes, and do you feel generally unwell? | urgent | Possible polymyalgia rheumatica; needs blood tests and medical care
 - Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, a drooping eyelid, or weakness in your hand? | urgent | Possible tumour at the top of the lung (Pancoast), felt in the shoulder and inner arm

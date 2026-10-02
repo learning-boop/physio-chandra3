@@ -18,7 +18,7 @@ reviewed_on: 2026-09-25
 - Did you have a cut, bite, or puncture on your hand or finger (including hitting someone's teeth), and is it now swollen, red, and very painful to straighten the finger? | emergency | Possible tendon sheath or joint infection; needs urgent surgical review
 - Was paint, grease, oil, or fluid injected into your hand under pressure (spray gun, grease gun), even if the wound looks tiny? | emergency | High-pressure injection injury: serious damage hides under a small wound
 - Is a finger or thumb hot, red, and swollen, with a fever or feeling very unwell? | emergency | Possible joint infection (septic arthritis)
-- Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | emergency | Possible stroke
+- Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | 911 | Possible stroke
 - Is there a tense, throbbing, swollen fingertip, or pus around the nail? | urgent | Possible fingertip or nail-fold infection (felon or paronychia); same-day review
 - Did a finger joint become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before? | urgent | Possible gout or other crystal arthritis
 - Are the knuckles in both hands swollen and stiff for more than an hour in the morning, or is a whole finger swollen like a sausage (especially with psoriasis)? | urgent | Possible inflammatory arthritis (rheumatoid or psoriatic)

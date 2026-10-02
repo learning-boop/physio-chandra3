@@ -17,7 +17,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - Do you have new numbness or tingling between your legs, around your bottom, or in your genitals (the area you would sit on a saddle)? | emergency | Possible cauda equina syndrome
 - Have you had new trouble starting to pass urine, not being able to feel when your bladder is full, leaking urine, or losing control of your bowels? | emergency | Possible cauda equina syndrome
 - In the last few days, has your leg pain spread to both legs, or has weakness in your leg or foot been getting quickly worse? | emergency | Possible cauda equina syndrome or severe nerve compression
-- Do you have a sudden, severe pain in your back or tummy, with a pulsing feeling in your tummy, or feeling faint or sweaty? | emergency | Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)
+- Do you have a sudden, severe pain in your back or tummy, with a pulsing feeling in your tummy, or feeling faint or sweaty? | 911 | Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)
 - Did this start in the last few days after a car crash, a fall from a height, or landing hard on your feet or bottom? | emergency | Possible spinal fracture
 - Have you ever had cancer, and is this a new back pain? | urgent | Cancer can spread to the spine
 - Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70? | urgent | Possible osteoporotic fracture of the spine

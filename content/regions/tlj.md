@@ -17,9 +17,10 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 <!-- Flags that ask the same thing as the mid back's (aorta, fracture,
      pancreas, cancer, osteoporosis, infection, legs, shingles) appear once
      when both areas are drawn. -->
-- Do you have a sudden, severe pain in your back, tummy, or side, with a pulsing feeling in your tummy, or feeling faint or sweaty? | emergency | Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)
-- Did the pain start suddenly as a tearing or ripping pain in your back, spreading to your chest or tummy? | emergency | Possible tear in the aorta (aortic dissection)
-- Have you lost control of your bladder or bowels, lost feeling between your legs or around your bottom, or had sudden weakness or numbness in both legs? | emergency | Possible compression of the lower spinal cord or nerves (conus medullaris or cauda equina)
+- Do you have a sudden, severe pain in your back, tummy, or side, with a pulsing feeling in your tummy, or feeling faint or sweaty? | 911 | Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)
+- Did the pain start suddenly as a tearing or ripping pain in your back, spreading to your chest or tummy? | 911 | Possible tear in the aorta (aortic dissection)
+- Have you lost control of your bladder or bowels, or lost feeling between your legs or around your bottom? | emergency | Possible compression of the lower spinal cord or nerves (conus medullaris or cauda equina)   (split 2 Oct 2026)
+- Have you had sudden weakness or numbness in both legs? | 911 | Possible compression of the lower spinal cord (conus medullaris)   (split 2 Oct 2026)
 - Did this start in the last few days after a car crash, a fall from a height, or landing hard on your feet or bottom? | emergency | Possible fracture; this is the most common level for spinal fractures
 - Do you have severe pain in the upper tummy that goes straight through to your back, with vomiting? | emergency | Possible pancreatitis or perforated ulcer
 - Do you have sudden, severe pain in a testicle? | emergency | Possible testicular torsion

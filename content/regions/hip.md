@@ -12,9 +12,9 @@ reviewed_on: 2026-09-25
 ---
 
 ## red flags
-- Do you have a sudden, severe pain in your back, tummy, or groin, with a pulsing feeling in your tummy, or feeling faint or sweaty? | emergency | Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)
+- Do you have a sudden, severe pain in your back, tummy, or groin, with a pulsing feeling in your tummy, or feeling faint or sweaty? | 911 | Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)
 - Is your hip very painful with a fever, and can you not put weight on the leg (or is a child suddenly refusing to walk and feverish)? | emergency | Possible joint infection (septic arthritis)
-- Could you be pregnant, and do you have sudden one-sided pain low in your tummy or groin, bleeding, or feeling faint? | emergency | Possible ectopic pregnancy
+- Could you be pregnant, and do you have sudden one-sided pain low in your tummy or groin, bleeding, or feeling faint? | 911 | Possible ectopic pregnancy
 - Do you have sudden, severe pain in a testicle? | emergency | Possible testicular torsion
 - Is there a lump in your groin that is hard, very painful, will not go back in, and are you vomiting? | emergency | Possible trapped (strangulated) hernia
 - Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels? | emergency | Possible cauda equina syndrome

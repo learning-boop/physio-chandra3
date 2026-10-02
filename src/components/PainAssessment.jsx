@@ -19,6 +19,7 @@ import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism }
 import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
 import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
 import { patternChecks } from '../data/patternChecks'
+import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
 const GOLD = '#c9a96e'
@@ -283,7 +284,7 @@ const card = { border: '1px solid rgba(201,169,110,0.25)', background: 'rgba(201
      calm, for "what to answer". Chosen answers stay gold, which stands
      out clearly on it.
    - The emergency check's band is a soft coral (important, not alarming)
-     and the doctor check's a soft amber; strong red stays for the 911 result.
+     and the doctor check's a soft amber; strong red stays for the emergency result.
    All text keeps well over 4.5:1 contrast on the navy. */
 const TEAL = '#5CC8C2'
 const BAND_TONES = {
@@ -640,7 +641,7 @@ export default function PainAssessment() {
   // Only red flags route away from the result; a caution does not.
   const cautionIds = CAUTION_CHECKS.map((c) => c.id)
   /* ── Safety screening, right after the drawing ─────────────────────────
-     Everything that would send someone to 911 is asked first, on its own
+     Everything that would send someone to emergency care is asked first, on its own
      page; then everything that means "see a doctor first"; only then the
      questions. Someone with saddle numbness or a thunderclap headache is
      routed in the first minute instead of after the whole questionnaire.
@@ -727,7 +728,7 @@ export default function PainAssessment() {
      Straight after the physician-first page, when one applies. Its answers are
      kept in `answers` as "<screen>:<question>"; `injuryPath` is the questions
      shown, for Back.
-     Its outcome joins the flags: 'emergency' → 911, 'urgent' → physician. */
+     Its outcome joins the flags: 'emergency' → 911 or go now (call911), 'urgent' → physician. */
   const [injuryPath, setInjuryPath] = useState([])
   const [injuryQ, setInjuryQ] = useState(null)       // question on screen
 
@@ -753,13 +754,16 @@ export default function PainAssessment() {
   const injuryOutcome = injury.route === 'emergency' || injury.route === 'urgent' ? injury : null
   const injuryFlag = injuryOutcome
     ? { id: '__injury', tier: injuryOutcome.route, sameDay: injuryOutcome.sameDay,
+      call911: !!injuryOutcome.call911, keepNeckStill: injuryOutcome.screen === 'neck' && !!injuryOutcome.call911,
       text: (SCREENS.find((sc) => sc.id === injuryOutcome.screen) || {}).flag || 'A recent injury (injury screen)',
       why: { title: injuryOutcome.why, text: TIER_WHY[injuryOutcome.route].text } }
     : null
 
   const pickedFlags = [...safetyChecks.filter((f) => flags.includes(f.id)), ...(injuryFlag ? [injuryFlag] : [])]
-  // Emergency-tier flags (e.g. cauda equina signs) mean 911 now, not a booking.
+  // Emergency-tier flags end the visit, not a booking: 911 for the ones that
+  // can be life-threatening, otherwise go to emergency now (../data/emergencyAdvice.js).
   const emergencyFlagged = pickedFlags.some((f) => f.tier === 'emergency')
+  const emergencyCare = emergencyLevel(pickedFlags)
   /* "See a doctor" flags do not end the visit. The person is advised to see
      their doctor — today for the same-day ones (giant cell arteritis, a
      possible clot, a hot joint with fever, a possible fracture) — and can
@@ -1699,7 +1703,7 @@ export default function PainAssessment() {
             )}
 
             {/* SAFETY FIRST — two pages straight after the drawing. Page 1 holds
-                everything that means 911 now; page 2 everything that means
+                everything that means emergency care now; page 2 everything that means
                 "see a doctor first". Any tick stops the questionnaire there. */}
             {(stage === 'emergency' || stage === 'physician') && (() => {
               const emergency = stage === 'emergency'
@@ -1843,7 +1847,7 @@ export default function PainAssessment() {
 
             {/* INJURY SCREENS — neck (Canadian C-Spine Rule), shoulder and
                 upper arm, one question at a time (../data/injuryScreen.js). The first answer that routes
-                ends it: to 911, to a physician, or on to the results. */}
+                ends it: to emergency care, to a physician, or on to the results. */}
             {stage === 'injury' && (() => {
               const found = injuryQuestion(injuryQ, flowZ)
               if (!found) return null
@@ -1879,7 +1883,7 @@ export default function PainAssessment() {
             {/* URGENT-CARE RESULT */}
             {stage === 'urgent' && (
               <Fade k="urgent">
-                <span style={label}>Medical Review Recommended</span>
+                <span style={label}>{emergencyFlagged ? 'Emergency Care Needed' : 'Medical Review Recommended'}</span>
 
                 {!emergencyFlagged && (pickedFlags.length > 0 || otherFlagged) && (
                   <div style={{ ...card, maxWidth: 520, margin: '12px 0 12px' }}>
@@ -1891,17 +1895,27 @@ export default function PainAssessment() {
                   </div>
                 )}
 
-                {/* Two outcomes, decided by the tier the clinician assigned to
-                    each flag — never by the AI. Emergency: 911 now, and no
-                    booking is offered. Otherwise: see a physician first. */}
+                {/* Outcomes decided by the tier the clinician assigned to each
+                    flag — never by the AI. Emergency, no booking offered:
+                    call 911 for the flags marked call911, otherwise go to an
+                    emergency department now (or labour and delivery).
+                    Otherwise: see a physician first. */}
                 {emergencyFlagged ? (
                   <div style={{ ...card, borderColor: 'rgba(239,68,68,0.6)', background: 'rgba(239,68,68,0.08)', maxWidth: 520 }}>
-                    <strong style={{ color: '#fca5a5', fontSize: 19, lineHeight: 1.4 }}>Please Seek Emergency Care Now</strong>
+                    <strong style={{ color: '#fca5a5', fontSize: 19, lineHeight: 1.4 }}>{EMERGENCY_ADVICE[emergencyCare].title}</strong>
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '12px 0 0' }}>
-                      What you selected can be a sign of a problem that needs urgent medical
-                      attention. Please call 911 or go to your nearest emergency department
-                      now. Do not wait for a physiotherapy appointment.
+                      {EMERGENCY_ADVICE[emergencyCare].text}
                     </p>
+                    {emergencyCare === 'call911' && pickedFlags.some((f) => f.keepNeckStill) && (
+                      <p style={{ ...body, fontSize: 15.5, color: '#fff', fontWeight: 600, margin: '10px 0 0' }}>
+                        {EMERGENCY_ADVICE.call911Neck}
+                      </p>
+                    )}
+                    {emergencyCare !== 'call911' && (
+                      <p style={{ ...body, fontSize: 15.5, color: '#fff', fontWeight: 600, margin: '10px 0 0' }}>
+                        {EMERGENCY_ADVICE[emergencyCare].fallback}
+                      </p>
+                    )}
                     {/* Why, for each emergency answer: the reason from the
                         region document, next to what the person ticked. */}
                     <span style={{ ...label, display: 'block', margin: '18px 0 0', fontSize: 11.5, color: '#fca5a5' }}>Why this needs emergency care</span>
@@ -1913,9 +1927,11 @@ export default function PainAssessment() {
                         </div>
                       ))}
                     </div>
-                    <a href="tel:911" style={{ ...goldBtn, background: '#ef4444', color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', marginTop: 16 }}>
-                      Call 911
-                    </a>
+                    {emergencyCare === 'call911' && (
+                      <a href="tel:911" style={{ ...goldBtn, background: '#ef4444', color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', marginTop: 16 }}>
+                        {EMERGENCY_ADVICE.call911.button}
+                      </a>
+                    )}
                   </div>
                 ) : (
                   <div style={{ ...card, borderColor: 'rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', maxWidth: 520 }}>

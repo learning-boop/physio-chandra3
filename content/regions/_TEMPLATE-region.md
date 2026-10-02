@@ -19,7 +19,10 @@ reviewed_on:
 
 ## red flags
 <!-- One per line:  text | tier | why (one sentence)
-     tier = emergency  → call 911 / emergency department, no booking offered
+     tier = 911        → call 911 now, do not drive (heart, lung clot, stroke, aorta,
+                         bleeding, meningitis, sudden weakness in both legs), no booking offered
+     tier = emergency  → go to an emergency department now, someone else drives;
+                         stable but needs hospital today, no booking offered
      tier = urgent     → see a physician first, booking offered after review
      Write the text the way you would ask a patient. -->
 - text | tier | why
@@ -30,7 +33,7 @@ reviewed_on:
      Asked in order; the first answer that routes ends it. Start with a gate
      ("hurt in the last N weeks?" — No skips the screen). Format:
        I1: question
-       - answer → skip | emergency | urgent | continue | next question
+       - answer → skip | 911 | emergency | urgent | continue | next question
      Example: src/data/injuryScreen.js (neck, shoulder, upper arm). -->
 
 ## opening questions

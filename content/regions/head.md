@@ -34,12 +34,12 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      -> a doctor today; getting quickly worse, or new in the last few days ->
      Emergency. However long ago, and whether or not it came on suddenly.
      Shared by the neck, base of the neck and head: each asked once. -->
-- Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | emergency | Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain (5 Ds and 3 Ns)
+- Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | 911 | Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain (5 Ds and 3 Ns)
 - Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump? | urgent, same day | Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today
-- Did this headache come on suddenly and reach its worst within a minute, like the worst headache of your life? | emergency | Possible bleed on the brain (thunderclap headache)
-- With the headache, have you had any of these: weakness or numbness on one side, a drooping face, trouble speaking or understanding, confusion, loss of vision or double vision, or trouble walking? | emergency | Possible stroke or other brain cause
-- Do you have a fever with a stiff neck, a new rash, or are you very drowsy, confused or feeling very unwell? | emergency | Possible meningitis   (cgh: confused, very unwell)
-- Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse? | emergency | Possible bleeding after a head injury
+- Did this headache come on suddenly and reach its worst within a minute, like the worst headache of your life? | 911 | Possible bleed on the brain (thunderclap headache)
+- With the headache, have you had any of these: weakness or numbness on one side, a drooping face, trouble speaking or understanding, confusion, loss of vision or double vision, or trouble walking? | 911 | Possible stroke or other brain cause
+- Do you have a fever with a stiff neck, a new rash, or are you very drowsy, confused or feeling very unwell? | 911 | Possible meningitis   (cgh: confused, very unwell)
+- Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse? | 911 | Possible bleeding after a head injury
 - Is one eye painful and red, with blurred vision or halos around lights? | emergency | Possible acute glaucoma
 - If you are over 50: is your scalp or temple tender to touch, do your jaw muscles ache when chewing and ease when you stop, or has your vision changed? | urgent | Possible giant cell arteritis. Needs same-day medical review to protect eyesight   (cgh: vision change)
 - Is this a new kind of headache that started after age 50, or are your headaches getting steadily worse or changing pattern over weeks? | urgent | New or progressive headache needs medical review
@@ -49,7 +49,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache? | urgent | Possible pre-eclampsia or other pregnancy-related cause
 <!-- Added 28 Sep 2026 at Chandra's instruction (cervicogenic dizziness review);
      shared with the neck, asked once. -->
-- Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly? | emergency | Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear
+- Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly? | 911 | Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear
 - Did a new headache with neck pain, different from any you have had before but not severe, start after a neck manipulation or sudden jolt? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
 
 ## opening questions

@@ -210,7 +210,7 @@ export function buildClinicianSummary(ctx = {}) {
     push(...listOf(reportedFlags.map((r) => `${r.sameDay ? '[SAME DAY] ' : ''}${r.text}${r.why ? ` — ${r.why}` : ''}`), '      · '))
     push('  Confirm at the first contact that a doctor has seen this.')
   } else {
-    push('  Red flags: none reported (an emergency flag would have routed the patient to 911).')
+    push('  Red flags: none reported (an emergency flag would have sent the patient to 911 or an emergency department).')
   }
   if (declinedFlags.length) push(`  Screened and denied: ${declinedFlags.join('; ')}`)
   if (cautions.length) {

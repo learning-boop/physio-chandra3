@@ -17,8 +17,8 @@ reviewed_on: 2026-09-25
 ## red flags
 - Is your forearm pain getting worse and worse, with the forearm tight and swollen and much worse when your fingers are moved, especially under a cast or tight bandage? | emergency | Possible compartment syndrome (pressure build-up in the forearm)
 - Is there a hot, swollen, red area on your forearm that is spreading fast, with pain far worse than it looks, or feeling very unwell? | emergency | Possible severe skin and tissue infection (necrotising fasciitis)
-- Is the pain on the inside of your left forearm or arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain can be felt down the inside of the arm and forearm
-- Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | emergency | Possible stroke
+- Is the pain on the inside of your left forearm or arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | 911 | Heart pain can be felt down the inside of the arm and forearm
+- Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | 911 | Possible stroke
 - Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever? | urgent | Possible skin or lymph infection (cellulitis or lymphangitis); same-day review
 - Is your hand becoming weaker, can you not lift your wrist, or can you not make an “OK” sign with your thumb and index finger? | urgent | Nerve weakness (radial or anterior interosseous nerve) needs medical review
 - Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady? | urgent | Possible pressure on the spinal cord in the neck: see the neck region

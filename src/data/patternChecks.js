@@ -99,7 +99,7 @@ const WHY = {
 }
 
 /* Each entry: shown only when the drawing matches, in this order.
-   tier 'emergency' → 911 screen; 'urgent' → see a physician first. */
+   tier 'emergency' → emergency screen (call911: 911, else go now); 'urgent' → see a physician first. */
 const PATTERNS = [
   {
     // Dizziness reported after a head injury (the head's D8). The safety
@@ -114,7 +114,7 @@ const PATTERNS = [
   // section 6). Its stroke-type and after-injury flags are on the first safety
   // pages already; these two only make sense once dizziness is reported.
   {
-    id: 'pc-dizzy-heart', tier: 'emergency', why: WHY.dizzyHeart,
+    id: 'pc-dizzy-heart', tier: 'emergency', call911: true, why: WHY.dizzyHeart,
     text: 'With the dizziness: fainting, chest pain, a racing or irregular heartbeat, or shortness of breath',
     when: (z, a) => [].concat(a.N9 || []).includes('dizzy'),
   },
@@ -150,7 +150,7 @@ const PATTERNS = [
       ![].concat(a.N4 || []).some((id) => id !== 'none'),
   },
   {
-    id: 'pc-cardiac', tier: 'emergency', why: WHY.cardiac,
+    id: 'pc-cardiac', tier: 'emergency', call911: true, why: WHY.cardiac,
     text: 'Pain or tightness in the chest, left arm or jaw — especially with sweating, nausea, or shortness of breath',
     // Spec's cardiac map: central chest, left arm, jaw. Deliberately NOT every
     // neck drawing — that would put a heart-attack question in front of

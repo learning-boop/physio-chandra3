@@ -17,7 +17,7 @@ reviewed_on: 2026-09-25
 ## red flags
 - Is your wrist hot, red, and swollen, with a fever or feeling very unwell? | emergency | Possible joint infection (septic arthritis)
 - Did you have a cut, bite, or puncture on the wrist or hand, and is it now swollen, red, and very painful to move the fingers? | emergency | Possible tendon sheath or deep hand infection; needs urgent surgical review
-- Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | emergency | Possible stroke
+- Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | 911 | Possible stroke
 - Since a wrist injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that even light touch hurts? | urgent | Possible complex regional pain syndrome (CRPS); early treatment matters
 - Did your wrist become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before? | urgent | Possible gout or other crystal arthritis
 - Are both wrists or several finger joints swollen and stiff for more than an hour in the morning? | urgent | Possible inflammatory arthritis (for example rheumatoid arthritis)

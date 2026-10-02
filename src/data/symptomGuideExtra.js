@@ -48,25 +48,30 @@ export const EXTRA_REGIONS = {
       // area's matching question is not asked again.
       // A1.1: sudden severe headache + sudden stroke signs + new, sudden
       // dizziness with signs. Dizziness alone still does not count.
-      { id: "nrf-stroke", tier: "emergency", group: ["stroke", "thunderclap", "dizzystroke"], why: "Possible stroke, bleed, or neck artery tear",
+      { id: "nrf-stroke", tier: "emergency", call911: true, group: ["stroke", "thunderclap", "dizzystroke"], why: "Possible stroke, bleed, or neck artery tear",
         text: "Since this started, has any of these come on suddenly: the worst headache of your life; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk?" },
       // Numbness and weakness spreading quickly in both hands and feet (a
       // fast nerve condition such as Guillain-Barre) from the "Cervical Neural
       // Mechanosensitivity" document (v1.0, approved 28 Sep 2026).
-      { id: "nrf-cord", tier: "emergency", group: "cord", why: "Acute pressure on the spinal cord, or a nerve condition that is spreading quickly",
-        text: "Along with the neck pain, have you lost control of your bladder or bowels, been unable to pass urine, had new numbness or weakness in both legs, or numbness or weakness spreading quickly, over hours or days, in both hands and feet?" },
+      // Split in two (Chandra, 2 Oct 2026): bladder or bowel changes go to an
+      // emergency department; weakness in both legs, or spreading in the hands
+      // and feet, is 911 (a fall, or the breathing muscles in Guillain-Barre).
+      { id: "nrf-cord", tier: "emergency", group: "cord", why: "Possible pressure on the spinal cord",
+        text: "Along with the neck pain, have you lost control of your bladder or bowels, or been unable to pass urine?" },
+      { id: "nrf-cord-legs", tier: "emergency", call911: true, group: "cordlegs", why: "Acute pressure on the spinal cord, or a nerve condition that is spreading quickly",
+        text: "Along with the neck pain, have you had new numbness or weakness in both legs, numbness or weakness spreading quickly, over hours or days, in both hands and feet, or any trouble breathing or swallowing?" },
       // A1.2: new numbness after a manipulation + severe or fast-changing pain
       // after a manipulation, jerk or knock + the 5 Ds and 3 Ns getting worse,
       // or new in the last few days, after an accident (Chandra, 26 and 28 Sep).
-      { id: "nrf-after", tier: "emergency", group: ["cadsevere", "trauma5d", "manip"], why: "After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain",
+      { id: "nrf-after", tier: "emergency", call911: true, group: ["cadsevere", "trauma5d", "manip"], why: "After a manipulation, accident, jerk or knock: possible neck artery tear, or damage to the spinal cord or brain",
         text: "Since a neck manipulation (\"cracking\"), a car accident, a sudden jerk, or a knock to the head or neck: is the pain severe and unlike anything you have felt before, or are any of these getting quickly worse, or new in the last few days: numbness or weakness in the arms or legs, dizziness, double vision, slurred speech, trouble swallowing, feeling sick or vomiting, a severe or worsening headache, confusion, drowsiness or memory loss, numbness around the lips, or eyes that flicker or jump?" },
-      { id: "nrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
+      { id: "nrf-mening", tier: "emergency", call911: true, group: "mening", why: "Possible meningitis",
         text: "Do you have a fever with a stiff neck, a bad headache, a rash, or feel very unwell, or find bright light hard to look at?" },
       // Radiculopathy document (28 Sep 2026): any arm, chest pain or pressure,
       // and feeling sick; C7 can refer to the chest, so the heart comes first.
-      { id: "nrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
+      { id: "nrf-cardiac", tier: "emergency", call911: true, group: "cardiac", why: "Heart pain can be felt in the neck, jaw, and arm",
         text: "Is the pain in your neck, jaw, or arm brought on by effort, or does it come with chest pain, pressure or tightness, shortness of breath, sweating, or feeling sick?" },
-      { id: "nrf-kehr", tier: "emergency", group: "kehr", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
+      { id: "nrf-kehr", tier: "emergency", call911: true, group: "kehr", drawn: ["shoulder"], why: "Possible bleeding from the spleen, felt at the shoulder tip",
         text: "Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?" },
       // A2.1: ongoing dizziness or signs after an accident + new, not severe
       // pain after a manipulation or jerk. The pain part is now same day.
@@ -339,16 +344,18 @@ export const EXTRA_REGIONS = {
   ctj: {
     name: "Base of the neck & upper back",
     redFlags: [
-      { id: "crf-aorta", tier: "emergency", group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
+      { id: "crf-aorta", tier: "emergency", call911: true, group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
         text: "Did the pain start suddenly as a tearing or ripping pain between your shoulder blades, or spreading into your chest?" },
-      { id: "crf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain is often felt between the shoulder blades",
+      { id: "crf-cardiac", tier: "emergency", call911: true, group: "cardiac", why: "Heart pain is often felt between the shoulder blades",
         text: "Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your left arm or jaw?" },
-      { id: "crf-lung", tier: "emergency", group: "lungclot", why: "Possible blood clot in the lung or a collapsed lung",
+      { id: "crf-lung", tier: "emergency", call911: true, group: "lungclot", why: "Possible blood clot in the lung or a collapsed lung",
         text: "Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf?" },
       { id: "crf-cord", tier: "emergency", group: "cord", why: "Possible spinal cord compression",
-        text: "Along with the back pain, have you lost control of your bladder or bowels, or had new weakness, numbness, or unsteadiness in both legs?" },
+        text: "Along with the back pain, have you lost control of your bladder or bowels?" },
+      { id: "crf-cord-legs", tier: "emergency", call911: true, group: "cordlegs", why: "Possible spinal cord compression",
+        text: "Along with the back pain, have you suddenly had new weakness, numbness, or unsteadiness in both legs?" },
       // Shared with the neck and head (group "trauma5d"): asked once.
-      { id: "crf-trauma5d", tier: "emergency", group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
+      { id: "crf-trauma5d", tier: "emergency", call911: true, group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
         text: "Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
       { id: "crf-trauma5d-doc", sameDay: true, tier: "urgent", group: "trauma5d-doc", why: "Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today",
         text: "Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
@@ -465,16 +472,18 @@ export const EXTRA_REGIONS = {
   upperback: {
     name: "Mid back (thoracic spine)",
     redFlags: [
-      { id: "trf-aorta", tier: "emergency", group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
+      { id: "trf-aorta", tier: "emergency", call911: true, group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
         text: "Did the pain start suddenly as a tearing or ripping pain in your mid back or between your shoulder blades, or spreading into your chest?" },
-      { id: "trf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the mid back",
+      { id: "trf-cardiac", tier: "emergency", call911: true, group: "cardiac", why: "Heart pain can be felt in the mid back",
         text: "Does the pain come with chest tightness, shortness of breath, or sweating, or is it brought on by effort and spreading to your arm or jaw?" },
-      { id: "trf-lung", tier: "emergency", group: "lungclot", why: "Possible blood clot in the lung or a collapsed lung",
+      { id: "trf-lung", tier: "emergency", call911: true, group: "lungclot", why: "Possible blood clot in the lung or a collapsed lung",
         text: "Do you have a sudden, sharp pain on breathing with shortness of breath, especially after a long journey, recent surgery, or with a swollen calf?" },
       { id: "trf-pancreas", tier: "emergency", group: "pancreas", why: "Possible pancreatitis or perforated ulcer",
         text: "Do you have severe pain in the upper tummy that goes straight through to your back, with vomiting?" },
       { id: "trf-cord", tier: "emergency", group: "cord", why: "Possible spinal cord compression",
-        text: "Along with the back pain, have you lost control of your bladder or bowels, or had sudden weakness or numbness in both legs?" },
+        text: "Along with the back pain, have you lost control of your bladder or bowels?" },
+      { id: "trf-cord-legs", tier: "emergency", call911: true, group: "cordlegs", why: "Possible spinal cord compression",
+        text: "Along with the back pain, have you had sudden weakness or numbness in both legs?" },
       { id: "trf-fracture", tier: "emergency", group: "fracture", why: "Possible spinal fracture",
         text: "Did this start in the last few days after a car crash, a fall from a height, or a hard blow to the back?" },
       { id: "trf-myelo", tier: "urgent", group: "legs", why: "Possible slow pressure on the spinal cord (thoracic myelopathy)",
@@ -590,12 +599,14 @@ export const EXTRA_REGIONS = {
   tlj: {
     name: "Where the mid back meets the low back",
     redFlags: [
-      { id: "jrf-aaa", tier: "emergency", group: "aaa", why: "Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
+      { id: "jrf-aaa", tier: "emergency", call911: true, group: "aaa", why: "Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
         text: "Do you have a sudden, severe pain in your back, tummy, or side, with a pulsing feeling in your tummy, or feeling faint or sweaty?" },
-      { id: "jrf-aorta", tier: "emergency", group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
+      { id: "jrf-aorta", tier: "emergency", call911: true, group: "aorta", why: "Possible tear in the aorta (aortic dissection)",
         text: "Did the pain start suddenly as a tearing or ripping pain in your back, spreading to your chest or tummy?" },
       { id: "jrf-conus", tier: "emergency", group: "cauda", why: "Possible compression of the lower spinal cord or nerves (conus medullaris or cauda equina)",
-        text: "Have you lost control of your bladder or bowels, lost feeling between your legs or around your bottom, or had sudden weakness or numbness in both legs?" },
+        text: "Have you lost control of your bladder or bowels, or lost feeling between your legs or around your bottom?" },
+      { id: "jrf-conus-legs", tier: "emergency", call911: true, group: "cordlegs", why: "Possible compression of the lower spinal cord (conus medullaris)",
+        text: "Have you had sudden weakness or numbness in both legs?" },
       { id: "jrf-fracture", tier: "emergency", group: "fracture", why: "Possible fracture; this is the most common level for spinal fractures",
         text: "Did this start in the last few days after a car crash, a fall from a height, or landing hard on your feet or bottom?" },
       { id: "jrf-pancreas", tier: "emergency", group: "pancreas", why: "Possible pancreatitis or perforated ulcer",
@@ -715,10 +726,14 @@ export const EXTRA_REGIONS = {
     redFlags: [
       { id: "prf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
         text: "Do you have new numbness or tingling between your legs, around your bottom, or in your genitals, or new trouble passing urine or controlling your bowels?" },
-      { id: "prf-fracture", tier: "emergency", why: "Possible pelvic or hip fracture",
+      { id: "prf-fracture", tier: "emergency", call911: true, why: "Possible pelvic or hip fracture",
         text: "After a fall or accident, are you unable to stand or put weight on your leg?" },
-      { id: "prf-pregnancy", tier: "emergency", why: "Possible labour or pregnancy complication",
-        text: "Are you pregnant and have severe pelvic or back pain with bleeding, fluid leaking, or regular tightenings?" },
+      // Split in two (Chandra, 2 Oct 2026, option b): heavy bleeding or
+      // feeling faint is 911; waters or tightenings go to labour and delivery.
+      { id: "prf-pregnancy-bleed", tier: "emergency", call911: true, why: "Possible serious pregnancy complication",
+        text: "Are you pregnant and have severe pelvic or back pain with heavy bleeding, or feeling faint?" },
+      { id: "prf-pregnancy", tier: "emergency", goTo: "labour", why: "Possible labour or waters breaking",
+        text: "Are you pregnant and have severe pelvic or back pain with fluid leaking, or regular tightenings?" },
       { id: "prf-osteo", tier: "urgent", group: "osteo", why: "Possible stress (insufficiency) fracture of the sacrum",
         text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
       { id: "prf-infection", sameDay: true, tier: "urgent", group: "infection", why: "Possible joint infection (septic sacroiliitis)",
@@ -938,9 +953,9 @@ export const EXTRA_REGIONS = {
     redFlags: [
       { id: "mrf-stuckopen", tier: "emergency", why: "Jaw dislocation needs urgent reduction",
         text: "Is your jaw stuck open, so you cannot close your mouth?" },
-      { id: "mrf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt in the jaw",
+      { id: "mrf-cardiac", tier: "emergency", call911: true, group: "cardiac", why: "Heart pain can be felt in the jaw",
         text: "Is pain in your jaw brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
-      { id: "mrf-droop", tier: "emergency", why: "Possible stroke or facial nerve palsy",
+      { id: "mrf-droop", tier: "emergency", call911: true, why: "Possible stroke or facial nerve palsy",
         text: "Has one side of your face suddenly drooped or become weak?" },
       { id: "mrf-fracture", sameDay: true, tier: "urgent", why: "Possible jaw fracture",
         text: "Did this start after a blow to the jaw or face, and your teeth no longer meet the way they used to?" },
@@ -1056,18 +1071,18 @@ export const EXTRA_REGIONS = {
   head: {
     name: "Head (headaches)",
     redFlags: [
-      { id: "hrf-thunderclap", tier: "emergency", group: "thunderclap", why: "Possible bleed on the brain (thunderclap headache)",
+      { id: "hrf-thunderclap", tier: "emergency", call911: true, group: "thunderclap", why: "Possible bleed on the brain (thunderclap headache)",
         text: "Did this headache come on suddenly and reach its worst within a minute, like the worst headache of your life?" },
-      { id: "hrf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke or other brain cause",
+      { id: "hrf-stroke", tier: "emergency", call911: true, group: "stroke", why: "Possible stroke or other brain cause",
         text: "With the headache, have you had any of these: weakness or numbness on one side, a drooping face, trouble speaking or understanding, confusion, loss of vision or double vision, or trouble walking?" },
-      { id: "hrf-mening", tier: "emergency", group: "mening", why: "Possible meningitis",
+      { id: "hrf-mening", tier: "emergency", call911: true, group: "mening", why: "Possible meningitis",
         // Confusion and feeling very unwell from the "Cervicogenic Headache"
         // document (v1.0, 28 Sep 2026).
         text: "Do you have a fever with a stiff neck, a new rash, or are you very drowsy, confused or feeling very unwell?" },
-      { id: "hrf-headinjury", tier: "emergency", why: "Possible bleeding after a head injury",
+      { id: "hrf-headinjury", tier: "emergency", call911: true, why: "Possible bleeding after a head injury",
         text: "Did the headache start after a blow to the head, and since then have you vomited more than once, become very drowsy or confused, or is the headache getting worse?" },
       // Shared with the neck and base of the neck (group "trauma5d"): asked once.
-      { id: "hrf-trauma5d", tier: "emergency", group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
+      { id: "hrf-trauma5d", tier: "emergency", call911: true, group: "trauma5d", why: "Getting worse, or new in the last few days, after an accident or a hard knock: possible damage to a neck artery or the brain",
         text: "Since a car accident or a hard knock to your head or neck, are dizziness or any of these getting quickly worse, or did they start in the last few days: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
       { id: "hrf-trauma5d-doc", sameDay: true, tier: "urgent", group: "trauma5d-doc", why: "Ongoing dizziness or nerve signs after an accident or a hard knock need a doctor today",
         text: "Since a car accident or a hard knock to your head or neck, have you had dizziness that keeps coming back or will not go away, or any of these, even if they are not getting worse: double vision, slurred speech, trouble swallowing, sudden falls or blackouts, feeling sick, numbness in your face or around your lips, or eyes that flicker or jump?" },
@@ -1086,7 +1101,7 @@ export const EXTRA_REGIONS = {
       { id: "hrf-pregnancy", tier: "urgent", why: "Possible pre-eclampsia or other pregnancy-related cause",
         text: "Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache?" },
       // Shared with the neck (group "cadsevere", Chandra 28 Sep 2026): asked once.
-      { id: "hrf-cad-severe", tier: "emergency", group: "cadsevere", why: "Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear",
+      { id: "hrf-cad-severe", tier: "emergency", call911: true, group: "cadsevere", why: "Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear",
         text: "Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly?" },
       { id: "hrf-cad", tier: "urgent", group: "cad", why: "Early sign of a neck artery tear can be pain alone (IFOMPT framework)",
         text: "Did a new headache with neck pain, different from any you have had before but not severe, start after a neck manipulation or sudden jolt?" }
@@ -1196,11 +1211,11 @@ export const EXTRA_REGIONS = {
   arm: {
     name: "Upper arm",
     redFlags: [
-      { id: "arf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain is often felt down the inside of the arm (T1)",
+      { id: "arf-cardiac", tier: "emergency", call911: true, group: "cardiac", why: "Heart pain is often felt down the inside of the arm (T1)",
         text: "Is the pain in your arm, especially the inside of the left arm, brought on by effort, or does it come with chest tightness, shortness of breath, sweating, or jaw pain?" },
-      { id: "arf-clotlung", tier: "emergency", why: "Possible clot in the arm that has travelled to the lung",
+      { id: "arf-clotlung", tier: "emergency", call911: true, why: "Possible clot in the arm that has travelled to the lung",
         text: "Has your whole arm suddenly become swollen, heavy, or bluish, and are you also short of breath or have chest pain?" },
-      { id: "arf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+      { id: "arf-stroke", tier: "emergency", call911: true, group: "stroke", why: "Possible stroke",
         text: "Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "arf-rhabdo", tier: "emergency", why: "Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
         text: "After very hard exercise, is your arm hugely swollen and very painful, and is your urine dark like cola?" },
@@ -1458,9 +1473,9 @@ export const EXTRA_REGIONS = {
         text: "Is your forearm pain getting worse and worse, with the forearm tight and swollen and much worse when your fingers are moved, especially under a cast or tight bandage?" },
       { id: "frf-necfasc", tier: "emergency", why: "Possible severe skin and tissue infection (necrotising fasciitis)",
         text: "Is there a hot, swollen, red area on your forearm that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
-      { id: "frf-cardiac", tier: "emergency", group: "cardiac", why: "Heart pain can be felt down the inside of the arm and forearm",
+      { id: "frf-cardiac", tier: "emergency", call911: true, group: "cardiac", why: "Heart pain can be felt down the inside of the arm and forearm",
         text: "Is the pain on the inside of your left forearm or arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?" },
-      { id: "frf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+      { id: "frf-stroke", tier: "emergency", call911: true, group: "stroke", why: "Possible stroke",
         text: "Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "frf-cellulitis", sameDay: true, tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
         text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
@@ -1589,7 +1604,7 @@ export const EXTRA_REGIONS = {
         text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?" },
       { id: "wrf-bite", tier: "emergency", group: "handbite", why: "Possible tendon sheath or deep hand infection; needs urgent surgical review",
         text: "Did you have a cut, bite, or puncture on the wrist or hand, and is it now swollen, red, and very painful to move the fingers?" },
-      { id: "wrf-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+      { id: "wrf-stroke", tier: "emergency", call911: true, group: "stroke", why: "Possible stroke",
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "wrf-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS); early treatment matters",
         text: "Since a wrist injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that even light touch hurts?" },
@@ -1720,7 +1735,7 @@ export const EXTRA_REGIONS = {
         text: "Was paint, grease, oil, or fluid injected into your hand under pressure (spray gun, grease gun), even if the wound looks tiny?" },
       { id: "hnd-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
         text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?" },
-      { id: "hnd-stroke", tier: "emergency", group: "stroke", why: "Possible stroke",
+      { id: "hnd-stroke", tier: "emergency", call911: true, group: "stroke", why: "Possible stroke",
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "hnd-felon", sameDay: true, tier: "urgent", why: "Possible fingertip or nail-fold infection (felon or paronychia); same-day review",
         text: "Is there a tense, throbbing, swollen fingertip, or pus around the nail?" },
@@ -1845,11 +1860,11 @@ export const EXTRA_REGIONS = {
   hip: {
     name: "Hip & groin",
     redFlags: [
-      { id: "hpf-aaa", tier: "emergency", why: "Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
+      { id: "hpf-aaa", tier: "emergency", call911: true, why: "Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
         text: "Do you have a sudden, severe pain in your back, tummy, or groin, with a pulsing feeling in your tummy, or feeling faint or sweaty?" },
       { id: "hpf-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
         text: "Is your hip very painful with a fever, and can you not put weight on the leg (or is a child suddenly refusing to walk and feverish)?" },
-      { id: "hpf-ectopic", tier: "emergency", why: "Possible ectopic pregnancy",
+      { id: "hpf-ectopic", tier: "emergency", call911: true, why: "Possible ectopic pregnancy",
         text: "Could you be pregnant, and do you have sudden one-sided pain low in your tummy or groin, bleeding, or feeling faint?" },
       { id: "hpf-torsion", tier: "emergency", why: "Possible testicular torsion",
         text: "Do you have sudden, severe pain in a testicle?" },
@@ -1983,7 +1998,7 @@ export const EXTRA_REGIONS = {
   thigh: {
     name: "Thigh",
     redFlags: [
-      { id: "tgf-pe", tier: "emergency", group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
+      { id: "tgf-pe", tier: "emergency", call911: true, group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
         text: "Is your thigh or calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
       { id: "tgf-compartment", tier: "emergency", why: "Possible compartment syndrome of the thigh",
         text: "Is your thigh pain getting worse and worse, with the thigh tense and swollen, especially after a heavy knock or crush?" },
@@ -2120,7 +2135,7 @@ export const EXTRA_REGIONS = {
   leg: {
     name: "Lower leg (calf & shin)",
     redFlags: [
-      { id: "lgf-pe", tier: "emergency", group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
+      { id: "lgf-pe", tier: "emergency", call911: true, group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
         text: "Is your calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
       { id: "lgf-compartment", tier: "emergency", why: "Possible acute compartment syndrome",
         text: "Is your lower leg pain getting worse and worse, with the leg tight and swollen and much worse when your toes are moved, especially after an injury or under a cast?" },
@@ -2270,7 +2285,7 @@ export const EXTRA_REGIONS = {
     redFlags: [
       { id: "af-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
         text: "Is your ankle hot, red, and swollen, with a fever or feeling unwell?" },
-      { id: "af-pe", tier: "emergency", group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
+      { id: "af-pe", tier: "emergency", call911: true, group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
         text: "Is your calf or ankle swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
       { id: "af-ischaemia", tier: "emergency", group: "limbischaemia", why: "Possible blocked artery",
         text: "Has your foot suddenly become cold, pale, numb, or painful at rest?" },

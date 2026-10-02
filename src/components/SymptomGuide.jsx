@@ -4,6 +4,7 @@ import {
   REGIONS, GENERAL_RED_FLAGS, PAIN_CHARACTER, SPECIAL_CARDS,
   classifyPainType, isRelevant, shouldStop, answeredRegionCount, computeResults,
 } from '../data/symptomGuide'
+import { emergencyLevel, EMERGENCY_ADVICE, EMERGENCY_SHORT } from '../data/emergencyAdvice'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -121,12 +122,12 @@ export default function SymptomGuide({ regionOptions }) {
       <Fade k="flagexit">
         <div style={{ ...card, borderColor: emergency ? 'rgba(239,68,68,0.6)' : 'rgba(245,158,11,0.55)', background: emergency ? 'rgba(239,68,68,0.08)' : 'rgba(245,158,11,0.07)' }}>
           <strong style={{ color: emergency ? '#fca5a5' : '#fcd34d', fontSize: 15 }}>
-            {emergency ? 'Please seek emergency care now' : 'Please see a doctor promptly'}
+            {emergency ? EMERGENCY_ADVICE[emergency].title : 'Please see a doctor promptly'}
           </strong>
           <p style={{ fontSize: 13, lineHeight: 1.65, color: 'rgba(255,255,255,0.8)', margin: '8px 0 0' }}>
             {emergency
-              ? 'Based on what you selected, this needs emergency assessment — call 911 or go to the nearest emergency department now. This guide will stop here.'
-              : 'Some of what you selected should be checked by a physician before physiotherapy. Please see your family physician, or a walk-in clinic if you do not have one. If your symptoms are severe or getting worse quickly, call 911.'}
+              ? EMERGENCY_SHORT[emergency]
+              :'Some of what you selected should be checked by a physician before physiotherapy. Please see your family physician, or a walk-in clinic if you do not have one. If your symptoms are severe or getting worse quickly, call 911.'}
           </p>
         </div>
         <p style={{ ...label, marginTop: 14, display: 'block' }}>You selected</p>
@@ -164,7 +165,8 @@ export default function SymptomGuide({ regionOptions }) {
     const submit = () => {
       if (flags.length) {
         const picked = all.filter((f) => flags.includes(f.id))
-        setFlagExit({ picked, emergency: picked.some((f) => f.tier === 'emergency') })
+        // 'call911' | 'goNow' | 'labour', or null for see-a-doctor.
+        setFlagExit({ picked, emergency: emergencyLevel(picked) })
         return
       }
       setStepIndex(1)

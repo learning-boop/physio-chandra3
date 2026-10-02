@@ -13,7 +13,7 @@ reviewed_on: 2026-09-25
 
 ## red flags
 - Is your ankle hot, red, and swollen, with a fever or feeling unwell? | emergency | Possible joint infection (septic arthritis)
-- Is your calf or ankle swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | emergency | Possible blood clot that has travelled to the lung
+- Is your calf or ankle swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung
 - Has your foot suddenly become cold, pale, numb, or painful at rest? | emergency | Possible blocked artery
 - Is there a hot, red area around your ankle that is spreading fast, with pain far worse than it looks, or feeling very unwell? | emergency | Possible severe skin and tissue infection
 - Do you have diabetes, and is your foot or ankle hot, red, and swollen (even if it does not hurt much), or is there a wound that is not healing? | urgent | Possible Charcot foot or diabetic foot infection; same-day review protects the foot

@@ -12,7 +12,7 @@ reviewed_on: 2026-09-25
 ---
 
 ## red flags
-- Is your thigh or calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | emergency | Possible blood clot that has travelled to the lung
+- Is your thigh or calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung
 - Is your thigh pain getting worse and worse, with the thigh tense and swollen, especially after a heavy knock or crush? | emergency | Possible compartment syndrome of the thigh
 - After very hard exercise, is your thigh hugely swollen and very painful, and is your urine dark like cola? | emergency | Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys
 - Is there a hot, red area on your thigh that is spreading fast, with pain far worse than it looks, or feeling very unwell? | emergency | Possible severe skin and tissue infection

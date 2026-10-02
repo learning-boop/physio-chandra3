@@ -15,9 +15,9 @@ reviewed_on: DRAFT prepared 24 Sep 2026, awaiting Chandra's review
 ---
 
 ## red flags
-- Is the pain in your arm, especially the inside of the left arm, brought on by effort, or does it come with chest tightness, shortness of breath, sweating, or jaw pain? | emergency | Heart pain is often felt down the inside of the arm (T1)
-- Has your whole arm suddenly become swollen, heavy, or bluish, and are you also short of breath or have chest pain? | emergency | Possible clot in the arm that has travelled to the lung
-- Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | emergency | Possible stroke
+- Is the pain in your arm, especially the inside of the left arm, brought on by effort, or does it come with chest tightness, shortness of breath, sweating, or jaw pain? | 911 | Heart pain is often felt down the inside of the arm (T1)
+- Has your whole arm suddenly become swollen, heavy, or bluish, and are you also short of breath or have chest pain? | 911 | Possible clot in the arm that has travelled to the lung
+- Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking? | 911 | Possible stroke
 - After very hard exercise, is your arm hugely swollen and very painful, and is your urine dark like cola? | emergency | Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys
 - Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever? | urgent | Possible skin or lymph infection (cellulitis or lymphangitis); same-day review
 - Has your whole arm become swollen, heavy, or bluish over a day or two, especially after a drip or line in the arm, or heavy overhead exercise? | urgent | Possible blood clot in the arm (same-day review)

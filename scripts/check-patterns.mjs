@@ -511,7 +511,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
   const flagsOf = (ids) => regionRedFlags(Z(ids), Z(ids))
   const neck = flagsOf(['neck'])
-  check('A1: the neck emergency page has 5 questions', neck.filter((f) => f.tier === 'emergency').length === 5, neck.filter((f) => f.tier === 'emergency').map((f) => f.id))
+  // 6 since the spinal cord question was split into 911 and go-now halves (2 Oct 2026).
+  check('A1: the neck emergency page has 6 questions', neck.filter((f) => f.tier === 'emergency').length === 6, neck.filter((f) => f.tier === 'emergency').map((f) => f.id))
   check('A2: the neck doctor page has 3 own questions (plus the general fever/cancer one = 4)', neck.filter((f) => f.tier !== 'emergency').length === 3, neck.filter((f) => f.tier !== 'emergency').map((f) => f.id))
   const nh = flagsOf(['neck', 'head']).map((f) => f.id)
   check('A1: neck + head asks the sudden headache and stroke signs once (the neck\'s merged question)',
@@ -552,6 +553,46 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     cautious.length < both.length && cautious.length > wristOnly.length - 1, { both: both.length, cautious: cautious.length, wristOnly: wristOnly.length })
   check('emergency questions still come before doctor questions',
     cautious.findIndex((f) => f.tier !== 'emergency') > cautious.map((f) => f.tier).lastIndexOf('emergency'), cautious.map((f) => f.tier))
+}
+
+// ── 16. 911 or go to emergency now (Chandra, 2 Oct 2026; content/regions/_REVIEW-911-split.md) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const { emergencyLevel } = await imp('src/data/emergencyAdvice.js')
+  const { injuryFlow } = await imp('src/data/injuryScreen.js')
+  const flags = Object.values(REGIONS).flatMap((r) => r.redFlags)
+  const byId = Object.fromEntries(flags.map((f) => [f.id, f]))
+  const em = flags.filter((f) => f.tier === 'emergency')
+  check('911 split: 46 region flags call 911 (41 + the 4 leg-weakness halves + pregnancy bleeding)',
+    em.filter((f) => f.call911).length === 46, em.filter((f) => f.call911).map((f) => f.id))
+  // 49: the base of the neck's recent-crash flag (ctj.md:34) is the neck injury screen, not a flag.
+  check('911 split: 49 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 49, em.filter((f) => !f.call911).map((f) => f.id))
+  check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
+  // A shared group must lead to the same place in every area that asks it.
+  const byGroup = {}
+  em.forEach((f) => [].concat(f.group || []).forEach((g) => (byGroup[g] = byGroup[g] || []).push(f)))
+  const mixed = Object.entries(byGroup).filter(([, fs]) => new Set(fs.map((f) => !!f.call911)).size > 1).map(([g]) => g)
+  check('911 split: every shared group is all 911 or all go-now', !mixed.length, mixed)
+  check('911 split: heart, stroke, lung clot and aorta call 911',
+    ['nrf-cardiac', 'hrf-stroke', 'kf-pe', 'crf-aorta', 'rf-aaa', 'hrf-thunderclap'].every((id) => byId[id].call911))
+  check('911 split: cauda equina, hot joint, compartment syndrome and fracture go now',
+    ['rf-saddle', 'rf-bladder', 'kf-septic', 'lgf-compartment', 'rf-fracture'].every((id) => !byId[id].call911))
+  check('911 split: emergencyLevel picks 911 over go-now, and go-now over labour',
+    emergencyLevel([byId['rf-saddle'], byId['rf-aaa']]) === 'call911' &&
+    emergencyLevel([byId['rf-saddle'], byId['prf-pregnancy']]) === 'goNow' &&
+    emergencyLevel([byId['prf-pregnancy']]) === 'labour' &&
+    emergencyLevel([{ tier: 'urgent' }]) === null)
+  check('911 split: pregnancy bleeding is 911, waters or tightenings go to labour and delivery',
+    byId['prf-pregnancy-bleed'].call911 && byId['prf-pregnancy'].goTo === 'labour' && !byId['prf-pregnancy'].call911)
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const neckInjury = injuryFlow(Z(['neck']), { 'neck:I1': 'yes', 'neck:I2': 'h48', 'neck:I3': 'yes' })
+  check('911 split: a high-risk neck injury in the last 48 hours calls 911', neckInjury.route === 'emergency' && neckInjury.call911, neckInjury)
+  const thigh = injuryFlow(Z(['thigh']), { 'thigh:I1': 'fall', 'thigh:I2': 'yes' })
+  check('911 split: a possible femur fracture calls 911', thigh.route === 'emergency' && thigh.call911, thigh)
+  const { SCREENS } = await imp('src/data/injuryScreen.js')
+  const injury911 = SCREENS.flatMap((sc) => sc.questions).flatMap((q) => q.options || []).filter((o) => o.call911).map((o) => o.why)
+  check('911 split: in the limb injury screens only the hip, pelvis and femur fractures call 911', injury911.length === 3, injury911)
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

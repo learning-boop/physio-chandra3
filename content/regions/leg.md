@@ -12,7 +12,7 @@ reviewed_on: 2026-09-25
 ---
 
 ## red flags
-- Is your calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | emergency | Possible blood clot that has travelled to the lung
+- Is your calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung
 - Is your lower leg pain getting worse and worse, with the leg tight and swollen and much worse when your toes are moved, especially after an injury or under a cast? | emergency | Possible acute compartment syndrome
 - Has your foot or lower leg suddenly become cold, pale, numb, or painful at rest? | emergency | Possible blocked artery (acute limb ischaemia)
 - Is there a hot, red area on your leg that is spreading fast, with pain far worse than it looks, or feeling very unwell? | emergency | Possible severe skin and tissue infection

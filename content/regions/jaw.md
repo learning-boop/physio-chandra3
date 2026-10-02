@@ -15,8 +15,8 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 ## red flags
 <!-- The heart question is shown once when the neck is drawn too. -->
 - Is your jaw stuck open, so you cannot close your mouth? | emergency | Jaw dislocation needs urgent reduction
-- Is pain in your jaw brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | emergency | Heart pain can be felt in the jaw
-- Has one side of your face suddenly drooped or become weak? | emergency | Possible stroke or facial nerve palsy
+- Is pain in your jaw brought on by effort, or does it come with chest tightness, shortness of breath, or sweating? | 911 | Heart pain can be felt in the jaw
+- Has one side of your face suddenly drooped or become weak? | 911 | Possible stroke or facial nerve palsy
 - Did this start after a blow to the jaw or face, and your teeth no longer meet the way they used to? | urgent | Possible jaw fracture
 - If you are over 50: do your jaw muscles ache when chewing and ease when you stop, or is your scalp or temple tender, or has your vision changed? | urgent | Possible giant cell arteritis. Needs same-day medical review to protect eyesight
 - Is there swelling of your face or jaw with a fever, or a bad taste or discharge in your mouth? | urgent | Possible dental or jaw infection (doctor or dentist)
