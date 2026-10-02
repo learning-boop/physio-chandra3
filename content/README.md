@@ -16,6 +16,7 @@ content/
   reference/      clinician references the site reasons with (never shown to visitors)
     referred-pain.md   → src/data/referralMap.js
     cervical-radiculopathy.md, upper-cervical.md, neural-mechanosensitivity.md   (condition documents' reasoning appendices)
+    cervical-conditions-manual.md   (AIM Theory Manual 2023, Chapter 2.1: dizziness, myelopathy, radiculopathy)
 ```
 
 Files starting with `_` are templates, examples and instructions, never data.

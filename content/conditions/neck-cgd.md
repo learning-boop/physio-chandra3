@@ -44,6 +44,8 @@ A feeling of being off-balance or unsteady that may come from the neck. Your bra
 - Turning your head or holding it in one position (desk work, driving, looking up at a shelf) brings it on
 - Episodes that last minutes to hours, often with neck stiffness and a headache at the back of the head
 - It follows the neck: better when the neck is better, worse when neck pain flares
+- Eyes tiring easily, needing to concentrate to read, or trouble judging distances
+- Often worse when you are tired or stressed, and stronger when the neck hurts more
 
 ## homeCare
 - Change position every 30 to 45 minutes during desk work or driving, and set screens at eye level
@@ -64,3 +66,6 @@ A feeling of being off-balance or unsteady that may come from the neck. Your bra
 - Sensorimotor: joint position error (over 4.5 degrees abnormal), smooth pursuit neck torsion test, balance (Romberg, tandem, single-leg).
 - Management: education; upper-cervical mobilisation and SNAGs after screening (low to very low certainty, Carrasco-Uribarren 2025; Reid 2015); position-sense and eye-head retraining, balance; neck strength and endurance; ergonomics; add vestibular rehab if an inner-ear problem coexists. No thrust manipulation without full vascular screening (IFOMPT 2023).
 - Outcomes: Dizziness Handicap Inventory and Neck Disability Index.
+- AIM Theory Manual 2023 (pp. 236-254; content/reference/cervical-conditions-manual.md): Reiley 2017 stepwise algorithm (history, triage, vestibular, detailed cervical exam, then torsion, relocation and movement sense tests). JPE over 7.1 cm at 90 cm; tracing over 9 (zigzag) or 10 (figure-of-8) errors. Clinical SPNTT sens 27%, spec 79%: a positive helps rule in. Cervical torsion test (nystagmus over 20/s) and head relocation best separate CGD from BPPV (L'Heureux-Lebeau 2014).
+- Visual symptoms common with neck pain: needing to concentrate to read, visual fatigue, judging distances, light sensitivity. Double vision, red eyes or words moving point elsewhere. Torsion balance test is the only balance test that suggests a neck source.
+- Management evidence: SNAGs or Maitland to the upper cervical spine plus home exercise, benefit to 12 months (Reid 2014, 2015); neck exercise with a cognitive behavioural approach in chronic WAD dizziness (Treleaven 2016); head relocation practice 85% vs vestibular rehab 18% in dizzy mTBI with abnormal proprioception (Hammerle 2019). Tailor manual therapy and exercise plus sensorimotor training to the impairments found.

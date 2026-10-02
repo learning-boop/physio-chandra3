@@ -62,6 +62,7 @@ A nerve in the neck has become irritated or squeezed where it leaves the spine, 
 
 ## homeCare
 - Rest your hand on top of your head, or support your arm on a pillow, when the arm pain flares
+- Early on, a position that eases the arm is fine, even if it is not "good posture"; straightening up can wait until the arm settles
 - Change position often; avoid long spells of looking up or looking down at a screen
 - Keep moving gently within comfort; complete rest or a neck collar is rarely needed
 - Sleep with a pillow that keeps your neck level, and avoid lying on the painful side if it makes the arm worse
@@ -84,4 +85,7 @@ A nerve in the neck has become irritated or squeezed where it leaves the spine, 
 - Acute: exercise with mobilising and stabilising elements (C); low-level laser (C); possible short-term collar use (C).
 - Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.
 - Chronic: combined exercise (stretching and strength) plus cervical and thoracic manual therapy (B); education to encourage occupational and exercise activity (B); intermittent traction (B); neural mobilisation (Basson 2017).
+- AIM Theory Manual 2023 (pp. 265-277; content/reference/cervical-conditions-manual.md): natural history, most resolve by 6 months, 50% fully by 6-12 months, 83% with a disc herniation by 24-36 months. Rule in: Rubinstein (history + Spurling + traction relief + Valsalva) or Thoomes (history + Spurling + axial traction relief + arm squeeze); rule out: 4 negative ULTTs (1, 2a, 2b, 3) + negative arm squeeze.
+- Prognosis: favourable with physiotherapy (Cleland 2007) if under 54, non-dominant arm, looking down not worse, multimodal care (3 of 4, 85%); poorer with longer duration, higher baseline pain and disability, less rotation to the affected side. MCID NDI 8.5, PSFS 2.2, NPRS 2.2.
+- Treatment sequence: open the IVF first (flexion, contralateral rotation and side bend; contralateral lateral glides if no peripheralisation), manual traction to test for centralisation, then intermittent mechanical traction (Fritz 2014; Raney 2009 rule, not validated). Thoracic thrust better than sham short term (Young 2019); cervical thrust only gapping or flexion techniques. Neural: unload, treat the cervical interface, sliders, then tensioners once conduction signs settle. Early exercise tends to aggravate; leave an adaptive unloading posture alone early on. Surgery for progressive motor deficit despite care (25% still debilitating pain at 12 months).
 - Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.); Wainner 2003; Thoomes 2018; Wong 2014; Iyer and Kim 2016; Thoomes 2013; Fritz 2014; Basson 2017; Cook 2010; Rushton 2023. Record NDI (or PROMIS) and NPRS at the first visit.

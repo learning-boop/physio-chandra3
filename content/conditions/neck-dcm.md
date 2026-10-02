@@ -53,6 +53,8 @@ Please see your family doctor soon. These symptoms need a medical assessment, wh
 - Avoid long spells with the neck fully bent up or down; set screens at eye level
 - Do not have your neck manipulated ("cracked") while you have these symptoms
 - Note any changes in your hands, walking or bladder, and tell your doctor or physiotherapist
+- Avoid positions or movements that bring on the tingling or electric feeling
+- If your hands or walking change quickly, or your bladder or bowel control changes, get medical help straight away
 
 ## seePhysioIf
 - You would like your hands, walking and balance checked; we will write to your family doctor with what we find
@@ -65,3 +67,6 @@ Please see your family doctor soon. These symptoms need a medical assessment, wh
 - Tromner (most sensitive screen), hyperreflexia, clonus, Lhermitte; 10-s grip and release, finger escape, 10-s step test, tandem gait, Romberg.
 - Grade with mJOA (mild 15-17, moderate 12-14, severe 11 or less) and Nurick; screen the lumbar spine for tandem stenosis.
 - Contraindicated: cervical HVLA manipulation. Traction only with medical clearance.
+- AIM Theory Manual 2023 (pp. 255-264; content/reference/cervical-conditions-manual.md): Cook cluster 3 or 4 of 5, post-test probability 94-99%. MRI sens 79-95%, spec 82-88%; X-ray does not rule in or out. Differentials: MS, B12 deficiency, ALS, nerve entrapment, stroke, Guillain-Barre, tumour.
+- Performance cut-offs (10 s; one arm and one leg test): foot tapping 24 or fewer (normal 31); grip and release F 11 or fewer, M 16 or fewer (normal 20/22); triangle step 17 or fewer (24); step test 13 or fewer (20); tally counter below 33 (47). Grip dynamometer MCID 5-6 kg. Normal ageing lowers all. Also JOA, European Myelopathy Score, Nurick.
+- Conservative care (low-moderate evidence): monitor neuro status every visit; thoracic extension mobilisation or manipulation for axial extension; DNF stabilisation, postural retraining in axial extension, diaphragmatic breathing; balance, aerobic, grip and lower limb strength, gait aids; avoid positions that worsen neuro signs. The manual lists manual and mechanical traction as options: here, only with medical clearance. After surgery about a third improve, a third stay the same, a third worsen.

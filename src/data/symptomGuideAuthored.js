@@ -4027,6 +4027,7 @@ export const AUTHORED = [
         "Management: education and reassurance; relative rest 24 to 48 h at most, then graded return; sub-symptom-threshold aerobic exercise (start around 55% of max HR, progress to about 70%); cervical treatment when the neck is involved; vestibular and oculomotor rehabilitation, with repositioning for BPPV; Return to Sport / School / Work plans following the BC CATT protocols. Return to at-risk activity only after medical clearance.",
         "Note mood, sleep and headache type for co-management with the GP. Persisting symptoms (over 4 weeks): about 1 in 6 adults, 1 in 4 young people.",
         "The head injury screen records when it happened and whether a doctor or NP has seen it (head:I2, head:I10); \"said it was not a concussion\" is recorded there, not scored.",
+        "AIM Theory Manual 2023 (pp. 236-254, 278; content/reference/cervical-conditions-manual.md): tell primary concussion from vestibular, cervicogenic and oculomotor dysfunction, and refer complex cases to a concussion-trained physiotherapist. History alone cannot separate the dizziness sources after concussion (Reneker 2015A); vestibular tests have the strongest consensus (Reneker 2015B). CCFT impaired in 81.6% of dizzy post-concussion patients (Reneker 2018). With abnormal neck proprioception and no vestibular or central cause, head relocation practice helped 85% vs 18% with vestibular rehab (Hammerle 2019).",
         "Sources: BC Guidelines, Concussion / mTBI (2024, revised May 2025); Patricios 2023 (Amsterdam consensus, BJSM); Leddy 2023; Schneider 2023; PedsConcussion living guideline 2024; Ontario Neurotrauma Foundation adult living guideline; Parachute Canadian Guideline on Concussion in Sport, 2nd ed. 2024 (CRT6); CATT (cattonline.com) 2024 protocols; Cancelliere 2023."
       ]
     },
@@ -7193,7 +7194,9 @@ export const AUTHORED = [
         "It started with neck pain or stiffness: after a whiplash injury or concussion, or gradually alongside long-standing neck pain",
         "Turning your head or holding it in one position (desk work, driving, looking up at a shelf) brings it on",
         "Episodes that last minutes to hours, often with neck stiffness and a headache at the back of the head",
-        "It follows the neck: better when the neck is better, worse when neck pain flares"
+        "It follows the neck: better when the neck is better, worse when neck pain flares",
+        "Eyes tiring easily, needing to concentrate to read, or trouble judging distances",
+        "Often worse when you are tired or stressed, and stronger when the neck hurts more"
       ],
       "homeCare": [
         "Change position every 30 to 45 minutes during desk work or driving, and set screens at eye level",
@@ -7213,7 +7216,10 @@ export const AUTHORED = [
         "Cervical: AROM, upper-cervical PAIVMs (C0-C3), flexion-rotation test, palpation reproducing dizziness.",
         "Sensorimotor: joint position error (over 4.5 degrees abnormal), smooth pursuit neck torsion test, balance (Romberg, tandem, single-leg).",
         "Management: education; upper-cervical mobilisation and SNAGs after screening (low to very low certainty, Carrasco-Uribarren 2025; Reid 2015); position-sense and eye-head retraining, balance; neck strength and endurance; ergonomics; add vestibular rehab if an inner-ear problem coexists. No thrust manipulation without full vascular screening (IFOMPT 2023).",
-        "Outcomes: Dizziness Handicap Inventory and Neck Disability Index."
+        "Outcomes: Dizziness Handicap Inventory and Neck Disability Index.",
+        "AIM Theory Manual 2023 (pp. 236-254; content/reference/cervical-conditions-manual.md): Reiley 2017 stepwise algorithm (history, triage, vestibular, detailed cervical exam, then torsion, relocation and movement sense tests). JPE over 7.1 cm at 90 cm; tracing over 9 (zigzag) or 10 (figure-of-8) errors. Clinical SPNTT sens 27%, spec 79%: a positive helps rule in. Cervical torsion test (nystagmus over 20/s) and head relocation best separate CGD from BPPV (L'Heureux-Lebeau 2014).",
+        "Visual symptoms common with neck pain: needing to concentrate to read, visual fatigue, judging distances, light sensitivity. Double vision, red eyes or words moving point elsewhere. Torsion balance test is the only balance test that suggests a neck source.",
+        "Management evidence: SNAGs or Maitland to the upper cervical spine plus home exercise, benefit to 12 months (Reid 2014, 2015); neck exercise with a cognitive behavioural approach in chronic WAD dizziness (Treleaven 2016); head relocation practice 85% vs vestibular rehab 18% in dizzy mTBI with abnormal proprioception (Hammerle 2019). Tailor manual therapy and exercise plus sensorimotor training to the impairments found."
       ]
     },
     "resolved": [
@@ -7386,7 +7392,9 @@ export const AUTHORED = [
         "Reduce fall risk at home: good lighting, handrails, non-slip mats",
         "Avoid long spells with the neck fully bent up or down; set screens at eye level",
         "Do not have your neck manipulated (\"cracked\") while you have these symptoms",
-        "Note any changes in your hands, walking or bladder, and tell your doctor or physiotherapist"
+        "Note any changes in your hands, walking or bladder, and tell your doctor or physiotherapist",
+        "Avoid positions or movements that bring on the tingling or electric feeling",
+        "If your hands or walking change quickly, or your bladder or bowel control changes, get medical help straight away"
       ],
       "seePhysioIf": [
         "You would like your hands, walking and balance checked; we will write to your family doctor with what we find",
@@ -7399,7 +7407,10 @@ export const AUTHORED = [
         "Cook cluster (gait deviation, +Hoffmann, inverted supinator, +Babinski, age over 45): 3 or more of 5 rules in; 1 or fewer helps rule out.",
         "Tromner (most sensitive screen), hyperreflexia, clonus, Lhermitte; 10-s grip and release, finger escape, 10-s step test, tandem gait, Romberg.",
         "Grade with mJOA (mild 15-17, moderate 12-14, severe 11 or less) and Nurick; screen the lumbar spine for tandem stenosis.",
-        "Contraindicated: cervical HVLA manipulation. Traction only with medical clearance."
+        "Contraindicated: cervical HVLA manipulation. Traction only with medical clearance.",
+        "AIM Theory Manual 2023 (pp. 255-264; content/reference/cervical-conditions-manual.md): Cook cluster 3 or 4 of 5, post-test probability 94-99%. MRI sens 79-95%, spec 82-88%; X-ray does not rule in or out. Differentials: MS, B12 deficiency, ALS, nerve entrapment, stroke, Guillain-Barre, tumour.",
+        "Performance cut-offs (10 s; one arm and one leg test): foot tapping 24 or fewer (normal 31); grip and release F 11 or fewer, M 16 or fewer (normal 20/22); triangle step 17 or fewer (24); step test 13 or fewer (20); tally counter below 33 (47). Grip dynamometer MCID 5-6 kg. Normal ageing lowers all. Also JOA, European Myelopathy Score, Nurick.",
+        "Conservative care (low-moderate evidence): monitor neuro status every visit; thoracic extension mobilisation or manipulation for axial extension; DNF stabilisation, postural retraining in axial extension, diaphragmatic breathing; balance, aerobic, grip and lower limb strength, gait aids; avoid positions that worsen neuro signs. The manual lists manual and mechanical traction as options: here, only with medical clearance. After surgery about a third improve, a third stay the same, a third worsen."
       ]
     },
     "resolved": [
@@ -7770,6 +7781,7 @@ export const AUTHORED = [
       ],
       "homeCare": [
         "Rest your hand on top of your head, or support your arm on a pillow, when the arm pain flares",
+        "Early on, a position that eases the arm is fine, even if it is not \"good posture\"; straightening up can wait until the arm settles",
         "Change position often; avoid long spells of looking up or looking down at a screen",
         "Keep moving gently within comfort; complete rest or a neck collar is rarely needed",
         "Sleep with a pillow that keeps your neck level, and avoid lying on the painful side if it makes the arm worse"
@@ -7792,6 +7804,9 @@ export const AUTHORED = [
         "Acute: exercise with mobilising and stabilising elements (C); low-level laser (C); possible short-term collar use (C).",
         "Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.",
         "Chronic: combined exercise (stretching and strength) plus cervical and thoracic manual therapy (B); education to encourage occupational and exercise activity (B); intermittent traction (B); neural mobilisation (Basson 2017).",
+        "AIM Theory Manual 2023 (pp. 265-277; content/reference/cervical-conditions-manual.md): natural history, most resolve by 6 months, 50% fully by 6-12 months, 83% with a disc herniation by 24-36 months. Rule in: Rubinstein (history + Spurling + traction relief + Valsalva) or Thoomes (history + Spurling + axial traction relief + arm squeeze); rule out: 4 negative ULTTs (1, 2a, 2b, 3) + negative arm squeeze.",
+        "Prognosis: favourable with physiotherapy (Cleland 2007) if under 54, non-dominant arm, looking down not worse, multimodal care (3 of 4, 85%); poorer with longer duration, higher baseline pain and disability, less rotation to the affected side. MCID NDI 8.5, PSFS 2.2, NPRS 2.2.",
+        "Treatment sequence: open the IVF first (flexion, contralateral rotation and side bend; contralateral lateral glides if no peripheralisation), manual traction to test for centralisation, then intermittent mechanical traction (Fritz 2014; Raney 2009 rule, not validated). Thoracic thrust better than sham short term (Young 2019); cervical thrust only gapping or flexion techniques. Neural: unload, treat the cervical interface, sliders, then tensioners once conduction signs settle. Early exercise tends to aggravate; leave an adaptive unloading posture alone early on. Surgery for progressive motor deficit despite care (25% still debilitating pain at 12 months).",
         "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.); Wainner 2003; Thoomes 2018; Wong 2014; Iyer and Kim 2016; Thoomes 2013; Fritz 2014; Basson 2017; Cook 2010; Rushton 2023. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
@@ -8071,6 +8086,7 @@ export const AUTHORED = [
         "Acute: advice to remain active (B); home ROM and postural exercise (B); minimise collar use (B); combined exercise plus manual therapy (B); exercise for ROM, strength, endurance, posture, coordination, aerobic and function (B); TENS (C); monitor progress (F).",
         "Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.",
         "Chronic: education on prognosis, pain management and reassurance (C); combined exercise plus manual therapy (C); cervical mobilisation plus individualised exercise with cognitive behavioural principles (C); TENS (C).",
+        "AIM Theory Manual 2023 (pp. 236-254, 279; content/reference/cervical-conditions-manual.md): sensorimotor deficits (position sense, eye movement control, balance) are greatest in WAD with dizziness, then WAD without, then non-traumatic neck pain; visual symptoms are more frequent after whiplash. Test JPE, SPNTT, torsion balance; treat with manual therapy and exercise plus tailored sensorimotor training, delivered with a cognitive behavioural approach (Treleaven 2016). Resource: Whiplash Injury and Chronic Pain (Gross, McMaster, 2019, free).",
         "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Australian WAD guideline 4th ed. (draft) 2023; OPTIMa 2016; Ritchie et al. 2013 and 2015 (WhipPredict); Stiell et al. 2001; Quebec Task Force 1995; Treleaven 2017; ICBC first-12-weeks page (checked Sept 2026, review yearly). Record NDI, NPRS and PSFS at the first visit."
       ]
     },
