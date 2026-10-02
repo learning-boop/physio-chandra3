@@ -23,6 +23,12 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 # upper-neck instability question in the final check when the neck is not
 # drawn. Reasoning appendix: content/reference/upper-cervical.md. Test
 # patients 6 to 8. Marked (cgh) below.
+# 2 Oct 2026: "Concussion.docx" (Conditions/Neck and headache, v1.0): the
+# concussion condition (head-concussion.md); a head injury screen (below,
+# src/data/injuryScreen.js) replaces the "knock in the last 4 weeks" flag;
+# question 8 becomes the document's symptom cluster and question 9 is new.
+# Built with the document's drafted answers to its open items (a) to (d).
+# Test patients 9 to 13. Marked (conc) below.
 ---
 
 ## red flags
@@ -44,13 +50,40 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - If you are over 50: is your scalp or temple tender to touch, do your jaw muscles ache when chewing and ease when you stop, or has your vision changed? | urgent | Possible giant cell arteritis. Needs same-day medical review to protect eyesight   (cgh: vision change)
 - Is this a new kind of headache that started after age 50, or are your headaches getting steadily worse or changing pattern over weeks? | urgent | New or progressive headache needs medical review
 - Is the headache brought on by coughing, sneezing, straining, or exercise, much worse when you lie down or stand up, or there when you wake, with vomiting? | urgent | Pressure-related headache can have a brain cause   (cgh: on waking with vomiting)
-- Did the headache start after a knock to the head or a whiplash injury in the last 4 weeks? | urgent | Possible concussion: medical assessment before physio
+<!-- (conc) Replaced by the head injury screen below:
+- Did the headache start after a knock to the head or a whiplash injury in the last 4 weeks? | urgent | Possible concussion: medical assessment before physio -->
 - Did this new headache start after beginning a new medication? | urgent | Medication side effect: the prescriber should review it
 - Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache? | urgent | Possible pre-eclampsia or other pregnancy-related cause
 <!-- Added 28 Sep 2026 at Chandra's instruction (cervicogenic dizziness review);
      shared with the neck, asked once. -->
 - Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly? | 911 | Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear
 - Did a new headache with neck pain, different from any you have had before but not severe, start after a neck manipulation or sudden jolt? | urgent | Early sign of a neck artery tear can be pain alone (IFOMPT framework)
+
+## injury screen
+<!-- (conc) From "Concussion.docx" (v1.0, 2 Oct 2026): its gate, Q1, Q2 and
+     Q7, and its red flags (BC Guidelines, Concussion / mTBI 2024, Table 1).
+     One question at a time, after the two safety pages; the first answer
+     that routes ends it. The head's own emergency flags above (worsening
+     headache, vomiting, drowsiness, one-sided weakness, the 5 Ds) are not
+     asked again. -->
+I1: Did your symptoms start after a knock to the head, a fall, a crash, or a sudden jolt to the body (like whiplash)?
+- Yes, I remember a specific event
+- I think so, but I am not sure
+- No injury that I know of → skip the screen
+I2: When did it happen?
+- In the last 3 days / 4 days to 4 weeks ago / More than 4 weeks ago / I am not sure
+Asked only in the last 3 days, or when not sure when (I3 to I7):
+I3: Since the injury, have you had a seizure (a fit), or have you passed out, even briefly, in the last 24 hours? | yes → 911
+I4: Since the injury, have you become more confused, restless or agitated, or hard to keep awake; or do you have weakness, numbness or tingling in your arms or legs, or trouble walking steadily? | yes → 911
+I5: Do you have severe pain in the middle of the back of your neck, or are you unable to move your neck, since the injury? | yes → 911, keep the neck still
+I6: Do you take a blood thinner (anticoagulant or antiplatelet medicine), for example warfarin, apixaban, rivaroxaban, dabigatran or clopidogrel? | yes → emergency department today
+I7: Were you hit by a vehicle, thrown from a vehicle, or did you fall from higher than 1 metre (about 3 feet)? | yes → emergency department today
+I8: Since the injury, have you felt very low or hopeless, or had thoughts of harming yourself? | yes → 9-8-8 Suicide Crisis Helpline (911 if in immediate danger), no booking
+I9 (more than 3 days ago): Are your symptoms getting worse rather than better over the days, or are new symptoms appearing? | yes → see your doctor
+I10: Have you seen a doctor or nurse practitioner about this injury?
+- Yes, and they said it was a concussion → on to the questions
+- Yes, and they said it was not a concussion → on to the questions
+- No, not yet → in the last 3 days (or not sure when): see a doctor today, HealthLink BC 8-1-1, education only and no booking; later: see your doctor, booking offered (item a)
 
 ## opening questions
 Q: Your age?
@@ -124,13 +157,24 @@ Q: What tends to bring a headache on? Tick all that apply.
 - Bright light or strong smells
 Ask only if: Where = "Always the same side, starting from the neck", "Both sides, like a tight band or pressure", or "One side, but it can switch sides"
 
-Q: Since your head injury, which of these apply? Tick all that apply.
-- Headache worse with screens or concentrating
+Q: Since the injury, which of these have you noticed? Tick all that apply.   (conc Q3: 1 each)
+- Headache or pressure in the head
 - Dizzy or off balance   (also confirmed in the final safety check: a "yes" there means a doctor today)
+- Brain fog, slowed thinking, or trouble remembering
+- Feeling sick (nausea) since the injury
 - Light or noise bothers me more than before
-- Foggy, or trouble sleeping
-- Neck pain since the injury
-Ask only if: How did it start? = "After a knock to the head or a whiplash injury" (and the 4-week red flag was not ticked)
+- Unusually tired, or sleeping differently
+- More irritable, low or anxious than usual   (shows "Mood and sleep matter in recovery too")
+- Short spins when I roll over in bed, lie down, or look up   (not scored; shows the BPPV card)
+Ask only if: How did it start? = "After a knock to the head or a whiplash injury"; asked first
+
+Q: About the injury and since: which of these apply? Tick all that apply.   (conc, new 2 Oct 2026)
+- I blacked out, felt dazed or confused, or cannot remember what happened around the injury   (conc Q4: 2)
+- Screens, reading, busy places or thinking hard clearly make it worse   (conc Q5: 2; one of the two)
+- Screens, reading, busy places or thinking hard sometimes make it worse   (conc Q5: 1)
+- Neck pain or stiffness, or turning my head brings on dizziness or headache   (conc Q6: 1)
+- None of these
+Ask only if: How did it start? = "After a knock to the head or a whiplash injury"; asked first
 
 ## final check (answers-dependent)
 <!-- (cgh) When the answers point to a neck-related headache (question 1
@@ -191,3 +235,24 @@ Expect: occipital nerve card
 CASE: 8. Neck triggers with throbbing, feeling sick and switching sides
 Answers: Q1 = can switch sides; Q2 = throbbing + feeling sick + light or noise; Q3 = neck movement brings it on
 Expect: migraine card; neck-related headache not on top
+
+<!-- (conc) From "Concussion.docx" (v1.0, 2 Oct 2026): maximum 15, shown from 6. -->
+CASE: 9. Concussion two weeks ago, confirmed by a doctor
+Answers: After a knock; injury screen = yes, 4 days to 4 weeks, not low, not worse, a doctor confirmed it; Q8 = headache + fog + light or noise + tired; Q9 = screens clearly + neck
+Expect: top condition = concussion; route = results
+
+CASE: 10. Knock two days ago, no doctor yet
+Answers: injury screen = yes, in the last 3 days, no to I3 to I8, not seen a doctor
+Expect: route = see a doctor today, no booking
+
+CASE: 11. Knock yesterday while taking a blood thinner
+Answers: injury screen = yes, in the last 3 days, I6 = yes
+Expect: route = emergency department today
+
+CASE: 12. Feeling hopeless since a concussion weeks ago
+Answers: injury screen = yes, more than 4 weeks, I8 = yes
+Expect: route = the 9-8-8 support screen
+
+CASE: 13. A knock with only a headache since
+Answers: After a knock; a doctor said it was not a concussion; Q8 = headache only; Q9 = none
+Expect: must not show = concussion

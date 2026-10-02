@@ -11,20 +11,23 @@
                       to get there (cauda equina, a hot joint, compartment
                       syndrome, a fracture they can walk on). Go to emergency
                       now, driven by someone else.
-   goTo: 'labour' sends a pregnancy flag to labour and delivery instead.
+   goTo: 'labour' sends a pregnancy flag to labour and delivery instead;
+   goTo: 'crisis' (thoughts of self-harm after a head injury) gives the 9-8-8
+   Suicide Crisis Helpline.
    The split, flag by flag: content/regions/_REVIEW-911-split.md.
    ───────────────────────────────────────────────────────────────────────── */
 
 const isEmergency = (f) => f && (f.tier === 'emergency' || f.route === 'emergency')
 
-/** 'call911' | 'goNow' | 'labour' for the picked flags, or null when none
-    is emergency-tier. 911 wins over everything else. */
+/** 'call911' | 'goNow' | 'crisis' | 'labour' for the picked flags, or null
+    when none is emergency-tier. 911 wins over everything else. */
 export function emergencyLevel(flags = []) {
   const em = flags.filter(isEmergency)
   if (!em.length) return null
   if (em.some((f) => f.call911)) return 'call911'
-  if (em.every((f) => f.goTo === 'labour')) return 'labour'
-  return 'goNow'
+  if (em.some((f) => !f.goTo)) return 'goNow'
+  if (em.some((f) => f.goTo === 'crisis')) return 'crisis'
+  return 'labour'
 }
 
 export const EMERGENCY_ADVICE = {
@@ -45,11 +48,19 @@ export const EMERGENCY_ADVICE = {
     text: 'What you selected needs to be checked at the hospital today. Please go to the labour and delivery unit now, or the emergency department if your hospital has no labour and delivery unit. Have someone drive you; do not drive yourself.',
     fallback: 'Call 911 if the bleeding becomes heavy, you feel faint, or it is getting worse quickly.',
   },
+  crisis: {
+    title: 'Please Reach Out for Support Now',
+    text: 'You do not have to manage this alone. Call or text 9-8-8, the Suicide Crisis Helpline, at any time of day or night. Please also see your doctor today.',
+    fallback: 'If you are in immediate danger, or might act on these thoughts, call 911.',
+    button: 'Call 9-8-8',
+    tel: '988',
+  },
 }
 
 /** One sentence for the short symptom guide. */
 export const EMERGENCY_SHORT = {
   call911: 'Based on what you selected, please call 911 now. Do not drive yourself. This guide will stop here.',
   goNow: 'Based on what you selected, please go to your nearest emergency department now, with someone else driving. Call 911 if you cannot get there safely or it is getting worse quickly. This guide will stop here.',
+  crisis: 'Please call or text 9-8-8, the Suicide Crisis Helpline, at any time, and see your doctor today. If you are in immediate danger, call 911. This guide will stop here.',
   labour: 'Based on what you selected, please go to the labour and delivery unit at your hospital now, with someone else driving. Call 911 if the bleeding becomes heavy or you feel faint. This guide will stop here.',
 }

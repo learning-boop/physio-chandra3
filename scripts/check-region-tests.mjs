@@ -527,6 +527,30 @@ const TESTS = {
       answers: { age: '30-49', onset: 'years', duration: 'o3m', D1: ['switch'], D2: ['throb', 'sick', 'lightnoise'],
         D3: ['neckmove'], D5: ['d1to14'], D6: ['upto9'] },
       expect: { notTop: ['head/cgh'], special: 'migraine', route: 'results' } },
+    // "Concussion.docx" (v1.0, 2 Oct 2026): the head injury screen routes
+    // first; the condition needs the knock plus 3 more points (max 15).
+    { name: '9. Concussion two weeks ago, confirmed by a doctor: fog, light, screens and neck',
+      lines: [['head']],
+      answers: { age: '18-29', onset: 'knock', duration: 'd2w', I1: 'yes', I2: 'w4', I8: 'no', I9: 'no', I10: 'confirmed',
+        D8: ['headache', 'foggy', 'sensitive', 'tired'], D9: ['loadclear', 'neck'] },
+      expect: { top: 'head/concussion', route: 'results' } },
+    { name: '10. Knock two days ago, no doctor yet: see a doctor today, no booking',
+      lines: [['head']],
+      answers: { age: '30-49', onset: 'knock', duration: 'd2w', I1: 'yes', I2: 'h72', I3: 'no', I4: 'no', I5: 'no', I6: 'no', I7: 'no', I8: 'no', I10: 'no' },
+      expect: { route: 'urgent' } },
+    { name: '11. Knock yesterday while taking a blood thinner: emergency today',
+      lines: [['head']],
+      answers: { age: 'o64', onset: 'knock', duration: 'd2w', I1: 'yes', I2: 'h72', I3: 'no', I4: 'no', I5: 'no', I6: 'yes' },
+      expect: { route: 'emergency' } },
+    { name: '12. Feeling hopeless since a concussion weeks ago: the 9-8-8 line',
+      lines: [['head']],
+      answers: { age: '18-29', onset: 'knock', duration: 'd12w', I1: 'yes', I2: 'o4w', I8: 'yes' },
+      expect: { route: 'emergency' } },
+    { name: '13. A knock with only a headache since: not concussion',
+      lines: [['head']],
+      answers: { age: '30-49', onset: 'knock', duration: 'd12w', I1: 'yes', I2: 'o4w', I8: 'no', I9: 'no', I10: 'notconc',
+        D1: ['band'], D2: ['pressing'], D8: ['headache'], D9: ['none'] },
+      expect: { not: ['head/concussion'], route: 'results' } },
   ],
   shoulder: [
     // "Outer right upper arm, below the shoulder": an upper-arm mark, which
@@ -894,7 +918,7 @@ const TESTS = {
 }
 
 /* Which injury screen a region's test patients answer with plain I1… keys. */
-const SCREEN_OF = { neck: 'neck', ctj: 'neck', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'leg', ankle: 'ankle', foot: 'foot' }
+const SCREEN_OF = { neck: 'neck', ctj: 'neck', head: 'head', shoulder: 'shoulder', arm: 'arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'leg', ankle: 'ankle', foot: 'foot' }
 
 const zonesOf = (lines) => {
   const seen = new Set(); const out = []

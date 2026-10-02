@@ -179,7 +179,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('dizzy since a head injury → see-a-doctor-today confirmation in the final check',
     ids(['head'], { D8: ['dizzy'] }).includes('pc-trauma5d:urgent'), ids(['head'], { D8: ['dizzy'] }))
   check('head injury without dizziness → no trauma confirmation',
-    !ids(['head'], { D8: ['screens'] }).some((x) => x.startsWith('pc-trauma5d')), ids(['head'], { D8: ['screens'] }))
+    !ids(['head'], { D8: ['foggy'] }).some((x) => x.startsWith('pc-trauma5d')), ids(['head'], { D8: ['foggy'] }))
   check('dizziness ticked on the neck → heart (911) and ear/worsening (doctor today) checks',
     ids(['neck'], { N9: ['dizzy'] }).includes('pc-dizzy-heart:emergency') && ids(['neck'], { N9: ['dizzy'] }).includes('pc-dizzy-doctor:urgent'),
     ids(['neck'], { N9: ['dizzy'] }))
@@ -591,8 +591,41 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const thigh = injuryFlow(Z(['thigh']), { 'thigh:I1': 'fall', 'thigh:I2': 'yes' })
   check('911 split: a possible femur fracture calls 911', thigh.route === 'emergency' && thigh.call911, thigh)
   const { SCREENS } = await imp('src/data/injuryScreen.js')
-  const injury911 = SCREENS.flatMap((sc) => sc.questions).flatMap((q) => q.options || []).filter((o) => o.call911).map((o) => o.why)
+  const injury911 = SCREENS.filter((sc) => !['neck', 'head'].includes(sc.id)).flatMap((sc) => sc.questions).flatMap((q) => q.options || []).filter((o) => o.call911).map((o) => o.why)
   check('911 split: in the limb injury screens only the hip, pelvis and femur fractures call 911', injury911.length === 3, injury911)
+}
+
+// ── 17. Head injury screen ("Concussion.docx" v1.0, 2 Oct 2026) ──
+{
+  const { injuryFlow } = await imp('src/data/injuryScreen.js')
+  const { emergencyLevel } = await imp('src/data/emergencyAdvice.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const head = [{ id: 'head', type: 'head', label: 'head' }]
+  const run = (a) => injuryFlow(head, Object.fromEntries(Object.entries(a).map(([k, v]) => ['head:' + k, v])))
+  const quiet = { I3: 'no', I4: 'no', I5: 'no', I6: 'no', I7: 'no', I8: 'no' }
+  check('head screen: no injury skips it', run({ I1: 'no' }).route === 'continue')
+  check('head screen: the first 3 days asks the emergency questions', run({ I1: 'yes', I2: 'h72' }).next === 'head:I3')
+  check('head screen: after 4 weeks the emergency questions are not asked', run({ I1: 'yes', I2: 'o4w' }).next === 'head:I8')
+  const early = run({ I1: 'yes', I2: 'h72', ...quiet, I10: 'no' })
+  check('head screen: first 3 days, no doctor → doctor today, no booking', early.route === 'urgent' && early.sameDay && early.noBooking, early)
+  const unsureWhen = run({ I1: 'yes', I2: 'unsure', ...quiet, I10: 'no' })
+  check('head screen: not sure when, no doctor → treated as recent', unsureWhen.noBooking === true, unsureWhen)
+  const later = run({ I1: 'yes', I2: 'w4', I8: 'no', I9: 'no', I10: 'no' })
+  check('head screen: later, no doctor → see your doctor, booking offered', later.route === 'urgent' && !later.noBooking && !later.sameDay, later)
+  check('head screen: seen by a doctor → on to the questions', run({ I1: 'yes', I2: 'w4', I8: 'no', I9: 'no', I10: 'confirmed' }).route === 'continue')
+  const seizure = run({ I1: 'yes', I2: 'h72', I3: 'yes' })
+  check('head screen: a seizure or passing out → 911', seizure.route === 'emergency' && seizure.call911, seizure)
+  const neckInj = run({ I1: 'yes', I2: 'h72', I3: 'no', I4: 'no', I5: 'yes' })
+  check('head screen: severe midline neck pain → 911, keep the neck still', neckInj.call911 && neckInj.keepNeckStill, neckInj)
+  const thinner = run({ I1: 'yes', I2: 'h72', I3: 'no', I4: 'no', I5: 'no', I6: 'yes' })
+  check('head screen: blood thinner → emergency department today, not 911',
+    thinner.route === 'emergency' && !thinner.call911 && emergencyLevel([thinner]) === 'goNow', thinner)
+  const crisis = run({ I1: 'yes', I2: 'o4w', I8: 'yes' })
+  check('head screen: thoughts of self-harm → the 9-8-8 screen', emergencyLevel([crisis]) === 'crisis', crisis)
+  check('head: the old "knock in the last 4 weeks" flag is gone (the screen replaces it)',
+    !REGIONS.head.redFlags.some((f) => f.id === 'hrf-concussion'))
+  const conc = REGIONS.head.conditions.find((c) => c.id === 'concussion')
+  check('concussion: only after a knock', conc && JSON.stringify(conc.gates) === JSON.stringify({ requiresOnset: ['knock'] }), conc && conc.gates)
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

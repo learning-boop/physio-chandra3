@@ -754,9 +754,14 @@ export default function PainAssessment() {
   const injuryOutcome = injury.route === 'emergency' || injury.route === 'urgent' ? injury : null
   const injuryFlag = injuryOutcome
     ? { id: '__injury', tier: injuryOutcome.route, sameDay: injuryOutcome.sameDay,
-      call911: !!injuryOutcome.call911, keepNeckStill: injuryOutcome.screen === 'neck' && !!injuryOutcome.call911,
-      text: (SCREENS.find((sc) => sc.id === injuryOutcome.screen) || {}).flag || 'A recent injury (injury screen)',
-      why: { title: injuryOutcome.why, text: TIER_WHY[injuryOutcome.route].text } }
+      call911: !!injuryOutcome.call911,
+      keepNeckStill: !!injuryOutcome.call911 && (injuryOutcome.screen === 'neck' || !!injuryOutcome.keepNeckStill),
+      // The head screen: no booking until a doctor has seen a recent head
+      // injury, and the 9-8-8 support line (../data/injuryScreen.js).
+      noBooking: !!injuryOutcome.noBooking, goTo: injuryOutcome.goTo,
+      // The question answered yes to, else the screen's own line.
+      text: injuryOutcome.question || (SCREENS.find((sc) => sc.id === injuryOutcome.screen) || {}).flag || 'A recent injury (injury screen)',
+      why: { title: injuryOutcome.why, text: injuryOutcome.whyText || TIER_WHY[injuryOutcome.route].text } }
     : null
 
   const pickedFlags = [...safetyChecks.filter((f) => flags.includes(f.id)), ...(injuryFlag ? [injuryFlag] : [])]
@@ -772,6 +777,8 @@ export default function PainAssessment() {
   const doctorFlags = pickedFlags.filter((f) => f.tier !== 'emergency')
   const doctorFlagged = doctorFlags.length > 0 || otherFlagged
   const sameDayFlagged = doctorFlags.some((f) => f.sameDay)
+  // A recent head injury no doctor has seen: education only, no booking yet.
+  const holdBooking = doctorFlags.some((f) => f.noBooking)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
     if (flaggedAt === 'physician') { if (injuryApplies) startInjury(); else startQuestions() }
@@ -1883,7 +1890,7 @@ export default function PainAssessment() {
             {/* URGENT-CARE RESULT */}
             {stage === 'urgent' && (
               <Fade k="urgent">
-                <span style={label}>{emergencyFlagged ? 'Emergency Care Needed' : 'Medical Review Recommended'}</span>
+                <span style={label}>{emergencyCare === 'crisis' ? 'Support Is Available' : emergencyFlagged ? 'Emergency Care Needed' : 'Medical Review Recommended'}</span>
 
                 {!emergencyFlagged && (pickedFlags.length > 0 || otherFlagged) && (
                   <div style={{ ...card, maxWidth: 520, margin: '12px 0 12px' }}>
@@ -1918,7 +1925,7 @@ export default function PainAssessment() {
                     )}
                     {/* Why, for each emergency answer: the reason from the
                         region document, next to what the person ticked. */}
-                    <span style={{ ...label, display: 'block', margin: '18px 0 0', fontSize: 11.5, color: '#fca5a5' }}>Why this needs emergency care</span>
+                    <span style={{ ...label, display: 'block', margin: '18px 0 0', fontSize: 11.5, color: '#fca5a5' }}>{emergencyCare === 'crisis' ? 'Why we are suggesting this' : 'Why this needs emergency care'}</span>
                     <div style={{ display: 'grid', gap: 12, marginTop: 10 }}>
                       {pickedFlags.filter((f) => f.tier === 'emergency').map((f) => (
                         <div key={f.id}>
@@ -1927,9 +1934,9 @@ export default function PainAssessment() {
                         </div>
                       ))}
                     </div>
-                    {emergencyCare === 'call911' && (
-                      <a href="tel:911" style={{ ...goldBtn, background: '#ef4444', color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', marginTop: 16 }}>
-                        {EMERGENCY_ADVICE.call911.button}
+                    {(emergencyCare === 'call911' || emergencyCare === 'crisis') && (
+                      <a href={`tel:${EMERGENCY_ADVICE[emergencyCare].tel || '911'}`} style={{ ...goldBtn, background: '#ef4444', color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', marginTop: 16 }}>
+                        {EMERGENCY_ADVICE[emergencyCare].button}
                       </a>
                     )}
                   </div>
@@ -1944,7 +1951,9 @@ export default function PainAssessment() {
                         : 'What you ticked should be checked by your doctor. Please book a visit with your family doctor, or a walk-in clinic if you do not have one.'}
                     </p>
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
-                      {sameDayFlagged
+                      {holdBooking
+                        ? 'Please see a doctor or nurse practitioner first. Once they have checked you, physiotherapy can help with your recovery, and you can book with Chandra then.'
+                        : sameDayFlagged
                         ? 'You can still book your physiotherapy assessment now. Chandra will check that a doctor has looked at this before treatment starts.'
                         : 'Physiotherapy can go ahead alongside that, and you can book with Chandra now: your assessment will look at these symptoms in detail, and Chandra can work with your doctor on the next steps.'}
                     </p>
@@ -1979,7 +1988,7 @@ export default function PainAssessment() {
 
                 {/* Physiotherapy can follow once a physician has reviewed the
                     flagged symptom — but never for an emergency-tier flag. */}
-                {!emergencyFlagged && (
+                {!emergencyFlagged && !holdBooking && (
                   <>
                     <span style={{ ...label, display: 'block', margin: '26px 0 0' }}>Book With Chandra</span>
                     <p style={{ ...body, fontSize: 15, margin: '10px 0 14px', maxWidth: 520 }}>
@@ -2250,15 +2259,31 @@ export default function PainAssessment() {
                   <PainAIPanel zones={zones} answers={aiAnswers.core} privateAnswers={aiAnswers.wellbeing} notes={notesText} matched={matched} onReview={setReview} aiOnly />
                 </div>
 
-                <span style={{ ...label, marginBottom: 12 }}>Your Next Step · Book an Assessment</span>
-                <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
-                  Based on what you have shared, a physiotherapy assessment is an appropriate
-                  next step. An appointment with Chandra lets your symptoms be examined
-                  individually and a suitable plan of care discussed with you. Choose the
-                  clinic that suits you, then call or book online.
-                </p>
+                {holdBooking ? (
+                  /* A recent head injury no doctor has seen ("Concussion"
+                     document, 2 Oct 2026): education only, no booking yet. */
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your Next Step · See a Doctor First</span>
+                    <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
+                      Please see a doctor or nurse practitioner today: your family doctor, a
+                      walk-in clinic or an urgent care centre, or call HealthLink BC on 8-1-1 if
+                      you are not sure where to go. Once they have checked you, physiotherapy can
+                      help with your recovery, and you are welcome to book with Chandra then.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your Next Step · Book an Assessment</span>
+                    <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
+                      Based on what you have shared, a physiotherapy assessment is an appropriate
+                      next step. An appointment with Chandra lets your symptoms be examined
+                      individually and a suitable plan of care discussed with you. Choose the
+                      clinic that suits you, then call or book online.
+                    </p>
 
-                <ClinicPicker />
+                    <ClinicPicker />
+                  </>
+                )}
 
                 {/* Everything the screen worked out, in the order of the CPA
                     Orthopaedic Division subjective booklet — for Chandra, and

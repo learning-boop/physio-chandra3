@@ -49,7 +49,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Back of pelvis & buttock | `sij` | SI assessment | 5 |
 | Tailbone | `coccyx` | Coccyx assessment | 5 |
 | Jaw | `jaw` | TMJ assessment | 5 |
-| Head | `head` | Head assessment (+ Cervicogenic Headache 1 document, D2 and D3) | 9 |
+| Head | `head` | Head assessment (+ Cervicogenic Headache 1 document, D2 and D3; + Concussion document, the head injury screen, D8 and D9) | 14 |
 | Shoulder | `shoulder` | Shoulder assessment | 6 |
 | Upper arm | `arm` | Upper arm assessment | 5 |
 | Elbow | `elbow` | Elbow assessment | 6 |
@@ -80,7 +80,8 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   can be marked to go first.
 - **Safety comes first, and tiers decide it, not the AI.** Right after the
   drawing, page 1 asks every `emergency` flag for the areas drawn (a "yes"
-  → 911, no booking, with the flag's reason shown), then page 2 every
+  → call 911, or go to an emergency department now for the flags that are
+  not life-threatening; no booking, with the flag's reason shown), then page 2 every
   `urgent` flag (a "yes" → "see your doctor", with booking offered now and
   the questionnaire continuing; the advice stays on the results). Flags
   marked `sameDay` (giant cell arteritis, a possible clot, a hot joint with
@@ -129,6 +130,13 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   junction; an upper-arm mark also asks the shoulder; a line from the neck
   down the arm asks the neck and base of the neck. A forearm mark beside
   the elbow is asked after the elbow (it is often elbow pain spreading down).
+- **A recent head injury no doctor has seen gets no booking.** The head
+  injury screen (Concussion document, 2 Oct 2026) sends anyone injured in
+  the last 3 days (or unsure when) who has not seen a doctor or nurse
+  practitioner to one today, with HealthLink BC 8-1-1, and holds the
+  booking until then; later injuries are sent to their doctor with booking
+  offered. Thoughts of self-harm after the injury show the 9-8-8 Suicide
+  Crisis Helpline.
 - **Refer-first conditions carry a doctor note.** A condition file with a
   `## doctorFirst` section (cervical myelopathy) shows that note at the top
   of its results card; `## clinicNotes` go to Chandra's clinician summary

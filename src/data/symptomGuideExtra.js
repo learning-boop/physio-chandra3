@@ -1094,8 +1094,9 @@ export const EXTRA_REGIONS = {
         text: "Is this a new kind of headache that started after age 50, or are your headaches getting steadily worse or changing pattern over weeks?" },
       { id: "hrf-pressure", tier: "urgent", why: "Pressure-related headache can have a brain cause",
         text: "Is the headache brought on by coughing, sneezing, straining, or exercise, much worse when you lie down or stand up, or there when you wake, with vomiting?" },
-      { id: "hrf-concussion", tier: "urgent", why: "Possible concussion: medical assessment before physio",
-        text: "Did the headache start after a knock to the head or a whiplash injury in the last 4 weeks?" },
+      // The "knock to the head in the last 4 weeks" flag (hrf-concussion) is
+      // now the head injury screen (../data/injuryScreen.js, "Concussion"
+      // document, 2 Oct 2026): it asks when, and whether a doctor has seen it.
       { id: "hrf-medication", tier: "urgent", why: "Medication side effect: the prescriber should review it",
         text: "Did this new headache start after beginning a new medication?" },
       { id: "hrf-pregnancy", tier: "urgent", why: "Possible pre-eclampsia or other pregnancy-related cause",
@@ -1187,14 +1188,35 @@ export const EXTRA_REGIONS = {
           { id: "food", label: "Missed meals, or certain foods or drinks" },
           { id: "lightsmell", label: "Bright light or strong smells" }
         ]},
-      { id: "D8", text: "Since your head injury, which of these apply? Tick all that apply.",
+      // D8 and D9 from the "Concussion" condition document (v1.0, 2 Oct 2026):
+      // D8 is its Q3 symptom cluster (1 point each); D9 its Q4 (blackout or
+      // memory gap), Q5 (worse with screens or mental effort) and Q6 (neck).
+      // Asked first after a knock: the head injury screen
+      // (../data/injuryScreen.js) has already done its timing, red flags and
+      // has-a-doctor-seen-you routing.
+      { id: "D8", text: "Since the injury, which of these have you noticed? Tick all that apply.",
         askIf: ({ ra }) => ra.onset === "knock",
+        priority: ({ ra }) => ra.onset === "knock",
         options: [
-          { id: "screens", label: "Headache worse with screens or concentrating" },
+          { id: "headache", label: "Headache or pressure in the head" },
           { id: "dizzy", label: "Dizzy or off balance" },
+          { id: "foggy", label: "Brain fog, slowed thinking, or trouble remembering" },
+          { id: "nausea", label: "Feeling sick (nausea) since the injury" },
           { id: "sensitive", label: "Light or noise bothers me more than before" },
-          { id: "foggy", label: "Foggy, or trouble sleeping" },
-          { id: "neckpain", label: "Neck pain since the injury" }
+          { id: "tired", label: "Unusually tired, or sleeping differently" },
+          { id: "mood", label: "More irritable, low or anxious than usual", special: "concussionMood" },
+          // Look-alike: positional vertigo after a knock (not scored).
+          { id: "spins", label: "Short spins when I roll over in bed, lie down, or look up", special: "bppv" }
+        ]},
+      { id: "D9", text: "About the injury and since: which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "knock",
+        priority: ({ ra }) => ra.onset === "knock",
+        options: [
+          { id: "blackout", label: "I blacked out, felt dazed or confused, or cannot remember what happened around the injury" },
+          { id: "loadclear", excl: "load", label: "Screens, reading, busy places or thinking hard clearly make it worse" },
+          { id: "loadsome", excl: "load", label: "Screens, reading, busy places or thinking hard sometimes make it worse" },
+          { id: "neck", label: "Neck pain or stiffness, or turning my head brings on dizziness or headache" },
+          { id: "none", label: "None of these" }
         ]}
     ],
     conditions: []
@@ -2607,6 +2629,9 @@ export const EXTRA_SPECIAL_CARDS = {
   // Cervicogenic dizziness look-alikes (the neck's N11).
   bppv: { title: "Short spins when you roll over: often the inner ear",
     body: "Short bursts of spinning, under a minute, when you roll over in bed, lie down, or look up are typical of <strong>BPPV</strong>: tiny crystals in the inner ear that have come loose. It is common, and a physiotherapist can check for it and treat it with simple head movements. It can happen alongside neck-related dizziness, so your assessment will check both." },
+  // Concussion look-alike: mood or sleep ("Concussion" document, 2 Oct 2026).
+  concussionMood: { title: "Mood and sleep matter in recovery too",
+    body: "Feeling more irritable, low or anxious after a head injury is common, and it usually settles as you recover. It is worth mentioning to your family doctor, who can help with mood and sleep; physiotherapy can run alongside. If you ever feel hopeless or have thoughts of harming yourself, call or text <strong>9-8-8</strong> at any time, or call 911 if you are in immediate danger." },
   innerEar: { title: "Spinning or ear symptoms: please see your doctor as well",
     body: "Dizziness where the room spins for hours or days, or that comes with hearing changes, ringing, or a full feeling in one ear, often comes from the <strong>inner ear</strong> (such as vestibular neuritis or Ménière's disease) or from vestibular migraine rather than the neck. Please see your family doctor so these can be checked. Physiotherapy (vestibular rehabilitation) can help alongside or afterwards. Sudden hearing loss in one ear needs a doctor the same day." },
   migraine: { title: "This pattern can be migraine: worth seeing your doctor",

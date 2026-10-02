@@ -466,6 +466,75 @@ export const FOOT_INJURY = [
     options: yesNo('urgent', 'Possible "turf toe" (big toe joint ligament injury)') },
 ]
 
+/* ── Head: knock, fall, crash or jolt (concussion) ──
+   From the "Concussion" condition document (v1.0, 2 Oct 2026), its gate
+   (section 1), Q1, Q2 and Q7 (section 4) and its red flags (section 6, from
+   the BC Guidelines "Concussion / mTBI" Table 1, 2024). The head area's own
+   emergency flags (worsening headache, vomiting, drowsiness, one-sided
+   weakness, double vision, the 5 Ds) are on the first safety page already.
+   Built with the document's drafted answers to its four open items:
+   (a) more than 3 days and no doctor yet → see your doctor, booking offered;
+   (c) the 9-8-8 question stays here; (d) under 18 has no rule of its own,
+   because everyone who has not seen a doctor is sent to one. */
+const RECENT = ['h72', 'unsure']
+export const HEAD_INJURY = [
+  { id: 'I1', text: 'Did your symptoms start after a knock to the head, a fall, a crash, or a sudden jolt to the body (like whiplash)?', options: [
+    { id: 'yes', label: 'Yes, I remember a specific event' },
+    { id: 'unsure', label: 'I think so, but I am not sure' },
+    { id: 'no', label: 'No injury that I know of' },
+  ]},
+  { id: 'I2', text: 'When did it happen?', options: [
+    { id: 'h72', label: 'In the last 3 days' },
+    { id: 'w4', label: '4 days to 4 weeks ago' },
+    { id: 'o4w', label: 'More than 4 weeks ago' },
+    { id: 'unsure', label: 'I am not sure' },
+  ]},
+  // In the first days (or when unsure when): the document's emergency flags.
+  { id: 'I3', text: 'Since the injury, have you had a seizure (a fit), or have you passed out, even briefly, in the last 24 hours?',
+    askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'A seizure or passing out after a head injury needs emergency care', { call911: true }) },
+  { id: 'I4', text: 'Since the injury, have you become more confused, restless or agitated, or hard to keep awake; or do you have weakness, numbness or tingling in your arms or legs, or trouble walking steadily?',
+    askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'Possible bleeding or swelling inside the skull', { call911: true }) },
+  { id: 'I5', text: 'Do you have severe pain in the middle of the back of your neck, or are you unable to move your neck, since the injury?',
+    askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'Possible neck fracture or spinal injury', { call911: true, keepNeckStill: true }) },
+  { id: 'I6', text: 'Do you take a blood thinner (anticoagulant or antiplatelet medicine), for example warfarin, apixaban, rivaroxaban, dabigatran or clopidogrel?',
+    askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'A head injury while taking a blood thinner needs a hospital check today, even if you feel well') },
+  { id: 'I7', text: 'Were you hit by a vehicle, thrown from a vehicle, or did you fall from higher than 1 metre (about 3 feet)?',
+    askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'A high-energy injury needs a hospital check today') },
+  { id: 'I8', text: 'Since the injury, have you felt very low or hopeless, or had thoughts of harming yourself?',
+    options: yesNo('emergency', 'Support is available now, any time of day or night', { goTo: 'crisis' }) },
+  { id: 'I9', text: 'Are your symptoms getting worse rather than better over the days, or are new symptoms appearing?',
+    askIf: (a) => !RECENT.includes(a.I2), options: yesNo('urgent', 'Symptoms getting worse, or new ones, after a head injury: see your doctor promptly') },
+  // Q7: routes rather than scores (see headInjuryStep).
+  { id: 'I10', text: 'Have you seen a doctor or nurse practitioner about this injury?', options: [
+    { id: 'confirmed', label: 'Yes, and they said it was a concussion' },
+    { id: 'notconc', label: 'Yes, and they said it was not a concussion' },
+    { id: 'no', label: 'No, not yet' },
+  ]},
+]
+
+const HEAD_WHY = {
+  doctorFirst: 'A concussion needs to be checked by a doctor or nurse practitioner first',
+  doctorFirstText: 'In the first few days after a head injury, a doctor or nurse practitioner should check you and rule out a more serious injury before physiotherapy. Please see your family doctor, a walk-in clinic or an urgent care centre today, or call HealthLink BC on 8-1-1 if you are not sure where to go. Until then: rest from screens and mental effort for a day or two, do not drive, avoid alcohol, and do not return to sport. Physiotherapy can help with your recovery once you have been checked.',
+  doctorAlso: 'A doctor or nurse practitioner should check a head injury as well',
+  doctorAlsoText: 'Concussion is diagnosed by a doctor or nurse practitioner, who can also rule out other causes. Please book a visit with your family doctor, or a walk-in clinic if you do not have one. Physiotherapy can go ahead alongside that, and Chandra can work with your doctor. Do not return to contact sport or activities with a risk of falling until a doctor has cleared you.',
+}
+
+/** The head screen: in order, ending at the first answer that routes. Q7
+    ("seen a doctor?") routes by the timing: no doctor in the first 3 days (or
+    unsure when) → see a doctor today, no booking yet; later → see a doctor,
+    booking offered. */
+function headInjuryStep(a = {}) {
+  const linear = linearStep(HEAD_INJURY.slice(0, -1))
+  if (a.I1 === 'no') return { route: 'skip' }
+  const r = linear(a)
+  if (r.next || r.route !== 'continue') return r
+  if (a.I10 === undefined) return { next: 'I10' }
+  if (a.I10 !== 'no') return { route: 'continue' }
+  return RECENT.includes(a.I2)
+    ? { route: 'urgent', sameDay: true, noBooking: true, why: HEAD_WHY.doctorFirst, whyText: HEAD_WHY.doctorFirstText }
+    : { route: 'urgent', why: HEAD_WHY.doctorAlso, whyText: HEAD_WHY.doctorAlsoText }
+}
+
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
@@ -475,7 +544,10 @@ function linearStep(questions) {
       if (a[q.id] === undefined) return { next: q.id }
       for (const oid of list(a[q.id])) {
         const o = q.options.find((x) => x.id === oid)
-        if (o && o.route) return { route: o.route, why: o.why, ...(o.call911 ? { call911: true } : {}), ...(q.sameDay ? { sameDay: true } : {}) }
+        if (o && o.route) {
+          const { route, why, call911, keepNeckStill, goTo } = o
+          return { route, why, question: q.text, ...(call911 ? { call911 } : {}), ...(keepNeckStill ? { keepNeckStill } : {}), ...(goTo ? { goTo } : {}), ...(q.sameDay ? { sameDay: true } : {}) }
+        }
       }
     }
     return { route: 'continue' }
@@ -486,6 +558,9 @@ export const SCREENS = [
   // Its "see a doctor" outcome means a possible fracture: same day.
   { id: 'neck', zones: ['neck', 'ctj'], title: 'Recent Neck Injury', sameDayUrgent: true,
     flag: 'A neck injury in the last 7 days (injury screen)', questions: INJURY_QUESTIONS, step: injuryStep },
+  // Any time since the injury: the timing is its second question.
+  { id: 'head', zones: ['head'], title: 'Head Injury',
+    flag: 'A knock to the head, fall, crash or jolt (head injury screen)', questions: HEAD_INJURY, step: headInjuryStep },
   { id: 'shoulder', zones: ['shoulder'], title: 'Recent Shoulder Injury',
     flag: 'A shoulder injury in the last 6 weeks (injury screen)', questions: SHOULDER_INJURY, step: linearStep(SHOULDER_INJURY) },
   { id: 'arm', zones: ['upperarm'], title: 'Recent Upper Arm Injury',
