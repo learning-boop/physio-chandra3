@@ -61,6 +61,29 @@ export function buildResultsPdf(d) {
     y += 8
     text(s, { size: 13.5, bold: true, color, gap: 6 })
   }
+  // A tinted box with a gold bar down its left side, kept whole on one page.
+  const notice = (title, paras) => {
+    const pad = 14, bar = 4, size = 10, step = size * 1.4, paraGap = 6
+    const inner = W - 2 * M - bar - 2 * pad
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(size)
+    const lines = paras.map((p) => doc.splitTextToSize(clean(p), inner))
+    const h = pad + 14 + 8 + lines.reduce((n, ls) => n + ls.length * step, 0) + paraGap * (paras.length - 1) + pad - 4
+    room(h + 16)
+    y += 12
+    doc.setFillColor(248, 243, 233); doc.rect(M, y, W - 2 * M, h, 'F')
+    doc.setFillColor(...GOLD); doc.rect(M, y, bar, h, 'F')
+    const x = M + bar + pad
+    let ty = y + pad + 11
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(...NAVY)
+    doc.text(clean(title), x, ty)
+    ty += 8
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(size); doc.setTextColor(...INK)
+    lines.forEach((ls, i) => {
+      ls.forEach((ln) => { ty += step; doc.text(ln, x, ty - step + size) })
+      if (i < lines.length - 1) ty += paraGap
+    })
+    y += h + 8
+  }
   const bullets = (items, opts = {}) => items.forEach((it) => {
     const before = y
     text(it, { indent: 12, gap: 3, ...opts })
@@ -134,6 +157,14 @@ export function buildResultsPdf(d) {
   } else {
     text(d.noMatch || 'No clear match in this guide. An in-person assessment is the right next step.')
   }
+
+  // Straight after the results (Chandra, 2 Oct 2026). Kept true to the site:
+  // only the opt-in anonymous copy is ever stored (api/anon-share.js); the
+  // AI overview is not kept, and the reference-code counter holds no answers.
+  notice('Your privacy', [
+    'This summary was prepared on your own device. Physio Chandra and the physiochandra.ca website do not save your answers, your drawing or these results, and this document has not been sent to anyone. It is yours to keep, to share with a health professional of your choice, or to delete.',
+    'The only exceptions are choices you make yourself: sending this summary to Chandra, or ticking the box to share an anonymous copy to help improve the guide. An anonymous copy never includes your name, contact details, reference code or anything you typed in your own words. If you used the optional AI overview, your answers were used only to prepare it and were not stored.',
+  ])
 
   if (d.painType) { heading('Likely pain type'); text(d.painType) }
   if (d.behaviour.length) { heading('How your pain behaves'); bullets(d.behaviour) }
