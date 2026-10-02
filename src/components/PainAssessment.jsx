@@ -2108,7 +2108,11 @@ export default function PainAssessment() {
                         {multiArea && (
                           <span style={{ ...label, fontSize: 15, display: 'block', marginBottom: 8 }}>{REGIONS[rk].name}</span>
                         )}
-                        <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{c.name}</p>
+                        {/* The condition name stands out (Chandra, 2 Oct 2026):
+                            larger, bold, on a gold band. A tint with an accent
+                            bar, not solid gold, so it does not read as a button. */}
+                        <p style={{ fontSize: 'clamp(19px,4.6vw,22px)', color: '#fff', margin: 0, lineHeight: 1.35, fontWeight: 700,
+                          background: 'rgba(201,169,110,0.22)', borderLeft: `4px solid ${GOLD}`, borderRadius: 8, padding: '10px 14px' }}>{c.name}</p>
                         {/* A refer-first condition (cervical myelopathy): its
                             see-your-doctor note comes before anything else. */}
                         {c.doctorFirst && (
