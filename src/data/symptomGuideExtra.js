@@ -120,6 +120,15 @@ export const EXTRA_REGIONS = {
         { id: "d6w", label: "2 to 6 weeks" },
         { id: "d3m", label: "6 weeks to 3 months" },
         { id: "o3m", label: "More than 3 months" }
+      ]},
+      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // the tender-spot question, on the opening screen and asked once across
+      // the neck, shoulder, upper back, low back and hip (shared id "tender",
+      // ../data/assessmentFlow.js), so it does not use a scored-question slot.
+      { id: "tender", text: "Can you find a tender spot or tight band in a muscle that, when you press it, brings on your usual ache, including the part that spreads?", options: [
+        { id: "refers", label: "Yes: pressing a tender spot brings on my usual ache, including where it spreads" },
+        { id: "spot", label: "There is a tender spot, but pressing it does not spread the ache" },
+        { id: "none", label: "No, or I cannot find one" }
       ]}
     ],
     questions: [
@@ -530,6 +539,15 @@ export const EXTRA_REGIONS = {
         { id: "d6w", label: "2 to 6 weeks" },
         { id: "d3m", label: "6 weeks to 3 months" },
         { id: "o3m", label: "More than 3 months" }
+      ]},
+      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // the tender-spot question, on the opening screen and asked once across
+      // the neck, shoulder, upper back, low back and hip (shared id "tender",
+      // ../data/assessmentFlow.js), so it does not use a scored-question slot.
+      { id: "tender", text: "Can you find a tender spot or tight band in a muscle that, when you press it, brings on your usual ache, including the part that spreads?", options: [
+        { id: "refers", label: "Yes: pressing a tender spot brings on my usual ache, including where it spreads" },
+        { id: "spot", label: "There is a tender spot, but pressing it does not spread the ache" },
+        { id: "none", label: "No, or I cannot find one" }
       ]}
     ],
     questions: [
@@ -2039,6 +2057,15 @@ export const EXTRA_REGIONS = {
         { id: "d6w", label: "2 to 6 weeks" },
         { id: "d3m", label: "6 weeks to 3 months" },
         { id: "o3m", label: "More than 3 months" }
+      ]},
+      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // the tender-spot question, on the opening screen and asked once across
+      // the neck, shoulder, upper back, low back and hip (shared id "tender",
+      // ../data/assessmentFlow.js), so it does not use a scored-question slot.
+      { id: "tender", text: "Can you find a tender spot or tight band in a muscle that, when you press it, brings on your usual ache, including the part that spreads?", options: [
+        { id: "refers", label: "Yes: pressing a tender spot brings on my usual ache, including where it spreads" },
+        { id: "spot", label: "There is a tender spot, but pressing it does not spread the ache" },
+        { id: "none", label: "No, or I cannot find one" }
       ]}
     ],
     questions: [

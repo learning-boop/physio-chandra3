@@ -158,6 +158,12 @@ Q: How long has it been going on?
 - 6 weeks to 3 months
 - More than 3 months
 
+## opening question added 2 Oct 2026
+Q: Can you find a tender spot or tight band in a muscle that, when you press it, brings on your usual ache, including the part that spreads?   (2 Oct 2026, Chandra's request: the "Myofascial Pain" document (v0.1 draft); shared on the opening screen with the neck, shoulder, upper back, low back and hip, asked once (id "tender"), so it does not use a scored-question slot; scores the new muscle-referred pain condition; added after the signed version)
+- Yes: pressing a tender spot brings on my usual ache, including where it spreads
+- There is a tender spot, but pressing it does not spread the ache
+- No, or I cannot find one
+
 ## questions
 Q: When you turn your head to look over your shoulder, what happens?
 - I can turn fully both ways

@@ -869,5 +869,21 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /!fibroDiagnosed && \(/.test(src) && /id: 'ca-fibro'/.test(src) && !/showWidespread[^\n]*holdBooking/.test(src))
 }
 
+// ── 29. Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026) ──
+{
+  const { buildScreens, rankAcross } = await imp('src/data/assessmentFlow.js')
+  const five = ['neck', 'shoulder', 'upperback', 'lowback', 'hip']
+  const ctx = buildScreens(five).context
+  check('Myofascial: the tender-spot question is on the opening screen once, however many of the five areas are drawn',
+    ctx.filter((q) => q.id === 'tender').length === 1 && five.every((k) => buildScreens([k]).context.some((q) => q.id === 'tender')))
+  const shown = (keys, a) => rankAcross(keys, a).map((x) => x.rk + '/' + x.c.id)
+  check('Myofascial: a tender spot that brings on the spread, at a desk, shows the neck muscle pattern',
+    shown(['neck'], { age: '30-49', onset: 'desk', duration: 'd2w', tender: 'refers' }).includes('neck/myofascial'))
+  check('Myofascial: "no tender spot" keeps it out',
+    !shown(['neck'], { age: '30-49', onset: 'desk', duration: 'd2w', tender: 'none' }).includes('neck/myofascial'))
+  check('Myofascial: one answer serves every drawn area (low back and hip)',
+    ['lowback/myofascial', 'hip/myofascial'].some((id) => shown(['lowback', 'hip'], { age: '30-49', duration: 'd2w', tender: 'refers' }).includes(id)))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

@@ -132,6 +132,9 @@ function mapDuration(id, q) {
   const d = DURATIONS.find((x) => x.id === id)
   return d ? d.to.find((t) => q.options.some((o) => o.id === t)) : undefined
 }
+// The myofascial tender-spot question ("Myofascial Pain" document, 2 Oct
+// 2026) is the same in every area that has it: asked once, read by each.
+const sharesTender = (q) => q.id === 'tender'
 const sharesDuration = (q) =>
   q.id === 'duration' &&
   DURATIONS.every((d) => mapDuration(d.id, q)) &&
@@ -146,7 +149,7 @@ export function buildContext(keys) {
   for (const k of keys) {
     const r = REGIONS[k]
     for (const q of r.context) {
-      if (sharesAge(q) || sharesDuration(q)) continue
+      if (sharesAge(q) || sharesDuration(q) || sharesTender(q)) continue
       const text = q.id === 'onset' ? `How did the ${AREA_WORD[k] || r.name.toLowerCase()} pain start?` : `${r.name}: ${q.text}`
       out.push({ ...q, id: `${q.id}@${k}`, text })
     }
@@ -154,6 +157,8 @@ export function buildContext(keys) {
   if (keys.some((k) => REGIONS[k].context.some(sharesDuration))) {
     out.push({ id: 'duration', text: 'How long has it been going on?', options: DURATIONS.map(({ id, label }) => ({ id, label })) })
   }
+  const tender = keys.map((k) => REGIONS[k].context.find(sharesTender)).find(Boolean)
+  if (tender) out.push(tender)
   return out
 }
 
@@ -186,6 +191,7 @@ export function regionAnswers(keys, rk, answers) {
     let v
     if (sharesAge(q)) v = answers.age === undefined ? undefined : mapAge(answers.age, q)
     else if (sharesDuration(q)) v = answers.duration === undefined ? undefined : mapDuration(answers.duration, q)
+    else if (sharesTender(q)) v = answers.tender
     else v = answers[`${q.id}@${rk}`]
     if (v !== undefined) out[q.id] = v
   }
