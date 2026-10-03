@@ -19,7 +19,7 @@ pointers:
 ---
 
 ## blurb
-Wear in the big toe joint makes it stiff, especially when bending the toe up to push off, and a bony lump often forms on top of the joint. It is painful when rising onto the toes, walking uphill, or running. Stiff-soled or rocker-soled shoes, and keeping the joint moving, often help a lot.
+Arthritis in the big toe joint makes it stiff, especially when bending the toe up to push off, and a bony lump often forms on top of the joint. It is painful when rising onto the toes, walking uphill, or running. Stiff-soled or rocker-soled shoes, and keeping the joint moving, often help a lot.
 
 ## noticed
 - A stiff big toe that will not bend up well
@@ -30,8 +30,13 @@ Wear in the big toe joint makes it stiff, especially when bending the toe up to 
 - Wear stiffer-soled or rocker-soled shoes
 - Avoid high heels and very flexible shoes
 - Gentle big toe movements within comfort
+- During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
 
 ## seePhysioIf
 - Pain is limiting walking or sport
 - The toe is getting stiffer
 - You want advice on shoes, insoles, or other options
+
+## clinicNotes
+- Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing.
+- Big toe: rocker sole or a stiff insert; 1st MTP mobilisation and toe and calf strength. A sudden hot, red toe is gout, not OA: see a doctor.

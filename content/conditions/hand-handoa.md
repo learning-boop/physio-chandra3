@@ -25,7 +25,7 @@ pointers:
 ---
 
 ## blurb
-The small joints in the middle and at the end of the fingers commonly wear with age, often running in families. The joints ache and stiffen, especially with gripping and in the cold, and firm bony bumps can form on them. Morning stiffness is usually short, and the hand tends to work better once it is moving.
+Arthritis in the small joints in the middle and at the end of the fingers is common from midlife, and often runs in families. The joints ache and stiffen, especially with gripping and in the cold, and firm bony bumps can form on them. Morning stiffness is usually short, and the hand tends to work better once it is moving.
 
 ## noticed
 - Aching and stiffness in the middle or end joints of the fingers
@@ -37,8 +37,13 @@ The small joints in the middle and at the end of the fingers commonly wear with 
 - Warm water or a heat pack before activity eases stiffness
 - Use tools with thicker handles, and jar openers, to reduce strain
 - Spread heavy hand tasks through the day
+- During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
 
 ## seePhysioIf
 - Pain or stiffness is limiting everyday tasks
 - A joint is becoming unstable or crooked
 - You want an exercise plan and advice on splints or aids
+
+## clinicNotes
+- Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing.
+- Hand: EULAR 2018, education, joint protection, hand exercises, orthoses as needed. Measures: AUSCAN or FIHOA, grip and pinch. Screen an inflammatory pattern (knuckle or wrist swelling, morning stiffness over an hour).

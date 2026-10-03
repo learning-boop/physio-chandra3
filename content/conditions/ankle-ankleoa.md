@@ -20,7 +20,7 @@ pointers:
 ---
 
 ## blurb
-Unlike the hip and knee, the ankle usually wears only after an old injury, such as a fracture or many sprains, sometimes years before. The ankle aches and stiffens, especially first thing and after sitting, swells after a busy day, and loses some of its movement. Strength, balance, and footwear make a real difference.
+Unlike the hip and knee, ankle arthritis usually follows an old injury, such as a fracture or many sprains, sometimes years before. The ankle aches and stiffens, especially first thing and after sitting, swells after a busy day, and loses some of its movement. Strength, balance, and footwear make a real difference.
 
 ## noticed
 - An ache and stiffness around the whole ankle, especially first thing and after sitting
@@ -31,8 +31,13 @@ Unlike the hip and knee, the ankle usually wears only after an old injury, such 
 - Keep active with walking, cycling, or swimming
 - Supportive, cushioned shoes, and a rocker sole can help
 - Gentle ankle movements first thing to ease stiffness
+- During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
 
 ## seePhysioIf
 - Pain or stiffness is limiting walking
 - The ankle keeps swelling or giving way
 - You want a strength, balance, and footwear plan
+
+## clinicNotes
+- Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing.
+- Ankle: mostly after old injury (ankle OA about 1% in population studies, AIM manual p. 573). Strength, balance and a rocker sole; screen for instability.

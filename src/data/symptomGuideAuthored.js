@@ -15,7 +15,7 @@ export const AUTHORED = [
           "o64"
         ]
       },
-      "blurb": "Unlike the hip and knee, the ankle usually wears only after an old injury, such as a fracture or many sprains, sometimes years before. The ankle aches and stiffens, especially first thing and after sitting, swells after a busy day, and loses some of its movement. Strength, balance, and footwear make a real difference.",
+      "blurb": "Unlike the hip and knee, ankle arthritis usually follows an old injury, such as a fracture or many sprains, sometimes years before. The ankle aches and stiffens, especially first thing and after sitting, swells after a busy day, and loses some of its movement. Strength, balance, and footwear make a real difference.",
       "noticed": [
         "An ache and stiffness around the whole ankle, especially first thing and after sitting",
         "Swelling after a busy day that settles overnight",
@@ -24,12 +24,17 @@ export const AUTHORED = [
       "homeCare": [
         "Keep active with walking, cycling, or swimming",
         "Supportive, cushioned shoes, and a rocker sole can help",
-        "Gentle ankle movements first thing to ease stiffness"
+        "Gentle ankle movements first thing to ease stiffness",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Pain or stiffness is limiting walking",
         "The ankle keeps swelling or giving way",
         "You want a strength, balance, and footwear plan"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Ankle: mostly after old injury (ankle OA about 1% in population studies, AIM manual p. 573). Strength, balance and a rocker sole; screen for instability."
       ]
     },
     "resolved": [
@@ -1663,6 +1668,10 @@ export const AUTHORED = [
         "The elbow is losing more movement",
         "It locks and you have to wiggle it free",
         "Stiffness is limiting daily tasks like washing your hair or eating"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Elbow: OA is usually after injury or heavy use (AIM manual p. 573). Catching or locking points to a loose body. The general OA principles apply to the arthritis part."
       ]
     },
     "resolved": [
@@ -2271,7 +2280,7 @@ export const AUTHORED = [
           "o64"
         ]
       },
-      "blurb": "The small joints across the middle of the foot can wear with age or after an old injury. The top of the midfoot aches with walking and standing, and bony lumps can form there that tight laces or shoes press on. Supportive, stiffer-soled shoes and strengthening help most people.",
+      "blurb": "Arthritis can develop in the small joints across the middle of the foot with age or after an old injury. The top of the midfoot aches with walking and standing, and bony lumps can form there that tight laces or shoes press on. Supportive, stiffer-soled shoes and strengthening help most people.",
       "noticed": [
         "An ache on the top or middle of the foot with walking and standing",
         "Bony lumps on the top of the midfoot",
@@ -2280,12 +2289,17 @@ export const AUTHORED = [
       "homeCare": [
         "Wear supportive shoes with a stiffer sole",
         "Loosen or re-lace to avoid pressure on the lumps",
-        "Keep active with cycling or swimming if walking is sore"
+        "Keep active with cycling or swimming if walking is sore",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Pain is limiting walking",
         "It is getting worse despite shoe changes",
         "You want advice on insoles and strengthening"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Midfoot: stiffer-soled or rocker shoes, orthoses; ask about an old midfoot (Lisfranc) injury."
       ]
     },
     "resolved": [
@@ -2518,7 +2532,7 @@ export const AUTHORED = [
       "id": "rigidus",
       "name": "Stiff big toe (hallux rigidus)",
       "clin": "First metatarsophalangeal joint osteoarthritis",
-      "blurb": "Wear in the big toe joint makes it stiff, especially when bending the toe up to push off, and a bony lump often forms on top of the joint. It is painful when rising onto the toes, walking uphill, or running. Stiff-soled or rocker-soled shoes, and keeping the joint moving, often help a lot.",
+      "blurb": "Arthritis in the big toe joint makes it stiff, especially when bending the toe up to push off, and a bony lump often forms on top of the joint. It is painful when rising onto the toes, walking uphill, or running. Stiff-soled or rocker-soled shoes, and keeping the joint moving, often help a lot.",
       "noticed": [
         "A stiff big toe that will not bend up well",
         "Pain pushing off, rising on the toes, or walking uphill",
@@ -2527,12 +2541,17 @@ export const AUTHORED = [
       "homeCare": [
         "Wear stiffer-soled or rocker-soled shoes",
         "Avoid high heels and very flexible shoes",
-        "Gentle big toe movements within comfort"
+        "Gentle big toe movements within comfort",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Pain is limiting walking or sport",
         "The toe is getting stiffer",
         "You want advice on shoes, insoles, or other options"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Big toe: rocker sole or a stiff insert; 1st MTP mobilisation and toe and calf strength. A sudden hot, red toe is gout, not OA: see a doctor."
       ]
     },
     "resolved": [
@@ -3388,7 +3407,7 @@ export const AUTHORED = [
       "id": "handoa",
       "name": "Finger joint arthritis (hand osteoarthritis)",
       "clin": "Hand osteoarthritis: Heberden's and Bouchard's nodes (EULAR 2018)",
-      "blurb": "The small joints in the middle and at the end of the fingers commonly wear with age, often running in families. The joints ache and stiffen, especially with gripping and in the cold, and firm bony bumps can form on them. Morning stiffness is usually short, and the hand tends to work better once it is moving.",
+      "blurb": "Arthritis in the small joints in the middle and at the end of the fingers is common from midlife, and often runs in families. The joints ache and stiffen, especially with gripping and in the cold, and firm bony bumps can form on them. Morning stiffness is usually short, and the hand tends to work better once it is moving.",
       "noticed": [
         "Aching and stiffness in the middle or end joints of the fingers",
         "Firm, bony bumps on the finger joints",
@@ -3398,12 +3417,17 @@ export const AUTHORED = [
         "Keep the fingers moving with gentle daily exercises",
         "Warm water or a heat pack before activity eases stiffness",
         "Use tools with thicker handles, and jar openers, to reduce strain",
-        "Spread heavy hand tasks through the day"
+        "Spread heavy hand tasks through the day",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Pain or stiffness is limiting everyday tasks",
         "A joint is becoming unstable or crooked",
         "You want an exercise plan and advice on splints or aids"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Hand: EULAR 2018, education, joint protection, hand exercises, orthoses as needed. Measures: AUSCAN or FIHOA, grip and pinch. Screen an inflammatory pattern (knuckle or wrist swelling, morning stiffness over an hour)."
       ]
     },
     "resolved": [
@@ -3672,7 +3696,7 @@ export const AUTHORED = [
       "id": "thumboa",
       "name": "Thumb base arthritis",
       "clin": "Thumb carpometacarpal (CMC) osteoarthritis",
-      "blurb": "This is gradual wear-and-tear at the joint where the thumb meets the wrist, which can make pinching and gripping tasks painful over time.",
+      "blurb": "This is osteoarthritis at the joint where the thumb meets the wrist: a slow change in the joint that can make pinching and gripping tasks painful. Exercises, a splint and easier ways of gripping often help.",
       "noticed": [
         "An ache at the base of the thumb that's worse with pinching or gripping",
         "Stiffness and less movement when trying to spread the thumb away from the hand",
@@ -3681,11 +3705,16 @@ export const AUTHORED = [
       "homeCare": [
         "Use adaptive tools like jar openers or ergonomic scissors to ease strain",
         "Try gentle warmth on the thumb before activity to loosen it up",
-        "Cut back on repeated pinching or gripping tasks that flare it up"
+        "Cut back on repeated pinching or gripping tasks that flare it up",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Thumb pain is limiting everyday tasks like opening jars or turning keys",
         "The ache or stiffness has lasted several weeks without improving"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Thumb base: EULAR 2018, long-term thumb base orthosis, exercise, joint protection. Manual therapy plus exercise improved pain but not pinch or grip strength (Villafane 2013, cited in the AIM manual). Measures: grip and pinch, AUSCAN."
       ]
     },
     "resolved": [
@@ -4624,9 +4653,9 @@ export const AUTHORED = [
     "region": "hip",
     "cond": {
       "id": "hipoa",
-      "name": "Hip osteoarthritis (wear-and-tear hip joint)",
+      "name": "Hip osteoarthritis",
       "clin": "Hip osteoarthritis (JOSPT CPG 2017)",
-      "blurb": "This is gradual wearing of the cartilage in the hip joint, common with age, that causes deep groin pain and stiffness that tends to build up slowly over months or years.",
+      "blurb": "This is a gradual change in the hip joint, common with age, that causes deep groin pain and stiffness building up slowly over months or years. Joints are not worn out by being used: regular movement and strength exercise often help.",
       "noticed": [
         "A deep ache in the groin or front of the hip that gets worse with walking, standing, or climbing stairs",
         "Stiffness in the morning that loosens up within about an hour of moving around",
@@ -4635,11 +4664,16 @@ export const AUTHORED = [
       "homeCare": [
         "Do gentle daily stretching and strengthening exercises for the hip and thigh muscles, several times a week",
         "Try lower-impact activities like swimming, cycling, or water-based exercise to stay active with less joint strain",
-        "If carrying extra weight, gradual weight loss with support from your care team can ease pressure on the hip"
+        "If carrying extra weight, gradual weight loss with support from your care team can ease pressure on the hip",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Stiffness or pain is limiting your walking, stairs, or daily routine for more than a few weeks",
         "Symptoms keep getting worse despite rest and simple activity changes"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Hip: Sutlive 2008, 4 of 5 (squatting aggravates, active flexion gives lateral hip pain, scour with adduction, active extension pain, passive IR 25 degrees or less): +LR 24.3. Capsular pattern IR, then flexion, then abduction. Manual therapy plus exercise (JOSPT hip OA CPG 2017). Measures: HOOS, 30-s chair stand, 40-m walk. Screen lumbar referral and lateral hip (GTPS)."
       ]
     },
     "resolved": [
@@ -5788,22 +5822,27 @@ export const AUTHORED = [
           "o64"
         ]
       },
-      "blurb": "A gradual change in the joint's cartilage and bone, common from midlife onward. Important: exercise is proven treatment, not a threat — stronger legs mean less pain, and activity does not 'wear the knee out'.",
+      "blurb": "A gradual change in the joint's cartilage and bone, common from midlife onward. Exercise is a core treatment, not a threat: stronger legs often mean less pain, and activity does not 'wear the knee out'.",
       "noticed": [
         "Aching with first steps after rest, easing as you get going",
         "Brief morning stiffness (minutes, not hours)",
         "Intermittent puffiness after busier days"
       ],
       "homeCare": [
-        "Regular strength work for thighs and hips — the single best-evidenced treatment",
+        "Regular strength work for thighs and hips: one of the most helpful things you can do",
         "Keep walking or cycling; motion is lotion",
         "Weight management where relevant makes a measurable difference",
-        "Heat for stiffness, brief ice for flare-ups"
+        "Heat for stiffness, brief ice for flare-ups",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Pain or stiffness limits walking, stairs, or sleep",
-        "You'd like a structured program (e.g., GLA:D-style) with proven outcomes",
+        "You'd like a structured education and exercise programme (e.g., GLA:D-style)",
         "You're weighing options and want conservative care optimized first"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Knee: ACR clinical criteria, knee pain plus 3 of: over 50, stiffness under 30 minutes, crepitus, bony tenderness, bony enlargement, no palpable warmth (sens 95%, spec 69%). Measures: KOOS, 30-s chair stand, 40-m fast-paced walk, stair climb. Cane in the opposite hand, unloader brace or wedge insoles in some cases (OARSI; ACR 2019)."
       ]
     },
     "resolved": [
@@ -5947,7 +5986,7 @@ export const AUTHORED = [
       "id": "pfoa",
       "name": "Kneecap arthritis",
       "clin": "Patellofemoral osteoarthritis",
-      "blurb": "This is wear-and-tear of the cartilage behind the kneecap that builds up slowly over many years, often in people who've had kneecap pain on and off for a long time.",
+      "blurb": "This is osteoarthritis behind the kneecap: a slow change in the cartilage and bone there over many years, often in people who've had kneecap pain on and off for a long time. Strengthening the thigh and hip muscles often helps.",
       "noticed": [
         "Pain behind or around the kneecap that has been present for many months or longer",
         "A short period of stiffness in the morning that eases once you get moving",
@@ -5956,11 +5995,16 @@ export const AUTHORED = [
       "homeCare": [
         "Stay active with low-impact movement like walking, cycling, or swimming",
         "Build strength in the thigh and hip muscles to support the joint",
-        "If relevant, gradual weight management can ease load on the knee"
+        "If relevant, gradual weight management can ease load on the knee",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "The pain or stiffness is starting to limit your daily activities or sleep",
         "Symptoms keep getting worse despite gentle activity changes"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Kneecap: quadriceps and hip strengthening are the core; taping or a brace may help short term. Measures: KOOS-PF, stairs and squat tolerance."
       ]
     },
     "resolved": [
@@ -10426,7 +10470,7 @@ export const AUTHORED = [
       "id": "thumboa",
       "name": "Thumb base arthritis",
       "clin": "Thumb carpometacarpal (CMC) osteoarthritis",
-      "blurb": "This is gradual wear-and-tear at the joint where the thumb meets the wrist, which can make pinching and gripping tasks painful over time.",
+      "blurb": "This is osteoarthritis at the joint where the thumb meets the wrist: a slow change in the joint that can make pinching and gripping tasks painful. Exercises, a splint and easier ways of gripping often help.",
       "noticed": [
         "An ache at the base of the thumb that's worse with pinching or gripping",
         "Stiffness and less movement when trying to spread the thumb away from the hand",
@@ -10435,11 +10479,16 @@ export const AUTHORED = [
       "homeCare": [
         "Use adaptive tools like jar openers or ergonomic scissors to ease strain",
         "Try gentle warmth on the thumb before activity to loosen it up",
-        "Cut back on repeated pinching or gripping tasks that flare it up"
+        "Cut back on repeated pinching or gripping tasks that flare it up",
+        "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
         "Thumb pain is limiting everyday tasks like opening jars or turning keys",
         "The ache or stiffness has lasted several weeks without improving"
+      ],
+      "clinicNotes": [
+        "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
+        "Thumb base: EULAR 2018, long-term thumb base orthosis, exercise, joint protection. Manual therapy plus exercise improved pain but not pinch or grip strength (Villafane 2013, cited in the AIM manual). Measures: grip and pinch, AUSCAN."
       ]
     },
     "resolved": [

@@ -20,7 +20,7 @@ pointers:
 ---
 
 ## blurb
-The small joints across the middle of the foot can wear with age or after an old injury. The top of the midfoot aches with walking and standing, and bony lumps can form there that tight laces or shoes press on. Supportive, stiffer-soled shoes and strengthening help most people.
+Arthritis can develop in the small joints across the middle of the foot with age or after an old injury. The top of the midfoot aches with walking and standing, and bony lumps can form there that tight laces or shoes press on. Supportive, stiffer-soled shoes and strengthening help most people.
 
 ## noticed
 - An ache on the top or middle of the foot with walking and standing
@@ -31,8 +31,13 @@ The small joints across the middle of the foot can wear with age or after an old
 - Wear supportive shoes with a stiffer sole
 - Loosen or re-lace to avoid pressure on the lumps
 - Keep active with cycling or swimming if walking is sore
+- During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
 
 ## seePhysioIf
 - Pain is limiting walking
 - It is getting worse despite shoe changes
 - You want advice on insoles and strengthening
+
+## clinicNotes
+- Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing.
+- Midfoot: stiffer-soled or rocker shoes, orthoses; ask about an old midfoot (Lisfranc) injury.
