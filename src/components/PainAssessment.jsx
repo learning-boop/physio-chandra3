@@ -6,6 +6,7 @@ import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
+import { preloadPdf } from './resultsPdf'
 import GuideVideo from './GuideVideo'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
@@ -391,6 +392,15 @@ export default function PainAssessment() {
     return () => window.removeEventListener('resize', onR)
   }, [])
   const isPhone = vw < 768
+  // Fetch the PDF library while the page is fresh, not on the results page
+  // minutes later: its file name changes with every site update, so a page
+  // loaded before an update would ask for a file that no longer exists and
+  // "Save my results (PDF)" would fail (Oct 2026).
+  useEffect(() => {
+    const go = () => preloadPdf().catch(() => {})
+    const id = typeof window.requestIdleCallback === 'function' ? window.requestIdleCallback(go, { timeout: 4000 }) : setTimeout(go, 1500)
+    return () => (typeof window.cancelIdleCallback === 'function' ? window.cancelIdleCallback(id) : clearTimeout(id))
+  }, [])
   // The swipe hint is a nudge, not decoration: it disappears the moment the
   // visitor touches the model, so it never nags someone who already knows.
   const [hasTurned, setHasTurned] = useState(false)

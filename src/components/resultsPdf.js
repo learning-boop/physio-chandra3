@@ -6,9 +6,17 @@
 let jsPdfModule = null
 // Load jsPDF ahead of the tap, so the PDF can be built and handed to the share
 // sheet inside the tap itself — phones refuse to share after a long wait.
+// A failed load is forgotten, so the next tap tries again instead of
+// failing every time. Always returns a promise (the module itself once
+// loaded, wrapped), since callers chain .catch().
 export function preloadPdf() {
-  if (!jsPdfModule) jsPdfModule = import('jspdf').then((m) => { jsPdfModule = m; return m })
-  return jsPdfModule
+  if (!jsPdfModule) {
+    jsPdfModule = import('jspdf').then(
+      (m) => { jsPdfModule = m; return m },
+      (e) => { jsPdfModule = null; throw e },
+    )
+  }
+  return Promise.resolve(jsPdfModule)
 }
 export const pdfReady = () => !!(jsPdfModule && jsPdfModule.jsPDF)
 

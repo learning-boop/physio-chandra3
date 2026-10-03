@@ -29,7 +29,9 @@ export default function SaveResults({ code, pdfData, anonPayload }) {
       const doc = buildResultsPdf(pdfData())
       const r = await savePdf(doc, `PhysioChandra-results-${code}.pdf`)
       setPdfState(r === 'cancelled' ? 'idle' : 'done')
-    } catch {
+    } catch (e) {
+      // Kept in the browser console, so a failure can be traced.
+      console.error('Results PDF could not be made:', e)
       setPdfState('error')
     }
   }

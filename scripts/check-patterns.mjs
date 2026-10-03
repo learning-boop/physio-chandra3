@@ -885,5 +885,22 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ['lowback/myofascial', 'hip/myofascial'].some((id) => shown(['lowback', 'hip'], { age: '30-49', duration: 'd2w', tender: 'refers' }).includes(id)))
 }
 
+// ── 30. The results PDF (Oct 2026): loaded early, and safe to ask for twice ──
+{
+  const pdf = await imp('src/components/resultsPdf.js')
+  await pdf.preloadPdf()
+  const again = pdf.preloadPdf()
+  check('PDF: asking for the PDF library again after it has loaded still gives a promise (the results page chains .catch)',
+    !!again && typeof again.then === 'function' && typeof again.catch === 'function' && pdf.pdfReady())
+  const doc = pdf.buildResultsPdf({ code: '20261002-001', dateText: 'October 2, 2026', images: null, areas: ['Neck'], doctor: null, referral: [],
+    conditions: [{ name: 'Muscle-referred neck and shoulder ache (myofascial pain)', blurb: 'A “knot” — is not a tear…' }], noMatch: 'x', painType: null,
+    behaviour: [], cautions: ['Fibromyalgia, diagnosed by a doctor'], answers: [{ question: 'Your age?', answer: '30 to 49' }], notes: '' })
+  check('PDF: a results PDF builds', doc.internal.getNumberOfPages() >= 1)
+  const { readFileSync } = await import('node:fs')
+  const src = readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('PDF: the library is fetched when the assessment opens, not first on the results page (a site update in between broke it)',
+    /preloadPdf\(\)\.catch/.test(src))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
