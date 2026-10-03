@@ -3,12 +3,13 @@ region: hand
 id: dupuytren
 name: Dupuytren's disease (Dupuytren's contracture)
 clin: Dupuytren's disease / contracture (palmar fibromatosis); post-fasciectomy rehabilitation
-# From "Dupuytrens contractures.docx" (Conditions/General conditions), v0.1
-# draft, 2 Oct 2026, pending Chandra's sign-off (AIM Theory Manual 2023 Ch. 2.9;
+# From "Dupuytrens contractures.docx" (Conditions/General conditions),
+# reviewed and signed by Chandra Matla, 2 Oct 2026 (confirmed in the session;
+# the saved Word file did not yet show the signature) (AIM Theory Manual 2023 Ch. 2.9;
 # Dutch guideline 2023, NICE IPG43 / BSSH, HAND-2, splinting RCTs). Replaces
 # the 25 Sep 2026 draft written from content/regions/hand.md.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 # Pointers follow the document's scored question set (section 4), on the
 # hand's H2 (tick all), H1 and H4:
 #   Q1 hand will not lie flat 3 (also shows the referral card) · Q2 a firm,

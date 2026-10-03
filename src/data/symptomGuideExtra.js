@@ -1877,8 +1877,8 @@ export const EXTRA_REGIONS = {
         { id: "palm", label: "Palm, at the base of a finger or thumb" },
         { id: "whole", label: "A whole finger, or the fingertips" }
       ]},
-      // Dupuytren's answers from the "Dupuytrens contractures" document (v0.1,
-      // 2 Oct 2026): its Q1 (flat on a table), Q2 (a firm, painless lump or
+      // Dupuytren's answers from the "Dupuytrens contractures" document (signed
+      // by Chandra, 2 Oct 2026): its Q1 (flat on a table), Q2 (a firm, painless lump or
       // cord) and Q3 (slowly bending), and a procedure already done.
       { id: "H2", text: "Which of these apply? Tick all that apply.", options: [
         { id: "trigger", label: "A finger or thumb clicks, catches, or locks bent" },

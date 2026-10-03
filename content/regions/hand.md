@@ -3,8 +3,8 @@
 # Built into src/data/symptomGuideExtra.js (hand) and src/data/injuryScreen.js (hand screen).
 # Conditions: content/conditions/hand-*.md. Body map: the hand band, below the wrist (WRIST_BOTTOM in Body3D.jsx).
 # Test patients: npm run check:regions
-# 2 Oct 2026: "Dupuytrens contractures.docx" (Conditions/General conditions, v0.1
-# draft): hand-dupuytren rewritten; question 2 gains a painless cord, "cannot lay
+# 2 Oct 2026: "Dupuytrens contractures.docx" (Conditions/General conditions, signed
+# by Chandra, 2 Oct 2026): hand-dupuytren rewritten; question 2 gains a painless cord, "cannot lay
 # flat" (referral card) and "had a procedure" (post-procedure check); the
 # lump flag widened. Marked (dup) below.
 # 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
@@ -228,7 +228,7 @@ Answers: Age 30 to 49 · Gradually, no clear reason · 2 to 6 weeks · Subjectiv
 Flags: None
 Expect: top condition = No hand condition; shows a “this may be coming from your neck” message; must not show = Thumb base arthritis or carpal tunnel as the top result; route = Results (suggest neck check) + booking
 
-<!-- (dup) From "Dupuytrens contractures.docx" (v0.1 draft, 2 Oct 2026): maximum 12, shown from 5. -->
+<!-- (dup) From "Dupuytrens contractures.docx" (signed by Chandra, 2 Oct 2026): maximum 12, shown from 5. -->
 CASE: Dupuytren's 1. Painless cord in the palm, ring finger slowly bending, hand will not lie flat
 Answers: 65 or over; gradually; more than 3 months; Q1 = palm; Q2 = cord + slowly bending + cannot lay flat
 Expect: top condition = Dupuytren's, with the see-your-doctor card; route = results

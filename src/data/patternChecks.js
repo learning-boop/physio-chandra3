@@ -189,7 +189,7 @@ const PATTERNS = [
     text: 'With the weakness: difficulty breathing or being breathless when you lie flat, a weak cough, trouble swallowing or clearing saliva, or fainting, near-fainting or a racing or irregular heartbeat',
     when: (z, a) => weakAnswer(a),
   },
-  // After a Dupuytren's procedure (the hand's H2, document v0.1, 2 Oct 2026).
+  // After a Dupuytren's procedure (the hand's H2, document signed by Chandra, 2 Oct 2026).
   {
     id: 'pc-hand-procedure', tier: 'urgent', sameDay: true, why: WHY.handProcedure,
     text: 'Since the procedure on your hand: a hot, red, increasingly swollen hand, pus, spreading redness or a fever; new numbness in a fingertip; or a finger you suddenly cannot bend',
