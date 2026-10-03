@@ -174,6 +174,10 @@ export const REGIONS = {
         text:"Could you be pregnant, and do you have pain low in your tummy along with pain at the tip of your shoulder?"},
       {id:"srf-lung", tier:"emergency", call911: true, group:"lungclot", why:"Possible blood clot in the lung or a collapsed lung",
         text:"Do you have a sudden, sharp pain on breathing with shortness of breath?"},
+      // Dark urine with muscle pain or weakness ("Poly myositis" document,
+      // Chandra 2 Oct 2026); shared with the arm, hip, thigh and leg.
+      {id:"srf-rhabdo", tier:"emergency", group:"rhabdo", why:"Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
+        text:"Do you have severe muscle pain or weakness, with urine that is dark like cola? (Especially after very hard exercise, a crush, a long time lying on the floor, a new medicine such as a statin, or a recent illness.)"},
       {id:"rf-hotjoint", tier:"emergency", group: "hotjoint", why:"Possible joint infection (septic arthritis)",
         text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?"},
       {id:"srf-pmr", tier:"urgent", why:"Possible polymyalgia rheumatica; needs blood tests and medical care",

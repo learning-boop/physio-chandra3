@@ -19,7 +19,11 @@
 - **Route B, diagnosed:** "Myasthenia gravis, diagnosed by a neurologist" (`ca-mg`) and "Myotonic dystrophy or another muscle disease, diagnosed by a neurologist" (`ca-dm`) and "Myositis (an inflammatory muscle disease…), diagnosed by a specialist" (`ca-myositis`) on the "Anything else we should know?" list. Neither stops physiotherapy; the results page explains safe exercise and when to call the team or 911.
 - **Already on the site:** stroke signs (911), spinal cord and cauda equina (emergency), spreading weakness in hands and feet with breathing or swallowing trouble (the neck's nrf-cord-legs, 911), the MS screen (pc-neuro), glove-and-stocking neuropathy, foot drop.
 - **Choices to confirm:** the documents send fainting or palpitations with weakness to the emergency department; here they are 911, as the site's other fainting and irregular-heartbeat checks are. The documents' rapidly spreading weakness (emergency department) is covered by the neck's cord questions only, not in every region.
-- **Myositis, not built separately:** rhabdomyolysis (dark urine) is asked only after extreme exercise (upper arm, thigh, calf); weakness with fever or weight loss is on the general flags; polymyalgia rheumatica over 50 has the neck's pc-over50stiff but no hip-and-shoulder entry of its own (the document's open item 5).
+- **Myositis, decided by Chandra (2 Oct 2026):**
+  - Dark urine with muscle pain or weakness is asked generally, not only after exercise: one shared question (group `rhabdo`) on the shoulder, upper arm, hip, thigh and lower leg, asked once; emergency department now.
+  - Polymyalgia rheumatica has its own doctor-first question, `pc-pmr`: over 50 with both shoulders or both hips (upper arms, thighs) drawn, not the neck (pc-over50stiff asks there); morning stiffness over 45 minutes, feeling unwell, or the giant cell arteritis signs; no booking until a doctor has seen them, the same day with those signs.
+  - The cancer link is mentioned calmly in the diagnosed entry (`ca-myositis`): some types are linked with lung problems and, less often, cancer, so the team may arrange screening tests.
+  - The phase-based exercise intensities and the local referral wording (Mary Pack Arthritis Program and rheumatology, VGH neuromuscular clinic) are confirmed as written.
 - **Not built:** the documents' scored blocks (6 questions each); the single screening question asks their strongest items and routes the same way.
 
 ## Myasthenia gravis
@@ -48,7 +52,7 @@
 
 ## Open items in the documents (signed 2 Oct 2026; built as below)
 
-(1) one cross-region "nerve and muscle" gate (built that way); (2) scores and overrides; (3) written confirmation of stability before the first MG session, and stop rules; (4) the breathing and inspiratory muscle training bullets; (5) local referral wording (VGH, St Paul's, GF Strong neuromuscular clinics); (6) naming the conditions on the doctor-first screen (kept generic); (7) congenital and childhood myotonic dystrophy in a "for my child" pathway. Myositis (v0.1): (1) the subacute proximal part of the gate (built); (2) scores and overrides; (3) the cancer association on patient screens (not mentioned on the site for now); (4) phase intensities and whether early-active is clinic-only; (5) PMR as its own doctor-first entry; (6) local referral (Mary Pack Arthritis Program and rheumatology vs VGH neuromuscular).
+(1) one cross-region "nerve and muscle" gate (built that way); (2) scores and overrides; (3) written confirmation of stability before the first MG session, and stop rules; (4) the breathing and inspiratory muscle training bullets; (5) local referral wording (VGH, St Paul's, GF Strong neuromuscular clinics); (6) naming the conditions on the doctor-first screen (kept generic); (7) congenital and childhood myotonic dystrophy in a "for my child" pathway. Myositis (v0.1): (1) the subacute proximal part of the gate (built); (2) scores and overrides (not built); (3) the cancer association (yes: in the diagnosed entry); (4) phase intensities (confirmed); (5) PMR as its own doctor-first entry (yes: pc-pmr); (6) local referral wording (confirmed). Also decided: dark urine asked generally.
 
 ## Sources
 

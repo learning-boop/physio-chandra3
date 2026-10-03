@@ -568,8 +568,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   // 49: the base of the neck's recent-crash flag (ctj.md:34) is the neck injury screen, not a flag;
   // 54 since the compartment syndrome document added the ankle, foot, wrist
   // and hand compartment questions and the calf rhabdomyolysis one (2 Oct 2026).
-  check('911 split: 54 region flags send the person to emergency now',
-    em.filter((f) => !f.call911).length === 54, em.filter((f) => !f.call911).map((f) => f.id))
+  // 56 with the general dark-urine question on the shoulder and hip (2 Oct 2026).
+  check('911 split: 56 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 56, em.filter((f) => !f.call911).map((f) => f.id))
   check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
   // A shared group must lead to the same place in every area that asks it.
   const byGroup = {}
@@ -823,6 +824,26 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Myositis: not asked for a weak grip alone (hands are spared; the general screen asks)',
     !patternChecks(ZN(['handR']), { H3: ['weak'] }, 9).some((p) => p.id === 'pc-myositis') && patternChecks(ZN(['thighR']), { R2: ['weak'] }, 9).some((p) => p.id === 'pc-myositis'))
   check('Myositis: not asked for one sore shoulder with no weakness', !patternChecks(ZN(['shoulderR']), { painQuality: ['ache'] }, 9).some((p) => p.id === 'pc-myositis'))
+}
+
+// ── 27. Polymyalgia rheumatica, dark urine, the cancer link (Chandra, 2 Oct 2026) ──
+{
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { regionRedFlags } = await imp('src/data/assessmentFlow.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const pmr = patternChecks(ZN(['shoulderL', 'shoulderR']), { age: 'o64' }, 9).find((p) => p.id === 'pc-pmr')
+  check('PMR: over 50 with both shoulders drawn asks about morning stiffness and the giant cell arteritis signs; doctor first (today with those signs)',
+    pmr && pmr.noBooking && pmr.sameDay && /jaw pain when chewing/.test(pmr.text), pmr)
+  check('PMR: not asked under 50, or when the neck is drawn (its own over-50 question asks there)',
+    !patternChecks(ZN(['shoulderL', 'shoulderR']), { age: '30-49' }, 9).some((p) => p.id === 'pc-pmr') &&
+    !patternChecks(ZN(['neck', 'shoulderL', 'shoulderR']), { age: 'o64' }, 9).some((p) => p.id === 'pc-pmr'))
+  const flags = (ids) => regionRedFlags(ZN(ids), ZN(ids)).map((f) => f.id)
+  const rh = flags(['shoulderR', 'upperarmR', 'hipR', 'thighR', 'lowerlegR']).filter((id) => /rhabdo/.test(id))
+  check('Dark urine: asked generally (no exercise needed), once across the shoulder, arm, hip, thigh and leg', rh.length === 1, rh)
+  check('Dark urine: asked for the shoulder and the hip too', flags(['shoulderR']).some((id) => /rhabdo/.test(id)) && flags(['hipR']).some((id) => /rhabdo/.test(id)))
+  const { readFileSync } = await import('node:fs')
+  const src = readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Myositis: the diagnosed entry mentions the cancer link calmly, with screening', /less often, cancer, so your team may arrange screening tests/.test(src))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

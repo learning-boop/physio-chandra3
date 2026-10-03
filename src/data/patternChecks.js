@@ -75,6 +75,10 @@ const WHY = {
     title: 'Please see your family doctor this week',
     text: 'Weakness in both thighs or both shoulders that has built up over weeks or months, without an injury, is different from a strained muscle or a worn joint. One possible cause is inflammation in the muscles themselves, which a doctor can usually pick up with a blood test. Please see your family doctor this week and ask whether a creatine kinase (CK) blood test is appropriate; mention any rash, swallowing trouble, cough or breathlessness, and the medicines you take (including any cholesterol medicine). If you have swallowing, breathing or general symptoms, please do not wait more than a few days. This kind of weakness can be treated, and physiotherapy can follow once the cause is known.',
   },
+  pmr: {
+    title: 'Please see your family doctor; today if any of the eye, scalp or jaw signs apply',
+    text: 'New aching and stiffness in both shoulders or both hips after the age of 50, worst in the morning and with feeling unwell, can be polymyalgia rheumatica, an inflammatory condition that a doctor treats, usually with a blood test and medicine, and which often responds quickly. Please see your family doctor within the next few days. A new headache, a tender scalp, jaw pain when chewing, or any change in your vision can mean giant cell arteritis, which needs a doctor the same day to protect your eyesight. Physiotherapy can help once a doctor has seen you.',
+  },
   handProcedure: {
     title: 'Please contact a doctor or your hand clinic today',
     text: 'After hand surgery, a needle release or an injection, a hot, red, increasingly swollen hand, pus, spreading redness or a fever can be an infection, and new numbness in a fingertip or a finger you suddenly cannot bend can mean a nerve or tendon problem. These need checking the same day. Pain, swelling, colour change or sensitivity far beyond what you expected, not settling week on week, also needs an early review.',
@@ -288,6 +292,16 @@ const PATTERNS = [
     id: 'pc-child-muscle', tier: 'urgent', noBooking: true, why: WHY.childMuscle,
     text: 'For a young child: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
     when: (z, a) => ['u5', 'u18'].includes(a.age) && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'),
+  },
+  // Polymyalgia rheumatica over 50, as its own doctor-first entry (Chandra,
+  // 2 Oct 2026, the "Poly myositis" document's open item 5): both shoulders
+  // or both hips (upper arms, thighs), not the neck (pc-over50stiff asks
+  // there). The giant cell arteritis signs make it same day.
+  {
+    id: 'pc-pmr', tier: 'urgent', sameDay: true, noBooking: true, why: WHY.pmr,
+    text: 'New aching and stiffness in both shoulders or both hips (or upper arms or thighs) over the last few weeks, lasting more than 45 minutes in the morning and making it hard to get out of bed, dress or lift your arms, often with tiredness or feeling unwell; or a new headache, a tender scalp, jaw pain when chewing, or changes in your vision',
+    when: (z, a) => over50(a.age) && !has(z, 'neck') &&
+      (['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)) || (has(z, 'shoulder') && has(z, 'hip'))),
   },
   // Inflammatory myopathy ("Poly myositis" document, v0.1 draft, 2 Oct 2026,
   // pending Chandra's sign-off; route A, the subacute symmetrical proximal

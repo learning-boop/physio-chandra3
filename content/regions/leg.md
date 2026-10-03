@@ -60,7 +60,7 @@ Why: Possible peroneal nerve injury
 <!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (v0.1 draft): see content/reference/compartment-syndrome.md. -->
 - (acs) The compartment question is reworded as above (pain relief no longer helping; shared with the ankle and foot).
 - Is a cast, splint or bandage on this leg feeling more and more tight and painful? Please do not cut it off yourself. | urgent, same day | A cast that keeps getting tighter needs checking today   (acs)
-- After very hard exercise, is your calf or shin hugely swollen and very painful, or weak, and is your urine dark like cola? | emergency | Possible muscle breakdown (rhabdomyolysis)   (acs)
+- Do you have severe muscle pain or weakness, with urine that is dark like cola? (Especially after very hard exercise, a crush, a long time lying on the floor, a new medicine such as a statin, or a recent illness.) | emergency | Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys   (2 Oct 2026, Chandra's request: asked generally, not only after exercise; shared with the shoulder, arm, hip, thigh and leg (group rhabdo), asked once; added after the signed version)
 
 ## opening questions
 Q: Your age?
