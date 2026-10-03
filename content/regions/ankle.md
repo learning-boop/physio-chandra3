@@ -25,7 +25,7 @@ reviewed_on: 2026-09-25
 - Do you have heel or Achilles pain along with back stiffness in the morning, psoriasis, eye inflammation, other swollen joints, or a recent stomach bug or sexually transmitted infection? | urgent | Possible inflammatory or reactive arthritis affecting the tendons
 - Have you recently taken a quinolone antibiotic (such as ciprofloxacin) or steroid tablets, and now have Achilles pain? | urgent | These medicines raise the risk of Achilles rupture; the prescriber should review
 - Is your foot slapping down or your toes catching when you walk? | urgent | Foot drop (peroneal nerve or L5) needs medical review
-- Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes? | urgent | Possible peripheral neuropathy; needs medical review and foot checks
+- Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes? | urgent | Possible peripheral neuropathy; needs medical review and foot checks · no booking until a doctor has seen them; left out when diabetes is known (diabetes documents, 3 Oct 2026; reference/diabetes.md)
 - Have you ever had cancer, or is there a lump that is growing, or deep pain at night that does not change with position? | urgent | A lump or bone lesion needs medical review
 
 ## injury screen

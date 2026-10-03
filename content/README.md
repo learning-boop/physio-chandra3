@@ -26,6 +26,7 @@ content/
     myofascial-pain.md   (muscle-referred pain: the shared tender-spot opening question and the myofascial condition in the neck, shoulder, upper back, low back and hip)
     fibromyalgia.md   (persistent widespread pain: the results-page explainer in src/data/widespreadPain.js, physio route with a family-doctor line, ca-fibro)
     duchenne.md   (Duchenne muscular dystrophy: the early-signs question for a child, pc-child-muscle, and the diagnosed entry on the cautions list)
+    diabetes.md   (diabetes as context: the question on "A little about you", its red flags first, the doctor-first nerve screen without it, the details and burden tier, the rank lift and the results panel in src/data/diabetes.js)
 ```
 
 Files starting with `_` are templates, examples and instructions, never data.

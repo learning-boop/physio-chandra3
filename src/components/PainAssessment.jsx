@@ -22,6 +22,9 @@ import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMecha
 import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
 import { patternChecks } from '../data/patternChecks'
 import { WIDESPREAD, widespreadRoute } from '../data/widespreadPain'
+import {
+  DM_STATUS, diabetesRedFlags, isNerveFlag, NERVE_WHY, diabetesBranch, diabetesQuestions, diabetesBonus, diabetesPanel, diabetesSummary,
+} from '../data/diabetes'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -666,8 +669,11 @@ export default function PainAssessment() {
   const ranked = useMemo(() => {
     if (!keys.length) return []
     // Two hypotheses, matching the summary Chandra receives (MAX_HYPOTHESES).
-    try { return rankAcross(keys, scopedAnswers, MAX_HYPOTHESES) } catch { return [] }
-  }, [keys, scopedAnswers])
+    // Diabetes lifts the conditions it makes more likely, in the order only
+    // (../data/diabetes.js); it never decides whether one is shown.
+    try { return rankAcross(keys, scopedAnswers, MAX_HYPOTHESES, diabetesBonus(answers, zones)) } catch { return [] }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keys, scopedAnswers, answers.dm, answers.dmType, answers.dmYears, answers.dmControl, answers.dmTreat, answers.dmComp, answers.dmFeel, zones])
   // Education cards the answers call for, e.g. "this may be coming from your
   // shoulder" when moving the arm hurts more than moving the neck.
   const specials = useMemo(() => {
@@ -719,9 +725,13 @@ export default function PainAssessment() {
   // Who the safety questions are for: age and birth sex from "A little about you".
   const who = useMemo(() => ({ age: answers.age, sex: birthSex }), [answers.age, birthSex])
   const screening = useMemo(() => {
-    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who))
+    // Numb or burning feet on both sides: with known diabetes the results
+    // panel takes over (../data/diabetes.js); without it, doctor first.
+    const dmKnown = answers.dm === 'yes'
+    const nerve = (f) => (isNerveFlag(f) ? { ...f, noBooking: true, why: NERVE_WHY } : f)
+    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)))
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
-    const list = regional.map((f) => ({
+    const list = regional.map((f) => nerve({
       ...f, why: typeof f.why === 'string' ? { title: f.why, text: tierWhy(f).text } : tierWhy(f),
     }))
     // Areas with no authored region (currently only the stomach) fall back to the
@@ -749,13 +759,18 @@ export default function PainAssessment() {
     const ownOrgan = list.some((f) => inGroup(f, 'organ'))
     const ownNeuro = list.some((f) => inGroup(f, 'neuro'))
     const universal = UNIVERSAL_CHECKS.filter((f) => !(injuryApplies && f.id === 'sc-trauma') && !(ownNeuro && f.id === 'sc-neuro'))
-    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral')).slice(0, 2)
-    const all = [...list, ...pattern]
+    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral'))
+      .filter((f) => !(dmKnown && isNerveFlag(f))).slice(0, 2).map(nerve)
+    // With diabetes, its own red flags come first on each page ("DiabetesMellitus"
+    // document, section 6), minus any this page already asks.
+    const diabetic = diabetesRedFlags(zones, answers, [...list, ...pattern])
+    const all = [...diabetic, ...list, ...pattern]
     return {
       emergency: all.filter((f) => f.tier === 'emergency'),
       physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
     }
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -853,6 +868,22 @@ export default function PainAssessment() {
   // nudge to the family doctor, unless a doctor has already diagnosed it.
   const fibroDiagnosed = flags.includes('ca-fibro')
   const showWidespread = widespreadRoute(painType, fibroDiagnosed)
+  // Diabetes ("DiabetesMellitus" and "Diabetes RiskModule" documents, v0.1,
+  // 3 Oct 2026; ../data/diabetes.js). The details are asked on "Before your
+  // results" when a condition diabetes makes more likely qualifies (counted
+  // with room for one a lift could bring in) or both feet burn or tingle.
+  const wideRanked = useMemo(() => {
+    if (!keys.length) return []
+    try { return rankAcross(keys, scopedAnswers, 4) } catch { return [] }
+  }, [keys, scopedAnswers])
+  const dmQuestions = diabetesBranch(answers, zones, wideRanked) ? diabetesQuestions(answers, zones) : []
+  const dmPanel = useMemo(() => diabetesPanel(answers, zones, shown), [answers, zones, shown])
+  const pickDm = (q, oid) => setAnswers((a) => {
+    if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
+    const cur = [].concat(a[q.id] || [])
+    if (cur.includes(oid)) return { ...a, [q.id]: cur.filter((x) => x !== oid) }
+    return { ...a, [q.id]: oid === 'none' ? ['none'] : [...cur.filter((x) => x !== 'none'), oid] }
+  })
 
   const setAnswer = (qid, value) => setAnswers((a) => ({ ...a, [qid]: value }))
 
@@ -957,12 +988,13 @@ export default function PainAssessment() {
     ? buildClinicianSummary({
       zones, referral, keys, answers: scopedAnswers, qaPairs, notes: notesText,
       ranked: shown, behaviour, psych, painType, cautions: pickedCautions,
+      diabetes: diabetesSummary(answers, zones, shown),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
       reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
       review,
     })
-    : ''), [stage, zones, referral, keys, scopedAnswers, qaPairs, notesText, shown, behaviour, psych, painType, pickedCautions, safetyChecks, flags, review, doctorFlags, otherFlagged, flagOther])
+    : ''), [stage, zones, referral, keys, scopedAnswers, qaPairs, notesText, shown, behaviour, psych, painType, pickedCautions, safetyChecks, flags, review, doctorFlags, otherFlagged, flagOther, answers])
 
   /* ── Reference code ────────────────────────────────────────────────────
      Given only to someone who completed the guide: asked for when the results
@@ -1007,6 +1039,7 @@ export default function PainAssessment() {
     painType: painType ? [painType.primary, painType.secondary].filter(Boolean).map((t) => `${PAIN_TYPES[t].title} (${PAIN_TYPES[t].term})`).join(', with some features of ') : null,
     behaviour: behaviour.notes,
     cautions: pickedCautions.map((f) => f.text),
+    diabetes: dmPanel ? { title: dmPanel.title, text: dmPanel.text, notes: dmPanel.notes } : null,
     answers: qaPairs,
     notes: notesText,
   })
@@ -1020,7 +1053,8 @@ export default function PainAssessment() {
     zones: zones.map((z) => ({ id: z.id, type: z.type, face: z.face, ink: z.ink })),
     lines,
     answers: Object.fromEntries(Object.entries(answers).filter(([k, v]) =>
-      !/(^notes$|^q5$|_other$)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
+      // Diabetes answers (dm, dmType…) stay out of the anonymous copy.
+      !/(^notes$|^q5$|_other$|^dm)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
     flags: flags.filter((f) => f !== '__other'),
     results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
     referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null })),
@@ -1785,7 +1819,7 @@ export default function PainAssessment() {
                     A little <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>about you</em>
                   </h2>
                   <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
-                    These two answers let us skip safety questions that cannot apply to you, so there are fewer to read.
+                    These answers let us skip safety questions that cannot apply to you, and ask the ones that do.
                   </p>
                 </div>
                 <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
@@ -1813,10 +1847,27 @@ export default function PainAssessment() {
                     Used only on this device to choose which safety questions to show (for example, pregnancy questions). It is not saved, not sent anywhere, and not included in your summary, PDF, AI overview or any shared copy.
                   </p>
                 </div>
+                {/* Diabetes (../data/diabetes.js): puts its red flags first and
+                    shapes the results. In the summary and PDF, never in the
+                    anonymous copy or the AI overview. */}
+                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{DM_STATUS.text}</span></p>
+                  {DM_STATUS.options.map((o, i) => {
+                    const sel = answers.dm === o.id
+                    return (
+                      <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, dm: o.id }))}>
+                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                      </button>
+                    )
+                  })}
+                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
+                    Diabetes changes which safety questions matter and how some problems are best treated. Your answer goes in your summary and PDF, not in any anonymous copy.
+                  </p>
+                </div>
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary"
-                    style={{ ...goldBtn, opacity: answers.age && birthSex ? 1 : 0.45, cursor: answers.age && birthSex ? 'pointer' : 'not-allowed' }}
-                    disabled={!answers.age || !birthSex}
+                    style={{ ...goldBtn, opacity: answers.age && birthSex && answers.dm ? 1 : 0.45, cursor: answers.age && birthSex && answers.dm ? 'pointer' : 'not-allowed' }}
+                    disabled={!answers.age || !birthSex || !answers.dm}
                     onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}>Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
                 </div>
@@ -1933,6 +1984,35 @@ export default function PainAssessment() {
                   })()}
                 </div>
 
+                {/* Diabetes details (../data/diabetes.js, module section 3):
+                    one panel, every question optional. They tailor the
+                    results; no score is ever shown. */}
+                {dmQuestions.length > 0 && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 2px' }}>
+                      <span aria-hidden="true" style={qMark} />
+                      <span>A few details about your diabetes</span>
+                    </p>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '0 0 6px', lineHeight: 1.6 }}>
+                      Diabetes makes some of the problems your answers point to more likely, and can change how they are best treated. Answer any you can; skip any you are not sure of.
+                    </p>
+                    {dmQuestions.map((q) => (
+                      <div key={q.id} style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 8 }}>
+                        <p style={{ fontSize: 14.5, color: '#fff', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
+                        {q.options.map((o) => {
+                          const sel = [].concat(answers[q.id] || []).includes(o.id)
+                          return (
+                            <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(q, o.id)}>
+                              <span style={letterStyle(sel)}>{sel ? '✓' : '·'}</span>
+                              <span>{o.label}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 {/* Cautions: they change how the first assessment is done,
                     they do not stop it. Kept visually separate so the screen
                     never reads as "more red flags". */}
@@ -1959,7 +2039,7 @@ export default function PainAssessment() {
                       if (flaggedIn(finalChecks) || otherFlagged) routeUrgent('safety')
                       else setStage('ok')
                     }}>
-                    {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length ? 'Continue' : 'None Apply — Continue'}
+                    {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length || dmQuestions.some((q) => answers[q.id] !== undefined) ? 'Continue' : 'None Apply — Continue'}
                   </button>
                   <button style={ghostBtn} onClick={() => setStage('review')}>Back</button>
                 </div>
@@ -2293,6 +2373,25 @@ export default function PainAssessment() {
                       <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: '6px 0 0', lineHeight: 1.6 }}>
                         Please mention these when you book, so your first appointment can be planned around them.
                       </p>
+                    </div>
+                  </>
+                )}
+
+                {/* Diabetes and this problem (../data/diabetes.js): the panel
+                    for the leading diabetes-linked condition, its tier's
+                    prognosis line and safety notes; or, without known
+                    diabetes, a gentle "worth asking for a blood test". */}
+                {dmPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>{answers.dm === 'yes' || answers.dm === 'pre' ? 'Your diabetes and this problem' : 'Worth knowing'}</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{dmPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{dmPanel.text}</p>
+                      {dmPanel.notes.length > 0 && (
+                        <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                          {dmPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                        </ul>
+                      )}
                     </div>
                   </>
                 )}

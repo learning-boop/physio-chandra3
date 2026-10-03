@@ -38,7 +38,8 @@ const AMBER = [180, 110, 0]
  *  code, dateText, images { views: [{ src, width, height, label }] } | null,
  *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
  *  conditions [{name, blurb}], noMatch string | null, painType string | null,
- *  cautions [string], behaviour [string], answers [{question, answer}], notes string
+ *  cautions [string], diabetes {title, text, notes [string]} | null,
+ *  behaviour [string], answers [{question, answer}], notes string
  * @returns jsPDF document
  */
 export function buildResultsPdf(d) {
@@ -177,6 +178,7 @@ export function buildResultsPdf(d) {
   if (d.painType) { heading('Likely pain type'); text(d.painType) }
   if (d.behaviour.length) { heading('How your pain behaves'); bullets(d.behaviour) }
   if (d.cautions.length) { heading('To mention when you book'); bullets(d.cautions) }
+  if (d.diabetes) { heading(d.diabetes.title); text(d.diabetes.text); if (d.diabetes.notes.length) bullets(d.diabetes.notes) }
 
   if (d.answers.length) {
     heading('Your answers')

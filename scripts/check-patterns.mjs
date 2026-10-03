@@ -954,5 +954,94 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Feedback: says never published or used as a testimonial, and gives 911, 8-1-1 and 9-8-8', /never published or used as a testimonial/.test(form) && /911/.test(form) && /8-1-1/.test(form) && /9-8-8/.test(form))
 }
 
+// ── 33. Diabetes ("DiabetesMellitus" + "Diabetes RiskModule", v0.1, 3 Oct 2026) ──
+{
+  const DM = await imp('src/data/diabetes.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const ids = (l) => l.map((f) => f.id)
+  check('Diabetes: no diabetes red flags without known diabetes',
+    !DM.diabetesRedFlags(ZN(['shoulderL']), { dm: 'no' }).length && !DM.diabetesRedFlags(ZN(['shoulderL']), { dm: 'pre' }).length)
+  const sh = DM.diabetesRedFlags(ZN(['shoulderL']), { dm: 'yes' })
+  check('Diabetes: with diabetes, any area asks ketoacidosis (911), a black toe, silent heart symptoms (911) and a hot swollen foot or wound (doctor today)',
+    ['dm-dka', 'dm-foot-black', 'dm-cardiac', 'dm-foot-hot'].every((i) => ids(sh).includes(i)) &&
+    sh.find((f) => f.id === 'dm-dka').call911 && sh.find((f) => f.id === 'dm-foot-hot').sameDay, ids(sh))
+  check('Diabetes: amyotrophy (no booking) and muscle infarction (today) only for hip, thigh, low back or leg drawings',
+    !ids(sh).includes('dm-amyotrophy') && !ids(sh).includes('dm-thigh') &&
+    DM.diabetesRedFlags(ZN(['thighR']), { dm: 'yes' }).some((f) => f.id === 'dm-amyotrophy' && f.noBooking && !f.sameDay))
+  const foot = REGIONS.foot.redFlags
+  const onFoot = DM.diabetesRedFlags(ZN(['footR']), { dm: 'yes' }, foot)
+  check('Diabetes: not asked twice where the foot already asks about Charcot and infection',
+    !ids(onFoot).includes('dm-foot-hot') && !ids(onFoot).includes('dm-foot-black'), ids(onFoot))
+  check('Diabetes: a heart question already on the page is not asked twice',
+    !DM.diabetesRedFlags(ZN(['chest']), { dm: 'yes' }, patternChecks(ZN(['chest']), {}, 7)).some((f) => f.id === 'dm-cardiac'))
+  const nerveFlags = ['leg', 'ankle', 'foot'].flatMap((k) => REGIONS[k].redFlags.filter(DM.isNerveFlag))
+  const poly = patternChecks(ZN(['footL', 'footR']), {}, 7).find((p) => p.id === 'pc-polyneuropathy')
+  check('Diabetes: numb or burning feet on both sides without known diabetes = doctor first, no booking (blood test)',
+    nerveFlags.length === 3 && nerveFlags.every((f) => f.noBooking) && poly && poly.noBooking && /blood test/.test(DM.NERVE_WHY.text) && /thirst/.test(DM.NERVE_WHY.text))
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Diabetes: with known diabetes the nerve questions are left out (the results panel takes over)',
+    /!\(dmKnown && isNerveFlag\(f\)\)/.test(src) && /\.\.\.diabetic, \.\.\.list, \.\.\.pattern/.test(src))
+  check('Diabetes: asked on "A little about you" (required to continue), kept out of the anonymous copy',
+    /DM_STATUS\.options\.map/.test(src) && /!answers\.dm\}/.test(src) && /_other\$\|\^dm\)/.test(src))
+
+  check('Diabetes tier: type 1, over 10 years, well above target = high; type 2, under 5 years, in target = low; over 20 years or a foot ulcer = high; prediabetes = low',
+    DM.diabetesTier({ dm: 'yes', dmType: 't1', dmYears: 'o10', dmControl: 'well' }) === 'high' &&
+    DM.diabetesTier({ dm: 'yes', dmType: 't2', dmYears: 'u5y', dmControl: 'target' }) === 'low' &&
+    DM.diabetesTier({ dm: 'yes', dmYears: 'o20' }) === 'high' && DM.diabetesTier({ dm: 'yes', dmComp: ['foot'] }) === 'high' &&
+    DM.diabetesTier({ dm: 'yes', dmYears: '5to10', dmControl: 'above' }) === 'moderate' &&
+    DM.diabetesTier({ dm: 'pre' }) === 'low' && DM.diabetesTier({ dm: 'no' }) === null)
+  check('Diabetes flags: insulin → HYPO; eyes, kidneys, heart; numb feet or the touch question → FOOT',
+    JSON.stringify(DM.diabetesFlags({ dmTreat: 'insulin', dmComp: ['eyes', 'kidneys', 'heart'], dmFeel: 'reduced' })) === JSON.stringify({ HYPO: true, EYE: true, KIDNEY: true, CARDIAC: true, FOOT: true }))
+
+  const shZ = ZN(['shoulderL'])
+  const a = { age: '50-64', onset: 'gradual', duration: 'd3m', S1: 'deep', S2: 'top', S3: ['behind', 'highshelf', 'lying'], S6: ['weakness'], S7: 'shoulder' }
+  const order = (b, ans = a) => rankAcross(['shoulder'], ans, 2, b).map((x) => x.c.id).join()
+  check('Diabetes lift: rotator cuff narrowly ahead of frozen shoulder → frozen shoulder first with long-standing diabetes; unchanged without it',
+    order(null) === 'rc,frozen' && order(DM.diabetesBonus({ dm: 'yes', dmYears: 'o20' }, shZ)) === 'frozen,rc' &&
+    order(DM.diabetesBonus({ dm: 'no' }, shZ)) === 'rc,frozen', [order(null), order(DM.diabetesBonus({ dm: 'yes', dmYears: 'o20' }, shZ))])
+  const mid = { ...a, S2: 'midarc' }
+  check('Diabetes lift: never shows a condition that has not met the 40% rule on its own',
+    order(DM.diabetesBonus({ dm: 'yes', dmYears: 'o20' }, shZ), mid) === order(null, mid) && !order(null, mid).includes('frozen'))
+  check('Diabetes lift: +1 more when both shoulders are drawn',
+    DM.diabetesBonus({ dm: 'yes', dmYears: 'o20' }, ZN(['shoulderL', 'shoulderR']))('shoulder', 'frozen') === 4 &&
+    DM.diabetesBonus({ dm: 'yes', dmYears: 'o20' }, shZ)('shoulder', 'frozen') === 3)
+  check('Diabetes: every linked condition exists, with a modifier for each tier and a known panel',
+    Object.entries(DM.DM_LINKED).every(([k, l]) => { const [rk, id] = k.split(':'); return REGIONS[rk] && REGIONS[rk].conditions.some((c) => c.id === id) &&
+      ['low', 'moderate', 'high'].every((t) => Number.isInteger(l.mod[t])) && ['shoulder', 'hand', 'feet', 'general'].includes(l.panel) }))
+
+  const fz = rankAcross(['shoulder'], a, 4)
+  check('Diabetes details: asked when a linked condition qualifies or both feet burn; not for a problem diabetes does not touch; prediabetes asks complications only',
+    DM.diabetesBranch({ dm: 'yes' }, shZ, fz) && !DM.diabetesBranch({ dm: 'no' }, shZ, fz) &&
+    !DM.diabetesBranch({ dm: 'yes' }, ZN(['kneeL']), []) &&
+    DM.diabetesBranch({ dm: 'yes', painQuality: ['burning'] }, ZN(['footL', 'footR']), []) &&
+    DM.diabetesQuestions({ dm: 'pre' }, shZ).map((q) => q.id).join() === 'dmComp' &&
+    !DM.diabetesQuestions({ dm: 'yes' }, shZ).some((q) => q.id === 'dmFeel') && DM.diabetesQuestions({ dm: 'yes' }, ZN(['footL'])).some((q) => q.id === 'dmFeel'))
+
+  const frozenFirst = [{ rk: 'shoulder', c: { id: 'frozen', name: 'Frozen shoulder' } }]
+  const pShoulder = DM.diabetesPanel({ dm: 'yes', dmYears: 'o10', dmControl: 'well', dmTreat: 'insulin' }, shZ, frozenFirst)
+  check('Diabetes panel: shoulder wording, the high-tier prognosis, the doctor line, the steroid and low-sugar notes',
+    pShoulder && /shoulder/.test(pShoulder.title) && pShoulder.notes.some((n) => /start early/.test(n)) &&
+    pShoulder.notes.some((n) => /diabetes team at your next visit/.test(n)) && pShoulder.notes.some((n) => /steroid injection/.test(n)) &&
+    pShoulder.notes.some((n) => /fast-acting sugar/.test(n)), pShoulder)
+  const pFeet = DM.diabetesPanel({ dm: 'yes', painQuality: ['tingling'] }, ZN(['footL', 'footR']), [])
+  check('Diabetes panel: both feet tingling with diabetes → the feet wording and daily foot checks',
+    pFeet && /feet/.test(pFeet.title) && pFeet.notes.some((n) => /Check both feet every day/.test(n)))
+  check('Diabetes panel: a problem diabetes does not touch → the short "staying active" note only',
+    DM.diabetesPanel({ dm: 'yes' }, ZN(['kneeL']), [{ rk: 'knee', c: { id: 'pfp' } }]).title === 'Diabetes and staying active')
+  const s50 = DM.diabetesPanel({ dm: 'no', age: '50-64' }, shZ, frozenFirst)
+  check('Diabetes, not known: frozen shoulder at 30 to 64 → "worth asking your doctor" for a blood test; not at 18 to 29; not for one-handed trigger finger; yes for both hands',
+    s50 && /HbA1c/.test(s50.text) && !DM.diabetesPanel({ dm: 'no', age: '18-29' }, shZ, frozenFirst) &&
+    !DM.diabetesPanel({ dm: 'ns' }, ZN(['handL']), [{ rk: 'hand', c: { id: 'trigger' } }]) &&
+    !!DM.diabetesPanel({ dm: 'ns' }, ZN(['handL', 'handR']), [{ rk: 'hand', c: { id: 'trigger' } }]))
+  const allText = JSON.stringify([DM.DM_RED_FLAGS, DM.NERVE_WHY, pShoulder, pFeet, s50,
+    ...['shoulder', 'hand', 'general'].map((p) => DM.diabetesPanel({ dm: 'yes', dmYears: 'o20' }, shZ, [{ rk: p === 'hand' ? 'hand' : p === 'general' ? 'knee' : 'shoulder', c: { id: p === 'hand' ? 'trigger' : p === 'general' ? 'oa' : 'frozen' } }]))])
+  check('Diabetes language: never "you have diabetes", a risk score, "high risk", "damage" (only "not damage"), "rotting" or a cure',
+    !/you (may )?have diabetes|risk score|high risk|(?<!not )damage|rotting|cure|permanent/i.test(allText), allText.match(/you (may )?have diabetes|risk score|high risk|(?<!not )damage|rotting|cure|permanent/i))
+  const sum = DM.diabetesSummary({ dm: 'yes', dmType: 't1', dmYears: 'o20', dmTreat: 'insulin' }, shZ, frozenFirst).join('\n')
+  check('Diabetes summary for Chandra: status, details, tier, flags and the lift applied',
+    /Yes, diabetes/.test(sum) && /Type 1/.test(sum) && /HIGH/.test(sum) && /HYPO/.test(sum) && /Frozen shoulder \+3/.test(sum), sum)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

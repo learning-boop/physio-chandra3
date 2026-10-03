@@ -22,7 +22,7 @@ reviewed_on: 2026-09-25
 - Do you get a cramping calf pain when walking that eases within minutes of standing still, and do you smoke, have diabetes, or are over 50? | urgent | Possible narrowed leg arteries (vascular claudication)
 - Do you run or train hard, and is there a sore spot on the shin bone that you can point to with one finger, or pain when hopping or at night? | urgent | Possible tibial stress fracture; needs imaging before more running
 - Is your foot slapping down or your toes catching when you walk? | urgent | Foot drop (peroneal nerve or L5) needs medical review
-- Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes? | urgent | Possible peripheral neuropathy; needs medical review and foot checks
+- Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes? | urgent | Possible peripheral neuropathy; needs medical review and foot checks · no booking until a doctor has seen them; left out when diabetes is known (diabetes documents, 3 Oct 2026; reference/diabetes.md)
 - Are you under 25 with a deep shin ache that wakes you at night, or a lump on the shin that is growing? | urgent | Bone lumps need imaging to rule out a tumour
 - Have you ever had cancer, or do you have deep leg pain at night that does not change with position, with weight loss? | urgent | Cancer can spread to the leg bones
 

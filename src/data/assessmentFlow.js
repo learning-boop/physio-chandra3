@@ -288,11 +288,18 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
 
 /** The conditions the answers point to, across every asked region. Each
     region's best match is kept first, so a strong elbow match is never pushed
-    out by three weaker shoulder ones; the rest fill up to `max`. */
-export function rankAcross(keys, answers, max = 3) {
+    out by three weaker shoulder ones; the rest fill up to `max`.
+    `bonus(rk, id)`: extra points for the ORDER only (diabetes, ./diabetes.js);
+    whether a condition is shown at all is unchanged. */
+export function rankAcross(keys, answers, max = 3, bonus = null) {
   const byRank = (a, b) => b.rank - a.rank || b.score - a.score
+  // rank = score / (ceiling + prior): the same ceiling with b more points.
+  const lift = (x) => {
+    const b = bonus ? bonus(x.rk, x.c.id) : 0
+    return b > 0 && x.score > 0 ? { ...x, rank: (x.rank * (x.score + b)) / x.score, bonus: b } : x
+  }
   const perRegion = keys.map((k) =>
-    computeResults(REGIONS[k], regionAnswers(keys, k, answers)).ranked.map((x) => ({ ...x, rk: k })))
+    computeResults(REGIONS[k], regionAnswers(keys, k, answers)).ranked.map((x) => lift({ ...x, rk: k })))
   // A pattern two asked areas both describe (the neck's and the head's
   // "Neck-related headache") is shown once, from the area that ranks it higher.
   const picked = []

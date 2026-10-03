@@ -274,7 +274,9 @@ const PATTERNS = [
       && [].concat(a.pattern24 || []).includes('amLong'),
   },
   {
-    id: 'pc-polyneuropathy', tier: 'urgent', why: WHY.neuropathy,
+    // Doctor first, no booking until then ("DiabetesMellitus" document, 3 Oct
+    // 2026); left out with known diabetes (../data/diabetes.js, NERVE_WHY).
+    id: 'pc-polyneuropathy', tier: 'urgent', noBooking: true, why: WHY.neuropathy,
     text: 'Numbness, tingling or burning in BOTH hands or BOTH feet, like wearing gloves or socks',
     when: (z) => bothSides(z, 'wrist') || bothSides(z, 'hand') || bothSides(z, 'lowerleg') || bothSides(z, 'ankle') || bothSides(z, 'foot'),
   },

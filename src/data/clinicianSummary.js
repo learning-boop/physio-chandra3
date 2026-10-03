@@ -113,7 +113,7 @@ export function buildClinicianSummary(ctx = {}) {
   const {
     zones = [], referral = [], keys = [], answers = {}, qaPairs = [], notes = '',
     ranked = [], behaviour = {}, psych = {}, painType = null,
-    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(),
+    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [],
   } = ctx
 
   const L = []
@@ -220,6 +220,13 @@ export function buildClinicianSummary(ctx = {}) {
     push('  Cautions: none reported.')
   }
   push('')
+
+  // ── Diabetes ("DiabetesMellitus" / "Diabetes RiskModule", ./diabetes.js) ──
+  if (diabetes.length) {
+    push('DIABETES (self-reported; confirm type, duration, last HbA1c, medicines and complications)')
+    push(...diabetes.map((d) => '  ' + d))
+    push('')
+  }
 
   // ── Flags (question 5) ──
   const f = psych.flags || { yellow: [], blue: [], black: [], pink: [] }

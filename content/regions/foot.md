@@ -23,7 +23,7 @@ reviewed_on: 2026-09-25
 - Did your big toe joint (or another joint) become suddenly hot, swollen, red, and too painful to touch, often overnight? | urgent | Possible gout
 - Is a whole toe swollen like a sausage, or do you have heel pain with back stiffness, psoriasis, eye inflammation, or after a stomach bug or sexually transmitted infection? | urgent | Possible inflammatory or reactive arthritis
 - Do you get a cramping pain in your foot or calf when walking that eases within minutes of standing still, or are your toes cold, shiny, and slow to heal? | urgent | Possible narrowed leg arteries
-- Do both feet feel numb, burning, or tingling, like wearing socks? | urgent | Possible peripheral neuropathy; needs medical review and foot checks
+- Do both feet feel numb, burning, or tingling, like wearing socks? | urgent | Possible peripheral neuropathy; needs medical review and foot checks · no booking until a doctor has seen them; left out when diabetes is known (diabetes documents, 3 Oct 2026; reference/diabetes.md)
 - Since a foot injury, surgery, or cast, is your foot burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts? | urgent | Possible complex regional pain syndrome (CRPS)
 - Do you run, march, or train hard, and is there pain on one foot bone (heel, midfoot, or a metatarsal) that is worse with every step or hopping, or aches at night? | urgent | Possible stress fracture; navicular and 5th metatarsal stress fractures are high-risk and need imaging
 - Is your foot slapping down or your toes catching when you walk? | urgent | Foot drop (peroneal nerve or L5) needs medical review
