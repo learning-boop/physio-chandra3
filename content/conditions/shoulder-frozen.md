@@ -43,6 +43,7 @@ The capsule around the shoulder joint tightens, causing pain then marked stiffne
 ## seePhysioIf
 - Stiffness is progressing or already limits daily tasks
 - You have diabetes or a thyroid condition with new shoulder stiffness
+- It came on with no injury: please also ask your doctor whether your thyroid and blood sugar have been checked (simple blood tests)
 - You'd like a staged plan matched to the phase you're in
 
 ## clinicNotes

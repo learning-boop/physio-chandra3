@@ -22,6 +22,7 @@
 
 import { HORMONE_SCREEN, LOW_HORMONE_SCREEN } from './steroids.js'
 import { CALCIUM_SCREEN } from './parathyroid.js'
+import { THYROID_SCREEN, PARALYSIS_FLAG } from './thyroid.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
@@ -191,6 +192,17 @@ const PATTERNS = [
     id: 'pc-muscle-crisis', tier: 'emergency', call911: true, why: WHY.muscleCrisis,
     text: 'With the weakness: difficulty breathing or being breathless when you lie flat, a weak cough, trouble swallowing or clearing saliva, or fainting, near-fainting or a racing or irregular heartbeat',
     when: (z, a) => weakAnswer(a),
+  },
+  // Sudden painless weakness of both legs ("Hyperthyroidism" document, signed
+  // by Chandra, 3 Oct 2026; thyrotoxic periodic paralysis, ancestry-
+  // neutral): 911. For both legs or both hips drawn, or a weakness answer
+  // with a leg, hip or low-back drawing. Near the top, so no count limit
+  // can cut it.
+  {
+    id: 'pc-paralysis', tier: 'emergency', call911: true, why: PARALYSIS_FLAG.why,
+    text: PARALYSIS_FLAG.text,
+    when: (z, a) => ['hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'].some((t) => bothSides(z, t)) ||
+      (weakAnswer(a) && has(z, 'lowerback', 'sij', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot')),
   },
   // After a Dupuytren's procedure (the hand's H2, document signed by Chandra, 2 Oct 2026).
   {
@@ -362,6 +374,15 @@ const PATTERNS = [
     id: 'pc-calcium', tier: 'urgent', noBooking: true, why: CALCIUM_SCREEN.why,
     text: CALCIUM_SCREEN.text,
     when: (z) => ['lowerleg', 'thigh', 'hip'].some((t) => bothSides(z, t)) || typesOf(z).size >= 4,
+  },
+  // An overactive thyroid ("Hyperthyroidism" document, signed by
+  // Chandra, 3 Oct 2026; route A): both-sided weakness with weight loss, or the
+  // racing-heart/heat/tremor cluster with a neck swelling or eye changes.
+  // Last, like the calcium question. A yes holds the booking.
+  {
+    id: 'pc-thyroid', tier: 'urgent', noBooking: true, why: THYROID_SCREEN.why,
+    text: THYROID_SCREEN.text,
+    when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
   },
 ]
 

@@ -27,6 +27,7 @@ import {
 } from '../data/diabetes'
 import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_CAUTION, PITUITARY_CAUTION } from '../data/steroids'
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
+import { THYROID_CAUTION, thyroidPanel } from '../data/thyroid'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -255,6 +256,8 @@ const CAUTION_CHECKS = [
   PITUITARY_CAUTION,
   // "Hyperparathyroidism" document (signed by Chandra, 3 Oct 2026), route B.
   PARATHYROID_CAUTION,
+  // "Hyperthyroidism" document (signed by Chandra, 3 Oct 2026), route C.
+  THYROID_CAUTION,
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -729,7 +732,7 @@ export default function PainAssessment() {
   const injuryApplies = useMemo(() => injuryScreenApplies(flowZ), [flowZ])
   // Organ-referral and systemic maps the drawing alone matches; the ones that
   // need answers (the inflammatory pattern) are left for the final check.
-  const earlyPatterns = useMemo(() => patternChecks(zones, {}, 7), [zones])
+  const earlyPatterns = useMemo(() => patternChecks(zones, {}, 12), [zones])
   // Who the safety questions are for: age and birth sex from "A little about you".
   const who = useMemo(() => ({ age: answers.age, sex: birthSex }), [answers.age, birthSex])
   const screening = useMemo(() => {
@@ -769,13 +772,20 @@ export default function PainAssessment() {
     const ownOrgan = list.some((f) => inGroup(f, 'organ'))
     const ownNeuro = list.some((f) => inGroup(f, 'neuro'))
     const universal = UNIVERSAL_CHECKS.filter((f) => !(injuryApplies && f.id === 'sc-trauma') && !(ownNeuro && f.id === 'sc-neuro'))
-    const kept = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral'))
+    // An area that asks about numb or burning feet itself (group "neuropathy":
+    // lower leg, ankle, foot) replaces the drawing's gloves-and-socks question.
+    const ownNeuropathy = list.some((f) => inGroup(f, 'neuropathy'))
+    const kept = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral') &&
+      !(ownNeuropathy && f.id === 'pc-polyneuropathy'))
       .filter((f) => !(dmKnown && isNerveFlag(f)))
-    const pattern = kept.slice(0, 2).map(nerve)
-    // The ones the two-question limit cut are asked on the final check
-    // instead; they used to be dropped altogether (a both-thighs drawing
-    // never reached the nerve and muscle screen).
-    const deferred = kept.slice(2).map((f) => f.id)
+    // Emergencies the drawing calls for are always asked here, on top of a
+    // two-question limit for the others. The ones the limit cuts are
+    // asked on the final check instead; they used to be dropped altogether
+    // (a both-thighs drawing never reached the nerve and muscle screen).
+    const em = kept.filter((f) => f.tier === 'emergency')
+    const rest = kept.filter((f) => f.tier !== 'emergency')
+    const pattern = [...em, ...rest.slice(0, 2)].map(nerve)
+    const deferred = rest.slice(2).map((f) => f.id)
     // With diabetes, its own red flags come first on each page ("DiabetesMellitus"
     // document, section 6), minus any this page already asks.
     const diabetic = diabetesRedFlags(zones, answers, [...list, ...pattern])
@@ -804,7 +814,8 @@ export default function PainAssessment() {
     const early = new Set(earlyPatterns.map((p) => p.id).filter((id) => !deferred.has(id)))
     // Up to five: dizziness (heart; ear or worsening) and headache can both
     // apply, and both-sided weakness asks PMR, myositis, the two hormone
-    // screens, the nerve and muscle screen and the calcium screen.
+    // screens, the nerve and muscle screen, and the calcium and thyroid
+    // screens (the last two drop first when space runs out).
     patternChecks(zones, answers, 12).filter((p) => !early.has(p.id)).slice(0, 5).map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
       .filter((p) => !(answers.dm === 'yes' && isNerveFlag(p))).forEach((p) => out.push(p))
     return out
@@ -906,6 +917,7 @@ export default function PainAssessment() {
   // Steroid medicine or diagnosed Cushing's (../data/steroids.js).
   const stPanel = useMemo(() => steroidPanel(answers, flags.includes('ca-cushing'), flags.includes('ca-pituitary')), [answers, flags])
   const caPanel = useMemo(() => parathyroidPanel(flags.includes('ca-parathyroid')), [flags])
+  const thPanel = useMemo(() => thyroidPanel(flags.includes('ca-thyroid')), [flags])
   const pickDm = (q, oid) => setAnswers((a) => {
     if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
     const cur = [].concat(a[q.id] || [])
@@ -1071,6 +1083,7 @@ export default function PainAssessment() {
     diabetes: dmPanel ? { title: dmPanel.title, text: dmPanel.text, notes: dmPanel.notes } : null,
     steroids: stPanel,
     calcium: caPanel,
+    thyroid: thPanel,
     answers: qaPairs,
     notes: notesText,
   })
@@ -2462,6 +2475,20 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{caPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {caPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* Diagnosed overactive thyroid (../data/thyroid.js). */}
+                {thPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your thyroid and exercise</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{thPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{thPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {thPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>
