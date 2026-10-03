@@ -146,3 +146,5 @@ Each of these questions mixes a slower picture (bladder, bowel or saddle changes
   - Suspected **femur fracture** or a **high-energy pelvic injury** should be **911**.
 - **Pattern checks** (`src/data/patternChecks.js`): `pc-cardiac` and `pc-dizzy-heart` should be **911**.
 - **Symptom guide** (`src/components/SymptomGuide.jsx:128`) uses the same combined wording and would follow the same split.
+
+- 2 Oct 2026, hip fracture CPG: "hpf-dislocation" (a dislocated hip replacement or a failed repair, cannot stand on the leg) calls 911, as the hip and femur fractures do; region flags calling 911 are now 47.

@@ -19,7 +19,7 @@ reviewed_on: 2026-09-25
 - Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels? | emergency | Possible cauda equina syndrome
 - Is your thigh or calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill? | urgent | Possible blood clot (DVT); same-day review
 - Is there spreading redness, a red streak up the leg, or a hot, swollen area, with a fever? | urgent | Possible skin infection (cellulitis); same-day review
-- Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night? | urgent | Possible stress fracture of the thigh bone; needs imaging before more running
+- Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night? (2 Oct 2026: shared with the knee's stress fracture question, group femstress, asked once) | urgent | Possible stress fracture of the thigh bone; needs imaging before more running
 - Are you under 25 with a deep thigh ache that wakes you at night, or a lump or swelling in the thigh that is growing? | urgent | Bone or soft-tissue lumps in the thigh need imaging to rule out a tumour
 - Is a child aged about 9 to 16 limping, with pain in the thigh or knee? | urgent | Possible slipped growth plate at the hip (SUFE), often felt in the thigh or knee
 - Do you get a cramping pain in the thigh or buttock when walking that eases within minutes of standing still, and do you smoke or have diabetes? | urgent | Possible narrowed leg arteries (vascular claudication)

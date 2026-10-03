@@ -35,6 +35,9 @@ export const PSYCHOSOCIAL_QUESTIONS = [
   { id: 'yfMood', colour: 'yellow', text: 'Lately I have been feeling low, worried or stressed.', options: AGREE },
   { id: 'yfSleep', colour: 'yellow', text: 'Pain or worry is affecting my sleep.', options: AGREE },
   { id: 'yfRoles', colour: 'yellow', text: 'The pain is causing problems at work or with my daily responsibilities.', options: AGREE },
+  // Time off work is one of the strongest risks for a slow return (JOSPT work
+  // participation CPG 2021, A), so it is asked of everyone.
+  { id: 'bfOffWork', colour: 'blue', text: 'I am off work, or on lighter or reduced duties, because of this.', options: AGREE },
   { id: 'bfWork', colour: 'blue', text: 'My work makes this harder — the demands are heavy, or I get little support with it.', options: AGREE },
   { id: 'pfConfident', colour: 'pink', text: 'I am confident I can keep doing most of my usual activities while this settles.', options: AGREE },
   { id: 'pfExpect', colour: 'pink', text: 'I expect to get back to normal, and I want to take an active part in that.', options: AGREE },
@@ -42,7 +45,8 @@ export const PSYCHOSOCIAL_QUESTIONS = [
 
 /* Shorter questionnaire (Chandra, 28 Sep 2026):
    C1  the five yellow-flag statements are asked of everyone; they carry the
-       risk grading, so the grading is unchanged.
+       risk grading, so the grading is unchanged. So is "off work or on
+       lighter duties" (bfOffWork, 2 Oct 2026, the work participation CPG).
    C2  the work and outlook statements only once the pain has lasted more than
        6 weeks, or is severe (7–10).
    C3  the claim question (ICBC, WorkSafeBC) is a tick box before the results
@@ -92,6 +96,9 @@ export function interpretPsychosocial(answers) {
   }
   if (yes('yfRoles')) {
     notes.push('If work or daily tasks are difficult, bring examples to your assessment — planning a gradual return to them can be part of your care.')
+  }
+  if (yes('bfOffWork')) {
+    notes.push('Staying connected to work, even with lighter or modified duties, usually helps recovery. Your plan can include a gradual return to work, and with your consent Chandra can work with your employer, WorkSafeBC or ICBC on modified duties.')
   }
   if (yes('bfWork')) {
     notes.push('When work itself is part of the problem, the plan has to fit your job. Bring the specific tasks that trouble you to your assessment.')

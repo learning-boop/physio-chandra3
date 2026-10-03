@@ -300,6 +300,10 @@ export const REGIONS = {
         text: "Is your calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill?" },
       { id: "kf-replacement", sameDay: true, tier: "urgent", why: "Possible infection or loosening of the replacement",
         text: "Do you have a knee replacement, and is it newly painful, warm, swollen, or is the wound red or leaking?" },
+      // A thigh-bone stress fracture can look like kneecap pain in people who
+      // train a lot (JOSPT patellofemoral pain CPG 2019); shared with the thigh.
+      { id: "kf-stress", tier: "urgent", group: "femstress", why: "Possible stress fracture of the thigh bone: it needs imaging before more running",
+        text: "Do you run or train hard, and do you have a deep ache above the knee or in the thigh that is worse with hopping or each run, or aches at night or at rest?" },
       { id: "kf-sufe", tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE): hip problems in children are often felt only at the knee",
         text: "Is a child aged about 9 to 16 limping with knee or thigh pain, or does moving the hip hurt?" },
       { id: "kf-perthes", tier: "urgent", why: "Possible Perthes disease or other hip problem felt at the knee",

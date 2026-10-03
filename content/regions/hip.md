@@ -18,6 +18,9 @@ reviewed_on: 2026-09-25
 - Do you have sudden, severe pain in a testicle? | emergency | Possible testicular torsion
 - Is there a lump in your groin that is hard, very painful, will not go back in, and are you vomiting? | emergency | Possible trapped (strangulated) hernia
 - Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels? | emergency | Possible cauda equina syndrome
+- Have you had a hip replacement or a hip fracture operation, and now have sudden severe hip pain or felt a clunk, cannot stand on the leg, or does the leg look shorter or turned? | emergency, 911 | Possible dislocation of a hip replacement, or a problem with the repair   (2 Oct 2026, Chandra's request: JOSPT hip fracture CPG 2021, dislocation after surgery; added after the signed version)
+- Have you had a hip replacement or a hip fracture operation, and is the hip newly painful, warm or swollen, or is the wound red or leaking, or do you have a fever? | urgent, same day | Possible infection or loosening of the hip replacement or repair   (2 Oct 2026, Chandra's request: as the knee's replacement question; added after the signed version)
+- Are you 65 or over, or do you have osteoporosis, and did groin or hip pain start suddenly (with no fall, or only a small slip or twist), so that it now hurts to stand or walk on that leg? | urgent, same day | Possible hip or pelvic fracture, even without a fall: an X-ray is needed today   (2 Oct 2026, Chandra's request: JOSPT hip fracture CPG 2021: hidden fractures in osteoporosis; the injury screen asks only after a fall; added after the signed version)
 - Is a child aged about 9 to 16 limping, with pain in the hip, groin, thigh, or knee? | urgent | Possible slipped growth plate at the hip (SUFE); hip problems in children are often felt at the knee
 - Do you run or train hard, and do you have a deep groin ache that is worse with running or hopping, or aches at night? | urgent | Possible stress fracture of the hip (femoral neck); needs imaging before more running
 - Do you take long-term steroid tablets, drink heavily, or have sickle cell disease, and have a deep groin ache? | urgent | Possible loss of blood supply to the hip bone (avascular necrosis)
@@ -203,3 +206,15 @@ Drawing: Left hip and groin after a fall at home
 Answers: Age 65 or over · After a fall · Less than 2 weeks; Injury screen: I1 “Yes, I fell onto my hip”; I2 Yes
 Flags: Injury screen I2 (cannot stand, leg looks shorter or turned out)
 Expect: top condition = None (no results shown); must not show = Any hip condition; any booking button; route = 911
+
+CASE: Test patient 7 (2 Oct 2026)
+Drawing: Left hip, 3 weeks after a hip replacement
+Answers: Age 65 or over · Gradually · 2 to 6 weeks; Injury screen: I1 No
+Flags: "Have you had a hip replacement or a hip fracture operation, and now have sudden severe hip pain or felt a clunk…?"
+Expect: top condition = None (no results shown); route = 911
+
+CASE: Test patient 8 (2 Oct 2026)
+Drawing: Right groin, sudden pain with osteoporosis and no fall
+Answers: Age 65 or over · Gradually · Less than 2 weeks; Injury screen: I1 No
+Flags: "Are you 65 or over, or do you have osteoporosis, and did groin or hip pain start suddenly (with no fall…)?"
+Expect: top condition = None; see a doctor first (same day, X-ray); route = Physician first

@@ -1970,6 +1970,16 @@ export const EXTRA_REGIONS = {
         text: "Is there a lump in your groin that is hard, very painful, will not go back in, and are you vomiting?" },
       { id: "hpf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
         text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
+      // After a hip replacement or a hip fracture operation (JOSPT hip fracture
+      // CPG 2021, Table 2: dislocation; the knee's kf-replacement for infection).
+      { id: "hpf-dislocation", tier: "emergency", call911: true, why: "Possible dislocation of a hip replacement, or a problem with the repair",
+        text: "Have you had a hip replacement or a hip fracture operation, and now have sudden severe hip pain or felt a clunk, cannot stand on the leg, or does the leg look shorter or turned?" },
+      { id: "hpf-replacement", sameDay: true, tier: "urgent", why: "Possible infection or loosening of the hip replacement or repair",
+        text: "Have you had a hip replacement or a hip fracture operation, and is the hip newly painful, warm or swollen, or is the wound red or leaking, or do you have a fever?" },
+      // A fracture with no fall, or only a small slip (JOSPT hip fracture CPG
+      // 2021: hidden fractures in osteoporosis; the injury screen asks after a fall).
+      { id: "hpf-nofall", sameDay: true, tier: "urgent", why: "Possible hip or pelvic fracture, even without a fall: an X-ray is needed today",
+        text: "Are you 65 or over, or do you have osteoporosis, and did groin or hip pain start suddenly (with no fall, or only a small slip or twist), so that it now hurts to stand or walk on that leg?" },
       { id: "hpf-sufe", tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE); hip problems in children are often felt at the knee",
         text: "Is a child aged about 9 to 16 limping, with pain in the hip, groin, thigh, or knee?" },
       { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip (femoral neck); needs imaging before more running",
@@ -2112,7 +2122,7 @@ export const EXTRA_REGIONS = {
         text: "Is your thigh or calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill?" },
       { id: "tgf-cellulitis", sameDay: true, tier: "urgent", group: "legcellulitis", why: "Possible skin infection (cellulitis); same-day review",
         text: "Is there spreading redness, a red streak up the leg, or a hot, swollen area, with a fever?" },
-      { id: "tgf-stress", tier: "urgent", why: "Possible stress fracture of the thigh bone; needs imaging before more running",
+      { id: "tgf-stress", tier: "urgent", group: "femstress", why: "Possible stress fracture of the thigh bone; needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night?" },
       { id: "tgf-tumour", tier: "urgent", why: "Bone or soft-tissue lumps in the thigh need imaging to rule out a tumour",
         text: "Are you under 25 with a deep thigh ache that wakes you at night, or a lump or swelling in the thigh that is growing?" },

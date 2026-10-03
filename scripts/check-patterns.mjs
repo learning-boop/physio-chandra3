@@ -524,9 +524,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('A3.5: no separate arm cancer question (the general one covers it)', !arm.some((id) => /cancer/.test(id)), arm)
   const ns = flagsOf(['neck', 'shoulderR']).map((f) => f.id)
   check('A3.3: neck + shoulder asks the organ question once', ns.filter((id) => /tip|organ|gallbladder/.test(id)).length === 1, ns)
-  check('C1: new, moderate pain gets the 5 yellow-flag statements', psychosocialQuestionsFor({ duration: 'd6w', sinSeverity: 'moderate' }).length === 5)
+  check('C1: new, moderate pain gets the 5 yellow-flag statements and the off-work one', psychosocialQuestionsFor({ duration: 'd6w', sinSeverity: 'moderate' }).length === 6)
   check('C2: pain over 6 weeks, or severe, adds the work and outlook statements',
-    psychosocialQuestionsFor({ duration: 'o3m', sinSeverity: 'mild' }).length === 8 && psychosocialQuestionsFor({ duration: 'd2w', sinSeverity: 'severe' }).length === 8)
+    psychosocialQuestionsFor({ duration: 'o3m', sinSeverity: 'mild' }).length === 9 && psychosocialQuestionsFor({ duration: 'd2w', sinSeverity: 'severe' }).length === 9)
   check('C3: the claim is no longer a statement, and still reaches the summary as a black flag',
     !psychosocialQuestionsFor({ duration: 'o3m' }).some((q) => q.id === 'kfClaim') && interpretPsychosocial({ yfFear: 'disagree', kfClaim: 'agree' }).flags.black.length === 1)
   check('C4: the screen is skipped only for pain under 2 weeks that is mild',
@@ -563,8 +563,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const flags = Object.values(REGIONS).flatMap((r) => r.redFlags)
   const byId = Object.fromEntries(flags.map((f) => [f.id, f]))
   const em = flags.filter((f) => f.tier === 'emergency')
-  check('911 split: 46 region flags call 911 (41 + the 4 leg-weakness halves + pregnancy bleeding)',
-    em.filter((f) => f.call911).length === 46, em.filter((f) => f.call911).map((f) => f.id))
+  check('911 split: 47 region flags call 911 (41 + the 4 leg-weakness halves + pregnancy bleeding + a dislocated hip replacement)',
+    em.filter((f) => f.call911).length === 47, em.filter((f) => f.call911).map((f) => f.id))
   // 49: the base of the neck's recent-crash flag (ctj.md:34) is the neck injury screen, not a flag;
   // 54 since the compartment syndrome document added the ankle, foot, wrist
   // and hand compartment questions and the calf rhabdomyolysis one (2 Oct 2026).
@@ -718,6 +718,32 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Concussion: 2 to 7 days after a crash, concussion symptoms see a doctor', conc.route === 'urgent', conc)
   const ok = neck({ I1: 'vehicle', I2: 'd7', I8: 'no', I3: 'no', I4: ['none'], I5: 'no', I9: 'no' })
   check('C-Spine Rule: 2 to 7 days, no high-risk feature or concussion signs, goes on to the questions', ok.route === 'continue', ok)
+}
+
+// ── 21. The remaining CPG safety gaps (2 Oct 2026) ──
+{
+  const { injuryFlow } = await imp('src/data/injuryScreen.js')
+  const { regionRedFlags } = await imp('src/data/assessmentFlow.js')
+  const { interpretPsychosocial } = await imp('src/data/psychosocial.js')
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const flagsOf = (ids) => regionRedFlags(Z(ids), Z(ids))
+  const hip = Object.fromEntries(flagsOf(['hipR']).map((f) => [f.id, f]))
+  check('Hip fracture CPG: a dislocated hip replacement calls 911', hip['hpf-dislocation'] && hip['hpf-dislocation'].call911 && hip['hpf-dislocation'].tier === 'emergency')
+  check('Hip fracture CPG: a painful, hot or leaking hip replacement is a same-day check', hip['hpf-replacement'] && hip['hpf-replacement'].sameDay)
+  check('Hip fracture CPG: sudden hip pain at 65+ or with osteoporosis, no fall needed, is a same-day X-ray', hip['hpf-nofall'] && hip['hpf-nofall'].sameDay && /no fall/.test(hip['hpf-nofall'].text))
+  const knee = (a) => injuryFlow(Z(['kneeR']), Object.fromEntries(Object.entries(a).map(([k, v]) => ['knee:' + k, v])))
+  const base = { I2: 'no', I3: 'no', I9: 'no', I4: 'no' }
+  const child = knee({ I1: 'fall', ...base, I8: 'yes' })
+  check('Pittsburgh knee rule: after a fall, under 12 or over 50 needs an X-ray the same day', child.route === 'urgent' && child.sameDay, child)
+  const twist = knee({ I1: 'twist', ...base, I5: 'no', I6: 'no' })
+  check('Pittsburgh knee rule: not asked after a twist (Ottawa only)', twist.route === 'continue', twist)
+  const foot = knee({ I1: 'blow', I2: 'no', I3: 'no', I9: 'yes' })
+  check('Knee ligament CPG: a weak foot after a knee injury (peroneal nerve) is a same-day check', foot.route === 'urgent' && foot.sameDay, foot)
+  const legs = flagsOf(['kneeR', 'thighR']).map((f) => f.id)
+  check('PFP CPG: the thigh-bone stress fracture question is asked once for a knee and thigh', legs.filter((id) => /stress/.test(id)).length === 1, legs)
+  const off = interpretPsychosocial({ bfOffWork: 'agree' })
+  check('Work participation CPG: off work or on lighter duties is a blue flag with a return-to-work note',
+    off.flags.blue.length === 1 && off.notes.some((n) => /modified duties/.test(n)), off)
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

@@ -17,6 +17,7 @@ reviewed_on: 2026-09-25
 - Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels? | emergency | Possible cauda equina syndrome
 - Is your calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill? | urgent | Possible blood clot (DVT). A burst cyst at the back of the knee looks the same and also needs checking
 - Do you have a knee replacement, and is it newly painful, warm, swollen, or is the wound red or leaking? | urgent | Possible infection or loosening of the replacement
+- Do you run or train hard, and do you have a deep ache above the knee or in the thigh that is worse with hopping or each run, or aches at night or at rest? | urgent | Possible stress fracture of the thigh bone: it needs imaging before more running   (2 Oct 2026, Chandra's request: JOSPT patellofemoral pain CPG 2019: a femoral stress fracture can look like kneecap pain; shared with the thigh (group femstress), asked once; added after the signed version)
 - Is a child aged about 9 to 16 limping with knee or thigh pain, or does moving the hip hurt? | urgent | Possible slipped growth plate at the hip (SUFE): hip problems in children are often felt only at the knee
 - Is a child aged about 4 to 10 limping, with knee or hip pain, but no injury? | urgent | Possible Perthes disease or other hip problem felt at the knee
 - Are you under 25 with a deep ache around the knee that wakes you at night, or a lump near the knee that is growing? | urgent | Bone tumours in young people are most common around the knee; needs imaging
@@ -44,9 +45,17 @@ I3 Since the injury, is your foot cold, pale, or numb?
 Route: Yes → EMERGENCY
 Why: Possible artery or nerve injury after a knee dislocation
 
+I9 Since the injury, is your foot weak, so your toes catch or your foot slaps down when you walk?   (2 Oct 2026, Chandra's request: JOSPT knee ligament CPG 2017: peroneal nerve injury with an outer-corner (posterolateral) injury or a dislocation; added after the signed version)
+Route: Yes → PHYSICIAN FIRST (same day)
+Why: Possible peroneal nerve injury: it needs checking today
+
 I4 Are you 55 or over, or could you not take 4 steps straight after the injury (and still cannot), or can you not bend the knee to a right angle?
 Route: Yes → PHYSICIAN FIRST
 Why: Ottawa knee rule: an X-ray is needed to rule out a fracture
+
+I8 (after a fall or a blow) Are you under 12, or over 50?   (2 Oct 2026, Chandra's request: the Pittsburgh knee rule, valid at every age; the JOSPT patellofemoral pain CPG 2019 notes Ottawa is validated in adults; added after the signed version)
+Route: Yes → PHYSICIAN FIRST (same day)
+Why: Pittsburgh knee rule: after a fall or a blow, an X-ray is needed under 12 or over 50
 
 I5 Did you hear or feel a pop, and did the knee swell up within 2 hours?
 Route: Yes → PHYSICIAN FIRST
@@ -205,3 +214,9 @@ Drawing: Back of the right knee and the calf, 10 days after a knee replacement
 Answers: Age 65 or over · After knee surgery or a knee replacement · Less than 2 weeks; Q5: a lump or fullness at the back of the knee
 Flags: “Is your calf swollen, warm, or tender, especially after surgery…?”
 Expect: top condition = None; see a doctor first (same day); must not show = Baker's cyst or any knee result without the physician-first message; route = Physician first
+
+CASE: Test patient 7 (2 Oct 2026)
+Drawing: Front of the right knee, a 10-year-old after a fall
+Answers: Age Under 18 · After a fall · Less than 2 weeks; Injury screen: I1 "Yes, a fall onto the knee"; I2, I3, I9, I4 No; I8 Yes
+Flags: Injury screen I8 (Pittsburgh knee rule)
+Expect: top condition = None; see a doctor first (same day, X-ray); route = Physician first

@@ -16,7 +16,8 @@
      hand      jammed, bent back, caught, crushed or cut (hand and fingers, B2)
      hip       fall, twist or sudden pull (hip, B2)
      thigh     sudden pain, knock or fall (thigh, B2)
-     knee      twist, blow or fall: the Ottawa knee rule, adapted (knee, B2)
+     knee      twist, blow or fall: the Ottawa knee rule, adapted, the Pittsburgh
+               rule after a fall or a blow, and the peroneal nerve (knee, B2)
      leg       kick, fall or sudden calf pain (lower leg, B2)
      ankle     rolled, twisted or landed badly: the Ottawa ankle rules in full, with self-pressed bone points (ankle, B2)
      foot      twist, crush, stubbed toe or landing: the Ottawa foot rule in full, with self-pressed bone points (foot, B2)
@@ -394,9 +395,18 @@ export const KNEE_INJURY = [
     options: yesNo('emergency', 'Possible knee or kneecap dislocation that has not gone back') },
   { id: 'I3', text: 'Since the injury, is your foot cold, pale, or numb?',
     options: yesNo('emergency', 'Possible artery or nerve injury after a knee dislocation') },
+  // The peroneal nerve wraps round the outer knee: hurt with an outer corner
+  // (posterolateral) injury or a dislocation (JOSPT knee ligament CPG 2017). Same day.
+  { id: 'I9', text: 'Since the injury, is your foot weak, so your toes catch or your foot slaps down when you walk?',
+    sameDay: true, options: yesNo('urgent', 'Possible peroneal nerve injury: it needs checking today') },
   // A possible fracture: same day.
   { id: 'I4', text: 'Are you 55 or over, or could you not take 4 steps straight after the injury (and still cannot), or can you not bend the knee to a right angle?',
     sameDay: true, options: yesNo('urgent', 'Ottawa knee rule: an X-ray is needed to rule out a fracture') },
+  // The Pittsburgh knee rule works at every age, after a fall or a blow
+  // (JOSPT patellofemoral pain CPG 2019: Ottawa is validated for adults).
+  { id: 'I8', text: 'Are you under 12, or over 50?',
+    askIf: (a) => a.I1 === 'fall' || a.I1 === 'blow', sameDay: true,
+    options: yesNo('urgent', 'Pittsburgh knee rule: after a fall or a blow, an X-ray is needed under 12 or over 50') },
   // Bleeding in the joint, which can mean a fracture: same day.
   { id: 'I5', text: 'Did you hear or feel a pop, and did the knee swell up within 2 hours?',
     sameDay: true, options: yesNo('urgent', 'Quick swelling means bleeding in the joint: possible ACL tear or fracture') },
