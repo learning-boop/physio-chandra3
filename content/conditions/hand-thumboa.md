@@ -6,7 +6,7 @@ clin: Thumb carpometacarpal (CMC) osteoarthritis
 # Patient text shared with wrist-thumboa.md: keep the two in step.
 # Pointers from content/regions/hand.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Base of the thumb, where it meets the wrist": 3
   "Pinching (turning a key, opening a jar, doing up buttons)": 3

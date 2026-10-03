@@ -6,7 +6,7 @@ clin: Ankle osteoarthritis, often after old fractures or repeated sprains
 ages: 30-49, 50-64, o64
 # DRAFT patient text written 25 Sep 2026 from content/regions/ankle.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "The first steps in the morning, or after sitting": 2
   "Swelling after activity, settling overnight": 2

@@ -6,7 +6,7 @@ clin: Midfoot (tarsometatarsal) osteoarthritis
 ages: 30-49, 50-64, o64
 # DRAFT patient text written 25 Sep 2026 from content/regions/foot.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "The arch, or the top of the midfoot": 3
   "Standing or walking a long time": 2

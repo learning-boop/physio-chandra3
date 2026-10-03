@@ -5,7 +5,7 @@ name: Elbow joint stiffness or catching
 clin: Elbow osteoarthritis or a loose body in the joint
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "It will not straighten fully": 3
   "It catches or locks at times": 3

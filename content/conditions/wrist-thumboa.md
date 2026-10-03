@@ -7,7 +7,7 @@ clin: Thumb carpometacarpal (CMC) osteoarthritis
 # Pointers moved to the rebuilt wrist questions (content/regions/wrist.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 # Patient text shared with hand-thumboa.md: keep the two in step.
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "65 or over": 2
   "50 to 64": 1

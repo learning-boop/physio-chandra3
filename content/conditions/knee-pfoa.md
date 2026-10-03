@@ -6,7 +6,7 @@ clin: Patellofemoral osteoarthritis
 # DRAFT drawn from the osteoarthritis reference (content/reference/osteoarthritis.md); the JOSPT patellofemoral pain CPG 2019 excludes PFOA
 # Pointers moved to the rebuilt knee questions (content/regions/knee.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Around or behind the kneecap": 2
   "Going down stairs, squatting, or sitting a long time with the knee bent": 2

@@ -6,7 +6,7 @@ clin: Hip osteoarthritis (JOSPT CPG revision 2025)
 # DRAFT extracted from: Hip Pain and Mobility Deficits—Hip Osteoarthritis: Revision 2025 (JOSPT, 2025)
 # Pointers moved to the rebuilt hip questions (content/regions/hip.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Grips the side of my hip in a “C” shape, thumb at the back and fingers in the groin": 3
   "Putting on socks and shoes, or getting in and out of a car": 3

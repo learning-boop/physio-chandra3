@@ -7,7 +7,7 @@ ages: 30-49, 50-64, o64
 # Patient text moved unchanged from the site's original knee region.
 # Pointers from content/regions/knee.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Stiff for less than 30 minutes in the morning or after sitting, then eases": 3
   "Swelling after activity": 2

@@ -5,7 +5,7 @@ name: Stiff big toe (hallux rigidus)
 clin: First metatarsophalangeal joint osteoarthritis
 # DRAFT patient text written 25 Sep 2026 from content/regions/foot.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Stiff, and painful when I push off or rise on my toes": 3
   "A bony lump on top of the joint": 3
