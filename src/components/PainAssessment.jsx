@@ -212,6 +212,13 @@ const CAUTION_CHECKS = [
   { id: 'ca-ms', tier: 'caution', text: 'Multiple sclerosis, diagnosed by a neurologist',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exercise is safe with MS and recommended by current guidelines: it does not bring on relapses, and it can help fatigue, strength, balance and mood. Your programme is built around your energy and how heat affects you, alongside your MS team. A new or clearly worse symptom lasting more than a day without a fever or infection is worth a call to your MS nurse or neurology team first.' } },
+  // "Myasthenia Gravis" and "Myotonic Dystrophy" documents (signed by Chandra, 2 Oct 2026), route B.
+  { id: 'ca-mg', tier: 'caution', text: 'Myasthenia gravis, diagnosed by a neurologist',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'When myasthenia is stable, moderate exercise is safe and can help strength, stamina and balance. Sessions are planned for your best time of day, after your medication, in a cool room, in short bouts that stop well before you tire, alongside your neurology team. A fever, infection or new medicine followed by worse weakness is worth a call to your neurology team the same day; any trouble breathing or swallowing is a reason to call 911.' } },
+  { id: 'ca-dm', tier: 'caution', text: 'Myotonic dystrophy or another muscle disease, diagnosed by a neurologist',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Regular, moderate exercise is safe with myotonic dystrophy and current guidance encourages it; it does not speed the condition up. Your programme is paced around your energy, with warm-ups for stiff hands and help with walking, balance and falls, alongside your neuromuscular team. Fainting, a racing or irregular heartbeat, or new trouble breathing or swallowing needs emergency care, and every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },

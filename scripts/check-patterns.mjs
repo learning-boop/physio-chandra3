@@ -761,5 +761,25 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     cn && cn.tier === 'urgent' && /hoarse/.test(cn.text) && neck.some((f) => f.id === 'nrf-stroke' && f.call911), neck.map((f) => f.id))
 }
 
+// ── 23. Nerve and muscle screen (Myasthenia Gravis and Myotonic Dystrophy documents, 2 Oct 2026) ──
+{
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const ids = (z, a) => patternChecks(ZN(z), a, 9).map((p) => p.id)
+  const grip = patternChecks(ZN(['handR']), { H3: ['weak'] }, 9)
+  const crisis = grip.find((p) => p.id === 'pc-muscle-crisis')
+  check('Nerve and muscle: a weak grip asks about breathing, swallowing, fainting or an irregular heartbeat (911)',
+    crisis && crisis.call911 && crisis.tier === 'emergency', grip.map((p) => p.id))
+  const scr = grip.find((p) => p.id === 'pc-muscle')
+  check('Nerve and muscle: and the fatigable / myotonia screen, which holds the booking (doctor in a few days), without naming a condition',
+    scr && scr.noBooking && !scr.sameDay && !/myasthen|myotonic|dystrophy/i.test(scr.text + scr.why.text), scr)
+  check('Nerve and muscle: both thighs drawn asks the screen, not the 911 question',
+    ids(['thighL', 'thighR'], {}).includes('pc-muscle') && !ids(['thighL', 'thighR'], {}).includes('pc-muscle-crisis'))
+  check('Nerve and muscle: a one-sided ache with no weakness is not asked', !ids(['shoulderR'], { painQuality: ['ache'] }).some((x) => /muscle/.test(x)))
+  const full = patternChecks(ZN(['shoulderL', 'shoulderR', 'chest', 'lowerback']), {}).map((p) => p.id)
+  check('Nerve and muscle: the screen comes last, only into a free place, so it never pushes out an organ or heart check',
+    full.length === 3 && !full.includes('pc-muscle') && ids(['shoulderL', 'shoulderR', 'chest'], {}).slice(-1)[0] === 'pc-muscle', full)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

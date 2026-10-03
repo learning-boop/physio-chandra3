@@ -41,6 +41,12 @@ const limbSpread = (zones, side) => {
   return Math.max(arm, leg)
 }
 
+/** Any answer that describes weakness (the shoulder's, arm's, wrist's,
+    hand's and thigh's weakness options, and foot drop). The nerve-specific
+    ones with their own route (the thumb, the pinch) are left out. */
+const WEAK_IDS = ['weak', 'weakness', 'weakgrip', 'footslap', 'slap']
+const weakAnswer = (a = {}) => Object.values(a).some((v) => [].concat(v).some((x) => WEAK_IDS.includes(x)))
+
 /** Age 50 or over, from any of the age answer ids (a50, 50-64, o64…). */
 const over50 = (id) => !!id && !/^u/.test(id) && Number((/\d+/.exec(id) || [0])[0]) >= 50
 const WHY = {
@@ -52,6 +58,14 @@ const WHY = {
   neuroScreen: {
     title: 'Please see your family doctor in the next few days',
     text: 'Along with numbness or tingling, these can come from the nervous system rather than a muscle or joint. Please see your family doctor within the next few days for a neurological check, and note when each symptom started and how long it lasted. If you have lost vision in one eye, please see a doctor today or go to urgent care. Most people with numbness or tingling do not have a serious cause, and when one is found, starting treatment early makes a real difference. Physiotherapy can follow once the cause is known.',
+  },
+  muscleCrisis: {
+    title: 'Please call 911 now',
+    text: 'Muscle weakness that affects breathing, coughing or swallowing, or comes with fainting or an irregular heartbeat, needs emergency care. Some nerve and muscle conditions can affect the breathing muscles or the heart, and help is needed quickly. If you have a diagnosed muscle condition, tell the paramedics.',
+  },
+  muscleScreen: {
+    title: 'Please see your family doctor in the next few days',
+    text: 'Weakness that fades with use and recovers with rest, eyelid or vision changes, chewing or speech that tires, a grip that is slow to let go, or slowly increasing weakness in both hands or feet are not usually a joint, tendon or muscle strain. They can come from the connection between nerves and muscles, or from the muscles themselves. Please see your family doctor in the next few days, describe what you have noticed through the day and anything that runs in your family, and ask whether a neurology referral is needed. Most of these checks are simple, and the conditions they look for can be treated or managed well. Physiotherapy can follow once the cause is known.',
   },
   handProcedure: {
     title: 'Please contact a doctor or your hand clinic today',
@@ -152,6 +166,17 @@ const PATTERNS = [
     text: 'Not explained by a neurological condition you have already been diagnosed with: in the last few months, blurred or lost vision in one eye (often painful when you move the eye) or double vision; a brief electric-shock feeling down your back or limbs when you bend your head forward; numbness or weakness clearly worse when you are hot; or earlier episodes of numbness, weakness or unsteadiness that came and went on their own',
     when: (z, a) => [].concat(a.painQuality || []).includes('tingling'),
   },
+  // Weakness from nerve-muscle or muscle disease ("Myasthenia Gravis" and
+  // "Myotonic Dystrophy" documents, signed 2 Oct 2026, route A; not named, as
+  // both documents recommend one "nerve and muscle" gate). First the crisis
+  // question, for anyone who described weakness: breathing or swallowing
+  // failure (myasthenic crisis) or a heart rhythm problem (myotonic
+  // dystrophy) is 911.
+  {
+    id: 'pc-muscle-crisis', tier: 'emergency', call911: true, why: WHY.muscleCrisis,
+    text: 'With the weakness: difficulty breathing or being breathless when you lie flat, a weak cough, trouble swallowing or clearing saliva, or fainting, near-fainting or a racing or irregular heartbeat',
+    when: (z, a) => weakAnswer(a),
+  },
   // After a Dupuytren's procedure (the hand's H2, document v0.1, 2 Oct 2026).
   {
     id: 'pc-hand-procedure', tier: 'urgent', sameDay: true, why: WHY.handProcedure,
@@ -245,6 +270,17 @@ const PATTERNS = [
     id: 'pc-limb', tier: 'urgent', why: WHY.limb,
     text: 'Changes in the skin colour, temperature, sweating or swelling of the painful arm or leg',
     when: (z) => limbSpread(z, 'L') >= 3 || limbSpread(z, 'R') >= 3,
+  },
+  // The nerve and muscle screen (myasthenia gravis: fatigable, eyes and
+  // bulbar, worse by evening; myotonic dystrophy: grip myotonia, both hands
+  // or feet, family history). For a weakness answer, or weakness-type
+  // drawings on both sides (shoulders, upper arms, hips, thighs). Last in the
+  // list, so it never pushes out the checks above. A yes holds the booking
+  // until a doctor has seen them (noBooking, in the next few days).
+  {
+    id: 'pc-muscle', tier: 'urgent', noBooking: true, why: WHY.muscleScreen,
+    text: 'Not explained by a condition you have already been diagnosed with: muscles that work at first, then fade the more you use them and recover after rest (often worse by evening); a drooping eyelid or double vision that comes and goes; your jaw tiring when you chew, or speech becoming slurred or nasal as you talk; a grip that is slow to let go, especially in the cold; or weakness in both hands or both feet that has crept on over months or years, especially with early cataracts or muscle weakness in the family',
+    when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
   },
 ]
 

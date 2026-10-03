@@ -1,5 +1,5 @@
-<!-- Source: "Multiple Sclerosis.docx" (Conditions/General conditions), v0.1
-     draft, 2 Oct 2026, pending Chandra's sign-off (AIM Theory Manual 2023
+<!-- Source: "Multiple Sclerosis.docx" (Conditions/General conditions),
+     approved and signed by Chandra Matla, 2 Oct 2026 (AIM Theory Manual 2023
      Ch. 2.9; NICE NG220, amended 2026 for the 2024 McDonald criteria;
      Montalban 2025; Kalb 2020; Canadian MS physical activity guidelines).
      Clinician reference only. -->
