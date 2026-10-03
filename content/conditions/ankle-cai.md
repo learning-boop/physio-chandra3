@@ -35,3 +35,11 @@ This is a lasting sense that your ankle isn't fully steady, often starting month
 ## seePhysioIf
 - Your ankle keeps giving way or rolling despite weeks of steady home exercise
 - You've had several sprains and still don't feel confident or steady walking on uneven surfaces
+
+## clinicNotes
+- Definition (JOSPT 2021): instability or giving way persisting 12 months or more after the first sprain, with activity limitation; mechanical and/or functional (sensorimotor). About 40% of first-time sprains.
+- Discriminative tools (B): CAIT 25 or less (sens 96.6%, spec 86.8%, LR+ 7.31; MCID 3); IdFAI 11 or more; AII 4 or more yes. Functional tests that discriminate: side hop, timed and multiple hop, foot-lift, SEBT (medial, anteromedial, posteromedial).
+- Exam (A): weight-bearing lunge, talar translation and inversion, eyes-closed single-leg balance, SEBT; hip abduction, extension and ER strength (C); TSK-11 or FABQ for fear of re-injury (C).
+- Copathology to refer if not recovering: fibularis tendon problems, impingement, osteochondral or chondral lesions, synovitis, loose bodies, syndesmosis, arthritis, os trigonum.
+- Treatment: proprioceptive and neuromuscular training (A); manual therapy (graded mobilisation or thrust, weight-bearing and non-weight-bearing MWM) for dorsiflexion and balance, short term (A); combine exercise and manual therapy with balance training (B); fibularis dry needling with proprioceptive training (C); brace or tape not as a stand-alone for balance (B). Balance-training responders: SEBT posteromedial reach 85% or less and FAAM-ADL 92.6% or less (70% success). Nonsurgical care for 3 to 6 months before surgery is considered.
+- Source: Martin RL et al., JOSPT 2021;51(4):CPG1-CPG80 (lateral ankle sprain revision 2021), grades in brackets.

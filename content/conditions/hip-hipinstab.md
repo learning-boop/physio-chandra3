@@ -33,3 +33,8 @@ Some hips have a slightly shallower socket or extra-stretchy ligaments, so the b
 ## seePhysioIf
 - The hip repeatedly feels like it's about to give way or catches/locks
 - Groin or hip discomfort continues for several weeks despite easing back on aggravating activities
+
+## clinicNotes
+- Structural instability (JOSPT 2014, C): anterior groin, lateral or general hip pain reproduced by FADIR or FABER; positive apprehension; IR over 30 degrees at 90 degrees of flexion; mechanical symptoms. Imaging: lateral centre-edge angle under 25 degrees, Tonnis angle over 10 degrees (dysplasia). Ligamentum teres tear: instability on squatting.
+- Risk factors (F): local or general laxity (Beighton), connective tissue disorders, bony shape, rotational and end-range sports. Measures (A): HOS, HAGOS or iHOT-33. Interventions (F): education to avoid end-range loading, neuromuscular re-education, strength and power; caution with capsular mobilisation in a lax hip.
+- Source: Enseki K et al., JOSPT 2014;44(6):A1-A32 (nonarthritic hip joint pain; revised by Enseki KR et al., JOSPT 2023;53(7), whose grades have not been checked against these).

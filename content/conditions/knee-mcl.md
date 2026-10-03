@@ -35,3 +35,8 @@ This is a stretch or tear of the ligament running along the inner side of your k
 ## seePhysioIf
 - Pain, swelling, or a wobbly feeling hasn't improved within a couple of weeks
 - The knee feels unstable or buckles during everyday walking or turning
+
+## clinicNotes
+- Diagnosis (ligament CPG 2017): valgus or rotational force, typically a blow to the outer knee with the foot planted; MCL tenderness reproduces the familiar pain. Valgus stress at 30 degrees: pain sens 78%, spec 67%; laxity sens 91%, spec 49%. MCL with ACL is a common combination: check Lachman and pivot shift; Ottawa knee rule.
+- Measures (B): IKDC 2000 or KOOS, Tegner or Marx, hop tests when appropriate, effusion, ROM, quadriceps strength. Bracing for severe MCL injury (F); neuromuscular re-education with strengthening (A).
+- Source: Logerstedt DS et al., JOSPT 2017;47(11):A1-A47 (knee ligament sprain revision 2017), grades in brackets.

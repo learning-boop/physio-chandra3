@@ -3,8 +3,11 @@
    could need medical care first. One per region document that has one:
 
      neck      the Canadian C-Spine Rule, adapted (Stiell et al., JAMA 2001),
-               from the cervical document, section B2 — also run for the base
-               of the neck (its document routes its injury flag here)
+               from the cervical document, section B2, with the rule's own
+               limits (alert adults, I8 and I3) and a concussion check after
+               2 to 7 days (I9), per the JOSPT neck 2017 and concussion 2020
+               CPGs — also run for the base of the neck (its document routes
+               its injury flag here)
      shoulder  fall, dislocation or sudden pull (shoulder document, B2)
      arm       fall, blow or sudden force to the upper arm (upper arm, B2)
      elbow     fall, blow or sudden force to the elbow (elbow, B2)
@@ -15,8 +18,8 @@
      thigh     sudden pain, knock or fall (thigh, B2)
      knee      twist, blow or fall: the Ottawa knee rule, adapted (knee, B2)
      leg       kick, fall or sudden calf pain (lower leg, B2)
-     ankle     rolled, twisted or landed badly: the Ottawa ankle rules, adapted (ankle, B2)
-     foot      twist, crush, stubbed toe or landing: the Ottawa foot rule, adapted (foot, B2)
+     ankle     rolled, twisted or landed badly: the Ottawa ankle rules in full, with self-pressed bone points (ankle, B2)
+     foot      twist, crush, stubbed toe or landing: the Ottawa foot rule in full, with self-pressed bone points (foot, B2)
 
    Questions are asked in order and the first answer that routes ends that
    screen. The site can only send people on to medical care from here, never
@@ -44,9 +47,15 @@ export const INJURY_QUESTIONS = [
     { id: 'h48', label: 'Within the last 48 hours' },
     { id: 'd7', label: '2 to 7 days ago' },
   ]},
-  { id: 'I3', text: 'Are you 65 or older?', options: [
+  // The rule applies to alert adults (16 and over): I8 and the age answer.
+  { id: 'I8', text: 'Since the injury, have you passed out, been drowsy or confused, or did you have alcohol or drugs before it happened; or do you have another very painful injury (for example a broken bone) that takes your attention away from your neck?', options: [
     { id: 'yes', label: 'Yes' },
     { id: 'no', label: 'No' },
+  ]},
+  { id: 'I3', text: 'How old are you?', options: [
+    { id: 'child', label: 'Under 16' },
+    { id: 'no', label: '16 to 64' },
+    { id: 'yes', label: '65 or older' },
   ]},
   { id: 'I4', text: 'Was it any of these? Tick all that apply.', multi: true, options: [
     { id: 'height', label: 'A fall from 1 metre (3 feet) or 5 stairs or higher' },
@@ -66,6 +75,12 @@ export const INJURY_QUESTIONS = [
     { id: 'delayed', label: 'The neck pain came on later, not straight away' },
     { id: 'none', label: 'None of these' },
   ]},
+  // After a crash, a fall or a blow (JOSPT concussion CPG 2020: look for an
+  // undiagnosed concussion after any concussive event, A).
+  { id: 'I9', text: 'Since the injury, and not yet checked by a doctor for this, have you had any of these: a headache, feeling foggy or slowed down, trouble concentrating or remembering, dizziness, or being bothered by light or noise?', options: [
+    { id: 'yes', label: 'Yes' },
+    { id: 'no', label: 'No' },
+  ]},
   { id: 'I7', text: 'Slowly turn your head as far as is comfortable to the left, then to the right. Stop if it hurts sharply; don’t push through it. Can you turn at least halfway to each shoulder?', options: [
     { id: 'yes', label: 'Yes, both ways' },
     { id: 'no', label: 'No, not one or both ways' },
@@ -79,6 +94,9 @@ export const I7_PASS_ROUTE = 'urgent'
 
 const WHY = {
   age: 'Being 65 or older is a high-risk factor after a neck injury',
+  notAlert: 'After passing out, drowsiness, confusion, alcohol or drugs, or another painful injury, a neck fracture cannot be ruled out without a hospital check',
+  child: 'The neck injury rule is for adults: after a recent neck injury, a child or teenager should be checked by a doctor',
+  concussion: 'These can be signs of a concussion: a doctor should check you, and physiotherapy can help once you have been seen',
   mechanism: 'The way the injury happened carries a high risk of a neck fracture',
   nerve: 'Pins and needles or numbness after a neck injury can mean a nerve or the spinal cord is involved',
   noLowRisk: 'Without any low-risk features, the neck cannot safely be moved or tested outside hospital',
@@ -100,7 +118,7 @@ export function ageFrom(id) {
 }
 
 /** Where the screen goes next.
-    `answers` holds I1–I7; `ageId` is the opening-screen age answer, which
+    `answers` holds I1–I9; `ageId` is the opening-screen age answer, which
     pre-fills I3 when it is known.
     Returns { next: 'I3' } while a question is still needed, else
     { route: 'skip' | 'continue' | 'urgent' | 'emergency', why?: string }. */
@@ -114,17 +132,29 @@ export function injuryStep(answers = {}, ageId) {
   const em = (why) => ({ route: 'emergency', why, call911: true })
   const high = (why) => (acute ? em(why) : { route: 'urgent', why })
 
-  // Step 1: any high-risk factor.
+  // The rule only applies to someone alert, sober and without another
+  // painful injury (Stiell 2001; NEXUS adds the same items).
+  if (a.I8 === undefined) return { next: 'I8' }
+  if (a.I8 === 'yes') return high(WHY.notAlert)
+
+  // Step 1: any high-risk factor. The opening screen's "Under 18" counts as
+  // under 16 (the rule was derived in adults; the JOSPT neck CPG 2017).
   const age = ageFrom(ageId)
-  const old = age !== null && age >= 65 ? true : a.I3 === 'yes' ? true : age !== null || a.I3 === 'no' ? false : null
-  if (old === null) return { next: 'I3' }
-  if (old) return high(WHY.age)
+  const band = age !== null ? (age >= 65 ? 'yes' : age < 18 ? 'child' : 'no') : a.I3
+  if (band === undefined) return { next: 'I3' }
+  if (band === 'yes') return high(WHY.age)
   if (!ticked(a.I4)) return { next: 'I4' }
   if (list(a.I4).some((x) => x !== 'none')) return high(WHY.mechanism)
   if (a.I5 === undefined) return { next: 'I5' }
   if (a.I5 === 'yes') return high(WHY.nerve)
-  // Older injuries with no high-risk factor go on to the region questions.
-  if (!acute) return { route: 'continue' }
+  if (band === 'child') return { route: 'urgent', why: WHY.child }
+  // Older injuries with no high-risk factor: a concussion check, then the
+  // region questions. (Within 48 hours every outcome sees a doctor anyway.)
+  if (!acute) {
+    if (a.I9 === undefined) return { next: 'I9' }
+    if (a.I9 === 'yes') return { route: 'urgent', why: WHY.concussion }
+    return { route: 'continue' }
+  }
 
   // Step 2: a low-risk factor that makes it safe to test movement.
   if (!ticked(a.I6)) return { next: 'I6' }
@@ -404,9 +434,19 @@ export const LEG_INJURY = [
     options: yesNo('urgent', 'Possible peroneal nerve injury') },
 ]
 
-/* ── Ankle: rolled, twisted or landed badly (Ottawa ankle rules, adapted;
-   Stiell 1993). Bone tenderness can only be checked in person, so those
-   Ottawa items are left out. ── */
+// The Ottawa bone-tenderness points, pressed by the patient (JOSPT lateral
+// ankle sprain CPG 2021: apply the rules in full; weight bearing alone misses
+// fractures). Worded the same in the ankle and foot screens, so it is asked
+// once when both apply.
+const OTTAWA_POINTS = 'Press firmly with your fingertips on each of these bony spots: the back edge and tip of the bony bump on the OUTER side of your ankle (up to about 6 cm, 2 inches, above the tip); the same on the INNER ankle bone; the bony knob halfway along the outer edge of your foot; and the bony bump on the inner side of your foot, just in front of the ankle. Is any of these spots sharply tender?'
+const ottawaPoints = (why) => [
+  { id: 'no', label: 'No, none of them' },
+  { id: 'yes', label: 'Yes, at least one is sharply tender', route: 'urgent', why },
+  { id: 'cannot', label: 'It is too painful to press on them', route: 'urgent', why },
+]
+
+/* ── Ankle: rolled, twisted or landed badly (Ottawa ankle rules, Stiell 1993,
+   in full: the 4 steps and the bone-tenderness points, I4 and I8). ── */
 export const ANKLE_INJURY = [
   { id: 'I1', text: 'Have you injured your ankle in the last 6 weeks, for example by rolling or twisting it, or in a fall?', options: [
     { id: 'no', label: 'No', route: 'skip' },
@@ -422,6 +462,8 @@ export const ANKLE_INJURY = [
   // A possible fracture: same day.
   { id: 'I4', text: 'Could you not take 4 steps straight after the injury, and still cannot?',
     sameDay: true, options: yesNo('urgent', 'Ottawa ankle rule: an X-ray is needed to rule out a fracture') },
+  { id: 'I8', text: OTTAWA_POINTS, sameDay: true,
+    options: ottawaPoints('Ottawa ankle rules: tenderness over the ankle or midfoot bones needs an X-ray to rule out a fracture') },
   // Asked after "a kick to the back of the ankle" only. Same day, as for the
   // lower leg's Achilles question.
   { id: 'I5', text: 'Did it feel like a kick to the back of the ankle, and now you cannot rise onto your toes on that leg, or feel a gap in the tendon?',
@@ -434,9 +476,9 @@ export const ANKLE_INJURY = [
     sameDay: true, options: yesNo('urgent', 'Possible growth plate fracture: in children these are more common than sprains') },
 ]
 
-/* ── Foot: twist, crush, stubbed toe or landing (Ottawa foot rule, adapted).
-   Tenderness over the navicular and the base of the 5th metatarsal can only
-   be checked in person. ── */
+/* ── Foot: twist, crush, stubbed toe or landing (Ottawa foot rule, in full:
+   the 4 steps and the navicular and 5th metatarsal points, I4 and I8; not
+   after a stubbed toe, which the rule does not cover). ── */
 export const FOOT_INJURY = [
   { id: 'I1', text: 'Have you injured your foot in the last 6 weeks, for example in a fall, a twist, or something landing on it?', options: [
     { id: 'no', label: 'No', route: 'skip' },
@@ -447,8 +489,8 @@ export const FOOT_INJURY = [
   ]},
   { id: 'I2', text: 'Is the foot or a toe out of shape, or is bone showing through the skin?',
     options: yesNo('emergency', 'Possible fracture or dislocation') },
-  // The questions that start "After a crush", "After rolling the ankle" and
-  // "After the big toe was bent back" are asked after that injury only.
+  // The questions that start "After a crush" and "After the big toe was bent
+  // back" are asked after that injury only.
   { id: 'I3', text: 'After a crush, is the foot getting tighter and more painful by the hour, with pain on moving the toes?',
     askIf: (a) => a.I1 === 'crush',
     options: yesNo('emergency', 'Possible compartment syndrome of the foot') },
@@ -456,11 +498,10 @@ export const FOOT_INJURY = [
   // when both apply.
   { id: 'I4', text: 'Could you not take 4 steps straight after the injury, and still cannot?',
     sameDay: true, options: yesNo('urgent', 'Ottawa foot rule: an X-ray is needed to rule out a fracture') },
+  { id: 'I8', text: OTTAWA_POINTS, askIf: (a) => a.I1 !== 'stub', sameDay: true,
+    options: ottawaPoints('Ottawa foot rule: tenderness over the midfoot or ankle bones needs an X-ray to rule out a fracture') },
   { id: 'I5', text: 'Is there bruising on the sole in the middle of the foot, or pain in the middle of the foot when you stand on your toes?',
     sameDay: true, options: yesNo('urgent', 'Possible Lisfranc (midfoot) injury: often missed, and it may need surgery') },
-  { id: 'I6', text: 'After rolling the ankle, is the pain on the outer edge of the foot, halfway along, rather than at the ankle?',
-    askIf: (a) => a.I1 === 'twist', sameDay: true,
-    options: yesNo('urgent', 'Possible fracture at the base of the 5th metatarsal') },
   { id: 'I7', text: 'After the big toe was bent back hard (on artificial turf, or jammed), is it swollen and painful to push off?',
     askIf: (a) => a.I1 === 'stub' || a.I1 === 'landing',
     options: yesNo('urgent', 'Possible "turf toe" (big toe joint ligament injury)') },
@@ -492,7 +533,9 @@ export const HEAD_INJURY = [
   // In the first days (or when unsure when): the document's emergency flags.
   { id: 'I3', text: 'Since the injury, have you had a seizure (a fit), or have you passed out, even briefly, in the last 24 hours?',
     askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'A seizure or passing out after a head injury needs emergency care', { call911: true }) },
-  { id: 'I4', text: 'Since the injury, have you become more confused, restless or agitated, or hard to keep awake; or do you have weakness, numbness or tingling in your arms or legs, or trouble walking steadily?',
+  // Vomiting more than once, unequal pupils and signs of a skull fracture:
+  // the JOSPT concussion CPG 2020 emergency screen (Figure 1).
+  { id: 'I4', text: 'Since the injury, have you become more confused, restless or agitated, or hard to keep awake; do you have weakness, numbness or tingling in your arms or legs, or trouble walking steadily; or have you vomited more than once, noticed one pupil bigger than the other, clear fluid or blood coming from your nose or ears, or new bruising behind your ears or around both eyes?',
     askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'Possible bleeding or swelling inside the skull', { call911: true }) },
   { id: 'I5', text: 'Do you have severe pain in the middle of the back of your neck, or are you unable to move your neck, since the injury?',
     askIf: (a) => RECENT.includes(a.I2), options: yesNo('emergency', 'Possible neck fracture or spinal injury', { call911: true, keepNeckStill: true }) },

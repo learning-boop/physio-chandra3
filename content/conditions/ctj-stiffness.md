@@ -41,3 +41,10 @@ The hinge where the mobile neck meets the stiffer upper back can become restrict
 - Recurring end-of-day neck/upper-back ache
 - Stiffness limits looking up or over the shoulder
 - You want targeted mobility and strengthening for desk work
+
+## clinicNotes
+- JOSPT 2017 category: neck pain with mobility deficits at the cervicothoracic junction (C): cervical and upper thoracic motion limitation reproducing the pain, no trauma, no radiating arm signs. Stage: acute under 6 weeks, subacute 6-12, chronic over 12; match dose to irritability.
+- Assess (B): CROM, CFRT, cervical and thoracic segmental mobility with provocation, upper trapezius pressure-pain threshold. Outcomes (A): NDI, NPRS, PSFS. No imaging without red flags; IFOMPT cervical framework before cervical manual therapy.
+- Acute: thoracic manipulation, neck ROM exercise, scapulothoracic and upper-limb stretching and strengthening (B); cervical manipulation and/or mobilisation (C). Subacute: neck and shoulder-girdle endurance exercise (B); thoracic and cervical manipulation or mobilisation (C). Chronic: multimodal (B), thoracic plus cervical manipulation or mobilisation with mixed exercise; dry needling, laser or intermittent traction; endurance exercise and education for an active lifestyle (C).
+- Look-alikes: mechanical neck pain (mainly mid and upper neck), rib joint (breathing-related), thoracic outlet (arm symptoms with the arm raised), cardiac or visceral referral (red flags).
+- Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets.

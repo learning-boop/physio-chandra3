@@ -39,3 +39,6 @@ Irritation of the gluteal tendons and bursa over the bony point of the outer hip
 - Night pain on that side persists beyond 2 weeks
 - Walking distance or stairs are limited
 - You want a progressive loading program — the evidence-based treatment
+
+## clinicNotes
+- Lateral hip pain also fits the hip OA criteria (Koc 2025) and FAI (Enseki 2014): check IR at 90 degrees of flexion and FADIR before calling it isolated GTPS; concurrent OA is common over 50. Source: Koc 2025; Enseki 2014.

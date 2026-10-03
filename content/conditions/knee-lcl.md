@@ -34,3 +34,8 @@ This is a stretch or tear of the ligament on the outer side of your knee, typica
 ## seePhysioIf
 - Symptoms aren't settling after a couple of weeks of rest and care
 - The knee feels loose or shifts to the side during activity
+
+## clinicNotes
+- Diagnosis (ligament CPG 2017): varus force; local swelling and tenderness over the LCL; lateral pain and laxity on varus stress at 0 and 30 degrees. Isolated LCL injury is the least common (about 4%). Suspect a posterolateral corner injury with hyperextension plus varus or a posterolateral blow to the medial tibia near extension; it can be part of a knee dislocation, so check the neurovascular status (including the peroneal nerve).
+- Bracing for posterolateral corner injury (F); neuromuscular re-education with strengthening (A); measures as for MCL (B). Differential: ITB syndrome in runners.
+- Source: Logerstedt DS et al., JOSPT 2017;47(11):A1-A47 (knee ligament sprain revision 2017), grades in brackets.

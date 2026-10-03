@@ -33,3 +33,6 @@ Sometimes pain that seems to come from the knee is actually being sent there fro
 ## seePhysioIf
 - Knee pain isn't improving with knee-focused self-care
 - You notice hip or groin stiffness alongside the knee symptoms
+
+## clinicNotes
+- Hip OA pain can spread down the thigh to the knee as it progresses (Koc 2025): check the OA criteria (over 50, morning stiffness under 1 hour, IR under 24 degrees or 15 degrees less than the other side, pain on passive IR). In children and teenagers, SUFE and Perthes present at the knee (Enseki 2014). Source: Koc 2025; Enseki 2014.

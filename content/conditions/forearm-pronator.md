@@ -36,3 +36,6 @@ The median nerve, the same nerve involved in carpal tunnel syndrome, can be sque
 - The tingling or ache has not eased after 2 to 3 weeks
 - Your pinch or grip is getting weaker
 - You are not sure whether it is this or carpal tunnel at the wrist
+
+## clinicNotes
+- CTS CPG 2019 lists pronator syndrome as a median nerve differential. Favour a proximal level when sensation over the thenar eminence is involved (palmar cutaneous branch leaves before the tunnel), there is no night waking eased by shaking, and the forearm aches with pronation or grip. Wrist provocation tests cannot separate the two levels and ULNT1 does not discriminate (D); use nerve conduction studies when unclear. Source: Erickson 2019.

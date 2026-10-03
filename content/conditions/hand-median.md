@@ -2,7 +2,7 @@
 region: hand
 id: median
 name: Carpal tunnel syndrome
-clin: Median nerve compression at the wrist (CTS-6; JOSPT CPG 2019)
+clin: Median nerve compression at the wrist (JOSPT CPG 2019; Wainner cluster; CTS-6 Graham 2006)
 # Patient text shared with wrist-median.md: keep the two in step.
 # Pointers from content/regions/hand.md, 25 Sep 2026: people often draw carpal tunnel on the fingers.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
@@ -18,6 +18,8 @@ pointers:
   "The back of my hand is numb too": -3
   "Tingling in the fingertips of both hands": -1
   "Moving my neck": -2
+  "50 to 64": 1
+  "65 or over": 1
 ---
 
 ## blurb
@@ -32,9 +34,18 @@ The median nerve supplies feeling to the thumb, index, and middle fingers. Compr
 ## homeCare
 - Avoid sleeping with the wrist curled — a neutral night splint often helps
 - Break up repetitive hand tasks; keep the wrist neutral at the keyboard
-- Gentle nerve-gliding movements within comfort
+- Gentle hand and finger stretches, alongside the night splint
 
 ## seePhysioIf
 - Tingling recurs most nights or persists by day
 - Grip or fine motor control is slipping
-- Early care (splinting, glides, ergonomics) can prevent progression — persistent numbness needs medical review
+- Early care, mainly a night splint and changes to how you use your hand, often eases symptoms; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review
+
+## clinicNotes
+- Severity: mild, typical pattern with intermittent symptoms and a normal exam; moderate, constant symptoms, thenar weakness or sensory loss in digits 1-3 without atrophy; severe, thenar atrophy. Refer to a hand surgeon with thenar atrophy; to a physician with signs of another condition; suggest nerve conduction studies when the exam is inconclusive; refer for a surgical opinion if not improving.
+- Wainner cluster (B): over 45, shaking relieves symptoms, wrist ratio over 0.67, CTQ symptom score over 1.9, reduced thumb pad sensation; 4 or more positive +LR 4.6, all 5 spec 0.99. Katz hand diagram, Phalen, Tinel and carpal compression estimate likelihood (B) but are weak alone (Phalen +LR 1.3; Tinel about 1.0). Sensation over the thenar eminence is spared in CTS (palmar cutaneous branch); dorsal hand symptoms make CTS unlikely.
+- Nerve status (A): Semmes-Weinstein (2.83 or 3.22 threshold) and static two-point discrimination; ULNT, scratch collapse and vibration conflicting (D). Outcomes (B): CTQ symptom scale (MCID 0.50 after 6 weeks of splinting) and CTQ function or DASH; grip and tip pinch (C).
+- Interventions: neutral night wrist orthosis (B); add daytime wear or change the design if night-only fails (C); pregnancy, orthosis and review after birth (C); keyboard and mouse advice (C); heat, diathermy, interferential, phonophoresis (C); short-term cervical and upper-limb manual therapy (C); stretching with an orthosis without atrophy (C); nerve mobilisation conflicting (D). Do not use laser, iontophoresis or magnets (B), or thermal ultrasound (C).
+- Course: 28-62% recover without treatment, 32-58% worsen; about 6 in 10 have surgery within 1-3 years after non-surgical care. Worse outcome with long duration, a positive Phalen, thenar wasting and repeated earlier treatments; better with under a year of symptoms. Risk: BMI over 30, over 50, female; diabetes, hypothyroidism, family history; forceful work strongest, computer work not increased.
+- Differentials: cervical radiculopathy, thoracic outlet, polyneuropathy, pronator syndrome, ulnar and radial tunnel; ALS and MS can begin distally. Acute CTS (fracture, bleeding, infection) is urgent.
+- Source: Erickson M et al., JOSPT 2019;49(5):CPG1-CPG85 (carpal tunnel syndrome), grades in brackets.

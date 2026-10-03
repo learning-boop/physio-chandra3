@@ -1,6 +1,6 @@
 ---
 # From "Foot assessment.docx" (Joint wise assessment folder), 25 Sep 2026.
-# Built into src/data/symptomGuideExtra.js (foot, question ids B1 to B8) and src/data/injuryScreen.js (foot screen, Ottawa foot rule adapted).
+# Built into src/data/symptomGuideExtra.js (foot, question ids B1 to B8) and src/data/injuryScreen.js (foot screen, Ottawa foot rule in full).
 # Conditions: content/conditions/foot-*.md. Body map: the sole and heel pad, and the top of the foot in front of the ankle (SOLE_TOP and FOOT_FRONT in Body3D.jsx).
 # Test patients: npm run check:regions
 # 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
@@ -56,9 +56,13 @@ I5 Is there bruising on the sole in the middle of the foot, or pain in the middl
 Route: Yes → PHYSICIAN FIRST
 Why: Possible Lisfranc (midfoot) injury; often missed and may need surgery
 
-I6 After rolling the ankle, is the pain on the outer edge of the foot, halfway along, rather than at the ankle?
-Route: Yes → PHYSICIAN FIRST
-Why: Possible fracture at the base of the 5th metatarsal
+I8 (asked unless a toe was stubbed or jammed, which the rule does not cover; replaces the earlier I6, "after rolling the ankle, is the pain on the outer edge of the foot, halfway along?", as the 5th metatarsal is now pressed directly)
+Press firmly with your fingertips on each of these bony spots: the back edge and tip of the bony bump on the OUTER side of your ankle (up to about 6 cm, 2 inches, above the tip); the same on the INNER ankle bone; the bony knob halfway along the outer edge of your foot; and the bony bump on the inner side of your foot, just in front of the ankle. Is any of these spots sharply tender?   (2 Oct 2026, Chandra's request: the Ottawa foot rule in full: the navicular and the base of the 5th metatarsal. Worded as the ankle's I8, so it is asked once when both are drawn; added after the signed version)
+- No, none of them
+- Yes, at least one is sharply tender
+- It is too painful to press on them
+Route: Yes or too painful → PHYSICIAN FIRST (same day)
+Why: Ottawa foot rule: tenderness over the midfoot or ankle bones needs an X-ray to rule out a fracture
 
 I7 After the big toe was bent back hard (on artificial turf, or jammed), is it swollen and painful to push off?
 Route: Yes → PHYSICIAN FIRST
@@ -218,9 +222,15 @@ Expect: top condition = None; see a doctor first; must not show = Hallux rigidus
 
 CASE: Test patient 5
 Drawing: Middle of the left foot after a fall down stairs with the foot bent under
-Answers: Age 30 to 49 · After an injury · Less than 2 weeks; Injury screen: I1 “Yes, my foot was bent under me”; I2 to I4 No; I5 Yes
+Answers: Age 30 to 49 · After an injury · Less than 2 weeks; Injury screen: I1 “Yes, my foot was bent under me”; I2 to I4 No; I8 No; I5 Yes
 Flags: Injury screen I5 (possible Lisfranc injury)
 Expect: top condition = None; see a doctor first; must not show = Midfoot sprain results without the physician-first message; route = Physician first
+
+CASE: Test patient 5b (2 Oct 2026, Ottawa foot rule)
+Drawing: Outer edge of the right foot after rolling it
+Answers: Age 30 to 49 · After an injury · Less than 2 weeks; Injury screen: I1 “Yes, I rolled or twisted it”; I2 No; I4 No (walking); I8 Yes (the bony knob halfway along the outer edge is sharply tender)
+Flags: Injury screen I8 (Ottawa bone tenderness, base of the 5th metatarsal)
+Expect: top condition = None; see a doctor first (same day, X-ray); must not show = Foot results without the physician-first message; route = Physician first
 
 CASE: Test patient 6
 Drawing: Both feet, soles and toes

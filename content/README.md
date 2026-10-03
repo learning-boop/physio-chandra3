@@ -20,6 +20,8 @@ content/
     osteoarthritis.md   (shared OA foundation: Osteoarthritis.docx intake + AIM manual Chapter 2.9 + current guidelines)
     compartment-syndrome.md   (acute compartment syndrome: the emergency-route questions, walk-in protocol, rehab after fasciotomy)
     multiple-sclerosis.md   (the nervous-system screen pc-neuro, diagnosed MS on the cautions list, clinician notes)
+    hip-fracture.md   (JOSPT hip fracture CPG 2021: the emergency route and rehabilitation after surgery)
+    work-participation.md   (JOSPT work participation CPG 2021: return-to-work screening and interventions)
 ```
 
 Files starting with `_` are templates, examples and instructions, never data.
@@ -45,7 +47,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 
 | Area on the body map | Region | Built from | Test patients |
 | --- | --- | --- | --- |
-| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents; + Cervical Radiculopathy document, N2, N3 and N12, reasoning in reference/cervical-radiculopathy.md; + Cervicogenic Headache 1 and Upper Cervical Pain documents, N13 and the upper neck pain condition, reasoning in reference/upper-cervical.md; + Cervical Neural Mechanosensitivity document, N14, reasoning in reference/neural-mechanosensitivity.md) | 53 |
+| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents; + Cervical Radiculopathy document, N2, N3 and N12, reasoning in reference/cervical-radiculopathy.md; + Cervicogenic Headache 1 and Upper Cervical Pain documents, N13 and the upper neck pain condition, reasoning in reference/upper-cervical.md; + Cervical Neural Mechanosensitivity document, N14, reasoning in reference/neural-mechanosensitivity.md; + the Canadian C-Spine Rule's limits and a concussion check in the injury screen, I8, I3 and I9, from the JOSPT neck 2017 and concussion 2020 CPGs) | 56 |
 | Base of neck (C7–T3) | `ctj` | CT junction assessment | 5 |
 | Mid back, front of chest | `upperback` | Thoracic assessment (+ Osteoporosis document, T9) | 8 |
 | Mid-to-low back, flank | `tlj` | TL-junction assessment | 5 |
@@ -64,8 +66,8 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Thigh | `thigh` | Thigh assessment (question ids R1–R8) | 6 |
 | Knee (from just above the kneecap to just below it) | `knee` | Knee assessment (question ids K1–K8) | 6 |
 | Lower leg (calf & shin) | `leg` (zone type `lowerleg`) | Lower leg assessment (question ids V1–V8) | 6 |
-| Ankle (ankle bones, front crease, back of the heel) | `ankle` | Ankle assessment (question ids A1–A8; + CRPS document, A9) | 8 |
-| Foot & toes (sole, heel pad, top of the foot, toes) | `foot` | Foot assessment (question ids B1–B8; + CRPS document, B9) | 6 |
+| Ankle (ankle bones, front crease, back of the heel) | `ankle` | Ankle assessment (question ids A1–A8; + CRPS document, A9; + the Ottawa ankle rules in full, injury screen I8, JOSPT ankle sprain CPG 2021) | 9 |
+| Foot & toes (sole, heel pad, top of the foot, toes) | `foot` | Foot assessment (question ids B1–B8; + CRPS document, B9; + the Ottawa foot rule in full, injury screen I8) | 7 |
 | Stomach | — | generic questions | — |
 
 Still to feed:

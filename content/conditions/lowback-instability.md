@@ -2,7 +2,7 @@
 region: lowback
 id: instability
 name: Back that feels unstable or gives way
-clin: Lumbar movement control impairment (instability)
+clin: Lumbar movement control impairment (instability) = low back pain with movement coordination impairments (JOSPT 2012)
 # DRAFT extracted from: Interventions for the Management of Acute and Chronic Low Back Pain: Revision 2021 (JOSPT Clinical Practice Guideline)
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
@@ -31,3 +31,9 @@ Some low back pain happens because the deep core muscles aren't controlling move
 ## seePhysioIf
 - Episodes of pain keep coming back despite general exercise
 - You're noticing ongoing weakness, giving way, or you're avoiding movements out of worry
+
+## clinicNotes
+- Classification (JOSPT 2012, B): low back pain with movement coordination impairments. Recurrent episodes with or without referred leg pain; symptoms at initial to mid range that worsen at end range or with sustained positions; possible segmental hypermobility, reduced trunk strength and endurance, coordination deficits in daily tasks.
+- Stabilisation prediction rule (Hicks): under 40, positive prone instability test, aberrant movements (painful arc, catch, thigh climbing, reversed lumbopelvic rhythm), SLR over 91 degrees; 3 or more +LR 4.0, fewer than 2 -LR 0.20 (not validated).
+- Chronic with movement control impairment: specific trunk activation and movement control exercise (2021, A); with leg pain (B). Acute: exercise including trunk activation (C). 2012: mid-range neuromuscular re-education, manual therapy for neighbouring mobility deficits, trunk strength and endurance; a temporary support may be considered acutely.
+- Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position.

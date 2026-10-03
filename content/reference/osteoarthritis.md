@@ -3,7 +3,7 @@
      (AIM Theory Manual 2023, Chapter 2.9 General Conditions, Inert Tissue:
      Osteoarthritis, manual pp. 572-581, read in full 2 Oct 2026); checked
      against NICE NG226 (2022), OARSI (2019), ACR/AF (2019), EULAR hand OA
-     (2018), JOSPT hip OA CPG (2017), AAOS knee OA (2021). Clinician reference
+     (2018), JOSPT hip OA CPG (Koc 2025; Cibulka 2017 superseded), AAOS knee OA (2021). Clinician reference
      only: never shown to patients. Summarised, not copied. Used by the
      ## clinicNotes of the OA conditions: knee-oa, knee-pfoa, hip-hipoa,
      hand-handoa, hand-thumboa, wrist-thumboa, foot-rigidus, foot-midfootoa,
@@ -27,7 +27,8 @@ A whole-joint condition: mechanical and biological events upset the balance of b
 
 - **Clinical, without imaging** (NICE NG226): 45 or over, activity-related joint pain, and no morning stiffness or stiffness of 30 minutes or less. Image only for atypical features or before surgery. Symptoms often precede radiographic change by 10-15 years (AIM manual p. 576).
 - **Knee** (Altman 1986, ACR clinical): knee pain plus 3 of 6 (over 50, stiffness under 30 minutes, crepitus, bony tenderness, bony enlargement, no palpable warmth): sensitivity 95%, specificity 69%.
-- **Hip** (Sutlive 2008): squatting aggravates, active flexion gives lateral hip pain, scour with adduction gives lateral hip or groin pain, active extension is painful, passive IR 25 degrees or less: 4 of 5, +LR 24.3. Capsular pattern IR, then flexion, then abduction (JOSPT hip OA CPG 2017).
+- **Hip** (Sutlive 2008): squatting aggravates, active flexion gives lateral hip pain, scour with adduction gives lateral hip or groin pain, active extension is painful, passive IR 25 degrees or less: 4 of 5, +LR 24.3. Capsular pattern IR, then flexion, then abduction.
+- **Hip, JOSPT classification** (Cibulka 2017, restated in Koc 2025, A): over 50, moderate anterior or lateral hip pain on weight bearing, morning stiffness under 1 hour, IR under 24 degrees or IR and flexion 15 degrees less than the other side, and/or pain on passive IR. Imaging (ACR): radiographs first, then ultrasound, then MRI or CT. Management (Koc 2025): manual therapy (A, including long-axis distraction and mobilisation with movement), exercise 1-5 times a week for 5-16 weeks (A), dry needling (A), education with pain-coping skills (B), weight loss 5-7.5% (B), gait aids (C), ultrasound by shared decision only (D), no brace first line (F).
 - **Measures:** NPRS; KOOS, HOOS or WOMAC; PSFS; the OARSI performance set (30-s chair stand, 40-m fast-paced walk, stair climb), TUG, balance. Hand: AUSCAN or FIHOA, grip and pinch.
 
 ## Stages (AIM manual pp. 576-580)
@@ -53,4 +54,4 @@ Inflammatory arthritis (morning stiffness over an hour, several swollen joints, 
 
 ## Key references
 
-NICE NG226 (2022); Bannuru 2019 (OARSI); Kolasinski 2020 (ACR/AF 2019); Kloppenburg 2019 (EULAR hand 2018); Cibulka 2017 (JOSPT hip); AAOS knee OA 3rd ed. 2021; Skou and Roos 2017 (GLA:D); Ageberg 2010 (NEMEX-TJR); Roos and Arden 2016; Hunter and Bierma-Zeinstra 2019 (Lancet); Sutlive 2008; Altman 1986; McAlindon 2014 (OARSI knee); Jevsevar 2013 (AAOS knee 2nd ed.); Hendry 2006; Villafane 2013; Geenen 2018 (EULAR pain management); AIM Theory Manual 2023 pp. 572-581.
+NICE NG226 (2022); Bannuru 2019 (OARSI); Kolasinski 2020 (ACR/AF 2019); Kloppenburg 2019 (EULAR hand 2018); Koc 2025 (JOSPT hip OA revision; Cibulka 2017 superseded); AAOS knee OA 3rd ed. 2021; Skou and Roos 2017 (GLA:D); Ageberg 2010 (NEMEX-TJR); Roos and Arden 2016; Hunter and Bierma-Zeinstra 2019 (Lancet); Sutlive 2008; Altman 1986; McAlindon 2014 (OARSI knee); Jevsevar 2013 (AAOS knee 2nd ed.); Hendry 2006; Villafane 2013; Geenen 2018 (EULAR pain management); AIM Theory Manual 2023 pp. 572-581.

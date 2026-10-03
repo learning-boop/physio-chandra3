@@ -588,7 +588,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('911 split: pregnancy bleeding is 911, waters or tightenings go to labour and delivery',
     byId['prf-pregnancy-bleed'].call911 && byId['prf-pregnancy'].goTo === 'labour' && !byId['prf-pregnancy'].call911)
   const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
-  const neckInjury = injuryFlow(Z(['neck']), { 'neck:I1': 'yes', 'neck:I2': 'h48', 'neck:I3': 'yes' })
+  const neckInjury = injuryFlow(Z(['neck']), { 'neck:I1': 'yes', 'neck:I2': 'h48', 'neck:I8': 'no', 'neck:I3': 'yes' })
   check('911 split: a high-risk neck injury in the last 48 hours calls 911', neckInjury.route === 'emergency' && neckInjury.call911, neckInjury)
   const thigh = injuryFlow(Z(['thigh']), { 'thigh:I1': 'fall', 'thigh:I2': 'yes' })
   check('911 split: a possible femur fracture calls 911', thigh.route === 'emergency' && thigh.call911, thigh)
@@ -691,6 +691,33 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   }
   check('CRPS: after an injury or operation, asks about a wound infection (doctor today)',
     patternChecks(Z(['wristR']), { W9: ['trigger'] }, 7).some((p) => p.id === 'pc-crps-infection' && p.sameDay))
+}
+
+// ── 20. Ottawa ankle and foot rules in full; the Canadian C-Spine Rule's limits ──
+{
+  const { injuryFlow, ANKLE_INJURY, FOOT_INJURY } = await imp('src/data/injuryScreen.js')
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const pts = ANKLE_INJURY.find((q) => q.id === 'I8')
+  check('Ottawa: the ankle and foot screens ask the same bone-tenderness question (asked once when both apply)',
+    pts && FOOT_INJURY.find((q) => q.id === 'I8').text === pts.text && /OUTER/.test(pts.text) && /INNER/.test(pts.text) && /outer edge of your foot/.test(pts.text))
+  const both = { 'ankle:I1': 'inversion', 'ankle:I2': 'no', 'ankle:I3': 'no', 'ankle:I4': 'no', 'ankle:I8': 'no', 'ankle:I6': 'no', 'ankle:I7': 'no', 'foot:I1': 'twist', 'foot:I2': 'no', 'foot:I5': 'no' }
+  const r = injuryFlow(Z(['ankleR', 'footR']), both)
+  check('Ottawa: an ankle and foot drawing does not ask the tenderness or 4-steps question twice', r.route === 'continue', r)
+  const tender = injuryFlow(Z(['ankleR']), { 'ankle:I1': 'inversion', 'ankle:I2': 'no', 'ankle:I3': 'no', 'ankle:I4': 'no', 'ankle:I8': 'cannot' })
+  check('Ottawa: too painful to press counts as tender (X-ray the same day)', tender.route === 'urgent' && tender.sameDay, tender)
+  const stub = injuryFlow(Z(['footR']), { 'foot:I1': 'stub', 'foot:I2': 'no', 'foot:I4': 'no', 'foot:I5': 'no' })
+  check('Ottawa: not asked after a stubbed toe (outside the rule)', stub.next === 'foot:I7', stub)
+  const neck = (a, age) => injuryFlow(Z(['neck']), Object.fromEntries(Object.entries(a).map(([k, v]) => ['neck:' + k, v])), age)
+  check('C-Spine Rule: alertness, intoxication and distracting injury are asked first',
+    neck({ I1: 'vehicle', I2: 'h48' }).next === 'neck:I8')
+  const drunk = neck({ I1: 'vehicle', I2: 'h48', I8: 'yes' })
+  check('C-Spine Rule: not alert within 48 hours is 911, neck kept still', drunk.route === 'emergency' && drunk.call911, drunk)
+  const teen = neck({ I1: 'sport', I2: 'd7', I8: 'no', I4: ['none'], I5: 'no' }, 'u18')
+  check('C-Spine Rule: under 18 with no high-risk feature sees a doctor the same day (the rule is for adults)', teen.route === 'urgent' && teen.sameDay, teen)
+  const conc = neck({ I1: 'vehicle', I2: 'd7', I8: 'no', I3: 'no', I4: ['none'], I5: 'no', I9: 'yes' })
+  check('Concussion: 2 to 7 days after a crash, concussion symptoms see a doctor', conc.route === 'urgent', conc)
+  const ok = neck({ I1: 'vehicle', I2: 'd7', I8: 'no', I3: 'no', I4: ['none'], I5: 'no', I9: 'no' })
+  check('C-Spine Rule: 2 to 7 days, no high-risk feature or concussion signs, goes on to the questions', ok.route === 'continue', ok)
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

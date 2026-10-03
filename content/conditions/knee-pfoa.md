@@ -3,7 +3,7 @@ region: knee
 id: pfoa
 name: Kneecap arthritis
 clin: Patellofemoral osteoarthritis
-# DRAFT extracted from: Patellofemoral Pain: Clinical Practice Guidelines (JOSPT, 2019)
+# DRAFT drawn from the osteoarthritis reference (content/reference/osteoarthritis.md); the JOSPT patellofemoral pain CPG 2019 excludes PFOA
 # Pointers moved to the rebuilt knee questions (content/regions/knee.md), 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
@@ -42,3 +42,4 @@ This is osteoarthritis behind the kneecap: a slow change in the cartilage and bo
 ## clinicNotes
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing.
 - Kneecap: quadriceps and hip strengthening are the core; taping or a brace may help short term. Measures: KOOS-PF, stairs and squat tolerance.
+- Patellofemoral pain CPG 2019 (which excludes PFOA): the link from PFP to PFOA is unproven prospectively; retrospectively, adolescent anterior knee pain (OR 7.5) and past patellar dislocation (OR 3.2) are associated with isolated PFOA. In chronic PFP over 40, about a quarter have isolated PFOA and 44% combined patellofemoral and tibiofemoral OA. Its 'no brace' recommendation does not carry over to PFOA.

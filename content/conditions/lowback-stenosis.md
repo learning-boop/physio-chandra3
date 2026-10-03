@@ -35,5 +35,10 @@ With age, the passageways for the spinal nerves can narrow. The classic pattern:
 
 ## seePhysioIf
 - Walking distance is shrinking
-- You'd like a structured conditioning plan — good evidence supports exercise for this pattern
+- You'd like a structured exercise and walking plan, which often helps this pattern
 - Symptoms affect balance or confidence
+
+## clinicNotes
+- Not a separate category in JOSPT 2012 or 2021; nearest is chronic low back pain with radiating pain in an older adult with flexion preference. 2012 (C): flexion exercise with manual therapy, strengthening, nerve mobilisation and progressive walking (Whitman: manual therapy, exercise and body-weight-supported treadmill walking). 2021: general exercise for older adults (A); with leg pain, mobilisation (B), neural mobilisation (B), no mechanical traction (D). After decompression: general exercise (C), education (B).
+- Differentials: vascular claudication (over 50, smoker, hypertension, diabetes); progressive, bilateral or sphincter signs need urgent referral. Measure walking tolerance as the performance measure.
+- Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position.

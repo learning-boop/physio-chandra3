@@ -35,3 +35,6 @@ The sciatic nerve passes under the deep buttock muscles; tightness or overload t
 - Buttock pain persists beyond 2 weeks
 - Any leg tingling — the low back must be ruled out as the true source
 - Sitting tolerance is limiting work or driving
+
+## clinicNotes
+- Hamstring CPG 2022 lists deep gluteal and ischial tunnel syndromes as differentials of posterior thigh pain, with lumbar radiculopathy and SIJ. Sudden onset while sprinting or stretching with pain on resisted knee flexion favours a hamstring strain; tenderness at the ischial tuberosity favours proximal hamstring tendon pathology or avulsion (refer the same day after a pop with bruising and a gap). Source: Martin RL et al., JOSPT 2022.

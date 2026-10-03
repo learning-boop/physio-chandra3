@@ -34,3 +34,6 @@ A sprain can also bruise or damage the cartilage and bone on top of the ankle bo
 - The ache or swelling is still there 6 weeks after a sprain
 - The ankle catches or locks
 - You cannot get back to sport
+
+## clinicNotes
+- JOSPT lateral ankle sprain CPG 2021: osteochondral lesions and talar bone bruises are listed copathologies of acute sprains (MRI copathology in 92%), and chondral lesions and loose bodies of chronic instability. Medial tibia or talus bone bruise within 2 weeks: longer return to walking (25 vs 16 days) and sport (92 vs 56). Imaging (ACR via the CPG): symptoms over 6 weeks, radiographs; if negative with suspected lesion, impingement or instability, MRI. Refer when symptoms or function do not fully recover. Source: Martin RL et al., JOSPT 2021.

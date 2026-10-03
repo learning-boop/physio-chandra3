@@ -38,3 +38,6 @@ The shoulder feels loose, slips, or has dislocated — most common in younger, a
 - It has slipped or dislocated before — a structured strengthening program is first-line care
 - Apprehension limits sport or work
 - You want assessment before returning to overhead or contact sport
+
+## clinicNotes
+- JOSPT adhesive capsulitis CPG 2013 differential (F): instability fits age under 40, a history of dislocation, excess glenohumeral accessory motion and apprehension at end-range ER, abduction or flexion; global motion loss and no apprehension point away. First dislocation at 40 or over: screen for a rotator cuff tear and axillary nerve injury, and image early if weakness persists. Source: Kelley 2013.

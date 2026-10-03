@@ -1,6 +1,6 @@
 ---
 # From "Ankle assessment.docx" (Joint wise assessment folder), 25 Sep 2026.
-# Built into src/data/symptomGuideExtra.js (ankle, question ids A1 to A8) and src/data/injuryScreen.js (ankle screen, Ottawa ankle rules adapted).
+# Built into src/data/symptomGuideExtra.js (ankle, question ids A1 to A8) and src/data/injuryScreen.js (ankle screen, Ottawa ankle rules in full).
 # Conditions: content/conditions/ankle-*.md. Body map: the ankle band (ANKLE_TOP in Body3D.jsx), which also covers the foot until the foot document is built.
 # Test patients: npm run check:regions
 # 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
@@ -50,6 +50,13 @@ Why: Possible artery or nerve injury
 I4 Could you not take 4 steps straight after the injury, and still cannot?
 Route: Yes → PHYSICIAN FIRST
 Why: Ottawa ankle rule: an X-ray is needed to rule out a fracture
+
+I8 Press firmly with your fingertips on each of these bony spots: the back edge and tip of the bony bump on the OUTER side of your ankle (up to about 6 cm, 2 inches, above the tip); the same on the INNER ankle bone; the bony knob halfway along the outer edge of your foot; and the bony bump on the inner side of your foot, just in front of the ankle. Is any of these spots sharply tender?   (2 Oct 2026, Chandra's request: the Ottawa ankle rules in full, as the JOSPT lateral ankle sprain CPG 2021 requires; weight bearing alone misses fractures. Worded as the foot's I8, so it is asked once when both are drawn; added after the signed version)
+- No, none of them
+- Yes, at least one is sharply tender
+- It is too painful to press on them
+Route: Yes or too painful → PHYSICIAN FIRST (same day)
+Why: Ottawa ankle rules: tenderness over the ankle or midfoot bones needs an X-ray to rule out a fracture
 
 I5 Did it feel like a kick to the back of the ankle, and now you cannot rise onto your toes on that leg, or feel a gap in the tendon?
 Route: Yes → PHYSICIAN FIRST
@@ -195,7 +202,7 @@ Ask only if: How did it start? = an injury start (twist, landing), and it has go
 ## test patients
 CASE: Test patient 1
 Drawing: Outer right ankle, below and in front of the bone
-Answers: Age 18 to 29 · I rolled or twisted it · Less than 2 weeks; Injury screen: I1 “Yes, I rolled it inwards”; I2 to I7 No; Q1: outer ankle; Q2: I rolled it recently, felt a pop, and it bruised; Q8: swelling and bruising after an injury
+Answers: Age 18 to 29 · I rolled or twisted it · Less than 2 weeks; Injury screen: I1 “Yes, I rolled it inwards”; I2 to I8 No; Q1: outer ankle; Q2: I rolled it recently, felt a pop, and it bruised; Q8: swelling and bruising after an injury
 Flags: None
 Expect: top condition = Lateral ankle sprain; must not show = High ankle sprain; any physician-first message; route = Results + booking
 
@@ -205,9 +212,15 @@ Answers: Age 30 to 49 · I rolled or twisted it · Less than 2 weeks; Injury scr
 Flags: Injury screen I4 (could not take 4 steps)
 Expect: top condition = None; see a doctor first; must not show = Ankle sprain results without the physician-first message; route = Physician first
 
+CASE: Test patient 2b (2 Oct 2026, Ottawa ankle rules)
+Drawing: Outer right ankle
+Answers: Age 18 to 29 · I rolled or twisted it · Less than 2 weeks; Injury screen: I1 “Yes, I rolled it inwards”; I2 to I4 No (walking); I8 Yes (the tip of the outer ankle bone is sharply tender)
+Flags: Injury screen I8 (Ottawa bone tenderness)
+Expect: top condition = None; see a doctor first (same day, X-ray); must not show = Ankle sprain results without the physician-first message; route = Physician first
+
 CASE: Test patient 3
 Drawing: Back of the right ankle and lower calf
-Answers: Age 30 to 49 · After landing badly or a fall · Less than 2 weeks; Injury screen: I1 “Yes, it felt like a kick to the back of the ankle”; I2 to I4 No; I5 Yes
+Answers: Age 30 to 49 · After landing badly or a fall · Less than 2 weeks; Injury screen: I1 “Yes, it felt like a kick to the back of the ankle”; I2 to I4 No; I8 No; I5 Yes
 Flags: Injury screen I5 (possible Achilles rupture)
 Expect: top condition = None; see a doctor first; must not show = Achilles tendinopathy results without the physician-first message; route = Physician first
 

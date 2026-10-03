@@ -2,7 +2,7 @@
 region: shoulder
 id: calcific
 name: Calcium deposits in the shoulder tendon
-clin: Rotator cuff calcific tendinopathy
+clin: Rotator cuff calcific tendinopathy, imaging-confirmed (JOSPT CPG 2025)
 # DRAFT extracted from: Rotator Cuff Tendinopathy Diagnosis, Nonsurgical Medical Care, and Rehabilitation: A Clinical Practice Guideline (JOSPT, 2025)
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
@@ -33,3 +33,9 @@ Small calcium deposits can build up inside one of the rotator cuff tendons, caus
 ## seePhysioIf
 - The pain has lasted more than a few weeks and isn't settling with rest and simple measures
 - Night pain or flare-ups are strong enough to disrupt sleep or daily activities
+
+## clinicNotes
+- Calcium deposit in a rotator cuff tendon, confirmed on imaging; managed within the rotator cuff recommendations (exercise A, education C, NSAIDs B, injection B but not first line). Imaging not routine at the first visit (F); ultrasound first if not improving by 12 weeks (F).
+- Shockwave may be used for calcific tendinopathy (C), unlike non-calcific; laser alone or with rehab (C); no therapeutic ultrasound (C). Ultrasound-guided lavage (barbotage) for cases not settling with initial care including injection (B).
+- Sudden severe pain without injury: exclude septic arthritis (fever), neuralgic amyotrophy (weakness or wasting after days of pain) and cardiac or visceral referral before calling it a calcific flare.
+- Source: Desmeules F et al., JOSPT 2025;55(4):235-274 (rotator cuff tendinopathy), grades in brackets.

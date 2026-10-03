@@ -33,3 +33,6 @@ The hip flexor muscle runs down the front of the hip into the top of the thigh. 
 - It has not settled after 2 to 3 weeks
 - The snapping is painful or getting more frequent
 - You want a plan to return to running or kicking
+
+## clinicNotes
+- Nonarthritic hip CPG 2014 lists iliopsoas problems as a differential of intra-articular pain; FADIR and FABER are non-specific, so pain on resisted hip flexion and a painful snap help separate it. Over 50, check the hip OA criteria (IR under 24 degrees, morning stiffness under 1 hour). Source: Enseki 2014; Koc 2025.

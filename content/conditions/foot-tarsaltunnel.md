@@ -31,3 +31,6 @@ A nerve running behind the inner ankle bone can become squeezed, sending burning
 ## seePhysioIf
 - Tingling, numbness, or burning hasn't settled within a couple of weeks
 - The sensations are spreading or becoming more intense
+
+## clinicNotes
+- Heel pain CPG 2014: negative tarsal tunnel, nerve tension and sensory tests are required to classify plantar fasciitis (B); a positive result redirects to nerve entrapment, and lumbopelvic referral must also be excluded (F). Source: Martin RL et al., JOSPT 2014.

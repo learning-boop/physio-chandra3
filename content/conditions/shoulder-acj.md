@@ -35,3 +35,6 @@ The small joint where the collarbone meets the shoulder blade can be sprained by
 - Pain persists past ~2–3 weeks
 - There's a visible step or bump after an injury
 - You want a graded return to gym or sport
+
+## clinicNotes
+- Kelley 2013 lists AC joint sprain and AC osteoarthritis among shoulder differentials; neither shoulder CPG gives AC test accuracy. A painful arc at the top of the range (not mid-range) points away from the rotator cuff. A step deformity after injury needs an X-ray before rehab. Source: Kelley 2013; Desmeules 2025.

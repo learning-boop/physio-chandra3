@@ -37,3 +37,8 @@ The small joints at the back of the spine can become irritated, typically causin
 - It lingers beyond ~2 weeks
 - It recurs with particular activities
 - You'd like specific mobility and strength work for it
+
+## clinicNotes
+- No facet-specific category in JOSPT 2012 or 2021: classify as low back pain with mobility deficits (2012, B) when unilateral pain is reproduced at end-range (here extension) and by segmental provocation. Facet pain cannot be confirmed clinically without a block; prefer impairment-based labels. Under 20 with extension pain and sport: screen for spondylolysis first.
+- Acute: thrust or non-thrust mobilisation (2021, A), prediction rule as for non-specific low back pain. Chronic: mobilisation (A) with exercise (A). Education to stay active (B).
+- Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position.

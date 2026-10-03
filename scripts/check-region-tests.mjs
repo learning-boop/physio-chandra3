@@ -36,8 +36,20 @@ const TESTS = {
       expect: { top: 'neck/radic', notTop: ['neck/mech'], notRegion: ['shoulder'], route: 'results' } },
     { name: '3. Highway crash within 48 hours',
       lines: [['neck']],
-      answers: { age: '50-64', onset: 'car', duration: 'd2w', I1: 'vehicle', I2: 'h48', I4: ['mvc'] },
+      answers: { age: '50-64', onset: 'car', duration: 'd2w', I1: 'vehicle', I2: 'h48', I8: 'no', I4: ['mvc'] },
       expect: { route: 'emergency', notAsked: ['neck:I6', 'neck:I7'] } },
+    { name: '3b. Crash 4 days ago, foggy and headachy since (concussion check)',
+      lines: [['neck']],
+      answers: { age: '30-49', onset: 'car', duration: 'd2w', I1: 'vehicle', I2: 'd7', I8: 'no', I4: ['none'], I5: 'no', I9: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '3c. Teenager, neck hurt in sport yesterday, no high-risk feature (adult rule does not apply)',
+      lines: [['neck']],
+      answers: { age: 'u18', onset: 'sport', duration: 'd2w', I1: 'sport', I2: 'h48', I8: 'no', I4: ['none'], I5: 'no' },
+      expect: { route: 'urgent', notAsked: ['neck:I6', 'neck:I7'] } },
+    { name: '3d. Drinking before a crash yesterday (the rule cannot be applied)',
+      lines: [['neck']],
+      answers: { age: '18-29', onset: 'car', duration: 'd2w', I1: 'vehicle', I2: 'h48', I8: 'yes' },
+      expect: { route: 'emergency', notAsked: ['neck:I4'] } },
     // The document draws the shoulder only; with no neck mark the site asks
     // the shoulder's questions, so it is run both ways.
     { name: '4a. Shoulder look-alike, shoulder drawn only',
@@ -903,20 +915,24 @@ const TESTS = {
       expect: { top: 'ankle/crps', route: 'results' } },
     { name: 'CRPS 2. A fresh sprain (under 2 weeks): the CRPS question is not asked',
       lines: [['ankleR']],
-      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I6: 'no', I7: 'no', A1: ['outer'] },
+      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I8: 'no', I6: 'no', I7: 'no', A1: ['outer'] },
       expect: { notAsked: ['A9'], not: ['ankle/crps'], route: 'results' } },
     { name: '1. Lateral ankle sprain',
       lines: [['ankleR']],
-      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I6: 'no', I7: 'no',
+      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I8: 'no', I6: 'no', I7: 'no',
         A1: ['outer'], A2: ['recent'], A8: ['injury'] },
       expect: { top: 'ankle/atfl', not: ['ankle/highankle'], route: 'results' } },
     { name: '2. Could not take four steps after rolling it (injury screen)',
       lines: [['ankleL']],
       answers: { age: '30-49', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'yes' },
       expect: { route: 'urgent' } },
+    { name: '2b. Walking, but the tip of the outer ankle bone is sharply tender (Ottawa ankle rules)',
+      lines: [['ankleR']],
+      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I8: 'yes' },
+      expect: { route: 'urgent', notAsked: ['ankle:I6'] } },
     { name: '3. Kick to the back of the ankle (Achilles rupture, injury screen)',
       lines: [['ankleR', 'lowerlegR']],
-      answers: { age: '30-49', onset: 'landing', duration: 'd2w', I1: 'kick', I2: 'no', I3: 'no', I4: 'no', I5: 'yes' },
+      answers: { age: '30-49', onset: 'landing', duration: 'd2w', I1: 'kick', I2: 'no', I3: 'no', I4: 'no', I8: 'no', I5: 'yes' },
       expect: { route: 'urgent' } },
     { name: '4. Tibialis posterior tendon dysfunction',
       lines: [['ankleL']],
@@ -954,7 +970,11 @@ const TESTS = {
       expect: { route: 'urgent' } },
     { name: '5. Midfoot pain after the foot was bent under (Lisfranc, injury screen)',
       lines: [['footL']],
-      answers: { age: '30-49', onset: 'injury', duration: 'd2w', I1: 'landing', I2: 'no', I4: 'no', I5: 'yes' },
+      answers: { age: '30-49', onset: 'injury', duration: 'd2w', I1: 'landing', I2: 'no', I4: 'no', I8: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '5b. Rolled the foot, the bony knob on its outer edge is tender (Ottawa foot rule)',
+      lines: [['footR']],
+      answers: { age: '30-49', onset: 'injury', duration: 'd2w', I1: 'twist', I2: 'no', I4: 'no', I8: 'yes' },
       expect: { route: 'urgent' } },
     { name: '6. Burning in both feet (neuropathy)',
       lines: [['footL'], ['footR']],
@@ -1047,7 +1067,7 @@ function run(rk, t) {
         const q = injuryQuestion(s.next, flowZ).q
         ia[s.next] = (q.options.find((o) => !o.route) || {}).id
       }
-      if (ia[s.next] === undefined && s.next === 'neck:I3') ia[s.next] = ageFrom(t.answers.age) >= 65 ? 'yes' : 'no'
+      if (ia[s.next] === undefined && s.next === 'neck:I3') ia[s.next] = ageFrom(t.answers.age) >= 65 ? 'yes' : ageFrom(t.answers.age) < 18 ? 'child' : 'no'
       if (ia[s.next] === undefined) return { ...seen, error: `injury question ${s.next} has no answer in the test` }
     }
     if (s.route === 'emergency' || s.route === 'urgent') return { ...seen, route: s.route }

@@ -97,11 +97,17 @@ I1: Have you injured your neck in the last 7 days, for example in an accident, a
 - Yes, sport, or a blow to the head or neck → I2
 
 I2: When did it happen?
-- Within the last 48 hours → I3 to I7
-- 2 to 7 days ago → I3 to I5; any high-risk answer → urgent; none → continue
+- Within the last 48 hours → I8, then I3 to I7
+- 2 to 7 days ago → I8, then I3 to I5; any high-risk answer → urgent; none → I9
 
-I3: Are you 65 or older?   (pre-filled from the age answer)
-- Yes → emergency (within 48 hours) / urgent (2 to 7 days)
+I8: Since the injury, have you passed out, been drowsy or confused, or did you have alcohol or drugs before it happened; or do you have another very painful injury (for example a broken bone) that takes your attention away from your neck?   (2 Oct 2026, Chandra's request: the rule applies only to alert, sober patients without a distracting injury; Stiell 2001, JOSPT neck CPG 2017; added after the signed version)
+- Yes → emergency, 911, keep the neck still (within 48 hours) / urgent, same day (2 to 7 days)
+- No → I3
+
+I3: How old are you?   (pre-filled from the age answer; "Under 18" counts as under 16)   (2 Oct 2026, Chandra's request: was "Are you 65 or older?"; the rule was derived in adults, 16 and over; added after the signed version)
+- Under 16 → I4 and I5 (a high-risk answer → emergency / urgent as below); otherwise → urgent, same day: a doctor should check a child or teenager after a recent neck injury
+- 16 to 64 → I4
+- 65 or older → emergency (within 48 hours) / urgent (2 to 7 days)
 
 I4: Was it any of these? Tick all that apply.
 - A fall from 1 metre (3 feet) or 5 stairs or higher
@@ -121,6 +127,10 @@ I6: Which of these are true? Tick all that apply.
 - The neck pain came on later, not straight away
 - None of these
 "None of these" → emergency; at least one → I7
+
+I9 (2 to 7 days ago, no high-risk answer): Since the injury, and not yet checked by a doctor for this, have you had any of these: a headache, feeling foggy or slowed down, trouble concentrating or remembering, dizziness, or being bothered by light or noise?   (2 Oct 2026, Chandra's request: JOSPT concussion CPG 2020: look for an undiagnosed concussion after any concussive event, grade A; within 48 hours everyone sees a doctor anyway; added after the signed version)
+- Yes → urgent, same day: possible concussion, a doctor should check first
+- No → continue to the neck questions
 
 I7: Slowly turn your head as far as is comfortable to the left, then to the right. Stop if it hurts sharply; don't push through it. Can you turn at least halfway to each shoulder?
 - Yes, both ways → urgent   (OPEN: Chandra to decide urgent or results + booking)
@@ -317,9 +327,27 @@ Expect: top condition = radiculopathy; must not show = mobility deficits as top,
 
 CASE: 3. Highway crash within 48 hours
 Drawing: Centre of the neck
-Answers: Age = 50 to 64; After a car accident or whiplash-type jolt; Less than 2 weeks; I1 = Yes, a car or other vehicle accident; I2 = Within the last 48 hours; I4 = A crash at highway speed, a rollover, or being thrown from the vehicle
+Answers: Age = 50 to 64; After a car accident or whiplash-type jolt; Less than 2 weeks; I1 = Yes, a car or other vehicle accident; I2 = Within the last 48 hours; I8 = No; I4 = A crash at highway speed, a rollover, or being thrown from the vehicle
 Flags: injury screen step 1 (dangerous mechanism)
 Expect: top condition = none; must not show = any condition, any booking, the neck-turn question (I7); route = 911
+
+CASE: 3b. Crash 4 days ago, foggy and headachy since (2 Oct 2026)
+Drawing: Centre of the neck
+Answers: Age = 30 to 49; After a car accident or whiplash-type jolt; Less than 2 weeks; I1 = Yes, a car or other vehicle accident; I2 = 2 to 7 days ago; I8 = No; I4 = None of these; I5 = No; I9 = Yes
+Flags: injury screen I9 (possible concussion)
+Expect: top condition = none; route = see a doctor first (same day)
+
+CASE: 3c. Teenager, neck hurt in sport yesterday (2 Oct 2026)
+Drawing: Centre of the neck
+Answers: Age = Under 18; Sport; Less than 2 weeks; I1 = Yes, sport, or a blow to the head or neck; I2 = Within the last 48 hours; I8 = No; I4 = None of these; I5 = No
+Flags: injury screen I3 (under 16: the adult rule does not apply)
+Expect: top condition = none; must not show = the low-risk and neck-turn questions (I6, I7); route = see a doctor first (same day)
+
+CASE: 3d. Drinking before a crash yesterday (2 Oct 2026)
+Drawing: Centre of the neck
+Answers: Age = 18 to 29; After a car accident or whiplash-type jolt; Less than 2 weeks; I1 = Yes, a car or other vehicle accident; I2 = Within the last 48 hours; I8 = Yes
+Flags: injury screen I8 (not alert or sober: the rule cannot be applied)
+Expect: top condition = none; must not show = the mechanism question (I4); route = 911
 
 CASE: 4. Shoulder look-alike
 Drawing: Top of the left shoulder and upper arm, stopping above the elbow

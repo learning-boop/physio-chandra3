@@ -164,7 +164,7 @@ export const AUTHORED = [
         "Repeated sprains if past ones weren't rehabbed"
       ],
       "homeCare": [
-        "First days: relative rest, elevation, gentle movement; protect but don't immobilise completely",
+        "First days: protect it with a brace or tape, keep it raised when resting, and move it gently; a badly sprained ankle sometimes needs a boot for a short time",
         "Early weight-bearing as tolerated once fracture is ruled out",
         "Then balance work — single-leg standing — is the key to preventing re-sprains"
       ],
@@ -172,6 +172,15 @@ export const AUTHORED = [
         "You can't walk comfortably within a few days",
         "The ankle still feels unstable after 2 weeks",
         "You've sprained the same ankle more than once — balance retraining prevents the cycle"
+      ],
+      "clinicNotes": [
+        "Diagnosis (B): inversion injury, Ottawa ankle rules negative, then the reverse anterolateral drawer test (sens 0.89, spec 0.90) and anterolateral talar palpation added to the traditional drawer (sens 0.22). Examination is most accurate 4 to 5 days after injury.",
+        "Ottawa ankle rules applied in full: sensitivity 92-100%; weight bearing alone drops sensitivity to about 88%. They cover the distal tibia and fibula, base of the 5th metatarsal and navicular; under 18, the full rules (sens 100%) beat the low-risk ankle rules.",
+        "Copathology on MRI in 92% of acute sprains: syndesmosis, osteochondral lesion, talar bone bruise, deltoid sprain, Achilles rupture, fibularis tendon or retinaculum injury, os trigonum, midfoot sprain, growth plate injury.",
+        "Measure at baseline and at least twice more (A): swelling, weight-bearing lunge, talar translation and inversion, single-leg balance eyes closed, SEBT, timed hop; PROMIS, FAAM or LEFS. PSEQ (C).",
+        "Prognosis (B): record age, BMI, coping, instability, previous sprain, weight-bearing pain, dorsiflexion, medial joint-line tenderness, balance and jump-landing. About 40% of first-time sprains develop chronic ankle instability; inability to jump and land at 2 weeks predicts it at 6 months.",
+        "Treatment: brace or tape with progressive weight bearing (A); severe sprains, a semi-rigid brace up to a below-knee cast for up to 10 days (A); structured exercise (protected active ROM, stretching, neuromuscular and balance, clinic plus home) (A); manual therapy including lymphatic drainage and AP talar mobilisation, pain-free (A); early return to work or sport in a brace (B). After a first sprain, brace plus balance training to prevent the next (A). Ice with exercise, pulsed shortwave, laser (C); electrotherapy and acupuncture (D); no ultrasound (A); psychologically informed care (E).",
+        "Source: Martin RL et al., JOSPT 2021;51(4):CPG1-CPG80 (lateral ankle sprain revision 2021), grades in brackets."
       ]
     },
     "resolved": [
@@ -251,6 +260,14 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Your ankle keeps giving way or rolling despite weeks of steady home exercise",
         "You've had several sprains and still don't feel confident or steady walking on uneven surfaces"
+      ],
+      "clinicNotes": [
+        "Definition (JOSPT 2021): instability or giving way persisting 12 months or more after the first sprain, with activity limitation; mechanical and/or functional (sensorimotor). About 40% of first-time sprains.",
+        "Discriminative tools (B): CAIT 25 or less (sens 96.6%, spec 86.8%, LR+ 7.31; MCID 3); IdFAI 11 or more; AII 4 or more yes. Functional tests that discriminate: side hop, timed and multiple hop, foot-lift, SEBT (medial, anteromedial, posteromedial).",
+        "Exam (A): weight-bearing lunge, talar translation and inversion, eyes-closed single-leg balance, SEBT; hip abduction, extension and ER strength (C); TSK-11 or FABQ for fear of re-injury (C).",
+        "Copathology to refer if not recovering: fibularis tendon problems, impingement, osteochondral or chondral lesions, synovitis, loose bodies, syndesmosis, arthritis, os trigonum.",
+        "Treatment: proprioceptive and neuromuscular training (A); manual therapy (graded mobilisation or thrust, weight-bearing and non-weight-bearing MWM) for dorsiflexion and balance, short term (A); combine exercise and manual therapy with balance training (B); fibularis dry needling with proprioceptive training (C); brace or tape not as a stand-alone for balance (B). Balance-training responders: SEBT posteromedial reach 85% or less and FAAM-ADL 92.6% or less (70% success). Nonsurgical care for 3 to 6 months before surgery is considered.",
+        "Source: Martin RL et al., JOSPT 2021;51(4):CPG1-CPG80 (lateral ankle sprain revision 2021), grades in brackets."
       ]
     },
     "resolved": [
@@ -425,6 +442,9 @@ export const AUTHORED = [
         "It has not improved within 1 to 2 weeks",
         "It is limiting walking or sport",
         "You need a graded plan back to twisting sport"
+      ],
+      "clinicNotes": [
+        "JOSPT lateral ankle sprain CPG 2021: syndesmosis injury is a key differential and copathology of acute and persisting sprains; apply the full Ottawa ankle rules first. Multi-ligament sprains in high-school athletes cost more than 3 weeks of sport. Imaging (ACR, cited in the CPG): alignment change suggesting syndesmosis injury warrants leg and stress radiographs, MRI or CT; refer with any diastasis concern or failure to settle. Source: Martin RL et al., JOSPT 2021 (tests per Sman 2015)."
       ]
     },
     "resolved": [
@@ -555,6 +575,9 @@ export const AUTHORED = [
         "The ache or swelling is still there 6 weeks after a sprain",
         "The ankle catches or locks",
         "You cannot get back to sport"
+      ],
+      "clinicNotes": [
+        "JOSPT lateral ankle sprain CPG 2021: osteochondral lesions and talar bone bruises are listed copathologies of acute sprains (MRI copathology in 92%), and chondral lesions and loose bodies of chronic instability. Medial tibia or talus bone bruise within 2 weeks: longer return to walking (25 vs 16 days) and sport (92 vs 56). Imaging (ACR via the CPG): symptoms over 6 weeks, radiographs; if negative with suspected lesion, impingement or instability, MRI. Refer when symptoms or function do not fully recover. Source: Martin RL et al., JOSPT 2021."
       ]
     },
     "resolved": [
@@ -1289,6 +1312,13 @@ export const AUTHORED = [
         "Recurring end-of-day neck/upper-back ache",
         "Stiffness limits looking up or over the shoulder",
         "You want targeted mobility and strengthening for desk work"
+      ],
+      "clinicNotes": [
+        "JOSPT 2017 category: neck pain with mobility deficits at the cervicothoracic junction (C): cervical and upper thoracic motion limitation reproducing the pain, no trauma, no radiating arm signs. Stage: acute under 6 weeks, subacute 6-12, chronic over 12; match dose to irritability.",
+        "Assess (B): CROM, CFRT, cervical and thoracic segmental mobility with provocation, upper trapezius pressure-pain threshold. Outcomes (A): NDI, NPRS, PSFS. No imaging without red flags; IFOMPT cervical framework before cervical manual therapy.",
+        "Acute: thoracic manipulation, neck ROM exercise, scapulothoracic and upper-limb stretching and strengthening (B); cervical manipulation and/or mobilisation (C). Subacute: neck and shoulder-girdle endurance exercise (B); thoracic and cervical manipulation or mobilisation (C). Chronic: multimodal (B), thoracic plus cervical manipulation or mobilisation with mixed exercise; dry needling, laser or intermittent traction; endurance exercise and education for an active lifestyle (C).",
+        "Look-alikes: mechanical neck pain (mainly mid and upper neck), rib joint (breathing-related), thoracic outlet (arm symptoms with the arm raised), cardiac or visceral referral (red flags).",
+        "Source: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets."
       ]
     },
     "resolved": [
@@ -2327,6 +2357,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Heel pain doesn't ease after a few weeks of cushioning changes",
         "You're unsure if it's this or another heel problem and want a clear plan"
+      ],
+      "clinicNotes": [
+        "Heel pain CPG 2014: in a cohort of 250, fat pad atrophy 15% vs plantar fasciitis 53%. Fat pad cases were far more likely to have pain with long standing (OR 20.9), night pain (OR 20.9) and pain in both heels (OR 25), WITHOUT first-step morning pain. Ask about earlier steroid injections (fat atrophy). Consider when the picture is not plantar fasciitis-like or fascia-directed care fails (C). Source: Martin RL et al., JOSPT 2014;44(11):A1-A23 (heel pain revision 2014; superseded by Koc TA et al., JOSPT 2023;53(12), whose grades have not yet been checked against these)."
       ]
     },
     "resolved": [
@@ -2364,13 +2397,19 @@ export const AUTHORED = [
         "qid": "B2",
         "oid": "firststep",
         "label": "Worst on the first steps in the morning, then eases, returns after standing",
-        "weight": -1
+        "weight": -2
       },
       {
         "qid": "B7",
         "oid": "back",
         "label": "Moving my low back",
         "weight": -2
+      },
+      {
+        "qid": "B5",
+        "oid": "standing",
+        "label": "Standing or walking a long time",
+        "weight": 2
       }
     ]
   },
@@ -2642,6 +2681,14 @@ export const AUTHORED = [
         "Heel pain lasts more than 2 weeks",
         "Mornings or long standing remain painful",
         "You want a loading and footwear plan — most cases settle with the right progression"
+      ],
+      "clinicNotes": [
+        "Diagnosis (B, 2014): plantar medial heel pain worst on the first steps and after long weight bearing; a recent increase in weight-bearing activity; pain on palpation of the proximal plantar fascia insertion; positive windlass test; NEGATIVE tarsal tunnel, nerve tension and sensory tests; limited dorsiflexion; abnormal Foot Posture Index; high BMI in non-athletes. Rule out lumbopelvic referral (F).",
+        "Risk factors (B): limited dorsiflexion, high BMI in non-athletes, running, work-related weight bearing on hard surfaces. Differentials (C): spondyloarthritis (heel pain in 47% of SpA, the first symptom in 16%), fat pad atrophy, proximal plantar fibroma, tarsal tunnel, calcaneal stress fracture.",
+        "Measures: FAAM, FHSQ or FFI (A); first-step pain VAS (B; MCID 19 mm); dorsiflexion ROM (B); FPI-6 (C).",
+        "Treatment (2014 grades): joint and soft tissue manual therapy (A); plantar fascia-specific and calf stretching (A); antipronation taping up to 3 weeks (A); prefabricated or custom foot orthoses (A); night splints for 1 to 3 months for first-step pain (A). Laser, phonophoresis, rocker soles (C); iontophoresis (D); no ultrasound (C). Corticosteroid injection: limited benefit, with risk of fat pad atrophy and fascia rupture. Imaging is rarely needed; a heel spur does not explain the pain.",
+        "The 2023 revision (Koc et al.) changed several 2014 grades, notably shockwave therapy, dry needling, strengthening and education: re-grade from the 2023 text before signing.",
+        "Source: Martin RL et al., JOSPT 2014;44(11):A1-A23 (heel pain revision 2014; superseded by Koc TA et al., JOSPT 2023;53(12), whose grades have not yet been checked against these)."
       ]
     },
     "resolved": [
@@ -2710,6 +2757,30 @@ export const AUTHORED = [
         "oid": "back",
         "label": "Moving my low back",
         "weight": -2
+      },
+      {
+        "qid": "B2",
+        "oid": "burning",
+        "label": "Burning or tingling in the heel or sole",
+        "weight": -2
+      },
+      {
+        "qid": "B6",
+        "oid": "sole",
+        "label": "Pins and needles or numbness in the sole or heel",
+        "weight": -2
+      },
+      {
+        "qid": "B6",
+        "oid": "fromback",
+        "label": "Pain that starts in the back or buttock and travels down",
+        "weight": -2
+      },
+      {
+        "qid": "B5",
+        "oid": "running",
+        "label": "Running or jumping",
+        "weight": 1
       }
     ]
   },
@@ -2941,6 +3012,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Tingling, numbness, or burning hasn't settled within a couple of weeks",
         "The sensations are spreading or becoming more intense"
+      ],
+      "clinicNotes": [
+        "Heel pain CPG 2014: negative tarsal tunnel, nerve tension and sensory tests are required to classify plantar fasciitis (B); a positive result redirects to nerve entrapment, and lumbopelvic referral must also be excluded (F). Source: Martin RL et al., JOSPT 2014."
       ]
     },
     "resolved": [
@@ -3239,6 +3313,9 @@ export const AUTHORED = [
         "The tingling or ache has not eased after 2 to 3 weeks",
         "Your pinch or grip is getting weaker",
         "You are not sure whether it is this or carpal tunnel at the wrist"
+      ],
+      "clinicNotes": [
+        "CTS CPG 2019 lists pronator syndrome as a median nerve differential. Favour a proximal level when sensation over the thenar eminence is involved (palmar cutaneous branch leaves before the tunnel), there is no night waking eased by shaking, and the forearm aches with pronation or grip. Wrist provocation tests cannot separate the two levels and ULNT1 does not discriminate (D); use nerve conduction studies when unclear. Source: Erickson 2019."
       ]
     },
     "resolved": [
@@ -3834,7 +3911,7 @@ export const AUTHORED = [
     "cond": {
       "id": "median",
       "name": "Carpal tunnel syndrome",
-      "clin": "Median nerve compression at the wrist (CTS-6; JOSPT CPG 2019)",
+      "clin": "Median nerve compression at the wrist (JOSPT CPG 2019; Wainner cluster; CTS-6 Graham 2006)",
       "blurb": "The median nerve supplies feeling to the thumb, index, and middle fingers. Compression — most commonly at the wrist — causes night tingling and numbness in that territory, often eased by shaking the hand.",
       "noticed": [
         "Tingling/numbness in thumb, index & middle fingers",
@@ -3845,12 +3922,21 @@ export const AUTHORED = [
       "homeCare": [
         "Avoid sleeping with the wrist curled — a neutral night splint often helps",
         "Break up repetitive hand tasks; keep the wrist neutral at the keyboard",
-        "Gentle nerve-gliding movements within comfort"
+        "Gentle hand and finger stretches, alongside the night splint"
       ],
       "seePhysioIf": [
         "Tingling recurs most nights or persists by day",
         "Grip or fine motor control is slipping",
-        "Early care (splinting, glides, ergonomics) can prevent progression — persistent numbness needs medical review"
+        "Early care, mainly a night splint and changes to how you use your hand, often eases symptoms; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review"
+      ],
+      "clinicNotes": [
+        "Severity: mild, typical pattern with intermittent symptoms and a normal exam; moderate, constant symptoms, thenar weakness or sensory loss in digits 1-3 without atrophy; severe, thenar atrophy. Refer to a hand surgeon with thenar atrophy; to a physician with signs of another condition; suggest nerve conduction studies when the exam is inconclusive; refer for a surgical opinion if not improving.",
+        "Wainner cluster (B): over 45, shaking relieves symptoms, wrist ratio over 0.67, CTQ symptom score over 1.9, reduced thumb pad sensation; 4 or more positive +LR 4.6, all 5 spec 0.99. Katz hand diagram, Phalen, Tinel and carpal compression estimate likelihood (B) but are weak alone (Phalen +LR 1.3; Tinel about 1.0). Sensation over the thenar eminence is spared in CTS (palmar cutaneous branch); dorsal hand symptoms make CTS unlikely.",
+        "Nerve status (A): Semmes-Weinstein (2.83 or 3.22 threshold) and static two-point discrimination; ULNT, scratch collapse and vibration conflicting (D). Outcomes (B): CTQ symptom scale (MCID 0.50 after 6 weeks of splinting) and CTQ function or DASH; grip and tip pinch (C).",
+        "Interventions: neutral night wrist orthosis (B); add daytime wear or change the design if night-only fails (C); pregnancy, orthosis and review after birth (C); keyboard and mouse advice (C); heat, diathermy, interferential, phonophoresis (C); short-term cervical and upper-limb manual therapy (C); stretching with an orthosis without atrophy (C); nerve mobilisation conflicting (D). Do not use laser, iontophoresis or magnets (B), or thermal ultrasound (C).",
+        "Course: 28-62% recover without treatment, 32-58% worsen; about 6 in 10 have surgery within 1-3 years after non-surgical care. Worse outcome with long duration, a positive Phalen, thenar wasting and repeated earlier treatments; better with under a year of symptoms. Risk: BMI over 30, over 50, female; diabetes, hypothyroidism, family history; forceful work strongest, computer work not increased.",
+        "Differentials: cervical radiculopathy, thoracic outlet, polyneuropathy, pronator syndrome, ulnar and radial tunnel; ALS and MS can begin distally. Acute CTS (fracture, bleeding, infection) is urgent.",
+        "Source: Erickson M et al., JOSPT 2019;49(5):CPG1-CPG85 (carpal tunnel syndrome), grades in brackets."
       ]
     },
     "resolved": [
@@ -3913,6 +3999,18 @@ export const AUTHORED = [
         "oid": "neck",
         "label": "Moving my neck",
         "weight": -2
+      },
+      {
+        "qid": "age",
+        "oid": "50-64",
+        "label": "50 to 64",
+        "weight": 1
+      },
+      {
+        "qid": "age",
+        "oid": "o64",
+        "label": "65 or over",
+        "weight": 1
       }
     ]
   },
@@ -4202,9 +4300,11 @@ export const AUTHORED = [
         "Manual examination C0-C3: reproduction and easing of the familiar headache; suboccipital, upper trapezius and SCM palpation; thoracic and scapular posture.",
         "Screen: cervical arterial dysfunction per the IFOMPT framework; upper cervical ligament tests only with risk factors (trauma, RA, Down syndrome, long-term steroids, recent throat infection, connective tissue disorder); cranial nerves and neuro exam if indicated.",
         "Management: education (a sensitive upper neck can drive head pain without damage in the head); upper cervical and thoracic manual therapy; progressive deep neck flexor and scapular exercise starting with craniocervical flexion; C1-2 self-SNAG for use when a headache starts (Hall 2007); desk, screen, driving and sleep set-up; work with the GP on medicine use.",
-        "JOSPT 2017 stage-matched options: acute: active mobility exercise (B), C1-2 self-SNAG (C). Subacute: cervical manipulation and mobilisation (B), C1-2 self-SNAG (C). Chronic: cervical manipulation and mobilisation (B), thoracic manipulation (B), combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B). Public text names hands-on techniques only; manipulation of the upper neck is left to clinical judgement after screening.",
+        "JOSPT 2017 stage-matched options: acute: active mobility exercise (B), C1-2 self-SNAG (C). Subacute: cervical manipulation and mobilisation (B), C1-2 self-SNAG (C). Chronic: one combined recommendation (B), cervical or cervicothoracic manipulation or mobilisation together with shoulder girdle and neck stretching, strengthening and endurance exercise. Public text names hands-on techniques only; manipulation of the upper neck is left to clinical judgement after screening.",
         "Look-alikes: migraine (throbbing, switches sides, nausea, light and sound sensitivity, aura); tension-type (pressing band on both sides); occipital neuralgia (brief shooting scalp pain, scalp sore to touch: card); upper neck pain without main headache (neck-upper); TMD (jaw region); post-concussion (head injury path); medication overuse (card); sinus or eye problem (GP or optometrist). Neck pain with migraine features is common: a possible match, suggest assessment, do not force one label.",
         "Reasoning appendix (segmental referral, upper cervical nerves and dermatomes, telling headache types apart, tests): content/reference/upper-cervical.md.",
+        "After a concussive event (JOSPT concussion CPG 2020): classify the headache type by ICHD (B); examine the cervical and thoracic spine (C) and vestibulo-oculomotor function (B); refer persistent migraine-type or chronic post-traumatic headache for specialist review (B). Source: Quatman-Yates, JOSPT 2020.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.): CFRT sens 0.90-0.95, spec 0.90-0.97, +LR 9.0-9.4, -LR 0.11-0.27 (healthy 39-45 degrees, cervicogenic headache 20-28; MDC90 4.7-7 degrees). C0-C3 PAIVM +LR 2.9-4.9; C1-2 the most common level. Headache worse with exertion: a positive Valsalva has +LR 2.3 for serious intracranial pathology. With TMD signs, adding TMJ-directed manual therapy and exercise beat a craniocervical-only programme.",
         "Sources: ICHD-3 2018; Sjaastad et al. 1998; Bogduk and Govind 2009; Haldeman and Dagenais 2001; Jull et al. 2007 and 2008; Ogince et al. 2007; Jull et al. 2002 (exercise and manipulative therapy RCT); Hall et al. 2007 (self-SNAG); JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Dreyfuss et al. 1994; Lord et al. 1994; SNNOOP10 (Do et al. 2019); IFOMPT 2023 (Rushton et al.); Hutting et al. 2013."
       ]
     },
@@ -4363,7 +4463,13 @@ export const AUTHORED = [
         "Note mood, sleep and headache type for co-management with the GP. Persisting symptoms (over 4 weeks): about 1 in 6 adults, 1 in 4 young people.",
         "The head injury screen records when it happened and whether a doctor or NP has seen it (head:I2, head:I10); \"said it was not a concussion\" is recorded there, not scored.",
         "AIM Theory Manual 2023 (pp. 236-254, 278; content/reference/cervical-conditions-manual.md): tell primary concussion from vestibular, cervicogenic and oculomotor dysfunction, and refer complex cases to a concussion-trained physiotherapist. History alone cannot separate the dizziness sources after concussion (Reneker 2015A); vestibular tests have the strongest consensus (Reneker 2015B). CCFT impaired in 81.6% of dizzy post-concussion patients (Reneker 2018). With abnormal neck proprioception and no vestibular or central cause, head relocation practice helped 85% vs 18% with vestibular rehab (Hammerle 2019).",
-        "Sources: BC Guidelines, Concussion / mTBI (2024, revised May 2025); Patricios 2023 (Amsterdam consensus, BJSM); Leddy 2023; Schneider 2023; PedsConcussion living guideline 2024; Ontario Neurotrauma Foundation adult living guideline; Parachute Canadian Guideline on Concussion in Sport, 2nd ed. 2024 (CRT6); CATT (cattonline.com) 2024 protocols; Cancelliere 2023."
+        "JOSPT 2020 concussion CPG, exam: screen every concussive event for emergency signs, cervical spine injury and undiagnosed concussion (A); full intake including mental health history, with mental health and cognitive screening and referral as indicated (A). Then examine four domains (B): cervical musculoskeletal, vestibulo-oculomotor, autonomic/exertional tolerance, motor function. Document each impairment and its irritability (E); assess self-efficacy, support and coping (E).",
+        "Sequencing (F): rate irritability first; least irritable tests first. With highly irritable neck pain and no serious pathology, treat the cervical and thoracic spine first so the other systems can be tested. Cervical exam (C) when there is neck pain, headache, dizziness, fatigue, balance or visual-focus complaints; may include the TMJ (F). Classify headache type by ICHD (B).",
+        "Vestibulo-oculomotor (B): alignment, pursuits, saccades, vergence and accommodation, gaze stability, DVA, visual motion sensitivity, orthostatic light-headedness; Dix-Hallpike or another positional test when BPPV is suspected (A). VOMS is a screen, not a full assessment. Autonomic/exertional (B): HR and BP supine, sitting, standing; symptom-guided graded exertion test with exertional intolerance, dizziness or headache, or before return to sport, military or manual work (B); delay it if highly symptomatic at rest; use a bike when vestibular or cervical impairments are present (C). Motor function (B): static and dynamic balance, coordination, dual task.",
+        "Interventions: education on symptoms and the expected good recovery (A); relative rather than strict rest, graded re-engagement, sleep (B); an impairment-matched plan (B); cervical and thoracic exercise and manual therapy (B); canalith repositioning for BPPV (A); vestibular and oculomotor rehabilitation by trained clinicians, others refer (B/F); symptom-guided progressive aerobic training for exertional intolerance or return to vigorous activity (A), once irritability is moderate or lower; motor function training (C). Early physiotherapy is safe; time since injury alone should not decide when to start.",
+        "Refer (B): persistent migraine-type or chronic headache; vision (including ocular alignment) or hearing problems; sleep, mental health or cognitive problems; possible mimics (tumour, endocrine, e.g. post-traumatic diabetes insipidus). Measures (F): symptom checklist serially; NDI and HDI every 2 weeks; Dix-Hallpike weekly until BPPV resolves; DHI and DVA for vestibular deficits; HiMAT for high-level balance; graded exertion test at least once and to judge readiness for return to sport or work.",
+        "Slower recovery (inconsistent evidence): previous concussion, female, younger, ADHD, migraine; loss of consciousness, amnesia, late removal from play; early dizziness, headache, depressive symptoms.",
+        "Sources: BC Guidelines, Concussion / mTBI (2024, revised May 2025); Patricios 2023 (Amsterdam consensus, BJSM); Leddy 2023; Schneider 2023; PedsConcussion living guideline 2024; Ontario Neurotrauma Foundation adult living guideline; Parachute Canadian Guideline on Concussion in Sport, 2nd ed. 2024 (CRT6); CATT (cattonline.com) 2024 protocols; Cancelliere 2023; Quatman-Yates 2020 (JOSPT concussion CPG, grades in brackets above)."
       ]
     },
     "resolved": [
@@ -4649,6 +4755,9 @@ export const AUTHORED = [
         "Buttock pain persists beyond 2 weeks",
         "Any leg tingling — the low back must be ruled out as the true source",
         "Sitting tolerance is limiting work or driving"
+      ],
+      "clinicNotes": [
+        "Hamstring CPG 2022 lists deep gluteal and ischial tunnel syndromes as differentials of posterior thigh pain, with lumbar radiculopathy and SIJ. Sudden onset while sprinting or stretching with pain on resisted knee flexion favours a hamstring strain; tenderness at the ischial tuberosity favours proximal hamstring tendon pathology or avulsion (refer the same day after a pop with bruising and a gap). Source: Martin RL et al., JOSPT 2022."
       ]
     },
     "resolved": [
@@ -4717,7 +4826,15 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Groin pinching persists beyond 2–3 weeks or limits sport",
         "Catching or clicking with pain",
-        "Conservative rehab has strong evidence — worth optimising before considering anything else"
+        "You would like a guided rehab plan: physiotherapy is the usual first step and helps many people"
+      ],
+      "clinicNotes": [
+        "Diagnosis (JOSPT 2014, C): anterior groin and/or lateral hip pain, aching or sharp, worse with sitting; reproduced by FADIR; IR under 20 degrees at 90 degrees of flexion, with flexion and abduction also limited; clicking, catching or locking may be present.",
+        "Imaging: cam (alpha angle over 60 degrees) or pincer (lateral centre-edge angle over 35 degrees, crossover sign); the link between shape and pain is not established. Labral tear on MR arthrogram: sens 71-100%, spec 44-71%.",
+        "Against diagnostic injection, FADIR sens 0.78 / spec 0.10 and FABER sens 0.60 / spec 0.18: these tests screen, they do not confirm. Measures (A): HOS, HAGOS or iHOT-33.",
+        "Interventions (2014, all F): education to change aggravating activities, mobilisation for capsular restriction, soft tissue work, therapeutic exercise, neuromuscular re-education.",
+        "Differentials: lumbar or SIJ referral, pubic symphysis, nerve entrapment, hip OA, iliopsoas or adductor problems, hernia or athletic pubalgia, osteonecrosis, femoral neck or pelvic stress fracture, avulsion, Perthes or SUFE, septic arthritis, gynaecological or prostate causes, tumour.",
+        "Source: Enseki K et al., JOSPT 2014;44(6):A1-A32 (nonarthritic hip joint pain; revised by Enseki KR et al., JOSPT 2023;53(7), whose grades have not been checked against these)."
       ]
     },
     "resolved": [
@@ -4817,6 +4934,9 @@ export const AUTHORED = [
         "Night pain on that side persists beyond 2 weeks",
         "Walking distance or stairs are limited",
         "You want a progressive loading program — the evidence-based treatment"
+      ],
+      "clinicNotes": [
+        "Lateral hip pain also fits the hip OA criteria (Koc 2025) and FAI (Enseki 2014): check IR at 90 degrees of flexion and FADIR before calling it isolated GTPS; concurrent OA is common over 50. Source: Koc 2025; Enseki 2014."
       ]
     },
     "resolved": [
@@ -4908,6 +5028,11 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The hip repeatedly feels like it's about to give way or catches/locks",
         "Groin or hip discomfort continues for several weeks despite easing back on aggravating activities"
+      ],
+      "clinicNotes": [
+        "Structural instability (JOSPT 2014, C): anterior groin, lateral or general hip pain reproduced by FADIR or FABER; positive apprehension; IR over 30 degrees at 90 degrees of flexion; mechanical symptoms. Imaging: lateral centre-edge angle under 25 degrees, Tonnis angle over 10 degrees (dysplasia). Ligamentum teres tear: instability on squatting.",
+        "Risk factors (F): local or general laxity (Beighton), connective tissue disorders, bony shape, rotational and end-range sports. Measures (A): HOS, HAGOS or iHOT-33. Interventions (F): education to avoid end-range loading, neuromuscular re-education, strength and power; caution with capsular mobilisation in a lax hip.",
+        "Source: Enseki K et al., JOSPT 2014;44(6):A1-A32 (nonarthritic hip joint pain; revised by Enseki KR et al., JOSPT 2023;53(7), whose grades have not been checked against these)."
       ]
     },
     "resolved": [
@@ -4960,7 +5085,7 @@ export const AUTHORED = [
     "cond": {
       "id": "hipoa",
       "name": "Hip osteoarthritis",
-      "clin": "Hip osteoarthritis (JOSPT CPG 2017)",
+      "clin": "Hip osteoarthritis (JOSPT CPG revision 2025)",
       "blurb": "This is a gradual change in the hip joint, common with age, that causes deep groin pain and stiffness building up slowly over months or years. Joints are not worn out by being used: regular movement and strength exercise often help.",
       "noticed": [
         "A deep ache in the groin or front of the hip that gets worse with walking, standing, or climbing stairs",
@@ -4968,7 +5093,7 @@ export const AUTHORED = [
         "Hip feels tighter than the other side, especially when turning the leg inward or crossing it"
       ],
       "homeCare": [
-        "Do gentle daily stretching and strengthening exercises for the hip and thigh muscles, several times a week",
+        "Do hip and thigh strengthening and stretching exercises several times a week, building up gradually; a guided programme tends to work better than exercising on your own",
         "Try lower-impact activities like swimming, cycling, or water-based exercise to stay active with less joint strain",
         "If carrying extra weight, gradual weight loss with support from your care team can ease pressure on the hip",
         "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
@@ -4979,7 +5104,13 @@ export const AUTHORED = [
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
-        "Hip: Sutlive 2008, 4 of 5 (squatting aggravates, active flexion gives lateral hip pain, scour with adduction, active extension pain, passive IR 25 degrees or less): +LR 24.3. Capsular pattern IR, then flexion, then abduction. Manual therapy plus exercise (JOSPT hip OA CPG 2017). Measures: HOOS, 30-s chair stand, 40-m walk. Screen lumbar referral and lateral hip (GTPS)."
+        "Classification (JOSPT 2017, restated in the 2025 revision, A): over 50 with moderate anterior or lateral hip pain on weight bearing, morning stiffness under 1 hour, hip IR under 24 degrees or IR and flexion 15 degrees less than the other side, and/or pain on passive IR. IR and flexion are lost first; abductor weakness gives an antalgic or Trendelenburg gait. Supporting cluster (not in the CPG): Sutlive 2008, 4 of 5 (squatting aggravates, active flexion gives lateral hip pain, scour with adduction, active extension pain, passive IR 25 degrees or less), +LR 24.3. Screen lumbar referral and lateral hip (GTPS).",
+        "Imaging (2025, ACR criteria): radiographs of the pelvis and hip first; ultrasound if normal or inconclusive; MRI or CT after that; Kellgren-Lawrence or Tonnis grading. Structure and symptoms correlate poorly.",
+        "Minimum data (2025 best practice): at least one self-report (WOMAC function, HOOS or PROMIS) and one performance test (6-minute walk, 30-s chair stand, TUG, timed stairs); ROM and strength in all six directions; NPRS; FABER for irritability; at baseline and at least one follow-up. Balance and fall risk (A): Berg, four square step test, single-leg stance.",
+        "Manual therapy (A): soft tissue and/or joint mobilisation, including high- and low-force long-axis distraction and mobilisation with movement, for mild to moderate OA; higher force favours range, lower force pain; adapt force to bony shape and irritability (F).",
+        "Exercise (A): individualised strength, flexibility and endurance, aquatic where suitable, 1-5 times a week, 30-120 minutes, for 5-16 weeks; supervised progressive strengthening did better than Nordic walking, which did better than unsupervised home exercise. Dry needling (A, new in 2025): trigger points in iliopsoas, rectus femoris, TFL, gluteus medius and minimus, weekly for 3 weeks, in K-L II-III, short-term gains.",
+        "Education (B), now including internet-based pain-coping skills training; weight loss (B, raised from C), 5-7.5% where BMI is over 25; gait and balance training with a walking aid (C); ultrasound only by shared decision (D, lowered from B); no brace as first line (F). Re-examine or refer (F) if the picture does not fit or does not improve.",
+        "Source: Koc TA et al., JOSPT 2025;55(11):CPG1-CPG31 (hip OA revision 2025; supersedes Cibulka 2017, JOSPT 47(6))."
       ]
     },
     "resolved": [
@@ -5096,6 +5227,9 @@ export const AUTHORED = [
         "It has not settled after 2 to 3 weeks",
         "The snapping is painful or getting more frequent",
         "You want a plan to return to running or kicking"
+      ],
+      "clinicNotes": [
+        "Nonarthritic hip CPG 2014 lists iliopsoas problems as a differential of intra-articular pain; FADIR and FABER are non-specific, so pain on resisted hip flexion and a painful snap help separate it. Over 50, check the hip OA criteria (IR under 24 degrees, morning stiffness under 1 hour). Source: Enseki 2014; Koc 2025."
       ]
     },
     "resolved": [
@@ -5618,7 +5752,7 @@ export const AUTHORED = [
     "cond": {
       "id": "acl",
       "name": "ACL tear (a major knee ligament injury)",
-      "clin": "Anterior cruciate ligament injury (JOSPT CPG 2017)",
+      "clin": "Anterior cruciate ligament injury (JOSPT knee ligament sprain CPG 2017; injury prevention CPG 2018)",
       "blurb": "This is an injury to one of the main stabilizing ligaments deep inside the knee, usually from a sudden twist, pivot, or awkward landing rather than direct contact.",
       "noticed": [
         "A twisting, pivoting, or landing movement at the moment it happened, often without anyone touching them",
@@ -5628,11 +5762,21 @@ export const AUTHORED = [
       "homeCare": [
         "Avoid sports or activities involving quick pivots, cutting, or jumping until it's been checked out",
         "Support the leg and avoid putting full weight through it if it feels unstable",
-        "Once cleared to move, gentle strengthening of the thigh, hip, and core muscles can help support the knee"
+        "Once cleared to move, gentle strengthening of the thigh, hip, and core muscles can help support the knee",
+        "If you play pivoting or jumping sports, a warm-up injury-prevention programme (such as FIFA 11+) done a few times a week through the season lowers the chance of knee and ACL injuries, especially for girls and young women"
       ],
       "seePhysioIf": [
         "Your knee gave way, buckled, or felt unstable after a twisting or landing injury",
         "Your knee swelled up quickly (within a couple of hours) after the injury"
+      ],
+      "clinicNotes": [
+        "Diagnosis (ligament CPG 2017): non-contact deceleration or cutting with valgus near extension, a pop, swelling within 0-12 hours (haemarthrosis), giving way. Lachman sens 85%, spec 94%; pivot shift sens 24%, spec 98% (rules in); anterior drawer. Apply the Ottawa knee rule for fracture. Check MCL, menisci and the posterolateral corner.",
+        "Instability markers: 6-m timed hop under 80% of the other leg, quadriceps index under 80%, giving way in daily activities. Measures (B): IKDC 2000 or KOOS, Tegner or Marx, hop tests, laxity, quadriceps strength, effusion (stroke test), ROM; ACL-RSI for fear of re-injury.",
+        "Non-operative: neuromuscular re-education with strengthening (A); functional brace for ACL deficiency (C). Rehabilitation with optional delayed reconstruction matched early reconstruction at 2 and 5 years (Frobell).",
+        "After reconstruction: motion within the first week (B), cryotherapy (B), early weight bearing (C), supervised plus home programme (B), weight-bearing and non-weight-bearing strengthening from 4-6 weeks for 6-10 months (A), NMES for 6-8 weeks (A); functional brace after reconstruction (D).",
+        "Prognosis: about 81% return to some sport, 65% to pre-injury level, 55% to competition; second ACL injury about 15% overall and over 20% under 25 who return to sport. Fear and low self-efficacy predict non-return.",
+        "Prevention (Arundale 2018, revised 2023): recommend an exercise-based programme (PEP, Sportsmetrics, HarmoKnee, Knakontroll, FIFA 11+) to all young athletes, not only those screened as high risk (A); multicomponent (strength, plyometrics, proximal control) (A); more than once a week, over 20 minutes a session, preseason and in season, with good adherence (A); balance training alone is not enough (B). Highest benefit: female athletes, especially under 18, and ages 12-25 in pivoting sports (A).",
+        "Source: Logerstedt DS et al., JOSPT 2017;47(11):A1-A47 (knee ligament sprain revision 2017), grades in brackets. Arundale AJH et al., JOSPT 2018;48(9):A1-A42 (injury prevention)."
       ]
     },
     "resolved": [
@@ -5676,7 +5820,7 @@ export const AUTHORED = [
         "qid": "K4",
         "oid": "nextday",
         "label": "It swelled the next day",
-        "weight": -2
+        "weight": -1
       },
       {
         "qid": "K8",
@@ -5774,6 +5918,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Knee pain isn't improving with knee-focused self-care",
         "You notice hip or groin stiffness alongside the knee symptoms"
+      ],
+      "clinicNotes": [
+        "Hip OA pain can spread down the thigh to the knee as it progresses (Koc 2025): check the OA criteria (over 50, morning stiffness under 1 hour, IR under 24 degrees or 15 degrees less than the other side, pain on passive IR). In children and teenagers, SUFE and Perthes present at the knee (Enseki 2014). Source: Koc 2025; Enseki 2014."
       ]
     },
     "resolved": [
@@ -5909,6 +6056,11 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Symptoms aren't settling after a couple of weeks of rest and care",
         "The knee feels loose or shifts to the side during activity"
+      ],
+      "clinicNotes": [
+        "Diagnosis (ligament CPG 2017): varus force; local swelling and tenderness over the LCL; lateral pain and laxity on varus stress at 0 and 30 degrees. Isolated LCL injury is the least common (about 4%). Suspect a posterolateral corner injury with hyperextension plus varus or a posterolateral blow to the medial tibia near extension; it can be part of a knee dislocation, so check the neurovascular status (including the peroneal nerve).",
+        "Bracing for posterolateral corner injury (F); neuromuscular re-education with strengthening (A); measures as for MCL (B). Differential: ITB syndrome in runners.",
+        "Source: Logerstedt DS et al., JOSPT 2017;47(11):A1-A47 (knee ligament sprain revision 2017), grades in brackets."
       ]
     },
     "resolved": [
@@ -5982,6 +6134,11 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Pain, swelling, or a wobbly feeling hasn't improved within a couple of weeks",
         "The knee feels unstable or buckles during everyday walking or turning"
+      ],
+      "clinicNotes": [
+        "Diagnosis (ligament CPG 2017): valgus or rotational force, typically a blow to the outer knee with the foot planted; MCL tenderness reproduces the familiar pain. Valgus stress at 30 degrees: pain sens 78%, spec 67%; laxity sens 91%, spec 49%. MCL with ACL is a common combination: check Lachman and pivot shift; Ottawa knee rule.",
+        "Measures (B): IKDC 2000 or KOOS, Tegner or Marx, hop tests when appropriate, effusion, ROM, quadriceps strength. Bracing for severe MCL injury (F); neuromuscular re-education with strengthening (A).",
+        "Source: Logerstedt DS et al., JOSPT 2017;47(11):A1-A47 (knee ligament sprain revision 2017), grades in brackets."
       ]
     },
     "resolved": [
@@ -6056,6 +6213,14 @@ export const AUTHORED = [
         "Joint-line pain persists beyond ~2 weeks",
         "There's catching or locking",
         "You want a rehab-first plan — outcomes rival surgery for many age-related tears"
+      ],
+      "clinicNotes": [
+        "Diagnosis (meniscus and cartilage CPG 2018): twisting injury, tearing sensation, swelling over 6-24 hours, catching or locking, pain on forced hyperextension and maximal flexion, McMurray pain or click, joint-line tenderness, Thessaly at 20 degrees. Single tests are weak in primary care (McMurray sens 0.58, spec 0.56; joint-line tenderness sens 0.77, spec 0.26); a composite of more than 3 positive findings has spec 90%, more than 5 spec 99% (rules in).",
+        "Risk: degenerative tears with age over 60, male sex, work kneeling or squatting, many flights of stairs; acute tears with soccer and rugby, and delayed ACL reconstruction. A locked knee needs an early surgical opinion.",
+        "Measures: IKDC 2000 or KOOS (B); effusion, ROM, quadriceps strength, forced hyperextension, maximal flexion, McMurray, joint-line tenderness (B); chair stand, stairs, TUG and 6-minute walk early, hop tests later (C).",
+        "Degenerative tear: exercise therapy was no different from arthroscopic partial meniscectomy at 2 years (Kise) and built more strength. Progressive ROM, knee and hip strengthening, neuromuscular training (B); after surgery, NMES or biofeedback (B), supervised plus home programme (B); after repair, early motion (B) and progressive weight bearing and return to activity (C).",
+        "Prognosis: a previous meniscal tear predicts tibiofemoral OA (OR 5.7); OA in about half after meniscectomy.",
+        "Source: Logerstedt DS et al., JOSPT 2018;48(2):A1-A50 (meniscal and articular cartilage lesions revision 2018), grades in brackets."
       ]
     },
     "resolved": [
@@ -6112,6 +6277,18 @@ export const AUTHORED = [
         "oid": "back",
         "label": "Moving my low back",
         "weight": -2
+      },
+      {
+        "qid": "onset",
+        "oid": "kneeling",
+        "label": "After a lot of kneeling or squatting",
+        "weight": 1
+      },
+      {
+        "qid": "age",
+        "oid": "50-64",
+        "label": "50 to 64",
+        "weight": 1
       }
     ]
   },
@@ -6148,7 +6325,8 @@ export const AUTHORED = [
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
-        "Knee: ACR clinical criteria, knee pain plus 3 of: over 50, stiffness under 30 minutes, crepitus, bony tenderness, bony enlargement, no palpable warmth (sens 95%, spec 69%). Measures: KOOS, 30-s chair stand, 40-m fast-paced walk, stair climb. Cane in the opposite hand, unloader brace or wedge insoles in some cases (OARSI; ACR 2019)."
+        "Knee: ACR clinical criteria, knee pain plus 3 of: over 50, stiffness under 30 minutes, crepitus, bony tenderness, bony enlargement, no palpable warmth (sens 95%, spec 69%). Measures: KOOS, 30-s chair stand, 40-m fast-paced walk, stair climb. Cane in the opposite hand, unloader brace or wedge insoles in some cases (OARSI; ACR 2019).",
+        "Knee injury and OA (Logerstedt 2018): a previous meniscal tear predicts tibiofemoral OA (OR 5.7), with OA in about half after meniscectomy; a previous ACL injury or delayed reconstruction adds meniscal and cartilage damage."
       ]
     },
     "resolved": [
@@ -6310,7 +6488,8 @@ export const AUTHORED = [
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0 draft, 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing.",
-        "Kneecap: quadriceps and hip strengthening are the core; taping or a brace may help short term. Measures: KOOS-PF, stairs and squat tolerance."
+        "Kneecap: quadriceps and hip strengthening are the core; taping or a brace may help short term. Measures: KOOS-PF, stairs and squat tolerance.",
+        "Patellofemoral pain CPG 2019 (which excludes PFOA): the link from PFP to PFOA is unproven prospectively; retrospectively, adolescent anterior knee pain (OR 7.5) and past patellar dislocation (OR 3.2) are associated with isolated PFOA. In chronic PFP over 40, about a quarter have isolated PFOA and 44% combined patellofemoral and tibiofemoral OA. Its 'no brace' recommendation does not carry over to PFOA."
       ]
     },
     "resolved": [
@@ -6403,6 +6582,13 @@ export const AUTHORED = [
         "It's not settling after ~2 weeks of load management",
         "It limits sport, stairs, or work",
         "You'd like a graded strengthening plan — the best-evidenced treatment"
+      ],
+      "clinicNotes": [
+        "Diagnosis (B): pain around or behind the kneecap reproduced by squatting, stairs, prolonged sitting or other loaded flexion, after excluding other causes. Pain on squatting is the test (A: +LR 1.8, -LR 0.2); reduced patellar tilt supports it (C: +LR 5.4).",
+        "Subgroups (F): overuse or overload; muscle performance deficits (hip and quadriceps); movement coordination (dynamic valgus); mobility (foot pronation, or tight hamstrings, quadriceps, calf, lateral retinaculum or ITB). Measures (A): AKPS, KOOS-PF, worst and usual pain; squat, step-down and single-leg squat (B).",
+        "Treatment: combined hip and knee exercise, hip emphasis early (A); combined interventions (A); prefabricated foot orthoses for pronators for up to 6 weeks with exercise (A); tailored taping with exercise up to 4 weeks (B); education on load, weight and adherence (F). Runners: gait retraining (C). Not recommended: patellofemoral braces, sleeves or straps (B), biofeedback (B), manual therapy alone (A), biophysical agents including cryotherapy (B), dry needling (A).",
+        "Prognosis: often persistent (about 40% unfavourable at 12 months); worse with symptoms over 2-4 months, older age, higher pain and lower AKPS. 'Educate and wait' does not work. Differentials: patellar tendinopathy, Osgood-Schlatter, Sinding-Larsen-Johansson, patellar instability, ITB, plica, tibiofemoral lesions, hip (SUFE in teenagers), lumbar referral, femoral stress fracture in high-volume trainees.",
+        "Source: Willy RW et al., JOSPT 2019;49(9):CPG1-CPG95 (patellofemoral pain), grades in brackets."
       ]
     },
     "resolved": [
@@ -6464,6 +6650,24 @@ export const AUTHORED = [
         "qid": "K8",
         "oid": "back",
         "label": "Moving my low back",
+        "weight": -2
+      },
+      {
+        "qid": "onset",
+        "oid": "running",
+        "label": "After increasing running or jumping",
+        "weight": 1
+      },
+      {
+        "qid": "K1",
+        "oid": "below",
+        "label": "Just below the kneecap",
+        "weight": -1
+      },
+      {
+        "qid": "K5",
+        "oid": "bump",
+        "label": "A tender bony bump just below the kneecap (in a teenager)",
         "weight": -2
       }
     ]
@@ -7181,7 +7385,7 @@ export const AUTHORED = [
     "cond": {
       "id": "discderangement",
       "name": "Disc-related back pain that changes with position",
-      "clin": "Lumbar disc derangement / directional preference (Mechanical Diagnosis and Therapy)",
+      "clin": "Lumbar disc derangement / directional preference (Mechanical Diagnosis and Therapy) = acute low back pain with related (referred) lower extremity pain (JOSPT 2012)",
       "blurb": "This is back pain that's thought to come from a disc that reacts to certain positions — it often gets worse with sitting or bending forward and can ease with different postures.",
       "noticed": [
         "Pain that's worse when sitting or bending forward, and often better when standing tall or gently arching back",
@@ -7189,13 +7393,19 @@ export const AUTHORED = [
         "Often starts after bending, lifting, or a sudden twisting movement"
       ],
       "homeCare": [
-        "Try gentle, repeated standing backbends a few times a day if they feel comfortable and don't worsen leg symptoms",
+        "Try gentle, repeated standing backbends a few times a day if they ease your pain or draw leg symptoms back toward your back; stop if leg symptoms spread further",
         "Take regular breaks from sitting and avoid staying slouched for long periods",
         "Stay gently active with short, frequent walks rather than resting in bed"
       ],
       "seePhysioIf": [
         "Leg symptoms are spreading further down or getting stronger despite trying position changes",
         "There's no improvement after a couple of weeks of adjusting your positions and staying active"
+      ],
+      "clinicNotes": [
+        "Classification (JOSPT 2012, B): acute low back pain with related (referred) lower extremity pain. Back pain with buttock, thigh or leg pain worse with flexion and sitting, that centralises or eases with positioning, manual procedures or repeated movements; lateral shift, reduced lordosis and limited extension are common.",
+        "Repeated movement testing: record the baseline symptom location, then judge centralisation or peripheralisation; the direction is chosen by response, not presumed. Centralisation is common (about 70% subacute, 52% chronic). 2021: MDT (C) acute, (B) chronic.",
+        "Acute with leg pain (2021, B): trunk strengthening and endurance with specific trunk activation; thrust or non-thrust mobilisation for acute low back pain (A). Progress to movement control once centralised (2012). Peripheralisation or new neurological signs: reclassify as radiating pain.",
+        "Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position."
       ]
     },
     "resolved": [
@@ -7277,6 +7487,11 @@ export const AUTHORED = [
         "It lingers beyond ~2 weeks",
         "It recurs with particular activities",
         "You'd like specific mobility and strength work for it"
+      ],
+      "clinicNotes": [
+        "No facet-specific category in JOSPT 2012 or 2021: classify as low back pain with mobility deficits (2012, B) when unilateral pain is reproduced at end-range (here extension) and by segmental provocation. Facet pain cannot be confirmed clinically without a block; prefer impairment-based labels. Under 20 with extension pain and sport: screen for spondylolysis first.",
+        "Acute: thrust or non-thrust mobilisation (2021, A), prediction rule as for non-specific low back pain. Chronic: mobilisation (A) with exercise (A). Education to stay active (B).",
+        "Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position."
       ]
     },
     "resolved": [
@@ -7341,7 +7556,7 @@ export const AUTHORED = [
     "cond": {
       "id": "instability",
       "name": "Back that feels unstable or gives way",
-      "clin": "Lumbar movement control impairment (instability)",
+      "clin": "Lumbar movement control impairment (instability) = low back pain with movement coordination impairments (JOSPT 2012)",
       "blurb": "Some low back pain happens because the deep core muscles aren't controlling movement well, leading to a catching, weak, or unstable feeling with certain movements.",
       "noticed": [
         "A catching or giving-way feeling with everyday movements like rolling over in bed or standing on one leg",
@@ -7356,6 +7571,12 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Episodes of pain keep coming back despite general exercise",
         "You're noticing ongoing weakness, giving way, or you're avoiding movements out of worry"
+      ],
+      "clinicNotes": [
+        "Classification (JOSPT 2012, B): low back pain with movement coordination impairments. Recurrent episodes with or without referred leg pain; symptoms at initial to mid range that worsen at end range or with sustained positions; possible segmental hypermobility, reduced trunk strength and endurance, coordination deficits in daily tasks.",
+        "Stabilisation prediction rule (Hicks): under 40, positive prone instability test, aberrant movements (painful arc, catch, thigh climbing, reversed lumbopelvic rhythm), SLR over 91 degrees; 3 or more +LR 4.0, fewer than 2 -LR 0.20 (not validated).",
+        "Chronic with movement control impairment: specific trunk activation and movement control exercise (2021, A); with leg pain (B). Acute: exercise including trunk activation (C). 2012: mid-range neuromuscular re-education, manual therapy for neighbouring mobility deficits, trunk strength and endurance; a temporary support may be considered acutely.",
+        "Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position."
       ]
     },
     "resolved": [
@@ -7396,7 +7617,7 @@ export const AUTHORED = [
     "cond": {
       "id": "nslbp",
       "name": "Non-specific mechanical low back pain",
-      "clin": "Acute low back pain with mobility deficits (JOSPT 2021)",
+      "clin": "Acute low back pain with mobility deficits (JOSPT 2012 classification; interventions JOSPT 2021)",
       "blurb": "Pain arising from the working parts of the back — joints, discs, muscles and ligaments reacting to load — without a single damaged structure to blame. It is very common, and the back remains strong.",
       "noticed": [
         "Pain that changes with position and activity",
@@ -7413,6 +7634,15 @@ export const AUTHORED = [
         "It isn't clearly improving after ~2 weeks",
         "It keeps returning",
         "It's limiting your work, sleep, or activity"
+      ],
+      "clinicNotes": [
+        "Classification (JOSPT 2012, B): low back pain with mobility deficits. Acute or subacute unilateral back, buttock or thigh pain, often after an awkward movement; restricted lumbar range and segmental mobility; pain reproduced by provocation of the involved lower thoracic, lumbar or SI segments.",
+        "Screen red flags first; failure to improve within 30 days is itself a flag (2012). No routine imaging without red flags. Thrust manipulation prediction rule (Flynn/Childs): symptoms under 16 days, none below the knee, lumbar hypomobility, hip IR over 35 degrees on at least one side, FABQ-W under 19; 4 of 5 +LR 13.2; the 2-item version (under 16 days, nothing below the knee) +LR 7.2.",
+        "Risk: STarT Back (low 0-3; high when the psychosocial subscale is 4-5); FABQ-W over 29 predicts a poorer outcome; 2-question depression screen (PRIME-MD). Measures: ODI (MCID 10 points or 30%) or RMDQ (5 points or 30%), NPRS, a performance measure.",
+        "Acute (2021): thrust or non-thrust joint mobilisation (A); massage or soft tissue mobilisation for short-term pain (B); exercise including specific trunk activation (C); treatment-based classification (B). Education (B): active one-to-one education on self-management and the favourable natural history; avoid bed rest and in-depth pathoanatomy.",
+        "Chronic (2021): exercise of any type (A); thrust or non-thrust mobilisation (A); pain neuroscience education alongside exercise or manual therapy (A); active care rather than education alone (A); movement control or trunk mobility exercise (B); soft tissue mobilisation as an adjunct (B); dry needling as an adjunct (C). Older adults: general exercise training (A).",
+        "Prognosis (2012): recurrence is common; risks are previous episodes and spinal or general hypermobility. Chronicity risks: symptoms below the knee, distress or depression, fear-avoidance, low recovery expectation, high pain, passive coping.",
+        "Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position."
       ]
     },
     "resolved": [
@@ -7475,6 +7705,12 @@ export const AUTHORED = [
         "oid": "eases",
         "label": "Walking eases it",
         "weight": 1
+      },
+      {
+        "qid": "duration",
+        "oid": "d2w",
+        "label": "Less than 2 weeks",
+        "weight": 1
       }
     ]
   },
@@ -7483,7 +7719,7 @@ export const AUTHORED = [
     "cond": {
       "id": "radicular",
       "name": "Nerve-related leg pain",
-      "clin": "Low back pain with radiating pain (sciatica / radiculopathy, JOSPT 2021)",
+      "clin": "Low back pain with radiating pain (sciatica / radiculopathy; JOSPT 2012 classification, interventions 2021)",
       "blurb": "Irritation of a nerve as it leaves the lower spine — commonly related to a disc — which can send pain, pins & needles, or numbness down the leg. Most cases settle over weeks to a few months.",
       "noticed": [
         "Leg symptoms often bother you more than the back itself",
@@ -7500,6 +7736,13 @@ export const AUTHORED = [
         "Leg symptoms persist beyond ~1–2 weeks",
         "Numbness or tingling isn't settling",
         "You want a plan to stay active safely while it recovers"
+      ],
+      "clinicNotes": [
+        "Classification (JOSPT 2012, B): low back pain with radiating pain. Acute: narrow-band lancinating leg pain, possible paraesthesia, numbness or weakness, reproduced at initial to mid range, with SLR or slump; subacute, mid range worse at end range; chronic, sustained end-range SLR or slump. Full neurological exam and UMN screen (tone, clonus).",
+        "Severe or progressive deficit: prompt MRI or CT and referral. Imaging otherwise only for injection or surgical candidates. Cauda equina: urinary retention sens 0.90, spec 0.95, +LR 18. Symptoms below the knee predict chronicity.",
+        "Acute with leg pain: trunk strengthening, endurance and specific activation (2021, B). Chronic with leg pain: specific trunk activation and movement control (B); thrust or non-thrust mobilisation (B); neural mobilisation as an adjunct (B); no mechanical traction (D).",
+        "After discectomy or decompression: general exercise (2021, C) and general education on precautions and resuming activity (B).",
+        "Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position."
       ]
     },
     "resolved": [
@@ -7572,8 +7815,13 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "Walking distance is shrinking",
-        "You'd like a structured conditioning plan — good evidence supports exercise for this pattern",
+        "You'd like a structured exercise and walking plan, which often helps this pattern",
         "Symptoms affect balance or confidence"
+      ],
+      "clinicNotes": [
+        "Not a separate category in JOSPT 2012 or 2021; nearest is chronic low back pain with radiating pain in an older adult with flexion preference. 2012 (C): flexion exercise with manual therapy, strengthening, nerve mobilisation and progressive walking (Whitman: manual therapy, exercise and body-weight-supported treadmill walking). 2021: general exercise for older adults (A); with leg pain, mobilisation (B), neural mobilisation (B), no mechanical traction (D). After decompression: general exercise (C), education (B).",
+        "Differentials: vascular claudication (over 50, smoker, hypertension, diabetes); progressive, bilateral or sphincter signs need urgent referral. Measure walking tolerance as the performance measure.",
+        "Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position."
       ]
     },
     "resolved": [
@@ -7664,7 +7912,9 @@ export const AUTHORED = [
         "Outcomes: Dizziness Handicap Inventory and Neck Disability Index.",
         "AIM Theory Manual 2023 (pp. 236-254; content/reference/cervical-conditions-manual.md): Reiley 2017 stepwise algorithm (history, triage, vestibular, detailed cervical exam, then torsion, relocation and movement sense tests). JPE over 7.1 cm at 90 cm; tracing over 9 (zigzag) or 10 (figure-of-8) errors. Clinical SPNTT sens 27%, spec 79%: a positive helps rule in. Cervical torsion test (nystagmus over 20/s) and head relocation best separate CGD from BPPV (L'Heureux-Lebeau 2014).",
         "Visual symptoms common with neck pain: needing to concentrate to read, visual fatigue, judging distances, light sensitivity. Double vision, red eyes or words moving point elsewhere. Torsion balance test is the only balance test that suggests a neck source.",
-        "Management evidence: SNAGs or Maitland to the upper cervical spine plus home exercise, benefit to 12 months (Reid 2014, 2015); neck exercise with a cognitive behavioural approach in chronic WAD dizziness (Treleaven 2016); head relocation practice 85% vs vestibular rehab 18% in dizzy mTBI with abnormal proprioception (Hammerle 2019). Tailor manual therapy and exercise plus sensorimotor training to the impairments found."
+        "Management evidence: SNAGs or Maitland to the upper cervical spine plus home exercise, benefit to 12 months (Reid 2014, 2015); neck exercise with a cognitive behavioural approach in chronic WAD dizziness (Treleaven 2016); head relocation practice 85% vs vestibular rehab 18% in dizzy mTBI with abnormal proprioception (Hammerle 2019). Tailor manual therapy and exercise plus sensorimotor training to the impairments found.",
+        "Post-concussion dizziness (JOSPT concussion CPG 2020): history cannot separate the sources; examine cervical and thoracic (C/F), vestibulo-oculomotor (B), and orthostatic HR and BP (B); Dix-Hallpike when BPPV is suspected and repositioning if positive (A). In the sport-concussion Delphi, cervical tests for dizziness (flexion-rotation, torsion, head-neck differentiation, motor control) rated weak and vestibular tests (head impulse, nystagmus, positional, saccades, VOR cancellation, head shake, pursuits) strong: treat neck tests as supporting, not confirming. Source: Quatman-Yates, JOSPT 2020.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.) does not review dizziness (a stated limitation); its only relevant content is the chronic WAD flow chart (vestibular rehabilitation, eye-head-neck and neuromuscular coordination)."
       ]
     },
     "resolved": [
@@ -7760,9 +8010,10 @@ export const AUTHORED = [
         "Manual examination C0-C3: reproduction and easing of the familiar headache; suboccipital, upper trapezius and SCM palpation; thoracic and scapular posture.",
         "Screen: cervical arterial dysfunction per the IFOMPT framework; upper cervical ligament tests only with risk factors (trauma, RA, Down syndrome, long-term steroids, recent throat infection, connective tissue disorder); cranial nerves and neuro exam if indicated.",
         "Management: education (a sensitive upper neck can drive head pain without damage in the head); upper cervical and thoracic manual therapy; progressive deep neck flexor and scapular exercise starting with craniocervical flexion; C1-2 self-SNAG for use when a headache starts (Hall 2007); desk, screen, driving and sleep set-up; work with the GP on medicine use.",
-        "JOSPT 2017 stage-matched options: acute: active mobility exercise (B), C1-2 self-SNAG (C). Subacute: cervical manipulation and mobilisation (B), C1-2 self-SNAG (C). Chronic: cervical manipulation and mobilisation (B), thoracic manipulation (B), combined manual therapy plus cervical and scapulothoracic strength and endurance exercise (B). Public text names hands-on techniques only; manipulation of the upper neck is left to clinical judgement after screening.",
+        "JOSPT 2017 stage-matched options: acute: active mobility exercise (B), C1-2 self-SNAG (C). Subacute: cervical manipulation and mobilisation (B), C1-2 self-SNAG (C). Chronic: one combined recommendation (B), cervical or cervicothoracic manipulation or mobilisation together with shoulder girdle and neck stretching, strengthening and endurance exercise. Public text names hands-on techniques only; manipulation of the upper neck is left to clinical judgement after screening.",
         "Look-alikes: migraine (throbbing, switches sides, nausea, light and sound sensitivity, aura); tension-type (pressing band on both sides); occipital neuralgia (brief shooting scalp pain, scalp sore to touch: card); upper neck pain without main headache (neck-upper); TMD (jaw region); post-concussion (head injury path); medication overuse (card); sinus or eye problem (GP or optometrist). Neck pain with migraine features is common: a possible match, suggest assessment, do not force one label.",
         "Reasoning appendix (segmental referral, upper cervical nerves and dermatomes, telling headache types apart, tests): content/reference/upper-cervical.md.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.): CFRT sens 0.90-0.95, spec 0.90-0.97, +LR 9.0-9.4, -LR 0.11-0.27 (healthy 39-45 degrees, cervicogenic headache 20-28; MDC90 4.7-7 degrees). C0-C3 PAIVM +LR 2.9-4.9; C1-2 the most common level. Headache worse with exertion: a positive Valsalva has +LR 2.3 for serious intracranial pathology. With TMD signs, adding TMJ-directed manual therapy and exercise beat a craniocervical-only programme.",
         "Sources: ICHD-3 2018; Sjaastad et al. 1998; Bogduk and Govind 2009; Haldeman and Dagenais 2001; Jull et al. 2007 and 2008; Ogince et al. 2007; Jull et al. 2002 (exercise and manipulative therapy RCT); Hall et al. 2007 (self-SNAG); JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Dreyfuss et al. 1994; Lord et al. 1994; SNNOOP10 (Do et al. 2019); IFOMPT 2023 (Rushton et al.); Hutting et al. 2013."
       ]
     },
@@ -7855,7 +8106,8 @@ export const AUTHORED = [
         "Contraindicated: cervical HVLA manipulation. Traction only with medical clearance.",
         "AIM Theory Manual 2023 (pp. 255-264; content/reference/cervical-conditions-manual.md): Cook cluster 3 or 4 of 5, post-test probability 94-99%. MRI sens 79-95%, spec 82-88%; X-ray does not rule in or out. Differentials: MS, B12 deficiency, ALS, nerve entrapment, stroke, Guillain-Barre, tumour.",
         "Performance cut-offs (10 s; one arm and one leg test): foot tapping 24 or fewer (normal 31); grip and release F 11 or fewer, M 16 or fewer (normal 20/22); triangle step 17 or fewer (24); step test 13 or fewer (20); tally counter below 33 (47). Grip dynamometer MCID 5-6 kg. Normal ageing lowers all. Also JOA, European Myelopathy Score, Nurick.",
-        "Conservative care (low-moderate evidence): monitor neuro status every visit; thoracic extension mobilisation or manipulation for axial extension; DNF stabilisation, postural retraining in axial extension, diaphragmatic breathing; balance, aerobic, grip and lower limb strength, gait aids; avoid positions that worsen neuro signs. The manual lists manual and mechanical traction as options: here, only with medical clearance. After surgery about a third improve, a third stay the same, a third worsen."
+        "Conservative care (low-moderate evidence): monitor neuro status every visit; thoracic extension mobilisation or manipulation for axial extension; DNF stabilisation, postural retraining in axial extension, diaphragmatic breathing; balance, aerobic, grip and lower limb strength, gait aids; avoid positions that worsen neuro signs. The manual lists manual and mechanical traction as options: here, only with medical clearance. After surgery about a third improve, a third stay the same, a third worsen.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.): clinical myelopathy tests generally have low sensitivity and should not be used to screen: a negative cluster does not remove suspicion; MRI is the diagnostic test (gadolinium if tumour, infection, inflammation or vascular cause is suspected). Natural history: about two thirds deteriorate progressively; surgical outcomes were better than nonsurgical; routine traction is advised against in moderate to severe DCM."
       ]
     },
     "resolved": [
@@ -7971,7 +8223,9 @@ export const AUTHORED = [
         "Acute: thoracic thrust manipulation (B); cervical ROM exercise (B); home ROM exercise (B); supervised upper-quarter strength and endurance exercise (B); stretching (B); cervical thrust manipulation or mobilisation (C).",
         "Subacute: supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (C); cervical thrust manipulation or mobilisation (C).",
         "Chronic: multimodal approach (B); combined cervical/thoracic exercise plus thrust manipulation or mobilisation (B); neuromuscular exercise for the cervical and scapulothoracic regions (B); supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (B); general fitness (B); advice to stay active (C).",
-        "Passive modalities: JOSPT 2017 allows TENS, laser, traction and dry needling for chronic neck pain; the German guideline 2025 recommends against laser, electrotherapy, ultrasound, traction and kinesiotaping. Not listed on the public page.",
+        "Passive modalities: JOSPT 2017's chronic multimodal package (B) includes dry needling, laser or intermittent mechanical or manual traction (TENS appears only in its flow chart, and its evidence showed no benefit of TENS over manual therapy or ultrasound); the German guideline 2025 recommends against laser, electrotherapy, ultrasound, traction and kinesiotaping. Not listed on the public page.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.), mobility deficits: classification (C) central or one-sided neck pain with limited motion that reproduces it, possibly referring to the shoulder girdle or arm; limited CROM, end-range pain, restricted cervical and thoracic segmental mobility, segmental provocation reproduces the pain. Measure (B): CROM, CFRT, segmental mobility, pressure-pain threshold algometry at upper trapezius (widespread low thresholds suggest altered central processing). No imaging without red flags.",
+        "Course (2017): idiopathic neck pain changes little after about 6.5 weeks and recovery slows after 6-12 weeks; 50-85% still report pain at 1-5 years, often episodic. Poorer prognosis: older age, previous musculoskeletal problems, poorer psychological health. Expert opinion: manual therapy benefit falls after the acute stage; manipulation may offer no advantage over mobilisation; cervical and scapulothoracic exercise is essential from the subacute stage.",
         "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; El-Allawy et al., Dtsch Arztebl Int 2025; OPTIMa (Cote et al.) 2016; Cochrane exercise review (Gross et al.) 2015; IFOMPT framework 2023. Record NDI, NPRS and PSFS at the first visit."
       ]
     },
@@ -8119,6 +8373,7 @@ export const AUTHORED = [
         "Look-alikes: cervical radiculopathy (neck-led, dermatomal; both can show); carpal tunnel (night tingling thumb to middle, shaking helps: wrist and hand); cubital tunnel (elbow); radial tunnel vs tennis elbow; thoracic outlet (base of the neck); peripheral neuropathy (both hands and feet: GP); muscle or tendon pain; CRPS after an injury.",
         "Red flags checked against the site: weakness getting quickly worse (nrf-myelo, same day); clumsy hands, both arms or walking (N9, cord signs); spreading quickly in both hands and feet (nrf-cord, added); a cold, pale or blue hand, or arm swelling with colour change (base of the neck crf-vascular, same day; upper arm emergency when with breathlessness or chest pain); heart (nrf-cardiac); severe pain then weakness, lumps, drooping eyelid, cancer (upper arm card, Pancoast questions, general check); numbness after a fracture, dislocation or cut (injury screens).",
         "Reasoning appendix (sensitivity vs conduction, neurodynamic tests, nerve pathways, local tests, root vs peripheral): content/reference/neural-mechanosensitivity.md.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.): median nerve neurodynamic testing is useful in cervical radiculopathy, radial nerve testing is not; upper-quarter and nerve mobilisation (B, 2008 guideline, not restated in 2017).",
         "Sources: Hall and Elvey 1999; Nee and Butler 2006; Nee et al. 2012 (JOSPT, test validity; J Physiother, RCT); Schmid et al. 2009 and 2020; Finnerup et al. 2016; Tampin et al. 2012; Coppieters and Butler 2008; Basson et al. 2017; Wainner et al. 2005; Padua et al. 2016; Upton and McComas 1973."
       ]
     },
@@ -8252,6 +8507,8 @@ export const AUTHORED = [
         "AIM Theory Manual 2023 (pp. 265-277; content/reference/cervical-conditions-manual.md): natural history, most resolve by 6 months, 50% fully by 6-12 months, 83% with a disc herniation by 24-36 months. Rule in: Rubinstein (history + Spurling + traction relief + Valsalva) or Thoomes (history + Spurling + axial traction relief + arm squeeze); rule out: 4 negative ULTTs (1, 2a, 2b, 3) + negative arm squeeze.",
         "Prognosis: favourable with physiotherapy (Cleland 2007) if under 54, non-dominant arm, looking down not worse, multimodal care (3 of 4, 85%); poorer with longer duration, higher baseline pain and disability, less rotation to the affected side. MCID NDI 8.5, PSFS 2.2, NPRS 2.2.",
         "Treatment sequence: open the IVF first (flexion, contralateral rotation and side bend; contralateral lateral glides if no peripheralisation), manual traction to test for centralisation, then intermittent mechanical traction (Fritz 2014; Raney 2009 rule, not validated). Thoracic thrust better than sham short term (Young 2019); cervical thrust only gapping or flexion techniques. Neural: unload, treat the cervical interface, sliders, then tensioners once conduction signs settle. Early exercise tends to aggravate; leave an adaptive unloading posture alone early on. Surgery for progressive motor deficit despite care (25% still debilitating pain at 12 months).",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.): Spurling sens 0.50, spec 0.86-0.93; distraction sens 0.44, spec 0.90-0.97; Valsalva sens 0.22, spec 0.94; median nerve neurodynamic test useful (a negative test helps rule out), radial nerve test not. Imaging: with neurological signs and normal radiographs, MRI including the craniocervical junction and upper thoracic spine. No benefit from continuous traction; a collar only briefly in the acute phase when nothing else relieves (expert opinion). Refer if not resolving or worsening.",
+        "CTS CPG 2019: ULNT accuracy for CTS is conflicting (D), so a positive ULNT1 does not separate a root from carpal tunnel; use the Wainner cluster and the thenar-sparing check.",
         "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.); Wainner 2003; Thoomes 2018; Wong 2014; Iyer and Kim 2016; Thoomes 2013; Fritz 2014; Basson 2017; Cook 2010; Rushton 2023. Record NDI (or PROMIS) and NPRS at the first visit."
       ]
     },
@@ -8407,6 +8664,7 @@ export const AUTHORED = [
         "Management: reassurance that a stiff, sore upper neck is common and usually not damage; stay active; chin-nod and head-turning exercises progressed to deep neck and scapular strengthening; upper cervical and thoracic manual therapy for short-term relief; desk, screen, driving and sleep set-up. JOSPT 2017 stage-matched options as for neck pain with mobility deficits (neck-mech).",
         "Look-alikes: cervicogenic headache (headache the main problem: neck-cheadache); mechanical mid or lower neck pain (neck-mech); radiculopathy (arm symptoms: neck-radic); acute wry neck (neck-mech / assessment); occipital neuralgia; TMD (jaw region); BPPV (card); polymyalgia rheumatica (final check over 50).",
         "Reasoning appendix (segmental referral, upper cervical nerves and dermatomes, tests, dizziness sorting): content/reference/upper-cervical.md.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.): CFRT +LR 9.0-9.4, -LR 0.11-0.27; C0-C3 PAIVM +LR 2.9-4.9. Upper cervical ligament tests: specificity adequate to rule in, sensitivity variable, so a negative test does not exclude instability. Add pressure-pain threshold algometry (B).",
         "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.); Dreyfuss et al. 1994; Lord et al. 1994; Cooper et al. 2007; Bogduk and Govind 2009; Ogince et al. 2007; Jull et al. 2007 and 2008; IFOMPT 2023 (Rushton et al.); Hutting et al. 2013; Canadian C-spine rule (Stiell et al. 2001)."
       ]
     },
@@ -8532,6 +8790,9 @@ export const AUTHORED = [
         "Subacute: the CPG flow chart gives no stage-specific recommendation; choose from the acute and chronic options by irritability.",
         "Chronic: education on prognosis, pain management and reassurance (C); combined exercise plus manual therapy (C); cervical mobilisation plus individualised exercise with cognitive behavioural principles (C); TENS (C).",
         "AIM Theory Manual 2023 (pp. 236-254, 279; content/reference/cervical-conditions-manual.md): sensorimotor deficits (position sense, eye movement control, balance) are greatest in WAD with dizziness, then WAD without, then non-traumatic neck pain; visual symptoms are more frequent after whiplash. Test JPE, SPNTT, torsion balance; treat with manual therapy and exercise plus tailored sensorimotor training, delivered with a cognitive behavioural approach (Treleaven 2016). Resource: Whiplash Injury and Chronic Pain (Gross, McMaster, 2019, free).",
+        "A whiplash crash is a concussive event (force transmitted to the head). Screen for an undiagnosed concussion (A, JOSPT concussion CPG 2020): altered mental state, amnesia, fogginess, light or noise sensitivity, exertional intolerance; use witness reports and a symptom checklist, and send to the GP for diagnosis if positive. If concussed, sequence the exam by irritability, neck first (F), and test exertion on a bike (C). Source: Quatman-Yates, JOSPT 2020.",
+        "JOSPT Neck Pain CPG 2017 (Blanpied et al.), additions: acute, reassure that recovery is expected within 2-3 months (B). Low risk of chronicity (C): one session of early advice, exercise instruction and education, or a comprehensive exercise programme, or TENS; supervised sessions beat a pamphlet; avoid intensive exercise and work hardening early (expert opinion). Subacute (flow chart, prolonged recovery): education and counselling to stay active; active ROM with low-load isometrics and mobilisation; combined manual therapy with stretching, strengthening and endurance; supervised neuromuscular and coordination exercise. Chronic flow chart also lists vestibular rehabilitation and eye-head-neck coordination.",
+        "Prognostic cut-offs (2017): NPRS 6 or more; NDI over 30%; Pain Catastrophizing Scale 20 or more; IES-R 33 or more (predicts chronicity, does not diagnose PTSD); cold hyperalgesia. Not prognostic: posture, impact direction, seat position, headrest. Older age does not predict a poor outcome in WAD. Trajectories: about 45% mild with rapid recovery, 40% moderate with incomplete recovery, 15% severe; most change in weeks 6-12, little after 12 months.",
         "Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Australian WAD guideline 4th ed. (draft) 2023; OPTIMa 2016; Ritchie et al. 2013 and 2015 (WhipPredict); Stiell et al. 2001; Quebec Task Force 1995; Treleaven 2017; ICBC first-12-weeks page (checked Sept 2026, review yearly). Record NDI, NPRS and PSFS at the first visit."
       ]
     },
@@ -8595,6 +8856,9 @@ export const AUTHORED = [
         "Pain persists past ~2–3 weeks",
         "There's a visible step or bump after an injury",
         "You want a graded return to gym or sport"
+      ],
+      "clinicNotes": [
+        "Kelley 2013 lists AC joint sprain and AC osteoarthritis among shoulder differentials; neither shoulder CPG gives AC test accuracy. A painful arc at the top of the range (not mid-range) points away from the rotator cuff. A step deformity after injury needs an X-ray before rehab. Source: Kelley 2013; Desmeules 2025."
       ]
     },
     "resolved": [
@@ -8653,7 +8917,7 @@ export const AUTHORED = [
     "cond": {
       "id": "calcific",
       "name": "Calcium deposits in the shoulder tendon",
-      "clin": "Rotator cuff calcific tendinopathy",
+      "clin": "Rotator cuff calcific tendinopathy, imaging-confirmed (JOSPT CPG 2025)",
       "blurb": "Small calcium deposits can build up inside one of the rotator cuff tendons, causing a deep ache or sometimes a sudden, intense flare of shoulder pain. It's usually confirmed with an ultrasound or X-ray rather than symptoms alone.",
       "noticed": [
         "A deep ache in the shoulder that can flare up strongly, sometimes without warning",
@@ -8668,6 +8932,12 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The pain has lasted more than a few weeks and isn't settling with rest and simple measures",
         "Night pain or flare-ups are strong enough to disrupt sleep or daily activities"
+      ],
+      "clinicNotes": [
+        "Calcium deposit in a rotator cuff tendon, confirmed on imaging; managed within the rotator cuff recommendations (exercise A, education C, NSAIDs B, injection B but not first line). Imaging not routine at the first visit (F); ultrasound first if not improving by 12 weeks (F).",
+        "Shockwave may be used for calcific tendinopathy (C), unlike non-calcific; laser alone or with rehab (C); no therapeutic ultrasound (C). Ultrasound-guided lavage (barbotage) for cases not settling with initial care including injection (B).",
+        "Sudden severe pain without injury: exclude septic arthritis (fever), neuralgic amyotrophy (weakness or wasting after days of pain) and cardiac or visceral referral before calling it a calcific flare.",
+        "Source: Desmeules F et al., JOSPT 2025;55(4):235-274 (rotator cuff tendinopathy), grades in brackets."
       ]
     },
     "resolved": [
@@ -8720,7 +8990,7 @@ export const AUTHORED = [
     "cond": {
       "id": "frozen",
       "name": "Frozen shoulder",
-      "clin": "adhesive capsulitis",
+      "clin": "Adhesive capsulitis (JOSPT CPG 2013)",
       "gates": {
         "ages": [
           "30-49",
@@ -8728,7 +8998,7 @@ export const AUTHORED = [
           "o64"
         ]
       },
-      "blurb": "The capsule around the shoulder joint tightens, causing pain then marked stiffness in all directions. It's most common between 40 and 65, and more common with diabetes or thyroid conditions. It does improve, but on a long timescale — physiotherapy can help shorten the stiff phase and keep you functional.",
+      "blurb": "The capsule around the shoulder joint tightens, causing pain then marked stiffness in all directions. It's most common between 40 and 65, and more common with diabetes or thyroid conditions. It does improve, but on a long timescale — physiotherapy, and for some people a steroid injection from a doctor, can ease the pain and help you keep using your arm while it recovers.",
       "noticed": [
         "Stiffness in every direction — others can't move it further either",
         "Losing outward reach (back pocket, seat-belt, bra strap) early on",
@@ -8743,6 +9013,14 @@ export const AUTHORED = [
         "Stiffness is progressing or already limits daily tasks",
         "You have diabetes or a thyroid condition with new shoulder stiffness",
         "You'd like a staged plan matched to the phase you're in"
+      ],
+      "clinicNotes": [
+        "Diagnosis (JOSPT 2013, F): age 40-65; gradual, progressive pain and stiffness limiting sleep, grooming, dressing and reaching; passive glenohumeral motion limited in several planes, ER (at the side) most; ER and IR fall as abduction goes from 45 to 90 degrees; end-range passive motion reproduces the pain; accessory glides restricted in all directions. Radiographs are normal (X-ray to exclude glenohumeral OA). Stage 1 is often mistaken for impingement.",
+        "Rule out: normal passive motion; radiographic OA; rotation increasing with abduction and subscapularis provocation; ULNT reproducing the pain. Both shoulders stiff over 50: think of polymyalgia rheumatica.",
+        "Risk (B): diabetes, thyroid disease, age 40-65 (peak 51-55), female, a previous episode on the other side (5-34%). Also immobilisation, cardiac events, trauma. Diabetes and male sex are linked to poorer ROM outcomes. Stages: pain (to about 3 months), freezing (3-9), frozen (9-15), thawing (15-24); mild to moderate deficits may persist with little disability (C).",
+        "Irritability guides dose: high (pain 7/10 or more, constant night or rest pain, pain before end range, active less than passive), moderate (4-6/10, pain at end range), low (3/10 or less, pain only with overpressure). Measures (A): DASH, ASES or SPADI; pain, active and passive ROM (E).",
+        "Interventions: intra-articular corticosteroid plus mobility exercise beats exercise alone at 4-6 weeks (A), so refer for injection when pain dominates; education on the natural course and stretching matched to irritability (B); stretching dosed by irritability (B); glenohumeral mobilisation (C); heat, ultrasound or electrical stimulation with exercise (C); manipulation under anaesthesia for non-responders (C). Gentle 'supervised neglect' beat aggressive stretching past the pain threshold (89% vs 64% good outcome at 2 years).",
+        "Source: Kelley MJ et al., JOSPT 2013;43(5):A1-A31 (adhesive capsulitis), grades in brackets."
       ]
     },
     "resolved": [
@@ -8829,6 +9107,12 @@ export const AUTHORED = [
         "oid": "neck",
         "label": "Moving my neck",
         "weight": -2
+      },
+      {
+        "qid": "age",
+        "oid": "50-64",
+        "label": "50 to 64",
+        "weight": 1
       }
     ]
   },
@@ -8860,6 +9144,9 @@ export const AUTHORED = [
         "It has slipped or dislocated before — a structured strengthening program is first-line care",
         "Apprehension limits sport or work",
         "You want assessment before returning to overhead or contact sport"
+      ],
+      "clinicNotes": [
+        "JOSPT adhesive capsulitis CPG 2013 differential (F): instability fits age under 40, a history of dislocation, excess glenohumeral accessory motion and apprehension at end-range ER, abduction or flexion; global motion loss and no apprehension point away. First dislocation at 40 or over: screen for a rotator cuff tear and axillary nerve injury, and image early if weakness persists. Source: Kelley 2013."
       ]
     },
     "resolved": [
@@ -8924,7 +9211,7 @@ export const AUTHORED = [
     "cond": {
       "id": "rc",
       "name": "Rotator-cuff-related shoulder pain",
-      "clin": "includes subacromial shoulder pain",
+      "clin": "Rotator cuff tendinopathy, including subacromial pain and partial-thickness tears (JOSPT CPG 2025)",
       "blurb": "The most common shoulder problem: the tendons that lift and steady the arm become sensitive to load, often after a spike in activity. Pain is typically felt in the outer upper arm when reaching.",
       "noticed": [
         "Painful arc when lifting the arm up or out",
@@ -8941,6 +9228,16 @@ export const AUTHORED = [
         "It isn't clearly improving after ~2 weeks",
         "Reaching, dressing, or sleep stay limited",
         "You want a graded strengthening plan — the treatment with the best evidence"
+      ],
+      "clinicNotes": [
+        "Scope (JOSPT 2025): rotator cuff tendinopathy includes subacromial pain or impingement, subacromial bursopathy, long head of biceps tendinopathy and partial-thickness tears; calcific when imaging shows a deposit. Full-thickness tears are excluded.",
+        "Tests (B): painful arc to rule in (sens 0.62, spec 0.82, +LR 3.44); Hawkins-Kennedy to rule out (sens 0.83, -LR 0.25); 3 of 5 (Hawkins-Kennedy, Neer, painful arc, empty can, resisted ER) +LR 2.93, -LR 0.34. Never diagnose on tests alone; screen the neck and red flags (F).",
+        "Measure: ROM by goniometer, inclinometer or phone app (A); not dynamic scapular motion (A); isometric strength by handheld dynamometer (A), not manual muscle testing. PROMs (A): SPADI (MCID 8), QuickDASH (13.4), DASH, WORC, ASES, OSS.",
+        "Imaging not in initial management (F); consider after up to 12 weeks of appropriate care without improvement, or with trauma or a suspected full-thickness tear, ultrasound first (F). Refer to a sport physician, physiatrist or orthopaedics with severe, persistent pain or disability after up to 12 weeks (F).",
+        "Rehabilitation: active exercise (motor control and/or resistance) first line (A), supervised not better than home; spinal and upper-limb manual therapy for short-term pain (B); individualised education (C); acupuncture as an adjunct (C); taping (D); work ergonomics (C). No shockwave (C) and no therapeutic ultrasound (B) for non-calcific tendinopathy.",
+        "Medical: acetaminophen (C); short-term oral NSAIDs (B); corticosteroid injection may be used (B) but not first line (C), ultrasound-guided subacromial preferred (B); not opioids first line (C); PRP and hyaluronic acid not first line.",
+        "Prognosis (B): persistent pain more likely over 55 (OR 3.8) and with high job demands (OR 4.1); also long duration, high pain, distress, catastrophising, kinesiophobia, compensation. Return to sport (F) by load tolerance with PROMs and performance measures.",
+        "Source: Desmeules F et al., JOSPT 2025;55(4):235-274 (rotator cuff tendinopathy), grades in brackets."
       ]
     },
     "resolved": [
@@ -9165,6 +9462,9 @@ export const AUTHORED = [
         "Pain persists more than ~2 weeks",
         "It began after pregnancy or a fall",
         "Walking or stairs remain limited"
+      ],
+      "clinicNotes": [
+        "JOSPT 2012 includes SI segments in low back pain with mobility deficits (B): unilateral back, buttock or thigh pain reproduced by provocation of the involved SI segments. Acute: thrust or non-thrust mobilisation (2021, A); the thrust prediction rule was derived on a lumbopelvic thrust (4 of 5, +LR 13.2). Chronic: exercise (A) with mobilisation (A) and pain neuroscience education (A). Source: Delitto 2012; George 2021."
       ]
     },
     "resolved": [
@@ -9649,7 +9949,7 @@ export const AUTHORED = [
       "clin": "Hamstring strain injury (JOSPT CPG 2022): sprinting type in the muscle belly, stretching type high near the sit bone",
       "blurb": "This is an injury to the muscle group at the back of your thigh, usually happening during a sprint, kick, or sudden change of direction. It causes a sharp pain right at the moment of injury and can leave the area sore and weak for days to weeks afterward.",
       "noticed": [
-        "A sudden, sharp pain at the back of the thigh or right where the thigh meets the sit-bone, often during running or kicking",
+        "A sudden, sharp pain at the back of the thigh, often during running or kicking (pain right at the sit bone with a large bruise needs checking quickly)",
         "Tenderness when pressing along the back of the thigh, and sometimes bruising or swelling",
         "Pain or tightness when trying to bend forward, stretch the leg straight, or push hard with that leg, plus a limp right after the injury"
       ],
@@ -9661,6 +9961,15 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The pain isn't easing after a couple of weeks, or you're still limping when walking",
         "You've strained this area before and want a structured plan to get back to sport safely and lower the chance of it happening again"
+      ],
+      "clinicNotes": [
+        "Diagnosis (B): sudden posterior thigh pain during activity, reproduced by stretch and/or resisted contraction, with local tenderness and loss of function; sudden onset is the most useful history item. Sprint type (late swing) is usually biceps femoris; overstretch type (hip flexion with knee extension) usually proximal semimembranosus, with a longer recovery.",
+        "Grading by active knee extension deficit (hip at 90 degrees): under 15 degrees about 26 days, 16-25 about 31 days, 26-35 about 75 days. Complete tear: diffuse bruising, palpable gap, cannot walk; refer suspected grade III or proximal tendon avulsion to a physician and imaging (radiographs for proximal symptoms). Imaging is not needed for grades I-II.",
+        "Maximal tenderness at the origin or insertion suggests tendon pathology (outside this CPG); a direct blow suggests contusion; vague, insidious onset suggests lumbar referral. Differentials: lumbar radiculopathy, SIJ, deep gluteal and ischial tunnel syndromes, adductor strain, contusion, compartment syndrome, DVT, apophysitis, avulsion fracture.",
+        "Exam: knee flexor strength by dynamometer (A); active knee extension by inclinometer (A); length of tenderness and distance from the ischial tuberosity (C; the closer, the longer the recovery); trunk and pelvic control (F). Outcome: FASH (B).",
+        "Prognosis (B): previous hamstring injury is the biggest risk (re-injury within 8 weeks OR 13.1); also age over 23, previous ACL injury or calf strain. Estimate return from strength, pain at injury, days to pain-free walking and tenderness area.",
+        "Treatment: eccentric training to tolerance added to stretching, strengthening, stabilisation and progressive running speeds (B); progressive agility and trunk stabilisation lowers re-injury (B: 7.7% vs 70%); neural mobilisation and early modalities (F). Prevention: the Nordic hamstring exercise within a multicomponent programme (A).",
+        "Source: Martin RL et al., JOSPT 2022;52(3):CPG1-CPG44 (hamstring strain injury in athletes), grades in brackets."
       ]
     },
     "resolved": [
@@ -9740,6 +10049,24 @@ export const AUTHORED = [
         "qid": "R1",
         "oid": "inner",
         "label": "Inner thigh",
+        "weight": -2
+      },
+      {
+        "qid": "onset",
+        "oid": "gradual",
+        "label": "Gradually, no clear reason",
+        "weight": -2
+      },
+      {
+        "qid": "onset",
+        "oid": "knock",
+        "label": "After a hard knock to the thigh",
+        "weight": -2
+      },
+      {
+        "qid": "R3",
+        "oid": "bruise",
+        "label": "A deep bruise after a knock",
         "weight": -2
       }
     ]
@@ -10315,6 +10642,7 @@ export const AUTHORED = [
         "Avoid in known or suspected osteoporosis: thrust manipulation of the spine or ribs, forceful end-range mobilisation, and loaded or repeated end-range spinal flexion and twisting (Too Fit to Fracture).",
         "Risk factors (AIM manual pp. 622-623): fixed, age over 50, female, family history (parent with hip fracture), previous fracture (risk up 86%, Kanis 2004), menopause or oophorectomy, long-term corticosteroids (30-50% fracture in their lifetime), RA and endocrine disease, male hypogonadism; modifiable, alcohol (4 or more drinks a day doubles hip fracture risk), smoking, low body weight or weight loss, eating disorders, low vitamin D and calcium, inactivity, falls. Also anticonvulsants, some hormonal treatments and antidepressants; hyperthyroidism, coeliac disease, cystic fibrosis, Cushing's; relative energy deficiency in young athletes.",
         "Look-alikes: mechanical mid-back pain (one-sided, eases with movement and heat, no risk factors); early shingles (burning band, rash in days); cancer or myeloma (night pain, weight loss, past cancer); inflammatory back pain (under 45, long morning stiffness, better with exercise).",
+        "Hip fracture link (McDonough 2021, JOSPT 51(2)): over 90% of hip fractures follow a fall, usually sideways, and fall risk predicts fracture independently of bone density; 4-8% have another fracture within a year. Assess and document fall risk (A) and make sure osteoporosis is assessed and treated after a hip fracture (F). See content/reference/hip-fracture.md.",
         "Sources: Morin 2023 (Osteoporosis Canada guideline, CMAJ 195:E1333); Giangregorio 2014 (Too Fit to Fracture, Osteoporos Int 25:821); Gibbs 2019 (Cochrane CD008618); Kanis 2004-2005; AIM Theory Manual 2023 pp. 621-625."
       ]
     },
@@ -10967,7 +11295,7 @@ export const AUTHORED = [
     "cond": {
       "id": "median",
       "name": "Carpal tunnel syndrome",
-      "clin": "Median nerve compression at the wrist (CTS-6; JOSPT CPG 2019)",
+      "clin": "Median nerve compression at the wrist (JOSPT CPG 2019; Wainner cluster; CTS-6 Graham 2006)",
       "blurb": "The median nerve supplies feeling to the thumb, index, and middle fingers. Compression — most commonly at the wrist — causes night tingling and numbness in that territory, often eased by shaking the hand.",
       "noticed": [
         "Tingling/numbness in thumb, index & middle fingers",
@@ -10978,12 +11306,21 @@ export const AUTHORED = [
       "homeCare": [
         "Avoid sleeping with the wrist curled — a neutral night splint often helps",
         "Break up repetitive hand tasks; keep the wrist neutral at the keyboard",
-        "Gentle nerve-gliding movements within comfort"
+        "Gentle hand and finger stretches, alongside the night splint"
       ],
       "seePhysioIf": [
         "Tingling recurs most nights or persists by day",
         "Grip or fine motor control is slipping",
-        "Early care (splinting, glides, ergonomics) can prevent progression — persistent numbness needs medical review"
+        "Early care, mainly a night splint and changes to how you use your hand, often eases symptoms; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review"
+      ],
+      "clinicNotes": [
+        "Severity: mild, typical pattern with intermittent symptoms and a normal exam; moderate, constant symptoms, thenar weakness or sensory loss in digits 1-3 without atrophy; severe, thenar atrophy. Refer to a hand surgeon with thenar atrophy; to a physician with signs of another condition; suggest nerve conduction studies when the exam is inconclusive; refer for a surgical opinion if not improving.",
+        "Wainner cluster (B): over 45, shaking relieves symptoms, wrist ratio over 0.67, CTQ symptom score over 1.9, reduced thumb pad sensation; 4 or more positive +LR 4.6, all 5 spec 0.99. Katz hand diagram, Phalen, Tinel and carpal compression estimate likelihood (B) but are weak alone (Phalen +LR 1.3; Tinel about 1.0). Sensation over the thenar eminence is spared in CTS (palmar cutaneous branch); dorsal hand symptoms make CTS unlikely.",
+        "Nerve status (A): Semmes-Weinstein (2.83 or 3.22 threshold) and static two-point discrimination; ULNT, scratch collapse and vibration conflicting (D). Outcomes (B): CTQ symptom scale (MCID 0.50 after 6 weeks of splinting) and CTQ function or DASH; grip and tip pinch (C).",
+        "Interventions: neutral night wrist orthosis (B); add daytime wear or change the design if night-only fails (C); pregnancy, orthosis and review after birth (C); keyboard and mouse advice (C); heat, diathermy, interferential, phonophoresis (C); short-term cervical and upper-limb manual therapy (C); stretching with an orthosis without atrophy (C); nerve mobilisation conflicting (D). Do not use laser, iontophoresis or magnets (B), or thermal ultrasound (C).",
+        "Course: 28-62% recover without treatment, 32-58% worsen; about 6 in 10 have surgery within 1-3 years after non-surgical care. Worse outcome with long duration, a positive Phalen, thenar wasting and repeated earlier treatments; better with under a year of symptoms. Risk: BMI over 30, over 50, female; diabetes, hypothyroidism, family history; forceful work strongest, computer work not increased.",
+        "Differentials: cervical radiculopathy, thoracic outlet, polyneuropathy, pronator syndrome, ulnar and radial tunnel; ALS and MS can begin distally. Acute CTS (fracture, bleeding, infection) is urgent.",
+        "Source: Erickson M et al., JOSPT 2019;49(5):CPG1-CPG85 (carpal tunnel syndrome), grades in brackets."
       ]
     },
     "resolved": [
@@ -11064,6 +11401,12 @@ export const AUTHORED = [
         "oid": "neck",
         "label": "Moving my neck",
         "weight": -2
+      },
+      {
+        "qid": "age",
+        "oid": "o64",
+        "label": "65 or over",
+        "weight": 1
       }
     ]
   },

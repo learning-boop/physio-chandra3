@@ -32,3 +32,6 @@ Just above the ankle, the two bones of the lower leg are held together by strong
 - It has not improved within 1 to 2 weeks
 - It is limiting walking or sport
 - You need a graded plan back to twisting sport
+
+## clinicNotes
+- JOSPT lateral ankle sprain CPG 2021: syndesmosis injury is a key differential and copathology of acute and persisting sprains; apply the full Ottawa ankle rules first. Multi-ligament sprains in high-school athletes cost more than 3 weeks of sport. Imaging (ACR, cited in the CPG): alignment change suggesting syndesmosis injury warrants leg and stress radiographs, MRI or CT; refer with any diastasis concern or failure to settle. Source: Martin RL et al., JOSPT 2021 (tests per Sman 2015).

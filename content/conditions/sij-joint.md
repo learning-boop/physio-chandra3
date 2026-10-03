@@ -47,3 +47,6 @@ The joint between the base of the spine and the pelvis can become sensitive — 
 - Pain persists more than ~2 weeks
 - It began after pregnancy or a fall
 - Walking or stairs remain limited
+
+## clinicNotes
+- JOSPT 2012 includes SI segments in low back pain with mobility deficits (B): unilateral back, buttock or thigh pain reproduced by provocation of the involved SI segments. Acute: thrust or non-thrust mobilisation (2021, A); the thrust prediction rule was derived on a lumbopelvic thrust (4 of 5, +LR 13.2). Chronic: exercise (A) with mobilisation (A) and pain neuroscience education (A). Source: Delitto 2012; George 2021.
