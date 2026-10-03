@@ -28,6 +28,7 @@ import {
 import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_CAUTION, PITUITARY_CAUTION } from '../data/steroids'
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } from '../data/thyroid'
+import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -260,6 +261,8 @@ const CAUTION_CHECKS = [
   THYROID_CAUTION,
   // "Hypothyroidism" document (signed by Chandra, 3 Oct 2026), route B.
   HYPOTHYROID_CAUTION,
+  // "Acromegaly" document (signed by Chandra, 3 Oct 2026), route B.
+  ACROMEGALY_CAUTION,
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -817,7 +820,8 @@ export default function PainAssessment() {
     // Up to six: dizziness (heart; ear or worsening) and headache can both
     // apply, and both-sided weakness asks PMR, myositis, the two pituitary
     // and steroid screens, the nerve and muscle screen, and the calcium and
-    // two thyroid screens (those last three drop first when space runs out).
+    // two thyroid screens, then acromegaly (the last ones drop first when
+    // space runs out).
     patternChecks(zones, answers, 12).filter((p) => !early.has(p.id)).slice(0, 6).map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
       .filter((p) => !(answers.dm === 'yes' && isNerveFlag(p))).forEach((p) => out.push(p))
     return out
@@ -921,6 +925,7 @@ export default function PainAssessment() {
   const caPanel = useMemo(() => parathyroidPanel(flags.includes('ca-parathyroid')), [flags])
   const thPanel = useMemo(() => thyroidPanel(flags.includes('ca-thyroid')), [flags])
   const hypoPanel = useMemo(() => hypothyroidPanel(flags.includes('ca-hypothyroid')), [flags])
+  const acroPanel = useMemo(() => acromegalyPanel(flags.includes('ca-acromegaly')), [flags])
   const pickDm = (q, oid) => setAnswers((a) => {
     if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
     const cur = [].concat(a[q.id] || [])
@@ -1088,6 +1093,7 @@ export default function PainAssessment() {
     calcium: caPanel,
     thyroid: thPanel,
     hypothyroid: hypoPanel,
+    acromegaly: acroPanel,
     answers: qaPairs,
     notes: notesText,
   })
@@ -2507,6 +2513,20 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{hypoPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {hypoPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* Diagnosed acromegaly (../data/acromegaly.js). */}
+                {acroPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your joints, spine and hands</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{acroPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{acroPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {acroPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>

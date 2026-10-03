@@ -23,6 +23,7 @@
 import { HORMONE_SCREEN, LOW_HORMONE_SCREEN } from './steroids.js'
 import { CALCIUM_SCREEN } from './parathyroid.js'
 import { THYROID_SCREEN, PARALYSIS_FLAG, HYPOTHYROID_SCREEN } from './thyroid.js'
+import { ACROMEGALY_SCREEN } from './acromegaly.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
@@ -393,6 +394,13 @@ const PATTERNS = [
     text: HYPOTHYROID_SCREEN.text,
     when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'thigh', 'lowerleg', 'hand', 'wrist'].some((t) => bothSides(z, t)) ||
       typesOf(z).size >= 4,
+  },
+  // Growth-hormone excess ("Acromegaly" document, signed by Chandra,
+  // 3 Oct 2026; route A): the growth change is the gate. Booking still offered.
+  {
+    id: 'pc-acromegaly', tier: 'urgent', why: ACROMEGALY_SCREEN.why,
+    text: ACROMEGALY_SCREEN.text,
+    when: (z) => ['knee', 'hip', 'shoulder', 'hand', 'wrist'].some((t) => bothSides(z, t)) || has(z, 'jaw') || typesOf(z).size >= 4,
   },
 ]
 

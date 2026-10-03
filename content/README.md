@@ -26,6 +26,7 @@ content/
     myofascial-pain.md   (muscle-referred pain: the shared tender-spot opening question and the myofascial condition in the neck, shoulder, upper back, low back and hip)
     fibromyalgia.md   (persistent widespread pain: the results-page explainer in src/data/widespreadPain.js, physio route with a family-doctor line, ca-fibro)
     duchenne.md   (Duchenne muscular dystrophy: the early-signs question for a child, pc-child-muscle, and the diagnosed entry on the cautions list)
+    acromegaly.md   (growth-hormone excess: pc-acromegaly gated on hands, feet or jaw growing, booking still offered, ca-acromegaly and its long-term joint panel, src/data/acromegaly.js)
     hypothyroidism.md   (an underactive thyroid: pc-hypothyroid with booking still offered, ca-hypothyroid and its panel, the carpal tunnel and widespread-pain cross-links, src/data/thyroid.js)
     hyperthyroidism.md   (an overactive thyroid: pc-thyroid, the 911 periodic-paralysis question pc-paralysis, ca-thyroid and its exercise-safety panel, the frozen-shoulder cross-link, src/data/thyroid.js)
     hyperparathyroidism.md   (calcium balance: the undiagnosed screen pc-calcium, ca-parathyroid and its panel, the pseudogout and osteoporosis cross-links, src/data/parathyroid.js)

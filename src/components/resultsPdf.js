@@ -38,7 +38,7 @@ const AMBER = [180, 110, 0]
  *  code, dateText, images { views: [{ src, width, height, label }] } | null,
  *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
  *  conditions [{name, blurb}], noMatch string | null, painType string | null,
- *  cautions [string], diabetes, steroids, calcium, thyroid and hypothyroid {title, text, notes [string]} | null,
+ *  cautions [string], diabetes, steroids, calcium, thyroid, hypothyroid and acromegaly {title, text, notes [string]} | null,
  *  behaviour [string], answers [{question, answer}], notes string
  * @returns jsPDF document
  */
@@ -183,6 +183,7 @@ export function buildResultsPdf(d) {
   if (d.calcium) { heading(d.calcium.title); text(d.calcium.text); if (d.calcium.notes.length) bullets(d.calcium.notes) }
   if (d.thyroid) { heading(d.thyroid.title); text(d.thyroid.text); if (d.thyroid.notes.length) bullets(d.thyroid.notes) }
   if (d.hypothyroid) { heading(d.hypothyroid.title); text(d.hypothyroid.text); if (d.hypothyroid.notes.length) bullets(d.hypothyroid.notes) }
+  if (d.acromegaly) { heading(d.acromegaly.title); text(d.acromegaly.text); if (d.acromegaly.notes.length) bullets(d.acromegaly.notes) }
 
   if (d.answers.length) {
     heading('Your answers')

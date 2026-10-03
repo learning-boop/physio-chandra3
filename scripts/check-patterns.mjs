@@ -780,7 +780,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const full = patternChecks(ZN(['shoulderL', 'shoulderR', 'chest', 'lowerback']), {}).map((p) => p.id)
   check('Nerve and muscle: the screen comes last, only into a free place, so it never pushes out an organ or heart check',
     full.length === 3 && !full.includes('pc-muscle') &&
-    ids(['shoulderL', 'shoulderR', 'chest'], {}).filter((x) => !['pc-calcium', 'pc-thyroid', 'pc-hypothyroid'].includes(x)).slice(-1)[0] === 'pc-muscle', full)
+    ids(['shoulderL', 'shoulderR', 'chest'], {}).filter((x) => !['pc-calcium', 'pc-thyroid', 'pc-hypothyroid', 'pc-acromegaly'].includes(x)).slice(-1)[0] === 'pc-muscle', full)
 }
 
 // ── 24. Early signs of a muscle condition in a young child ("DuchenneMD", signed 2 Oct 2026) ──
@@ -1198,7 +1198,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Hypothyroidism route A: for both hands or wrists, both calves, thighs or shoulders, or a widespread drawing; not for one wrist',
     !!get(['wristL', 'wristR']) && !!get(['lowerlegL', 'lowerlegR']) && !!get(['neck', 'shoulderL', 'hipR', 'kneeL']) && !get(['wristL']))
   const order = patternChecks(ZN(['shoulderL', 'shoulderR']), { age: '50-64' }, 12).map((x) => x.id)
-  check('Hypothyroidism route A: last of the pattern questions, so it drops first when the final check is full', order[order.length - 1] === 'pc-hypothyroid', order)
+  check('Hypothyroidism route A: after the other weakness and hormone questions, so it drops among the first when the final check is full',
+    order.indexOf('pc-thyroid') < order.indexOf('pc-hypothyroid') && order.indexOf('pc-muscle') < order.indexOf('pc-hypothyroid'), order)
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
   const p = TH.hypothyroidPanel(true)
   check('Hypothyroidism route B: diagnosed on the cautions list; panel with the dose check, thyroxine timing, night splint, statin, over-replacement and 911 signs',
@@ -1211,6 +1212,32 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([TH.HYPOTHYROID_SCREEN, TH.HYPOTHYROID_CAUTION, p])
   check('Hypothyroidism language: no "you have hypothyroidism", cure, guarantee, and "damage" only as "not damaged" or "not that anything is damaged"',
     !/you (may )?have hypothy|cure|guarantee|permanent/i.test(all) && (all.match(/damage/g) || []).length === (all.match(/not damaged|not that anything is damaged/g) || []).length, all.match(/you (may )?have hypothy|cure|guarantee|permanent/i))
+}
+
+// ── 39. Acromegaly ("Acromegaly", signed 3 Oct 2026) ──
+{
+  const AC = await imp('src/data/acromegaly.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const get = (z) => patternChecks(ZN(z), {}, 12).find((p) => p.id === 'pc-acromegaly')
+  const a = get(['kneeL', 'kneeR'])
+  check('Acromegaly route A: hands, feet or jaw grown in adulthood is the gate, with several large joints or a stooping back, both hands numb, or the snoring/headache/sweating cluster → IGF-1 test, booking still offered',
+    a && !a.noBooking && !a.sameDay && /hands or feet have grown/.test(a.text) && /together with any of these/.test(a.text) &&
+    /IGF-1/.test(a.why.text) && /old photo/.test(a.why.text) && /welcome to book/.test(a.why.text), a)
+  check('Acromegaly route A: for both knees, hips, shoulders, hands or wrists, the jaw, or a widespread drawing; not for one knee',
+    !!get(['hipL', 'hipR']) && !!get(['handL', 'handR']) && !!get(['jaw']) && !!get(['neck', 'shoulderL', 'hipR', 'kneeL']) && !get(['kneeL']))
+  const order = patternChecks(ZN(['shoulderL', 'shoulderR']), { age: '50-64' }, 12).map((x) => x.id)
+  check('Acromegaly route A: the last pattern question; both shoulders at 50 to 64 still fit (two on the doctor page, six on the final check)',
+    order[order.length - 1] === 'pc-acromegaly' && order.filter((x) => !['pc-cardiac', 'pc-visceral'].includes(x)).length === 8, order)
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const p = AC.acromegalyPanel(true)
+  check('Acromegaly route B: diagnosed on the cautions list; panel with joint-protective activity, back fractures despite a normal scan, sleep apnoea, after-surgery signs, 911 headache and chest pain, bowel line',
+    /ACROMEGALY_CAUTION,/.test(src) && p && p.notes.some((n) => /bone-density scan looks normal/.test(n)) && p.notes.some((n) => /sleep study/.test(n)) &&
+    p.notes.some((n) => /surgeon/.test(n) && /Clear fluid/.test(n)) && p.notes.some((n) => /911/.test(n) && /vision loss/.test(n)) &&
+    p.notes.some((n) => /bowel/.test(n)) && AC.acromegalyPanel(false) === null)
+  const all = JSON.stringify([AC.ACROMEGALY_SCREEN, AC.ACROMEGALY_CAUTION, p])
+  check('Acromegaly language: no "you have acromegaly", cure, guarantee or "damage"; "not from wearing out"',
+    !/you (may )?have acromeg|cure|guarantee|permanent|damage/i.test(all) && /not from wearing out/.test(all), all.match(/you (may )?have acromeg|cure|guarantee|permanent|damage/i))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)
