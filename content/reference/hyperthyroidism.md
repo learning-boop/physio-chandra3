@@ -23,7 +23,7 @@ Common (about 1-2% of women, far fewer men); about two-thirds have measurable mu
 
 - **Emergency pattern questions are always asked on the first safety pages**, on top of the two non-emergency pattern questions there (an emergency could otherwise be deferred to the final check, after the questionnaire). The drawing's list now holds up to 12 matches instead of 7, so none is cut by count.
 - **The gloves-and-socks question is no longer asked twice:** an area that asks its own "both feet numb, burning or tingling" question (lower leg, ankle, foot) replaces the drawing's general one, like the heart, clot and organ questions.
-- With this document, a both-thighs drawing at 50 or over asks: the 911 paralysis question and two others (myositis, the Cushing's question) on the doctor pages, then PMR, low hormones, the nerve and muscle screen, calcium and thyroid on the final check (five). A sixth would be cut; the calcium and thyroid questions sit last so they are the ones that drop first.
+- (Before hypothyroidism.md raised the final check to six.) With this document, a both-thighs drawing at 50 or over asks: the 911 paralysis question and two others (myositis, the Cushing's question) on the doctor pages, then PMR, low hormones, the nerve and muscle screen, calcium and thyroid on the final check (five). A sixth would be cut; the calcium and thyroid questions sit last so they are the ones that drop first.
 
 ## Decisions on the open items (accepted with the sign-off, 3 Oct 2026)
 

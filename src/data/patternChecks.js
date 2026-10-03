@@ -22,7 +22,7 @@
 
 import { HORMONE_SCREEN, LOW_HORMONE_SCREEN } from './steroids.js'
 import { CALCIUM_SCREEN } from './parathyroid.js'
-import { THYROID_SCREEN, PARALYSIS_FLAG } from './thyroid.js'
+import { THYROID_SCREEN, PARALYSIS_FLAG, HYPOTHYROID_SCREEN } from './thyroid.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
@@ -383,6 +383,16 @@ const PATTERNS = [
     id: 'pc-thyroid', tier: 'urgent', noBooking: true, why: THYROID_SCREEN.why,
     text: THYROID_SCREEN.text,
     when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
+  },
+  // An underactive thyroid ("Hypothyroidism" document, signed by Chandra,
+  // 3 Oct 2026; route A): stiff, achy, slow-to-recover muscles on both
+  // sides, or both hands numb at night, with the "slowing" cluster. Doctor
+  // in the next few weeks, but booking is still offered (its open item 1).
+  {
+    id: 'pc-hypothyroid', tier: 'urgent', why: HYPOTHYROID_SCREEN.why,
+    text: HYPOTHYROID_SCREEN.text,
+    when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'thigh', 'lowerleg', 'hand', 'wrist'].some((t) => bothSides(z, t)) ||
+      typesOf(z).size >= 4,
   },
 ]
 

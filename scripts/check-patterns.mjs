@@ -780,7 +780,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const full = patternChecks(ZN(['shoulderL', 'shoulderR', 'chest', 'lowerback']), {}).map((p) => p.id)
   check('Nerve and muscle: the screen comes last, only into a free place, so it never pushes out an organ or heart check',
     full.length === 3 && !full.includes('pc-muscle') &&
-    ids(['shoulderL', 'shoulderR', 'chest'], {}).filter((x) => !['pc-calcium', 'pc-thyroid'].includes(x)).slice(-1)[0] === 'pc-muscle', full)
+    ids(['shoulderL', 'shoulderR', 'chest'], {}).filter((x) => !['pc-calcium', 'pc-thyroid', 'pc-hypothyroid'].includes(x)).slice(-1)[0] === 'pc-muscle', full)
 }
 
 // ── 24. Early signs of a muscle condition in a young child ("DuchenneMD", signed 2 Oct 2026) ──
@@ -1060,8 +1060,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Cushing route A: asked after myositis and before the nerve and muscle screen',
     order.indexOf('pc-myositis') < order.indexOf('pc-hormone') && order.indexOf('pc-hormone') < order.indexOf('pc-muscle'), order)
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
-  check('Final check: room for five questions, and pattern questions the doctor page\'s two-question limit cut are asked there instead of dropped',
-    /\.slice\(0, 5\)/.test(src) && /const deferred = rest\.slice\(2\)/.test(src) && /\[\.\.\.em, \.\.\.rest\.slice\(0, 2\)\]/.test(src) && /filter\(\(id\) => !deferred\.has\(id\)\)/.test(src))
+  check('Final check: room for six questions, and pattern questions the doctor page\'s two-question limit cut are asked there instead of dropped',
+    /\.slice\(0, 6\)/.test(src) && /const deferred = rest\.slice\(2\)/.test(src) && /\[\.\.\.em, \.\.\.rest\.slice\(0, 2\)\]/.test(src) && /filter\(\(id\) => !deferred\.has\(id\)\)/.test(src))
   check('Cushing route B: "diagnosed" on the cautions list; strength does not come back by itself; exercise is the treatment',
     /CUSHING_CAUTION,/.test(src) && /does not come back by itself/.test(ST.CUSHING_CAUTION.why.text) && ST.CUSHING_CAUTION.tier === 'caution')
   check('Steroids: no extra red flags without long-term steroids',
@@ -1168,8 +1168,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Safety pages: emergency pattern questions are always asked on the first pages, on top of the two others; never deferred to the end',
     /const em = kept\.filter\(\(f\) => f\.tier === 'emergency'\)/.test(src) && /!\(ownNeuropathy && f\.id === 'pc-polyneuropathy'\)/.test(src) && /const deferred = rest\.slice\(2\)/.test(src) && /patternChecks\(zones, \{\}, 12\)/.test(src))
   const order = patternChecks(ZN(['thighL', 'thighR']), { age: '50-64' }, 12).map((x) => x.id)
-  check('Hyperthyroidism: both thighs at 50 to 64 still fits every check (911 on the first page, two others there, five on the final check)',
-    order.filter((x) => x !== 'pc-paralysis').length === 7 && order.indexOf('pc-paralysis') === 0, order)
+  check('Hyperthyroidism: both thighs at 50 to 64 still fits every check (911 on the first page, two others there, six on the final check)',
+    order.filter((x) => x !== 'pc-paralysis').length === 8 && order.indexOf('pc-paralysis') === 0, order)
   const panel = TH.thyroidPanel(true)
   check('Hyperthyroidism route B: diagnosed on the cautions list; light to moderate activity until controlled; stop signs; agranulocytosis, eye and thyroid-storm warnings; sit-to-stand and step-ups',
     /THYROID_CAUTION,/.test(src) && /no vigorous or heavy exercise/.test(TH.THYROID_CAUTION.why.text) && panel &&
@@ -1182,6 +1182,35 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([TH.THYROID_SCREEN, TH.PARALYSIS_FLAG, TH.THYROID_CAUTION, panel])
   check('Hyperthyroidism language: no "you have hyperthyroidism", cure, guarantee or "damage" except "not damaged"',
     !/you (may )?have hyperthy|cure|guarantee|permanent|(?<!not )damage/i.test(all), all.match(/you (may )?have hyperthy|cure|guarantee|permanent|(?<!not )damage/i))
+}
+
+// ── 38. Hypothyroidism ("Hypothyroidism", signed 3 Oct 2026) ──
+{
+  const TH = await imp('src/data/thyroid.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { WIDESPREAD } = await imp('src/data/widespreadPain.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const get = (z) => patternChecks(ZN(z), {}, 12).find((p) => p.id === 'pc-hypothyroid')
+  const h = get(['handL', 'handR'])
+  check('Hypothyroidism route A: stiff slow-to-recover muscles or both hands numb at night, with the slowing cluster → thyroid test in the next few weeks, booking still offered, statin line',
+    h && !h.noBooking && !h.sameDay && h.tier === 'urgent' && /numb at night/.test(h.text) && /feeling cold/.test(h.text) &&
+    /next few weeks/.test(h.why.text) && /statin/.test(h.why.text) && /welcome to book/.test(h.why.text), h)
+  check('Hypothyroidism route A: for both hands or wrists, both calves, thighs or shoulders, or a widespread drawing; not for one wrist',
+    !!get(['wristL', 'wristR']) && !!get(['lowerlegL', 'lowerlegR']) && !!get(['neck', 'shoulderL', 'hipR', 'kneeL']) && !get(['wristL']))
+  const order = patternChecks(ZN(['shoulderL', 'shoulderR']), { age: '50-64' }, 12).map((x) => x.id)
+  check('Hypothyroidism route A: last of the pattern questions, so it drops first when the final check is full', order[order.length - 1] === 'pc-hypothyroid', order)
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const p = TH.hypothyroidPanel(true)
+  check('Hypothyroidism route B: diagnosed on the cautions list; panel with the dose check, thyroxine timing, night splint, statin, over-replacement and 911 signs',
+    /HYPOTHYROID_CAUTION,/.test(src) && p && /dose may need adjusting/.test(p.text) && p.notes.some((n) => /empty stomach/.test(n)) &&
+    p.notes.some((n) => /night splint/.test(n)) && p.notes.some((n) => /cholesterol tablet/.test(n)) && p.notes.some((n) => /too high/.test(n)) &&
+    p.notes.some((n) => /911/.test(n) && /very low temperature/.test(n)) && TH.hypothyroidPanel(false) === null)
+  const cts = ['wrist', 'hand'].map((k) => REGIONS[k].conditions.find((c) => c.id === 'median'))
+  check('Hypothyroidism cross-links: both carpal tunnel records (both hands numb at night) and the widespread-pain doctor line name a thyroid test',
+    cts.every((c) => c && JSON.stringify(c).includes('whether your thyroid and blood sugar have been checked')) && /including a thyroid test/.test(WIDESPREAD.doctor))
+  const all = JSON.stringify([TH.HYPOTHYROID_SCREEN, TH.HYPOTHYROID_CAUTION, p])
+  check('Hypothyroidism language: no "you have hypothyroidism", cure, guarantee, and "damage" only as "not damaged" or "not that anything is damaged"',
+    !/you (may )?have hypothy|cure|guarantee|permanent/i.test(all) && (all.match(/damage/g) || []).length === (all.match(/not damaged|not that anything is damaged/g) || []).length, all.match(/you (may )?have hypothy|cure|guarantee|permanent/i))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

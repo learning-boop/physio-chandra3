@@ -38,6 +38,7 @@ The median nerve supplies feeling to the thumb, index, and middle fingers. Compr
 
 ## seePhysioIf
 - Tingling recurs most nights or persists by day
+- Both hands tingle or go numb at night: please also ask your doctor whether your thyroid and blood sugar have been checked (simple blood tests)
 - Grip or fine motor control is slipping
 - Early care, mainly a night splint and changes to how you use your hand, often eases symptoms; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review
 
