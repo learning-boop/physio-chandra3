@@ -19,6 +19,7 @@ content/
     cervical-conditions-manual.md   (AIM Theory Manual 2023, Chapter 2.1: dizziness, myelopathy, radiculopathy)
     osteoarthritis.md   (shared OA foundation: Osteoarthritis.docx intake + AIM manual Chapter 2.9 + current guidelines)
     compartment-syndrome.md   (acute compartment syndrome: the emergency-route questions, walk-in protocol, rehab after fasciotomy)
+    multiple-sclerosis.md   (the nervous-system screen pc-neuro, diagnosed MS on the cautions list, clinician notes)
 ```
 
 Files starting with `_` are templates, examples and instructions, never data.

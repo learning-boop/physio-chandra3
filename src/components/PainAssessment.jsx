@@ -208,6 +208,10 @@ const CAUTION_CHECKS = [
   { id: 'ca-claim', tier: 'caution', text: 'A claim, insurance or time-off process is involved (ICBC, WorkSafeBC, or similar)',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Claims come with their own forms and reports, so your first assessment can cover what they need.' } },
+  // "Multiple Sclerosis" document (v0.1, 2 Oct 2026), route B: diagnosed MS.
+  { id: 'ca-ms', tier: 'caution', text: 'Multiple sclerosis, diagnosed by a neurologist',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Exercise is safe with MS and recommended by current guidelines: it does not bring on relapses, and it can help fatigue, strength, balance and mood. Your programme is built around your energy and how heat affects you, alongside your MS team. A new or clearly worse symptom lasting more than a day without a fever or infection is worth a call to your MS nurse or neurology team first.' } },
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -777,8 +781,10 @@ export default function PainAssessment() {
   const doctorFlags = pickedFlags.filter((f) => f.tier !== 'emergency')
   const doctorFlagged = doctorFlags.length > 0 || otherFlagged
   const sameDayFlagged = doctorFlags.some((f) => f.sameDay)
-  // A recent head injury no doctor has seen: education only, no booking yet.
+  // No booking until a doctor has seen them: a recent head injury no doctor
+  // has seen (today), or a nervous-system pattern (pc-neuro, in a few days).
   const holdBooking = doctorFlags.some((f) => f.noBooking)
+  const holdToday = doctorFlags.some((f) => f.noBooking && f.sameDay)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
     if (flaggedAt === 'physician') { if (injuryApplies) startInjury(); else startQuestions() }
@@ -2265,10 +2271,9 @@ export default function PainAssessment() {
                   <>
                     <span style={{ ...label, marginBottom: 12 }}>Your Next Step · See a Doctor First</span>
                     <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
-                      Please see a doctor or nurse practitioner today: your family doctor, a
-                      walk-in clinic or an urgent care centre, or call HealthLink BC on 8-1-1 if
-                      you are not sure where to go. Once they have checked you, physiotherapy can
-                      help with your recovery, and you are welcome to book with Chandra then.
+                      {holdToday
+                        ? 'Please see a doctor or nurse practitioner today: your family doctor, a walk-in clinic or an urgent care centre, or call HealthLink BC on 8-1-1 if you are not sure where to go. Once they have checked you, physiotherapy can help with your recovery, and you are welcome to book with Chandra then.'
+                        : 'Please see your family doctor in the next few days, or a walk-in clinic if you do not have one; HealthLink BC on 8-1-1 can help if you are not sure where to go. Once the cause is known, physiotherapy can help, and you are welcome to book with Chandra then.'}
                     </p>
                   </>
                 ) : (

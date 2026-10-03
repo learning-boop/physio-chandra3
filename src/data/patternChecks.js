@@ -49,6 +49,10 @@ const WHY = {
     title: 'A stiff spine can break with little force',
     text: 'In long-standing ankylosing spondylitis the spine is stiffer and can break after a fall or jolt that would not hurt most people. New, severe neck or back pain after even a minor fall needs to be checked in hospital straight away. Keep your head and neck as still as you can.',
   },
+  neuroScreen: {
+    title: 'Please see your family doctor in the next few days',
+    text: 'Along with numbness or tingling, these can come from the nervous system rather than a muscle or joint. Please see your family doctor within the next few days for a neurological check, and note when each symptom started and how long it lasted. If you have lost vision in one eye, please see a doctor today or go to urgent care. Most people with numbness or tingling do not have a serious cause, and when one is found, starting treatment early makes a real difference. Physiotherapy can follow once the cause is known.',
+  },
   handProcedure: {
     title: 'Please contact a doctor or your hand clinic today',
     text: 'After hand surgery, a needle release or an injection, a hot, red, increasingly swollen hand, pus, spreading redness or a fever can be an infection, and new numbness in a fingertip or a finger you suddenly cannot bend can mean a nerve or tendon problem. These need checking the same day. Pain, swelling, colour change or sensitivity far beyond what you expected, not settling week on week, also needs an early review.',
@@ -138,6 +142,15 @@ const PATTERNS = [
     id: 'pc-uveitis', tier: 'urgent', sameDay: true, why: WHY.uveitis,
     text: 'A painful, red eye with blurred vision or sensitivity to light',
     when: (z, a) => [...[].concat(a.L9 || []), ...[].concat(a.P6 || [])].some((x) => ['morning', 'exercise', 'night', 'related', 'diagnosed'].includes(x)),
+  },
+  // Nervous system rather than muscle or joint ("Multiple Sclerosis" document
+  // v0.1, 2 Oct 2026, route A; not named as MS, its open item 1): for anyone
+  // who described pins and needles or numbness. A yes holds the booking
+  // until a doctor has seen them (noBooking).
+  {
+    id: 'pc-neuro', tier: 'urgent', noBooking: true, why: WHY.neuroScreen,
+    text: 'Not explained by a neurological condition you have already been diagnosed with: in the last few months, blurred or lost vision in one eye (often painful when you move the eye) or double vision; a brief electric-shock feeling down your back or limbs when you bend your head forward; numbness or weakness clearly worse when you are hot; or earlier episodes of numbness, weakness or unsteadiness that came and went on their own',
+    when: (z, a) => [].concat(a.painQuality || []).includes('tingling'),
   },
   // After a Dupuytren's procedure (the hand's H2, document v0.1, 2 Oct 2026).
   {
@@ -246,7 +259,8 @@ export function patternChecks(zones = [], answers = {}, max = 3) {
     // call911 and keepNeckStill pick the emergency screen (./emergencyAdvice.js).
     try {
       if (p.when(zones, answers)) out.push({ id: p.id, text: p.text, tier: p.tier, why: p.why,
-        ...(p.sameDay ? { sameDay: true } : {}), ...(p.call911 ? { call911: true } : {}), ...(p.keepNeckStill ? { keepNeckStill: true } : {}) })
+        ...(p.sameDay ? { sameDay: true } : {}), ...(p.call911 ? { call911: true } : {}), ...(p.keepNeckStill ? { keepNeckStill: true } : {}),
+        ...(p.noBooking ? { noBooking: true } : {}) })
     } catch { /* skip */ }
   }
   return out
