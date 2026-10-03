@@ -89,8 +89,11 @@ export const EXTRA_REGIONS = {
       // lump in the throat from the "Cervicogenic Headache" and "Upper
       // Cervical Pain" documents (v1.0, 28 Sep 2026). The head asks the same
       // in its final check when the neck is not drawn (patternChecks.js).
-      { id: "nrf-upperinstab", tier: "urgent", why: "Possible upper neck instability: a doctor should check before hands-on neck treatment",
-        text: "Do you have rheumatoid arthritis or another inflammatory arthritis, or Down syndrome, or take steroid tablets long term; does your head feel too heavy to hold up, so you support it with your hands; or does moving your neck bring a lump-in-the-throat feeling or tingling around your lips or mouth?" },
+      // + gradual cranial nerve signs (JOSPT neck pain CPG 2017: unexplained
+      // cranial nerve dysfunction, 2 Oct 2026), folded in to keep the doctor
+      // page at 3 questions (A2); the sudden picture is nrf-stroke (911).
+      { id: "nrf-upperinstab", tier: "urgent", why: "A doctor should check before hands-on neck treatment: possible upper neck instability, or unexplained changes in the nerves of the face, eyes or throat",
+        text: "Do you have rheumatoid arthritis or another inflammatory arthritis, or Down syndrome, or take steroid tablets long term; does your head feel too heavy to hold up, so you support it with your hands; does moving your neck bring a lump-in-the-throat feeling or tingling around your lips or mouth; or, over recent weeks or months and without an injury, have you developed a hoarse voice, trouble swallowing, numbness or weakness on one side of your face, a drooping eyelid, or double vision that has not gone away?" },
       // A3.3: shared with the shoulder and base of the neck (group "organ").
       { id: "nrf-tip", tier: "urgent", group: ["organ", "tip", "gallbladder"], drawn: ["shoulder"], why: "The diaphragm, lung lining, liver or gallbladder can be felt at the shoulder",
         text: "Is the pain worse after fatty meals or when you breathe in deeply, or does it come with feeling sick, fever, yellow skin or eyes, or not change at all with movement or position?" }

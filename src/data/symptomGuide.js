@@ -26,6 +26,11 @@ export const REGIONS = {
         text:"In the last few days, has your leg pain spread to both legs, or has weakness in your leg or foot been getting quickly worse?"},
       {id:"rf-aaa", tier:"emergency", call911: true, group:"aaa", why:"Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
         text:"Do you have a sudden, severe pain in your back or tummy, with a pulsing feeling in your tummy, or feeling faint or sweaty?"},
+      // A non-ruptured aneurysm: deep, constant pain unrelated to movement, with
+      // vascular risk factors (JOSPT low back pain CPG 2012, red flag table).
+      // The sudden, severe picture is rf-aaa (911).
+      {id:"rf-aaa-slow", tier:"urgent", group:"aaaslow", why:"Possible abdominal aortic aneurysm: a doctor should check, usually with an ultrasound scan",
+        text:"Are you over 50 and have you ever smoked, or do you have high blood pressure, diabetes, or heart or artery disease; and is your back pain a deep, constant ache that does not change with movement or position, or do you feel a pulsing in your tummy?"},
       {id:"rf-fracture", tier:"emergency", group:"fracture", why:"Possible spinal fracture",
         text:"Did this start in the last few days after a car crash, a fall from a height, or landing hard on your feet or bottom?"},
       {id:"rf-cancer", tier:"urgent", group:"cancer", why:"Cancer can spread to the spine",

@@ -746,5 +746,20 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     off.flags.blue.length === 1 && off.notes.some((n) => /modified duties/.test(n)), off)
 }
 
+// ── 22. The two low-priority CPG gaps (2 Oct 2026) ──
+{
+  const { regionRedFlags } = await imp('src/data/assessmentFlow.js')
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const flagsOf = (ids) => regionRedFlags(Z(ids), Z(ids))
+  const back = flagsOf(['lowerback'])
+  const slow = back.find((f) => f.id === 'rf-aaa-slow')
+  check('Low back CPG 2012: a slowly growing aneurysm is asked (deep constant pain, risk factors), urgent not 911',
+    slow && slow.tier === 'urgent' && !slow.call911 && back.some((f) => f.id === 'rf-aaa' && f.call911), back.map((f) => f.id))
+  const neck = flagsOf(['neck'])
+  const cn = neck.find((f) => f.id === 'nrf-upperinstab')
+  check('Neck CPG 2017: gradual cranial nerve signs are asked (urgent, in the upper-neck question), alongside the sudden stroke question (911)',
+    cn && cn.tier === 'urgent' && /hoarse/.test(cn.text) && neck.some((f) => f.id === 'nrf-stroke' && f.call911), neck.map((f) => f.id))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
