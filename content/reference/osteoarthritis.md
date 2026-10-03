@@ -1,5 +1,6 @@
-<!-- Sources: "Osteoarthritis.docx" (Conditions/General conditions), intake v1.0
-     draft prepared 2 Oct 2026 for Chandra's review; "General conditions.pdf"
+<!-- Sources: "Osteoarthritis.docx" (Conditions/General conditions), intake v1.0,
+     reviewed and signed by Chandra Matla, 2 Oct 2026 (confirmed in the
+     session; the saved Word file did not yet show the signature); "General conditions.pdf"
      (AIM Theory Manual 2023, Chapter 2.9 General Conditions, Inert Tissue:
      Osteoarthritis, manual pp. 572-581, read in full 2 Oct 2026); checked
      against NICE NG226 (2022), OARSI (2019), ACR/AF (2019), EULAR hand OA
