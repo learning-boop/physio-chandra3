@@ -18,6 +18,7 @@ content/
     cervical-radiculopathy.md, upper-cervical.md, neural-mechanosensitivity.md   (condition documents' reasoning appendices)
     cervical-conditions-manual.md   (AIM Theory Manual 2023, Chapter 2.1: dizziness, myelopathy, radiculopathy)
     osteoarthritis.md   (shared OA foundation: Osteoarthritis.docx intake + AIM manual Chapter 2.9 + current guidelines)
+    compartment-syndrome.md   (acute compartment syndrome: the emergency-route questions, walk-in protocol, rehab after fasciotomy)
 ```
 
 Files starting with `_` are templates, examples and instructions, never data.

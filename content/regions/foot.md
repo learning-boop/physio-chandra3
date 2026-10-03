@@ -65,6 +65,10 @@ Route: Yes → PHYSICIAN FIRST
 Why: Possible “turf toe” (big toe joint ligament injury)
 
 
+<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (v0.1 draft): see content/reference/compartment-syndrome.md. -->
+- Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved? | emergency | Possible acute compartment syndrome   (acs; shared by the lower leg, ankle and foot, asked once)
+- Is a cast, splint or bandage on this foot feeling more and more tight and painful? Please do not cut it off yourself. | urgent, same day | A cast that keeps getting tighter needs checking today   (acs)
+
 ## opening questions
 Q: Your age?
 - Under 18

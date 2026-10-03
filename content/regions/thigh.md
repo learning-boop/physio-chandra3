@@ -57,6 +57,9 @@ Route: Yes → PHYSICIAN FIRST
 Why: Possible bone forming in the muscle after a bruise (myositis ossificans); needs imaging
 
 
+<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (v0.1 draft): see content/reference/compartment-syndrome.md. -->
+- (acs) The compartment question adds a trigger in the last day or two, very hard exercise, and pain relief no longer helping.
+
 ## opening questions
 Q: Your age?
 - Under 18

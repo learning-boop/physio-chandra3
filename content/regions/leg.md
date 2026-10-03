@@ -57,6 +57,11 @@ Route: Yes → PHYSICIAN FIRST
 Why: Possible peroneal nerve injury
 
 
+<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (v0.1 draft): see content/reference/compartment-syndrome.md. -->
+- (acs) The compartment question is reworded as above (pain relief no longer helping; shared with the ankle and foot).
+- Is a cast, splint or bandage on this leg feeling more and more tight and painful? Please do not cut it off yourself. | urgent, same day | A cast that keeps getting tighter needs checking today   (acs)
+- After very hard exercise, is your calf or shin hugely swollen and very painful, or weak, and is your urine dark like cola? | emergency | Possible muscle breakdown (rhabdomyolysis)   (acs)
+
 ## opening questions
 Q: Your age?
 - Under 18

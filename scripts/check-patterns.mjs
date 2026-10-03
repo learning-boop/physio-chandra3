@@ -565,9 +565,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const em = flags.filter((f) => f.tier === 'emergency')
   check('911 split: 46 region flags call 911 (41 + the 4 leg-weakness halves + pregnancy bleeding)',
     em.filter((f) => f.call911).length === 46, em.filter((f) => f.call911).map((f) => f.id))
-  // 49: the base of the neck's recent-crash flag (ctj.md:34) is the neck injury screen, not a flag.
-  check('911 split: 49 region flags send the person to emergency now',
-    em.filter((f) => !f.call911).length === 49, em.filter((f) => !f.call911).map((f) => f.id))
+  // 49: the base of the neck's recent-crash flag (ctj.md:34) is the neck injury screen, not a flag;
+  // 54 since the compartment syndrome document added the ankle, foot, wrist
+  // and hand compartment questions and the calf rhabdomyolysis one (2 Oct 2026).
+  check('911 split: 54 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 54, em.filter((f) => !f.call911).map((f) => f.id))
   check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
   // A shared group must lead to the same place in every area that asks it.
   const byGroup = {}
@@ -664,6 +666,21 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const Z = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
   check("Dupuytren's: after a procedure, asks about infection, numbness or a finger that will not bend (doctor today)",
     patternChecks(Z(['handR']), { H2: ['procedure'] }, 7).some((p) => p.id === 'pc-hand-procedure' && p.sameDay))
+  {
+    const { regionRedFlags } = await imp('src/data/assessmentFlow.js')
+    const ZZ = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+    const ids = (z) => regionRedFlags(ZZ(z), ZZ(z)).map((f) => f.id)
+    const comp = (z) => ids(z).filter((x) => /compartment/.test(x))
+    check('compartment syndrome: asked for an ankle, foot, wrist or hand drawn on its own',
+      ['ankleR', 'footR', 'wristR', 'handR'].every((z) => comp([z]).length === 1), ['ankleR', 'footR', 'wristR', 'handR'].map((z) => comp([z])))
+    check('compartment syndrome: a lower leg, ankle and foot drawing asks it once; a forearm, wrist and hand drawing once',
+      comp(['lowerlegR', 'ankleR', 'footR']).length === 1 && comp(['forearmR', 'wristR', 'handR']).length === 1)
+    const legs = REGIONS.leg.redFlags.find((f) => f.id === 'lgf-compartment')
+    check('compartment syndrome: goes to an emergency department now, and asks about pain relief no longer helping',
+      legs.tier === 'emergency' && !legs.call911 && /pain relief/.test(legs.text))
+    const cast = REGIONS.wrist.redFlags.find((f) => f.id === 'wrf-cast')
+    check('compartment syndrome: a cast getting tighter is a same-day check, not cut off at home', cast && cast.sameDay && /do not cut/.test(cast.text))
+  }
   check('CRPS: after an injury or operation, asks about a wound infection (doctor today)',
     patternChecks(Z(['wristR']), { W9: ['trigger'] }, 7).some((p) => p.id === 'pc-crps-infection' && p.sameDay))
 }

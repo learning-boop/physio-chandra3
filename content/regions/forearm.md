@@ -58,6 +58,10 @@ Route: Yes → PHYSICIAN FIRST
 Why: Possible radial nerve injury
 
 
+<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (v0.1 draft): see content/reference/compartment-syndrome.md. -->
+- (acs) The compartment question is reworded (pain relief no longer helping; shared with the wrist and hand).
+- Is a cast, splint or bandage on this arm feeling more and more tight and painful? Please do not cut it off yourself. | urgent, same day | A cast that keeps getting tighter needs checking today   (acs)
+
 ## opening questions
 Q: Your age?
 - Under 18
