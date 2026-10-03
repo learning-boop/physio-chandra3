@@ -100,7 +100,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -224,7 +225,7 @@ export const EXTRA_REGIONS = {
           { id: "notsure", label: "Not sure, or they vary" }
         ]},
       { id: "N4", text: "If you get headaches with this, what are they like?",
-        askIf: ({ draw, ra }) => (draw && draw.has("head")) || !ra.age || ["u18", "18-29", "30-49"].includes(ra.age),
+        askIf: ({ draw, ra }) => (draw && draw.has("head")) || !ra.age || ["u5", "u18", "18-29", "30-49"].includes(ra.age),
         options: [
           // "Always the same side" from the "Cervicogenic Headache" document's
           // Q2 (v1.0, 28 Sep 2026): headaches that switch sides point to migraine.
@@ -379,7 +380,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -508,7 +510,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -646,7 +649,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -767,7 +771,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -830,7 +835,7 @@ export const EXTRA_REGIONS = {
       // Options shared with the low back's L9 ("Ankylosing spondylitis
       // Spondyloarthritis" document, 2 Oct 2026); "eye" became "related".
       { id: "P6", text: "Which of these apply? Tick all that apply.",
-        askIf: ({ ra }) => (!ra.age || ["u18", "18-29", "30-49"].includes(ra.age)) && (!ra.duration || ra.duration === "o3m"),
+        askIf: ({ ra }) => (!ra.age || ["u5", "u18", "18-29", "30-49"].includes(ra.age)) && (!ra.duration || ra.duration === "o3m"),
         priority: ({ ra }) => ra.duration === "o3m" && ra.onset === "gradual",
         options: [
           { id: "before40", label: "My back pain first started before I was 40" },
@@ -885,7 +890,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -998,7 +1004,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -1133,7 +1140,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -1280,7 +1288,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -1401,7 +1410,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -1542,7 +1552,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -1677,7 +1688,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -1835,7 +1847,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -2002,7 +2015,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -2140,7 +2154,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -2283,7 +2298,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -2438,7 +2454,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -2602,7 +2619,8 @@ export const EXTRA_REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },

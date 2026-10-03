@@ -50,7 +50,8 @@ export const REGIONS = {
     ],
     context:[
       {id:"age", text:"Your age?", options:[
-        {id:"u18", label:"Under 18"},
+        {id:"u5", label:"Under 5"},
+        {id:"u18", label:"5 to 17"},
         {id:"18-29", label:"18 to 29"},
         {id:"30-49", label:"30 to 49"},
         {id:"50-64", label:"50 to 64"},
@@ -191,7 +192,8 @@ export const REGIONS = {
     ],
     context:[
       {id:"age", text:"Your age?", options:[
-        {id:"u18", label:"Under 18"},
+        {id:"u5", label:"Under 5"},
+        {id:"u18", label:"5 to 17"},
         {id:"18-29", label:"18 to 29"},
         {id:"30-49", label:"30 to 49"},
         {id:"50-64", label:"50 to 64"},
@@ -244,7 +246,7 @@ export const REGIONS = {
         ]},
       {id:"S5", text:"Does your shoulder feel unstable?",
         // "Under 40": the age bands split at 50, so 30 to 49 is included.
-        askIf: ({ ra }) => !ra.age || ["u18", "18-29", "30-49"].includes(ra.age) || ra.onset === "popped" || ra.onset === "overhead",
+        askIf: ({ ra }) => !ra.age || ["u5", "u18", "18-29", "30-49"].includes(ra.age) || ra.onset === "popped" || ra.onset === "overhead",
         options:[
           {id:"popped", label:"It has popped out and needed putting back"},
           {id:"slips", label:"It slips or clunks, then goes back on its own"},
@@ -326,7 +328,8 @@ export const REGIONS = {
     ],
     context: [
       { id: "age", text: "Your age?", options: [
-        { id: "u18", label: "Under 18" },
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 17" },
         { id: "18-29", label: "18 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
@@ -388,11 +391,11 @@ export const REGIONS = {
       ]},
       { id: "K6", text: "Does it hurt to move your hip (putting on socks, turning your leg in and out in bed)?",
         askIf: ({ draw, ra }) => !draw || ["thigh", "hip"].some((t) => draw.has(t)) ||
-          ["u18", "50-64", "o64"].includes(ra.age),
+          ["u5", "u18", "50-64", "o64"].includes(ra.age),
         // Early for a child, or when the thigh or hip is drawn too: hip
         // problems (in children, a slipped growth plate) are often felt only
         // at the knee.
-        priority: ({ draw, ra }) => !draw || ["thigh", "hip"].some((t) => draw.has(t)) || ra.age === "u18",
+        priority: ({ draw, ra }) => !draw || ["thigh", "hip"].some((t) => draw.has(t)) || ["u5", "u18"].includes(ra.age),
         options: [
           { id: "yes", label: "Yes", special: "hipSource" },
           { id: "no", label: "No" },

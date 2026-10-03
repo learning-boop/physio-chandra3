@@ -793,5 +793,23 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !patternChecks(ZN(['wristR']), { age: 'u18' }, 9).some((p) => p.id === 'pc-child-muscle'))
 }
 
+// ── 25. Age: "Under 5" and "5 to 17" (Chandra does not treat children under 5, 2 Oct 2026) ──
+{
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { REGIONS: ALL } = await imp('src/data/symptomGuide.js')
+  const bad = Object.entries(ALL).filter(([, r]) => {
+    const q = (r.context || []).find((c) => c.id === 'age')
+    return q && !(q.options.some((o) => o.id === 'u5' && o.label === 'Under 5') && q.options.some((o) => o.id === 'u18' && o.label === '5 to 17'))
+  }).map(([k]) => k)
+  check('Age: every area asks "Under 5" and "5 to 17" (no "Under 18" left)', bad.length === 0, bad)
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  check('Age: the early-signs question for a child is asked for under 5 as well as 5 to 17',
+    patternChecks(ZN(['thighL', 'thighR']), { age: 'u5' }, 9).some((p) => p.id === 'pc-child-muscle'))
+  const { readFileSync } = await import('node:fs')
+  const src = readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Age: under 5 replaces every booking with a referral to a children\'s physiotherapist',
+    /const underFive = answers\.age === 'u5'/.test(src) && /!holdBooking && !underFive/.test(src) && /underFive && !holdBooking \?/.test(src))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

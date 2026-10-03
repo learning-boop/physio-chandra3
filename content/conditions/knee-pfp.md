@@ -10,7 +10,7 @@ reviewed:
 pointers:
   "Around or behind the kneecap": 3
   "Going down stairs, squatting, or sitting a long time with the knee bent": 3
-  "Under 18": 1
+  "5 to 17": 1
   "18 to 29": 1
   "Bending and loading my knee": 1
   "Stiff for less than 30 minutes in the morning or after sitting, then eases": -1

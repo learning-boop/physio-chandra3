@@ -20,7 +20,8 @@ pointers:
   "More than 3 months": 1
   "Gradually, no clear reason": 1
   "18 to 29": -2
-  "Under 18": -2
+  "5 to 17": -2
+  "Under 5": -2
   "Points to one spot on the outer hip": -1
   "Moving my low back": -2
 ---

@@ -5189,7 +5189,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "u18",
-        "label": "Under 18",
+        "label": "5 to 17",
+        "weight": -2
+      },
+      {
+        "qid": "age",
+        "oid": "u5",
+        "label": "Under 5",
         "weight": -2
       },
       {
@@ -5945,7 +5951,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "u18",
-        "label": "Under 18",
+        "label": "5 to 17",
+        "weight": 1
+      },
+      {
+        "qid": "age",
+        "oid": "u5",
+        "label": "Under 5",
         "weight": 1
       },
       {
@@ -6538,7 +6550,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "u18",
-        "label": "Under 18",
+        "label": "5 to 17",
+        "weight": -2
+      },
+      {
+        "qid": "age",
+        "oid": "u5",
+        "label": "Under 5",
         "weight": -2
       },
       {
@@ -6607,7 +6625,7 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "u18",
-        "label": "Under 18",
+        "label": "5 to 17",
         "weight": 1
       },
       {
@@ -8174,7 +8192,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "u18",
-        "label": "Under 18",
+        "label": "5 to 17",
+        "weight": -2
+      },
+      {
+        "qid": "age",
+        "oid": "u5",
+        "label": "Under 5",
         "weight": -2
       },
       {

@@ -796,6 +796,10 @@ export default function PainAssessment() {
   // No booking until a doctor has seen them: a recent head injury no doctor
   // has seen (today), or a nervous-system pattern (pc-neuro, in a few days).
   const holdBooking = doctorFlags.some((f) => f.noBooking)
+  // Chandra does not treat children under 5 (2 Oct 2026): no booking, a
+  // referral to the family doctor or a paediatric physiotherapist instead.
+  const underFive = answers.age === 'u5'
+  const UNDER_FIVE = 'Chandra sees children from 5 years old. For a younger child, please talk to your family doctor, who can refer you to a children\'s physiotherapist (for example through BC Children\'s Hospital or your local child development centre).'
   const holdToday = doctorFlags.some((f) => f.noBooking && f.sameDay)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
@@ -1969,7 +1973,9 @@ export default function PainAssessment() {
                         : 'What you ticked should be checked by your doctor. Please book a visit with your family doctor, or a walk-in clinic if you do not have one.'}
                     </p>
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
-                      {holdBooking
+                      {underFive
+                        ? UNDER_FIVE
+                        : holdBooking
                         ? 'Please see a doctor or nurse practitioner first. Once they have checked you, physiotherapy can help with your recovery, and you can book with Chandra then.'
                         : sameDayFlagged
                         ? 'You can still book your physiotherapy assessment now. Chandra will check that a doctor has looked at this before treatment starts.'
@@ -2006,7 +2012,7 @@ export default function PainAssessment() {
 
                 {/* Physiotherapy can follow once a physician has reviewed the
                     flagged symptom — but never for an emergency-tier flag. */}
-                {!emergencyFlagged && !holdBooking && (
+                {!emergencyFlagged && !holdBooking && !underFive && (
                   <>
                     <span style={{ ...label, display: 'block', margin: '26px 0 0' }}>Book With Chandra</span>
                     <p style={{ ...body, fontSize: 15, margin: '10px 0 14px', maxWidth: 520 }}>
@@ -2277,7 +2283,12 @@ export default function PainAssessment() {
                   <PainAIPanel zones={zones} answers={aiAnswers.core} privateAnswers={aiAnswers.wellbeing} notes={notesText} matched={matched} onReview={setReview} aiOnly />
                 </div>
 
-                {holdBooking ? (
+                {underFive && !holdBooking ? (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your Next Step · A Children's Physiotherapist</span>
+                    <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>{UNDER_FIVE}</p>
+                  </>
+                ) : holdBooking ? (
                   /* A recent head injury no doctor has seen ("Concussion"
                      document, 2 Oct 2026): education only, no booking yet. */
                   <>

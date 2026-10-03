@@ -11,7 +11,8 @@ pointers:
   "Moving my hip": 3
   "65 or over": 1
   "50 to 64": 1
-  "Under 18": 1
+  "5 to 17": 1
+  "Under 5": 1
   "Bending and loading my knee": -2
   "Moving my low back": -2
   "Yes": 3

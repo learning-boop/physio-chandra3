@@ -277,13 +277,13 @@ const PATTERNS = [
   },
   // Early signs of a muscle condition in a young child ("DuchenneMD"
   // document, signed by Chandra, 2 Oct 2026, route A; Duchenne is not named
-  // on this screen). For an "Under 18" answer with the legs, hips or low back
+  // on this screen). For an "Under 5" or "5 to 17" answer with the legs, hips or low back
   // drawn: the parent answers for the child. Never reassures; a yes holds the
   // booking until a doctor has seen the child (noBooking).
   {
     id: 'pc-child-muscle', tier: 'urgent', noBooking: true, why: WHY.childMuscle,
     text: 'For a young child: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
-    when: (z, a) => a.age === 'u18' && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'),
+    when: (z, a) => ['u5', 'u18'].includes(a.age) && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'),
   },
   // The nerve and muscle screen (myasthenia gravis: fatigable, eyes and
   // bulbar, worse by evening; myotonic dystrophy: grip myotonia, both hands
