@@ -2,8 +2,8 @@
    Diabetes: a context, not a diagnosis.
 
    From "DiabetesMellitus.docx" (condition intake) and "PhysioChandra Diabetes
-   RiskModule.docx" (Conditions/General conditions), both v0.1 drafts of
-   3 Oct 2026, pending Chandra's sign-off. Clinician reference:
+   RiskModule.docx" (Conditions/General conditions), reviewed and signed by
+   Chandra Matla, 3 Oct 2026 (confirmed in the session). Clinician reference:
    content/reference/diabetes.md.
 
    The guide never diagnoses diabetes and never shows a risk score. It comes

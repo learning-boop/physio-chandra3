@@ -954,7 +954,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Feedback: says never published or used as a testimonial, and gives 911, 8-1-1 and 9-8-8', /never published or used as a testimonial/.test(form) && /911/.test(form) && /8-1-1/.test(form) && /9-8-8/.test(form))
 }
 
-// ── 33. Diabetes ("DiabetesMellitus" + "Diabetes RiskModule", v0.1, 3 Oct 2026) ──
+// ── 33. Diabetes ("DiabetesMellitus" + "Diabetes RiskModule", signed 3 Oct 2026) ──
 {
   const DM = await imp('src/data/diabetes.js')
   const { patternChecks } = await imp('src/data/patternChecks.js')

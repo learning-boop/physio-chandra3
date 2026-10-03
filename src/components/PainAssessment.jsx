@@ -868,7 +868,7 @@ export default function PainAssessment() {
   // nudge to the family doctor, unless a doctor has already diagnosed it.
   const fibroDiagnosed = flags.includes('ca-fibro')
   const showWidespread = widespreadRoute(painType, fibroDiagnosed)
-  // Diabetes ("DiabetesMellitus" and "Diabetes RiskModule" documents, v0.1,
+  // Diabetes ("DiabetesMellitus" and "Diabetes RiskModule" documents, signed
   // 3 Oct 2026; ../data/diabetes.js). The details are asked on "Before your
   // results" when a condition diabetes makes more likely qualifies (counted
   // with room for one a lift could bring in) or both feet burn or tingle.

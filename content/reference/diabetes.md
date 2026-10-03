@@ -1,6 +1,8 @@
 <!-- Source: "DiabetesMellitus.docx" (condition intake) and "PhysioChandra
-     Diabetes RiskModule.docx" (Conditions/General conditions), both v0.1
-     drafts of 3 Oct 2026, PENDING Chandra's sign-off. (An earlier
+     Diabetes RiskModule.docx" (Conditions/General conditions), reviewed and
+     signed by Chandra Matla, 3 Oct 2026 (confirmed in the session; the
+     saved Word files did not yet show the signature), accepting the build
+     and the decisions below. (An earlier
      "Diabetes Mellitus.docx", 09:03 the same day, sits beside them; the
      09:49 "DiabetesMellitus.docx" is the version fed.) Evidence: ADA
      Standards of Care 2026 §2 and §12; IDF type 5 (April 2025); Diabetes
@@ -38,7 +40,7 @@ Diabetes is not a region condition, and the guide never diagnoses it or shows a 
 7. **The results panel** ("Your diabetes and this problem", also in the PDF): the variant for the first diabetes-linked condition shown (shoulder, hand, feet, general), then the tier's prognosis line; at moderate or high, "mention this to your family doctor or diabetes team"; the steroid-injection line when the shoulder leads; notes for HYPO, FOOT, EYE, KIDNEY, CARDIAC. Diabetes with nothing linked: a short "Diabetes and staying active" note (feet daily, low-sugar line). Prediabetes: the "future risk" line only. Without known diabetes: "Worth asking your doctor about" (an HbA1c; Diabetes Canada suggests a check every three years from 40) for the first-sign patterns in the table; never "you may have diabetes", never blocks booking.
 8. **Chandra's summary**: a DIABETES section with every answer, the tier, flags and which conditions were lifted. Diabetes answers are left out of the anonymous copy and are not sent to the AI overview.
 
-## Decisions made while building (for Chandra to confirm)
+## Decisions made while building (accepted with the sign-off, 3 Oct 2026)
 
 - **Open item 1 (global question):** adopted, on "A little about you", required.
 - **Open item 2 (name diabetes when undiagnosed):** the nerve screen names "blood-sugar problems and other treatable causes" once, as the document drafts.
