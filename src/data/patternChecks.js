@@ -67,6 +67,10 @@ const WHY = {
     title: 'Please see your family doctor in the next few days',
     text: 'Weakness that fades with use and recovers with rest, eyelid or vision changes, chewing or speech that tires, a grip that is slow to let go, or slowly increasing weakness in both hands or feet are not usually a joint, tendon or muscle strain. They can come from the connection between nerves and muscles, or from the muscles themselves. Please see your family doctor in the next few days, describe what you have noticed through the day and anything that runs in your family, and ask whether a neurology referral is needed. Most of these checks are simple, and the conditions they look for can be treated or managed well. Physiotherapy can follow once the cause is known.',
   },
+  childMuscle: {
+    title: 'Please see your family doctor in the next week or two',
+    text: 'Most children who fall a lot or walk on their toes do not have a muscle condition, and checking is quick. But getting up from the floor by pushing the hands up the legs, falling behind other children at running, jumping or stairs, walking late or losing a skill, or unusually large, firm calves can point to weakness in the hip and thigh muscles, and a doctor should look at this rather than wait. Please describe exactly what you have noticed and ask whether a creatine kinase (CK) blood test is appropriate; it is the usual first step. If your child has lost a skill they used to have, please see the doctor this week. Physiotherapy can follow once the cause is known, and your instincts as a parent are worth trusting.',
+  },
   handProcedure: {
     title: 'Please contact a doctor or your hand clinic today',
     text: 'After hand surgery, a needle release or an injection, a hot, red, increasingly swollen hand, pus, spreading redness or a fever can be an infection, and new numbness in a fingertip or a finger you suddenly cannot bend can mean a nerve or tendon problem. These need checking the same day. Pain, swelling, colour change or sensitivity far beyond what you expected, not settling week on week, also needs an early review.',
@@ -270,6 +274,16 @@ const PATTERNS = [
     id: 'pc-limb', tier: 'urgent', why: WHY.limb,
     text: 'Changes in the skin colour, temperature, sweating or swelling of the painful arm or leg',
     when: (z) => limbSpread(z, 'L') >= 3 || limbSpread(z, 'R') >= 3,
+  },
+  // Early signs of a muscle condition in a young child ("DuchenneMD"
+  // document, signed by Chandra, 2 Oct 2026, route A; Duchenne is not named
+  // on this screen). For an "Under 18" answer with the legs, hips or low back
+  // drawn: the parent answers for the child. Never reassures; a yes holds the
+  // booking until a doctor has seen the child (noBooking).
+  {
+    id: 'pc-child-muscle', tier: 'urgent', noBooking: true, why: WHY.childMuscle,
+    text: 'For a young child: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
+    when: (z, a) => a.age === 'u18' && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'),
   },
   // The nerve and muscle screen (myasthenia gravis: fatigable, eyes and
   // bulbar, worse by evening; myotonic dystrophy: grip myotonia, both hands

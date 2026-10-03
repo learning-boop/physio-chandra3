@@ -781,5 +781,17 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     full.length === 3 && !full.includes('pc-muscle') && ids(['shoulderL', 'shoulderR', 'chest'], {}).slice(-1)[0] === 'pc-muscle', full)
 }
 
+// ── 24. Early signs of a muscle condition in a young child ("DuchenneMD", signed 2 Oct 2026) ──
+{
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const kid = patternChecks(ZN(['lowerlegL', 'lowerlegR']), { age: 'u18' }, 9).find((p) => p.id === 'pc-child-muscle')
+  check('Duchenne: under 18 with the legs drawn asks the early-signs question; a yes holds the booking (doctor in a week or two, CK test)',
+    kid && kid.noBooking && /creatine kinase/.test(kid.why.text) && !/Duchenne/i.test(kid.text + kid.why.text), kid)
+  check('Duchenne: not asked for an adult, or for a child with only an arm drawn',
+    !patternChecks(ZN(['lowerlegR']), { age: '30-49' }, 9).some((p) => p.id === 'pc-child-muscle') &&
+    !patternChecks(ZN(['wristR']), { age: 'u18' }, 9).some((p) => p.id === 'pc-child-muscle'))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

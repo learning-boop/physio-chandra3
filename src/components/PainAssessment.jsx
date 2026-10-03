@@ -219,6 +219,10 @@ const CAUTION_CHECKS = [
   { id: 'ca-dm', tier: 'caution', text: 'Myotonic dystrophy or another muscle disease, diagnosed by a neurologist',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Regular, moderate exercise is safe with myotonic dystrophy and current guidance encourages it; it does not speed the condition up. Your programme is paced around your energy, with warm-ups for stiff hands and help with walking, balance and falls, alongside your neuromuscular team. Fainting, a racing or irregular heartbeat, or new trouble breathing or swallowing needs emergency care, and every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
+  // "DuchenneMD" document (signed by Chandra, 2 Oct 2026), route B.
+  { id: 'ca-dmd', tier: 'caution', text: 'Duchenne or Becker muscular dystrophy, diagnosed by a neuromuscular team (for a child or young person)',
+    why: { title: 'Worth knowing before the first assessment',
+      text: 'Physiotherapy works alongside the neuromuscular team (BC Children\'s Hospital) on daily stretching, night splints, enjoyable activity such as swimming or cycling, walking, posture and equipment. Very hard or "eccentric" exercise (downhill walking, jumping, heavy lifting, pushing to exhaustion) is avoided. Severe muscle pain with dark, cola-coloured urine after activity, or a fall followed by leg pain or refusal to stand, needs the emergency department; and every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
