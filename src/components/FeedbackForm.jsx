@@ -120,8 +120,9 @@ export default function FeedbackForm({ context }) {
 
       <label className="fb-q" htmlFor="fb-comment">Suggestions or comments <span className="fb-opt">(optional)</span></label>
       <p className="fb-warn-static">
-        Please do <strong>not</strong> include your name, contact details, health card number or any other personal
-        information. This box is not read straight away and is not answered: it is not a way to ask for care.
+        To protect your privacy, please do <strong>not</strong> include your name, contact information, Personal Health
+        Number or any other identifying details. Comments are reviewed periodically and do not receive a reply. If you
+        need care or advice, please contact a health professional directly.
       </p>
       <textarea id="fb-comment" className="fb-text-in" rows={4} maxLength={MAX} value={comment}
         onChange={(e) => setComment(e.target.value)} placeholder="What would make the guide clearer or more useful?" />
