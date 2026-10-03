@@ -19,6 +19,7 @@
 import { REGIONS } from '../src/data/symptomGuide.js'
 import {
   REGION_CHAINS, MAX_SCORED_QUESTIONS, buildScreens, nextQuestion, rankAcross, regionAnswers,
+  twinIds,
 } from '../src/data/assessmentFlow.js'
 
 const BUDGET = Number(process.argv[2]) || MAX_SCORED_QUESTIONS
@@ -68,7 +69,9 @@ function runFlow(keys, full) {
   let id
   while ((id = nextQuestion(keys, ans, asked, BUDGET))) {
     asked.push(id)
-    if (full[id] !== undefined) ans[id] = full[id]
+    // A twin question (same `same` key) takes the answer written for its twin.
+    const own = twinIds(id).find((x) => full[x] !== undefined)
+    if (own !== undefined) ans[id] = full[own]
   }
   return { ranked: rankAcross(keys, ans), asked: asked.length }
 }
@@ -138,7 +141,9 @@ for (const keys of pairs) {
       n3++
       const { ranked, asked } = runFlow(keys, toShared(keys, rk, textbook(REGIONS[rk], c)))
       maxAsked = Math.max(maxAsked, asked)
-      const pos = ranked.findIndex((x) => x.c.id === c.id && x.rk === rk)
+      // A condition with the same name in both areas is shown once, from the
+      // area that ranks it higher (rankAcross): that counts as found.
+      const pos = ranked.findIndex((x) => (x.c.id === c.id && x.rk === rk) || x.c.name === c.name)
       if (pos === 0) first3++
       if (pos < 0) {
         fail3++
@@ -161,7 +166,9 @@ for (const keys of triples) {
     for (const c of REGIONS[rk].conditions) {
       n4++
       const { ranked } = runFlow(keys, toShared(keys, rk, textbook(REGIONS[rk], c)))
-      const pos = ranked.findIndex((x) => x.c.id === c.id && x.rk === rk)
+      // A condition with the same name in both areas is shown once, from the
+      // area that ranks it higher (rankAcross): that counts as found.
+      const pos = ranked.findIndex((x) => (x.c.id === c.id && x.rk === rk) || x.c.name === c.name)
       if (pos >= 0) in4++
       if (pos === 0) first4++
     }

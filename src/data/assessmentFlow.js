@@ -157,12 +157,31 @@ export function buildContext(keys) {
   return out
 }
 
+/* Questions that ask the same thing in neighbouring areas carry the same
+   `same` key and identical options (the CRPS question in the wrist, hand,
+   ankle and foot: W9, H9, A9, B9). Ids stay unique, because answers are
+   stored by id; the flow asks one of them, and each area reads that answer
+   as its own. */
+const SAME_OF = {}
+for (const r of Object.values(REGIONS)) for (const q of r.questions) if (q.same) SAME_OF[q.id] = q.same
+const twinAnswer = (q, answers) => {
+  const id = Object.keys(SAME_OF).find((x) => x !== q.id && SAME_OF[x] === q.same && answers[x] !== undefined)
+  return id === undefined ? undefined : answers[id]
+}
+
+/** The question id a patient's answer to `id` also stands for: the twin
+    asked in its place (for test patients written with one area's id). */
+export const twinIds = (id) => (SAME_OF[id] ? Object.keys(SAME_OF).filter((x) => SAME_OF[x] === SAME_OF[id]) : [id])
+
 /** One region's view of the answers, in that region's own ids and bands. */
 export function regionAnswers(keys, rk, answers) {
   if (keys.length <= 1) return answers
   const r = REGIONS[rk]
   const out = {}
-  for (const q of r.questions) if (answers[q.id] !== undefined) out[q.id] = answers[q.id]
+  for (const q of r.questions) {
+    if (answers[q.id] !== undefined) out[q.id] = answers[q.id]
+    else if (q.same) { const v = twinAnswer(q, answers); if (v !== undefined) out[q.id] = v }
+  }
   for (const q of r.context) {
     let v
     if (sharesAge(q)) v = answers.age === undefined ? undefined : mapAge(answers.age, q)
@@ -233,6 +252,8 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
   const draw = ctx.draw ? new Set(ctx.draw) : null
   const all = { ...answers, ...(ctx.all || {}) }
   if (askedIds.length >= budget) return null
+  // A question whose twin (same `same` key) was asked in another area is done.
+  const askedSame = new Set(askedIds.map((id) => SAME_OF[id]).filter(Boolean))
   const live = []
   for (const k of keys) {
     const region = REGIONS[k]
@@ -247,7 +268,7 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
     const open = { ...ra }
     for (const q of region.questions) if (!askedIds.includes(q.id)) delete open[q.id]
     for (const q of region.questions) {
-      if (askedIds.includes(q.id) || !isRelevant(q, region, open)) continue
+      if (askedIds.includes(q.id) || (q.same && askedSame.has(q.same)) || !isRelevant(q, region, open)) continue
       if (LOCATION_QUESTION_IDS.has(q.id) && [].concat(answers[q.id] ?? []).length) continue
       if (q.askIf && !q.askIf({ draw, ra: open, all })) continue
       live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: questionValue(q, region, open) * weight + (q.priority && q.priority({ draw, ra: open, all }) ? 1 : 0) })

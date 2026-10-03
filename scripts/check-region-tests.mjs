@@ -10,6 +10,7 @@ import { REGIONS, ZONE_TO_REGION } from '../src/data/symptomGuide.js'
 import {
   questionRegions, needsAreaChoice, buildScreens, nextQuestion, rankAcross, regionAnswers,
   specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
+  twinIds,
 } from '../src/data/assessmentFlow.js'
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
 import { injuryFlow, injuryQuestion, limbAnswerFor as limbAs, ageFrom } from '../src/data/injuryScreen.js'
@@ -697,6 +698,15 @@ const TESTS = {
       flags: ['frf-compartment'],
       expect: { route: 'emergency' } },
   ],  wrist: [
+    // "CRPS.docx" (v1.0 draft, 2 Oct 2026): max 17, shown from 7.
+    { name: 'CRPS 1. Wrist burning, swollen and discoloured 2 months after a fracture in a cast',
+      lines: [['wristR']],
+      answers: { age: '50-64', onset: 'fall', duration: 'd3m', I1: 'no', W9: ['trigger', 'outofprop', 'colour', 'swelling', 'touch', 'motor'] },
+      expect: { top: 'wrist/crps', route: 'results' } },
+    { name: 'CRPS 2. Hand and wrist drawn as a glove: the CRPS question is asked once',
+      lines: [['wristR', 'handR']],
+      answers: { age: '50-64', onset: 'fall', duration: 'd3m', I1: 'no', W9: ['trigger', 'outofprop', 'colour', 'touch'] },
+      expect: { notAsked: ['H9'], route: 'results' } },
     { name: "1. De Quervain's after a new baby",
       lines: [['wristR']],
       answers: { age: '30-49', onset: 'baby', duration: 'd6w', W1: ['thumb'], W2: ['baby'], W5: ['sharp'] },
@@ -878,6 +888,14 @@ const TESTS = {
         V1: ['lateral'], V6: ['outer'], V7: ['back'] },
       expect: { notRegion: ['leg'], areas: ['lowback'], route: 'results' } },
   ],  ankle: [
+    { name: 'CRPS 1. Foot and ankle cold, blotchy and sensitive 6 weeks after a sprain',
+      lines: [['ankleR']],
+      answers: { age: '30-49', onset: 'twist', duration: 'd3m', I1: 'no', A9: ['trigger', 'outofprop', 'colour', 'swelling', 'touch'] },
+      expect: { top: 'ankle/crps', route: 'results' } },
+    { name: 'CRPS 2. A fresh sprain (under 2 weeks): the CRPS question is not asked',
+      lines: [['ankleR']],
+      answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I6: 'no', I7: 'no', A1: ['outer'] },
+      expect: { notAsked: ['A9'], not: ['ankle/crps'], route: 'results' } },
     { name: '1. Lateral ankle sprain',
       lines: [['ankleR']],
       answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'inversion', I2: 'no', I3: 'no', I4: 'no', I6: 'no', I7: 'no',
@@ -1039,7 +1057,9 @@ function run(rk, t) {
   while ((id = nextQuestion(keys, ans, seen.asked.filter((x) => !x.includes(':')), MAX_SCORED_QUESTIONS,
     { draw: zones.map((z) => z.type), all, minor }))) {
     seen.asked.push(id)
-    if (all[id] !== undefined) ans[id] = all[id]
+    // A twin question (same `same` key) takes the answer written for its twin.
+    const own = twinIds(id).find((x) => all[x] !== undefined)
+    if (own !== undefined) ans[id] = all[own]
   }
   const shown = rankAcross(keys, ans, MAX_HYPOTHESES).map((x) => `${x.rk}/${x.c.id}`)
   return { ...seen, route: 'results', shown, specials: specialsAcross(keys, ans) }

@@ -3,6 +3,9 @@
 # Built into src/data/symptomGuideExtra.js (ankle, question ids A1 to A8) and src/data/injuryScreen.js (ankle screen, Ottawa ankle rules adapted).
 # Conditions: content/conditions/ankle-*.md. Body map: the ankle band (ANKLE_TOP in Body3D.jsx), which also covers the foot until the foot document is built.
 # Test patients: npm run check:regions
+# 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
+# ankle-crps and question A9, shared with the wrist, hand, ankle and foot
+# (asked once). Marked (crps) below.
 region: ankle
 name: Ankle
 source: Martin RL et al. Ankle stability and movement coordination impairments: lateral ankle ligament sprains, revision 2021. JOSPT 51(4), 2021; Stiell IG et al. Decision rules for the use of radiography in acute ankle injuries (Ottawa ankle rules). JAMA 269(9), 1993; Delahunt E et al. Clinical assessment of acute lateral ankle sprain injuries (ROAST): 2019 consensus statement. Br J Sports Med 53(20), 2019; Vuurberg G et al. Diagnosis, treatment and prevention of ankle sprains: update of an evidence-based clinical guideline. Br J Sports Med 52(15), 2018; Sman AD et al. Diagnostic accuracy of clinical tests for ankle syndesmosis injury. Br J Sports Med 49(5), 2015; Maffulli N. The clinical diagnosis of subcutaneous tear of the Achilles tendon. Am J Sports Med 26(2), 1998; Kohls-Gatzoulis J et al. Tibialis posterior dysfunction: a common and treatable cause of adult acquired flatfoot. BMJ 329, 2004; McSweeney SC, Cichero M. Tarsal tunnel syndrome: a narrative literature review. Foot 25(4), 2015; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019
@@ -60,6 +63,9 @@ I7 Are you under 16, with pain on the bone just above the ankle?
 Route: Yes → PHYSICIAN FIRST
 Why: Possible growth plate fracture: in children these are more common than sprains
 
+
+<!-- (crps) Added 2 Oct 2026, shared with the foot (group "crps"), asked once: -->
+- Since an ankle injury, surgery, or cast, is your ankle or foot burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts? | urgent | Possible complex regional pain syndrome (CRPS); early treatment matters
 
 ## opening questions
 Q: Your age?
@@ -146,6 +152,16 @@ Q: What does any swelling look like?
 - A hot, red, swollen joint
 - No swelling
 
+Q: Which of these apply to the painful area? Tick all that apply.   (crps, A9; same question as W9 / H9 / A9 / B9)
+- It started after a fracture, an operation, or time in a cast or splint on this arm or leg   (crps Q1: 3)
+- The pain is far worse, or has lasted far longer, than I would expect from the injury   (crps Q2: 3)
+- Compared with the other side, the skin there looks a different colour, or feels warmer or colder   (crps Q3: 3)
+- It is more swollen than the other side, or sweats more or less   (crps Q4: 2)
+- Light touch (clothes, sheets, water in the shower) hurts on that area   (crps Q5: 3)
+- It is stiff, weak or shaky, or the nails, hair or skin there have changed   (crps Q6: 2)
+- None of these
+Ask only if: How did it start? = an injury start (twist, landing), and it has gone on 2 weeks or more; asked first after an injury start
+
 ## referral patterns
 - Outer ankle ligaments (ATFL, CFL) → front of and below the outer ankle bone | Lateral ankle sprain | Fracture (Ottawa), peroneal tendons, base of the 5th metatarsal (foot file)
 - Syndesmosis → front of the ankle, just above the joint between the two leg bones | High ankle (syndesmosis) sprain | Fracture
@@ -208,3 +224,11 @@ Drawing: Whole right ankle and foot, swollen
 Answers: Age 50 to 64 · Gradually, no clear reason · 2 to 6 weeks · Subjective S15: Diabetes; Q8: a hot, red, swollen joint
 Flags: “Do you have diabetes, and is your foot or ankle hot, red, and swollen (even if it does not hurt much)…?”
 Expect: top condition = None; see a doctor first (same day); must not show = Ankle sprain or arthritis results without the physician-first message; route = Physician first
+
+<!-- (crps) From "CRPS.docx" (v1.0 draft, 2 Oct 2026): maximum 17, shown from 7. -->
+CASE: CRPS 1. Foot and ankle cold, blotchy and sensitive 6 weeks after a sprain
+Answers: 30 to 49; rolled or twisted it; 6 weeks to 3 months; CRPS question = trigger, out of proportion, colour, swelling, touch
+Expect: top condition = CRPS; route = results
+
+CASE: CRPS 2. A fresh sprain, under 2 weeks
+Expect: the CRPS question is not asked; must not show = CRPS

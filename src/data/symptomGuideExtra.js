@@ -1753,6 +1753,22 @@ export const EXTRA_REGIONS = {
           { id: "elbow", label: "Moving my elbow" },
           { id: "wristhand", label: "Using my wrist and hand" },
           { id: "none", label: "None of these bring it on" }
+        ]},
+      // "CRPS" document (v1.0 draft, 2 Oct 2026): its six scored questions
+      // as one tick-all, in the wrist (W9), hand (H9), ankle (A9) and foot (B9).
+      // `same: "crps"`: a glove or sock drawing across two areas asks it once.
+      { id: "W9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
+        // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
+        askIf: ({ ra }) => (!ra.onset || ["fall", "twist"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["fall", "twist"].includes(ra.onset),
+        options: [
+          { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
+          { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },
+          { id: "colour", label: "Compared with the other side, the skin there looks a different colour, or feels warmer or colder" },
+          { id: "swelling", label: "It is more swollen than the other side, or sweats more or less" },
+          { id: "touch", label: "Light touch (clothes, sheets, water in the shower) hurts on that area" },
+          { id: "motor", label: "It is stiff, weak or shaky, or the nails, hair or skin there have changed" },
+          { id: "none", label: "None of these" }
         ]}
     ],
     conditions: []
@@ -1885,6 +1901,22 @@ export const EXTRA_REGIONS = {
           { id: "wrist", label: "Moving my wrist" },
           { id: "fingers", label: "Using my fingers" },
           { id: "none", label: "None of these bring it on" }
+        ]},
+      // "CRPS" document (v1.0 draft, 2 Oct 2026): its six scored questions
+      // as one tick-all, in the wrist (W9), hand (H9), ankle (A9) and foot (B9).
+      // `same: "crps"`: a glove or sock drawing across two areas asks it once.
+      { id: "H9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
+        // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
+        askIf: ({ ra }) => (!ra.onset || ["injury", "crush"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["injury", "crush"].includes(ra.onset),
+        options: [
+          { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
+          { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },
+          { id: "colour", label: "Compared with the other side, the skin there looks a different colour, or feels warmer or colder" },
+          { id: "swelling", label: "It is more swollen than the other side, or sweats more or less" },
+          { id: "touch", label: "Light touch (clothes, sheets, water in the shower) hurts on that area" },
+          { id: "motor", label: "It is stiff, weak or shaky, or the nails, hair or skin there have changed" },
+          { id: "none", label: "None of these" }
         ]}
     ],
     conditions: []
@@ -2349,7 +2381,10 @@ export const EXTRA_REGIONS = {
       { id: "af-neuropathy", tier: "urgent", group: "neuropathy", why: "Possible peripheral neuropathy; needs medical review and foot checks",
         text: "Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes?" },
       { id: "af-cancer", tier: "urgent", group: "cancer", why: "A lump or bone lesion needs medical review",
-        text: "Have you ever had cancer, or is there a lump that is growing, or deep pain at night that does not change with position?" }
+        text: "Have you ever had cancer, or is there a lump that is growing, or deep pain at night that does not change with position?" },
+      // "CRPS" document red flag (2 Oct 2026); shared with the foot, asked once.
+      { id: "af-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS); early treatment matters",
+        text: "Since an ankle injury, surgery, or cast, is your ankle or foot burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -2446,7 +2481,23 @@ export const EXTRA_REGIONS = {
         { id: "activity", label: "Swelling after activity, settling overnight" },
         { id: "hot", label: "A hot, red, swollen joint", special: "hotJoint" },
         { id: "none", label: "No swelling" }
-      ]}
+      ]},
+      // "CRPS" document (v1.0 draft, 2 Oct 2026): its six scored questions
+      // as one tick-all, in the wrist (W9), hand (H9), ankle (A9) and foot (B9).
+      // `same: "crps"`: a glove or sock drawing across two areas asks it once.
+      { id: "A9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
+        // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
+        askIf: ({ ra }) => (!ra.onset || ["twist", "landing"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["twist", "landing"].includes(ra.onset),
+        options: [
+          { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
+          { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },
+          { id: "colour", label: "Compared with the other side, the skin there looks a different colour, or feels warmer or colder" },
+          { id: "swelling", label: "It is more swollen than the other side, or sweats more or less" },
+          { id: "touch", label: "Light touch (clothes, sheets, water in the shower) hurts on that area" },
+          { id: "motor", label: "It is stiff, weak or shaky, or the nails, hair or skin there have changed" },
+          { id: "none", label: "None of these" }
+        ]}
     ],
     conditions: []
   },
@@ -2590,7 +2641,23 @@ export const EXTRA_REGIONS = {
         { id: "psoriasis", label: "I have psoriasis, or other joints are swollen", special: "footDoctor" },
         { id: "gout", label: "I have had gout before", special: "footDoctor" },
         { id: "none", label: "None of these" }
-      ]}
+      ]},
+      // "CRPS" document (v1.0 draft, 2 Oct 2026): its six scored questions
+      // as one tick-all, in the wrist (W9), hand (H9), ankle (A9) and foot (B9).
+      // `same: "crps"`: a glove or sock drawing across two areas asks it once.
+      { id: "B9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
+        // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
+        askIf: ({ ra }) => (!ra.onset || ["injury"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["injury"].includes(ra.onset),
+        options: [
+          { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
+          { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },
+          { id: "colour", label: "Compared with the other side, the skin there looks a different colour, or feels warmer or colder" },
+          { id: "swelling", label: "It is more swollen than the other side, or sweats more or less" },
+          { id: "touch", label: "Light touch (clothes, sheets, water in the shower) hurts on that area" },
+          { id: "motor", label: "It is stiff, weak or shaky, or the nails, hair or skin there have changed" },
+          { id: "none", label: "None of these" }
+        ]}
     ],
     conditions: []
   }

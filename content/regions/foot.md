@@ -3,6 +3,9 @@
 # Built into src/data/symptomGuideExtra.js (foot, question ids B1 to B8) and src/data/injuryScreen.js (foot screen, Ottawa foot rule adapted).
 # Conditions: content/conditions/foot-*.md. Body map: the sole and heel pad, and the top of the foot in front of the ankle (SOLE_TOP and FOOT_FRONT in Body3D.jsx).
 # Test patients: npm run check:regions
+# 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
+# foot-crps and question B9, shared with the wrist, hand, ankle and foot
+# (asked once). Marked (crps) below.
 region: foot
 name: Foot & toes
 source: Koc TA et al. Heel pain: plantar fasciitis, revision 2023. JOSPT 53(12), 2023; Stiell IG et al. Decision rules for the use of radiography in acute ankle injuries (Ottawa ankle and foot rules). JAMA 269(9), 1993; Warden SJ, Davis IS, Fredericson M. Management and prevention of bone stress injuries in long-distance runners. JOSPT 44(10), 2014; Welck MJ et al. Lisfranc injuries. Injury 46(4), 2015; Bhatia M, Thomson L. Morton's neuroma: current concepts review. J Clin Orthop Trauma 11(3), 2020; Richette P et al. 2016 updated EULAR evidence-based recommendations for the management of gout. Ann Rheum Dis 76(1), 2017; NICE NG19. Diabetic foot problems: prevention and management, 2015 (updated 2019); McSweeney SC, Cichero M. Tarsal tunnel syndrome: a narrative literature review. Foot 25(4), 2015; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019
@@ -145,6 +148,16 @@ Q: Do any of these apply? Tick all that apply.
 - I have psoriasis, or other joints are swollen
 - I have had gout before
 - None of these
+
+Q: Which of these apply to the painful area? Tick all that apply.   (crps, B9; same question as W9 / H9 / A9 / B9)
+- It started after a fracture, an operation, or time in a cast or splint on this arm or leg   (crps Q1: 3)
+- The pain is far worse, or has lasted far longer, than I would expect from the injury   (crps Q2: 3)
+- Compared with the other side, the skin there looks a different colour, or feels warmer or colder   (crps Q3: 3)
+- It is more swollen than the other side, or sweats more or less   (crps Q4: 2)
+- Light touch (clothes, sheets, water in the shower) hurts on that area   (crps Q5: 3)
+- It is stiff, weak or shaky, or the nails, hair or skin there have changed   (crps Q6: 2)
+- None of these
+Ask only if: How did it start? = an injury start (injury), and it has gone on 2 weeks or more; asked first after an injury start
 
 ## referral patterns
 - Plantar fascia → inner underside of the heel, first-step pain | Plantar heel pain (plantar fasciitis) | Fat pad, calcaneal stress fracture, Baxter's nerve, S1 nerve root

@@ -644,5 +644,27 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('911 split: the heart pattern check keeps call911 (fixed 2 Oct 2026)', cardiac && emergencyLevel([cardiac]) === 'call911', cardiac)
 }
 
+// ── 19. CRPS: one question shared by the wrist, hand, ankle and foot ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const { nextQuestion, regionAnswers } = await imp('src/data/assessmentFlow.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const twins = ['wrist', 'hand', 'ankle', 'foot'].map((k) => REGIONS[k].questions.find((q) => q.same === 'crps'))
+  check('CRPS: the four twin questions exist with identical options',
+    twins.every(Boolean) && new Set(twins.map((q) => JSON.stringify(q.options.map((o) => o.label)))).size === 1, twins.map((q) => q && q.id))
+  const keys = ['wrist', 'hand']
+  const ans = { age: 'a50', 'onset@wrist': 'fall', 'onset@hand': 'injury', duration: 'd3m' }
+  const asked = []
+  let id
+  while ((id = nextQuestion(keys, ans, asked, 5))) { asked.push(id); if (id === 'W9' || id === 'H9') ans[id] = ['trigger', 'colour'] }
+  check('CRPS: a hand-and-wrist drawing asks the question once', asked.filter((x) => x === 'W9' || x === 'H9').length === 1, asked)
+  const asked1 = asked.find((x) => x === 'W9' || x === 'H9'), other = asked1 === 'W9' ? 'H9' : 'W9'
+  check('CRPS: the other area reads that answer as its own',
+    JSON.stringify(regionAnswers(keys, other === 'W9' ? 'wrist' : 'hand', ans)[other]) === JSON.stringify(['trigger', 'colour']))
+  const Z = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  check('CRPS: after an injury or operation, asks about a wound infection (doctor today)',
+    patternChecks(Z(['wristR']), { W9: ['trigger'] }, 7).some((p) => p.id === 'pc-crps-infection' && p.sameDay))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

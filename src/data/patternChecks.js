@@ -49,6 +49,10 @@ const WHY = {
     title: 'A stiff spine can break with little force',
     text: 'In long-standing ankylosing spondylitis the spine is stiffer and can break after a fall or jolt that would not hurt most people. New, severe neck or back pain after even a minor fall needs to be checked in hospital straight away. Keep your head and neck as still as you can.',
   },
+  crpsInfection: {
+    title: 'Please see a doctor today',
+    text: 'After an injury or operation, a wound or pin site that is red, discharging or getting worse, or a fever, can be an infection. It needs a doctor the same day, before CRPS or anything else is considered.',
+  },
   uveitis: {
     title: 'Please see a doctor or eye specialist today',
     text: 'A painful red eye with blurred vision or sensitivity to light can be uveitis, an inflammation inside the eye that is linked to inflammatory back pain. It is treatable, but it needs to be checked the same day to protect your sight.',
@@ -130,6 +134,13 @@ const PATTERNS = [
     id: 'pc-uveitis', tier: 'urgent', sameDay: true, why: WHY.uveitis,
     text: 'A painful, red eye with blurred vision or sensitivity to light',
     when: (z, a) => [...[].concat(a.L9 || []), ...[].concat(a.P6 || [])].some((x) => ['morning', 'exercise', 'night', 'related', 'diagnosed'].includes(x)),
+  },
+  // CRPS (the shared W9 / H9 / A9 / B9 question, document v1.0 draft, 2 Oct 2026): infection
+  // after the injury or operation needs a doctor the same day.
+  {
+    id: 'pc-crps-infection', tier: 'urgent', sameDay: true, why: WHY.crpsInfection,
+    text: 'Since the injury or operation, a wound or pin site with discharge or spreading redness, or a fever, chills or feeling unwell',
+    when: (z, a) => ['W9', 'H9', 'A9', 'B9'].some((id) => [].concat(a[id] || []).includes('trigger')),
   },
   // Dizziness ticked on the neck's N9 (cervicogenic dizziness document,
   // section 6). Its stroke-type and after-injury flags are on the first safety

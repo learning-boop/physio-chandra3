@@ -3,6 +3,9 @@
 # Built into src/data/symptomGuideExtra.js (hand) and src/data/injuryScreen.js (hand screen).
 # Conditions: content/conditions/hand-*.md. Body map: the hand band, below the wrist (WRIST_BOTTOM in Body3D.jsx).
 # Test patients: npm run check:regions
+# 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
+# hand-crps and question H9, shared with the wrist, hand, ankle and foot
+# (asked once). Marked (crps) below.
 region: hand
 name: Hand & fingers
 source: Leggit JC, Meko CJ. Acute finger injuries: part I. Tendons and ligaments. Am Fam Physician 73(5), 2006; Leggit JC, Meko CJ. Acute finger injuries: part II. Fractures, dislocations, and thumb injuries. Am Fam Physician 73(5), 2006; Kloppenburg M et al. 2018 update of the EULAR recommendations for the management of hand osteoarthritis. Ann Rheum Dis 78(1), 2019; Aletaha D et al. 2010 rheumatoid arthritis classification criteria (ACR/EULAR). Arthritis Rheum 62(9), 2010; Makkouk AH et al. Trigger finger: etiology, evaluation, and treatment. Curr Rev Musculoskelet Med 1(2), 2008; Hyatt BT, Bagg MR. Flexor tenosynovitis. Orthop Clin North Am 48(2), 2017; Erickson M et al. Hand pain and sensory deficits: carpal tunnel syndrome. JOSPT 49(5), 2019 (revision 2026: Chandra to confirm); Harden RN et al. Validation of the “Budapest Criteria” for complex regional pain syndrome. Pain 150(2), 2010; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019
@@ -144,6 +147,16 @@ Q: Which hurts more: moving your neck, moving your wrist, or using your fingers?
 - Using my fingers
 - None of these bring it on
 Ask only if: The drawing reaches the wrist, forearm, or neck, or the patient ticks “Pins and needles or numbness” or “Shooting or electric” (subjective S3)
+
+Q: Which of these apply to the painful area? Tick all that apply.   (crps, H9; same question as W9 / H9 / A9 / B9)
+- It started after a fracture, an operation, or time in a cast or splint on this arm or leg   (crps Q1: 3)
+- The pain is far worse, or has lasted far longer, than I would expect from the injury   (crps Q2: 3)
+- Compared with the other side, the skin there looks a different colour, or feels warmer or colder   (crps Q3: 3)
+- It is more swollen than the other side, or sweats more or less   (crps Q4: 2)
+- Light touch (clothes, sheets, water in the shower) hurts on that area   (crps Q5: 3)
+- It is stiff, weak or shaky, or the nails, hair or skin there have changed   (crps Q6: 2)
+- None of these
+Ask only if: How did it start? = an injury start (injury, crush), and it has gone on 2 weeks or more; asked first after an injury start
 
 ## referral patterns
 - Thumb base joint (CMC) → base of the thumb and thumb side of the wrist | Thumb base arthritis | De Quervain's, scaphoid (wrist file)

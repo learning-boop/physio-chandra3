@@ -3,6 +3,9 @@
 # Built into src/data/symptomGuideExtra.js (wrist) and src/data/injuryScreen.js (wrist screen).
 # Conditions: content/conditions/wrist-*.md. Body map: the wrist band, which also covers the hand until the hand document is built.
 # Test patients: npm run check:regions
+# 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
+# wrist-crps and question W9, shared with the wrist, hand, ankle and foot
+# (asked once). Marked (crps) below.
 region: wrist
 name: Wrist
 source: Erickson M et al. Hand pain and sensory deficits: carpal tunnel syndrome. JOSPT 49(5), 2019 (revision published 2026: Chandra to confirm the current version); Graham B et al. Development and validation of diagnostic criteria for carpal tunnel syndrome (CTS-6). J Hand Surg Am 31(6), 2006; Duckworth AD et al. Predictors of fracture following suspected injury to the scaphoid. J Bone Joint Surg Br 94(7), 2012; Ilyas AM et al. De Quervain tenosynovitis of the wrist. J Am Acad Orthop Surg 15(12), 2007; Tay SC et al. The “ulnar fovea sign” for defining ulnar wrist pain. J Hand Surg Am 32(4), 2007; Harden RN et al. Validation of proposed diagnostic criteria (the “Budapest Criteria”) for complex regional pain syndrome. Pain 150(2), 2010; Lee MJ, LaStayo PC. Pronator syndrome and other nerve compressions that mimic carpal tunnel syndrome. JOSPT 34(10), 2004; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019
@@ -138,6 +141,16 @@ Q: Which hurts more: moving your neck, moving your elbow, or using your wrist an
 - None of these bring it on
 Ask only if: The drawing reaches the forearm, elbow, or neck, or the patient ticks “Pins and needles or numbness” or “Shooting or electric” (subjective S3)
 
+Q: Which of these apply to the painful area? Tick all that apply.   (crps, W9; same question as W9 / H9 / A9 / B9)
+- It started after a fracture, an operation, or time in a cast or splint on this arm or leg   (crps Q1: 3)
+- The pain is far worse, or has lasted far longer, than I would expect from the injury   (crps Q2: 3)
+- Compared with the other side, the skin there looks a different colour, or feels warmer or colder   (crps Q3: 3)
+- It is more swollen than the other side, or sweats more or less   (crps Q4: 2)
+- Light touch (clothes, sheets, water in the shower) hurts on that area   (crps Q5: 3)
+- It is stiff, weak or shaky, or the nails, hair or skin there have changed   (crps Q6: 2)
+- None of these
+Ask only if: How did it start? = an injury start (fall, twist), and it has gone on 2 weeks or more; asked first after an injury start
+
 ## referral patterns
 - Thumb tendons (APL, EPB) → thumb side of the wrist, into the thumb and up the forearm | De Quervain's tenosynovitis | Intersection syndrome (forearm file), superficial radial nerve, thumb base arthritis, scaphoid
 - Scaphoid and scapholunate ligament → hollow at the base of the thumb, back of the wrist | Scaphoid fracture or ligament injury (after a fall) | De Quervain's, wrist arthritis
@@ -196,3 +209,11 @@ Drawing: Right side of the neck, thumb side of the forearm and wrist, thumb and 
 Answers: Age 30 to 49 · Gradually, no clear reason · 2 to 6 weeks · Subjective S3: Pins and needles or numbness; Q3: tingling or numbness in the thumb, index, and middle fingers; Q4: when driving, holding a phone, or reading (no night waking); Q8: moving my neck
 Flags: None
 Expect: top condition = No wrist condition; shows a “this may be coming from your neck” message; must not show = Carpal tunnel syndrome as the top result; route = Results (suggest neck check) + booking
+
+<!-- (crps) From "CRPS.docx" (v1.0 draft, 2 Oct 2026): maximum 17, shown from 7. -->
+CASE: CRPS 1. Wrist burning, swollen and discoloured 2 months after a fracture in a cast
+Answers: 50 to 64; after a fall onto the hand; 6 weeks to 3 months; no injury in the last 6 weeks; CRPS question = all six
+Expect: top condition = CRPS (with the see-your-doctor note); route = results
+
+CASE: CRPS 2. Hand and wrist drawn as a glove
+Expect: the CRPS question is asked once (the hand's H9 is not asked)

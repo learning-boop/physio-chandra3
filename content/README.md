@@ -56,14 +56,14 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Upper arm | `arm` | Upper arm assessment | 5 |
 | Elbow | `elbow` | Elbow assessment | 6 |
 | Forearm | `forearm` | Forearm assessment | 5 |
-| Wrist | `wrist` | Wrist assessment | 6 |
-| Hand & fingers | `hand` | Hand and fingers assessment | 6 |
+| Wrist | `wrist` | Wrist assessment (+ CRPS document, W9) | 8 |
+| Hand & fingers | `hand` | Hand and fingers assessment (+ CRPS document, H9) | 6 |
 | Hip & groin | `hip` | Hip assessment (question ids G1–G8) | 6 |
 | Thigh | `thigh` | Thigh assessment (question ids R1–R8) | 6 |
 | Knee (from just above the kneecap to just below it) | `knee` | Knee assessment (question ids K1–K8) | 6 |
 | Lower leg (calf & shin) | `leg` (zone type `lowerleg`) | Lower leg assessment (question ids V1–V8) | 6 |
-| Ankle (ankle bones, front crease, back of the heel) | `ankle` | Ankle assessment (question ids A1–A8) | 6 |
-| Foot & toes (sole, heel pad, top of the foot, toes) | `foot` | Foot assessment (question ids B1–B8) | 6 |
+| Ankle (ankle bones, front crease, back of the heel) | `ankle` | Ankle assessment (question ids A1–A8; + CRPS document, A9) | 8 |
+| Foot & toes (sole, heel pad, top of the foot, toes) | `foot` | Foot assessment (question ids B1–B8; + CRPS document, B9) | 6 |
 | Stomach | — | generic questions | — |
 
 Still to feed:
@@ -103,6 +103,10 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
   two). "How it is affecting you" asks 5 statements, 8 when the pain has
   lasted over 6 weeks or is severe, none for pain under 2 weeks that is mild;
   an insurance or work claim is a tick box before the results.
+- **Twin questions are asked once.** A question tagged `same` (the CRPS
+  question W9 / H9 / A9 / B9 in the wrist, hand, ankle and foot) keeps its
+  own id and identical options; once one is asked, the others are skipped
+  and each area reads that answer as its own.
 - **Neighbouring areas share.** A red flag that asks the same thing in two
   areas (heart, aorta, spinal cord…) is shown once. A condition with the same
   name in two areas is shown once, so keep its text identical in both files
