@@ -366,5 +366,17 @@ export function regionRedFlagsFor(flowZ = [], zones = flowZ, excludedZ = []) {
   return [...main.filter((f) => f.tier === 'emergency'), ...extra, ...main.filter((f) => f.tier !== 'emergency')]
 }
 
+/** Whether a safety question can apply to this person ("A little about you",
+    Chandra, 2 Oct 2026). A question tagged `sex` ("female" / "male": birth
+    sex, so pregnancy questions still reach a trans man) is left out only for
+    the other birth sex; `ages` (age answer ids) only when the age is known and
+    outside them. Unknown, "intersex or prefer not to say", or untagged: always
+    asked. Emergency questions are only ever tagged by birth sex, never age. */
+export function forPerson(f, { age, sex } = {}) {
+  if (f.sex && (sex === 'female' || sex === 'male') && f.sex !== sex) return false
+  if (f.ages && age && !f.ages.includes(age)) return false
+  return true
+}
+
 /** True when a flag belongs to this group (a flag's group may be a list). */
 export const inGroup = (f, g) => [].concat(f.group || []).includes(g)

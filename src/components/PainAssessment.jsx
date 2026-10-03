@@ -12,7 +12,7 @@ import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlagsFor, inGroup, MAX_SCORED_QUESTIONS,
+  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
@@ -60,6 +60,15 @@ const QUESTIONS = [
     placeholder: 'Other symptoms, previous injuries, relevant medical history, or any concerns…' },
 ]
 const LETTERS = 'ABCDEFGHIJKLMNOPQRST'.split('')
+// "A little about you": the same age bands as every area's age question.
+const ABOUT_AGES = [
+  { id: 'u5', label: 'Under 5' }, { id: 'u18', label: '5 to 17' }, { id: '18-29', label: '18 to 29' },
+  { id: '30-49', label: '30 to 49' }, { id: '50-64', label: '50 to 64' }, { id: 'o64', label: '65 or over' },
+]
+const ABOUT_SEX = [
+  { id: 'female', label: 'Female' }, { id: 'male', label: 'Male' },
+  { id: 'other', label: 'Intersex, or prefer not to say' },
+]
 const BEHAV_ID = '__behav'
 const PSYCH_ID = '__psych'
 /* Unscored screens that always close the questions, in this order. */
@@ -203,7 +212,7 @@ const CAUTION_CHECKS = [
   { id: 'ca-surgery', tier: 'caution', text: 'Surgery or a procedure in this area within the last 3 months',
     why: { title: 'Recent surgery changes the plan',
       text: 'Healing tissue and any surgeon\'s restrictions come first, so your assessment works within them.' } },
-  { id: 'ca-preg', tier: 'caution', text: 'Pregnant, or within 3 months of giving birth',
+  { id: 'ca-preg', sex: 'female', tier: 'caution', text: 'Pregnant, or within 3 months of giving birth',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Positions, hands-on techniques and exercise choices are adjusted during and after pregnancy.' } },
   // C3 (shorter questionnaire): was a statement on "How it is affecting you".
@@ -406,6 +415,13 @@ export default function PainAssessment() {
   const [hasTurned, setHasTurned] = useState(false)
 
   const [stage, setStage] = useState('landing')
+  // "A little about you" (Chandra, 2 Oct 2026): birth sex is used ONLY to
+  // leave out safety questions that cannot apply (pregnancy, testicle). It is
+  // kept apart from `answers` on purpose, so it never reaches the summary,
+  // the PDF, the AI overview or the anonymous copy, and it is cleared on
+  // restart. 'female' | 'male' | 'other' ("intersex, or prefer not to say":
+  // every question is asked) | null.
+  const [birthSex, setBirthSex] = useState(null)
   const [qIndex, setQIndex] = useState(0)
   const [zones, setZones] = useState([])
   const [answers, setAnswers] = useState({})   // { q1: 'text'|'__other', q1_other: '' }
@@ -548,7 +564,8 @@ export default function PainAssessment() {
     })
     if (keys.length) {
       return [
-        { id: '__ctx', group: [...ctxQuestions, PAIN_QUALITY], text: 'A few details to start' },
+        // Age is asked on "A little about you", before the safety pages.
+        { id: '__ctx', group: [...ctxQuestions.filter((q) => q.id !== 'age'), PAIN_QUALITY], text: 'A few details to start' },
         ...regionQuestions,
         behav(REGION_EASERS[keys[0]] || undefined),
         PSYCH_SCREEN,
@@ -698,8 +715,10 @@ export default function PainAssessment() {
   // Organ-referral and systemic maps the drawing alone matches; the ones that
   // need answers (the inflammatory pattern) are left for the final check.
   const earlyPatterns = useMemo(() => patternChecks(zones, {}, 7), [zones])
+  // Who the safety questions are for: age and birth sex from "A little about you".
+  const who = useMemo(() => ({ age: answers.age, sex: birthSex }), [answers.age, birthSex])
   const screening = useMemo(() => {
-    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ)
+    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who))
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
     const list = regional.map((f) => ({
       ...f, why: typeof f.why === 'string' ? { title: f.why, text: tierWhy(f).text } : tierWhy(f),
@@ -735,7 +754,7 @@ export default function PainAssessment() {
       emergency: all.filter((f) => f.tier === 'emergency'),
       physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
     }
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -1123,7 +1142,7 @@ export default function PainAssessment() {
 
   const restart = () => {
     setFlaggedAt(null)
-    setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null)
+    setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
     setClearSignal((n) => n + 1); setFromReview(false); setDrawMode(false); setShowAnswers(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined)
     setVisitCode(null); codeAsked.current = false
@@ -1454,7 +1473,7 @@ export default function PainAssessment() {
                     className="pa-primary"
                     style={{ ...goldBtn, opacity: zones.length ? 1 : 0.45, cursor: zones.length ? 'pointer' : 'not-allowed' }}
                     disabled={!zones.length}
-                    onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}
+                    onClick={() => setStage('about')}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('guide')}>Back</button>
                 </div>
@@ -1722,7 +1741,7 @@ export default function PainAssessment() {
                       <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.5 }}>{q.area ? `${q.area} — ` : ''}{q.text}</p>
                       <p style={{ fontSize: 15.5, color: '#fff', margin: '6px 0 0', lineHeight: 1.55 }}>{answerText(q)}</p>
                     </div>
-                    <button onClick={() => goToQuestion(screenOf(q), true)}
+                    <button onClick={() => (q.id === 'age' ? setStage('about') : goToQuestion(screenOf(q), true))}
                       style={{ background: 'none', border: 'none', color: GOLD, fontSize: 13.5, cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0, padding: '10px 2px 10px 12px', margin: '-10px -2px -10px 0', minHeight: 44, alignSelf: 'flex-start', fontFamily: 'var(--font-body)' }}>Change</button>
                   </div>
                 ))}
@@ -1750,6 +1769,55 @@ export default function PainAssessment() {
                 <div className="pa-actions" style={{ marginTop: 16 }}>
                   <button className="pa-primary" style={goldBtn} onClick={() => setStage('safety')}>Continue</button>
                   <button style={ghostBtn} onClick={() => goToQuestion(path[path.length - 1])}>Back</button>
+                </div>
+              </Fade>
+            )}
+
+            {/* A LITTLE ABOUT YOU — age and birth sex, so the safety pages ask
+                only what can apply (Chandra, 2 Oct 2026). Birth sex stays on
+                this device and in no summary, PDF or shared copy. */}
+            {stage === 'about' && (
+              <Fade k="about">
+                <div style={headBand('gold')}>
+                  <span style={bandLabel('gold')}>Before the Safety Questions</span>
+                  <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 10px', maxWidth: 520 }}>
+                    A little <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>about you</em>
+                  </h2>
+                  <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
+                    These two answers let us skip safety questions that cannot apply to you, so there are fewer to read.
+                  </p>
+                </div>
+                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>Your age?</span></p>
+                  {ABOUT_AGES.map((o, i) => {
+                    const sel = answers.age === o.id
+                    return (
+                      <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, age: o.id }))}>
+                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>Your sex assigned at birth?</span></p>
+                  {ABOUT_SEX.map((o, i) => {
+                    const sel = birthSex === o.id
+                    return (
+                      <button key={o.id} style={chip(sel)} onClick={() => setBirthSex(o.id)}>
+                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                      </button>
+                    )
+                  })}
+                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
+                    Used only on this device to choose which safety questions to show (for example, pregnancy questions). It is not saved, not sent anywhere, and not included in your summary, PDF, AI overview or any shared copy.
+                  </p>
+                </div>
+                <div className="pa-actions" style={{ marginTop: 20 }}>
+                  <button className="pa-primary"
+                    style={{ ...goldBtn, opacity: answers.age && birthSex ? 1 : 0.45, cursor: answers.age && birthSex ? 'pointer' : 'not-allowed' }}
+                    disabled={!answers.age || !birthSex}
+                    onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}>Continue</button>
+                  <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
                 </div>
               </Fade>
             )}
@@ -1802,7 +1870,7 @@ export default function PainAssessment() {
                     <button className="pa-primary" style={goldBtn} onClick={next}>
                       {ticked ? 'Continue' : 'None of These Apply — Continue'}
                     </button>
-                    <button style={ghostBtn} onClick={() => setStage(emergency || !screening.emergency.length ? 'draw' : 'emergency')}>Back</button>
+                    <button style={ghostBtn} onClick={() => setStage(emergency || !screening.emergency.length ? 'about' : 'emergency')}>Back</button>
                   </div>
                 </Fade>
               )
@@ -1872,7 +1940,7 @@ export default function PainAssessment() {
                   <span aria-hidden="true" style={qMark} />
                   <span>Also worth telling us — these do not stop physiotherapy</span>
                 </p>
-                  {CAUTION_CHECKS.map((f, i) => {
+                  {CAUTION_CHECKS.filter((f) => forPerson(f, who)).map((f, i) => {
                     const sel = flags.includes(f.id)
                     return (
                       <button key={f.id} style={chip(sel)}

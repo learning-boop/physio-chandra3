@@ -158,6 +158,7 @@ assessment" was replaced by "Upper arm" and "Forearm" and is not used.
 - **Look-alikes become cards, not conditions.** "May be coming from your
   neck / shoulder / hip / low back", migraine, and see-a-doctor messages are
   cards shown with the results.
+- **Who a safety question is for** ("A little about you", 2 Oct 2026). Age and sex assigned at birth are asked after the drawing, before the safety pages. A red flag may carry `sex: "female"` or `sex: "male"` (only when it cannot apply to the other birth sex: pregnancy, periods, giving birth, testicle) or `ages: [...]` (only when the question itself names an age, e.g. "over 50", "a child aged 9 to 16"). An emergency question is never tagged by age. Unknown, or "Intersex, or prefer not to say": every question is asked (`forPerson` in src/data/assessmentFlow.js). Birth sex stays on the device: it is never put in the answers, so it is not in the summary, PDF, AI overview or anonymous copy.
 - **Test patients are the proof.** 3–5 per region, including one red-flag case
   and one look-alike that must NOT be matched.
 

@@ -21,6 +21,7 @@ const sections = [
     body: [
       'The pain guide asks where you feel pain and some questions about it, including your age range and, if you choose to answer them, how the pain is affecting your mood, sleep and work. It does not ask for your name or contact details.',
       'Your drawing and answers are worked through on your own device, in your browser. They are not saved by this website and are cleared when you close or restart the guide, unless you choose to share an anonymous copy (see below).',
+      'Before the safety questions, the guide asks your age range and your sex assigned at birth, so it can leave out questions that cannot apply to you (for example, pregnancy questions). Your sex assigned at birth is used only for that, on your device: it is not saved, not sent anywhere, and not included in your summary, your PDF, the AI overview or the anonymous copy. You can choose "Intersex, or prefer not to say", and every question is then asked.',
     ],
   },
   {

@@ -902,5 +902,34 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /preloadPdf\(\)\.catch/.test(src))
 }
 
+// ── 31. "A little about you": age and birth sex before the safety pages (Chandra, 2 Oct 2026) ──
+{
+  const { forPerson, regionRedFlags } = await imp('src/data/assessmentFlow.js')
+  const { REGIONS: R } = await imp('src/data/symptomGuide.js')
+  const all = Object.values(R).flatMap((r) => r.redFlags || [])
+  const unknown = all.filter((f) => !forPerson(f, {}))
+  check('About you: with age and birth sex unknown, every safety question is still asked', unknown.length === 0, unknown.map((f) => f.id))
+  check('About you: "intersex, or prefer not to say" asks every question', all.every((f) => forPerson(f, { sex: 'other' })))
+  const ageEm = all.filter((f) => f.tier === 'emergency' && f.ages)
+  check('About you: no emergency question is ever left out by age', ageEm.length === 0, ageEm.map((f) => f.id))
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const hip = (who) => regionRedFlags(ZN(['hipR']), ZN(['hipR'])).filter((f) => forPerson(f, who)).map((f) => f.id)
+  const man55 = hip({ age: '50-64', sex: 'male' }), woman30 = hip({ age: '30-49', sex: 'female' }), all0 = hip({})
+  check('About you: a man of 55 drawing the hip is not asked the pregnancy, period or child questions, but is asked the testicle one',
+    !man55.includes('hpf-ectopic') && !man55.includes('hpf-pelvic') && !man55.includes('hpf-sufe') && man55.includes('hpf-torsion'), man55)
+  check('About you: a woman of 30 drawing the hip is asked the pregnancy question and not the testicle one',
+    woman30.includes('hpf-ectopic') && !woman30.includes('hpf-torsion'), woman30)
+  check('About you: fewer hip safety questions once age and sex are known', man55.length < all0.length && woman30.length < all0.length, [all0.length, man55.length, woman30.length])
+  check('About you: the septic hip question (children and adults) is asked at every age', ['u5', '30-49', 'o64'].every((age) => hip({ age, sex: 'male' }).includes('hpf-septic')))
+  const { readFileSync } = await import('node:fs')
+  const src = readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const between = (a, b) => { const i = src.indexOf(a); return i < 0 ? '' : src.slice(i, src.indexOf(b, i + a.length)) }
+  const pdf = between('const pdfData = () =>', 'const anonPayload'), anon = between('const anonPayload = () =>', '// The screen a review-screen')
+  const summary = between('const summaryText = useMemo', '])')
+  check('About you: birth sex is never stored in the answers (so never in the summary, AI overview or anonymous copy)',
+    !/setAnswers\([^\n]*(birthSex|sex:)/.test(src) && !/birthSex/.test(pdf) && !/birthSex/.test(anon) && !/birthSex/.test(summary) && pdf.length > 0 && anon.length > 0)
+  check('About you: birth sex is cleared on restart', /setFocusKey\(null\); setBirthSex\(null\)/.test(src))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

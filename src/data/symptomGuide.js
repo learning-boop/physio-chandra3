@@ -29,7 +29,7 @@ export const REGIONS = {
       // A non-ruptured aneurysm: deep, constant pain unrelated to movement, with
       // vascular risk factors (JOSPT low back pain CPG 2012, red flag table).
       // The sudden, severe picture is rf-aaa (911).
-      {id:"rf-aaa-slow", tier:"urgent", group:"aaaslow", why:"Possible abdominal aortic aneurysm: a doctor should check, usually with an ultrasound scan",
+      {id:"rf-aaa-slow", ages:["50-64", "o64"], tier:"urgent", group:"aaaslow", why:"Possible abdominal aortic aneurysm: a doctor should check, usually with an ultrasound scan",
         text:"Are you over 50 and have you ever smoked, or do you have high blood pressure, diabetes, or heart or artery disease; and is your back pain a deep, constant ache that does not change with movement or position, or do you feel a pulsing in your tummy?"},
       {id:"rf-fracture", tier:"emergency", group:"fracture", why:"Possible spinal fracture",
         text:"Did this start in the last few days after a car crash, a fall from a height, or landing hard on your feet or bottom?"},
@@ -43,7 +43,7 @@ export const REGIONS = {
         text:"Is your foot slapping down or your toes catching when you walk, even if it is not getting worse?"},
       {id:"rf-kidney", tier:"urgent", group:"kidney", why:"Possible kidney stone or kidney infection",
         text:"Does the pain come in waves from your side to your groin, or come with a fever, burning when you pass urine, or blood in your urine?"},
-      {id:"rf-spondy", tier:"urgent", why:"Possible stress fracture of the spine (spondylolysis); needs imaging",
+      {id:"rf-spondy", ages:["u5", "u18", "18-29"], tier:"urgent", why:"Possible stress fracture of the spine (spondylolysis); needs imaging",
         text:"Are you under 20, and does it hurt to arch your back, especially with sport such as gymnastics, dance, cricket bowling, or tennis?"},
       {id:"rf-pelvic", tier:"urgent", group:"pelvic", why:"Pelvic organ and prostate problems can be felt in the low back",
         text:"Is the pain linked to your periods, or do you have unusual vaginal bleeding, or (for men) new trouble passing urine?"}
@@ -177,7 +177,7 @@ export const REGIONS = {
         text:"Is the pain in your shoulder, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?"},
       {id:"srf-kehr", tier:"emergency", call911: true, group:"kehr", why:"Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign)",
         text:"Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?"},
-      {id:"srf-ectopic", tier:"emergency", call911: true, why:"Possible ectopic pregnancy: blood under the diaphragm is felt at the shoulder tip",
+      {id:"srf-ectopic", sex:"female", tier:"emergency", call911: true, why:"Possible ectopic pregnancy: blood under the diaphragm is felt at the shoulder tip",
         text:"Could you be pregnant, and do you have pain low in your tummy along with pain at the tip of your shoulder?"},
       {id:"srf-lung", tier:"emergency", call911: true, group:"lungclot", why:"Possible blood clot in the lung or a collapsed lung",
         text:"Do you have a sudden, sharp pain on breathing with shortness of breath?"},
@@ -187,7 +187,7 @@ export const REGIONS = {
         text:"Do you have severe muscle pain or weakness, with urine that is dark like cola? (Especially after very hard exercise, a crush, a long time lying on the floor, a new medicine such as a statin, or a recent illness.)"},
       {id:"rf-hotjoint", tier:"emergency", group: "hotjoint", why:"Possible joint infection (septic arthritis)",
         text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?"},
-      {id:"srf-pmr", tier:"urgent", why:"Possible polymyalgia rheumatica; needs blood tests and medical care",
+      {id:"srf-pmr", ages:["50-64", "o64"], tier:"urgent", why:"Possible polymyalgia rheumatica; needs blood tests and medical care",
         text:"If you are over 50: are both shoulders (and often both hips) stiff and aching, worst in the morning for more than 45 minutes, and do you feel generally unwell?"},
       {id:"srf-pancoast", tier:"urgent", group:"pancoast", why:"Possible tumour at the top of the lung (Pancoast), felt in the shoulder and inner arm",
         text:"Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, a drooping eyelid, or weakness in your hand?"},
@@ -329,11 +329,11 @@ export const REGIONS = {
       // train a lot (JOSPT patellofemoral pain CPG 2019); shared with the thigh.
       { id: "kf-stress", tier: "urgent", group: "femstress", why: "Possible stress fracture of the thigh bone: it needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep ache above the knee or in the thigh that is worse with hopping or each run, or aches at night or at rest?" },
-      { id: "kf-sufe", tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE): hip problems in children are often felt only at the knee",
+      { id: "kf-sufe", ages: ["u18"], tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE): hip problems in children are often felt only at the knee",
         text: "Is a child aged about 9 to 16 limping with knee or thigh pain, or does moving the hip hurt?" },
-      { id: "kf-perthes", tier: "urgent", why: "Possible Perthes disease or other hip problem felt at the knee",
+      { id: "kf-perthes", ages: ["u5", "u18"], tier: "urgent", why: "Possible Perthes disease or other hip problem felt at the knee",
         text: "Is a child aged about 4 to 10 limping, with knee or hip pain, but no injury?" },
-      { id: "kf-tumour", tier: "urgent", why: "Bone tumours in young people are most common around the knee; needs imaging",
+      { id: "kf-tumour", ages: ["u5", "u18", "18-29"], tier: "urgent", why: "Bone tumours in young people are most common around the knee; needs imaging",
         text: "Are you under 25 with a deep ache around the knee that wakes you at night, or a lump near the knee that is growing?" },
       { id: "kf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
         text: "Did your knee become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
