@@ -1115,5 +1115,37 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     conc && JSON.stringify(conc).includes('hormone (pituitary) blood test'))
 }
 
+// ── 36. Hyperparathyroidism ("Hyperparathyroidism", signed 3 Oct 2026) ──
+{
+  const PT = await imp('src/data/parathyroid.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const ca = (z) => patternChecks(ZN(z), {}, 12).find((p) => p.id === 'pc-calcium')
+  const c = ca(['lowerlegL', 'lowerlegR'])
+  check('Hyperparathyroidism route A: bone aches on both sides with a stone, easy fracture or thin bones, the thirst/mood cluster or an untested high calcium → family doctor, a blood test, no booking',
+    c && c.noBooking && !c.sameDay && /kidney stone/.test(c.text) && /thin bones/.test(c.text) && /never followed up/.test(c.text) &&
+    /calcium, vitamin D and parathyroid hormone/.test(c.why.text), c)
+  check('Hyperparathyroidism route A: for both shins, thighs or hips, or a widespread drawing; not for one knee or one hip',
+    !!ca(['thighL', 'thighR']) && !!ca(['hipL', 'hipR']) && !!ca(['neck', 'shoulderL', 'hipR', 'kneeL']) && !ca(['kneeL']) && !ca(['hipL']))
+  const order = patternChecks(ZN(['thighL', 'thighR']), { age: '50-64' }, 12).map((p) => p.id)
+  check('Hyperparathyroidism route A: last, after the nerve and muscle screen, so it never pushes out the checks before it',
+    order[order.length - 1] === 'pc-calcium' && order.indexOf('pc-muscle') < order.indexOf('pc-calcium'), order)
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Hyperparathyroidism: the gout or pseudogout questions (knee, elbow, wrist, hand) add "under 60 or recurring → ask about calcium and PTH"',
+    PT.CPPD_IDS.every((id) => Object.values(REGIONS).some((r) => r.redFlags.some((f) => f.id === id && /pseudogout/.test(f.text)))) &&
+    /under 60/.test(PT.CPPD_WHY.text) && /infection/.test(PT.CPPD_WHY.text) && /CPPD_IDS\.includes\(f\.id\) \? \{ \.\.\.f, why: CPPD_WHY \}/.test(src))
+  const p = PT.parathyroidPanel(true)
+  check('Hyperparathyroidism route B: diagnosed on the cautions list; the panel has fluids, sit-to-stand and heel raises, no self-started supplements, the high-calcium crisis (911) and low calcium after neck surgery (same day)',
+    /PARATHYROID_CAUTION,/.test(src) && p && p.notes.some((n) => /heel raises/.test(n)) && p.notes.some((n) => /supplements/.test(n)) &&
+    p.notes.some((n) => /911/.test(n) && /high calcium/.test(n)) && p.notes.some((n) => /after parathyroid or thyroid surgery/.test(n) && /same day/.test(n)) &&
+    PT.parathyroidPanel(false) === null)
+  const osteo = REGIONS.upperback.conditions.find((x) => x.id === 'osteoporosis')
+  check('Hyperparathyroidism: the osteoporosis record asks whether calcium and parathyroid hormone were checked when there is no obvious cause',
+    osteo && JSON.stringify(osteo).includes('calcium and parathyroid hormone have been checked'))
+  const all = JSON.stringify([PT.CALCIUM_SCREEN, PT.CPPD_WHY, PT.PARATHYROID_CAUTION, p])
+  check('Hyperparathyroidism language: no "you have hyperparathyroidism", cure, guarantee or "damage"',
+    !/you (may )?have hyperpara|cure|guarantee|permanent|damage/i.test(all), all.match(/you (may )?have hyperpara|cure|guarantee|permanent|damage/i))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

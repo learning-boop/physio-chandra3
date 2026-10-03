@@ -21,6 +21,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 import { HORMONE_SCREEN, LOW_HORMONE_SCREEN } from './steroids.js'
+import { CALCIUM_SCREEN } from './parathyroid.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
@@ -351,6 +352,16 @@ const PATTERNS = [
     id: 'pc-muscle', tier: 'urgent', noBooking: true, why: WHY.muscleScreen,
     text: 'Not explained by a condition you have already been diagnosed with: muscles that work at first, then fade the more you use them and recover after rest (often worse by evening); a drooping eyelid or double vision that comes and goes; your jaw tiring when you chew, or speech becoming slurred or nasal as you talk; a grip that is slow to let go, especially in the cold; or weakness in both hands or both feet that has crept on over months or years, especially with early cataracts or muscle weakness in the family',
     when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
+  },
+  // Calcium balance ("Hyperparathyroidism" document, signed by Chandra,
+  // 3 Oct 2026; route A): deep bone aches on both sides with stones, an easy
+  // fracture or thin bones, the thirst/constipation/mood cluster, or a high
+  // calcium result never followed up. Last, so it never pushes out the
+  // checks above. A yes holds the booking (family doctor, a blood test).
+  {
+    id: 'pc-calcium', tier: 'urgent', noBooking: true, why: CALCIUM_SCREEN.why,
+    text: CALCIUM_SCREEN.text,
+    when: (z) => ['lowerleg', 'thigh', 'hip'].some((t) => bothSides(z, t)) || typesOf(z).size >= 4,
   },
 ]
 

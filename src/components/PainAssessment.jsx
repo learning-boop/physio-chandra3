@@ -26,6 +26,7 @@ import {
   DM_STATUS, diabetesRedFlags, isNerveFlag, NERVE_WHY, diabetesBranch, diabetesQuestions, diabetesBonus, diabetesPanel, diabetesSummary,
 } from '../data/diabetes'
 import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_CAUTION, PITUITARY_CAUTION } from '../data/steroids'
+import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -252,6 +253,8 @@ const CAUTION_CHECKS = [
   CUSHING_CAUTION,
   // "Hypopituitarism" document (signed by Chandra, 3 Oct 2026), route B.
   PITUITARY_CAUTION,
+  // "Hyperparathyroidism" document (signed by Chandra, 3 Oct 2026), route B.
+  PARATHYROID_CAUTION,
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -733,7 +736,9 @@ export default function PainAssessment() {
     // Numb or burning feet on both sides: with known diabetes the results
     // panel takes over (../data/diabetes.js); without it, doctor first.
     const dmKnown = answers.dm === 'yes'
-    const nerve = (f) => (isNerveFlag(f) ? { ...f, noBooking: true, why: NERVE_WHY } : f)
+    // Gout or pseudogout ("Hyperparathyroidism" document, open item 3): under
+    // 60 or recurrent attacks are a reason to ask about calcium and PTH.
+    const nerve = (f) => (isNerveFlag(f) ? { ...f, noBooking: true, why: NERVE_WHY } : CPPD_IDS.includes(f.id) ? { ...f, why: CPPD_WHY } : f)
     const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)))
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
     const list = regional.map((f) => nerve({
@@ -799,7 +804,7 @@ export default function PainAssessment() {
     const early = new Set(earlyPatterns.map((p) => p.id).filter((id) => !deferred.has(id)))
     // Up to five: dizziness (heart; ear or worsening) and headache can both
     // apply, and both-sided weakness asks PMR, myositis, the two hormone
-    // screens and the nerve and muscle screen.
+    // screens, the nerve and muscle screen and the calcium screen.
     patternChecks(zones, answers, 12).filter((p) => !early.has(p.id)).slice(0, 5).map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
       .filter((p) => !(answers.dm === 'yes' && isNerveFlag(p))).forEach((p) => out.push(p))
     return out
@@ -900,6 +905,7 @@ export default function PainAssessment() {
   const dmPanel = useMemo(() => diabetesPanel(answers, zones, shown), [answers, zones, shown])
   // Steroid medicine or diagnosed Cushing's (../data/steroids.js).
   const stPanel = useMemo(() => steroidPanel(answers, flags.includes('ca-cushing'), flags.includes('ca-pituitary')), [answers, flags])
+  const caPanel = useMemo(() => parathyroidPanel(flags.includes('ca-parathyroid')), [flags])
   const pickDm = (q, oid) => setAnswers((a) => {
     if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
     const cur = [].concat(a[q.id] || [])
@@ -1064,6 +1070,7 @@ export default function PainAssessment() {
     cautions: pickedCautions.map((f) => f.text),
     diabetes: dmPanel ? { title: dmPanel.title, text: dmPanel.text, notes: dmPanel.notes } : null,
     steroids: stPanel,
+    calcium: caPanel,
     answers: qaPairs,
     notes: notesText,
   })
@@ -2441,6 +2448,20 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{stPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {stPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* Diagnosed calcium or parathyroid problem (../data/parathyroid.js). */}
+                {caPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your bones and calcium balance</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{caPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{caPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {caPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>
