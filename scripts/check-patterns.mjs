@@ -981,9 +981,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     nerveFlags.length === 3 && nerveFlags.every((f) => f.noBooking) && poly && poly.noBooking && /blood test/.test(DM.NERVE_WHY.text) && /thirst/.test(DM.NERVE_WHY.text))
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
   check('Diabetes: with known diabetes the nerve questions are left out (the results panel takes over)',
-    /!\(dmKnown && isNerveFlag\(f\)\)/.test(src) && /\.\.\.diabetic, \.\.\.list, \.\.\.pattern/.test(src))
+    /!\(dmKnown && isNerveFlag\(f\)\)/.test(src) && /\.\.\.diabetic, \.\.\.steroid, \.\.\.list, \.\.\.pattern/.test(src))
   check('Diabetes: asked on "A little about you" (required to continue), kept out of the anonymous copy',
-    /DM_STATUS\.options\.map/.test(src) && /!answers\.dm\}/.test(src) && /_other\$\|\^dm\)/.test(src))
+    /DM_STATUS\.options\.map/.test(src) && /!answers\.dm \|\|/.test(src) && /_other\$\|\^dm\|/.test(src))
 
   check('Diabetes tier: type 1, over 10 years, well above target = high; type 2, under 5 years, in target = low; over 20 years or a foot ulcer = high; prediabetes = low',
     DM.diabetesTier({ dm: 'yes', dmType: 't1', dmYears: 'o10', dmControl: 'well' }) === 'high' &&
@@ -1041,6 +1041,48 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const sum = DM.diabetesSummary({ dm: 'yes', dmType: 't1', dmYears: 'o20', dmTreat: 'insulin' }, shZ, frozenFirst).join('\n')
   check('Diabetes summary for Chandra: status, details, tier, flags and the lift applied',
     /Yes, diabetes/.test(sum) && /Type 1/.test(sum) && /HIGH/.test(sum) && /HYPO/.test(sum) && /Frozen shoulder \+3/.test(sum), sum)
+}
+
+// ── 34. Cushing's syndrome and steroid medicine ("Cushings Syndrome", signed 3 Oct 2026) ──
+{
+  const ST = await imp('src/data/steroids.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const hormone = (z, a = {}) => patternChecks(ZN(z), a, 9).find((p) => p.id === 'pc-hormone')
+  const h = hormone(['thighL', 'thighR'])
+  check('Cushing route A: both thighs drawn → weakness over months with steroids or body changes; doctor in a week or two, no booking, not named',
+    h && h.noBooking && !h.sameDay && /stretch marks/.test(h.text) && /steroid/.test(h.text) &&
+    !/cushing|cortisol excess/i.test(h.text + h.why.text) && /do not stop any steroid/i.test(h.why.text), h)
+  check('Cushing route A: also for a weakness answer with a shoulder, hip or thigh drawing; not for one knee drawn without weakness',
+    !!hormone(['shoulderL'], { S6: ['weakness'] }) && !hormone(['kneeL']))
+  const order = patternChecks(ZN(['thighL', 'thighR']), { age: '50-64' }, 9).map((p) => p.id)
+  check('Cushing route A: asked after myositis and before the nerve and muscle screen',
+    order.indexOf('pc-myositis') < order.indexOf('pc-hormone') && order.indexOf('pc-hormone') < order.indexOf('pc-muscle'), order)
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Cushing: the final check has room for four questions, so PMR, myositis, the hormone screen and the nerve and muscle screen all fit',
+    /\.slice\(0, 4\)\.forEach\(\(p\) => out\.push\(p\)\)/.test(src))
+  check('Cushing route B: "diagnosed" on the cautions list; strength does not come back by itself; exercise is the treatment',
+    /CUSHING_CAUTION,/.test(src) && /does not come back by itself/.test(ST.CUSHING_CAUTION.why.text) && ST.CUSHING_CAUTION.tier === 'caution')
+  check('Steroids: no extra red flags without long-term steroids',
+    !ST.steroidRedFlags({ steroid: 'no' }).length && !ST.steroidRedFlags({ steroid: 'ns' }).length)
+  const rf = ST.steroidRedFlags({ steroid: 'tabs' })
+  check('Steroids: adrenal crisis (911), a mind change (emergency department, 9-8-8), a hidden infection (doctor today) come first; a knee or thigh tendon snap (today) for those drawings',
+    rf.find((f) => f.id === 'st-adrenal').call911 && rf.find((f) => f.id === 'st-mind').tier === 'emergency' && /9-8-8/.test(rf.find((f) => f.id === 'st-mind').why.text) &&
+    rf.find((f) => f.id === 'st-infection').sameDay && /\.\.\.steroid, \.\.\.list/.test(src) && ST.steroidRedFlags({ steroid: 'other' }).length === 3 &&
+    ST.steroidRedFlags({ steroid: 'tabs' }, [], ZN(['kneeL'])).some((f) => f.id === 'st-tendon' && f.sameDay))
+  check('Steroids: the spine fracture, steroid hip and Achilles questions are already asked by those areas',
+    ['lowback', 'tlj', 'sij'].every((k) => REGIONS[k].redFlags.some((f) => f.group === 'osteo' || /steroid/.test(f.text))) &&
+    REGIONS.hip.redFlags.some((f) => f.id === 'hpf-avn' && /steroid/.test(f.text)) && REGIONS.ankle.redFlags.some((f) => /steroid/.test(f.text)))
+  check('Steroids: asked on "A little about you" (required), kept out of the anonymous copy',
+    /STEROID_STATUS\.options\.map/.test(src) && /!answers\.steroid\}/.test(src) && /\^steroid\$\)/.test(src))
+  const p1 = ST.steroidPanel({ steroid: 'tabs' }, false), p2 = ST.steroidPanel({ steroid: 'no' }, true)
+  check('Steroids panel: never stop suddenly, sit-to-stand, protect the back, ask about bone health; Cushing diagnosed: strength does not return by itself',
+    p1 && p1.notes.some((n) => /Never stop steroid tablets suddenly/.test(n)) && p1.notes.some((n) => /firm chair/.test(n)) &&
+    p1.notes.some((n) => /vitamin D/.test(n)) && p2 && /does not come back by itself/.test(p2.text) &&
+    !p2.notes.some((n) => /Never stop steroid/.test(n)) && ST.steroidPanel({ steroid: 'no' }, false) === null)
+  const all = JSON.stringify([ST.STEROID_RED_FLAGS, ST.HORMONE_SCREEN, ST.CUSHING_CAUTION, p1, p2])
+  check('Steroids language: no "you have Cushing\'s", cure, guarantee or "damage" except "not … damaged by use"',
+    !/you (may )?have cushing|cure|guarantee|permanent|(?<!not muscle )damage/i.test(all), all.match(/you (may )?have cushing|cure|guarantee|permanent|(?<!not muscle )damage/i))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

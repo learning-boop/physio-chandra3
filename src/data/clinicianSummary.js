@@ -113,7 +113,7 @@ export function buildClinicianSummary(ctx = {}) {
   const {
     zones = [], referral = [], keys = [], answers = {}, qaPairs = [], notes = '',
     ranked = [], behaviour = {}, psych = {}, painType = null,
-    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [],
+    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [],
   } = ctx
 
   const L = []
@@ -225,6 +225,12 @@ export function buildClinicianSummary(ctx = {}) {
   if (diabetes.length) {
     push('DIABETES (self-reported; confirm type, duration, last HbA1c, medicines and complications)')
     push(...diabetes.map((d) => '  ' + d))
+    push('')
+  }
+  // ── Steroids ("Cushings Syndrome" document, ./steroids.js) ──
+  if (steroids.length) {
+    push('STEROID MEDICINE (self-reported; confirm drug, prednisone-equivalent dose, duration, route, taper plan, emergency card)')
+    push(...steroids.map((d) => '  ' + d))
     push('')
   }
 

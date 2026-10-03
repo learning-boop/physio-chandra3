@@ -25,6 +25,7 @@ import { WIDESPREAD, widespreadRoute } from '../data/widespreadPain'
 import {
   DM_STATUS, diabetesRedFlags, isNerveFlag, NERVE_WHY, diabetesBranch, diabetesQuestions, diabetesBonus, diabetesPanel, diabetesSummary,
 } from '../data/diabetes'
+import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_CAUTION } from '../data/steroids'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -247,6 +248,8 @@ const CAUTION_CHECKS = [
   { id: 'ca-dmd', tier: 'caution', text: 'Duchenne or Becker muscular dystrophy, diagnosed by a neuromuscular team (for a child or young person)',
     why: { title: 'Worth knowing before the first assessment',
       text: 'Chandra sees children from 5 years old; for a child under 5, please ask the neuromuscular team at BC Children\'s Hospital about a paediatric physiotherapist. Physiotherapy works alongside the neuromuscular team on daily stretching, night splints, enjoyable activity such as swimming or cycling, walking, posture and equipment. Very hard or "eccentric" exercise (downhill walking, jumping, heavy lifting, pushing to exhaustion) is avoided. Severe muscle pain with dark, cola-coloured urine after activity, or a fall followed by leg pain or refusal to stand, needs the emergency department; and every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
+  // "Cushings Syndrome" document (signed by Chandra, 3 Oct 2026), route B.
+  CUSHING_CAUTION,
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -764,13 +767,16 @@ export default function PainAssessment() {
     // With diabetes, its own red flags come first on each page ("DiabetesMellitus"
     // document, section 6), minus any this page already asks.
     const diabetic = diabetesRedFlags(zones, answers, [...list, ...pattern])
-    const all = [...diabetic, ...list, ...pattern]
+    // Long-term steroids ("Cushings Syndrome" document, section 6): the ones
+    // the areas do not already ask, also first (../data/steroids.js).
+    const steroid = steroidRedFlags(answers, [...list, ...pattern], zones)
+    const all = [...diabetic, ...steroid, ...list, ...pattern]
     return {
       emergency: all.filter((f) => f.tier === 'emergency'),
       physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -780,8 +786,10 @@ export default function PainAssessment() {
     const night = GENERAL_RED_FLAGS.find((f) => f.id === 'grf-night')
     if (behaviour.nightConcern && night) out.push({ ...night, why: TIER_WHY.urgent })
     const early = new Set(earlyPatterns.map((p) => p.id))
-    // Up to three: dizziness (heart; ear or worsening) and headache can both apply.
-    patternChecks(zones, answers, 7).filter((p) => !early.has(p.id)).slice(0, 3).forEach((p) => out.push(p))
+    // Up to four: dizziness (heart; ear or worsening) and headache can both
+    // apply, and both-sided weakness asks PMR, myositis, the hormone or
+    // steroid screen and the nerve and muscle screen.
+    patternChecks(zones, answers, 7).filter((p) => !early.has(p.id)).slice(0, 4).forEach((p) => out.push(p))
     return out
   }, [zones, answers, behaviour.nightConcern, earlyPatterns])
 
@@ -878,6 +886,8 @@ export default function PainAssessment() {
   }, [keys, scopedAnswers])
   const dmQuestions = diabetesBranch(answers, zones, wideRanked) ? diabetesQuestions(answers, zones) : []
   const dmPanel = useMemo(() => diabetesPanel(answers, zones, shown), [answers, zones, shown])
+  // Steroid medicine or diagnosed Cushing's (../data/steroids.js).
+  const stPanel = useMemo(() => steroidPanel(answers, flags.includes('ca-cushing')), [answers, flags])
   const pickDm = (q, oid) => setAnswers((a) => {
     if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
     const cur = [].concat(a[q.id] || [])
@@ -989,6 +999,7 @@ export default function PainAssessment() {
       zones, referral, keys, answers: scopedAnswers, qaPairs, notes: notesText,
       ranked: shown, behaviour, psych, painType, cautions: pickedCautions,
       diabetes: diabetesSummary(answers, zones, shown),
+      steroids: steroidSummary(answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
       reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
@@ -1040,6 +1051,7 @@ export default function PainAssessment() {
     behaviour: behaviour.notes,
     cautions: pickedCautions.map((f) => f.text),
     diabetes: dmPanel ? { title: dmPanel.title, text: dmPanel.text, notes: dmPanel.notes } : null,
+    steroids: stPanel,
     answers: qaPairs,
     notes: notesText,
   })
@@ -1053,8 +1065,8 @@ export default function PainAssessment() {
     zones: zones.map((z) => ({ id: z.id, type: z.type, face: z.face, ink: z.ink })),
     lines,
     answers: Object.fromEntries(Object.entries(answers).filter(([k, v]) =>
-      // Diabetes answers (dm, dmType…) stay out of the anonymous copy.
-      !/(^notes$|^q5$|_other$|^dm)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
+      // Diabetes and steroid answers (dm, dmType…, steroid) stay out of the anonymous copy.
+      !/(^notes$|^q5$|_other$|^dm|^steroid$)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
     flags: flags.filter((f) => f !== '__other'),
     results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
     referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null })),
@@ -1860,14 +1872,26 @@ export default function PainAssessment() {
                       </button>
                     )
                   })}
+                </div>
+                {/* Steroid medicine (../data/steroids.js), same handling. */}
+                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{STEROID_STATUS.text}</span></p>
+                  {STEROID_STATUS.options.map((o, i) => {
+                    const sel = answers.steroid === o.id
+                    return (
+                      <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, steroid: o.id }))}>
+                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                      </button>
+                    )
+                  })}
                   <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
-                    Diabetes changes which safety questions matter and how some problems are best treated. Your answer goes in your summary and PDF, not in any anonymous copy.
+                    Diabetes and steroid medicine change which safety questions matter and how some problems are best treated. These two answers go in your summary and PDF, not in any anonymous copy.
                   </p>
                 </div>
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary"
-                    style={{ ...goldBtn, opacity: answers.age && birthSex && answers.dm ? 1 : 0.45, cursor: answers.age && birthSex && answers.dm ? 'pointer' : 'not-allowed' }}
-                    disabled={!answers.age || !birthSex || !answers.dm}
+                    style={{ ...goldBtn, opacity: answers.age && birthSex && answers.dm && answers.steroid ? 1 : 0.45, cursor: answers.age && birthSex && answers.dm && answers.steroid ? 'pointer' : 'not-allowed' }}
+                    disabled={!answers.age || !birthSex || !answers.dm || !answers.steroid}
                     onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}>Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
                 </div>
@@ -2392,6 +2416,20 @@ export default function PainAssessment() {
                           {dmPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                         </ul>
                       )}
+                    </div>
+                  </>
+                )}
+
+                {/* Steroid medicine or diagnosed Cushing's (../data/steroids.js). */}
+                {stPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your muscles and bones</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{stPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{stPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {stPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
                     </div>
                   </>
                 )}

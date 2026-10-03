@@ -20,6 +20,8 @@
    ⚠ FOR CLINICIAN REVIEW — wording, tiers and which drawings trigger each.
    ───────────────────────────────────────────────────────────────────────── */
 
+import { HORMONE_SCREEN } from './steroids.js'
+
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
 /** Marked on a particular SURFACE — zones drawn before surfaces were recorded
@@ -314,6 +316,16 @@ const PATTERNS = [
     text: 'Not explained by a condition you have already been diagnosed with: weakness in both thighs or hips, or both shoulders or upper arms, that has built up steadily over weeks to a few months without an injury (trouble getting up from a chair or out of a car, climbing stairs, or lifting your arms to wash your hair), with or without a purple or red rash on the eyelids, knuckles, chest or upper back, a new dry cough or breathlessness, or trouble swallowing',
     // Proximal only: a weak grip or foot drop alone goes to the general screen.
     when: (z, a) => (weakAnswer(a) && has(z, 'neck', 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
+      ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
+  },
+  // Cortisol or steroid medicine ("Cushings Syndrome" document, signed by
+  // Chandra, 3 Oct 2026; route A, not named): the same both-sided proximal
+  // weakness with steroid medicine or the body changes. A yes holds the
+  // booking (family doctor in the next week or two). ./steroids.js
+  {
+    id: 'pc-hormone', tier: 'urgent', noBooking: true, why: HORMONE_SCREEN.why,
+    text: HORMONE_SCREEN.text,
+    when: (z, a) => (weakAnswer(a) && has(z, 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
       ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
   },
   // The nerve and muscle screen (myasthenia gravis: fatigable, eyes and
