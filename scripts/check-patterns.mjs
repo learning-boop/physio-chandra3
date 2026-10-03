@@ -869,7 +869,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /!fibroDiagnosed && \(/.test(src) && /id: 'ca-fibro'/.test(src) && !/showWidespread[^\n]*holdBooking/.test(src))
 }
 
-// ── 29. Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026) ──
+// ── 29. Myofascial pain ("Myofascial Pain" document, signed by Chandra, 2 Oct 2026) ──
 {
   const { buildScreens, rankAcross } = await imp('src/data/assessmentFlow.js')
   const five = ['neck', 'shoulder', 'upperback', 'lowback', 'hip']

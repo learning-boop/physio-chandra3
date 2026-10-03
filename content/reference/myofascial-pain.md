@@ -1,5 +1,5 @@
-<!-- Source: "Myofascial Pain.docx" (Conditions/General conditions), v0.1
-     draft, 2 Oct 2026, pending Chandra's sign-off (AIM Theory Manual 2023
+<!-- Source: "Myofascial Pain.docx" (Conditions/General conditions), reviewed
+     and signed by Chandra Matla, 2 Oct 2026 (confirmed in the session) (AIM Theory Manual 2023
      Ch. 2.9; Delphi 2018 trigger point criteria; MPS update 2025; dry
      needling reviews 2023-2025; Bogduk 2009). Clinician reference only. -->
 
@@ -25,7 +25,7 @@
 - Pressure release and soft tissue techniques; dry needling within CHCPBC authorisation and with consent (GRADE weak, short-term benefit, very low certainty long-term); heat, contract-relax stretch; then the active core: graded loading, movement variability, workstation, sleep and load changes, self-release teaching.
 - Over 3 months, several regions and poor sleep: the persistent-pain framing and the widespread plan; do not keep chasing spots.
 
-## Open items in the document (v0.1)
+## Open items in the document (signed 2 Oct 2026; built as below)
 
 (1) regions and per-region wording (built: neck, shoulder, upper back, low back, hip); (2) the hard rules (not built as rules; see above); (3) dry needling (kept, authorised); (4) the "knot" reframing wording; (5) a referred-pattern overlay on the 3D model; (6) scores and thresholds.
 

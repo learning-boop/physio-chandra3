@@ -121,7 +121,7 @@ export const EXTRA_REGIONS = {
         { id: "d3m", label: "6 weeks to 3 months" },
         { id: "o3m", label: "More than 3 months" }
       ]},
-      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // Myofascial pain ("Myofascial Pain" document, signed by Chandra, 2 Oct 2026):
       // the tender-spot question, on the opening screen and asked once across
       // the neck, shoulder, upper back, low back and hip (shared id "tender",
       // ../data/assessmentFlow.js), so it does not use a scored-question slot.
@@ -540,7 +540,7 @@ export const EXTRA_REGIONS = {
         { id: "d3m", label: "6 weeks to 3 months" },
         { id: "o3m", label: "More than 3 months" }
       ]},
-      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // Myofascial pain ("Myofascial Pain" document, signed by Chandra, 2 Oct 2026):
       // the tender-spot question, on the opening screen and asked once across
       // the neck, shoulder, upper back, low back and hip (shared id "tender",
       // ../data/assessmentFlow.js), so it does not use a scored-question slot.
@@ -2058,7 +2058,7 @@ export const EXTRA_REGIONS = {
         { id: "d3m", label: "6 weeks to 3 months" },
         { id: "o3m", label: "More than 3 months" }
       ]},
-      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // Myofascial pain ("Myofascial Pain" document, signed by Chandra, 2 Oct 2026):
       // the tender-spot question, on the opening screen and asked once across
       // the neck, shoulder, upper back, low back and hip (shared id "tender",
       // ../data/assessmentFlow.js), so it does not use a scored-question slot.

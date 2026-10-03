@@ -71,7 +71,7 @@ export const REGIONS = {
         {id:"d3m", label:"6 weeks to 3 months"},
         {id:"o3m", label:"More than 3 months"}
       ]},
-      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // Myofascial pain ("Myofascial Pain" document, signed by Chandra, 2 Oct 2026):
       // the tender-spot question, shared on the opening screen (id "tender").
       {id:"tender", text:"Can you find a tender spot or tight band in a muscle that, when you press it, brings on your usual ache, including the part that spreads?", options:[
         {id:"refers", label:"Yes: pressing a tender spot brings on my usual ache, including where it spreads"},
@@ -224,7 +224,7 @@ export const REGIONS = {
         {id:"d3m", label:"6 weeks to 3 months"},
         {id:"o3m", label:"More than 3 months"}
       ]},
-      // Myofascial pain ("Myofascial Pain" document, v0.1 draft, 2 Oct 2026):
+      // Myofascial pain ("Myofascial Pain" document, signed by Chandra, 2 Oct 2026):
       // the tender-spot question, shared on the opening screen (id "tender").
       {id:"tender", text:"Can you find a tender spot or tight band in a muscle that, when you press it, brings on your usual ache, including the part that spreads?", options:[
         {id:"refers", label:"Yes: pressing a tender spot brings on my usual ache, including where it spreads"},

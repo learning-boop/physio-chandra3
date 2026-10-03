@@ -3,8 +3,8 @@ region: lowback
 id: myofascial
 name: Muscle-referred low back and hip ache (myofascial pain)
 clin: Myofascial pain syndrome: quadratus lumborum, lumbar paraspinals, gluteals (referral to the iliac crest, buttock and hip)
-# From "Myofascial Pain.docx" (Conditions/General conditions), v0.1 draft,
-# 2 Oct 2026, pending Chandra's sign-off (AIM Theory Manual 2023 Ch. 2.9;
+# From "Myofascial Pain.docx" (Conditions/General conditions), reviewed and
+# signed by Chandra Matla, 2 Oct 2026 (confirmed in the session) (AIM Theory Manual 2023 Ch. 2.9;
 # Delphi 2018 trigger point criteria; MPS update 2025; dry needling reviews
 # 2023-2025; Bogduk 2009). Chandra chose the shared tender-spot question
 # (the opening screen's "tender", shared) and confirmed dry needling authorisation.
@@ -13,7 +13,7 @@ clin: Myofascial pain syndrome: quadratus lumborum, lumbar paraspinals, gluteals
 # Patient wording: "can be associated with a sensitive, tight muscle", never
 # "you have knots" or "damaged muscle".
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Yes: pressing a tender spot brings on my usual ache, including where it spreads": 4
   "There is a tender spot, but pressing it does not spread the ache": 1
