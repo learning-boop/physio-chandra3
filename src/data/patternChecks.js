@@ -44,6 +44,15 @@ const limbSpread = (zones, side) => {
 /** Age 50 or over, from any of the age answer ids (a50, 50-64, o64…). */
 const over50 = (id) => !!id && !/^u/.test(id) && Number((/\d+/.exec(id) || [0])[0]) >= 50
 const WHY = {
+  // "Ankylosing spondylitis Spondyloarthritis" document (v1.0, 2 Oct 2026), red flags.
+  asFracture: {
+    title: 'A stiff spine can break with little force',
+    text: 'In long-standing ankylosing spondylitis the spine is stiffer and can break after a fall or jolt that would not hurt most people. New, severe neck or back pain after even a minor fall needs to be checked in hospital straight away. Keep your head and neck as still as you can.',
+  },
+  uveitis: {
+    title: 'Please see a doctor or eye specialist today',
+    text: 'A painful red eye with blurred vision or sensitivity to light can be uveitis, an inflammation inside the eye that is linked to inflammatory back pain. It is treatable, but it needs to be checked the same day to protect your sight.',
+  },
   trauma5d: {
     title: 'Please see a doctor today',
     text: 'Dizziness that keeps coming back or does not go away after a car accident or a hard knock to the head or neck can come from the inner ear or the neck, but it can also be a sign of damage to a neck artery or the brain. A doctor should check it today, before any treatment of the neck. If it is getting quickly worse, go to an emergency department.',
@@ -109,6 +118,18 @@ const PATTERNS = [
     id: 'pc-trauma5d', tier: 'urgent', sameDay: true, why: WHY.trauma5d,
     text: 'Since the accident or knock, dizziness that keeps coming back or will not go away, or double vision, slurred speech, trouble swallowing, falls or blackouts, feeling sick, face numbness, or flickering eyes',
     when: (z, a) => [].concat(a.D8 || []).includes('dizzy'),
+  },
+  // Axial spondyloarthritis (the low back's L9 or the pelvis's P6, document
+  // v1.0, 2 Oct 2026): a fracture in a known AS spine, then uveitis.
+  {
+    id: 'pc-as-fracture', tier: 'emergency', call911: true, keepNeckStill: true, why: WHY.asFracture,
+    text: 'Since a fall or jolt, even a minor one, new and severe neck or back pain',
+    when: (z, a) => [...[].concat(a.L9 || []), ...[].concat(a.P6 || [])].includes('diagnosed'),
+  },
+  {
+    id: 'pc-uveitis', tier: 'urgent', sameDay: true, why: WHY.uveitis,
+    text: 'A painful, red eye with blurred vision or sensitivity to light',
+    when: (z, a) => [...[].concat(a.L9 || []), ...[].concat(a.P6 || [])].some((x) => ['morning', 'exercise', 'night', 'related', 'diagnosed'].includes(x)),
   },
   // Dizziness ticked on the neck's N9 (cervicogenic dizziness document,
   // section 6). Its stroke-type and after-injury flags are on the first safety
@@ -201,7 +222,11 @@ export function patternChecks(zones = [], answers = {}, max = 3) {
   const out = []
   for (const p of PATTERNS) {
     if (out.length >= max) break
-    try { if (p.when(zones, answers)) out.push({ id: p.id, text: p.text, tier: p.tier, why: p.why, ...(p.sameDay ? { sameDay: true } : {}) }) } catch { /* skip */ }
+    // call911 and keepNeckStill pick the emergency screen (./emergencyAdvice.js).
+    try {
+      if (p.when(zones, answers)) out.push({ id: p.id, text: p.text, tier: p.tier, why: p.why,
+        ...(p.sameDay ? { sameDay: true } : {}), ...(p.call911 ? { call911: true } : {}), ...(p.keepNeckStill ? { keepNeckStill: true } : {}) })
+    } catch { /* skip */ }
   }
   return out
 }

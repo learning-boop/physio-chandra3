@@ -824,12 +824,18 @@ export const EXTRA_REGIONS = {
           { id: "turning", label: "Turning over in bed is very hard" },
           { id: "none", label: "None of these" }
         ]},
+      // Options shared with the low back's L9 ("Ankylosing spondylitis
+      // Spondyloarthritis" document, 2 Oct 2026); "eye" became "related".
       { id: "P6", text: "Which of these apply? Tick all that apply.",
         askIf: ({ ra }) => (!ra.age || ["u18", "18-29", "30-49"].includes(ra.age)) && (!ra.duration || ra.duration === "o3m"),
+        priority: ({ ra }) => ra.duration === "o3m" && ra.onset === "gradual",
         options: [
-          { id: "morning", label: "Stiff for more than 30 minutes in the morning", special: "inflammatory" },
-          { id: "exercise", label: "Exercise helps more than rest", special: "inflammatory" },
-          { id: "eye", label: "I have had eye inflammation, psoriasis, or inflammatory bowel disease", special: "inflammatory" },
+          { id: "before40", label: "My back pain first started before I was 40" },
+          { id: "morning", label: "My back is stiff for more than 30 minutes in the morning", special: "inflammatory" },
+          { id: "exercise", label: "Moving or exercise eases it, and resting does not", special: "inflammatory" },
+          { id: "night", label: "It wakes me in the second half of the night, and eases once I get up and move" },
+          { id: "related", label: "I have psoriasis, Crohn's or colitis, have had a painful red eye (uveitis), have heel pain, or a close relative has ankylosing spondylitis", special: "inflammatory" },
+          { id: "diagnosed", label: "I have been told I have ankylosing spondylitis or axial spondyloarthritis" },
           { id: "none", label: "None of these" }
         ]},
       { id: "P7", text: "Does bending forward or arching your low back change the pain?", options: [

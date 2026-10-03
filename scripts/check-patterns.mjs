@@ -628,5 +628,21 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('concussion: only after a knock', conc && JSON.stringify(conc.gates) === JSON.stringify({ requiresOnset: ['knock'] }), conc && conc.gates)
 }
 
+// ── 18. Axial spondyloarthritis safety checks; pattern checks keep call911 ──
+{
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { emergencyLevel } = await imp('src/data/emergencyAdvice.js')
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const asFx = patternChecks(Z(['lowerback']), { L9: ['diagnosed'] }, 7).find((p) => p.id === 'pc-as-fracture')
+  check('axSpA: known AS asks about a fall or jolt, and a yes calls 911 with the neck kept still',
+    asFx && emergencyLevel([asFx]) === 'call911' && asFx.keepNeckStill, asFx)
+  check('axSpA: inflammatory features ask about a painful red eye (doctor today)',
+    patternChecks(Z(['sij']), { P6: ['morning'] }, 7).some((p) => p.id === 'pc-uveitis' && p.sameDay))
+  check('axSpA: onset before 40 alone does not ask about the eye',
+    !patternChecks(Z(['lowerback']), { L9: ['before40'] }, 7).some((p) => p.id === 'pc-uveitis'))
+  const cardiac = patternChecks(Z(['chest']), {}, 7).find((p) => p.id === 'pc-cardiac')
+  check('911 split: the heart pattern check keeps call911 (fixed 2 Oct 2026)', cardiac && emergencyLevel([cardiac]) === 'call911', cardiac)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

@@ -5,6 +5,9 @@
 # buttocks (SIJ_TOP in src/components/Body3D.jsx). A line from there down the
 # leg also asks the low back questions.
 # Test patients: npm run check:regions
+# 2 Oct 2026: "Ankylosing spondylitis Spondyloarthritis.docx" (Conditions/General
+# conditions, v1.0): condition sij-axspa and the inflammatory back pain question,
+# shared with the low back (L9). Marked (as) below.
 region: sij
 name: Sacroiliac joint & back of the pelvis
 source: Laslett M et al. Sacroiliac joint provocation test cluster. Man Ther 10, 2005; Vleeming A et al. European guidelines for the diagnosis and treatment of pelvic girdle pain. Eur Spine J 17(6), 2008; Szadek KM et al. Diagnostic validity of criteria for sacroiliac joint pain. J Pain 10(4), 2009; Fortin JD, Falco FJ. The Fortin finger test. Am J Orthop 26(7), 1997; Rudwaleit M et al. ASAS criteria for inflammatory back pain. Ann Rheum Dis 68, 2009; Finucane LM et al. International Framework for Red Flags. JOSPT 50(7), 2020; Slipman CW et al. Sacroiliac joint pain referral zones. Arch Phys Med Rehabil 81(3), 2000; Donnelly JM et al. Travell, Simons & Simons' Trigger Point Manual, 3rd ed., 2019
@@ -84,11 +87,16 @@ Q: Which of these apply? Tick all that apply.
 Ask only if: How did it start? = "During pregnancy" or "After giving birth"
 
 Q: Which of these apply? Tick all that apply.
-- Stiff for more than 30 minutes in the morning   (shows the inflammatory back pain card)
-- Exercise helps more than rest   (shows the inflammatory back pain card)
-- I have had eye inflammation, psoriasis, or inflammatory bowel disease   (shows the inflammatory back pain card)
+<!-- (as) Options replaced 2 Oct 2026 with the low back's L9 set; was: stiff over 30 minutes, exercise helps more than rest, eye inflammation / psoriasis / IBD. -->
+- My back pain first started before I was 40   (as Q1: 3)
+- My back is stiff for more than 30 minutes in the morning   (as Q3: 3; shows the inflammatory back pain card)
+- Moving or exercise eases it, and resting does not   (as Q4: 3; shows the card)
+- It wakes me in the second half of the night, and eases once I get up and move   (as Q5: 3)
+- I have psoriasis, Crohn's or colitis, have had a painful red eye (uveitis), have heel pain, or a close relative has ankylosing spondylitis   (as bonus: 2; shows the card)
+- I have been told I have ankylosing spondylitis or axial spondyloarthritis   (as: 0; asks the AS fracture check)
 - None of these
-Ask only if: Age = "Under 18", "18 to 29" or "30 to 49", and it has gone on "More than 3 months"
+Ask only if: Age = "Under 18", "18 to 29" or "30 to 49", and it has gone on "More than 3 months"; asked first when it also started gradually
+(as) "It switches from side to side" (question 3) scores 1 for the condition.
 
 Q: Does bending forward or arching your low back change the pain?
 - Yes, a lot   (shows "This may be coming from your low back")

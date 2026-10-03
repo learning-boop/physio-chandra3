@@ -3,6 +3,9 @@
 # Built into src/data/symptomGuide.js (lowback). Conditions: content/conditions/lowback-*.md.
 # A low-back mark also asks the TL-junction questions (content/regions/tlj.md).
 # Test patients: npm run check:regions
+# 2 Oct 2026: "Ankylosing spondylitis Spondyloarthritis.docx" (Conditions/General
+# conditions, v1.0): condition lowback-axspa and the inflammatory back pain question,
+# shared with the pelvis (P6). Marked (as) below.
 region: lowback
 name: Low back & pelvis
 source: George SZ et al. Interventions for the management of acute and chronic low back pain: Revision 2021. JOSPT 51(11), 2021; Delitto A et al. Low back pain CPG (classification). JOSPT 42(4), 2012; NICE NG59. Low back pain and sciatica in over 16s, 2016 (updated 2020); Finucane LM et al. International Framework for Red Flags. JOSPT 50(7), 2020; Konno S et al. Clinical diagnosis support tool for lumbar spinal stenosis. Eur Spine J 16, 2007; Laslett M et al. Sacroiliac joint provocation test cluster. Man Ther 10, 2005; Bogduk N. Pain 147, 2009; Fukui S et al. Clin J Pain 13(4), 1997; O'Neill CW et al. Spine 27(24), 2002; Lesher JM et al. Hip joint pain referral patterns. Pain Med 9(1), 2008; Donnelly JM et al. Travell, Simons & Simons' Trigger Point Manual, 3rd ed., 2019
@@ -104,6 +107,17 @@ Q: Which of these do you do regularly? Tick all that apply.
 - Driving long distances
 - None of these
 
+Q: Which of these apply? Tick all that apply.   (as, new)
+- My back pain first started before I was 40   (as Q1: 3)
+- My back is stiff for more than 30 minutes in the morning   (as Q3: 3; shows the inflammatory back pain card)
+- Moving or exercise eases it, and resting does not   (as Q4: 3; shows the card)
+- It wakes me in the second half of the night, and eases once I get up and move   (as Q5: 3)
+- I have psoriasis, Crohn's or colitis, have had a painful red eye (uveitis), have heel pain, or a close relative has ankylosing spondylitis   (as bonus: 2; shows the card)
+- The pain switches from one buttock to the other   (as Q6: 1)
+- I have been told I have ankylosing spondylitis or axial spondyloarthritis   (as: 0; asks the AS fracture check)
+- None of these
+Ask only if: it has gone on 6 weeks or more (or not answered), and it started gradually (or not answered); asked first for more than 3 months, gradual
+
 ## referral patterns
 - Low back → buttock and back of the thigh, stopping above the knee | Referred pain from the lumbar joints or discs (not a nerve root). Joints and discs can also refer below the knee, so distance alone does not mean a nerve root | Sacroiliac joint, hip joint, deep gluteal pain
 - Low back → below the knee (L4 inner shin, L5 top of the foot and big toe, S1 outer foot and sole) | Nerve root (radicular) when there are nerve-type symptoms. Without them, consider joint, disc, or gluteus minimus referral instead | Deep gluteal (piriformis), peroneal nerve at the knee, tarsal tunnel
@@ -145,3 +159,12 @@ Drawing: Low back in the middle, on the spine
 Answers: Age = Under 18; Gradually, no clear reason; 2 to 6 weeks; Q1 = low back only; Q4 = arching back, or standing for a long time; Q6 = in the middle of the low back, on the spine; Q8 = sport with a lot of arching back
 Flags: Are you under 20, and does it hurt to arch your back...
 Expect: top condition = none; must not show = LBP with mobility deficits, any booking before review; route = physician first
+
+<!-- (as) From "Ankylosing spondylitis Spondyloarthritis.docx" (v1.0, 2 Oct 2026): maximum 20, shown from 8. -->
+CASE: 6. 28, gradual low back pain for months, stiff mornings, better moving, wakes at night
+Answers: 18 to 29; gradually; more than 3 months; inflammatory question = before 40 + morning stiffness + exercise helps + night pain + switching buttocks
+Expect: top condition = inflammatory back pain (with the see-your-doctor note); route = results
+
+CASE: 7. 45, low back pain after lifting, eases with rest
+Answers: 30 to 49; after lifting; more than 3 months
+Expect: inflammatory question not asked; must not show = inflammatory back pain

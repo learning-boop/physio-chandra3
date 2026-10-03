@@ -418,6 +418,16 @@ const TESTS = {
       answers: { age: 'u18', onset: 'gradual', duration: 'd6w', L1: ['back'], L4: ['arch'], L6: ['centre'], L8: ['arching'] },
       flags: ['rf-spondy'],
       expect: { route: 'urgent' } },
+    // "Ankylosing spondylitis Spondyloarthritis.docx" (v1.0, 2 Oct 2026): max 20, shown from 8.
+    { name: '6. 28, gradual low back pain for months, stiff mornings, better moving, wakes at night',
+      lines: [['lowerback']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'o3m', L1: ['buttock'], L4: ['getup'], L6: ['centre'],
+        L9: ['before40', 'morning', 'exercise', 'night', 'alternating'] },
+      expect: { top: 'lowback/axspa', route: 'results' } },
+    { name: '7. 45, low back pain after lifting, eases with rest: not inflammatory',
+      lines: [['lowerback']],
+      answers: { age: '30-49', onset: 'lift', duration: 'o3m', L1: ['back'], L4: ['bendsit'], L6: ['side'], L7: ['stiff'] },
+      expect: { not: ['lowback/axspa'], notAsked: ['L9'], route: 'results' } },
   ],
   sij: [
     { name: '1. Sacroiliac joint after a jarring landing',

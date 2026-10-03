@@ -124,6 +124,24 @@ export const REGIONS = {
         {id:"sitting", label:"Sitting most of the day"},
         {id:"driving", label:"Driving long distances"},
         {id:"none", label:"None of these"}
+      ]},
+      // "Ankylosing spondylitis Spondyloarthritis" document (v1.0, 2 Oct
+      // 2026): its Q1 (onset before 40), Q3 (morning stiffness), Q4 (exercise
+      // helps, rest does not), Q5 (night pain easing on rising), Q6 (switching
+      // buttocks) and its bonus features. The same answers as the pelvis's P6.
+      // Asked for pain of 6 weeks or more that came on gradually.
+      {id:"L9", text:"Which of these apply? Tick all that apply.",
+        askIf: ({ ra }) => (!ra.duration || ra.duration === "d3m" || ra.duration === "o3m") && (!ra.onset || ra.onset === "gradual"),
+        priority: ({ ra }) => ra.duration === "o3m" && ra.onset === "gradual",
+        options:[
+        {id:"before40", label:"My back pain first started before I was 40"},
+        {id:"morning", label:"My back is stiff for more than 30 minutes in the morning", special:"inflammatory"},
+        {id:"exercise", label:"Moving or exercise eases it, and resting does not", special:"inflammatory"},
+        {id:"night", label:"It wakes me in the second half of the night, and eases once I get up and move"},
+        {id:"related", label:"I have psoriasis, Crohn's or colitis, have had a painful red eye (uveitis), have heel pain, or a close relative has ankylosing spondylitis", special:"inflammatory"},
+        {id:"alternating", label:"The pain switches from one buttock to the other"},
+        {id:"diagnosed", label:"I have been told I have ankylosing spondylitis or axial spondyloarthritis"},
+        {id:"none", label:"None of these"}
       ]}
     ],
     conditions:[]
