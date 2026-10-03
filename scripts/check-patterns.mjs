@@ -811,5 +811,19 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /const underFive = answers\.age === 'u5'/.test(src) && /!holdBooking && !underFive/.test(src) && /underFive && !holdBooking \?/.test(src))
 }
 
+// ── 26. Inflammatory myopathy ("Poly myositis" document, v0.1 draft, 2 Oct 2026) ──
+{
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const both = patternChecks(ZN(['thighL', 'thighR', 'shoulderL', 'shoulderR']), {}, 9)
+  const myo = both.find((p) => p.id === 'pc-myositis')
+  check('Myositis: both thighs and shoulders drawn asks about weakness over weeks to months; a yes holds the booking (doctor this week, CK)',
+    myo && myo.noBooking && /creatine kinase/.test(myo.why.text) && !/myositis|polymyositis/i.test(myo.text), both.map((p) => p.id))
+  check('Myositis: asked before the general nerve and muscle screen', both.findIndex((p) => p.id === 'pc-myositis') < both.findIndex((p) => p.id === 'pc-muscle'))
+  check('Myositis: not asked for a weak grip alone (hands are spared; the general screen asks)',
+    !patternChecks(ZN(['handR']), { H3: ['weak'] }, 9).some((p) => p.id === 'pc-myositis') && patternChecks(ZN(['thighR']), { R2: ['weak'] }, 9).some((p) => p.id === 'pc-myositis'))
+  check('Myositis: not asked for one sore shoulder with no weakness', !patternChecks(ZN(['shoulderR']), { painQuality: ['ache'] }, 9).some((p) => p.id === 'pc-myositis'))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

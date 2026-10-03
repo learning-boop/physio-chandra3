@@ -22,7 +22,7 @@ content/
     multiple-sclerosis.md   (the nervous-system screen pc-neuro, diagnosed MS on the cautions list, clinician notes)
     hip-fracture.md   (JOSPT hip fracture CPG 2021: the emergency route and rehabilitation after surgery)
     work-participation.md   (JOSPT work participation CPG 2021: return-to-work screening and interventions)
-    neuromuscular.md   (myasthenia gravis and myotonic dystrophy: the nerve and muscle screen pc-muscle, the 911 crisis question, diagnosed entries on the cautions list)
+    neuromuscular.md   (myasthenia gravis, myotonic dystrophy and myositis (pc-myositis): the nerve and muscle screen pc-muscle, the 911 crisis question, diagnosed entries on the cautions list)
     duchenne.md   (Duchenne muscular dystrophy: the early-signs question for a child, pc-child-muscle, and the diagnosed entry on the cautions list)
 ```
 

@@ -71,6 +71,10 @@ const WHY = {
     title: 'Please see your family doctor in the next week or two',
     text: 'Most children who fall a lot or walk on their toes do not have a muscle condition, and checking is quick. But getting up from the floor by pushing the hands up the legs, falling behind other children at running, jumping or stairs, walking late or losing a skill, or unusually large, firm calves can point to weakness in the hip and thigh muscles, and a doctor should look at this rather than wait. Please describe exactly what you have noticed and ask whether a creatine kinase (CK) blood test is appropriate; it is the usual first step. If your child has lost a skill they used to have, please see the doctor this week. Physiotherapy can follow once the cause is known, and your instincts as a parent are worth trusting.',
   },
+  myositisScreen: {
+    title: 'Please see your family doctor this week',
+    text: 'Weakness in both thighs or both shoulders that has built up over weeks or months, without an injury, is different from a strained muscle or a worn joint. One possible cause is inflammation in the muscles themselves, which a doctor can usually pick up with a blood test. Please see your family doctor this week and ask whether a creatine kinase (CK) blood test is appropriate; mention any rash, swallowing trouble, cough or breathlessness, and the medicines you take (including any cholesterol medicine). If you have swallowing, breathing or general symptoms, please do not wait more than a few days. This kind of weakness can be treated, and physiotherapy can follow once the cause is known.',
+  },
   handProcedure: {
     title: 'Please contact a doctor or your hand clinic today',
     text: 'After hand surgery, a needle release or an injection, a hot, red, increasingly swollen hand, pus, spreading redness or a fever can be an infection, and new numbness in a fingertip or a finger you suddenly cannot bend can mean a nerve or tendon problem. These need checking the same day. Pain, swelling, colour change or sensitivity far beyond what you expected, not settling week on week, also needs an early review.',
@@ -284,6 +288,17 @@ const PATTERNS = [
     id: 'pc-child-muscle', tier: 'urgent', noBooking: true, why: WHY.childMuscle,
     text: 'For a young child: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
     when: (z, a) => ['u5', 'u18'].includes(a.age) && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'),
+  },
+  // Inflammatory myopathy ("Poly myositis" document, v0.1 draft, 2 Oct 2026,
+  // pending Chandra's sign-off; route A, the subacute symmetrical proximal
+  // part of the nerve and muscle gate, not named). Before the general screen,
+  // for the same triggers. A yes holds the booking (doctor this week, CK).
+  {
+    id: 'pc-myositis', tier: 'urgent', noBooking: true, why: WHY.myositisScreen,
+    text: 'Not explained by a condition you have already been diagnosed with: weakness in both thighs or hips, or both shoulders or upper arms, that has built up steadily over weeks to a few months without an injury (trouble getting up from a chair or out of a car, climbing stairs, or lifting your arms to wash your hair), with or without a purple or red rash on the eyelids, knuckles, chest or upper back, a new dry cough or breathlessness, or trouble swallowing',
+    // Proximal only: a weak grip or foot drop alone goes to the general screen.
+    when: (z, a) => (weakAnswer(a) && has(z, 'neck', 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
+      ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
   },
   // The nerve and muscle screen (myasthenia gravis: fatigable, eyes and
   // bulbar, worse by evening; myotonic dystrophy: grip myotonia, both hands
