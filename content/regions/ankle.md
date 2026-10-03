@@ -74,7 +74,7 @@ Why: Possible growth plate fracture: in children these are more common than spra
 <!-- (crps) Added 2 Oct 2026, shared with the foot (group "crps"), asked once: -->
 - Since an ankle injury, surgery, or cast, is your ankle or foot burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts? | urgent | Possible complex regional pain syndrome (CRPS); early treatment matters
 
-<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (v0.1 draft): see content/reference/compartment-syndrome.md. -->
+<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (signed by Chandra, 2 Oct 2026): see content/reference/compartment-syndrome.md. -->
 - Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved? | emergency | Possible acute compartment syndrome   (acs; shared by the lower leg, ankle and foot, asked once)
 - Is a cast, splint or bandage on this leg feeling more and more tight and painful? Please do not cut it off yourself. | urgent, same day | A cast that keeps getting tighter needs checking today   (acs)
 

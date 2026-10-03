@@ -71,7 +71,7 @@ Route: Yes → PHYSICIAN FIRST
 Why: Possible finger fracture with rotation, or a central slip (boutonnière) injury
 
 
-<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (v0.1 draft): see content/reference/compartment-syndrome.md. -->
+<!-- (acs) 2 Oct 2026, "Acute Compartment Syndrome.docx" (signed by Chandra, 2 Oct 2026): see content/reference/compartment-syndrome.md. -->
 - Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved? | emergency | Possible acute compartment syndrome   (acs; shared by the forearm, wrist and hand, asked once)
 - Is a cast, splint or bandage on this hand feeling more and more tight and painful? Please do not cut it off yourself. | urgent, same day | A cast that keeps getting tighter needs checking today   (acs)
 

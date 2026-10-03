@@ -1,5 +1,6 @@
 <!-- Source: "Acute Compartment Syndrome.docx" (Conditions/General conditions),
-     v0.1 draft, 2 Oct 2026, pending Chandra's sign-off (AIM Theory Manual 2023
+     reviewed and signed by Chandra Matla, 2 Oct 2026 (confirmed in the
+     session; the saved Word file did not yet show the signature) (AIM Theory Manual 2023
      Ch. 2.9; BOAST compartment syndrome 2025; Donaldson 2014; RCEM Learning).
      Clinician reference only. On the site, acute compartment syndrome is an
      emergency-route entry, not a condition: the safety questions below end
@@ -33,7 +34,7 @@ Stop the assessment. Do not elevate above heart level. Release any circumferenti
 - As wounds heal: scar massage and desensitising once closed, progressive range, splinting or positioning where muscles risk shortening.
 - Strength and function: graded strengthening, balance and gait or hand-function retraining, staged return to work, driving and sport; work with what a nerve is recovering and compensate safely for what is not; keep the surgical team informed and refer back promptly if anything worsens.
 
-## Open items in the document (v0.1)
+## Open items in the document (signed 2 Oct 2026; built as below)
 
 (1) emergency threshold and override rules; (2) whether "possible" also goes straight to the emergency screen (built: yes, there is one question); (3) wording of the passive-stretch question for someone alone ("gently moved"); (4) chronic exertional compartment syndrome as its own physio condition (not yet built); (5) the walk-in protocol (911 vs own transport) against the clinic's process.
 

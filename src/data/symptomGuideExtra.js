@@ -1525,7 +1525,7 @@ export const EXTRA_REGIONS = {
     // it then gets no guaranteed first question (see nextQuestion).
     yieldsTo: ["elbow"],
     redFlags: [
-      // "Acute Compartment Syndrome" document (v0.1 draft, 2 Oct 2026): pain relief no
+      // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "frf-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
         text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
@@ -1661,7 +1661,7 @@ export const EXTRA_REGIONS = {
   wrist: {
     name: "Wrist",
     redFlags: [
-      // "Acute Compartment Syndrome" document (v0.1 draft, 2 Oct 2026): pain relief no
+      // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "wrf-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
         text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
@@ -1813,7 +1813,7 @@ export const EXTRA_REGIONS = {
   hand: {
     name: "Hand & fingers",
     redFlags: [
-      // "Acute Compartment Syndrome" document (v0.1 draft, 2 Oct 2026): pain relief no
+      // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "hnd-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
         text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
@@ -2129,7 +2129,7 @@ export const EXTRA_REGIONS = {
     redFlags: [
       { id: "tgf-pe", tier: "emergency", call911: true, group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
         text: "Is your thigh or calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
-      // "Acute Compartment Syndrome" document (v0.1 draft, 2 Oct 2026): pain relief no
+      // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "tgf-compartment", tier: "emergency", why: "Possible compartment syndrome of the thigh: pressure building up inside the muscles needs an emergency department now",
         text: "Since a heavy knock, a crush, a broken bone or very hard exercise in the last day or two: is your thigh pain far worse than expected and still climbing, no longer helped by pain relief, with the thigh tense, hard and swollen?" },
@@ -2269,7 +2269,7 @@ export const EXTRA_REGIONS = {
     redFlags: [
       { id: "lgf-pe", tier: "emergency", call911: true, group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
         text: "Is your calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
-      // "Acute Compartment Syndrome" document (v0.1 draft, 2 Oct 2026): pain relief no
+      // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "lgf-compartment", tier: "emergency", group: "compartment-leg", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
         text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved?" },
@@ -2422,7 +2422,7 @@ export const EXTRA_REGIONS = {
   ankle: {
     name: "Ankle",
     redFlags: [
-      // "Acute Compartment Syndrome" document (v0.1 draft, 2 Oct 2026): pain relief no
+      // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "af-compartment", tier: "emergency", group: "compartment-leg", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
         text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved?" },
@@ -2588,7 +2588,7 @@ export const EXTRA_REGIONS = {
   foot: {
     name: "Foot & toes",
     redFlags: [
-      // "Acute Compartment Syndrome" document (v0.1 draft, 2 Oct 2026): pain relief no
+      // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "ft-compartment", tier: "emergency", group: "compartment-leg", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
         text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved?" },
