@@ -490,8 +490,10 @@ export const EXTRA_REGIONS = {
         text: "Have your legs gradually become stiff, heavy, or clumsy when you walk?" },
       { id: "trf-cancer", tier: "urgent", group: "cancer", why: "The thoracic spine is a common site for cancer to spread",
         text: "Have you ever had cancer, and is this a new mid-back pain?" },
-      { id: "trf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
-        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+      // Widened to the "Osteoporosis" document's red flag (v1.0, 2 Oct 2026):
+      // over 50, or a fall from standing height, as well as a minor strain.
+      { id: "trf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine: your doctor should examine you and arrange an X-ray before treatment starts",
+        text: "Did the pain start suddenly after a minor strain, cough, lift, or a fall from standing height, and are you over 50, or do you have osteoporosis or take long-term steroid tablets?" },
       { id: "trf-infection", tier: "urgent", group: "infection", why: "Possible spinal infection",
         text: "Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?" },
       { id: "trf-kidney", tier: "urgent", group: "kidney", why: "Possible kidney infection or stone",
@@ -582,7 +584,20 @@ export const EXTRA_REGIONS = {
         { id: "moving", label: "Moving around" },
         { id: "heat", label: "Heat or massage" },
         { id: "nothing", label: "Nothing specific" }
-      ]}
+      ]},
+      // "Osteoporosis" document (v1.0, 2 Oct 2026): its Q4 (known osteoporosis
+      // or a fragility fracture, 3), Q5 (causes of bone loss, 2) and Q6 (height
+      // loss or stoop, 2). Asked from 50 (its Q1 scores nothing under 50), and
+      // first when the pain came on after a cough, lift or fall.
+      { id: "T9", text: "Which of these apply to you? Tick all that apply.",
+        askIf: ({ ra }) => ra.age === "50-64" || ra.age === "o64",
+        priority: ({ ra }) => ["cough", "lift", "fall"].includes(ra.onset),
+        options: [
+          { id: "fragility", label: "I have been told I have osteoporosis or low bone density, or I have broken a bone after a minor fall as an adult" },
+          { id: "secondary", label: "I have taken steroid tablets (such as prednisone) for more than 3 months, or I have rheumatoid arthritis, a thyroid or parathyroid condition, coeliac or inflammatory bowel disease, or had an early menopause" },
+          { id: "height", label: "I have lost height (more than about 4 cm, or 1½ inches), or I stoop more than I used to" },
+          { id: "none", label: "None of these, or I am not sure" }
+        ]}
     ],
     conditions: []
   },

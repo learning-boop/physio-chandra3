@@ -351,6 +351,21 @@ const TESTS = {
       answers: { age: 'o64', onset: 'lift', duration: 'd2w', T1: ['spine'], T2: ['slump', 'lifting'] },
       flags: ['trf-osteo'],
       expect: { route: 'urgent' } },
+    // "Osteoporosis.docx" (v1.0, 2 Oct 2026): max 16, shown from 7.
+    { name: '6. Over 65, mid-back pain after a cough, known osteoporosis and height loss',
+      lines: [['upperback']],
+      answers: { age: 'o64', onset: 'cough', duration: 'd2w', T1: ['spine'], T2: ['slump', 'lifting'], T3: ['no'],
+        T9: ['fragility', 'height'], T6: ['worse'], T8: ['lying'] },
+      expect: { top: 'upperback/osteoporosis', route: 'results' } },
+    { name: '7. 55, stiff beside the spine after desk work, no bone history: not osteoporosis',
+      lines: [['upperback']],
+      answers: { age: '50-64', onset: 'sitting', duration: 'd3m', T1: ['beside'], T2: ['slump', 'sitting'], T5: ['desk'],
+        T6: ['eases'], T8: ['tall', 'heat'], T9: ['none'] },
+      expect: { not: ['upperback/osteoporosis'], route: 'results' } },
+    { name: '8. Under 50 on steroids, sudden pain: the bone history question is not asked',
+      lines: [['upperback']],
+      answers: { age: '30-49', onset: 'cough', duration: 'd2w', T1: ['spine'], T2: ['lifting'], T6: ['worse'] },
+      expect: { not: ['upperback/osteoporosis'], notAsked: ['T9'], route: 'results' } },
   ],
   tlj: [
     // Drawn on the low back only: the TL junction is asked because a low-back

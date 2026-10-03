@@ -4,6 +4,9 @@
 # Body map: the mid back (below the base-of-neck band, above where the ribs
 # end) AND the front of the chest.
 # Test patients: npm run check:regions
+# 2 Oct 2026: "Osteoporosis.docx" (Conditions/General conditions, v1.0):
+# condition upperback-osteoporosis, question 9 and a wider osteoporosis
+# flag. Test patients 6 to 8. Marked (op) below.
 region: upperback
 name: Mid back (thoracic spine)
 source: Finucane LM et al. International Framework for Red Flags for Potential Serious Spinal Pathologies. JOSPT 50(7), 2020; Heneghan NR, Rushton A. Understanding why the thoracic region is the 'Cinderella' region of the spine. Man Ther 21, 2016; Rudwaleit M et al. ASAS criteria for inflammatory back pain. Ann Rheum Dis 68, 2009; Proulx AM, Zryd TW. Costochondritis: diagnosis and treatment. Am Fam Physician 80(6), 2009; Bogduk N. Pain 147, 2009; Dreyfuss P et al. Thoracic zygapophyseal joint pain patterns. Spine 19(7), 1994; Donnelly JM et al. Travell, Simons & Simons' Trigger Point Manual, 3rd ed., 2019; Giamberardino MA. J Rehabil Med Suppl 41, 2003
@@ -24,7 +27,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 - Did this start in the last few days after a car crash, a fall from a height, or a hard blow to the back? | emergency | Possible spinal fracture
 - Have your legs gradually become stiff, heavy, or clumsy when you walk? | urgent | Possible slow pressure on the spinal cord (thoracic myelopathy)
 - Have you ever had cancer, and is this a new mid-back pain? | urgent | The thoracic spine is a common site for cancer to spread
-- Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70? | urgent | Possible osteoporotic fracture of the spine
+- Did the pain start suddenly after a minor strain, cough, lift, or a fall from standing height, and are you over 50, or do you have osteoporosis or take long-term steroid tablets? | urgent | Possible osteoporotic fracture of the spine: your doctor should examine you and arrange an X-ray before treatment starts   (op: was "over 70", no fall from standing)
 - Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs? | urgent | Possible spinal infection
 - Is the pain in your side or lower ribs, with a fever, burning when you pass urine, or blood in your urine? | urgent | Possible kidney infection or stone
 - Is the pain linked to eating, heartburn, or black stools, or is it under your right shoulder blade after fatty meals? | urgent | Stomach, ulcer, or gallbladder pain can be felt in the back
@@ -107,6 +110,13 @@ Q: What eases it? Tick all that apply.
 - Heat or massage
 - Nothing specific
 
+Q: Which of these apply to you? Tick all that apply.   (op)
+- I have been told I have osteoporosis or low bone density, or I have broken a bone after a minor fall as an adult   (op Q4: 3)
+- I have taken steroid tablets (such as prednisone) for more than 3 months, or I have rheumatoid arthritis, a thyroid or parathyroid condition, coeliac or inflammatory bowel disease, or had an early menopause   (op Q5: 2)
+- I have lost height (more than about 4 cm, or 1½ inches), or I stoop more than I used to   (op Q6: 2)
+- None of these, or I am not sure
+Ask only if: age 50 or over; asked first after a cough, lift or fall
+
 ## referral patterns
 - Thoracic joints (T4–T12) → beside the spine, sometimes along the rib | Referred pain from the spinal or rib joints; facet pain stays mostly on one side, about one level below the joint (Dreyfuss 1994) | Disc, rib joint
 - Thoracic nerve root → a band around the chest or tummy (T10 at the belly button) | Nerve root pain (thoracic radiculopathy or intercostal neuralgia) | Shingles, diabetic nerve pain
@@ -151,3 +161,16 @@ Drawing: Middle of the back, on the spine
 Answers: Age = 65 or over; After lifting, twisting, or reaching; Less than 2 weeks; Q1 = on the spine; Q2 = bending forward or slumping + lifting or carrying
 Flags: Sudden pain after a minor strain... osteoporosis...
 Expect: top condition = none; must not show = thoracic stiffness, any booking before review; route = physician first
+
+<!-- (op) From "Osteoporosis.docx" (v1.0, 2 Oct 2026): maximum 16, shown from 7. -->
+CASE: 6. Over 65, mid-back pain after a cough, known osteoporosis and height loss
+Answers: 65 or over; after a cough; less than 2 weeks; Q1 = middle of the back, on the spine; Q9 = known osteoporosis + height loss
+Expect: top condition = osteoporosis (with the see-your-doctor note); route = results
+
+CASE: 7. 55, stiff beside the spine after desk work, no bone history
+Answers: 50 to 64; after sitting; Q1 = beside the spine; Q9 = none
+Expect: must not show = osteoporosis; route = results
+
+CASE: 8. Under 50, sudden pain after a cough
+Answers: 30 to 49; after a cough; Q1 = middle of the back
+Expect: question 9 not asked; must not show = osteoporosis
