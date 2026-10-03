@@ -303,8 +303,8 @@ const PATTERNS = [
     when: (z, a) => over50(a.age) && !has(z, 'neck') &&
       (['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)) || (has(z, 'shoulder') && has(z, 'hip'))),
   },
-  // Inflammatory myopathy ("Poly myositis" document, v0.1 draft, 2 Oct 2026,
-  // pending Chandra's sign-off; route A, the subacute symmetrical proximal
+  // Inflammatory myopathy ("Poly myositis" document, signed by Chandra,
+  // 2 Oct 2026; route A, the subacute symmetrical proximal
   // part of the nerve and muscle gate, not named). Before the general screen,
   // for the same triggers. A yes holds the booking (doctor this week, CK).
   {

@@ -4,7 +4,9 @@
      files did not yet show the signature) (AIM Theory Manual 2023 Ch. 2.9; Narayanaswami 2021
      MG consensus; MG exercise reviews 2024-2025; MDF consensus DM1 2018 and
      DM2 2019; OPTIMISTIC 2018; Cochrane 2019). Myositis from "Poly
-     myositis.docx", v0.1 draft, 2 Oct 2026, pending Chandra's sign-off (BSR
+     myositis.docx", reviewed and signed by Chandra Matla, 2 Oct 2026
+     (confirmed in the session; the saved Word file did not yet show the
+     signature) (BSR
      2022; EULAR/ACR 2017; exercise reviews 2018-2024). Clinician reference
      only. -->
 
@@ -52,7 +54,7 @@
 
 ## Open items in the documents (signed 2 Oct 2026; built as below)
 
-(1) one cross-region "nerve and muscle" gate (built that way); (2) scores and overrides; (3) written confirmation of stability before the first MG session, and stop rules; (4) the breathing and inspiratory muscle training bullets; (5) local referral wording (VGH, St Paul's, GF Strong neuromuscular clinics); (6) naming the conditions on the doctor-first screen (kept generic); (7) congenital and childhood myotonic dystrophy in a "for my child" pathway. Myositis (v0.1): (1) the subacute proximal part of the gate (built); (2) scores and overrides (not built); (3) the cancer association (yes: in the diagnosed entry); (4) phase intensities (confirmed); (5) PMR as its own doctor-first entry (yes: pc-pmr); (6) local referral wording (confirmed). Also decided: dark urine asked generally.
+(1) one cross-region "nerve and muscle" gate (built that way); (2) scores and overrides; (3) written confirmation of stability before the first MG session, and stop rules; (4) the breathing and inspiratory muscle training bullets; (5) local referral wording (VGH, St Paul's, GF Strong neuromuscular clinics); (6) naming the conditions on the doctor-first screen (kept generic); (7) congenital and childhood myotonic dystrophy in a "for my child" pathway. Myositis (signed 2 Oct 2026): (1) the subacute proximal part of the gate (built); (2) scores and overrides (not built); (3) the cancer association (yes: in the diagnosed entry); (4) phase intensities (confirmed); (5) PMR as its own doctor-first entry (yes: pc-pmr); (6) local referral wording (confirmed). Also decided: dark urine asked generally.
 
 ## Sources
 
