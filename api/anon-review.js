@@ -4,7 +4,8 @@
    REVIEW_PASSWORD environment variable (set it in Vercel → Settings →
    Environment Variables); without it the function refuses every request.
 
-   GET /api/anon-review?from=2026-10&to=2026-12
+   GET /api/anon-review?from=2026-10&to=2026-12[&kind=feedback]
+   kind=feedback returns the anonymous feedback (api/feedback.js) instead.
    Header: Authorization: Bearer <REVIEW_PASSWORD> */
 import { createHash, timingSafeEqual } from 'node:crypto'
 import { hasStore, pipeline } from './_lib/store.js'
@@ -39,7 +40,8 @@ export default async function handler(req, res) {
   const months = monthsBetween(String(q.from || ''), String(q.to || q.from || ''))
   if (!months || !months.length) return res.status(400).json({ error: 'from/to must be YYYY-MM' })
   try {
-    const lists = await pipeline(months.map((mo) => ['LRANGE', `anon:${mo}`, 0, -1]))
+    const prefix = q.kind === 'feedback' ? 'feedback' : 'anon'
+    const lists = await pipeline(months.map((mo) => ['LRANGE', `${prefix}:${mo}`, 0, -1]))
     const records = []
     lists.forEach((list) => (list || []).forEach((s) => { try { records.push(JSON.parse(s)) } catch { /* skip */ } }))
     return res.status(200).json({ months, count: records.length, records })

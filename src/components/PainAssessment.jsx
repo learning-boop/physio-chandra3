@@ -6,6 +6,7 @@ import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
+import FeedbackForm from './FeedbackForm'
 import { preloadPdf } from './resultsPdf'
 import GuideVideo from './GuideVideo'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
@@ -2433,6 +2434,14 @@ export default function PainAssessment() {
 
                 <span style={{ ...label, margin: '30px 0 12px' }}>Keep Your Results</span>
                 <SaveResults code={visitCode} pdfData={pdfData} anonPayload={anonPayload} />
+
+                {/* Anonymous feedback, for everyone who reaches the results
+                    (Chandra, 2 Oct 2026). Only if ticked separately: the areas
+                    drawn and the conditions shown, no answers. */}
+                <FeedbackForm context={() => ({
+                  areas: [...new Set(zones.map((z) => z.type))],
+                  results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
+                })} />
 
                 <div className="pa-actions" style={{ marginTop: 22 }}>
                   <button style={ghostBtn} onClick={restart}>Start Over</button>

@@ -931,5 +931,28 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('About you: birth sex is cleared on restart', /setFocusKey\(null\); setBirthSex\(null\)/.test(src))
 }
 
+// ── 32. Anonymous feedback (Chandra, 2 Oct 2026) ──
+{
+  const { scrub, buildFeedback } = await imp('api/feedback.js')
+  const s = scrub('My name is Jane Smith, email jane.smith@mail.com or call 604-555-0123, PHN 9876 543 210, V5K 0A1, see www.x.ca. The safety questions were long.')
+  check('Feedback: names after "my name is", emails, phone and health card numbers, postal codes and web addresses are removed',
+    !/Jane|Smith|@|555|9876|V5K|www/.test(s) && /safety questions were long/.test(s), s)
+  check('Feedback: a comment is cut to 500 characters', scrub('a'.repeat(900)).length === 500)
+  const r = buildFeedback({ ease: 4, sense: 'partly', confusing: true, parts: ['safety', 'bogus'], comment: 'ok', code: '20261002-001', answers: { age: '30-49' }, context: { areas: ['hip'], results: [{ region: 'hip', id: 'gtps' }] } }, '2026-10-02')
+  check('Feedback: only the listed values are kept; no reference code or answers; areas and results only when ticked',
+    r.ease === 4 && r.sense === 'partly' && r.parts.join() === 'safety' && !('code' in r) && !('answers' in r) && r.context === null && JSON.stringify(r).indexOf('20261002') < 0, r)
+  const r2 = buildFeedback({ attach: true, context: { areas: ['hip'], results: [{ region: 'hip', id: 'gtps' }] } }, '2026-10-02')
+  check('Feedback: the areas drawn and conditions shown are added only when the person ticks to attach them', r2.context && r2.context.results[0].id === 'gtps')
+  const { readFileSync } = await import('node:fs')
+  const api = readFileSync(new URL('../api/feedback.js', import.meta.url), 'utf8')
+  const form = readFileSync(new URL('../src/components/FeedbackForm.jsx', import.meta.url), 'utf8')
+  check('Feedback: the server refuses anything sent without the confirmation', /consent !== true/.test(api))
+  check('Feedback: the page removes contact details before sending, so they never leave the device', /comment: scrub\(comment\)/.test(form))
+  check('Feedback: a separate confirmation (freely given, no personal information, not monitored, no action asked of Physio Chandra, rights unaffected) must be ticked before sending',
+    /role="dialog"/.test(form) && /freely and entirely of my own choice/.test(form) && /not included my name, contact details/.test(form) &&
+    /does not ask Physio Chandra or physiochandra\.ca to take any action/.test(form) && /does not affect your rights/.test(form) && /disabled=\{!confirmed/.test(form))
+  check('Feedback: says never published or used as a testimonial, and gives 911, 8-1-1 and 9-8-8', /never published or used as a testimonial/.test(form) && /911/.test(form) && /8-1-1/.test(form) && /9-8-8/.test(form))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

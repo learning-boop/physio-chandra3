@@ -27,6 +27,7 @@ import {
 import visitCode from '../api/visit-code.js'
 import anonShare from '../api/anon-share.js'
 import anonReview from '../api/anon-review.js'
+import feedback from '../api/feedback.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -129,6 +130,7 @@ app.post('/api/pain-analysis', async (req, res) => {
 app.post('/api/visit-code', visitCode)
 app.post('/api/anon-share', anonShare)
 app.get('/api/anon-review', anonReview)
+app.post('/api/feedback', feedback)
 
 app.get('/health', (req, res) => res.json({ ok: true }))
 

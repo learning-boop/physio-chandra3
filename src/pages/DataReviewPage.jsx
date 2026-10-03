@@ -35,11 +35,24 @@ function toCsv(records) {
   return [cols.join(','), ...rows].join('\n')
 }
 
+function feedbackCsv(records) {
+  const cols = ['date', 'id', 'ease', 'sense', 'confusing', 'parts', 'comment', 'areas', 'results']
+  const cell = (v) => {
+    const s = v == null ? '' : typeof v === 'string' ? v : JSON.stringify(v)
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+  }
+  const rows = records.map((r) => [r.date, r.id, r.ease, r.sense, r.confusing, (r.parts || []).join(' '), r.comment,
+    r.context ? (r.context.areas || []).join(' ') : '', r.context ? (r.context.results || []).map((x) => `${x.region}/${x.id}`).join(' ') : ''].map(cell).join(','))
+  return [cols.join(','), ...rows].join('\n')
+}
+
 export default function DataReviewPage() {
   const [password, setPassword] = useState('')
   const [from, setFrom] = useState(monthsAgo(2))
   const [to, setTo] = useState(thisMonth())
   const [state, setState] = useState({ status: 'idle', records: [], error: '' })
+  // Anonymous guide copies, or the anonymous feedback (api/feedback.js).
+  const [kind, setKind] = useState('anon')
 
   useEffect(() => {
     const m = document.createElement('meta')
@@ -52,7 +65,7 @@ export default function DataReviewPage() {
     e.preventDefault()
     setState({ status: 'busy', records: [], error: '' })
     try {
-      const res = await fetch(`${API_URL}/api/anon-review?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, {
+      const res = await fetch(`${API_URL}/api/anon-review?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${kind === 'feedback' ? '&kind=feedback' : ''}`, {
         headers: { Authorization: `Bearer ${password}` },
       })
       const j = await res.json().catch(() => ({}))
@@ -79,7 +92,7 @@ export default function DataReviewPage() {
     <main style={{ background: 'var(--warm-white)', color: 'var(--text-dark)', minHeight: '100vh', padding: '48px max(20px, 5vw)', fontFamily: 'var(--font-body)' }}>
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
         <span style={{ fontSize: 13, letterSpacing: '0.22em', textTransform: 'uppercase', color: GOLD }}>Private</span>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(32px, 5vw, 48px)', margin: '8px 0 6px' }}>Anonymous pain guide copies</h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(32px, 5vw, 48px)', margin: '8px 0 6px' }}>{kind === 'feedback' ? 'Anonymous feedback' : 'Anonymous pain guide copies'}</h1>
         <p style={{ color: 'var(--text-mid)', margin: '0 0 24px', lineHeight: 1.6 }}>
           Drawings and chosen answers shared anonymously by patients who ticked the box. No names, contact details or reference codes are kept.
         </p>
@@ -87,6 +100,12 @@ export default function DataReviewPage() {
         <form onSubmit={load} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 24 }}>
           <label style={{ display: 'grid', gap: 4, fontSize: 13 }}>Password
             <input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} style={input} required />
+          </label>
+          <label style={{ display: 'grid', gap: 4, fontSize: 13 }}>Show
+            <select value={kind} onChange={(e) => { setKind(e.target.value); setState({ status: 'idle', records: [], error: '' }) }} style={input}>
+              <option value="anon">Anonymous copies</option>
+              <option value="feedback">Feedback</option>
+            </select>
           </label>
           <label style={{ display: 'grid', gap: 4, fontSize: 13 }}>From
             <input type="month" value={from} onChange={(e) => setFrom(e.target.value)} style={input} required />
@@ -99,7 +118,40 @@ export default function DataReviewPage() {
 
         {state.error && <p style={{ color: '#a33', marginBottom: 20 }}>{state.error}</p>}
 
-        {state.status === 'done' && (
+        {state.status === 'done' && kind === 'feedback' && (
+          <>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 20 }}>
+              <strong style={{ fontSize: 18, marginRight: 8 }}>{records.length} feedback {records.length === 1 ? 'entry' : 'entries'}</strong>
+              <button style={ghost} disabled={!records.length} onClick={() => download(`feedback-${from}-to-${to}.csv`, feedbackCsv(records), 'text/csv')}>Download CSV</button>
+            </div>
+            <p style={{ color: 'var(--text-mid)', lineHeight: 1.6, marginBottom: 16 }}>
+              For improving the guide only: never published or used as a testimonial. Comments have contact details removed before they are kept.
+            </p>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+                <thead>
+                  <tr style={{ textAlign: 'left', borderBottom: '2px solid #d8d2c6' }}>
+                    {['Date', 'Ease', 'Made sense', 'Confusing', 'Comment', 'Shown'].map((h) => <th key={h} style={{ padding: '8px 10px' }}>{h}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {records.slice().reverse().slice(0, 300).map((r) => (
+                    <tr key={r.id} style={{ borderBottom: '1px solid #e6e1d7', verticalAlign: 'top' }}>
+                      <td style={{ padding: '8px 10px', whiteSpace: 'nowrap' }}>{r.date}</td>
+                      <td style={{ padding: '8px 10px' }}>{r.ease ?? '—'}</td>
+                      <td style={{ padding: '8px 10px' }}>{r.sense || '—'}</td>
+                      <td style={{ padding: '8px 10px' }}>{r.confusing === true ? `yes${r.parts && r.parts.length ? ': ' + r.parts.join(', ') : ''}` : r.confusing === false ? 'no' : '—'}</td>
+                      <td style={{ padding: '8px 10px', maxWidth: 360 }}>{r.comment || '—'}</td>
+                      <td style={{ padding: '8px 10px' }}>{r.context ? (r.context.results || []).map((x) => x.id).join(', ') || '(none)' : '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {state.status === 'done' && kind === 'anon' && (
           <>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 20 }}>
               <strong style={{ fontSize: 18, marginRight: 8 }}>{records.length} {records.length === 1 ? 'copy' : 'copies'}</strong>

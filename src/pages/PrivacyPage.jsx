@@ -41,6 +41,14 @@ const sections = [
     ],
   },
   {
+    title: 'Feedback on the guide',
+    body: [
+      'At the end of the results you can choose to send anonymous feedback: a few tapped answers (how easy the guide was, whether the results made sense, anything confusing) and, if you wish, a short comment. Nothing is sent unless you fill it in, confirm in a separate step that you are sharing it freely and without personal information, and press "Yes, send my feedback".',
+      'Please do not include your name, contact details or other personal information in a comment. Anything that looks like an email address, phone number, web address, postal code or long number (such as a health card number) is removed before the feedback is kept. Your reference code, answers, the time and your device details are not included. Only if you tick a separate box, the areas you drew and the conditions you were shown (not your answers) are added, so the feedback can improve the reasoning.',
+      'Feedback is used only to improve this guide. It is never published or used as a testimonial, is not read straight away, and is not answered, so it is not a way to ask for care. It is stored with Upstash, only Chandra can open it, and it is deleted after about two years. Because it cannot be linked to you, it cannot be found again or deleted on request after it has been sent. Sending feedback does not affect your rights: to raise a concern about your care, contact Chandra directly or the College of Health and Care Professionals of BC.',
+    ],
+  },
+  {
     title: 'The optional AI overview',
     body: [
       'At the end of the guide you can choose to see an overview of your results written by an AI service. Nothing is sent unless you press "Show my AI overview".',
