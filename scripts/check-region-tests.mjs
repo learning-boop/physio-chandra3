@@ -737,6 +737,15 @@ const TESTS = {
         W3: ['thumb'], W4: ['posture'], W8: ['neck'] },
       expect: { notRegion: ['wrist'], areas: ['neck'], route: 'results' } },
   ],  hand: [
+    // "Dupuytrens contractures.docx" (v0.1 draft, 2 Oct 2026): max 12, shown from 5.
+    { name: "Dupuytren's 1. Painless cord in the palm, ring finger slowly bending, hand will not lie flat",
+      lines: [['handR']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', I1: 'no', H1: ['palm'], H2: ['cord', 'dupuytren', 'flat'] },
+      expect: { top: 'hand/dupuytren', special: 'dupuytrenReferral', route: 'results' } },
+    { name: "Dupuytren's 2. A finger that clicks and locks: trigger finger, not Dupuytren's on top",
+      lines: [['handR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', I1: 'no', H1: ['palm'], H2: ['trigger', 'nodule'] },
+      expect: { notTop: ['hand/dupuytren'], route: 'results' } },
     { name: '1. Thumb base arthritis',
       lines: [['handR']],
       answers: { age: '50-64', onset: 'gradual', duration: 'o3m', H1: ['thumbbase'], H3: ['pinch'], H6: ['bony'] },

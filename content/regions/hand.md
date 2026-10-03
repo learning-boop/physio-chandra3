@@ -3,6 +3,10 @@
 # Built into src/data/symptomGuideExtra.js (hand) and src/data/injuryScreen.js (hand screen).
 # Conditions: content/conditions/hand-*.md. Body map: the hand band, below the wrist (WRIST_BOTTOM in Body3D.jsx).
 # Test patients: npm run check:regions
+# 2 Oct 2026: "Dupuytrens contractures.docx" (Conditions/General conditions, v0.1
+# draft): hand-dupuytren rewritten; question 2 gains a painless cord, "cannot lay
+# flat" (referral card) and "had a procedure" (post-procedure check); the
+# lump flag widened. Marked (dup) below.
 # 2 Oct 2026: "CRPS.docx" (Conditions/General conditions, v1.0 draft): condition
 # hand-crps and question H9, shared with the wrist, hand, ankle and foot
 # (asked once). Marked (crps) below.
@@ -29,7 +33,7 @@ reviewed_on: 2026-09-25
 - Since a hand injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts? | urgent | Possible complex regional pain syndrome (CRPS)
 - Is the numbness in your fingers there all the time, or is the muscle at the base of your thumb or between your thumb and index finger getting thinner? | urgent | Severe nerve compression needs a specialist opinion
 - Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady? | urgent | Possible pressure on the spinal cord in the neck: see the neck region
-- Is there a hard lump that is growing, or a new dark streak under a nail? | urgent | A growing lump or nail streak needs medical review
+- Is there a hard lump that is growing quickly over weeks, is painful, or is deep and larger than a few centimetres, or a new dark streak under a nail?   (dup: widened) | urgent | A growing lump or nail streak needs medical review
 
 ## injury screen
 <!-- Built into src/data/injuryScreen.js. Asked in order; the first answer that routes ends it. -->
@@ -100,7 +104,10 @@ Q: Where is the pain mainly?
 Q: Which of these apply? Tick all that apply.
 - A finger or thumb clicks, catches, or locks bent
 - A tender lump in the palm at the base of that finger
-- A finger is slowly bending into my palm, and I cannot lay my hand flat
+- A firm lump, ridge or tight cord in my palm, below the ring or little finger, that is not usually painful   (dup Q2: 3)
+- A finger is slowly bending into my palm over months or years   (dup Q3: 3; was "…and I cannot lay my hand flat")
+- I cannot lay my hand flat on a table: a finger lifts off   (dup Q1: 3; shows "Your hand no longer lies flat: worth seeing your doctor")
+- I have had a procedure on my palm for this (surgery, a needle release or an injection)   (dup: 0; asks the post-procedure check)
 - Hard bony bumps on the finger joints
 - None of these
 
@@ -216,3 +223,12 @@ Drawing: Right side of the neck, thumb, and index finger (look-alike)
 Answers: Age 30 to 49 · Gradually, no clear reason · 2 to 6 weeks · Subjective S3: Pins and needles or numbness; Q4: tingling or numbness in the thumb, index, and middle fingers; Q5: when I use my hand (no night waking); Q8: moving my neck
 Flags: None
 Expect: top condition = No hand condition; shows a “this may be coming from your neck” message; must not show = Thumb base arthritis or carpal tunnel as the top result; route = Results (suggest neck check) + booking
+
+<!-- (dup) From "Dupuytrens contractures.docx" (v0.1 draft, 2 Oct 2026): maximum 12, shown from 5. -->
+CASE: Dupuytren's 1. Painless cord in the palm, ring finger slowly bending, hand will not lie flat
+Answers: 65 or over; gradually; more than 3 months; Q1 = palm; Q2 = cord + slowly bending + cannot lay flat
+Expect: top condition = Dupuytren's, with the see-your-doctor card; route = results
+
+CASE: Dupuytren's 2. A finger that clicks and locks
+Answers: Q2 = clicks or locks + tender lump
+Expect: Dupuytren's not on top (trigger finger)

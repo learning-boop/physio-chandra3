@@ -1810,8 +1810,9 @@ export const EXTRA_REGIONS = {
         text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
       { id: "hnd-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+      // Widened with the Dupuytren's document's red flag (2 Oct 2026).
       { id: "hnd-lump", tier: "urgent", why: "A growing lump or nail streak needs medical review",
-        text: "Is there a hard lump that is growing, or a new dark streak under a nail?" }
+        text: "Is there a hard lump that is growing quickly over weeks, is painful, or is deep and larger than a few centimetres, or a new dark streak under a nail?" }
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1844,10 +1845,16 @@ export const EXTRA_REGIONS = {
         { id: "palm", label: "Palm, at the base of a finger or thumb" },
         { id: "whole", label: "A whole finger, or the fingertips" }
       ]},
+      // Dupuytren's answers from the "Dupuytrens contractures" document (v0.1,
+      // 2 Oct 2026): its Q1 (flat on a table), Q2 (a firm, painless lump or
+      // cord) and Q3 (slowly bending), and a procedure already done.
       { id: "H2", text: "Which of these apply? Tick all that apply.", options: [
         { id: "trigger", label: "A finger or thumb clicks, catches, or locks bent" },
         { id: "nodule", label: "A tender lump in the palm at the base of that finger" },
-        { id: "dupuytren", label: "A finger is slowly bending into my palm, and I cannot lay my hand flat" },
+        { id: "cord", label: "A firm lump, ridge or tight cord in my palm, below the ring or little finger, that is not usually painful" },
+        { id: "dupuytren", label: "A finger is slowly bending into my palm over months or years" },
+        { id: "flat", label: "I cannot lay my hand flat on a table: a finger lifts off", special: "dupuytrenReferral" },
+        { id: "procedure", label: "I have had a procedure on my palm for this (surgery, a needle release or an injection)" },
         { id: "nodes", label: "Hard bony bumps on the finger joints" },
         { id: "none", label: "None of these" }
       ]},
@@ -2731,6 +2738,9 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Severe pain behind one eye, with a watery eye or runny nose on the same side, can be a <strong>cluster-type headache</strong>. It needs a doctor's assessment and specific treatment, so please book with your doctor." },
   medOveruse: { title: "Frequent painkillers can keep headaches going",
     body: "Taking painkillers for headaches on <strong>10 or more days a month</strong> (15 or more for simple ones like paracetamol or ibuprofen) can itself keep headaches going, called <strong>medication-overuse headache</strong>. Please review how often you take them with your doctor or pharmacist; do not stop suddenly without advice." },
+  // Dupuytren's: the hand no longer lies flat (document Q1, 2 Oct 2026).
+  dupuytrenReferral: { title: "Your hand no longer lies flat: worth seeing your doctor",
+    body: "When a finger can no longer lie flat on a table, Dupuytren's has usually reached the point where a release procedure is worth discussing. Please see your family doctor about a referral to a hand surgeon, especially if the bend is getting in the way of everyday tasks, or a middle finger joint is affected. Physiotherapy can help you prepare, and hand therapy afterwards helps you keep the straightening gained." },
   handDoctor: { title: "Please have this checked by a doctor",
     body: "A whole finger swollen like a sausage, knuckles swollen in both hands, a hot puffy joint, long morning stiffness, nail pitting with psoriasis, other joints swollen too, tingling in both hands, fingers that go white then blue in the cold, or a hand that has changed colour or temperature since an injury are signs a doctor should look at. They can point to inflammatory arthritis, gout, a circulation problem, a nerve condition, or complex regional pain syndrome. Physiotherapy can help alongside or afterwards." },
   nerveDoctor: { title: "Constant numbness or a weak thumb should be checked by a doctor",

@@ -662,6 +662,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('CRPS: the other area reads that answer as its own',
     JSON.stringify(regionAnswers(keys, other === 'W9' ? 'wrist' : 'hand', ans)[other]) === JSON.stringify(['trigger', 'colour']))
   const Z = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  check("Dupuytren's: after a procedure, asks about infection, numbness or a finger that will not bend (doctor today)",
+    patternChecks(Z(['handR']), { H2: ['procedure'] }, 7).some((p) => p.id === 'pc-hand-procedure' && p.sameDay))
   check('CRPS: after an injury or operation, asks about a wound infection (doctor today)',
     patternChecks(Z(['wristR']), { W9: ['trigger'] }, 7).some((p) => p.id === 'pc-crps-infection' && p.sameDay))
 }

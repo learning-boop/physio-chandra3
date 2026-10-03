@@ -57,7 +57,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Elbow | `elbow` | Elbow assessment | 6 |
 | Forearm | `forearm` | Forearm assessment | 5 |
 | Wrist | `wrist` | Wrist assessment (+ CRPS document, W9) | 8 |
-| Hand & fingers | `hand` | Hand and fingers assessment (+ CRPS document, H9) | 6 |
+| Hand & fingers | `hand` | Hand and fingers assessment (+ CRPS document, H9; + Dupuytren's document, H2) | 8 |
 | Hip & groin | `hip` | Hip assessment (question ids G1–G8) | 6 |
 | Thigh | `thigh` | Thigh assessment (question ids R1–R8) | 6 |
 | Knee (from just above the kneecap to just below it) | `knee` | Knee assessment (question ids K1–K8) | 6 |

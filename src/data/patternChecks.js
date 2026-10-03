@@ -49,6 +49,10 @@ const WHY = {
     title: 'A stiff spine can break with little force',
     text: 'In long-standing ankylosing spondylitis the spine is stiffer and can break after a fall or jolt that would not hurt most people. New, severe neck or back pain after even a minor fall needs to be checked in hospital straight away. Keep your head and neck as still as you can.',
   },
+  handProcedure: {
+    title: 'Please contact a doctor or your hand clinic today',
+    text: 'After hand surgery, a needle release or an injection, a hot, red, increasingly swollen hand, pus, spreading redness or a fever can be an infection, and new numbness in a fingertip or a finger you suddenly cannot bend can mean a nerve or tendon problem. These need checking the same day. Pain, swelling, colour change or sensitivity far beyond what you expected, not settling week on week, also needs an early review.',
+  },
   crpsInfection: {
     title: 'Please see a doctor today',
     text: 'After an injury or operation, a wound or pin site that is red, discharging or getting worse, or a fever, can be an infection. It needs a doctor the same day, before CRPS or anything else is considered.',
@@ -134,6 +138,12 @@ const PATTERNS = [
     id: 'pc-uveitis', tier: 'urgent', sameDay: true, why: WHY.uveitis,
     text: 'A painful, red eye with blurred vision or sensitivity to light',
     when: (z, a) => [...[].concat(a.L9 || []), ...[].concat(a.P6 || [])].some((x) => ['morning', 'exercise', 'night', 'related', 'diagnosed'].includes(x)),
+  },
+  // After a Dupuytren's procedure (the hand's H2, document v0.1, 2 Oct 2026).
+  {
+    id: 'pc-hand-procedure', tier: 'urgent', sameDay: true, why: WHY.handProcedure,
+    text: 'Since the procedure on your hand: a hot, red, increasingly swollen hand, pus, spreading redness or a fever; new numbness in a fingertip; or a finger you suddenly cannot bend',
+    when: (z, a) => [].concat(a.H2 || []).includes('procedure'),
   },
   // CRPS (the shared W9 / H9 / A9 / B9 question, document v1.0 draft, 2 Oct 2026): infection
   // after the injury or operation needs a doctor the same day.
