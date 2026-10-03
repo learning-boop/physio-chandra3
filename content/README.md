@@ -23,6 +23,7 @@ content/
     hip-fracture.md   (JOSPT hip fracture CPG 2021: the emergency route and rehabilitation after surgery)
     work-participation.md   (JOSPT work participation CPG 2021: return-to-work screening and interventions)
     neuromuscular.md   (myasthenia gravis, myotonic dystrophy and myositis (pc-myositis): the nerve and muscle screen pc-muscle, the 911 crisis question, diagnosed entries on the cautions list)
+    fibromyalgia.md   (persistent widespread pain: the results-page explainer in src/data/widespreadPain.js, physio route with a family-doctor line, ca-fibro)
     duchenne.md   (Duchenne muscular dystrophy: the early-signs question for a child, pc-child-muscle, and the diagnosed entry on the cautions list)
 ```
 

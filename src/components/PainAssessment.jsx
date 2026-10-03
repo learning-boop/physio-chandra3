@@ -19,6 +19,7 @@ import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism }
 import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
 import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
 import { patternChecks } from '../data/patternChecks'
+import { WIDESPREAD, widespreadRoute } from '../data/widespreadPain'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -209,6 +210,10 @@ const CAUTION_CHECKS = [
     why: { title: 'Worth knowing before your first assessment',
       text: 'Claims come with their own forms and reports, so your first assessment can cover what they need.' } },
   // "Multiple Sclerosis" document (v0.1, 2 Oct 2026), route B: diagnosed MS.
+  // "Fibromyalgia" document (signed by Chandra, 2 Oct 2026): diagnosed route.
+  { id: 'ca-fibro', tier: 'caution', text: 'Fibromyalgia, diagnosed by a doctor',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Fibromyalgia does not stop physiotherapy: regular exercise built up slowly is the treatment with the strongest evidence, alongside understanding the pain, sleep and pacing. Your programme starts below what you can manage now and builds in small planned steps, so flares become shorter and less worrying.' } },
   { id: 'ca-ms', tier: 'caution', text: 'Multiple sclerosis, diagnosed by a neurologist',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exercise is safe with MS and recommended by current guidelines: it does not bring on relapses, and it can help fatigue, strength, balance and mood. Your programme is built around your energy and how heat affects you, alongside your MS team. A new or clearly worse symptom lasting more than a day without a fever or infection is worth a call to your MS nurse or neurology team first.' } },
@@ -814,6 +819,10 @@ export default function PainAssessment() {
   // Cautions never withhold booking — they shape the first assessment, and
   // they are listed on the result screen and in Chandra's summary.
   const pickedCautions = CAUTION_CHECKS.filter((f) => flags.includes(f.id))
+  // Persistent widespread pain (fibromyalgia document): physio route with a
+  // nudge to the family doctor, unless a doctor has already diagnosed it.
+  const fibroDiagnosed = flags.includes('ca-fibro')
+  const showWidespread = widespreadRoute(painType, fibroDiagnosed)
 
   const setAnswer = (qid, value) => setAnswers((a) => ({ ...a, [qid]: value }))
 
@@ -2239,6 +2248,28 @@ export default function PainAssessment() {
                         Pain often has more than one of these features. Your physiotherapist
                         will confirm this at your assessment.
                       </p>
+                    </div>
+                  </>
+                )}
+
+                {/* Persistent widespread pain ("Fibromyalgia" document, signed
+                    2 Oct 2026; ../data/widespreadPain.js): the full explainer
+                    belongs here and only here. */}
+                {showWidespread && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Understanding Your Pain</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{WIDESPREAD.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{WIDESPREAD.what}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{WIDESPREAD.alarm}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{WIDESPREAD.reassure}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {WIDESPREAD.selfCare.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                      <p style={{ ...body, fontSize: 14.5, margin: '10px 0 0' }}>{WIDESPREAD.physio}</p>
+                      {!fibroDiagnosed && (
+                        <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.6)', margin: '10px 0 0', lineHeight: 1.6 }}>{WIDESPREAD.doctor}</p>
+                      )}
                     </div>
                   </>
                 )}

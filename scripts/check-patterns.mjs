@@ -846,5 +846,28 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Myositis: the diagnosed entry mentions the cancer link calmly, with screening', /less often, cancer, so your team may arrange screening tests/.test(src))
 }
 
+// ── 28. Persistent widespread pain ("Fibromyalgia" document, signed 2 Oct 2026) ──
+{
+  const { classifyPainMechanism } = await imp('src/data/painType.js')
+  const { widespreadRoute, WIDESPREAD } = await imp('src/data/widespreadPain.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const many = ZN(['neck', 'shoulderL', 'shoulderR', 'lowerback', 'hipL', 'hipR', 'thighL', 'thighR'])
+  const chronic = { duration: 'o3m', painQuality: ['ache', 'touch'], easing: ['none'], sinSettle: 'constant', yfSleep: 'agree', yfMood: 'agree', yfFear: 'agree' }
+  const pt = classifyPainMechanism({ zones: many, answers: chronic })
+  check('Widespread pain: many areas for more than 3 months shows the widespread-pain explainer', widespreadRoute(pt, false), pt)
+  const one = classifyPainMechanism({ zones: ZN(['lowerback']), answers: chronic })
+  check('Widespread pain: one area, however long, does not', !widespreadRoute(one, false), one)
+  const fresh = classifyPainMechanism({ zones: many, answers: { ...chronic, duration: 'd2w' } })
+  check('Widespread pain: not for a few weeks of pain', !widespreadRoute(fresh, false), fresh)
+  check('Widespread pain: shown for a doctor\'s fibromyalgia diagnosis', widespreadRoute(null, true))
+  const all = [WIDESPREAD.title, WIDESPREAD.what, WIDESPREAD.alarm, WIDESPREAD.reassure, WIDESPREAD.physio, ...WIDESPREAD.selfCare].join(' ')
+  check('Widespread pain: no labels to the patient ("central sensitisation", damage, wear and tear), and fibromyalgia named only in the doctor line',
+    !/central sensiti|wear and tear|fibromyalgia/i.test(all) && /damage/.test(all) && !/is damage|are damaged|means damage/i.test(all) && /fibromyalgia, one possibility/.test(WIDESPREAD.doctor))
+  const { readFileSync } = await import('node:fs')
+  const src = readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Widespread pain: the doctor line is left out when fibromyalgia is already diagnosed, and booking is not held',
+    /!fibroDiagnosed && \(/.test(src) && /id: 'ca-fibro'/.test(src) && !/showWidespread[^\n]*holdBooking/.test(src))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

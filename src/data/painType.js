@@ -208,5 +208,6 @@ export function classifyPainMechanism({ zones = [], answers = {}, behaviour = {}
   if (!ranked.length) return null
   // Tissue pain divides again into mechanical and inflammatory.
   const subtype = ranked.includes('nociceptive') ? nociceptiveSubtype(answers) : null
-  return { primary: ranked[0], secondary: ranked[1] || null, subtype, reasons }
+  // `widespread` (the drawing) feeds the widespread-pain section (./widespreadPain.js).
+  return { primary: ranked[0], secondary: ranked[1] || null, subtype, reasons, widespread: d.widespread }
 }
