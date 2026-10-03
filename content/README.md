@@ -26,6 +26,7 @@ content/
     myofascial-pain.md   (muscle-referred pain: the shared tender-spot opening question and the myofascial condition in the neck, shoulder, upper back, low back and hip)
     fibromyalgia.md   (persistent widespread pain: the results-page explainer in src/data/widespreadPain.js, physio route with a family-doctor line, ca-fibro)
     duchenne.md   (Duchenne muscular dystrophy: the early-signs question for a child, pc-child-muscle, and the diagnosed entry on the cautions list)
+    hypopituitarism.md   (low pituitary hormones: the undiagnosed screen pc-lowhormone, ca-pituitary and its panel, the hydrocortisone adrenal-crisis wording, the concussion cross-link, and the deferred pattern questions fix)
     cushings.md   (Cushing's syndrome and steroid medicine: the undiagnosed weakness screen pc-hormone, ca-cushing, the steroid question on "A little about you", its red flags and results panel in src/data/steroids.js)
     diabetes.md   (diabetes as context: the question on "A little about you", its red flags first, the doctor-first nerve screen without it, the details and burden tier, the rank lift and the results panel in src/data/diabetes.js)
 ```

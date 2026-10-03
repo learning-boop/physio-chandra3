@@ -20,7 +20,7 @@
    ⚠ FOR CLINICIAN REVIEW — wording, tiers and which drawings trigger each.
    ───────────────────────────────────────────────────────────────────────── */
 
-import { HORMONE_SCREEN } from './steroids.js'
+import { HORMONE_SCREEN, LOW_HORMONE_SCREEN } from './steroids.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
@@ -327,6 +327,19 @@ const PATTERNS = [
     text: HORMONE_SCREEN.text,
     when: (z, a) => (weakAnswer(a) && has(z, 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
       ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
+  },
+  // Too little pituitary hormone ("Hypopituitarism" document, signed by
+  // Chandra, 3 Oct 2026; route A, not named): exhaustion or both-sided muscle
+  // loss for months with one of its causes (pituitary or brain tumour or
+  // treatment, a significant head injury, a childbirth with heavy bleeding,
+  // cancer immunotherapy). Asked for both-sided weakness drawings, a
+  // widespread drawing, a weakness answer, or a head problem lasting more
+  // than 3 months (the concussion cross-link). A yes holds the booking.
+  {
+    id: 'pc-lowhormone', tier: 'urgent', noBooking: true, why: LOW_HORMONE_SCREEN.why,
+    text: LOW_HORMONE_SCREEN.text,
+    when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)) ||
+      typesOf(z).size >= 4 || (has(z, 'head') && ['o3m', 'years'].includes(a.duration)),
   },
   // The nerve and muscle screen (myasthenia gravis: fatigable, eyes and
   // bulbar, worse by evening; myotonic dystrophy: grip myotonia, both hands

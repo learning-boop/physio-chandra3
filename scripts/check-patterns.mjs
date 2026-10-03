@@ -1059,8 +1059,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Cushing route A: asked after myositis and before the nerve and muscle screen',
     order.indexOf('pc-myositis') < order.indexOf('pc-hormone') && order.indexOf('pc-hormone') < order.indexOf('pc-muscle'), order)
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
-  check('Cushing: the final check has room for four questions, so PMR, myositis, the hormone screen and the nerve and muscle screen all fit',
-    /\.slice\(0, 4\)\.forEach\(\(p\) => out\.push\(p\)\)/.test(src))
+  check('Final check: room for five questions, and pattern questions the doctor page\'s two-question limit cut are asked there instead of dropped',
+    /\.slice\(0, 5\)/.test(src) && /const deferred = kept\.slice\(2\)/.test(src) && /filter\(\(id\) => !deferred\.has\(id\)\)/.test(src))
   check('Cushing route B: "diagnosed" on the cautions list; strength does not come back by itself; exercise is the treatment',
     /CUSHING_CAUTION,/.test(src) && /does not come back by itself/.test(ST.CUSHING_CAUTION.why.text) && ST.CUSHING_CAUTION.tier === 'caution')
   check('Steroids: no extra red flags without long-term steroids',
@@ -1083,6 +1083,36 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([ST.STEROID_RED_FLAGS, ST.HORMONE_SCREEN, ST.CUSHING_CAUTION, p1, p2])
   check('Steroids language: no "you have Cushing\'s", cure, guarantee or "damage" except "not … damaged by use"',
     !/you (may )?have cushing|cure|guarantee|permanent|(?<!not muscle )damage/i.test(all), all.match(/you (may )?have cushing|cure|guarantee|permanent|(?<!not muscle )damage/i))
+}
+
+// ── 35. Hypopituitarism ("Hypopituitarism", signed 3 Oct 2026) ──
+{
+  const ST = await imp('src/data/steroids.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const low = (z, a = {}) => patternChecks(ZN(z), a, 12).find((p) => p.id === 'pc-lowhormone')
+  const l = low(['thighL', 'thighR'])
+  check('Hypopituitarism route A: exhaustion or both-sided muscle loss with a cause (pituitary or brain tumour or treatment, head injury, childbirth with heavy bleeding, immunotherapy); doctor in a week or two, no booking',
+    l && l.noBooking && !l.sameDay && /head injury/.test(l.text) && /heavy bleeding/.test(l.text) && /immunotherapy/.test(l.text) &&
+    /blood tests/.test(l.why.text) && !/hypopituitarism/i.test(l.text + l.why.text), l)
+  check('Hypopituitarism route A: also for a widespread drawing, a weakness answer, or a head problem lasting more than 3 months; not for one knee',
+    !!low(['neck', 'shoulderL', 'hipR', 'kneeL']) && !!low(['kneeL'], { K6: ['weak'] }) === !!patternChecks(ZN(['kneeL']), { K6: ['weak'] }, 12).find((p) => p.id === 'pc-myositis' || p.id === 'pc-muscle') &&
+    !!low(['head'], { duration: 'o3m' }) && !low(['head'], { duration: 'd2w' }) && !low(['kneeL']))
+  const order = patternChecks(ZN(['shoulderL', 'shoulderR']), { age: '50-64' }, 12).map((p) => p.id)
+  check('Hypopituitarism route A: after the Cushing question, before the nerve and muscle screen, and both shoulders still fit all five weakness questions',
+    order.indexOf('pc-hormone') < order.indexOf('pc-lowhormone') && order.indexOf('pc-lowhormone') < order.indexOf('pc-muscle') &&
+    ['pc-pmr', 'pc-myositis', 'pc-hormone', 'pc-lowhormone', 'pc-muscle'].every((id) => order.includes(id)), order)
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Hypopituitarism route B: diagnosed on the cautions list; its panel covers sick-day rules, small steps, salt and water, bone, and the 911 headache signs',
+    /PITUITARY_CAUTION,/.test(src) && /under-supplied, not damaged/.test(ST.PITUITARY_CAUTION.why.text) &&
+    (() => { const p = ST.steroidPanel({ steroid: 'tabs' }, false, true); return p && /pituitary/i.test(p.title) && p.notes.some((n) => /sick-day/.test(n)) && p.notes.some((n) => /911/.test(n)) && p.notes.some((n) => /salt/.test(n)) })())
+  const ad = ST.STEROID_RED_FLAGS.find((f) => f.id === 'st-adrenal')
+  check('Hypopituitarism: hydrocortisone replacement is named in the steroid question, and the adrenal-crisis question covers diarrhoea, keeping tablets down and sick-day rules',
+    /hydrocortisone/.test(ST.STEROID_STATUS.options[0].label) && /keep your steroid tablets down/.test(ad.text) && /diarrhoea/.test(ad.text) && /sick-day rules/.test(ad.why.text))
+  const { REGIONS: R } = await imp('src/data/symptomGuide.js')
+  const conc = R.head.conditions.find((c) => c.id === 'concussion')
+  check('Hypopituitarism: the concussion record suggests a hormone blood test when symptoms last 3 months or more',
+    conc && JSON.stringify(conc).includes('hormone (pituitary) blood test'))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

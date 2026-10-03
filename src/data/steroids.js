@@ -22,12 +22,20 @@
 
    The answer is kept as answers.steroid: in the summary and PDF, not in the
    anonymous copy or the AI overview.
+
+   Too little hormone: "Hypopituitarism.docx", reviewed and signed by
+   Chandra Matla, 3 Oct 2026 (confirmed in the session); content/reference/
+   hypopituitarism.md. Route A: pc-lowhormone (LOW_HORMONE_SCREEN, not
+   named). Route B: ca-pituitary (PITUITARY_CAUTION) and its panel. The
+   adrenal-crisis overlay is the steroid one: hydrocortisone replacement is
+   steroid tablets, so it is named in the question and the crisis wording
+   adds the sick-day rules.
    ───────────────────────────────────────────────────────────────────────── */
 
 export const STEROID_STATUS = {
   id: 'steroid', text: 'Do you take steroid medicine, or have you in the past year?',
   options: [
-    { id: 'tabs', label: 'Yes, steroid tablets (such as prednisone or dexamethasone) for 3 months or more' },
+    { id: 'tabs', label: 'Yes, steroid tablets (such as prednisone, dexamethasone, or hydrocortisone replacement) for 3 months or more' },
     { id: 'other', label: 'Yes, other steroids: high-dose inhalers, repeated injections, or a herbal, skin or body-building product that may contain steroids' },
     { id: 'no', label: 'No, or only a short course' },
     { id: 'ns', label: 'Not sure' },
@@ -39,9 +47,9 @@ export const onSteroids = (a = {}) => a.steroid === 'tabs' || a.steroid === 'oth
    long-term steroids. */
 export const STEROID_RED_FLAGS = [
   { id: 'st-adrenal', tier: 'emergency', call911: true,
-    text: 'Very weak, dizzy or faint, with vomiting, stomach pain, a fever or confusion, while taking steroids or since stopping them',
+    text: 'Very weak, dizzy or faint, with vomiting, diarrhoea, stomach pain, a fever or confusion, or unable to keep your steroid tablets down, while taking steroids or since stopping them',
     why: { title: 'Possible adrenal crisis',
-      text: 'With steroid medicine, or soon after stopping it, these together can mean the body is short of its own steroid hormone (an adrenal crisis). It needs emergency treatment. If you carry a steroid emergency card or injection, use it as instructed while you wait.' } },
+      text: 'With steroid medicine, including hydrocortisone replacement, or soon after stopping it, these together can mean the body is short of its own steroid hormone (an adrenal crisis). It needs emergency treatment. If you carry a steroid emergency card or injection, use it as instructed while you wait. On a day you are ill but well enough to keep tablets down, follow your sick-day rules (usually doubling the dose) and call your doctor.' } },
   { id: 'st-mind', tier: 'emergency',
     text: 'Since starting or changing steroid medicine: confusion, seeing or hearing things that are not there, or very low mood with thoughts of harming yourself',
     why: { title: 'Please get help today',
@@ -74,6 +82,23 @@ export const HORMONE_SCREEN = {
     text: 'Weakness in both thighs or shoulders that has built up over months, together with changes like these, can be linked with the body\'s own steroid hormone (cortisol) or with steroid medicines. This needs a doctor rather than a physiotherapist first. Please see your family doctor in the next week or two, mention these changes together, and take a list of every medicine, inhaler, cream and supplement you use. Please do not stop any steroid tablets on your own. Physiotherapy can help rebuild strength once the cause is being treated; you are welcome to book after that visit.' },
 }
 
+/* Too little pituitary hormone, route A (./patternChecks.js, pc-lowhormone):
+   the document's doctor-first rule, a cause (Q3) with exhaustion (Q1) or
+   both-sided muscle loss (Q2). The pituitary is named once, as the document
+   drafts (open item 1). */
+export const LOW_HORMONE_SCREEN = {
+  text: 'Not explained by a condition you have already been diagnosed with: for the past few months, exhaustion most days that sleep does not fix, or muscles that have become smaller or weaker on both sides, together with any of these: a pituitary or brain tumour, brain surgery or radiotherapy to the head; a significant head injury or bleeding in the brain; a childbirth with heavy bleeding, after which your periods did not return or breastfeeding did not work; or cancer immunotherapy',
+  why: { title: 'Please see your family doctor in the next week or two',
+    text: 'Tiredness that does not recover and loss of muscle on both sides can be caused by low hormone levels, including, after a head injury or treatment near the brain, the pituitary gland itself. These are found with blood tests, not by a physiotherapist. Please see your family doctor in the next week or two and mention all of these together, including any head injury, pituitary treatment or difficult childbirth. If you are on cancer immunotherapy, contact your oncology team the same day. Hormones that are low can be replaced, and physiotherapy can help rebuild strength and stamina once they are; you are welcome to book after that visit.' },
+}
+
+/* Too little pituitary hormone, route B: diagnosed and on replacement. */
+export const PITUITARY_CAUTION = {
+  id: 'ca-pituitary', tier: 'caution', text: 'A pituitary hormone problem or adrenal insufficiency, diagnosed by a doctor (for example on hydrocortisone, thyroxine, sex hormone or growth hormone replacement)',
+  why: { title: 'Worth knowing before your first assessment',
+    text: 'Once hormone replacement is right, a steady strength and stamina programme can help rebuild muscle, energy and bone: they have been under-supplied, not damaged. Your programme starts from where you are, builds by how well you recover the next day, protects your bones, and is never pushed on a day you are unwell. If you take hydrocortisone, sessions are planned around your sick-day rules, alongside your endocrinologist.' },
+}
+
 /* Route B's cautions-list entry (PainAssessment.jsx, CAUTION_CHECKS). */
 export const CUSHING_CAUTION = {
   id: 'ca-cushing', tier: 'caution', text: 'Cushing\'s syndrome, diagnosed by a doctor (being treated, or treated in the past)',
@@ -88,9 +113,25 @@ const SELF_CARE = [
   'Ask your doctor about calcium, vitamin D, and whether a bone-density check or bone medicine is right for you; this is recommended for most people on steroid tablets for more than three months.',
 ]
 
-/** The results panel, or null. `cushing` = ca-cushing ticked. */
-export function steroidPanel(answers = {}, cushing = false) {
+const PITUITARY_SELF_CARE = [
+  'If you take hydrocortisone or prednisone replacement, never miss doses, carry your steroid card, and follow your sick-day rules (usually doubling the dose when you are ill); ask your doctor for them if you have not been given them.',
+  'Build activity in small steps: a short daily walk and a few sit-to-stands from a firm chair, adding a little each week only if you have recovered by the next day.',
+  'Drink to thirst and keep salt in your diet unless your doctor has told you otherwise, and stand up slowly if you get light-headed.',
+  'Ask your doctor about a bone-density check and vitamin D.',
+  'Call 911 for a sudden, severe headache with loss of vision, double vision or a drooping eyelid, or for collapse; see a doctor the same day for extreme thirst with large amounts of pale urine.',
+]
+
+/** The results panel, or null. `cushing` = ca-cushing ticked; `pituitary` =
+    ca-pituitary ticked (takes precedence: its notes cover hydrocortisone). */
+export function steroidPanel(answers = {}, cushing = false, pituitary = false) {
   const steroids = onSteroids(answers)
+  if (pituitary) {
+    return {
+      title: 'Low pituitary hormones and rebuilding strength',
+      text: 'The pituitary gland sends the signals for cortisol, thyroid hormone, sex hormones and growth hormone. When some of these are low, muscles lose bulk and stamina, bones thin, and energy and mood fall. With the right replacement from your endocrinologist, energy, muscle, bone and mood usually improve over months, and they improve most when replacement is combined with training. The muscles and bones have been under-supplied, not damaged: a progressive strength and aerobic programme, built by how well you recover the next day and using effort rather than heart rate while doses are being adjusted, is safe and is part of the treatment.',
+      notes: PITUITARY_SELF_CARE,
+    }
+  }
   if (!cushing && !steroids) return null
   if (cushing) {
     return {

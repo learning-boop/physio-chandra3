@@ -25,7 +25,7 @@ import { WIDESPREAD, widespreadRoute } from '../data/widespreadPain'
 import {
   DM_STATUS, diabetesRedFlags, isNerveFlag, NERVE_WHY, diabetesBranch, diabetesQuestions, diabetesBonus, diabetesPanel, diabetesSummary,
 } from '../data/diabetes'
-import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_CAUTION } from '../data/steroids'
+import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_CAUTION, PITUITARY_CAUTION } from '../data/steroids'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -250,6 +250,8 @@ const CAUTION_CHECKS = [
       text: 'Chandra sees children from 5 years old; for a child under 5, please ask the neuromuscular team at BC Children\'s Hospital about a paediatric physiotherapist. Physiotherapy works alongside the neuromuscular team on daily stretching, night splints, enjoyable activity such as swimming or cycling, walking, posture and equipment. Very hard or "eccentric" exercise (downhill walking, jumping, heavy lifting, pushing to exhaustion) is avoided. Severe muscle pain with dark, cola-coloured urine after activity, or a fall followed by leg pain or refusal to stand, needs the emergency department; and every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
   // "Cushings Syndrome" document (signed by Chandra, 3 Oct 2026), route B.
   CUSHING_CAUTION,
+  // "Hypopituitarism" document (signed by Chandra, 3 Oct 2026), route B.
+  PITUITARY_CAUTION,
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -762,8 +764,13 @@ export default function PainAssessment() {
     const ownOrgan = list.some((f) => inGroup(f, 'organ'))
     const ownNeuro = list.some((f) => inGroup(f, 'neuro'))
     const universal = UNIVERSAL_CHECKS.filter((f) => !(injuryApplies && f.id === 'sc-trauma') && !(ownNeuro && f.id === 'sc-neuro'))
-    const pattern = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral'))
-      .filter((f) => !(dmKnown && isNerveFlag(f))).slice(0, 2).map(nerve)
+    const kept = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral'))
+      .filter((f) => !(dmKnown && isNerveFlag(f)))
+    const pattern = kept.slice(0, 2).map(nerve)
+    // The ones the two-question limit cut are asked on the final check
+    // instead; they used to be dropped altogether (a both-thighs drawing
+    // never reached the nerve and muscle screen).
+    const deferred = kept.slice(2).map((f) => f.id)
     // With diabetes, its own red flags come first on each page ("DiabetesMellitus"
     // document, section 6), minus any this page already asks.
     const diabetic = diabetesRedFlags(zones, answers, [...list, ...pattern])
@@ -774,6 +781,7 @@ export default function PainAssessment() {
     return {
       emergency: all.filter((f) => f.tier === 'emergency'),
       physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
+      deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid])
@@ -785,13 +793,17 @@ export default function PainAssessment() {
     // on the pain-behaviour screen: put the matching flag to them to confirm.
     const night = GENERAL_RED_FLAGS.find((f) => f.id === 'grf-night')
     if (behaviour.nightConcern && night) out.push({ ...night, why: TIER_WHY.urgent })
-    const early = new Set(earlyPatterns.map((p) => p.id))
-    // Up to four: dizziness (heart; ear or worsening) and headache can both
-    // apply, and both-sided weakness asks PMR, myositis, the hormone or
-    // steroid screen and the nerve and muscle screen.
-    patternChecks(zones, answers, 7).filter((p) => !early.has(p.id)).slice(0, 4).forEach((p) => out.push(p))
+    // Drawing-only checks were asked on the doctor page, except those its
+    // two-question limit deferred to here.
+    const deferred = new Set(screening.deferred)
+    const early = new Set(earlyPatterns.map((p) => p.id).filter((id) => !deferred.has(id)))
+    // Up to five: dizziness (heart; ear or worsening) and headache can both
+    // apply, and both-sided weakness asks PMR, myositis, the two hormone
+    // screens and the nerve and muscle screen.
+    patternChecks(zones, answers, 12).filter((p) => !early.has(p.id)).slice(0, 5).map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
+      .filter((p) => !(answers.dm === 'yes' && isNerveFlag(p))).forEach((p) => out.push(p))
     return out
-  }, [zones, answers, behaviour.nightConcern, earlyPatterns])
+  }, [zones, answers, behaviour.nightConcern, earlyPatterns, screening.deferred])
 
   const safetyChecks = useMemo(
     () => [...screening.emergency, ...screening.physician, ...finalChecks],
@@ -887,7 +899,7 @@ export default function PainAssessment() {
   const dmQuestions = diabetesBranch(answers, zones, wideRanked) ? diabetesQuestions(answers, zones) : []
   const dmPanel = useMemo(() => diabetesPanel(answers, zones, shown), [answers, zones, shown])
   // Steroid medicine or diagnosed Cushing's (../data/steroids.js).
-  const stPanel = useMemo(() => steroidPanel(answers, flags.includes('ca-cushing')), [answers, flags])
+  const stPanel = useMemo(() => steroidPanel(answers, flags.includes('ca-cushing'), flags.includes('ca-pituitary')), [answers, flags])
   const pickDm = (q, oid) => setAnswers((a) => {
     if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
     const cur = [].concat(a[q.id] || [])

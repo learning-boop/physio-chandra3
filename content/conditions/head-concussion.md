@@ -68,6 +68,7 @@ Concussion is diagnosed by a doctor or nurse practitioner, who also checks for a
 - A doctor has checked you and you still have headache, dizziness, neck pain, balance or vision problems, or trouble coping with exercise, school or work
 - Symptoms are lasting beyond 2 to 4 weeks: physiotherapy for the neck, balance and exercise tolerance tends to help most here
 - You want a step-by-step plan to return to sport, school or work
+- Tiredness, weakness, low mood, or changes in sex drive or periods are not improving 3 months or more after the injury: please also ask your family doctor about a hormone (pituitary) blood test, which can be checked alongside physiotherapy
 
 ## clinicNotes
 - Physio role is the recovery phase, alongside the GP or NP. Confirm medical assessment and diagnosis (BC guideline: ideally within 72 h); check red flags and the C-spine (Canadian C-Spine Rule).
@@ -76,6 +77,7 @@ Concussion is diagnosed by a doctor or nurse practitioner, who also checks for a
 - Vestibular and oculomotor: VOMS, smooth pursuits, saccades, convergence (NPC), VOR, visual motion sensitivity; Dix-Hallpike if positional vertigo is reported.
 - Balance: mBESS, tandem gait (dual task). Exertion: Buffalo Concussion Treadmill or Bike Test for the sub-symptom heart-rate threshold; orthostatic HR and BP (2 min supine, 1 min standing) for an autonomic or POTS pattern.
 - Management: education and reassurance; relative rest 24 to 48 h at most, then graded return; sub-symptom-threshold aerobic exercise (start around 55% of max HR, progress to about 70%); cervical treatment when the neck is involved; vestibular and oculomotor rehabilitation, with repositioning for BPPV; Return to Sport / School / Work plans following the BC CATT protocols. Return to at-risk activity only after medical clearance.
+- Post-traumatic hypopituitarism ("Hypopituitarism" document, signed 3 Oct 2026; content/reference/hypopituitarism.md): 10-30% after moderate to severe TBI or SAH, GH deficiency commonest; suggest an endocrine screen at 3-6 and 12 months, and in persisting symptoms after mild TBI. The final check asks pc-lowhormone for a head problem lasting more than 3 months.
 - Note mood, sleep and headache type for co-management with the GP. Persisting symptoms (over 4 weeks): about 1 in 6 adults, 1 in 4 young people.
 - The head injury screen records when it happened and whether a doctor or NP has seen it (head:I2, head:I10); "said it was not a concussion" is recorded there, not scored.
 - AIM Theory Manual 2023 (pp. 236-254, 278; content/reference/cervical-conditions-manual.md): tell primary concussion from vestibular, cervicogenic and oculomotor dysfunction, and refer complex cases to a concussion-trained physiotherapist. History alone cannot separate the dizziness sources after concussion (Reneker 2015A); vestibular tests have the strongest consensus (Reneker 2015B). CCFT impaired in 81.6% of dizzy post-concussion patients (Reneker 2018). With abnormal neck proprioception and no vestibular or central cause, head relocation practice helped 85% vs 18% with vestibular rehab (Hammerle 2019).
