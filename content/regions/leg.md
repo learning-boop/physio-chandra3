@@ -65,7 +65,7 @@ Why: Possible peroneal nerve injury
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -172,19 +172,19 @@ Q: Is there any swelling or change in the skin?
 ## test patients
 CASE: Test patient 1
 Drawing: Inner edge of both shins, lower half
-Answers: Age 18 to 29 · After increasing running, jumping, or marching · 2 to 6 weeks; Q1: along the inner edge of the shin bone; Q2: sore at the start, eases as I warm up, worse after; Q3: a long stretch (more than 5 cm) along the inner edge of the bone
+Answers: Age 16 to 29 · After increasing running, jumping, or marching · 2 to 6 weeks; Q1: along the inner edge of the shin bone; Q2: sore at the start, eases as I warm up, worse after; Q3: a long stretch (more than 5 cm) along the inner edge of the bone
 Flags: None
 Expect: top condition = Medial tibial stress syndrome (shin splints); must not show = Tibial stress fracture; compartment syndrome; route = Results + booking
 
 CASE: Test patient 2
 Drawing: One spot on the front of the right shin
-Answers: Age 18 to 29 · After increasing running, jumping, or marching · 2 to 6 weeks; Q1: front of the shin; Q2: gets worse the more I run, and hurts to hop; Q3: one spot I can cover with a fingertip
+Answers: Age 16 to 29 · After increasing running, jumping, or marching · 2 to 6 weeks; Q1: front of the shin; Q2: gets worse the more I run, and hurts to hop; Q3: one spot I can cover with a fingertip
 Flags: “Do you run or train hard, and is there a sore spot on the shin bone…?”
 Expect: top condition = None; see a doctor first; must not show = Shin splints without the physician-first message; route = Physician first
 
 CASE: Test patient 3
 Drawing: Front and outer side of both lower legs
-Answers: Age 18 to 29 · It comes on during exercise and eases when I stop · More than 3 months; Q2: builds up during exercise at the same point, and eases within minutes of stopping; Q4: the leg goes tight or hard; the foot goes numb, tingly, or weak; it eases within 10 to 30 minutes of stopping
+Answers: Age 16 to 29 · It comes on during exercise and eases when I stop · More than 3 months; Q2: builds up during exercise at the same point, and eases within minutes of stopping; Q4: the leg goes tight or hard; the foot goes numb, tingly, or weak; it eases within 10 to 30 minutes of stopping
 Flags: None
 Expect: top condition = Chronic exertional compartment syndrome; must not show = Shin splints as the top result; route = Results + booking
 

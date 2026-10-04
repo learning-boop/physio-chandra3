@@ -101,8 +101,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -390,8 +390,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -520,8 +520,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -668,8 +668,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -770,9 +770,9 @@ export const EXTRA_REGIONS = {
         text: "After a fall or accident, are you unable to stand or put weight on your leg?" },
       // Split in two (Chandra, 2 Oct 2026, option b): heavy bleeding or
       // feeling faint is 911; waters or tightenings go to labour and delivery.
-      { id: "prf-pregnancy-bleed", sex: "female", tier: "emergency", call911: true, why: "Possible serious pregnancy complication",
+      { id: "prf-pregnancy-bleed", sex: "female", ages: ["18-29", "30-49"], tier: "emergency", call911: true, why: "Possible serious pregnancy complication",
         text: "Are you pregnant and have severe pelvic or back pain with heavy bleeding, or feeling faint?" },
-      { id: "prf-pregnancy", sex: "female", tier: "emergency", goTo: "labour", why: "Possible labour or waters breaking",
+      { id: "prf-pregnancy", sex: "female", ages: ["18-29", "30-49"], tier: "emergency", goTo: "labour", why: "Possible labour or waters breaking",
         text: "Are you pregnant and have severe pelvic or back pain with fluid leaking, or regular tightenings?" },
       { id: "prf-osteo", tier: "urgent", group: "osteo", why: "Possible stress (insufficiency) fracture of the sacrum",
         text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?" },
@@ -790,8 +790,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -910,8 +910,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1024,8 +1024,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1149,7 +1149,7 @@ export const EXTRA_REGIONS = {
       // document, 2 Oct 2026): it asks when, and whether a doctor has seen it.
       { id: "hrf-medication", tier: "urgent", why: "Medication side effect: the prescriber should review it",
         text: "Did this new headache start after beginning a new medication?" },
-      { id: "hrf-pregnancy", sex: "female", tier: "urgent", why: "Possible pre-eclampsia or other pregnancy-related cause",
+      { id: "hrf-pregnancy", sex: "female", ages: ["18-29", "30-49"], tier: "urgent", why: "Possible pre-eclampsia or other pregnancy-related cause",
         text: "Are you pregnant, or have you had a baby in the last 6 weeks, and this is a new or different headache?" },
       // Shared with the neck (group "cadsevere", Chandra 28 Sep 2026): asked once.
       { id: "hrf-cad-severe", tier: "emergency", call911: true, group: "cadsevere", why: "Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear",
@@ -1160,8 +1160,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1308,8 +1308,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1430,8 +1430,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1572,8 +1572,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1708,8 +1708,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1867,8 +1867,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -1997,7 +1997,7 @@ export const EXTRA_REGIONS = {
         text: "Do you have a sudden, severe pain in your back, tummy, or groin, with a pulsing feeling in your tummy, or feeling faint or sweaty?" },
       { id: "hpf-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
         text: "Is your hip very painful with a fever, and can you not put weight on the leg (or is a child suddenly refusing to walk and feverish)?" },
-      { id: "hpf-ectopic", sex: "female", tier: "emergency", call911: true, why: "Possible ectopic pregnancy",
+      { id: "hpf-ectopic", sex: "female", ages: ["18-29", "30-49"], tier: "emergency", call911: true, why: "Possible ectopic pregnancy",
         text: "Could you be pregnant, and do you have sudden one-sided pain low in your tummy or groin, bleeding, or feeling faint?" },
       { id: "hpf-torsion", sex: "male", tier: "emergency", why: "Possible testicular torsion",
         text: "Do you have sudden, severe pain in a testicle?" },
@@ -2039,8 +2039,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -2187,8 +2187,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -2331,8 +2331,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -2487,8 +2487,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }
@@ -2652,8 +2652,8 @@ export const EXTRA_REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }

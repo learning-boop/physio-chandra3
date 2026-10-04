@@ -78,7 +78,7 @@ Why: Possible finger fracture with rotation, or a central slip (boutonnière) in
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -212,7 +212,7 @@ Expect: top condition = None; see a doctor first; must not show = Results + book
 
 CASE: Test patient 4
 Drawing: Right hand, over the knuckle of the middle finger
-Answers: Age 18 to 29 · It was crushed or cut · Less than 2 weeks
+Answers: Age 16 to 29 · It was crushed or cut · Less than 2 weeks
 Flags: “Did you have a cut, bite, or puncture on your hand or finger (including hitting someone's teeth), and is it now swollen, red, and very painful…?”
 Expect: top condition = None (no results shown); must not show = Any hand condition; any booking button; route = 911
 

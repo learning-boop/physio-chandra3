@@ -8,7 +8,7 @@
    Pregnancy is the one hormonal entry that is a physiotherapy route by
    default, so it is a global overlay like diabetes, not a region condition:
      1. One question on "A little about you", for a birth sex of female or
-        "intersex, or prefer not to say", aged 5 to 64 (PREG_STATUS,
+        "intersex, or prefer not to say", aged 16 to 49 (PREG_STATUS,
         answers.preg; after a birth, how the baby was born, answers.pregBirth).
      2. While pregnant or in the year after, the obstetric and postpartum red
         flags go to the FRONT of the safety pages, in every area, minus any
@@ -62,9 +62,11 @@ export const isPostpartum = (a = {}) => POSTPARTUM.includes(a.preg)
 export const pregnancyOn = (a = {}) => isPregnant(a) || isPostpartum(a)
 
 /** Asked of a birth sex of female or "intersex, or prefer not to say",
-    aged 5 to 64 (no question for under 5 or 65 and over). */
+    aged 16 to 49 (Chandra, 4 Oct 2026: not 5 to 15, not 50 and over; the
+    age codes '18-29' and '30-49' are the "16 to 29" and "30 to 49" bands). */
+export const PREG_AGES = ['18-29', '30-49']
 export const pregnancyAsked = (who = {}) =>
-  (who.sex === 'female' || who.sex === 'other') && !!who.age && !['u5', 'o64'].includes(who.age)
+  (who.sex === 'female' || who.sex === 'other') && PREG_AGES.includes(who.age)
 
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
 const BACK = ['lowerback', 'sij', 'coccyx', 'tlj', 'flank', 'upperback', 'chest']

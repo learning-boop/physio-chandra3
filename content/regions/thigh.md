@@ -63,7 +63,7 @@ Why: Possible bone forming in the muscle after a bruise (myositis ossificans); n
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -168,13 +168,13 @@ Q: Is there any swelling or lump?
 ## test patients
 CASE: Test patient 1
 Drawing: Back of the right thigh, middle
-Answers: Age 18 to 29 · A sudden sharp pain while sprinting or kicking · Less than 2 weeks; Injury screen: I1 “Yes, a sudden sharp pain while sprinting”; I2 to I6 No; Q1: back of the thigh; Q2: sprinting, kicking, or jumping; stretching; Q3: a sudden sharp pain during activity, with bruising after
+Answers: Age 16 to 29 · A sudden sharp pain while sprinting or kicking · Less than 2 weeks; Injury screen: I1 “Yes, a sudden sharp pain while sprinting”; I2 to I6 No; Q1: back of the thigh; Q2: sprinting, kicking, or jumping; stretching; Q3: a sudden sharp pain during activity, with bruising after
 Flags: None
 Expect: top condition = Hamstring strain; must not show = L5–S1 nerve root pain; proximal hamstring tendon tear; route = Results + booking
 
 CASE: Test patient 2
 Drawing: Front of the left thigh after a knee to the thigh in football
-Answers: Age 18 to 29 · After a hard knock to the thigh · Less than 2 weeks; Injury screen: I1 “Yes, a hard knock”; I2 to I6 No; Q3: a deep bruise after a knock; Q4: more than halfway
+Answers: Age 16 to 29 · After a hard knock to the thigh · Less than 2 weeks; Injury screen: I1 “Yes, a hard knock”; I2 to I6 No; Q3: a deep bruise after a knock; Q4: more than halfway
 Flags: None
 Expect: top condition = Quadriceps contusion (“dead leg”); must not show = Quadriceps strain as the top result; any physician-first message; route = Results + booking
 
@@ -198,6 +198,6 @@ Expect: top condition = None; see a doctor first (same day); must not show = Any
 
 CASE: Test patient 6
 Drawing: Deep ache in the front of the left thigh
-Answers: Age 18 to 29 · After increasing running or training · 2 to 6 weeks; Q1: front of the thigh
+Answers: Age 16 to 29 · After increasing running or training · 2 to 6 weeks; Q1: front of the thigh
 Flags: “Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night?”
 Expect: top condition = None; see a doctor first; must not show = Quadriceps strain without the physician-first message; route = Physician first

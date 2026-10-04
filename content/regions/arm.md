@@ -62,7 +62,7 @@ Why: Possible torn biceps tendon
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -141,7 +141,7 @@ Ask only if: How did it start? is “It came with a rash, or after an illness or
 ## test patients
 CASE: Test patient 1
 Drawing: Front of the right upper arm
-Answers: Age 18 to 29 · After the gym, heavy lifting, or a new workout · Less than 2 weeks; Q1: front of the upper arm (biceps); Q2: lifting, curls, or push-ups; Q6: sore and stiff 1 to 3 days after, then easing
+Answers: Age 16 to 29 · After the gym, heavy lifting, or a new workout · Less than 2 weeks; Q1: front of the upper arm (biceps); Q2: lifting, curls, or push-ups; Q6: sore and stiff 1 to 3 days after, then easing
 Flags: None
 Expect: top condition = Muscle soreness or strain (upper arm); must not show = Nerve root pain from the neck; any physician-first message; route = Results + booking
 
@@ -153,7 +153,7 @@ Expect: top condition = No arm condition; shows a “this may be coming from you
 
 CASE: Test patient 3
 Drawing: Whole right arm, worse at the inner forearm and little finger
-Answers: Age 18 to 29 · Gradually, no clear reason · 6 weeks to 3 months; Q2: carrying bags, or letting the arm hang down; lifting my arm up or reaching overhead; Q3: the whole arm feels heavy and tired, especially with it raised; Q7: the arm goes heavy, tingly, or dead
+Answers: Age 16 to 29 · Gradually, no clear reason · 6 weeks to 3 months; Q2: carrying bags, or letting the arm hang down; lifting my arm up or reaching overhead; Q3: the whole arm feels heavy and tired, especially with it raised; Q7: the arm goes heavy, tingly, or dead
 Flags: None
 Expect: top condition = Thoracic outlet pattern (nerve type); must not show = Muscle soreness or strain as the top result; route = Results + booking
 

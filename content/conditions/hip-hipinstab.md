@@ -13,7 +13,7 @@ pointers:
   "Groin, or the front of the hip": 1
   "Deep pain in the hip joint with twisting": 1
   "A sudden twist, kick, or change of direction": 1
-  "18 to 29": 1
+  "16 to 29": 1
   "Moving my low back": -2
 ---
 

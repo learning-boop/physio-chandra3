@@ -34,7 +34,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -169,7 +169,7 @@ Expect: top condition = none; must not show = LBP with mobility deficits, any bo
 
 <!-- (as) From "Ankylosing spondylitis Spondyloarthritis.docx" (v1.0, 2 Oct 2026): maximum 20, shown from 8. -->
 CASE: 6. 28, gradual low back pain for months, stiff mornings, better moving, wakes at night
-Answers: 18 to 29; gradually; more than 3 months; inflammatory question = before 40 + morning stiffness + exercise helps + night pain + switching buttocks
+Answers: 16 to 29; gradually; more than 3 months; inflammatory question = before 40 + morning stiffness + exercise helps + night pain + switching buttocks
 Expect: top condition = inflammatory back pain (with the see-your-doctor note); route = results
 
 CASE: 7. 45, low back pain after lifting, eases with rest

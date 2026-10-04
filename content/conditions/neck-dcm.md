@@ -27,8 +27,8 @@ pointers:
   "Getting better": -1
   "50 to 64": 1
   "65 or over": 1
-  "18 to 29": -1
-  "5 to 17": -2
+  "16 to 29": -1
+  "5 to 15": -2
   "Under 5": -2
   "Gradually, no clear reason": 1
   "More than 3 months": 1

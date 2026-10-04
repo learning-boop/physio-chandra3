@@ -67,7 +67,7 @@ Why: Possible TFCC tear, joint instability, or fracture on the little-finger sid
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -192,7 +192,7 @@ Expect: top condition = Carpal tunnel syndrome; must not show = Nerve root pain 
 
 CASE: Test patient 3
 Drawing: Thumb side of the left wrist after a fall
-Answers: Age 18 to 29 · After a fall onto the hand · Less than 2 weeks; Injury screen: I1 “Yes, I fell onto my outstretched hand”; I2 to I4 No; I5 Yes
+Answers: Age 16 to 29 · After a fall onto the hand · Less than 2 weeks; Injury screen: I1 “Yes, I fell onto my outstretched hand”; I2 to I4 No; I5 Yes
 Flags: Injury screen I5 (possible scaphoid fracture)
 Expect: top condition = None; see a doctor first; must not show = A wrist sprain result shown before the physician-first message; route = Physician first
 

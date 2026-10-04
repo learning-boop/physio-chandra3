@@ -4886,7 +4886,7 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "18-29",
-        "label": "18 to 29",
+        "label": "16 to 29",
         "weight": 2
       },
       {
@@ -5072,7 +5072,7 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "18-29",
-        "label": "18 to 29",
+        "label": "16 to 29",
         "weight": 1
       },
       {
@@ -5186,13 +5186,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "18-29",
-        "label": "18 to 29",
+        "label": "16 to 29",
         "weight": -2
       },
       {
         "qid": "age",
         "oid": "u18",
-        "label": "5 to 17",
+        "label": "5 to 15",
         "weight": -2
       },
       {
@@ -6039,7 +6039,7 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "u18",
-        "label": "5 to 17",
+        "label": "5 to 15",
         "weight": 1
       },
       {
@@ -6632,13 +6632,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "18-29",
-        "label": "18 to 29",
+        "label": "16 to 29",
         "weight": -2
       },
       {
         "qid": "age",
         "oid": "u18",
-        "label": "5 to 17",
+        "label": "5 to 15",
         "weight": -2
       },
       {
@@ -6713,13 +6713,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "u18",
-        "label": "5 to 17",
+        "label": "5 to 15",
         "weight": 1
       },
       {
         "qid": "age",
         "oid": "18-29",
-        "label": "18 to 29",
+        "label": "16 to 29",
         "weight": 1
       },
       {
@@ -8359,13 +8359,13 @@ export const AUTHORED = [
       {
         "qid": "age",
         "oid": "18-29",
-        "label": "18 to 29",
+        "label": "16 to 29",
         "weight": -1
       },
       {
         "qid": "age",
         "oid": "u18",
-        "label": "5 to 17",
+        "label": "5 to 15",
         "weight": -2
       },
       {

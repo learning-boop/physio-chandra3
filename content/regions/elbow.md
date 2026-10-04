@@ -61,7 +61,7 @@ Why: Not being able to straighten the elbow after an injury raises the chance of
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -193,6 +193,6 @@ Expect: top condition = None; see a doctor first; must not show = Any tendinopat
 
 CASE: Test patient 6
 Drawing: Whole left elbow after a fall
-Answers: Age 18 to 29 · After a fall onto the hand or elbow · Less than 2 weeks; Injury screen: I1 “Yes, I fell onto my hand or elbow”; I2 to I5 No; I6 “No, it will not straighten fully”
+Answers: Age 16 to 29 · After a fall onto the hand or elbow · Less than 2 weeks; Injury screen: I1 “Yes, I fell onto my hand or elbow”; I2 to I5 No; I6 “No, it will not straighten fully”
 Flags: Injury screen I6 (cannot straighten the elbow)
 Expect: top condition = None; see a doctor first; must not show = Results + booking without the physician-first message; route = Physician first

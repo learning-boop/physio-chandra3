@@ -138,7 +138,7 @@ export function injuryStep(answers = {}, ageId) {
   if (a.I8 === undefined) return { next: 'I8' }
   if (a.I8 === 'yes') return high(WHY.notAlert)
 
-  // Step 1: any high-risk factor. The opening screen's "Under 5" and "5 to 17" count as
+  // Step 1: any high-risk factor. The opening screen's "Under 5" and "5 to 15" count as
   // under 16 (the rule was derived in adults; the JOSPT neck CPG 2017).
   const age = ageFrom(ageId)
   const band = age !== null ? (age >= 65 ? 'yes' : age < 18 ? 'child' : 'no') : a.I3

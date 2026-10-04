@@ -304,7 +304,7 @@ const PATTERNS = [
   },
   // Early signs of a muscle condition in a young child ("DuchenneMD"
   // document, signed by Chandra, 2 Oct 2026, route A; Duchenne is not named
-  // on this screen). For an "Under 5" or "5 to 17" answer with the legs, hips or low back
+  // on this screen). For an "Under 5" or "5 to 15" answer with the legs, hips or low back
   // drawn: the parent answers for the child. Never reassures; a yes holds the
   // booking until a doctor has seen the child (noBooking).
   {
@@ -318,7 +318,7 @@ const PATTERNS = [
   {
     id: 'pc-rickets', tier: 'urgent', noBooking: true, why: RICKETS_SCREEN.why,
     text: RICKETS_SCREEN.text,
-    // Under 5: any leg or wrist; 5 to 17: both legs (a teenager's one sore wrist is not asked).
+    // Under 5: any leg or wrist; 5 to 15: both legs (a teenager's one sore wrist is not asked).
     when: (z, a) => (a.age === 'u5' && has(z, 'thigh', 'knee', 'lowerleg', 'ankle', 'wrist')) ||
       (a.age === 'u18' && ['thigh', 'knee', 'lowerleg'].some((t) => bothSides(z, t))),
   },

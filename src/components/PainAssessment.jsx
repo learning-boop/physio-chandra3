@@ -76,7 +76,7 @@ const QUESTIONS = [
 const LETTERS = 'ABCDEFGHIJKLMNOPQRST'.split('')
 // "A little about you": the same age bands as every area's age question.
 const ABOUT_AGES = [
-  { id: 'u5', label: 'Under 5' }, { id: 'u18', label: '5 to 17' }, { id: '18-29', label: '18 to 29' },
+  { id: 'u5', label: 'Under 5' }, { id: 'u18', label: '5 to 15' }, { id: '18-29', label: '16 to 29' },
   { id: '30-49', label: '30 to 49' }, { id: '50-64', label: '50 to 64' }, { id: 'o64', label: '65 or over' },
 ]
 const ABOUT_SEX = [
@@ -228,7 +228,8 @@ const CAUTION_CHECKS = [
   { id: 'ca-surgery', tier: 'caution', text: 'Surgery or a procedure in this area within the last 3 months',
     why: { title: 'Recent surgery changes the plan',
       text: 'Healing tissue and any surgeon\'s restrictions come first, so your assessment works within them.' } },
-  { id: 'ca-preg', sex: 'female', tier: 'caution', text: 'Pregnant, or within 3 months of giving birth',
+  // 16 to 64 (4 Oct 2026): the fallback for 50 to 64, where the pregnancy question is not asked.
+  { id: 'ca-preg', sex: 'female', ages: ['18-29', '30-49', '50-64'], tier: 'caution', text: 'Pregnant, or within 3 months of giving birth',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Positions, hands-on techniques and exercise choices are adjusted during and after pregnancy.' } },
   // C3 (shorter questionnaire): was a statement on "How it is affecting you".
@@ -1956,7 +1957,7 @@ export default function PainAssessment() {
                   </p>
                 </div>
                 {/* Pregnancy (../data/pregnancy.js): for a birth sex of female
-                    or "prefer not to say", aged 5 to 64. Puts the obstetric
+                    or "prefer not to say", aged 16 to 49. Puts the obstetric
                     and postpartum red flags first and shapes the results. In
                     the summary and PDF, never in the anonymous copy or the AI
                     overview. */}

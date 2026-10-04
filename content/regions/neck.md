@@ -139,7 +139,7 @@ I7: Slowly turn your head as far as is comfortable to the left, then to the righ
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -351,7 +351,7 @@ Expect: top condition = none; must not show = the low-risk and neck-turn questio
 
 CASE: 3d. Drinking before a crash yesterday (2 Oct 2026)
 Drawing: Centre of the neck
-Answers: Age = 18 to 29; After a car accident or whiplash-type jolt; Less than 2 weeks; I1 = Yes, a car or other vehicle accident; I2 = Within the last 48 hours; I8 = Yes
+Answers: Age = 16 to 29; After a car accident or whiplash-type jolt; Less than 2 weeks; I1 = Yes, a car or other vehicle accident; I2 = Within the last 48 hours; I8 = Yes
 Flags: injury screen I8 (not alert or sober: the rule cannot be applied)
 Expect: top condition = none; must not show = the mechanism question (I4); route = 911
 
@@ -363,7 +363,7 @@ Expect: top condition = no neck condition, "this may be coming from your shoulde
 
 CASE: 5. Cervicogenic headache
 Drawing: Back of the neck and back of the head on the right
-Answers: Age = 18 to 29; Gradually, no clear reason; More than 3 months; Q1 = stiff or painful turning to one side; Q4 = one-sided, starting at the back of the neck or head + brought on by neck movement or holding one position; Q6 = long spells at a desk, screen, or driving
+Answers: Age = 16 to 29; Gradually, no clear reason; More than 3 months; Q1 = stiff or painful turning to one side; Q4 = one-sided, starting at the back of the neck or head + brought on by neck movement or holding one position; Q6 = long spells at a desk, screen, or driving
 Flags: none
 Expect: top condition = cervicogenic headache; must not show = migraine or tension-type as top, any physician-first message; route = results
 

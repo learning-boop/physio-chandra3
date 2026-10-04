@@ -81,7 +81,7 @@ Why: Possible growth plate fracture: in children these are more common than spra
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -202,7 +202,7 @@ Ask only if: How did it start? = an injury start (twist, landing), and it has go
 ## test patients
 CASE: Test patient 1
 Drawing: Outer right ankle, below and in front of the bone
-Answers: Age 18 to 29 · I rolled or twisted it · Less than 2 weeks; Injury screen: I1 “Yes, I rolled it inwards”; I2 to I8 No; Q1: outer ankle; Q2: I rolled it recently, felt a pop, and it bruised; Q8: swelling and bruising after an injury
+Answers: Age 16 to 29 · I rolled or twisted it · Less than 2 weeks; Injury screen: I1 “Yes, I rolled it inwards”; I2 to I8 No; Q1: outer ankle; Q2: I rolled it recently, felt a pop, and it bruised; Q8: swelling and bruising after an injury
 Flags: None
 Expect: top condition = Lateral ankle sprain; must not show = High ankle sprain; any physician-first message; route = Results + booking
 
@@ -214,7 +214,7 @@ Expect: top condition = None; see a doctor first; must not show = Ankle sprain r
 
 CASE: Test patient 2b (2 Oct 2026, Ottawa ankle rules)
 Drawing: Outer right ankle
-Answers: Age 18 to 29 · I rolled or twisted it · Less than 2 weeks; Injury screen: I1 “Yes, I rolled it inwards”; I2 to I4 No (walking); I8 Yes (the tip of the outer ankle bone is sharply tender)
+Answers: Age 16 to 29 · I rolled or twisted it · Less than 2 weeks; Injury screen: I1 “Yes, I rolled it inwards”; I2 to I4 No (walking); I8 Yes (the tip of the outer ankle bone is sharply tender)
 Flags: Injury screen I8 (Ottawa bone tenderness)
 Expect: top condition = None; see a doctor first (same day, X-ray); must not show = Ankle sprain results without the physician-first message; route = Physician first
 
@@ -232,7 +232,7 @@ Expect: top condition = Tibialis posterior tendon dysfunction; must not show = T
 
 CASE: Test patient 5
 Drawing: Outer right ankle
-Answers: Age 18 to 29 · I rolled or twisted it · More than 3 months · Injury screen: I1 “No” (more than 6 weeks ago); Q1: outer ankle; Q2: it keeps rolling, or feels like it will give way; Q3: walking on uneven ground; Q4: it still feels unstable
+Answers: Age 16 to 29 · I rolled or twisted it · More than 3 months · Injury screen: I1 “No” (more than 6 weeks ago); Q1: outer ankle; Q2: it keeps rolling, or feels like it will give way; Q3: walking on uneven ground; Q4: it still feels unstable
 Flags: None
 Expect: top condition = Chronic ankle instability; must not show = Acute lateral ankle sprain as the top result; route = Results + booking
 

@@ -44,7 +44,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -137,7 +137,7 @@ Expect: top condition = Cervicothoracic junction stiffness; must not show = thor
 
 CASE: 2. Thoracic outlet
 Drawing: Above the left collarbone and down the inner arm to the ring and little fingers
-Answers: Age = 18 to 29; After lifting, carrying, or reaching; 2 to 6 weeks; Q1 = above my collarbone; Q2 = raising my arms overhead + carrying bags; Q4 = ring and little fingers + worse overhead or carrying + arm feels heavy; Q5 = working with my arms overhead
+Answers: Age = 16 to 29; After lifting, carrying, or reaching; 2 to 6 weeks; Q1 = above my collarbone; Q2 = raising my arms overhead + carrying bags; Q4 = ring and little fingers + worse overhead or carrying + arm feels heavy; Q5 = working with my arms overhead
 Flags: none
 Expect: top condition = First rib dysfunction / thoracic outlet (neurogenic); must not show = CTJ stiffness as top; route = results
 

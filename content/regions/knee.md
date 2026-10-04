@@ -73,7 +73,7 @@ Why: First kneecap dislocation: imaging to check for a loose bone or cartilage f
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -181,7 +181,7 @@ Ask only if: The drawing includes the thigh, hip, or back, or Question 6 is “Y
 ## test patients
 CASE: Test patient 1
 Drawing: Around the right kneecap
-Answers: Age 18 to 29 · Gradually, no clear reason · 6 weeks to 3 months; Q1: around or behind the kneecap; Q2: going down stairs, squatting, or sitting a long time with the knee bent; Q3: none of these
+Answers: Age 16 to 29 · Gradually, no clear reason · 6 weeks to 3 months; Q1: around or behind the kneecap; Q2: going down stairs, squatting, or sitting a long time with the knee bent; Q3: none of these
 Flags: None
 Expect: top condition = Patellofemoral pain; must not show = Knee osteoarthritis; meniscal lesion; route = Results + booking
 
@@ -193,7 +193,7 @@ Expect: top condition = Knee osteoarthritis; must not show = Meniscal lesion as 
 
 CASE: Test patient 3
 Drawing: Whole right knee after a football injury
-Answers: Age 18 to 29 · A twist or pivot in sport · Less than 2 weeks; Injury screen: I1 “Yes, a twist or pivot in sport”; I2 to I4 No; I5 Yes
+Answers: Age 16 to 29 · A twist or pivot in sport · Less than 2 weeks; Injury screen: I1 “Yes, a twist or pivot in sport”; I2 to I4 No; I5 Yes
 Flags: Injury screen I5 (pop with swelling within 2 hours)
 Expect: top condition = None; see a doctor first; must not show = Results + booking without the physician-first message; route = Physician first
 

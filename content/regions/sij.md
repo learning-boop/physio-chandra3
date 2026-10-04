@@ -33,7 +33,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -95,7 +95,7 @@ Q: Which of these apply? Tick all that apply.
 - I have psoriasis, Crohn's or colitis, have had a painful red eye (uveitis), have heel pain, or a close relative has ankylosing spondylitis   (as bonus: 2; shows the card)
 - I have been told I have ankylosing spondylitis or axial spondyloarthritis   (as: 0; asks the AS fracture check)
 - None of these
-Ask only if: Age = "Under 18", "18 to 29" or "30 to 49", and it has gone on "More than 3 months"; asked first when it also started gradually
+Ask only if: Age = "Under 18", "16 to 29" or "30 to 49", and it has gone on "More than 3 months"; asked first when it also started gradually
 (as) "It switches from side to side" (question 3) scores 1 for the condition.
 
 Q: Does bending forward or arching your low back change the pain?
@@ -134,7 +134,7 @@ Expect: top condition = pregnancy-related pelvic girdle pain; must not show = SI
 
 CASE: 3. Inflammatory look-alike
 Drawing: Both buttocks, switching sides
-Answers: Age = 18 to 29; Gradually, no clear reason; More than 3 months; Q3 = it switches from side to side; Q6 = stiff for more than 30 minutes + exercise helps more than rest
+Answers: Age = 16 to 29; Gradually, no clear reason; More than 3 months; Q3 = it switches from side to side; Q6 = stiff for more than 30 minutes + exercise helps more than rest
 Flags: Are you under 45... woken you in the second half of the night...
 Expect: top condition = none; must not show = mechanical SIJ pain, any booking before review; route = physician first
 

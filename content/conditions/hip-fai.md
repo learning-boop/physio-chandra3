@@ -15,7 +15,7 @@ pointers:
   "Grips the side of my hip in a “C” shape, thumb at the back and fingers in the groin": 2
   "After increasing running or sport": 2
   "A sudden twist, kick, or change of direction": 1
-  "18 to 29": 2
+  "16 to 29": 2
   "30 to 49": 1
   "65 or over": -2
   "Stiff in the morning for less than an hour, then it eases": -1

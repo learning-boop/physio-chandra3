@@ -36,7 +36,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -152,7 +152,7 @@ Expect: top condition = rib joint (costovertebral); must not show = costochondri
 
 CASE: 3. Costochondritis
 Drawing: Front of the chest, left of the breastbone
-Answers: Age = 18 to 29; After a cough, sneeze, or sudden movement; 2 to 6 weeks; Q1 = at the front of my chest; Q7 = tender to press + worse with pushing + started after a chest infection
+Answers: Age = 16 to 29; After a cough, sneeze, or sudden movement; 2 to 6 weeks; Q1 = at the front of my chest; Q7 = tender to press + worse with pushing + started after a chest infection
 Flags: none
 Expect: top condition = costochondritis; must not show = rib joint as top; route = results (advise a doctor check if first chest pain) + booking
 

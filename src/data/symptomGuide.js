@@ -51,8 +51,8 @@ export const REGIONS = {
     context:[
       {id:"age", text:"Your age?", options:[
         {id:"u5", label:"Under 5"},
-        {id:"u18", label:"5 to 17"},
-        {id:"18-29", label:"18 to 29"},
+        {id:"u18", label:"5 to 15"},
+        {id:"18-29", label:"16 to 29"},
         {id:"30-49", label:"30 to 49"},
         {id:"50-64", label:"50 to 64"},
         {id:"o64", label:"65 or over"}
@@ -177,7 +177,7 @@ export const REGIONS = {
         text:"Is the pain in your shoulder, jaw, or left arm brought on by effort, or does it come with chest tightness, shortness of breath, or sweating?"},
       {id:"srf-kehr", tier:"emergency", call911: true, group:"kehr", why:"Possible bleeding from the spleen, felt at the shoulder tip (Kehr's sign)",
         text:"Did pain at the tip of your left shoulder start after a blow to your tummy or ribs, or does it come with feeling faint or dizzy?"},
-      {id:"srf-ectopic", sex:"female", tier:"emergency", call911: true, why:"Possible ectopic pregnancy: blood under the diaphragm is felt at the shoulder tip",
+      {id:"srf-ectopic", sex:"female", ages:["18-29", "30-49"], tier:"emergency", call911: true, why:"Possible ectopic pregnancy: blood under the diaphragm is felt at the shoulder tip",
         text:"Could you be pregnant, and do you have pain low in your tummy along with pain at the tip of your shoulder?"},
       {id:"srf-lung", tier:"emergency", call911: true, group:"lungclot", why:"Possible blood clot in the lung or a collapsed lung",
         text:"Do you have a sudden, sharp pain on breathing with shortness of breath?"},
@@ -204,8 +204,8 @@ export const REGIONS = {
     context:[
       {id:"age", text:"Your age?", options:[
         {id:"u5", label:"Under 5"},
-        {id:"u18", label:"5 to 17"},
-        {id:"18-29", label:"18 to 29"},
+        {id:"u18", label:"5 to 15"},
+        {id:"18-29", label:"16 to 29"},
         {id:"30-49", label:"30 to 49"},
         {id:"50-64", label:"50 to 64"},
         {id:"o64", label:"65 or over"}
@@ -347,8 +347,8 @@ export const REGIONS = {
     context: [
       { id: "age", text: "Your age?", options: [
         { id: "u5", label: "Under 5" },
-        { id: "u18", label: "5 to 17" },
-        { id: "18-29", label: "18 to 29" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
         { id: "30-49", label: "30 to 49" },
         { id: "50-64", label: "50 to 64" },
         { id: "o64", label: "65 or over" }

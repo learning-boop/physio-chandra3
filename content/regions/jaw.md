@@ -30,7 +30,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      map onto the site's shared bands (DURATIONS in src/data/assessmentFlow.js). -->
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -112,7 +112,7 @@ Q: Do any of these come with it? Tick all that apply.
 ## test patients
 CASE: 1. Clicking jaw (disc displacement with reduction)
 Drawing: Just in front of the left ear
-Answers: Age = 18 to 29; Gradually, no clear reason; 2 weeks to 3 months; Q1 = pain at the joint + clicking or popping; Q2 = chewing + yawning; Q3 = a click when opening or closing; Q4 = fully, but it hurts
+Answers: Age = 16 to 29; Gradually, no clear reason; 2 weeks to 3 months; Q1 = pain at the joint + clicking or popping; Q2 = chewing + yawning; Q3 = a click when opening or closing; Q4 = fully, but it hurts
 Flags: none
 Expect: top condition = TMJ disc displacement with reduction; must not show = closed lock, jaw muscle pain as top; route = results
 
@@ -124,7 +124,7 @@ Expect: top condition = TMD myalgia, linked to clenching; must not show = disc d
 
 CASE: 3. Closed lock
 Drawing: Right jaw joint
-Answers: Age = 18 to 29; I woke up with it; Less than 2 weeks; Q1 = stiff and will not open fully + catches or locks; Q3 = it used to click, but it stopped; Q4 = only partway; Q5 = it locks closed
+Answers: Age = 16 to 29; I woke up with it; Less than 2 weeks; Q1 = stiff and will not open fully + catches or locks; Q3 = it used to click, but it stopped; Q4 = only partway; Q5 = it locks closed
 Flags: none
 Expect: top condition = closed lock (disc displacement without reduction); must not show = clicking joint as top; route = results + booking (priority)
 

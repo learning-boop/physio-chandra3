@@ -62,7 +62,7 @@ Why: Possible posterior dislocation, which is often missed
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over

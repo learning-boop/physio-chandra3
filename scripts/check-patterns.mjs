@@ -795,17 +795,17 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !patternChecks(ZN(['wristR']), { age: 'u18' }, 9).some((p) => p.id === 'pc-child-muscle'))
 }
 
-// ── 25. Age: "Under 5" and "5 to 17" (Chandra does not treat children under 5, 2 Oct 2026) ──
+// ── 25. Age: "Under 5" and "5 to 15" (Chandra does not treat children under 5, 2 Oct 2026) ──
 {
   const { patternChecks } = await imp('src/data/patternChecks.js')
   const { REGIONS: ALL } = await imp('src/data/symptomGuide.js')
   const bad = Object.entries(ALL).filter(([, r]) => {
     const q = (r.context || []).find((c) => c.id === 'age')
-    return q && !(q.options.some((o) => o.id === 'u5' && o.label === 'Under 5') && q.options.some((o) => o.id === 'u18' && o.label === '5 to 17'))
+    return q && !(q.options.some((o) => o.id === 'u5' && o.label === 'Under 5') && q.options.some((o) => o.id === 'u18' && o.label === '5 to 15'))
   }).map(([k]) => k)
-  check('Age: every area asks "Under 5" and "5 to 17" (no "Under 18" left)', bad.length === 0, bad)
+  check('Age: every area asks "Under 5" and "5 to 15" (no "Under 18" left)', bad.length === 0, bad)
   const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
-  check('Age: the early-signs question for a child is asked for under 5 as well as 5 to 17',
+  check('Age: the early-signs question for a child is asked for under 5 as well as 5 to 15',
     patternChecks(ZN(['thighL', 'thighR']), { age: 'u5' }, 9).some((p) => p.id === 'pc-child-muscle'))
   const { readFileSync } = await import('node:fs')
   const src = readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
@@ -911,8 +911,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const unknown = all.filter((f) => !forPerson(f, {}))
   check('About you: with age and birth sex unknown, every safety question is still asked', unknown.length === 0, unknown.map((f) => f.id))
   check('About you: "intersex, or prefer not to say" asks every question', all.every((f) => forPerson(f, { sex: 'other' })))
-  const ageEm = all.filter((f) => f.tier === 'emergency' && f.ages)
-  check('About you: no emergency question is ever left out by age', ageEm.length === 0, ageEm.map((f) => f.id))
+  // The one exception (Chandra, 4 Oct 2026): the pregnancy and ectopic emergencies, asked of 16 to 49 only.
+  const PREG_EM = ['srf-ectopic', 'prf-pregnancy-bleed', 'prf-pregnancy', 'hpf-ectopic']
+  const ageEm = all.filter((f) => f.tier === 'emergency' && f.ages && !PREG_EM.includes(f.id))
+  check('About you: no emergency question is ever left out by age (except the pregnancy and ectopic ones, 16 to 49)', ageEm.length === 0, ageEm.map((f) => f.id))
   const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
   const hip = (who) => regionRedFlags(ZN(['hipR']), ZN(['hipR'])).filter((f) => forPerson(f, who)).map((f) => f.id)
   const man55 = hip({ age: '50-64', sex: 'male' }), woman30 = hip({ age: '30-49', sex: 'female' }), all0 = hip({})
@@ -1031,7 +1033,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Diabetes panel: a problem diabetes does not touch → the short "staying active" note only',
     DM.diabetesPanel({ dm: 'yes' }, ZN(['kneeL']), [{ rk: 'knee', c: { id: 'pfp' } }]).title === 'Diabetes and staying active')
   const s50 = DM.diabetesPanel({ dm: 'no', age: '50-64' }, shZ, frozenFirst)
-  check('Diabetes, not known: frozen shoulder at 30 to 64 → "worth asking your doctor" for a blood test; not at 18 to 29; not for one-handed trigger finger; yes for both hands',
+  check('Diabetes, not known: frozen shoulder at 30 to 64 → "worth asking your doctor" for a blood test; not at 16 to 29; not for one-handed trigger finger; yes for both hands',
     s50 && /HbA1c/.test(s50.text) && !DM.diabetesPanel({ dm: 'no', age: '18-29' }, shZ, frozenFirst) &&
     !DM.diabetesPanel({ dm: 'ns' }, ZN(['handL']), [{ rk: 'hand', c: { id: 'trigger' } }]) &&
     !!DM.diabetesPanel({ dm: 'ns' }, ZN(['handL', 'handR']), [{ rk: 'hand', c: { id: 'trigger' } }]))
@@ -1246,8 +1248,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const { emergencyLevel } = await imp('src/data/emergencyAdvice.js')
   const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
-  check('Pregnancy: asked of female or "prefer not to say" aged 5 to 64, not of men, under 5s or 65 and over; required; out of the anonymous copy',
-    PG.pregnancyAsked({ sex: 'female', age: '30-49' }) && PG.pregnancyAsked({ sex: 'other', age: 'u18' }) &&
+  check('Pregnancy: asked of female or "prefer not to say" aged 16 to 49, not of men, 5 to 15s, under 5s or 50 and over; required; out of the anonymous copy',
+    PG.pregnancyAsked({ sex: 'female', age: '30-49' }) && PG.pregnancyAsked({ sex: 'other', age: '18-29' }) && !PG.pregnancyAsked({ sex: 'female', age: 'u18' }) &&
+    !PG.pregnancyAsked({ sex: 'female', age: '50-64' }) &&
     !PG.pregnancyAsked({ sex: 'male', age: '30-49' }) && !PG.pregnancyAsked({ sex: 'female', age: 'u5' }) && !PG.pregnancyAsked({ sex: 'female', age: 'o64' }) &&
     /\(!pregAsk \|\| answers\.preg\)/.test(src) && /\^preg\|/.test(src))
   const ids = (st, z) => PG.pregnancyRedFlags(ZN(z), { preg: st }).map((f) => f.id)
@@ -1346,7 +1349,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /phosphate, alkaline phosphatase, parathyroid hormone and kidney function/.test(c.why.text) && /osteomalacia, "soft bones"/.test(c.why.text) &&
     /mistaken for fibromyalgia/.test(c.why.text))
   const kid = (z, age) => patternChecks(ZN(z), { age }, 12).find((p) => p.id === 'pc-rickets')
-  check('Rickets: under 5 with a leg or wrist drawn, 5 to 17 with both legs; doctor first, no booking, 911 for a seizure or floppiness; not for adults or a teenager\'s one wrist',
+  check('Rickets: under 5 with a leg or wrist drawn, 5 to 15 with both legs; doctor first, no booking, 911 for a seizure or floppiness; not for adults or a teenager\'s one wrist',
     !!kid(['kneeL'], 'u5') && !!kid(['wristL'], 'u5') && !!kid(['lowerlegL', 'lowerlegR'], 'u18') && !kid(['wristL'], 'u18') && !kid(['kneeL'], 'u18') && !kid(['kneeL'], '30-49') && !kid(['shoulderL'], 'u18') &&
     kid(['kneeL'], 'u5').noBooking && /911/.test(OM.RICKETS_SCREEN.why.text) && /floppy/.test(OM.RICKETS_SCREEN.why.text))
   check('Osteomalacia cross-links: the hip, thigh, knee, shin and foot stress-fracture questions add the bone blood test for a repeat or low-training stress fracture',
@@ -1393,6 +1396,23 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([OP.OSTEOPENIA_CAUTION, OP.BONE_DETAILS, plain, high])
   check('Osteopenia language: no "thin" or "fragile" bones, cure or guarantee; "avoid" only for specific movements',
     !/thin(ning)? bones|fragile|cure|guarantee/i.test(all) && (all.match(/avoid/gi) || []).length === (all.match(/avoid lifting and twisting|avoid things for fear of falling|is not avoided/g) || []).length, all.match(/thin(ning)? bones|fragile|cure|guarantee|avoid[^.]*/gi))
+}
+
+// ── 44. Age bands "5 to 15" and "16 to 29"; pregnancy questions 16 to 49 (Chandra, 4 Oct 2026) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const { forPerson } = await imp('src/data/assessmentFlow.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const ageQs = Object.values(REGIONS).map((r) => (r.context || []).find((q) => q.id === 'age')).filter(Boolean)
+  check('Age bands: every age question says "5 to 15" and "16 to 29" (codes u18 and 18-29 kept)',
+    ageQs.length > 15 && ageQs.every((q) => q.options.some((o) => o.id === 'u18' && o.label === '5 to 15') && q.options.some((o) => o.id === '18-29' && o.label === '16 to 29')) &&
+    /\{ id: 'u18', label: '5 to 15' \}, \{ id: '18-29', label: '16 to 29' \}/.test(src))
+  const preg = Object.values(REGIONS).flatMap((r) => r.redFlags).filter((f) => ['prf-pregnancy-bleed', 'prf-pregnancy', 'hrf-pregnancy', 'hpf-ectopic', 'srf-ectopic'].includes(f.id))
+  const asks = (f, age) => forPerson(f, { age, sex: 'female' })
+  check('Pregnancy and ectopic safety questions in the areas: asked of women 16 to 49 only, not 5 to 15 or 50 and over',
+    preg.length === 5 && preg.every((f) => asks(f, '18-29') && asks(f, '30-49') && !asks(f, 'u18') && !asks(f, '50-64') && !asks(f, 'o64')), preg.map((f) => f.id))
+  check('"Pregnant, or within 3 months of giving birth" on the cautions list: 16 to 64 (the fallback at 50 to 64), not for children',
+    /id: 'ca-preg', sex: 'female', ages: \['18-29', '30-49', '50-64'\]/.test(src))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

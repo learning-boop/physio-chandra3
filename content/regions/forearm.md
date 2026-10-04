@@ -65,7 +65,7 @@ Why: Possible radial nerve injury
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -167,7 +167,7 @@ Ask only if: Question 2 includes “It builds during sport and eases within minu
 ## test patients
 CASE: Test patient 1
 Drawing: Top of the right forearm, just above the wrist on the thumb side
-Answers: Age 18 to 29 · After a new or increased repeated task (rowing, paddling, weights, a new job) · Less than 2 weeks; Q1: top of the forearm about four finger-widths above the wrist; Q2: repeated wrist movements; Q3: a squeaking or creaking feeling when I move my wrist; swelling along the top of the forearm
+Answers: Age 16 to 29 · After a new or increased repeated task (rowing, paddling, weights, a new job) · Less than 2 weeks; Q1: top of the forearm about four finger-widths above the wrist; Q2: repeated wrist movements; Q3: a squeaking or creaking feeling when I move my wrist; swelling along the top of the forearm
 Flags: None
 Expect: top condition = Intersection syndrome; must not show = De Quervain's as the top result; any nerve condition; route = Results + booking
 
@@ -179,7 +179,7 @@ Expect: top condition = Pronator syndrome (median nerve in the forearm); must no
 
 CASE: Test patient 3
 Drawing: Both forearms, top and underside
-Answers: Age 18 to 29 · It comes on during sport and eases when I stop · 6 weeks to 3 months; Q2: it builds during sport and eases within minutes of stopping; Q3: the forearm goes tight and hard with use; Q8: the forearm goes tight and hard; it eases within 10 to 30 minutes of stopping
+Answers: Age 16 to 29 · It comes on during sport and eases when I stop · 6 weeks to 3 months; Q2: it builds during sport and eases within minutes of stopping; Q3: the forearm goes tight and hard with use; Q8: the forearm goes tight and hard; it eases within 10 to 30 minutes of stopping
 Flags: None
 Expect: top condition = Chronic exertional compartment syndrome (“arm pump”); must not show = Any physician-first message; nerve root pain from the neck; route = Results + booking
 

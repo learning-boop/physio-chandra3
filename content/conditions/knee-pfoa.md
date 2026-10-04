@@ -14,8 +14,8 @@ pointers:
   "50 to 64": 2
   "65 or over": 2
   "More than 3 months": 1
-  "18 to 29": -2
-  "5 to 17": -2
+  "16 to 29": -2
+  "5 to 15": -2
   "Under 5": -2
   "Moving my low back": -2
   "Inner side of the knee": -2

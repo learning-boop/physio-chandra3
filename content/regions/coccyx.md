@@ -29,7 +29,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
      map onto the site's shared bands (DURATIONS in src/data/assessmentFlow.js). -->
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -133,6 +133,6 @@ Expect: top condition = none; must not show = any condition, any booking; route 
 
 CASE: 5. Pilonidal look-alike
 Drawing: Top of the buttock crease
-Answers: Age = 18 to 29; Gradually, no clear reason; 2 weeks to 2 months; Q1 = beside the tailbone, in the buttock crease; Q8 = a tender lump
+Answers: Age = 16 to 29; Gradually, no clear reason; 2 weeks to 2 months; Q1 = beside the tailbone, in the buttock crease; Q8 = a tender lump
 Flags: Swelling, redness, or discharge near the top of the buttock crease...
 Expect: top condition = none; must not show = coccydynia, any booking before review; route = physician first

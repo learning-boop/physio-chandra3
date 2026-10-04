@@ -14,7 +14,7 @@ Pregnancy is not a region condition and not a disease. It enters as a global ove
 
 ## On the site
 
-1. **The context question** (document Q1). On "A little about you", after age and birth sex, for a birth sex of female or "intersex, or prefer not to say", aged 5 to 64: "Are you pregnant, or have you given birth in the last 12 months?" (up to 12 weeks / 13 to 27 weeks / 28 weeks or more / gave birth in the last 6 weeks / 6 weeks to 12 months ago / No). Required when shown. After a birth, an optional "How was your baby born?" (vaginal / with forceps, ventouse or a large tear / caesarean). Stored as `answers.preg`, `answers.pregBirth`. Changing the age or sex so the question no longer applies clears them.
+1. **The context question** (document Q1). On "A little about you", after age and birth sex, for a birth sex of female or "intersex, or prefer not to say", aged 16 to 49: "Are you pregnant, or have you given birth in the last 12 months?" (up to 12 weeks / 13 to 27 weeks / 28 weeks or more / gave birth in the last 6 weeks / 6 weeks to 12 months ago / No). Required when shown. After a birth, an optional "How was your baby born?" (vaginal / with forceps, ventouse or a large tear / caesarean). Stored as `answers.preg`, `answers.pregBirth`. Changing the age or sex so the question no longer applies clears them.
 2. **Red flags first** (document §6), in every area, ahead of the diabetes and steroid ones, minus any the page already asks (`covers`):
    - 911: heavy bleeding or bleeding with faintness/severe pain (pregnant; replaces the pelvis's prf-pregnancy-bleed); constant severe tummy pain or a hard, tender bump (pregnant); heavy bleeding after the birth (first 6 weeks); sudden breathlessness, chest pain or coughing blood (pregnant and first 6 weeks; skipped where the area asks its lung-clot question).
    - Labour and delivery: bleeding, or waters or regular tightenings before 37 weeks (pregnant; replaces prf-pregnancy); pre-eclampsia signs (13 weeks on and first 6 weeks; the wording says "after 20 weeks"); fewer movements (13 weeks on; the wording says "past about 24 weeks").
@@ -57,7 +57,7 @@ Other choices, please confirm:
 - **The leg clot** (§6 says 911 for a swollen calf or breathlessness): split. Breathlessness, chest pain or coughing blood → 911. One swollen, warm, painful calf or thigh alone → doctor the same day (with "911 if you also become breathless"), matching the site's existing DVT rule.
 - **Placental abruption** ("severe constant tummy pain or a hard tender bump", §6 "maternity unit now / 911"): 911.
 - **Stage windows**: clot and postpartum-bleeding/infection flags for pregnancy and the first 6 weeks only; mood for the whole year; pre-eclampsia from 13 weeks (the option band) with "after 20 weeks" in the wording; movements from 13 weeks with "past about 24 weeks" in the wording.
-- **Age band**: asked from 5 to 64 (teen pregnancy is included; not asked of under 5s or 65 and over).
+- **Age band** (Chandra, 4 Oct 2026): asked from 16 to 49 only; the age bands became "5 to 15" and "16 to 29" for this. The areas' own pregnancy and ectopic safety questions follow the same ages. "Pregnant, or within 3 months of giving birth" on the cautions list is shown from 16 to 64, as the fallback for the rare pregnancy at 50 and over. This is the one exception to the rule that no emergency question is left out by age (2 Oct 2026): Chandra chose 16 to 49 over 5 to 49, accepting that a pregnant 13 to 15 year old is not asked the ectopic question.
 
 ## Not built
 

@@ -66,7 +66,7 @@ Why: Possible growth plate avulsion fracture
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -192,7 +192,7 @@ Expect: top condition = Hip osteoarthritis; must not show = Gluteal tendinopathy
 
 CASE: Test patient 3
 Drawing: Right groin
-Answers: Age 18 to 29 · After increasing running or sport · 6 weeks to 3 months; Q1: groin, or the front of the hip; Q2: sitting in a low chair, or deep squatting; Q3: clicking, catching, or locking deep in the groin; Q4: grips the side of my hip in a “C” shape; Q5: deep pain in the hip joint with twisting
+Answers: Age 16 to 29 · After increasing running or sport · 6 weeks to 3 months; Q1: groin, or the front of the hip; Q2: sitting in a low chair, or deep squatting; Q3: clicking, catching, or locking deep in the groin; Q4: grips the side of my hip in a “C” shape; Q5: deep pain in the hip joint with twisting
 Flags: None
 Expect: top condition = FAI syndrome or labral-related hip pain; must not show = Adductor-related groin pain as the top result; route = Results + booking
 
@@ -204,7 +204,7 @@ Expect: top condition = No hip condition; shows a “this may be coming from you
 
 CASE: Test patient 5
 Drawing: Deep in the right groin
-Answers: Age 18 to 29 · After increasing running or sport · 2 to 6 weeks; Q1: groin, or the front of the hip
+Answers: Age 16 to 29 · After increasing running or sport · 2 to 6 weeks; Q1: groin, or the front of the hip
 Flags: “Do you run or train hard, and do you have a deep groin ache that is worse with running or hopping, or aches at night?”
 Expect: top condition = None; see a doctor first; must not show = FAI syndrome or any sport result without the physician-first message; route = Physician first
 

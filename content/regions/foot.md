@@ -76,7 +76,7 @@ Why: Possible “turf toe” (big toe joint ligament injury)
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -210,7 +210,7 @@ Expect: top condition = Morton's neuroma; must not show = Nerve root pain from t
 
 CASE: Test patient 3
 Drawing: Top of the right forefoot, over the 2nd metatarsal
-Answers: Age 18 to 29 · After increasing running, walking, or standing · 2 to 6 weeks; Q1: the ball of the foot; Q3: pain on one bone that is worse with every step or hopping
+Answers: Age 16 to 29 · After increasing running, walking, or standing · 2 to 6 weeks; Q1: the ball of the foot; Q3: pain on one bone that is worse with every step or hopping
 Flags: “Do you run, march, or train hard, and is there pain on one foot bone…?”
 Expect: top condition = None; see a doctor first (possible metatarsal stress fracture); must not show = Metatarsalgia without the physician-first message; route = Physician first
 

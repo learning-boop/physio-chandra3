@@ -34,7 +34,7 @@ reviewed_on: DRAFT prepared 23 Sep 2026, awaiting Chandra's review
 ## opening questions
 Q: Your age?
 - Under 18
-- 18 to 29
+- 16 to 29
 - 30 to 49
 - 50 to 64
 - 65 or over
@@ -133,7 +133,7 @@ Expect: top condition = thoracolumbar joint dysfunction; must not show = slippin
 
 CASE: 3. Slipping rib
 Drawing: Side, just below the left ribs
-Answers: Age = 18 to 29; After a twisting sport; 2 to 6 weeks; Q1 = at my side, just below the ribs; Q4 = clicking or slipping + sharp pain at the rib edge
+Answers: Age = 16 to 29; After a twisting sport; 2 to 6 weeks; Q1 = at my side, just below the ribs; Q4 = clicking or slipping + sharp pain at the rib edge
 Flags: none
 Expect: top condition = slipping rib syndrome; must not show = Maigne as top; route = results
 
