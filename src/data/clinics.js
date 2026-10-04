@@ -11,6 +11,8 @@
    lat/lng: the centre of the AREA (approximate), used only on the visitor's
    device for "Find my nearest clinic"; replace with each clinic's own
    coordinates once the street addresses are added.
+   email: the clinic's email for the summary; '' sends it to Chandra
+   (SUMMARY_EMAIL) until the clinic's address is added.
    map: the pin's position on the area sketch in ClinicPicker.jsx (x, y in
    its 520 x 230 frame; not to scale). */
 export const CLINICS = [
@@ -24,6 +26,7 @@ export const CLINICS = [
     address: 'South Surrey, BC',
     hours: 'Mon – Fri   8:00 am – 7:00 pm\nSaturday   9:00 am – 4:00 pm',
     phone: '+1 (604) 555-0101',
+    email: '',
     janeUrl: '',
     img: 'images/clinic1.png',
     tagline: 'Comprehensive physiotherapy in the heart of South Surrey.',
@@ -38,6 +41,7 @@ export const CLINICS = [
     address: 'Burnaby, BC',
     hours: 'Mon – Fri   7:00 am – 8:00 pm\nSaturday   9:00 am – 3:00 pm',
     phone: '+1 (604) 555-0202',
+    email: '',
     janeUrl: '',
     img: 'images/clinic2.jpg',
     tagline: 'Physiotherapy and rehabilitation services in Burnaby.',
@@ -52,11 +56,15 @@ export const CLINICS = [
     address: 'Guildford, Surrey BC',
     hours: 'Mon – Fri   8:00 am – 6:00 pm\nSaturday   10:00 am – 2:00 pm',
     phone: '+1 (604) 555-0303',
+    email: '',
     janeUrl: '',
     img: 'images/clinic31.jpg',
     tagline: 'Physiotherapy and rehabilitation services in Guildford.',
   },
 ]
+
+/* Where the summary goes when the clinic has no email of its own. */
+export const SUMMARY_EMAIL = 'chandra@physiochandra.ca'
 
 /* tel: links want digits only (a leading + is kept). */
 export const telHref = (phone) => `tel:${phone.replace(/[^\d+]/g, '')}`

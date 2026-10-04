@@ -4,6 +4,7 @@ import Body3D from './Body3D'
 import { Link } from 'react-router-dom'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
+import { CLINICS } from '../data/clinics'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
 import FeedbackForm from './FeedbackForm'
@@ -481,6 +482,8 @@ export default function PainAssessment() {
   const bodyApi = useRef(null)
   // Reference code, given once the results are reached (see visitCode below).
   const [visitCode, setVisitCode] = useState(null)
+  // The clinic chosen in the booking step; the summary emails it.
+  const [clinicId, setClinicId] = useState(null)
   const [fromReview, setFromReview] = useState(false)
   // Gates the result screen behind the "not a diagnosis" notice.
   // When the marks cross more than one area, the person chooses which area
@@ -2452,7 +2455,7 @@ export default function PainAssessment() {
                       Choose a clinic to book your assessment, or carry on to finish the
                       questions and see what your answers can be associated with.
                     </p>
-                    <ClinicPicker />
+                    <ClinicPicker picked={clinicId} onPick={setClinicId} />
                   </>
                 )}
 
@@ -2945,14 +2948,15 @@ export default function PainAssessment() {
                       clinic that suits you, then call or book online.
                     </p>
 
-                    <ClinicPicker />
+                    <ClinicPicker picked={clinicId} onPick={setClinicId} />
                   </>
                 )}
 
                 {/* Everything the screen worked out, in the order of the CPA
                     Orthopaedic Division subjective booklet — for Chandra, and
                     built on the device from the answers already given. */}
-                <ClinicianSummary text={visitCode ? `Reference code: ${visitCode}\n\n${summaryText}` : summaryText} />
+                <ClinicianSummary text={visitCode ? `Reference code: ${visitCode}\n\n${summaryText}` : summaryText}
+                  clinic={CLINICS.find((c) => c.id === clinicId) || null} code={visitCode || ''} />
 
                 <span style={{ ...label, margin: '30px 0 12px' }}>Keep Your Results</span>
                 <SaveResults code={visitCode} pdfData={pdfData} anonPayload={anonPayload} />

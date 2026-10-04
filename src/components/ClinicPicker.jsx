@@ -52,8 +52,12 @@ function AreaMap({ picked, nearest, onPick }) {
   )
 }
 
-export default function ClinicPicker() {
-  const [picked, setPicked] = useState(null)
+/* `picked` and `onPick` let the page share the choice (the summary emails
+   the chosen clinic); without them the picker keeps its own. */
+export default function ClinicPicker({ picked: pickedProp, onPick } = {}) {
+  const [own, setOwn] = useState(null)
+  const picked = pickedProp === undefined ? own : pickedProp
+  const setPicked = (v) => { const next = typeof v === 'function' ? v(picked) : v; if (onPick) onPick(next); else setOwn(next) }
   const [dist, setDist] = useState(null)     // { [clinicId]: km } once located
   const [locating, setLocating] = useState(false)
   const [locError, setLocError] = useState('')
