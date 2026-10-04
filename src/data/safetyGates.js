@@ -6,6 +6,14 @@
    tailbone and jaw have no injury screen, so they get the grouped doctor
    page only.
 
+   Drawings with more than one area (smartAreas): the groups of every drawn
+   area are merged by THEME (clot or circulation, infection or flare-up,
+   feeling or strength, bone, inside the body, medical check, …), so one
+   "circulation" group lists the knee's and the lower leg's signs together.
+   The injury screens keep their usual place after the doctor page there
+   (several chain together for a limb), so the mechanism filter does not
+   apply; every question is still asked, inside its group.
+
    It runs when ONE of these areas is the only one drawn (AREAS below):
    1. Mechanism first. The area's injury screen ("Have you injured your …
       in the last 6 weeks…?") runs straight after the emergency page, before
@@ -343,9 +351,10 @@ export const SIGNS = {
 /** "Title: a; b; or c", from the members present. */
 export function gateText(gate, members = []) {
   const parts = members.map((m) => SIGNS[m.id]).filter(Boolean)
-  if (!parts.length) return gate.title
+  const title = typeof gate.title === 'function' ? gate.title(members) : gate.title
+  if (!parts.length) return title
   const list = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join('; ')}; or ${parts[parts.length - 1]}`
-  return `${gate.title}: ${list}`
+  return `${title}: ${list}`
 }
 
 /* Mechanism: question id → the injury screen whose first answer decides it.
@@ -363,16 +372,67 @@ export const kneeInjured = (a = {}) => injuredIn('knee', a)
 export const byMechanism = (flags = [], answers = {}) =>
   flags.filter((f) => !(MECHANISM[f.id] && injuredIn(MECHANISM[f.id], answers)))
 
+/* Zone types that belong to another area's groups: the front of the chest
+   is part of the mid back, the flank part of the thoracolumbar junction. */
+const ALIAS = { chest: 'upperback', flank: 'tlj' }
+export const areaOf = (type) => ALIAS[type] || type
+
 /** The area the smarter flow runs for, or null: one of AREAS, drawn alone. */
 export function smartArea(zones = []) {
   if (!zones.length) return null
-  const t = zones[0].type
-  return AREAS.includes(t) && zones.every((z) => z.type === t) ? t : null
+  const t = areaOf(zones[0].type)
+  return AREAS.includes(t) && zones.every((z) => areaOf(z.type) === t) ? t : null
+}
+
+/** The areas of a drawing with more than one area, or null (one area, or an
+    area outside the flow such as the stomach). In the order drawn. */
+export function smartAreas(zones = []) {
+  const areas = [...new Set(zones.map((z) => areaOf(z.type)))]
+  return areas.length >= 2 && areas.every((a) => AREAS.includes(a)) ? areas : null
+}
+
+/* Each area group's theme, from the end of its id, for merging across areas. */
+const THEME_OF_SUFFIX = {
+  circulation: 'circulation', skin: 'circulation', surgery: 'circulation',
+  infection: 'infection', flare: 'infection',
+  nerve: 'nerve', cord: 'nerve', arm: 'nerve',
+  bone: 'bone', organ: 'organ', medical: 'medical', bowel: 'bowel', injury: 'injury', pattern: 'headache',
+}
+export const themeOf = (g) => THEME_OF_SUFFIX[g.id.slice(g.id.lastIndexOf('-') + 1)] || 'medical'
+export const THEME_TITLES = {
+  // Built from the questions present: "a tight cast" and "a problem after surgery" only when they apply.
+  circulation: (members) => {
+    const parts = ['a clot', 'a circulation problem']
+    if (members.some((m) => /cast/.test(m.id))) parts.push('a tight cast')
+    if (members.some((m) => /replacement/.test(m.id))) parts.push('a problem after surgery')
+    return `Signs of ${parts.slice(0, -1).join(', ')} or ${parts[parts.length - 1]}`
+  },
+  infection: 'Signs of infection or a flare-up',
+  nerve: 'Changes in feeling or strength',
+  bone: 'Signs of a problem in the bone',
+  organ: 'Signs coming from inside the body',
+  medical: 'Signs that need a medical check',
+  bowel: 'Signs coming from the bowel or bottom',
+  injury: 'After a blow or a fall',
+  headache: 'A headache that is new or changing',
 }
 /** Kept for the knee prototype's checks. */
 export const kneeOnly = (zones = []) => smartArea(zones) === 'knee'
 
-const groupsFor = (area) => GATES[area] || []
+/** One area's groups, or, for several areas, their groups merged by theme
+    (a question already in an earlier theme stays there). */
+function groupsFor(area) {
+  if (!Array.isArray(area)) return GATES[area] || []
+  const byTheme = new Map(), seen = new Set()
+  for (const a of area) {
+    for (const g of GATES[a] || []) {
+      const t = themeOf(g)
+      if (!byTheme.has(t)) byTheme.set(t, { id: `multi-${t}`, title: THEME_TITLES[t], members: [] })
+      for (const m of g.members) if (!seen.has(m)) { seen.add(m); byTheme.get(t).members.push(m) }
+    }
+  }
+  return [...byTheme.values()]
+}
 
 /** "Not sure which" flags for the groups that will show as a gateway (two or
     more members on the page). They join the doctor-page list so they count

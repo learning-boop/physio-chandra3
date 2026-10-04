@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import { arrangeOptions, arrangeSplit } from '../data/optionOrder'
-import { byMechanism, smartArea, gateUnsureFlags, gateRows } from '../data/safetyGates'
+import { byMechanism, smartArea, smartAreas, gateUnsureFlags, gateRows } from '../data/safetyGates'
 import { CLINICS } from '../data/clinics'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
@@ -861,7 +861,8 @@ export default function PainAssessment() {
       physician: (() => {
         // Smarter safety flow: the mechanism filter, then the gateway groups.
         const doc = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
-        const area = smartArea(flowZ)
+        // One area, or several merged by theme (../data/safetyGates.js).
+        const area = smartArea(flowZ) || smartAreas(flowZ)
         return area ? [...doc, ...gateUnsureFlags(doc, area)] : doc
       })(),
       deferred,

@@ -1656,5 +1656,48 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     G.smartArea([{ type: 'knee' }, { type: 'thigh' }]) === null && G.smartArea([{ type: 'stomach' }]) === null && G.smartArea([{ type: 'elbow' }]) === 'elbow' && G.smartArea([{ type: 'lowerback' }]) === 'lowerback')
 }
 
+// ── 50. Smarter safety flow: drawings with more than one area (Chandra, 4 Oct 2026) ──
+{
+  const G = await imp('src/data/safetyGates.js')
+  const { regionRedFlags, forPerson } = await imp('src/data/assessmentFlow.js')
+  const { bySeverity } = await imp('src/data/emergencyAdvice.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { injuryScreenApplies } = await imp('src/data/injuryScreen.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const page = (ids, who = { age: '50-64', sex: 'female' }) => {
+    const z = ZN(ids)
+    const own = regionRedFlags(z, z).filter((f) => f.tier !== 'emergency' && forPerson(f, who))
+    const ownNeuro = own.some((f) => [].concat(f.group || []).includes('neuro'))
+    const uni = [!ownNeuro && { id: 'sc-neuro', tier: 'urgent' }, { id: 'sc-systemic', tier: 'urgent' }, !injuryScreenApplies(z) && { id: 'sc-trauma', tier: 'urgent', sameDay: true }].filter(Boolean)
+    const pats = patternChecks(z, {}, 12).filter((x) => x.tier !== 'emergency').slice(0, 2)
+    const before = bySeverity([...own, ...uni, ...pats])
+    const area = G.smartArea(z) || G.smartAreas(z)
+    const rows = area ? G.gateRows([...before, ...G.gateUnsureFlags(before, area)]) : before.map((f) => ({ flag: f }))
+    const kept = rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id]))
+    return { area, before: before.length, after: rows.length, lost: before.filter((f) => !kept.includes(f.id)).map((f) => f.id), rows }
+  }
+  const combos = {
+    'knee + lower leg': ['kneeL', 'lowerlegL'], 'neck + shoulder': ['neck', 'shoulderL'], 'lower back + hip': ['lowerback', 'hipL'],
+    'wrist + hand': ['wristL', 'handL'], 'shoulder + upper arm + elbow': ['shoulderL', 'upperarmL', 'elbowL'],
+    'lower back + pelvis + thigh': ['lowerback', 'sij', 'thighL'], 'neck + head': ['neck', 'head'], 'ankle + foot': ['ankleL', 'footL'],
+  }
+  const res = Object.fromEntries(Object.entries(combos).map(([k, ids]) => [k, page(ids)]))
+  const line = Object.entries(res).map(([k, v]) => k + ' ' + v.before + '→' + v.after).join('; ')
+  check('Several areas: every combination is grouped by theme, shrinks a lot, and loses no red flag',
+    Object.values(res).every((v) => Array.isArray(v.area) && v.after < v.before && !v.lost.length && v.after <= 9), JSON.stringify(Object.fromEntries(Object.entries(res).map(([k, v]) => [k, [v.before, v.after, v.lost]]))))
+  console.log('    several areas: ' + line)
+  const kl = res['knee + lower leg'].rows.find((r) => r.gate && r.gate.id === 'multi-circulation')
+  check('Several areas: one theme group holds both areas\' questions, under one title (knee and lower leg circulation)',
+    kl && kl.members.some((m) => /^kf-/.test(m.id)) && kl.members.some((m) => /^lgf-/.test(m.id)) && /^Signs of a clot, a circulation problem or a tight cast: /.test(kl.gate.text) && !/after surgery/.test(kl.gate.text))
+  check('Several areas: each question sits in one group only, and a shared general question is not repeated',
+    Object.values(res).every((v) => { const ids = v.rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id])); return ids.length === new Set(ids).size }))
+  check('Front of the chest and the flank count as the mid back and the TLJ: a chest-only drawing gets the mid-back groups, chest + mid back is one area',
+    G.smartArea([{ type: 'chest' }]) === 'upperback' && G.smartArea([{ type: 'flank' }]) === 'tlj' && G.smartArea([{ type: 'chest' }, { type: 'upperback' }]) === 'upperback' &&
+    G.smartAreas([{ type: 'chest' }, { type: 'upperback' }]) === null && JSON.stringify(G.smartAreas([{ type: 'knee' }, { type: 'stomach' }])) === 'null')
+  check('Several areas: grouped on the doctor page; the injury screens keep their place after it (only a single area moves its injury question first)',
+    /const area = smartArea\(flowZ\) \|\| smartAreas\(flowZ\)/.test(src) && /const smartFirst = injuryApplies && !!smartArea\(flowZ\)/.test(src))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
