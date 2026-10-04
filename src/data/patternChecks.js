@@ -25,6 +25,7 @@ import { CALCIUM_SCREEN } from './parathyroid.js'
 import { THYROID_SCREEN, PARALYSIS_FLAG, HYPOTHYROID_SCREEN } from './thyroid.js'
 import { ACROMEGALY_SCREEN } from './acromegaly.js'
 import { RICKETS_SCREEN } from './osteomalacia.js'
+import { PAGET_SCREEN, pagetApplies } from './paget.js'
 import { BONE_SCREEN, BONE_SCREEN_ADULT, BONE_WHY_YOUNG, BONE_WHY_ADULT, YOUNG, oneBone } from './boneTumour.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
@@ -338,6 +339,15 @@ const PATTERNS = [
     // Narrower from 30 (rotator cuff, frozen shoulder and arthritis also wake people).
     text: BONE_SCREEN_ADULT.text,
     when: (z, a) => !!a.age && !YOUNG.includes(a.age) && !!a.duration && a.duration !== 'd2w' && oneBone(z),
+  },
+  // Paget's disease of bone ("Pagets Disease" document, v0.1, 4 Oct 2026;
+  // route A): 50 and over, one shin, thigh, hip, pelvis, low back or head
+  // area, for 6 weeks or more. Family doctor for a blood test and an X-ray
+  // in the next few weeks; booking still offered. ./paget.js
+  {
+    id: 'pc-paget', tier: 'urgent', why: PAGET_SCREEN.why,
+    text: PAGET_SCREEN.text,
+    when: (z, a) => pagetApplies(z, a),
   },
   // Polymyalgia rheumatica over 50, as its own doctor-first entry (Chandra,
   // 2 Oct 2026, the "Poly myositis" document's open item 5): both shoulders

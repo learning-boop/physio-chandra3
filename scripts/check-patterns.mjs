@@ -1449,5 +1449,35 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !/cancer|tumou?r|sarcoma/i.test(rec) && !/survival|cure|guarantee|\d+ ?%/i.test(rec + JSON.stringify(p)), rec.match(/cancer|tumou?r|sarcoma/i))
 }
 
+// ── 46. Paget's disease of bone ("Pagets Disease", v0.1, 4 Oct 2026) ──
+{
+  const PG = await imp('src/data/paget.js')
+  const BT = await imp('src/data/boneTumour.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const pc = (z, a) => patternChecks(ZN(z), a, 12).find((x) => x.id === 'pc-paget')
+  const c = pc(['lowerlegL'], { age: 'o64', duration: 'o3m' })
+  check('Paget route A: 50 and over, one shin, thigh, hip, pelvis, low back or head for 6 weeks or more → blood test and X-ray, booking still offered, named; no ancestry question',
+    c && !c.noBooking && !c.sameDay && /warmer/.test(c.text) && /bowed/.test(c.text) && /hat size/.test(c.text) && /alkaline phosphatase/.test(c.text) &&
+    /Paget's disease of bone/.test(c.why.text) && /blood test and an X-ray/.test(c.why.text) && /welcome to book/.test(c.why.text) &&
+    !/ancestry|descent|British|European|Asian/i.test(c.text + c.why.text) &&
+    !!pc(['head'], { age: '50-64', duration: 'd3m' }) && !!pc(['lowerback'], { age: '50-64', duration: 'o3m' }), c)
+  check('Paget route A: not under 50, not for under 6 weeks, not for both shins or a widespread drawing',
+    !pc(['lowerlegL'], { age: '30-49', duration: 'o3m' }) && !pc(['lowerlegL'], { age: 'o64', duration: 'd6w' }) &&
+    !pc(['lowerlegL', 'lowerlegR'], { age: 'o64', duration: 'o3m' }) && !pc(['lowerlegL', 'neck', 'shoulderR', 'hipL'], { age: 'o64', duration: 'o3m' }))
+  check('Paget sarcoma flag: the adult bone question tells someone with Paget\'s to answer yes for new, worsening pain or a new swelling in that bone (X-ray this week)',
+    /If you have Paget's disease of bone, answer yes for new pain in that bone that is steadily getting worse/.test(BT.BONE_SCREEN_ADULT.text) && /this week/.test(BT.BONE_WHY_ADULT.text))
+  const p = PG.pagetPanel(true)
+  check('Paget route B: on the cautions list; panel with the four pain sources, no heavy impact on a bowed bone, the ALP check, tell the surgeon, the X-ray-within-a-week, fracture, cord and calcium signs; in the PDF',
+    /PAGET_CAUTION,/.test(src) && p && /four places/.test(p.text) && p.notes.some((n) => /jumping and heavy impact on a bowed/.test(n)) &&
+    p.notes.some((n) => /alkaline phosphatase/.test(n)) && p.notes.some((n) => /surgeon, dentist/.test(n)) && p.notes.some((n) => /within a week/.test(n)) &&
+    p.notes.some((n) => /emergency department today/.test(n)) && p.notes.some((n) => /emergency department now/.test(n)) && p.notes.some((n) => /high calcium/.test(n)) &&
+    PG.pagetPanel(false) === null && /paget: pgtPanel/.test(src))
+  const all = JSON.stringify([PG.PAGET_SCREEN, PG.PAGET_CAUTION, p])
+  check('Paget language: no cancer, cure, guarantee or "damage"; "tumour" not used',
+    !/cancer|tumou?r|sarcoma|cure|guarantee|damage/i.test(all), all.match(/cancer|tumou?r|sarcoma|cure|guarantee|damage/i))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

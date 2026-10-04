@@ -38,7 +38,7 @@ const AMBER = [180, 110, 0]
  *  code, dateText, images { views: [{ src, width, height, label }] } | null,
  *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
  *  conditions [{name, blurb}], noMatch string | null, boneWatch string | null, painType string | null,
- *  cautions [string], diabetes, steroids, calcium, thyroid, hypothyroid, acromegaly, pregnancy, oi, osteomalacia, bone and boneTumour {title, text, notes [string]} | null,
+ *  cautions [string], diabetes, steroids, calcium, thyroid, hypothyroid, acromegaly, pregnancy, oi, osteomalacia, bone, boneTumour and paget {title, text, notes [string]} | null,
  *  behaviour [string], answers [{question, answer}], notes string
  * @returns jsPDF document
  */
@@ -182,6 +182,7 @@ export function buildResultsPdf(d) {
   if (d.cautions.length) { heading('To mention when you book'); bullets(d.cautions) }
   if (d.diabetes) { heading(d.diabetes.title); text(d.diabetes.text); if (d.diabetes.notes.length) bullets(d.diabetes.notes) }
   if (d.steroids) { heading(d.steroids.title); text(d.steroids.text); if (d.steroids.notes.length) bullets(d.steroids.notes) }
+  if (d.paget) { heading(d.paget.title); text(d.paget.text); if (d.paget.notes.length) bullets(d.paget.notes) }
   if (d.boneTumour) { heading(d.boneTumour.title); text(d.boneTumour.text); if (d.boneTumour.notes.length) bullets(d.boneTumour.notes) }
   if (d.bone) { heading(d.bone.title); text(d.bone.text); if (d.bone.notes.length) bullets(d.bone.notes) }
   if (d.osteomalacia) { heading(d.osteomalacia.title); text(d.osteomalacia.text); if (d.osteomalacia.notes.length) bullets(d.osteomalacia.notes) }

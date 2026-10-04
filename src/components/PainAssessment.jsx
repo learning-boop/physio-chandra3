@@ -29,6 +29,7 @@ import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } from '../data/thyroid'
 import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
+import { PAGET_CAUTION, pagetPanel } from '../data/paget'
 import { BONE_TUMOUR_CAUTION, boneTumourPanel, TUMOUR_IDS, BONE_WHY_YOUNG, BONE_WATCH, boneWatch } from '../data/boneTumour'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
@@ -271,6 +272,8 @@ const CAUTION_CHECKS = [
   OSTEOMALACIA_CAUTION,
   // "Osteosarcoma" document (v0.1, 4 Oct 2026), the diagnosed route.
   BONE_TUMOUR_CAUTION,
+  // "Pagets Disease" document (v0.1, 4 Oct 2026), route B.
+  PAGET_CAUTION,
   // "Hyperthyroidism" document (signed by Chandra, 3 Oct 2026), route C.
   THYROID_CAUTION,
   // "Hypothyroidism" document (signed by Chandra, 3 Oct 2026), route B.
@@ -968,6 +971,8 @@ export default function PainAssessment() {
   const caPanel = useMemo(() => parathyroidPanel(flags.includes('ca-parathyroid')), [flags])
   // Diagnosed osteomalacia or rickets (../data/osteomalacia.js).
   const omPanel = useMemo(() => osteomalaciaPanel(flags.includes('ca-osteomalacia')), [flags])
+  // Paget's disease of bone, diagnosed (../data/paget.js).
+  const pgtPanel = useMemo(() => pagetPanel(flags.includes('ca-paget')), [flags])
   // A bone tumour, treated (../data/boneTumour.js).
   const btPanel = useMemo(() => boneTumourPanel(flags.includes('ca-bonetumour')), [flags])
   // Osteopenia, low bone density (../data/osteopenia.js).
@@ -1152,6 +1157,7 @@ export default function PainAssessment() {
     osteomalacia: omPanel,
     bone: bnPanel,
     boneTumour: btPanel,
+    paget: pgtPanel,
     boneWatch: boneWatch(zones, answers) ? BONE_WATCH : null,
     thyroid: thPanel,
     hypothyroid: hypoPanel,
@@ -2710,6 +2716,20 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{caPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {caPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* Paget's disease of bone, diagnosed (../data/paget.js). */}
+                {pgtPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your bones and joints</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{pgtPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{pgtPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {pgtPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>
