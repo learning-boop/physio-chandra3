@@ -1636,7 +1636,7 @@ export default function PainAssessment() {
                           <circle cx="12" cy="12" r="10" fill="none" stroke={GOLD} strokeWidth="2" />
                           <path d="M12 10.5v6M12 7.2v.6" stroke={GOLD} strokeWidth="2.2" strokeLinecap="round" />
                         </svg>
-                        <span>We will ask about the <strong>ticked areas</strong>. Tap an area to add or remove it.</span>
+                        <span>We will ask about the <strong>ticked areas</strong>. Tap an area to <strong>add</strong> or <strong>remove</strong> it.</span>
                       </p>
                     )}
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
