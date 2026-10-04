@@ -4,6 +4,7 @@ id: ucl
 name: Inner elbow ligament strain (thrower's elbow)
 clin: Ulnar collateral ligament sprain (moving valgus stress; O'Driscoll 2005)
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -33,5 +34,5 @@ The ligament on the inner side of the elbow takes a large strain each time the a
 
 ## seePhysioIf
 - Throwing still hurts after 2 weeks of rest
-- You felt a pop, or the elbow feels unstable
+- You felt a pop, or the elbow feels unstable: see a doctor promptly, as a full tear may need a surgeon's opinion
 - You want a graded throwing programme to return to sport

@@ -4,6 +4,7 @@ id: guyon
 name: Ulnar nerve irritation at the wrist (Guyon's canal)
 clin: Ulnar neuropathy at the wrist (Guyon's canal)
 # DRAFT patient text written 25 Sep 2026 from content/regions/wrist.md — not yet reviewed.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -35,5 +36,5 @@ The ulnar nerve passes through a small tunnel at the base of the palm on the lit
 
 ## seePhysioIf
 - The tingling has not eased after 2 to 3 weeks of changes
-- Your grip or finger control is getting weaker
+- Your grip or finger control keeps getting weaker, or the muscles between your thumb and fingers look thinner: see a doctor, who may arrange nerve tests
 - The back of your hand is numb too: the nerve may be pressed higher up, at the elbow

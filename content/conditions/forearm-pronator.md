@@ -4,6 +4,7 @@ id: pronator
 name: Pronator syndrome (median nerve in the forearm)
 clin: Pronator syndrome (median nerve compression at the proximal forearm)
 # DRAFT patient text written 25 Sep 2026 from content/regions/forearm.md — not yet reviewed.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -34,7 +35,7 @@ The median nerve, the same nerve involved in carpal tunnel syndrome, can be sque
 
 ## seePhysioIf
 - The tingling or ache has not eased after 2 to 3 weeks
-- Your pinch or grip is getting weaker
+- Your pinch or grip keeps getting weaker, or the muscles at the base of the thumb look thinner: see a doctor, who may arrange nerve tests
 - You are not sure whether it is this or carpal tunnel at the wrist
 
 ## clinicNotes

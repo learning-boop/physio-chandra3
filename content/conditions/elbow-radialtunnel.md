@@ -5,6 +5,7 @@ name: Radial tunnel syndrome
 clin: Posterior interosseous nerve irritation at the radial tunnel
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
 # Patient text shared with forearm-radialtunnel.md: keep the two in step.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -36,4 +37,4 @@ A nerve that runs through the muscles at the top of the forearm can be squeezed 
 ## seePhysioIf
 - The ache has not eased after 2 to 3 weeks
 - Tennis elbow treatment has not helped
-- You notice weakness lifting the fingers or the wrist
+- You notice weakness lifting the fingers or the wrist, or it is getting worse: see a doctor, who may arrange nerve tests

@@ -5,6 +5,7 @@ name: Pelvic floor muscle pain
 clin: Levator ani (pelvic floor) muscle pain
 # Shows the "pelvic health physiotherapist" card (pelvicHealth) with it.
 # DRAFT patient text written 25 Sep 2026 from content/regions/coccyx.md — not yet reviewed.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -37,3 +38,4 @@ The muscles of the pelvic floor attach to the tailbone. When they stay tight or 
 - It keeps coming back or affects bowel movements or sex
 - You would like an assessment with a pelvic health physiotherapist
 - You have not yet seen your doctor about bowel or gynaecological causes
+- Bleeding from your bottom, black stools, or a change in your bowel habit lasting more than 3 weeks: see your doctor first

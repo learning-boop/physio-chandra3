@@ -1,8 +1,10 @@
 /* Review pages for the condition texts drafted by Claude (Chandra, 4 Oct 2026).
    Tier 1: the 14 that sit next to a condition needing a doctor (read first).
    Tier 2: the 24 common problems most patients will see.
+   Tier 3: the 14 less common ones, mostly nerve entrapments.
    Run: node scripts/make-review-tier.mjs 1   →   review/tier1.html
         node scripts/make-review-tier.mjs 2   →   review/tier2.html
+        node scripts/make-review-tier.mjs 3   →   review/tier3.html
 
    Built from the condition files (what Chandra edits) and the live site data
    (the area's safety questions), so it always shows what is built. Opens in
@@ -83,10 +85,33 @@ const TIER2 = [
   ['forearm-overuse', 'Common with work and gym load.', 'Is "tingling or weakness in the hand" pointed to the right place?'],
   ['elbow-posterior', 'Common with leaning and knocks.', 'The infection line is in the description: should it also be a "see a doctor the same day" line?'],
 ]
-const LIST = TIER === '2' ? TIER2 : TIER1
-const HEAD = TIER === '2'
-  ? { title: 'Tier 2 Review', h1: `Tier 2 review: ${TIER2.length} condition texts`, lede: 'Drafted by Claude, not yet signed: the common problems most patients will see.' }
-  : { title: 'Tier 1 Review', h1: `Tier 1 review: ${TIER1.length} condition texts`, lede: 'Drafted by Claude, not yet signed, each sitting next to a condition that needs a doctor.' }
+const TIER3 = [
+  ['elbow-radialtunnel', 'A nerve entrapment that is easy to mistake for tennis elbow.',
+    '"Weakness lifting the fingers or the wrist" goes to the physiotherapist: should increasing finger or wrist drop go to a doctor (nerve tests)?'],
+  ['elbow-ucl', 'Throwing athletes; a full ligament tear may need a surgeon.',
+    'The description says a pop "needs to be checked promptly", but the line sends a pop or an unstable elbow to the physiotherapist. Should it be a doctor?'],
+  ['forearm-pronator', 'A median nerve entrapment, often confused with carpal tunnel.',
+    '"Pinch or grip getting weaker" goes to the physiotherapist: should weakness that keeps progressing, or thinning muscles, go to a doctor?'],
+  ['wrist-guyon', 'An ulnar nerve entrapment at the wrist (cycling, tools).',
+    'Same question: should grip or finger weakness that keeps progressing, or thinning hand muscles, go to a doctor?'],
+  ['coccyx-pelvicfloor', 'Pelvic and bowel symptoms overlap with other causes.',
+    'Should bleeding from the bottom, black stools or a lasting change in bowel habit be named on the card (doctor first)?'],
+  ['knee-saphenous', 'A skin nerve at the inner knee, often after surgery.', 'Is the "spreading or weak: points to the back" line right?'],
+  ['forearm-intersection', 'Overuse above the wrist (rowing, paddling).', 'Is the description and advice right?'],
+  ['forearm-wartenberg', 'A skin nerve pressed by straps or cuffs.', 'Is the description and advice right?'],
+  ['wrist-ecu', 'Little-finger-side wrist tendon (racquets, golf).', 'Is the snapping line and advice right?'],
+  ['hand-digital', 'A finger nerve: one side of one finger.', 'The "after a cut: doctor promptly" line is there. Is it right?'],
+  ['hand-thumbmuscle', 'Thumb overuse with phones and pinching.', 'Is the description and advice right?'],
+  ['leg-peroneal', 'A nerve at the outer knee; foot drop is the danger.', 'The "foot slaps down: doctor first" line is there. Is it right?'],
+  ['foot-sesamoid', 'Under the big toe; a stress fracture looks similar.', 'The "worse or at night: doctor first" line is there. Is it right?'],
+  ['coccyx-unstable', 'A tailbone that catches on standing, often after childbirth.', 'Is the description and advice right?'],
+]
+const LIST = TIER === '3' ? TIER3 : TIER === '2' ? TIER2 : TIER1
+const HEAD = TIER === '3'
+  ? { title: 'Tier 3 Review', h1: `Tier 3 review: ${TIER3.length} condition texts`, lede: 'Drafted by Claude, not yet signed: the less common problems, mostly nerve entrapments.' }
+  : TIER === '2'
+    ? { title: 'Tier 2 Review', h1: `Tier 2 review: ${TIER2.length} condition texts`, lede: 'Drafted by Claude, not yet signed: the common problems most patients will see.' }
+    : { title: 'Tier 1 Review', h1: `Tier 1 review: ${TIER1.length} condition texts`, lede: 'Drafted by Claude, not yet signed, each sitting next to a condition that needs a doctor.' }
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 

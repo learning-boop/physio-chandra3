@@ -1732,6 +1732,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     // Tier 2 cards with a look-alike (4 Oct 2026)
     head: ['tth'], jaw: ['myalgia'], arm: ['strain'], thigh: ['doms', 'contusion'], hand: ['trigger'] }
   T1.leg = ['cecs', 'calfstrain']
+  // Tier 3 doctor lines Chandra asked for (4 Oct 2026)
+  T1.elbow = ['biceps', 'radialtunnel', 'ucl']; T1.forearm = ['armpump', 'pronator']; T1.wrist = ['guyon']; T1.coccyx = ['trauma', 'pelvicfloor']
   // sij/pgp is left out on purpose: its warning signs are the pregnancy safety
   // questions and the pregnancy results panel shown beside it (src/data/pregnancy.js).
   const missing = []

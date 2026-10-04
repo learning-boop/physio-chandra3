@@ -990,7 +990,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It keeps coming back or affects bowel movements or sex",
         "You would like an assessment with a pelvic health physiotherapist",
-        "You have not yet seen your doctor about bowel or gynaecological causes"
+        "You have not yet seen your doctor about bowel or gynaecological causes",
+        "Bleeding from your bottom, black stools, or a change in your bowel habit lasting more than 3 weeks: see your doctor first"
       ]
     },
     "resolved": [
@@ -1950,7 +1951,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The ache has not eased after 2 to 3 weeks",
         "Tennis elbow treatment has not helped",
-        "You notice weakness lifting the fingers or the wrist"
+        "You notice weakness lifting the fingers or the wrist, or it is getting worse: see a doctor, who may arrange nerve tests"
       ]
     },
     "resolved": [
@@ -2122,7 +2123,7 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "Throwing still hurts after 2 weeks of rest",
-        "You felt a pop, or the elbow feels unstable",
+        "You felt a pop, or the elbow feels unstable: see a doctor promptly, as a full tear may need a surgeon's opinion",
         "You want a graded throwing programme to return to sport"
       ]
     },
@@ -3320,7 +3321,7 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "The tingling or ache has not eased after 2 to 3 weeks",
-        "Your pinch or grip is getting weaker",
+        "Your pinch or grip keeps getting weaker, or the muscles at the base of the thumb look thinner: see a doctor, who may arrange nerve tests",
         "You are not sure whether it is this or carpal tunnel at the wrist"
       ],
       "clinicNotes": [
@@ -11693,7 +11694,7 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "The tingling has not eased after 2 to 3 weeks of changes",
-        "Your grip or finger control is getting weaker",
+        "Your grip or finger control keeps getting weaker, or the muscles between your thumb and fingers look thinner: see a doctor, who may arrange nerve tests",
         "The back of your hand is numb too: the nerve may be pressed higher up, at the elbow"
       ]
     },
