@@ -25,6 +25,7 @@ import { CALCIUM_SCREEN } from './parathyroid.js'
 import { THYROID_SCREEN, PARALYSIS_FLAG, HYPOTHYROID_SCREEN } from './thyroid.js'
 import { ACROMEGALY_SCREEN } from './acromegaly.js'
 import { RICKETS_SCREEN } from './osteomalacia.js'
+import { BONE_SCREEN, BONE_SCREEN_ADULT, BONE_WHY_YOUNG, BONE_WHY_ADULT, YOUNG, oneBone } from './boneTumour.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
@@ -321,6 +322,22 @@ const PATTERNS = [
     // Under 5: any leg or wrist; 5 to 15: both legs (a teenager's one sore wrist is not asked).
     when: (z, a) => (a.age === 'u5' && has(z, 'thigh', 'knee', 'lowerleg', 'ankle', 'wrist')) ||
       (a.age === 'u18' && ['thigh', 'knee', 'lowerleg'].some((t) => bothSides(z, t))),
+  },
+  // Pain in one bone that is not settling ("Osteosarcoma" document, v0.1,
+  // 4 Oct 2026; the recognition rule, every area): one knee, shin, thigh,
+  // hip or pelvis, shoulder or upper arm drawn, for 2 weeks or more (the
+  // question says three). X-ray, no booking: today or tomorrow up to 29
+  // (NICE NG12, 48 hours), this week from 30. Never names cancer. ./boneTumour.js
+  {
+    id: 'pc-bone-young', tier: 'urgent', sameDay: true, noBooking: true, why: BONE_WHY_YOUNG,
+    text: BONE_SCREEN.text,
+    when: (z, a) => YOUNG.includes(a.age) && !!a.duration && a.duration !== 'd2w' && oneBone(z),
+  },
+  {
+    id: 'pc-bone', tier: 'urgent', noBooking: true, why: BONE_WHY_ADULT,
+    // Narrower from 30 (rotator cuff, frozen shoulder and arthritis also wake people).
+    text: BONE_SCREEN_ADULT.text,
+    when: (z, a) => !!a.age && !YOUNG.includes(a.age) && !!a.duration && a.duration !== 'd2w' && oneBone(z),
   },
   // Polymyalgia rheumatica over 50, as its own doctor-first entry (Chandra,
   // 2 Oct 2026, the "Poly myositis" document's open item 5): both shoulders

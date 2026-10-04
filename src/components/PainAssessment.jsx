@@ -29,6 +29,7 @@ import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } from '../data/thyroid'
 import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
+import { BONE_TUMOUR_CAUTION, boneTumourPanel, TUMOUR_IDS, BONE_WHY_YOUNG, BONE_WATCH, boneWatch } from '../data/boneTumour'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -268,6 +269,8 @@ const CAUTION_CHECKS = [
   PARATHYROID_CAUTION,
   // "Osteomalacia" document (v0.1, 4 Oct 2026), route C.
   OSTEOMALACIA_CAUTION,
+  // "Osteosarcoma" document (v0.1, 4 Oct 2026), the diagnosed route.
+  BONE_TUMOUR_CAUTION,
   // "Hyperthyroidism" document (signed by Chandra, 3 Oct 2026), route C.
   THYROID_CAUTION,
   // "Hypothyroidism" document (signed by Chandra, 3 Oct 2026), route B.
@@ -771,7 +774,9 @@ export default function PainAssessment() {
     // 60 or recurrent attacks are a reason to ask about calcium and PTH.
     // A stress fracture in someone who does not run ("Osteomalacia" document): a bone blood test too.
     const nerve = (f) => (isNerveFlag(f) ? { ...f, noBooking: true, why: NERVE_WHY } : CPPD_IDS.includes(f.id) ? { ...f, why: CPPD_WHY }
-      : STRESS_IDS.includes(f.id) ? { ...f, why: { ...f.why, text: `${f.why.text} ${STRESS_LINE}` } } : f)
+      : STRESS_IDS.includes(f.id) ? { ...f, why: { ...f.why, text: `${f.why.text} ${STRESS_LINE}` } }
+      // The young knee, thigh and shin bone questions ("Osteosarcoma" document): X-ray today or tomorrow, no booking.
+      : TUMOUR_IDS.includes(f.id) ? { ...f, noBooking: true, sameDay: true, why: BONE_WHY_YOUNG } : f)
     // Not pregnant and no birth in the last 12 months: the areas' "Are you
     // pregnant and…" questions cannot apply (the ectopic ones, "could you be
     // pregnant", are still asked).
@@ -963,6 +968,8 @@ export default function PainAssessment() {
   const caPanel = useMemo(() => parathyroidPanel(flags.includes('ca-parathyroid')), [flags])
   // Diagnosed osteomalacia or rickets (../data/osteomalacia.js).
   const omPanel = useMemo(() => osteomalaciaPanel(flags.includes('ca-osteomalacia')), [flags])
+  // A bone tumour, treated (../data/boneTumour.js).
+  const btPanel = useMemo(() => boneTumourPanel(flags.includes('ca-bonetumour')), [flags])
   // Osteopenia, low bone density (../data/osteopenia.js).
   const bnPanel = useMemo(() => bonePanel(flags, answers), [flags, answers])
   const thPanel = useMemo(() => thyroidPanel(flags.includes('ca-thyroid')), [flags])
@@ -1144,6 +1151,8 @@ export default function PainAssessment() {
     calcium: caPanel,
     osteomalacia: omPanel,
     bone: bnPanel,
+    boneTumour: btPanel,
+    boneWatch: boneWatch(zones, answers) ? BONE_WATCH : null,
     thyroid: thPanel,
     hypothyroid: hypoPanel,
     acromegaly: acroPanel,
@@ -2600,6 +2609,14 @@ export default function PainAssessment() {
                   </div>
                 )}
 
+                {/* One bone, young or 65 and over: the watch line, with or
+                    without a match ("Osteosarcoma" document, ../data/boneTumour.js). */}
+                {boneWatch(zones, answers) && (
+                  <p style={{ fontSize: 14.5, lineHeight: 1.55, color: '#fcd34d', margin: '0 0 24px', padding: '10px 12px', border: '1px solid rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', borderRadius: 10, maxWidth: 520 }}>
+                    {BONE_WATCH}
+                  </p>
+                )}
+
                 {/* AI overview of the whole traced path. It is given the matched
                     conditions above and explains exactly those, in the same
                     order, so the page gives one answer rather than two lists
@@ -2693,6 +2710,20 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{caPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {caPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* A bone tumour, treated (../data/boneTumour.js). */}
+                {btPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your recovery</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{btPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{btPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {btPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>

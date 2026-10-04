@@ -1415,5 +1415,39 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /id: 'ca-preg', sex: 'female', ages: \['18-29', '30-49', '50-64'\]/.test(src))
 }
 
+// ── 45. Osteosarcoma ("Osteosarcoma", v0.1, 4 Oct 2026) ──
+{
+  const BT = await imp('src/data/boneTumour.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const pc = (z, a, id) => patternChecks(ZN(z), a, 12).find((x) => x.id === id)
+  const y = pc(['kneeL'], { age: 'u18', duration: 'd6w' }, 'pc-bone-young')
+  check('Bone rule, young: one knee for 2 weeks or more at 5 to 29 → X-ray today or tomorrow, no booking; not under 2 weeks, both knees or a widespread drawing',
+    y && y.sameDay && y.noBooking && /today or tomorrow/.test(y.why.text) && /whole bone/.test(y.why.text) && /do not start or continue physiotherapy/.test(y.why.text) &&
+    !pc(['kneeL'], { age: 'u18', duration: 'd2w' }, 'pc-bone-young') && !pc(['kneeL', 'kneeR'], { age: 'u18', duration: 'd3m' }, 'pc-bone-young') &&
+    !pc(['kneeL', 'neck', 'shoulderR', 'hipL'], { age: '18-29', duration: 'd3m' }, 'pc-bone-young') &&
+    !!pc(['upperarmR'], { age: '18-29', duration: 'o3m' }, 'pc-bone-young') && !!pc(['kneeL', 'thighL'], { age: 'u5', duration: 'd6w' }, 'pc-bone-young'), y)
+  const ad = pc(['shoulderR'], { age: '50-64', duration: 'd3m' }, 'pc-bone')
+  check('Bone rule, 30 and over: this week, no booking, a narrower question (deep in the bone, not the joint or a tendon; building AND at rest or night, or a swelling)',
+    ad && ad.noBooking && !ad.sameDay && /this week/.test(ad.why.text) && /not in the joint or a tendon/.test(ad.text) && /week by week and is there at rest/.test(ad.text) &&
+    !pc(['shoulderR'], { age: '50-64', duration: 'd3m' }, 'pc-bone-young') && !pc(['shoulderR'], { age: 'u18', duration: 'd3m' }, 'pc-bone'), ad)
+  const tum = Object.values(REGIONS).flatMap((r) => r.redFlags).filter((f) => BT.TUMOUR_IDS.includes(f.id))
+  check('Bone rule: the young knee, thigh and shin tumour questions get the same X-ray routing (today or tomorrow, no booking)',
+    tum.length === 3 && /TUMOUR_IDS\.includes\(f\.id\) \? \{ \.\.\.f, noBooking: true, sameDay: true, why: BONE_WHY_YOUNG \}/.test(src))
+  check('Bone rule: the watch line on the results for one bone at 5 to 29 or 65 and over, not at 30 to 64',
+    BT.boneWatch(ZN(['kneeL']), { age: 'u18' }) && BT.boneWatch(ZN(['hipR']), { age: 'o64' }) && !BT.boneWatch(ZN(['kneeL']), { age: '30-49' }) &&
+    !BT.boneWatch(ZN(['kneeL', 'kneeR']), { age: 'u18' }) && /boneWatch\(zones, answers\) &&/.test(src) && /BONE_WATCH/.test(src))
+  const p = BT.boneTumourPanel(true)
+  check('Bone tumour, treated: on the cautions list; panel with the clearance line, implant guidance, chemotherapy fever, the treated limb, heart and clot (911) signs, surveillance; in the PDF',
+    /BONE_TUMOUR_CAUTION,/.test(src) && p && p.notes.some((n) => /weight-bearing and movement limits/.test(n)) && p.notes.some((n) => /38 °C/.test(n)) &&
+    p.notes.some((n) => /clunk/.test(n)) && p.notes.some((n) => /Call 911/.test(n)) && p.notes.some((n) => /new lump/.test(n)) &&
+    BT.boneTumourPanel(false) === null && /boneTumour: btPanel/.test(src))
+  const rec = JSON.stringify([BT.BONE_SCREEN, BT.BONE_SCREEN_ADULT, BT.BONE_WHY_YOUNG, BT.BONE_WHY_ADULT, BT.BONE_WATCH])
+  check('Bone rule language: the recognition screens never say cancer, tumour or sarcoma; no survival figures, cure or guarantee anywhere',
+    !/cancer|tumou?r|sarcoma/i.test(rec) && !/survival|cure|guarantee|\d+ ?%/i.test(rec + JSON.stringify(p)), rec.match(/cancer|tumou?r|sarcoma/i))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
