@@ -4,6 +4,7 @@ id: contusion
 name: Thigh bruise ("dead leg")
 clin: Quadriceps contusion (Kary 2010)
 # DRAFT patient text written 25 Sep 2026 from content/regions/thigh.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -35,3 +36,4 @@ A hard knock to the thigh, such as a knee in football or a tackle, bruises the m
 - The knee still will not bend past halfway after a few days
 - You feel a hard lump in the muscle weeks later
 - You want a plan to return to sport
+- The pain and tense swelling keep building over the hours after the knock, or the leg goes numb: go to the emergency department now

@@ -4,6 +4,7 @@ id: tth
 name: Tension-type headache
 clin: Tension-type headache (ICHD-3)
 # DRAFT patient text written 25 Sep 2026 from content/regions/head.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -25,7 +26,7 @@ pointers:
 ---
 
 ## blurb
-The most common headache: a pressing or tight band across the forehead, temples or back of the head, usually on both sides. It is linked to stress, poor sleep, long spells at a screen and tight neck and shoulder muscles. It is not dangerous, and it usually responds to changes in routine, movement and relaxation.
+The most common headache: a pressing or tight band across the forehead, temples or back of the head, usually on both sides. It is linked to stress, poor sleep, long spells at a screen and tight neck and shoulder muscles. It is not dangerous, and it usually responds to changes in routine, movement and relaxation. A headache that comes on suddenly and severely, or with a fever, a stiff neck, weakness, confusion or a change in vision, is different and needs urgent care.
 
 ## noticed
 - A band-like pressure or tightness on both sides of the head
@@ -42,3 +43,4 @@ The most common headache: a pressing or tight band across the forehead, temples 
 - Headaches happen on many days a month or are becoming more frequent
 - Neck and shoulder tension comes with them
 - You want a plan combining posture, exercise and relaxation
+- A sudden, severe headache, or one with a fever, a stiff neck, weakness, confusion or a change in vision: call 911 or go to the emergency department now

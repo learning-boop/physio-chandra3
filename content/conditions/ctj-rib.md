@@ -4,6 +4,7 @@ id: rib
 name: Upper rib joint strain
 clin: Upper rib joint (costovertebral) dysfunction
 # DRAFT patient text written 24 Sep 2026 from content/regions/ctj.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -32,3 +33,4 @@ Each rib joins the spine at small joints that move with every breath. A sudden t
 - It has not eased after a week or two
 - Every breath or sleeping on that side stays painful
 - It keeps returning with twisting at work or in sport
+- Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911

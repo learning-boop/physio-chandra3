@@ -4,6 +4,7 @@ id: myalgia
 name: Jaw muscle pain
 clin: TMD myalgia (masticatory muscle pain; DC/TMD)
 # DRAFT patient text written 25 Sep 2026 from content/regions/jaw.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -41,3 +42,4 @@ The chewing muscles in the cheek and temple can become sore and tight, often wit
 - It lasts more than a few weeks or keeps coming back
 - Headaches or ear symptoms come with it
 - You want a plan combining jaw exercises, posture and relaxation
+- If you are over 50: jaw ache when chewing that eases when you stop, a tender scalp or temple, or a change in vision: see a doctor the same day

@@ -4,6 +4,7 @@ id: strain
 name: Upper arm muscle soreness or strain
 clin: Delayed-onset muscle soreness or muscle strain (biceps, triceps)
 # DRAFT patient text written 25 Sep 2026 from content/regions/arm.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -40,5 +41,5 @@ The big muscles of the upper arm can ache for a day or three after a new or hard
 
 ## seePhysioIf
 - A strain has not improved after 2 weeks
-- You felt a pop and the muscle looks a different shape
+- You felt a pop and the muscle now looks a different shape: see a doctor within a few days, as a tendon tear is best repaired early
 - You want a plan to return to lifting or sport

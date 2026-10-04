@@ -793,7 +793,7 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "A strain has not improved after 2 weeks",
-        "You felt a pop and the muscle looks a different shape",
+        "You felt a pop and the muscle now looks a different shape: see a doctor within a few days, as a tendon tear is best repaired early",
         "You want a plan to return to lifting or sport"
       ]
     },
@@ -1252,7 +1252,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It has not eased after a week or two",
         "Every breath or sleeping on that side stays painful",
-        "It keeps returning with twisting at work or in sport"
+        "It keeps returning with twisting at work or in sport",
+        "Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911"
       ]
     },
     "resolved": [
@@ -4219,7 +4220,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The finger catches often or locks and has to be freed",
         "It has not settled after a few weeks of easing off",
-        "You want advice on splinting and exercises"
+        "You want advice on splinting and exercises",
+        "The whole finger is red, swollen and painful to straighten, especially after a cut or a bite: see a doctor the same day"
       ]
     },
     "resolved": [
@@ -4564,7 +4566,7 @@ export const AUTHORED = [
       "id": "tth",
       "name": "Tension-type headache",
       "clin": "Tension-type headache (ICHD-3)",
-      "blurb": "The most common headache: a pressing or tight band across the forehead, temples or back of the head, usually on both sides. It is linked to stress, poor sleep, long spells at a screen and tight neck and shoulder muscles. It is not dangerous, and it usually responds to changes in routine, movement and relaxation.",
+      "blurb": "The most common headache: a pressing or tight band across the forehead, temples or back of the head, usually on both sides. It is linked to stress, poor sleep, long spells at a screen and tight neck and shoulder muscles. It is not dangerous, and it usually responds to changes in routine, movement and relaxation. A headache that comes on suddenly and severely, or with a fever, a stiff neck, weakness, confusion or a change in vision, is different and needs urgent care.",
       "noticed": [
         "A band-like pressure or tightness on both sides of the head",
         "Worse with stress, poor sleep or long hours at a screen",
@@ -4579,7 +4581,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Headaches happen on many days a month or are becoming more frequent",
         "Neck and shoulder tension comes with them",
-        "You want a plan combining posture, exercise and relaxation"
+        "You want a plan combining posture, exercise and relaxation",
+        "A sudden, severe headache, or one with a fever, a stiff neck, weakness, confusion or a change in vision: call 911 or go to the emergency department now"
       ]
     },
     "resolved": [
@@ -5760,7 +5763,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It lasts more than a few weeks or keeps coming back",
         "Headaches or ear symptoms come with it",
-        "You want a plan combining jaw exercises, posture and relaxation"
+        "You want a plan combining jaw exercises, posture and relaxation",
+        "If you are over 50: jaw ache when chewing that eases when you stop, a tender scalp or temple, or a change in vision: see a doctor the same day"
       ]
     },
     "resolved": [
@@ -7062,7 +7066,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "You still cannot walk normally after a few days",
         "You want a plan to return to sport: re-injury is common",
-        "The whole calf becomes swollen, warm, or tender: see a doctor the same day"
+        "The whole calf becomes swollen, warm, or tender: see a doctor the same day",
+        "You felt a snap at the back of the heel, or cannot go up on tiptoe on that leg: see a doctor the same day, as the Achilles tendon can tear"
       ]
     },
     "resolved": [
@@ -10173,7 +10178,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The knee still will not bend past halfway after a few days",
         "You feel a hard lump in the muscle weeks later",
-        "You want a plan to return to sport"
+        "You want a plan to return to sport",
+        "The pain and tense swelling keep building over the hours after the knock, or the leg goes numb: go to the emergency department now"
       ]
     },
     "resolved": [
@@ -10239,7 +10245,7 @@ export const AUTHORED = [
       "id": "doms",
       "name": "Thigh muscle soreness or tight spots after exercise",
       "clin": "Delayed-onset muscle soreness and myofascial trigger points",
-      "blurb": "After a new or harder workout, the thigh muscles often ache and stiffen for one to three days, then ease: this is normal and settles on its own. Tight, tender spots in the muscle can also send pain elsewhere in the thigh or to the knee when pressed. Neither is a tear, and both ease with gentle movement and a gradual build-up of training.",
+      "blurb": "After a new or harder workout, the thigh muscles often ache and stiffen for one to three days, then ease: this is normal and settles on its own. Tight, tender spots in the muscle can also send pain elsewhere in the thigh or to the knee when pressed. Neither is a tear, and both ease with gentle movement and a gradual build-up of training. Dark, cola-coloured urine, or severe weakness and swelling after hard exercise, is different: that needs emergency care.",
       "noticed": [
         "Aching and stiffness in the thigh muscles 1 to 3 days after exercise",
         "Tender, tight spots that send pain elsewhere when pressed",
@@ -10253,7 +10259,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The soreness has not eased after a week",
         "It comes back after every session",
-        "You want a training plan that builds up safely"
+        "You want a training plan that builds up safely",
+        "Your urine turns dark like cola, or your muscles are severely weak or swollen after exercise: go to the emergency department now"
       ]
     },
     "resolved": [

@@ -4,6 +4,7 @@ id: calfstrain
 name: Calf muscle strain ("tennis leg")
 clin: Medial gastrocnemius or soleus strain
 # DRAFT patient text written 25 Sep 2026 from content/regions/leg.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -35,3 +36,4 @@ A sudden push-off, such as a lunge in tennis or a sprint, can tear some fibres o
 - You still cannot walk normally after a few days
 - You want a plan to return to sport: re-injury is common
 - The whole calf becomes swollen, warm, or tender: see a doctor the same day
+- You felt a snap at the back of the heel, or cannot go up on tiptoe on that leg: see a doctor the same day, as the Achilles tendon can tear

@@ -1,6 +1,8 @@
-/* Tier 1 review page: the 14 condition texts drafted by Claude that sit next
-   to a condition needing a doctor (Chandra, 4 Oct 2026). Read these first.
-   Run: node scripts/make-review-tier1.mjs   →   review/tier1.html
+/* Review pages for the condition texts drafted by Claude (Chandra, 4 Oct 2026).
+   Tier 1: the 14 that sit next to a condition needing a doctor (read first).
+   Tier 2: the 24 common problems most patients will see.
+   Run: node scripts/make-review-tier.mjs 1   →   review/tier1.html
+        node scripts/make-review-tier.mjs 2   →   review/tier2.html
 
    Built from the condition files (what Chandra edits) and the live site data
    (the area's safety questions), so it always shows what is built. Opens in
@@ -9,7 +11,8 @@
 import fs from 'node:fs'
 import { REGIONS } from '../src/data/symptomGuide.js'
 
-const OUT = 'review/tier1.html'
+const TIER = String(process.argv[2] || '1')
+const OUT = `review/tier${TIER}.html`
 const TIER1 = [
   ['upperback-costochondritis', 'Chest pain: must not reassure away a heart problem.',
     'Does chest pain with breathlessness, sweating, or pain into the arm or jaw go to 911 first? Is "sore when pressed" never used to rule out the heart?'],
@@ -40,6 +43,50 @@ const TIER1 = [
   ['tlj-slippingrib', 'Organ-pain look-alike (kidney, gallbladder).',
     'Do pain with a fever, urine symptoms, or pain after fatty meals point to a doctor rather than this condition?'],
 ]
+
+const TIER2 = [
+  ['head-tth', 'The commonest headache; the card says it is not dangerous.',
+    'Is there a line for a sudden, severe headache, or one with a fever, stiff neck, weakness, confusion or change in vision (911 or emergency department)? Is "not dangerous" safe as worded?'],
+  ['jaw-myalgia', 'Common; the jaw-and-temple artery problem in over-50s looks similar.',
+    'Is there a line for over 50 with jaw ache on chewing, a tender temple or a change in vision (doctor the same day)?'],
+  ['arm-strain', 'Common after the gym; a biceps tear looks similar.',
+    '"A pop and the muscle looks a different shape" goes to the physiotherapist: should it be a doctor within a few days?'],
+  ['thigh-doms', 'Very common after exercise; muscle breakdown looks similar.',
+    'Is there a line for dark, cola-coloured urine or severe weakness after exercise (emergency department)?'],
+  ['thigh-contusion', 'Common in contact sport; a thigh compartment syndrome is a rare emergency.',
+    'Is there a line for pain and tense swelling that keep building after the knock (emergency department)?'],
+  ['leg-calfstrain', 'Common; a clot and an Achilles rupture look similar.',
+    'The clot line is there. Is there a line for a snap at the back of the heel, or not being able to go up on tiptoe (doctor the same day)?'],
+  ['hand-trigger', 'Common; a tendon-sheath infection is a hand emergency.',
+    'Is there a line for a red, swollen finger that hurts to straighten, especially after a cut (doctor the same day)?'],
+  ['ctj-rib', 'Common; the pain can wrap to the front of the chest.',
+    'Should there be a line for chest pain with breathlessness, sweating or arm or jaw pain (911)?'],
+  ['upperback-rib', 'Common after a twist or cough.',
+    'Is a crack worth mentioning after a fall or a hard cough with low bone density? Is breathlessness covered?'],
+  ['tlj-stiffness', 'Common; kidney pain sits in the same place.',
+    'Should there be a line for pain with a fever, burning or blood when you pass urine (doctor first)?'],
+  ['foot-metatarsalgia', 'Common, especially with footwear.',
+    'Is a stress fracture (pain on one bone, worse with every step) or, with diabetes, a hot red forefoot pointed to a doctor?'],
+  ['foot-bunion', 'Very common.',
+    'Is the wording right about what footwear and exercises can and cannot change? Is a suddenly hot, red big toe (gout) told apart?'],
+  ['ankle-insertional', 'Common in runners and in middle age.',
+    'Is Achilles pain after a quinolone antibiotic or steroids pointed to a doctor? Is a sudden snap covered?'],
+  ['ankle-anteriorimp', 'Common after old sprains and in sport.', 'Is the description and advice right?'],
+  ['thigh-quadstrain', 'Common in kicking and sprinting sport.', 'Is the description, recovery and return-to-sport advice right?'],
+  ['thigh-adductor', 'Common in kicking and side-stepping sport.', 'Is groin pain that moves up (hip, hernia, pubic bone) handled well?'],
+  ['hip-iliopsoas', 'Common in running and kicking sport.', 'Is the painful snapping line right? Anything for a fever with groin pain?'],
+  ['hip-pubic', 'Common in sport and in pregnancy.', 'Is the pregnancy wording consistent with the pregnancy pages (no "unstable" or "loose")?'],
+  ['hip-meralgia', 'Common with tight clothing, pregnancy and weight change.', 'The "spreading or weak: points to the back" line: is it right and clear?'],
+  ['knee-prepatellar', 'Common in people who kneel for work.', 'The infection line is there (hot, red or unwell: doctor the same day). Is it right?'],
+  ['jaw-clicking', 'Very common, usually painless.', 'Is the description and reassurance right?'],
+  ['jaw-closedlock', 'Less common but time-sensitive.', 'Is "book soon: early guided movement" the right advice and urgency?'],
+  ['forearm-overuse', 'Common with work and gym load.', 'Is "tingling or weakness in the hand" pointed to the right place?'],
+  ['elbow-posterior', 'Common with leaning and knocks.', 'The infection line is in the description: should it also be a "see a doctor the same day" line?'],
+]
+const LIST = TIER === '2' ? TIER2 : TIER1
+const HEAD = TIER === '2'
+  ? { title: 'Tier 2 Review', h1: `Tier 2 review: ${TIER2.length} condition texts`, lede: 'Drafted by Claude, not yet signed: the common problems most patients will see.' }
+  : { title: 'Tier 1 Review', h1: `Tier 1 review: ${TIER1.length} condition texts`, lede: 'Drafted by Claude, not yet signed, each sitting next to a condition that needs a doctor.' }
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
@@ -73,7 +120,7 @@ function readCondition(key) {
 const list = (items) => (items && items.length ? `<ul>${items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p class="muted">None.</p>')
 const tierLabel = (f) => (f.tier === 'emergency' ? (f.call911 ? '911' : 'Emergency') : f.sameDay ? 'Doctor today' : 'See a doctor')
 
-const cards = TIER1.map(([key, why, check], i) => {
+const cards = LIST.map(([key, why, check], i) => {
   const c = readCondition(key)
   const R = REGIONS[c.region]
   const flags = (R ? R.redFlags : []).filter((f) => !f.drawn)
@@ -88,7 +135,7 @@ const cards = TIER1.map(([key, why, check], i) => {
         <p class="clin">Clinical label: ${esc(c.clin)}</p>
       </div>
     </header>
-    <div class="why"><strong>Why Tier 1:</strong> ${esc(why)}<br><strong>Check:</strong> ${esc(check)}</div>
+    <div class="why"><strong>Why Tier ${TIER}:</strong> ${esc(why)}<br><strong>Check:</strong> ${esc(check)}</div>
     <h3>What patients read</h3>
     <div class="patient">
       <p>${esc((s.blurb || []).join(' '))}</p>
@@ -116,7 +163,7 @@ const cards = TIER1.map(([key, why, check], i) => {
 
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tier 1 Review</title>
+<title>${HEAD.title}</title>
 <style>
   :root { --ink: #1b2430; --muted: #5d6b7a; --line: #dde3ea; --bg: #f6f8fb; --card: #fff; --gold: #9a7a3c; --ok: #1d7a46; --todo: #b2561c; --soft: #fbf7ef; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #e8edf3; --muted: #a3b0be; --line: #2c3846; --bg: #0f1722; --card: #162131; --gold: #d6b67a; --ok: #6fd39b; --todo: #f0a46a; --soft: #1d2a3b; } }
@@ -145,13 +192,13 @@ const html = `<!doctype html>
   .done { border-color: var(--ok); }
 </style></head>
 <body><main>
-  <h1>Tier 1 review: 14 condition texts</h1>
-  <p class="lede">Drafted by Claude, not yet signed, each sitting next to a condition that needs a doctor. Built ${new Date().toISOString().slice(0, 10)} from the condition files. Your ticks and notes stay in this browser; use "Copy my notes" and paste them to Claude to make the edits and add your sign-off.</p>
+  <h1>${HEAD.h1}</h1>
+  <p class="lede">${HEAD.lede} Built ${new Date().toISOString().slice(0, 10)} from the condition files. Your ticks and notes stay in this browser; use "Copy my notes" and paste them to Claude to make the edits and add your sign-off.</p>
   <div class="bar"><button id="copy">Copy my notes</button><button class="ghost" id="clear">Clear ticks</button><span class="progress" id="progress"></span></div>
   ${cards}
 </main>
 <script>
-  const KEY = 'tier1-review-v1'
+  const KEY = 'tier${TIER}-review-v1'
   let state = {}
   try { state = JSON.parse(localStorage.getItem(KEY) || '{}') } catch (e) { state = {} }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)) } catch (e) {} }
@@ -171,7 +218,7 @@ const html = `<!doctype html>
   })
   refresh()
   document.getElementById('copy').addEventListener('click', async () => {
-    const lines = ['Tier 1 review (' + new Date().toISOString().slice(0, 10) + ')']
+    const lines = ['Tier ${TIER} review (' + new Date().toISOString().slice(0, 10) + ')']
     cards.forEach((card) => {
       const k = card.dataset.key, s = state[k] || {}, name = card.querySelector('h2').textContent
       const ticks = ['wording', 'doctor', 'pointers'].filter((f) => s[f]).join(', ')
@@ -187,4 +234,4 @@ const html = `<!doctype html>
 
 fs.mkdirSync('review', { recursive: true })
 fs.writeFileSync(OUT, html)
-console.log(`Wrote ${OUT}: ${TIER1.length} conditions`)
+console.log(`Wrote ${OUT}: ${LIST.length} conditions`)

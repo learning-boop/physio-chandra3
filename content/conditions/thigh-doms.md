@@ -4,6 +4,7 @@ id: doms
 name: Thigh muscle soreness or tight spots after exercise
 clin: Delayed-onset muscle soreness and myofascial trigger points
 # DRAFT patient text written 25 Sep 2026 from content/regions/thigh.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -21,7 +22,7 @@ pointers:
 ---
 
 ## blurb
-After a new or harder workout, the thigh muscles often ache and stiffen for one to three days, then ease: this is normal and settles on its own. Tight, tender spots in the muscle can also send pain elsewhere in the thigh or to the knee when pressed. Neither is a tear, and both ease with gentle movement and a gradual build-up of training.
+After a new or harder workout, the thigh muscles often ache and stiffen for one to three days, then ease: this is normal and settles on its own. Tight, tender spots in the muscle can also send pain elsewhere in the thigh or to the knee when pressed. Neither is a tear, and both ease with gentle movement and a gradual build-up of training. Dark, cola-coloured urine, or severe weakness and swelling after hard exercise, is different: that needs emergency care.
 
 ## noticed
 - Aching and stiffness in the thigh muscles 1 to 3 days after exercise
@@ -37,3 +38,4 @@ After a new or harder workout, the thigh muscles often ache and stiffen for one 
 - The soreness has not eased after a week
 - It comes back after every session
 - You want a training plan that builds up safely
+- Your urine turns dark like cola, or your muscles are severely weak or swollen after exercise: go to the emergency department now
