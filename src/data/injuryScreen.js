@@ -341,7 +341,7 @@ export const HIP_INJURY = [
     askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle',
     options: yesNo('emergency', 'A high-energy injury: possible pelvic or hip fracture', { call911: true }) },
   // A possible fracture: same day.
-  { id: 'I4', text: 'After a minor fall, can you walk but with groin pain when you put weight on the leg, and are you 65 or over or have osteoporosis?',
+  { id: 'I4', text: 'After a minor fall, can you walk but with groin pain when you put weight on the leg, and are you 65 or over or have osteoporosis or low bone density?',
     askIf: (a) => a.I1 === 'fall', sameDay: true,
     options: yesNo('urgent', 'Possible hidden hip or pelvic fracture: these are often missed on the first X-ray') },
   // A torn tendon that is best repaired early: same day, as for the biceps.

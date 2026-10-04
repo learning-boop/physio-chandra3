@@ -38,7 +38,7 @@ const AMBER = [180, 110, 0]
  *  code, dateText, images { views: [{ src, width, height, label }] } | null,
  *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
  *  conditions [{name, blurb}], noMatch string | null, painType string | null,
- *  cautions [string], diabetes, steroids, calcium, thyroid, hypothyroid, acromegaly, pregnancy, oi and osteomalacia {title, text, notes [string]} | null,
+ *  cautions [string], diabetes, steroids, calcium, thyroid, hypothyroid, acromegaly, pregnancy, oi, osteomalacia and bone {title, text, notes [string]} | null,
  *  behaviour [string], answers [{question, answer}], notes string
  * @returns jsPDF document
  */
@@ -180,6 +180,7 @@ export function buildResultsPdf(d) {
   if (d.cautions.length) { heading('To mention when you book'); bullets(d.cautions) }
   if (d.diabetes) { heading(d.diabetes.title); text(d.diabetes.text); if (d.diabetes.notes.length) bullets(d.diabetes.notes) }
   if (d.steroids) { heading(d.steroids.title); text(d.steroids.text); if (d.steroids.notes.length) bullets(d.steroids.notes) }
+  if (d.bone) { heading(d.bone.title); text(d.bone.text); if (d.bone.notes.length) bullets(d.bone.notes) }
   if (d.osteomalacia) { heading(d.osteomalacia.title); text(d.osteomalacia.text); if (d.osteomalacia.notes.length) bullets(d.osteomalacia.notes) }
   if (d.calcium) { heading(d.calcium.title); text(d.calcium.text); if (d.calcium.notes.length) bullets(d.calcium.notes) }
   if (d.thyroid) { heading(d.thyroid.title); text(d.thyroid.text); if (d.thyroid.notes.length) bullets(d.thyroid.notes) }

@@ -113,7 +113,7 @@ export function buildClinicianSummary(ctx = {}) {
   const {
     zones = [], referral = [], keys = [], answers = {}, qaPairs = [], notes = '',
     ranked = [], behaviour = {}, psych = {}, painType = null,
-    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [], pregnancy = [], oi = [],
+    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [], pregnancy = [], oi = [], bone = [],
   } = ctx
 
   const L = []
@@ -221,6 +221,12 @@ export function buildClinicianSummary(ctx = {}) {
   }
   push('')
 
+  // ── Osteopenia ("Osteopenia" document, ./osteopenia.js) ──
+  if (bone.length) {
+    push('OSTEOPENIA / LOW BONE DENSITY (self-reported; bring DXA report: site, T/Z-scores, machine, artefact; FRAX or CAROC is the GP\'s. Exercise per OC 2023: balance/functional + progressive resistance 2x/week; spine-sparing technique)')
+    push(...bone.map((d) => '  ' + d))
+    push('')
+  }
   // ── Osteogenesis imperfecta ("Osteogenesis Imperfecta" document, ./oi.js) ──
   if (oi.length) {
     push('OSTEOGENESIS IMPERFECTA (self-reported; confirm type/gene, fracture history, rods/fusion, bone medicine incl. denosumab status, DXA, hearing, cardiopulmonary and basilar invagination symptoms. No HVLA, forceful mobilisation, end-range passive stretch or heavy resisted testing on deformed segments; new focal pain = X-ray first)')

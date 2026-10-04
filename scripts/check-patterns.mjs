@@ -1298,7 +1298,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const { REGIONS } = await imp('src/data/symptomGuide.js')
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
   check('OI: an optional tick on "A little about you" (not required to continue), out of the anonymous copy, cleared with its details',
-    /OI_STATUS\.text/.test(src) && !/answers\.oi/.test(src.match(/const aboutDone = [^\n]*/)[0]) && /\^preg\|\^oi\)/.test(src) &&
+    /OI_STATUS\.text/.test(src) && !/answers\.oi/.test(src.match(/const aboutDone = [^\n]*/)[0]) && /\^preg\|\^oi[|)]/.test(src) &&
     /dropOi = \(\{ oi, oiType, oiGoal, oiFalls, oiCare, \.\.\.a \}\)/.test(src))
   check('OI red flags: none without the tick; with it, first on the safety pages in every area, after the obstetric ones',
     !OI.oiRedFlags({}).length && OI.oiRedFlags({ oi: 'yes' }).length === 6 &&
@@ -1363,6 +1363,36 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([c, OM.RICKETS_SCREEN, OM.OSTEOMALACIA_CAUTION, p, OM.STRESS_LINE])
   check('Osteomalacia language: no "you have osteomalacia", cure, guarantee, "permanent" or "damage"; no community named',
     !/you (may )?have osteomalacia|cure|guarantee|permanent|damage|south asian|migrat|ethnic/i.test(all), all.match(/you (may )?have osteomalacia|cure|guarantee|permanent|damage|south asian|migrat|ethnic/i))
+}
+
+// ── 43. Osteopenia ("Osteopenia", v0.1, 4 Oct 2026) ──
+{
+  const OP = await imp('src/data/osteopenia.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const inj = (await import('node:fs')).readFileSync(new URL('../src/data/injuryScreen.js', import.meta.url), 'utf8')
+  check('Osteopenia: on the cautions list (physio route, booking never held), optional risk questions, out of the anonymous copy',
+    /OSTEOPENIA_CAUTION,/.test(src) && OP.OSTEOPENIA_CAUTION.tier === 'caution' && /BONE_DETAILS\.map/.test(src) && /\^oi\|\^bn\)/.test(src) && /bone: bnPanel/.test(src))
+  const osteoFlags = Object.values(REGIONS).flatMap((r) => r.redFlags).filter((f) => [].concat(f.group || []).includes('osteo'))
+  check('Osteopenia fracture first: every spine fragile-bone question, the hip "no fall" question, the fall checks and the hip injury screen say "osteoporosis or low bone density"',
+    osteoFlags.length >= 5 && osteoFlags.every((f) => /osteoporosis or low bone density/.test(f.text)) &&
+    /osteoporosis or low bone density/.test(REGIONS.hip.redFlags.find((f) => f.id === 'hpf-nofall').text) &&
+    /or have osteoporosis or low bone density',/.test(src) && /osteoporosis or low bone density/.test(inj), osteoFlags.map((f) => f.id))
+  const R = OP.boneRisk
+  check('Osteopenia clarifier: "ask your doctor" for a total of 5 or more, a hip/spine or 2+ fracture, height loss, a secondary cause, or 2+ falls at 65+; not for one risk factor; steroid tablets count from "A little about you"',
+    R({ bnFracture: 'hipspine' }).askDoctor && R({ bnFracture: 'two' }).reclassify && R({ bnHeight: 'yes' }).askDoctor && R({ bnRisk: ['gut'] }).askDoctor &&
+    R({ bnFalls: 'two', age: 'o64' }).askDoctor && !R({ bnFalls: 'two', age: '50-64' }).askDoctor && !R({ bnRisk: ['smoke'] }).askDoctor &&
+    R({ bnFracture: 'one', bnFalls: 'one' }).askDoctor && R({ bnRisk: ['smoke', 'parent'], steroid: 'tabs', bnFalls: 'one' }).askDoctor &&
+    !R({ bnRisk: ['smoke', 'parent'], bnFalls: 'one' }).askDoctor)
+  const plain = OP.bonePanel(['ca-osteopenia'], {}), high = OP.bonePanel(['ca-osteopenia'], { bnFracture: 'hipspine', bnHeight: 'yes', bnFalls: 'one' })
+  check('Osteopenia panel: strength twice a week, daily balance, gradual impact without a spine fracture, hip-hinge technique; the FRAX, osteoporosis, spine X-ray and falls lines only when the answers call for them; no number shown',
+    plain.notes.some((n) => /twice a week/.test(n)) && plain.notes.some((n) => /heel drops/.test(n) && /not had a spine fracture/.test(n)) &&
+    plain.notes.some((n) => /hips and knees/.test(n)) && !plain.notes.some((n) => /FRAX/.test(n)) &&
+    high.notes.some((n) => /FRAX/.test(n)) && high.notes.some((n) => /treated as osteoporosis/.test(n)) && high.notes.some((n) => /spine X-ray/.test(n)) &&
+    high.notes.some((n) => /falls check/.test(n)) && !/\d+ ?%/.test(JSON.stringify(high)) && OP.bonePanel([], {}) === null)
+  const all = JSON.stringify([OP.OSTEOPENIA_CAUTION, OP.BONE_DETAILS, plain, high])
+  check('Osteopenia language: no "thin" or "fragile" bones, cure or guarantee; "avoid" only for specific movements',
+    !/thin(ning)? bones|fragile|cure|guarantee/i.test(all) && (all.match(/avoid/gi) || []).length === (all.match(/avoid lifting and twisting|avoid things for fear of falling|is not avoided/g) || []).length, all.match(/thin(ning)? bones|fragile|cure|guarantee|avoid[^.]*/gi))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

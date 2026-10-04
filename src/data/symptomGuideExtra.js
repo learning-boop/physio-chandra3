@@ -375,7 +375,7 @@ export const EXTRA_REGIONS = {
       { id: "crf-pancoast", tier: "urgent", group: "pancoast", why: "Possible tumour at the top of the lung (Pancoast)",
         text: "Do you smoke or used to smoke, and have you also had a cough that will not go away, coughed up blood, or noticed a drooping eyelid on the painful side?" },
       { id: "crf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
-        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or take long-term steroid tablets?" },
+        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or low bone density, or take long-term steroid tablets?" },
       { id: "crf-wasting", tier: "urgent", why: "Nerve compression (C8/T1) or thoracic outlet needs medical review",
         text: "Are the small muscles of your hand getting thinner, or has your grip become weak?" },
       { id: "crf-vascular", sameDay: true, tier: "urgent", why: "Possible blood vessel compression or clot in the arm (same-day review)",
@@ -507,7 +507,7 @@ export const EXTRA_REGIONS = {
       // Widened to the "Osteoporosis" document's red flag (v1.0, 2 Oct 2026):
       // over 50, or a fall from standing height, as well as a minor strain.
       { id: "trf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine: your doctor should examine you and arrange an X-ray before treatment starts",
-        text: "Did the pain start suddenly after a minor strain, cough, lift, or a fall from standing height, and are you over 50, or do you have osteoporosis or take long-term steroid tablets?" },
+        text: "Did the pain start suddenly after a minor strain, cough, lift, or a fall from standing height, and are you over 50, or do you have osteoporosis or low bone density, or take long-term steroid tablets?" },
       { id: "trf-infection", tier: "urgent", group: "infection", why: "Possible spinal infection",
         text: "Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?" },
       { id: "trf-kidney", tier: "urgent", group: "kidney", why: "Possible kidney infection or stone",
@@ -657,7 +657,7 @@ export const EXTRA_REGIONS = {
       { id: "jrf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the spine",
         text: "Have you ever had cancer, and is this a new back pain?" },
       { id: "jrf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
-        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+        text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?" },
       { id: "jrf-infection", tier: "urgent", group: "infection", why: "Possible spinal infection",
         text: "Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?" },
       { id: "jrf-legs", tier: "urgent", group: "legs", why: "Possible slow pressure on the spinal cord",
@@ -775,7 +775,7 @@ export const EXTRA_REGIONS = {
       { id: "prf-pregnancy", sex: "female", tier: "emergency", goTo: "labour", why: "Possible labour or waters breaking",
         text: "Are you pregnant and have severe pelvic or back pain with fluid leaking, or regular tightenings?" },
       { id: "prf-osteo", tier: "urgent", group: "osteo", why: "Possible stress (insufficiency) fracture of the sacrum",
-        text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+        text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?" },
       { id: "prf-infection", sameDay: true, tier: "urgent", group: "infection", why: "Possible joint infection (septic sacroiliitis)",
         text: "Do you have a fever or chills with the pain, or have you recently given birth, had surgery, or injected drugs?" },
       { id: "prf-cancer", tier: "urgent", group: "cancer", why: "Cancer can spread to the pelvis and sacrum",
@@ -903,7 +903,7 @@ export const EXTRA_REGIONS = {
       { id: "xrf-cancer", tier: "urgent", group: "cancer", why: "Rare tumours can occur here",
         text: "Have you ever had cancer, or can you feel a lump near your tailbone?" },
       { id: "xrf-osteo", tier: "urgent", group: "osteo", why: "Possible stress (insufficiency) fracture of the sacrum",
-        text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis, take long-term steroid tablets, or are over 70?" },
+        text: "Did the pain start after a minor fall or with no injury, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?" },
       { id: "xrf-sphincter", sex: "female", tier: "urgent", why: "Possible pelvic floor or sphincter injury: see a doctor or pelvic health service",
         text: "Since giving birth, have you had trouble controlling wind or your bowels?" }
     ],
@@ -2014,7 +2014,7 @@ export const EXTRA_REGIONS = {
       // A fracture with no fall, or only a small slip (JOSPT hip fracture CPG
       // 2021: hidden fractures in osteoporosis; the injury screen asks after a fall).
       { id: "hpf-nofall", sameDay: true, tier: "urgent", why: "Possible hip or pelvic fracture, even without a fall: an X-ray is needed today",
-        text: "Are you 65 or over, or do you have osteoporosis, and did groin or hip pain start suddenly (with no fall, or only a small slip or twist), so that it now hurts to stand or walk on that leg?" },
+        text: "Are you 65 or over, or do you have osteoporosis or low bone density, and did groin or hip pain start suddenly (with no fall, or only a small slip or twist), so that it now hurts to stand or walk on that leg?" },
       { id: "hpf-sufe", ages: ["u18"], tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE); hip problems in children are often felt at the knee",
         text: "Is a child aged about 9 to 16 limping, with pain in the hip, groin, thigh, or knee?" },
       { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip (femoral neck); needs imaging before more running",

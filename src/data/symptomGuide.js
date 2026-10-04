@@ -3,7 +3,7 @@ export const GENERAL_RED_FLAGS = [
   {id:"grf-weight", text:"Unexplained weight loss over recent months", tier:"urgent"},
   {id:"grf-cancer", text:"A history of cancer, and this is a new or changing pain", tier:"urgent"},
   {id:"grf-night", text:"Constant pain that doesn't change with position or rest and wakes you every night", tier:"urgent"},
-  {id:"grf-trauma", text:"A significant accident (fall from height, vehicle collision) — or any fall if you're 65+ or have osteoporosis", tier:"urgent"}
+  {id:"grf-trauma", text:"A significant accident (fall from height, vehicle collision) — or any fall if you're 65+ or have osteoporosis or low bone density", tier:"urgent"}
 ];
 
 export const REGIONS = {
@@ -36,7 +36,7 @@ export const REGIONS = {
       {id:"rf-cancer", tier:"urgent", group:"cancer", why:"Cancer can spread to the spine",
         text:"Have you ever had cancer, and is this a new back pain?"},
       {id:"rf-osteo", tier:"urgent", group:"osteo", why:"Possible osteoporotic fracture of the spine",
-        text:"Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis, take long-term steroid tablets, or are over 70?"},
+        text:"Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?"},
       {id:"rf-infection", tier:"urgent", group:"infection", why:"Possible spinal infection",
         text:"Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs, or had a recent urine or skin infection, or a recent spine procedure or injection?"},
       {id:"rf-footdrop", tier:"urgent", why:"Nerve weakness (foot drop) needs medical review",

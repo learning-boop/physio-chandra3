@@ -29,6 +29,7 @@ import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } from '../data/thyroid'
 import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
+import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
 import {
@@ -207,7 +208,7 @@ const UNIVERSAL_CHECKS = [
   { id: 'sc-systemic', tier: 'urgent', text: 'Fever, chills, unexplained weight loss, a new or growing lump, pain at night that does not change with position, or a history of cancer with new or changing pain',
     why: { title: 'Possible infection or systemic cause',
       text: 'Pain accompanied by fever, weight loss, or a cancer history can have a medical rather than a mechanical cause. That has to be excluded by a doctor first, as it is treated quite differently.' } },
-  { id: 'sc-trauma', tier: 'urgent', sameDay: true, text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis',
+  { id: 'sc-trauma', tier: 'urgent', sameDay: true, text: 'A significant fall, accident, or injury — or any fall if you are 65 or older, or have osteoporosis or low bone density',
     why: { title: 'A fracture should be excluded',
       text: 'After a significant impact — or any fall where bone strength may be reduced — imaging is usually needed to rule out a fracture before the area is loaded or mobilised.' } },
 ]
@@ -222,6 +223,8 @@ const CAUTION_CHECKS = [
   { id: 'ca-bone', tier: 'caution', text: 'Osteoporosis, thinning bones, or long-term steroid medication',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Where bone strength may be reduced, hands-on techniques and loading are chosen more carefully. It does not stop physiotherapy — it shapes how it starts.' } },
+  // "Osteopenia" document (v0.1, 4 Oct 2026): the physio route, with optional risk questions.
+  OSTEOPENIA_CAUTION,
   { id: 'ca-surgery', tier: 'caution', text: 'Surgery or a procedure in this area within the last 3 months',
     why: { title: 'Recent surgery changes the plan',
       text: 'Healing tissue and any surgeon\'s restrictions come first, so your assessment works within them.' } },
@@ -959,6 +962,8 @@ export default function PainAssessment() {
   const caPanel = useMemo(() => parathyroidPanel(flags.includes('ca-parathyroid')), [flags])
   // Diagnosed osteomalacia or rickets (../data/osteomalacia.js).
   const omPanel = useMemo(() => osteomalaciaPanel(flags.includes('ca-osteomalacia')), [flags])
+  // Osteopenia, low bone density (../data/osteopenia.js).
+  const bnPanel = useMemo(() => bonePanel(flags, answers), [flags, answers])
   const thPanel = useMemo(() => thyroidPanel(flags.includes('ca-thyroid')), [flags])
   const hypoPanel = useMemo(() => hypothyroidPanel(flags.includes('ca-hypothyroid')), [flags])
   const acroPanel = useMemo(() => acromegalyPanel(flags.includes('ca-acromegaly')), [flags])
@@ -1082,6 +1087,7 @@ export default function PainAssessment() {
       steroids: steroidSummary(answers),
       pregnancy: pregnancySummary(answers),
       oi: oiSummary(answers),
+      bone: boneSummary(flags, answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
       reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
@@ -1136,6 +1142,7 @@ export default function PainAssessment() {
     steroids: stPanel,
     calcium: caPanel,
     osteomalacia: omPanel,
+    bone: bnPanel,
     thyroid: thPanel,
     hypothyroid: hypoPanel,
     acromegaly: acroPanel,
@@ -1154,8 +1161,8 @@ export default function PainAssessment() {
     zones: zones.map((z) => ({ id: z.id, type: z.type, face: z.face, ink: z.ink })),
     lines,
     answers: Object.fromEntries(Object.entries(answers).filter(([k, v]) =>
-      // Diabetes, steroid, pregnancy and OI answers (dm, dmType…, steroid, preg…, oi…) stay out of the anonymous copy.
-      !/(^notes$|^q5$|_other$|^dm|^steroid$|^preg|^oi)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
+      // Diabetes, steroid, pregnancy, OI and bone-risk answers (dm, dmType…, steroid, preg…, oi…, bn…) stay out of the anonymous copy.
+      !/(^notes$|^q5$|_other$|^dm|^steroid$|^preg|^oi|^bn)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
     flags: flags.filter((f) => f !== '__other'),
     results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
     referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null })),
@@ -2241,13 +2248,43 @@ export default function PainAssessment() {
                   })}
                 </div>
 
+                {/* Osteopenia ticked (../data/osteopenia.js): optional risk
+                    questions. No number is ever calculated or shown; they
+                    decide whether the results add "ask your doctor for a
+                    full fracture-risk assessment". */}
+                {osteopeniaOn(flags) && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 2px' }}>
+                      <span aria-hidden="true" style={qMark} />
+                      <span>A few questions about your bones</span>
+                    </p>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '0 0 6px', lineHeight: 1.6 }}>
+                      Your scan number is only part of the picture. These help your results say whether a fuller check with your doctor is worth asking for. Answer any you can.
+                    </p>
+                    {BONE_DETAILS.map((q) => (
+                      <div key={q.id} style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 8 }}>
+                        <p style={{ fontSize: 14.5, color: '#fff', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
+                        {q.options.map((o) => {
+                          const sel = [].concat(answers[q.id] || []).includes(o.id)
+                          return (
+                            <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(q, o.id)}>
+                              <span style={letterStyle(sel)}>{sel ? '✓' : '·'}</span>
+                              <span>{o.label}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary" style={goldBtn}
                     onClick={() => {
                       if (flaggedIn(finalChecks) || otherFlagged) routeUrgent('safety')
                       else setStage('ok')
                     }}>
-                    {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length || dmQuestions.some((q) => answers[q.id] !== undefined) || OI_DETAILS.some((q) => answers[q.id] !== undefined) ? 'Continue' : 'None Apply — Continue'}
+                    {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length || dmQuestions.some((q) => answers[q.id] !== undefined) || OI_DETAILS.some((q) => answers[q.id] !== undefined) || BONE_DETAILS.some((q) => answers[q.id] !== undefined) ? 'Continue' : 'None Apply — Continue'}
                   </button>
                   <button style={ghostBtn} onClick={() => setStage('review')}>Back</button>
                 </div>
@@ -2655,6 +2692,20 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{caPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {caPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* Osteopenia (../data/osteopenia.js). */}
+                {bnPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your bones and exercise</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{bnPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{bnPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {bnPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>
