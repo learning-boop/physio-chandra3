@@ -2,8 +2,9 @@
    Smarter doctor page: mechanism first, then gateway groups.
    Knee prototype (Chandra, 4 Oct 2026), extended the same day to the foot,
    hip and ankle, then the back (lower back, mid back, thoracolumbar
-   junction), neck and shoulder. The back has no injury screen, so it gets
-   the grouped doctor page only.
+   junction), neck and shoulder, and then every other area. The back, pelvis,
+   tailbone and jaw have no injury screen, so they get the grouped doctor
+   page only.
 
    It runs when ONE of these areas is the only one drawn (AREAS below):
    1. Mechanism first. The area's injury screen ("Have you injured your …
@@ -26,7 +27,8 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 /* The areas it runs for: the drawn zone type → its injury screen and groups. */
-export const AREAS = ['knee', 'foot', 'hip', 'ankle', 'lowerback', 'upperback', 'tlj', 'neck', 'shoulder']
+export const AREAS = ['knee', 'foot', 'hip', 'ankle', 'lowerback', 'upperback', 'tlj', 'neck', 'shoulder',
+  'ctj', 'sij', 'coccyx', 'jaw', 'head', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'thigh', 'lowerleg']
 
 /* Gateway groups per area. Each takes the place of its most severe member
    on the page (the page is sorted by severity first). */
@@ -75,6 +77,77 @@ export const GATES = {
   shoulder: [
     { id: 'shoulder-medical', title: 'Signs coming from the chest or tummy, or that need a medical check', members: ['srf-pancoast', 'srf-organ', 'sc-systemic'] },
     { id: 'shoulder-nerve', title: 'Changes in feeling or strength', members: ['srf-pta', 'sc-neuro'] },
+  ],
+  // Base of the neck (CTJ; the neck injury screen).
+  ctj: [
+    { id: 'ctj-arm', title: 'Changes in the arm or hand', members: ['crf-wasting', 'crf-vascular', 'sc-neuro'] },
+    { id: 'ctj-organ', title: 'Signs coming from the chest or tummy', members: ['crf-pancoast', 'crf-gallbladder', 'crf-oesophagus'] },
+    { id: 'ctj-medical', title: 'Signs that need a medical check', members: ['crf-osteo', 'crf-shingles', 'sc-systemic'] },
+  ],
+  // Back of the pelvis and buttock: no injury screen.
+  sij: [
+    { id: 'sij-bone', title: 'Signs of a problem in the bone', members: ['prf-osteo', 'sc-trauma', 'prf-cancer'] },
+    { id: 'sij-infection', title: 'Signs of infection or another medical cause', members: ['prf-infection', 'sc-systemic'] },
+    { id: 'sij-organ', title: 'Signs coming from inside the body', members: ['prf-kidney', 'pc-urinary', 'prf-pelvic'] },
+  ],
+  // Tailbone: no injury screen.
+  coccyx: [
+    { id: 'coccyx-bowel', title: 'Signs coming from the bowel or bottom', members: ['xrf-bowel', 'xrf-pilonidal', 'xrf-sphincter'] },
+    { id: 'coccyx-bone', title: 'Signs of a problem in the bone', members: ['xrf-osteo', 'sc-trauma'] },
+    { id: 'coccyx-medical', title: 'Signs that need a medical check', members: ['xrf-cancer', 'xrf-constant', 'sc-systemic'] },
+  ],
+  // Jaw: no injury screen.
+  jaw: [
+    { id: 'jaw-injury', title: 'After a blow or a fall', members: ['mrf-fracture', 'sc-trauma'] },
+    { id: 'jaw-infection', title: 'Signs of infection, or coming from the ear or throat', members: ['mrf-infection', 'mrf-ear', 'mrf-throat'] },
+    { id: 'jaw-medical', title: 'Signs that need a medical check', members: ['mrf-numb', 'mrf-lump', 'pc-acromegaly', 'sc-systemic'] },
+  ],
+  // Head (the head injury screen).
+  head: [
+    { id: 'head-pattern', title: 'A headache that is new or changing', members: ['hrf-new50', 'hrf-pressure', 'hrf-medication', 'hrf-pregnancy', 'hrf-cad'] },
+    { id: 'head-medical', title: 'Other signs that need a medical check', members: ['sc-neuro', 'sc-systemic'] },
+  ],
+  // Upper arm (the arm injury screen).
+  upperarm: [
+    { id: 'arm-skin', title: 'Signs of infection or a clot', members: ['arf-cellulitis', 'arf-clot'] },
+    { id: 'arm-nerve', title: 'Changes in feeling or strength', members: ['arf-myelo', 'arf-pta', 'arf-shingles', 'sc-neuro'] },
+    { id: 'arm-medical', title: 'Signs that need a medical check', members: ['arf-pancoast', 'sc-systemic'] },
+  ],
+  // Elbow.
+  elbow: [
+    { id: 'elbow-infection', title: 'Signs of infection or a flare-up', members: ['erf-bursa', 'erf-gout'] },
+    { id: 'elbow-nerve', title: 'Changes in feeling or strength', members: ['erf-nerve', 'erf-myelo', 'erf-pta', 'sc-neuro'] },
+  ],
+  // Forearm.
+  forearm: [
+    { id: 'forearm-skin', title: 'Signs of infection or a tight cast', members: ['frf-cast', 'frf-cellulitis'] },
+    { id: 'forearm-nerve', title: 'Changes in feeling or strength', members: ['frf-nerve', 'frf-myelo', 'frf-shingles', 'sc-neuro'] },
+    { id: 'forearm-medical', title: 'Signs that need a medical check', members: ['frf-pancoast', 'frf-stress', 'sc-systemic'] },
+  ],
+  // Wrist.
+  wrist: [
+    { id: 'wrist-circulation', title: 'Signs of a tight cast or a circulation problem', members: ['wrf-cast', 'wrf-raynaud'] },
+    { id: 'wrist-flare', title: 'Signs of a flare-up', members: ['wrf-gout', 'wrf-inflam'] },
+    { id: 'wrist-nerve', title: 'Changes in feeling or strength', members: ['wrf-numb', 'wrf-myelo', 'wrf-crps', 'sc-neuro'] },
+  ],
+  // Hand and fingers.
+  hand: [
+    { id: 'hand-circulation', title: 'Signs of a tight cast or a circulation problem', members: ['hnd-cast', 'hnd-raynaud'] },
+    { id: 'hand-infection', title: 'Signs of infection or a flare-up', members: ['hnd-felon', 'hnd-gout', 'hnd-inflam'] },
+    { id: 'hand-nerve', title: 'Changes in feeling or strength', members: ['hnd-numb', 'hnd-myelo', 'hnd-crps', 'sc-neuro'] },
+    { id: 'hand-medical', title: 'Signs that need a medical check', members: ['hnd-lump', 'sc-systemic'] },
+  ],
+  // Thigh.
+  thigh: [
+    { id: 'thigh-circulation', title: 'Signs of a clot, an infection or a circulation problem', members: ['tgf-dvt', 'tgf-cellulitis', 'tgf-claudication'] },
+    { id: 'thigh-nerve', title: 'Changes in feeling or strength', members: ['tgf-femoral', 'sc-neuro'] },
+    { id: 'thigh-medical', title: 'Signs that need a medical check', members: ['tgf-stress', 'tgf-tumour', 'tgf-sufe', 'tgf-cancer', 'sc-systemic'] },
+  ],
+  // Lower leg (calf and shin; the leg injury screen).
+  lowerleg: [
+    { id: 'leg-circulation', title: 'Signs of a clot, an infection, a tight cast or a circulation problem', members: ['lgf-cast', 'lgf-dvt', 'lgf-cellulitis', 'lgf-claudication'] },
+    { id: 'leg-nerve', title: 'Changes in feeling or strength', members: ['lgf-footdrop', 'lgf-neuropathy', 'sc-neuro'] },
+    { id: 'leg-medical', title: 'Signs that need a medical check', members: ['lgf-stress', 'lgf-tumour', 'lgf-cancer', 'sc-systemic'] },
   ],
   ankle: [
     { id: 'ankle-circulation', title: 'Signs of a clot or a tight cast', members: ['af-cast', 'af-dvt'] },
@@ -166,6 +239,99 @@ export const SIGNS = {
   'srf-pancoast': 'a cough that will not go away, coughing up blood, a drooping eyelid or a weak hand, if you smoke or used to',
   'srf-organ': 'pain that is worse after fatty meals or when you breathe in deeply, or comes with feeling sick, fever or yellow skin or eyes, or does not change at all with movement',
   'srf-pta': 'a sudden, severe shoulder pain with no injury that lasted several days, then shoulder or arm muscles became weak or thin',
+  // Base of the neck
+  'crf-wasting': 'the small muscles of your hand getting thinner, or a weak grip',
+  'crf-vascular': 'an arm or hand that turns pale, blue, cold or swollen, especially when raised',
+  'crf-pancoast': 'a cough that will not go away, coughing up blood or a drooping eyelid, if you smoke or used to',
+  'crf-gallbladder': 'pain that is worse after fatty meals or when you breathe in deeply, or comes with feeling sick, fever or yellow skin or eyes',
+  'crf-oesophagus': 'pain when you swallow, or food that feels as if it sticks on the way down',
+  'crf-osteo': 'pain that started suddenly after a minor strain, cough or lift, if you have low bone density or take long-term steroid tablets',
+  'crf-shingles': 'a band of burning pain around one side of the chest or back, with a rash or blisters',
+  // Back of the pelvis
+  'prf-osteo': 'pain that started after a minor fall or with no injury, if you have low bone density, take long-term steroid tablets or are over 70',
+  'prf-cancer': 'a past cancer, with this new pain',
+  'prf-infection': 'a fever or chills, or a recent birth, operation or injected drugs',
+  'prf-kidney': 'pain in waves from your side to your groin, or burning or blood when you pass urine',
+  'prf-pelvic': 'pain linked to your periods, or unusual vaginal bleeding or discharge',
+  // Tailbone
+  'xrf-bowel': 'bleeding from your bottom, black stools, or a change in bowel habit for more than 3 weeks',
+  'xrf-pilonidal': 'swelling, redness or discharge near the top of the buttock crease, or a fever',
+  'xrf-sphincter': 'since giving birth, trouble controlling wind or your bowels',
+  'xrf-osteo': 'pain that started after a minor fall or with no injury, if you have low bone density, take long-term steroid tablets or are over 70',
+  'xrf-cancer': 'a past cancer, or a lump near your tailbone',
+  'xrf-constant': 'pain that is there all the time, worse at night and not affected by sitting',
+  // Jaw
+  'mrf-fracture': 'after a blow to the jaw or face, teeth that no longer meet the way they used to',
+  'mrf-infection': 'swelling of the face or jaw with a fever, or a bad taste or discharge in your mouth',
+  'mrf-ear': 'hearing loss or discharge from the ear on the painful side',
+  'mrf-throat': 'a sore throat, hoarse voice or trouble swallowing for more than 3 weeks',
+  'mrf-numb': 'part of your chin, lip or face that is numb',
+  'mrf-lump': 'a growing lump in front of the ear or under the jaw, or a bite that has changed without an injury',
+  'pc-acromegaly': 'hands, feet or jaw that have grown in adulthood, with aching joints, snoring or headaches',
+  // Head
+  'hrf-new50': 'a new kind of headache after age 50, or headaches getting steadily worse or changing over weeks',
+  'hrf-pressure': 'a headache brought on by coughing, straining or exercise, much worse lying down or standing up, or there on waking with vomiting',
+  'hrf-medication': 'a new headache since starting a new medicine',
+  'hrf-pregnancy': 'a new or different headache while pregnant or in the 6 weeks after a birth',
+  'hrf-cad': 'a new headache with neck pain, unlike any before, after a neck manipulation or a sudden jolt',
+  // Upper arm
+  'arf-cellulitis': 'spreading redness, a red streak up the arm, or a hot swollen area, with a fever',
+  'arf-clot': 'a whole arm that has become swollen, heavy or bluish over a day or two',
+  'arf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
+  'arf-pta': 'a sudden, severe arm or shoulder pain with no injury that lasted several days, then weak or thin arm muscles',
+  'arf-shingles': 'a band of burning pain down the arm, with a rash or blisters in the same strip',
+  'arf-pancoast': 'pain down the inside of the arm to the little finger with a cough that will not go away, or a drooping eyelid, if you smoke or used to',
+  // Elbow
+  'erf-bursa': 'a swelling at the point of the elbow that is red, warm or has a cut or graze over it',
+  'erf-gout': 'a joint that became suddenly hot, swollen and very painful overnight, with gout or pseudogout before',
+  'erf-nerve': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist you cannot lift',
+  'erf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
+  'erf-pta': 'a sudden, severe arm pain with no injury that lasted several days, then weak arm or hand muscles',
+  // Forearm
+  'frf-cast': 'a cast, splint or bandage on the arm that feels more and more tight and painful',
+  'frf-cellulitis': 'spreading redness, a red streak up the arm, or a hot swollen area, with a fever',
+  'frf-nerve': 'a hand becoming weaker, a wrist you cannot lift, or an "OK" sign you cannot make',
+  'frf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
+  'frf-shingles': 'a band of burning pain down the forearm, with a rash or blisters in the same strip',
+  'frf-pancoast': 'pain down the little-finger side of the forearm with a cough that will not go away, or a drooping eyelid, if you smoke or used to',
+  'frf-stress': 'a deep, pinpoint bone pain worse with loading, in a young gymnast or weight-bearing athlete',
+  // Wrist
+  'wrf-cast': 'a cast, splint or bandage on the arm that feels more and more tight and painful',
+  'wrf-raynaud': 'fingers or a hand that go white, blue or cold in attacks, or a painful cold finger that does not recover',
+  'wrf-gout': 'a joint that became suddenly hot, swollen and very painful overnight, with gout or pseudogout before',
+  'wrf-inflam': 'both wrists or several finger joints swollen and stiff for more than an hour in the morning',
+  'wrf-numb': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist you cannot lift',
+  'wrf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
+  'wrf-crps': 'since an injury, surgery or cast, a hand that burns, swells, changes colour or is so sensitive that light touch hurts',
+  // Hand
+  'hnd-cast': 'a cast, splint or bandage on the hand that feels more and more tight and painful',
+  'hnd-raynaud': 'fingers that go white then blue in the cold, or a sore or ulcer on a fingertip',
+  'hnd-felon': 'a tense, throbbing, swollen fingertip, or pus around the nail',
+  'hnd-gout': 'a joint that became suddenly hot, swollen and very painful overnight, with gout or pseudogout before',
+  'hnd-inflam': 'knuckles in both hands swollen and stiff for more than an hour in the morning, or a whole finger swollen like a sausage',
+  'hnd-numb': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist you cannot lift',
+  'hnd-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
+  'hnd-crps': 'since an injury, surgery or cast, a hand that burns, swells, changes colour or is so sensitive that light touch hurts',
+  'hnd-lump': 'a hard lump growing quickly over weeks, painful or larger than a few centimetres, or a new dark streak under a nail',
+  // Thigh
+  'tgf-dvt': 'a thigh or calf that is swollen, warm or tender',
+  'tgf-cellulitis': 'spreading redness, a red streak up the leg, or a hot swollen area, with a fever',
+  'tgf-claudication': 'cramping thigh or buttock pain on walking that eases when you stand still, if you smoke or have diabetes',
+  'tgf-femoral': 'a thigh muscle that has become weak or thin, or a knee that gives way, with no injury',
+  'tgf-stress': 'a deep, aching thigh pain that is worse with hopping or aches at night, if you run or train hard',
+  'tgf-tumour': 'a deep thigh ache that wakes you at night, or a lump in the thigh that is growing',
+  'tgf-sufe': 'a child aged about 9 to 16 limping, with thigh or knee pain',
+  'tgf-cancer': 'a past cancer, or a deep thigh ache at night that does not change with position, with weight loss',
+  // Lower leg
+  'lgf-cast': 'a cast, splint or bandage on the leg that feels more and more tight and painful',
+  'lgf-dvt': 'a calf that is swollen, warm or tender',
+  'lgf-cellulitis': 'spreading redness, a red streak up the leg, a hot swollen area with a fever, or a leg ulcer that is not healing',
+  'lgf-claudication': 'cramping calf pain on walking that eases when you stand still, if you smoke, have diabetes or are over 50',
+  'lgf-footdrop': 'your foot slapping down or your toes catching when you walk',
+  'lgf-neuropathy': 'both feet numb, burning or tingling, like wearing socks',
+  'lgf-stress': 'a sore spot on the shin bone you can point to with one finger, or pain when hopping or at night, if you run or train hard',
+  'lgf-tumour': 'a deep shin ache that wakes you at night, or a lump on the shin that is growing',
+  'lgf-cancer': 'a past cancer, or a deep leg ache at night that does not change with position, with weight loss',
   // Drawing-based pattern questions (./patternChecks.js)
   'pc-visceral': 'pain that does not change at all with movement or position, or comes with nausea, fever or feeling unwell',
   // Shared
@@ -185,7 +351,10 @@ export function gateText(gate, members = []) {
 /* Mechanism: question id → the injury screen whose first answer decides it.
    'noInjury' questions (overuse stress fractures, "no injury" Perthes) are
    skipped after a recent injury to that area. */
-export const MECHANISM = { 'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'hpf-stress': 'hip', 'srf-pta': 'shoulder' }
+export const MECHANISM = {
+  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'hpf-stress': 'hip', 'srf-pta': 'shoulder',
+  'frf-stress': 'forearm', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
+}
 export const injuredIn = (screen, a = {}) => a[`${screen}:I1`] !== undefined && a[`${screen}:I1`] !== 'no'
 /** Kept for the knee prototype's wording. */
 export const kneeInjured = (a = {}) => injuredIn('knee', a)
