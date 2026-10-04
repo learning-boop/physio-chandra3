@@ -1464,8 +1464,26 @@ export default function PainAssessment() {
             50%      { transform: translateX(15px);  opacity: 1; }
           }
           @keyframes pa-swipe-in { from { opacity: 0; } to { opacity: 1; } }
+
+          /* "We will ask about the ticked areas": a gold callout after drawing,
+             with a short glow when it first appears. */
+          .pa-areas-note {
+            display: flex; align-items: flex-start; gap: 10px; margin: 0 0 12px;
+            padding: 12px 14px; border-radius: 12px;
+            border: 1px solid rgba(201,169,110,0.9); border-left: 5px solid ${GOLD};
+            background: rgba(201,169,110,0.24);
+            color: #f6ead0; font-size: clamp(15px, 3.8vw, 16px); font-weight: 500; line-height: 1.5;
+            animation: pa-note-in 0.4s ease both, pa-note-glow 1.6s ease-out 0.4s 2;
+          }
+          .pa-areas-note strong { color: #fff; font-weight: 700; }
+          @keyframes pa-note-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+          @keyframes pa-note-glow {
+            0%   { box-shadow: 0 0 0 0 rgba(201,169,110,0.55); }
+            70%  { box-shadow: 0 0 0 10px rgba(201,169,110,0); }
+            100% { box-shadow: 0 0 0 0 rgba(201,169,110,0); }
+          }
           @media (prefers-reduced-motion: reduce) {
-            .pa-swipe, .pa-swipe__dot { animation: none; }
+            .pa-swipe, .pa-swipe__dot, .pa-areas-note { animation: none; }
           }
           /* Narrow phones: keep the pill inside the frame. */
           @media (max-width: 380px) {
@@ -1610,9 +1628,15 @@ export default function PainAssessment() {
                     unticked when the line only touched them; a tap changes it. */}
                 {zones.length > 0 && (
                   <div style={{ marginBottom: 18, maxWidth: 520 }}>
+                    {/* Highlighted (Chandra, 4 Oct 2026): a gold callout that
+                        glows briefly when it appears, so it is read after drawing. */}
                     {areaChips.length > 1 && (
-                      <p style={{ fontSize: 14, lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: '0 0 10px' }}>
-                        We will ask about the ticked areas. Tap an area to add or remove it.
+                      <p className="pa-areas-note" role="note">
+                        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}>
+                          <circle cx="12" cy="12" r="10" fill="none" stroke={GOLD} strokeWidth="2" />
+                          <path d="M12 10.5v6M12 7.2v.6" stroke={GOLD} strokeWidth="2.2" strokeLinecap="round" />
+                        </svg>
+                        <span>We will ask about the <strong>ticked areas</strong>. Tap an area to add or remove it.</span>
                       </p>
                     )}
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
