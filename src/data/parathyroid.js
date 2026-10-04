@@ -10,7 +10,11 @@
      A. Undiagnosed: a doctor-first final-check question, "a calcium blood
         test" (pc-calcium in ./patternChecks.js), for bone aches on both
         sides or a widespread drawing. Names the parathyroid once (open
-        item 1: the test is a routine blood panel).
+        item 1: the test is a routine blood panel). Since 4 Oct 2026 it is
+        also the osteomalacia screen ("Osteomalacia.docx", ./osteomalacia.js):
+        bones tender to press, weak hips or a waddle, a stress fracture
+        without sport, and the low-vitamin-D risk cluster, with one blood
+        test for both.
      B. Diagnosed: "A parathyroid or calcium problem, or kidney-related bone
         disease, diagnosed" on the cautions list (ca-parathyroid,
         PainAssessment.jsx), with the results panel below, which carries the
@@ -26,9 +30,9 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 export const CALCIUM_SCREEN = {
-  text: 'Not explained by a condition you have already been diagnosed with: a deep ache "in the bones" on both sides (shins, thighs, hips, back or ribs), there at rest and worse on your feet, together with any of these: a kidney stone, now or in the past; a bone broken in a small fall or with no real injury, or being told you have thin bones; two or more of unusual thirst or passing more urine, constipation, nausea or poor appetite, low mood or "brain fog", and poor sleep; or a high calcium or low vitamin D blood result that was never followed up',
+  text: 'Not explained by a condition you have already been diagnosed with: a deep ache "in the bones" on both sides (shins, thighs, hips, pelvis, back or ribs), there at rest and worse on your feet, together with any of these: bones that hurt when you press firmly on your shin, breastbone or the front of your pelvis; weak hips and thighs (hard to get up from a low chair or climb stairs), or being told you walk with a side-to-side waddle; a "stress fracture" or crack in a bone without running or heavy sport, a bone broken in a small fall or with no real injury, or being told you have thin bones; a kidney stone, now or in the past; two or more of unusual thirst or passing more urine, constipation, nausea or poor appetite, low mood or "brain fog", and poor sleep; two or more of darker skin, little sun on your skin (indoor or shift work, or clothing that covers most of your skin outdoors), little dairy or a vegan diet, coeliac, Crohn\'s or another gut condition or past weight-loss surgery, kidney or liver disease, and long-term anti-seizure medicine; or a high calcium or low vitamin D blood result that was never followed up',
   why: { title: 'Please see your family doctor in the next week or two',
-    text: 'Deep aching bones on both sides, bones that break easily, kidney stones, thirst and low mood can all come from the body\'s calcium balance, most often an overactive parathyroid gland or low vitamin D. This is found with a simple blood test (calcium, vitamin D and parathyroid hormone), not by a physiotherapist. Please see your family doctor in the next week or two and mention all of these together. It can be treated, and thinned bone responds to treatment and the right exercise; you are welcome to book after that visit.' },
+    text: 'Deep aching bones on both sides, bones that hurt when pressed, weak hips, bones that crack or break easily, kidney stones, thirst and low mood can all come from the body\'s calcium and vitamin D balance: most often low vitamin D, which leaves new bone soft (osteomalacia, "soft bones"), or an overactive parathyroid gland. Soft bones are often mistaken for fibromyalgia, arthritis or "getting older". Both are found with a simple blood test (vitamin D, calcium, phosphate, alkaline phosphatase, parathyroid hormone and kidney function), not by a physiotherapist. Please see your family doctor in the next week or two and mention all of these together, including any of the risk factors listed. Both can be treated: soft bone hardens again and weak muscles rebuild once the cause is treated, and physiotherapy can help you get strong again; you are welcome to book after that visit. If a bone may have cracked, avoid loading it until it has been checked.' },
 }
 
 /* Gout or pseudogout questions (knee, elbow, wrist, hand): their

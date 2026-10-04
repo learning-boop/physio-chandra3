@@ -29,6 +29,7 @@ import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } from '../data/thyroid'
 import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
+import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
 import {
   PREG_STATUS, PREG_BIRTH, PREG_LIMITS, pregnancyAsked, isPregnant, isPostpartum, pregnancyRedFlags, pregnancyBonus, pregnancyPanel, pregnancySummary,
@@ -261,6 +262,8 @@ const CAUTION_CHECKS = [
   PITUITARY_CAUTION,
   // "Hyperparathyroidism" document (signed by Chandra, 3 Oct 2026), route B.
   PARATHYROID_CAUTION,
+  // "Osteomalacia" document (v0.1, 4 Oct 2026), route C.
+  OSTEOMALACIA_CAUTION,
   // "Hyperthyroidism" document (signed by Chandra, 3 Oct 2026), route C.
   THYROID_CAUTION,
   // "Hypothyroidism" document (signed by Chandra, 3 Oct 2026), route B.
@@ -762,7 +765,9 @@ export default function PainAssessment() {
     const dmKnown = answers.dm === 'yes'
     // Gout or pseudogout ("Hyperparathyroidism" document, open item 3): under
     // 60 or recurrent attacks are a reason to ask about calcium and PTH.
-    const nerve = (f) => (isNerveFlag(f) ? { ...f, noBooking: true, why: NERVE_WHY } : CPPD_IDS.includes(f.id) ? { ...f, why: CPPD_WHY } : f)
+    // A stress fracture in someone who does not run ("Osteomalacia" document): a bone blood test too.
+    const nerve = (f) => (isNerveFlag(f) ? { ...f, noBooking: true, why: NERVE_WHY } : CPPD_IDS.includes(f.id) ? { ...f, why: CPPD_WHY }
+      : STRESS_IDS.includes(f.id) ? { ...f, why: { ...f.why, text: `${f.why.text} ${STRESS_LINE}` } } : f)
     // Not pregnant and no birth in the last 12 months: the areas' "Are you
     // pregnant and…" questions cannot apply (the ectopic ones, "could you be
     // pregnant", are still asked).
@@ -952,6 +957,8 @@ export default function PainAssessment() {
   // Steroid medicine or diagnosed Cushing's (../data/steroids.js).
   const stPanel = useMemo(() => steroidPanel(answers, flags.includes('ca-cushing'), flags.includes('ca-pituitary')), [answers, flags])
   const caPanel = useMemo(() => parathyroidPanel(flags.includes('ca-parathyroid')), [flags])
+  // Diagnosed osteomalacia or rickets (../data/osteomalacia.js).
+  const omPanel = useMemo(() => osteomalaciaPanel(flags.includes('ca-osteomalacia')), [flags])
   const thPanel = useMemo(() => thyroidPanel(flags.includes('ca-thyroid')), [flags])
   const hypoPanel = useMemo(() => hypothyroidPanel(flags.includes('ca-hypothyroid')), [flags])
   const acroPanel = useMemo(() => acromegalyPanel(flags.includes('ca-acromegaly')), [flags])
@@ -1128,6 +1135,7 @@ export default function PainAssessment() {
     diabetes: dmPanel ? { title: dmPanel.title, text: dmPanel.text, notes: dmPanel.notes } : null,
     steroids: stPanel,
     calcium: caPanel,
+    osteomalacia: omPanel,
     thyroid: thPanel,
     hypothyroid: hypoPanel,
     acromegaly: acroPanel,
@@ -2647,6 +2655,20 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{caPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {caPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* Diagnosed osteomalacia or rickets (../data/osteomalacia.js). */}
+                {omPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your bones and muscles</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{omPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{omPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {omPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>

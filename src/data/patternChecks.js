@@ -24,6 +24,7 @@ import { HORMONE_SCREEN, LOW_HORMONE_SCREEN } from './steroids.js'
 import { CALCIUM_SCREEN } from './parathyroid.js'
 import { THYROID_SCREEN, PARALYSIS_FLAG, HYPOTHYROID_SCREEN } from './thyroid.js'
 import { ACROMEGALY_SCREEN } from './acromegaly.js'
+import { RICKETS_SCREEN } from './osteomalacia.js'
 
 const typesOf = (zones) => new Set(zones.map((z) => z.type))
 const has = (zones, ...types) => zones.some((z) => types.includes(z.type))
@@ -310,6 +311,16 @@ const PATTERNS = [
     id: 'pc-child-muscle', tier: 'urgent', noBooking: true, why: WHY.childMuscle,
     text: 'For a young child: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
     when: (z, a) => ['u5', 'u18'].includes(a.age) && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'),
+  },
+  // Rickets ("Osteomalacia" document, v0.1, 4 Oct 2026; the child route):
+  // bowed legs or knock-knees, thick wrists or ankles, a bumpy chest, leg
+  // aches or late walking or teeth. Doctor first, no booking. ./osteomalacia.js
+  {
+    id: 'pc-rickets', tier: 'urgent', noBooking: true, why: RICKETS_SCREEN.why,
+    text: RICKETS_SCREEN.text,
+    // Under 5: any leg or wrist; 5 to 17: both legs (a teenager's one sore wrist is not asked).
+    when: (z, a) => (a.age === 'u5' && has(z, 'thigh', 'knee', 'lowerleg', 'ankle', 'wrist')) ||
+      (a.age === 'u18' && ['thigh', 'knee', 'lowerleg'].some((t) => bothSides(z, t))),
   },
   // Polymyalgia rheumatica over 50, as its own doctor-first entry (Chandra,
   // 2 Oct 2026, the "Poly myositis" document's open item 5): both shoulders

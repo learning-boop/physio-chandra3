@@ -1125,7 +1125,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const c = ca(['lowerlegL', 'lowerlegR'])
   check('Hyperparathyroidism route A: bone aches on both sides with a stone, easy fracture or thin bones, the thirst/mood cluster or an untested high calcium → family doctor, a blood test, no booking',
     c && c.noBooking && !c.sameDay && /kidney stone/.test(c.text) && /thin bones/.test(c.text) && /never followed up/.test(c.text) &&
-    /calcium, vitamin D and parathyroid hormone/.test(c.why.text), c)
+    /vitamin D, calcium, phosphate, alkaline phosphatase, parathyroid hormone/.test(c.why.text), c)
   check('Hyperparathyroidism route A: for both shins, thighs or hips, or a widespread drawing; not for one knee or one hip',
     !!ca(['thighL', 'thighR']) && !!ca(['hipL', 'hipR']) && !!ca(['neck', 'shoulderL', 'hipR', 'kneeL']) && !ca(['kneeL']) && !ca(['hipL']))
   const order = patternChecks(ZN(['thighL', 'thighR']), { age: '50-64' }, 12).map((p) => p.id)
@@ -1328,6 +1328,41 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([OI.OI_RED_FLAGS, p, pr, OI.OI_DETAILS])
   check('OI language: "less tough", not "fragile"; "brittle" only as the common name; no cure or guarantee',
     !/fragile|cure|guarantee|brittle/i.test(all) && /brittle bone disease/.test(OI.OI_STATUS.text), all.match(/fragile|cure|guarantee|brittle/i))
+}
+
+// ── 42. Osteomalacia ("Osteomalacia", v0.1, 4 Oct 2026) ──
+{
+  const PT = await imp('src/data/parathyroid.js')
+  const OM = await imp('src/data/osteomalacia.js')
+  const WS = await imp('src/data/widespreadPain.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const c = PT.CALCIUM_SCREEN
+  check('Osteomalacia route A: folded into the calcium screen: bones tender to press, weak hips or a waddle, a stress fracture without sport, the risk cluster; one blood test with phosphate and ALP; names soft bones',
+    /press firmly on your shin, breastbone/.test(c.text) && /waddle/.test(c.text) && /without running or heavy sport/.test(c.text) &&
+    /darker skin/.test(c.text) && /weight-loss surgery/.test(c.text) && /anti-seizure/.test(c.text) &&
+    /phosphate, alkaline phosphatase, parathyroid hormone and kidney function/.test(c.why.text) && /osteomalacia, "soft bones"/.test(c.why.text) &&
+    /mistaken for fibromyalgia/.test(c.why.text))
+  const kid = (z, age) => patternChecks(ZN(z), { age }, 12).find((p) => p.id === 'pc-rickets')
+  check('Rickets: under 5 with a leg or wrist drawn, 5 to 17 with both legs; doctor first, no booking, 911 for a seizure or floppiness; not for adults or a teenager\'s one wrist',
+    !!kid(['kneeL'], 'u5') && !!kid(['wristL'], 'u5') && !!kid(['lowerlegL', 'lowerlegR'], 'u18') && !kid(['wristL'], 'u18') && !kid(['kneeL'], 'u18') && !kid(['kneeL'], '30-49') && !kid(['shoulderL'], 'u18') &&
+    kid(['kneeL'], 'u5').noBooking && /911/.test(OM.RICKETS_SCREEN.why.text) && /floppy/.test(OM.RICKETS_SCREEN.why.text))
+  check('Osteomalacia cross-links: the hip, thigh, knee, shin and foot stress-fracture questions add the bone blood test for a repeat or low-training stress fracture',
+    OM.STRESS_IDS.every((id) => Object.values(REGIONS).some((r) => r.redFlags.some((f) => f.id === id))) &&
+    /STRESS_IDS\.includes\(f\.id\)/.test(src) && /not your first stress fracture/.test(OM.STRESS_LINE) && /vitamin D/.test(WS.WIDESPREAD.doctor))
+  const osteo = REGIONS.upperback.conditions.find((x) => x.id === 'osteoporosis')
+  check('Osteomalacia cross-links: the osteoporosis record names vitamin D in the "ask your doctor" line',
+    osteo && JSON.stringify(osteo).includes('vitamin D, calcium and parathyroid hormone have been checked'))
+  const p = OM.osteomalaciaPanel(true)
+  check('Osteomalacia route C: diagnosed on the cautions list; panel with keep taking supplements, gradual strength, weight-bearing plan, the 3-month review, the groin crack and low calcium (911 seizure); in the PDF',
+    /OSTEOMALACIA_CAUTION,/.test(src) && p && p.notes.some((n) => /come back when supplements stop/.test(n)) && p.notes.some((n) => /sit-to-stands/.test(n)) &&
+    p.notes.some((n) => /about 3 months/.test(n)) && p.notes.some((n) => /groin, hip or thigh/.test(n)) && p.notes.some((n) => /Call 911 for a seizure/.test(n)) &&
+    OM.osteomalaciaPanel(false) === null && /osteomalacia: omPanel/.test(src))
+  const all = JSON.stringify([c, OM.RICKETS_SCREEN, OM.OSTEOMALACIA_CAUTION, p, OM.STRESS_LINE])
+  check('Osteomalacia language: no "you have osteomalacia", cure, guarantee, "permanent" or "damage"; no community named',
+    !/you (may )?have osteomalacia|cure|guarantee|permanent|damage|south asian|migrat|ethnic/i.test(all), all.match(/you (may )?have osteomalacia|cure|guarantee|permanent|damage|south asian|migrat|ethnic/i))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)
