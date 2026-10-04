@@ -5,6 +5,7 @@ name: First rib and thoracic outlet irritation
 clin: First rib dysfunction / neurogenic thoracic outlet syndrome (SVS reporting standards 2016)
 # DRAFT patient text written 24 Sep 2026 from content/regions/ctj.md — not yet reviewed.
 # Vascular signs and hand-muscle wasting are red flags in the region file, not this pattern.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -39,3 +40,5 @@ The nerves to the arm pass through a narrow gap between the collarbone, the firs
 - Tingling or heaviness keeps coming back with overhead work or carrying
 - It is affecting your grip, work or sleep
 - You want a plan for posture, breathing and first-rib mobility that eases the outlet
+- The arm swells or turns blue or purple, or the hand goes cold, pale and painful: see a doctor the same day
+- The small muscles of the hand are getting thinner, or your grip is getting weak: see a doctor

@@ -4,6 +4,7 @@ id: costochondritis
 name: Chest wall pain (costochondritis)
 clin: Costochondritis
 # DRAFT patient text written 24 Sep 2026 from content/regions/upperback.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -31,3 +32,4 @@ The joints where the ribs meet the breastbone can become irritated, often after 
 - It has not eased after a few weeks
 - It keeps coming back
 - You want a plan to return to the gym or sport
+- Chest pain with breathlessness, sweating, feeling sick, or pain spreading to the arm, jaw or back: call 911

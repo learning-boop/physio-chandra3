@@ -4,6 +4,7 @@ id: highankle
 name: High ankle sprain (syndesmosis)
 clin: Syndesmosis (high ankle) sprain (Sman 2015)
 # DRAFT patient text written 25 Sep 2026 from content/regions/ankle.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -32,6 +33,7 @@ Just above the ankle, the two bones of the lower leg are held together by strong
 - It has not improved within 1 to 2 weeks
 - It is limiting walking or sport
 - You need a graded plan back to twisting sport
+- You could not take 4 steps straight after the injury, or the bone is tender to press: see a doctor for an X-ray first
 
 ## clinicNotes
 - JOSPT lateral ankle sprain CPG 2021: syndesmosis injury is a key differential and copathology of acute and persisting sprains; apply the full Ottawa ankle rules first. Multi-ligament sprains in high-school athletes cost more than 3 weeks of sport. Imaging (ACR, cited in the CPG): alignment change suggesting syndesmosis injury warrants leg and stress radiographs, MRI or CT; refer with any diastasis concern or failure to settle. Source: Martin RL et al., JOSPT 2021 (tests per Sman 2015).

@@ -4,6 +4,7 @@ id: trauma
 name: Bruised tailbone after a fall
 clin: Traumatic coccydynia (Maigne 2000)
 # DRAFT patient text written 25 Sep 2026 from content/regions/coccyx.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -22,7 +23,7 @@ pointers:
 ---
 
 ## blurb
-A fall straight onto the bottom can bruise the tailbone or strain the small joint above it. Sitting, especially leaning back on a hard seat, presses on the sore spot. It usually settles over weeks to a few months as the bruising heals.
+A fall straight onto the bottom can bruise the tailbone or strain the small joint above it. Sitting, especially leaning back on a hard seat, presses on the sore spot. It usually settles over weeks to a few months as the bruising heals. A hard fall can occasionally crack the tailbone; an X-ray is only needed if the pain is severe or not settling, as it rarely changes the treatment.
 
 ## noticed
 - Pain right on the tip of the tailbone after landing on it
@@ -39,3 +40,5 @@ A fall straight onto the bottom can bruise the tailbone or strain the small join
 - It hasn't eased after 6 to 8 weeks
 - Sitting stays hard enough to limit work, driving or sleep
 - You want the tailbone assessed and a plan for sitting and activity
+- The pain is severe, or getting worse after the first two weeks: see a doctor, who may arrange an X-ray
+- Numbness around your bottom or genitals, or new trouble passing urine or controlling your bowels: go to the emergency department now

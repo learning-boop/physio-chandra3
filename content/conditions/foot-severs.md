@@ -5,6 +5,7 @@ name: Heel growing pain (Sever's disease)
 clin: Calcaneal apophysitis
 ages: u18
 # DRAFT patient text written 25 Sep 2026 from content/regions/foot.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -31,3 +32,4 @@ In children aged about 8 to 14, the growth plate at the back of the heel bone is
 - It is stopping your child from playing sport
 - The pain is there at rest or at night: see a doctor first
 - You want a plan to manage sport through the growth spurt
+- The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first

@@ -1724,5 +1724,25 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     sum.includes('Also worth considering (below the cut-off or third)'))
 }
 
+// ── 52. Tier 1 cards: each points its dangerous look-alike to a doctor (Chandra, 4 Oct 2026) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const T1 = { upperback: ['costochondritis', 'nerveroot'], knee: ['baker'], leg: ['cecs'], forearm: ['armpump'], elbow: ['biceps'], ankle: ['highankle', 'osteochondral'],
+    ctj: ['tos'], foot: ['severs'], coccyx: ['trauma'], hip: ['inguinal'], tlj: ['slippingrib'] }
+  // sij/pgp is left out on purpose: its warning signs are the pregnancy safety
+  // questions and the pregnancy results panel shown beside it (src/data/pregnancy.js).
+  const missing = []
+  for (const [rk, ids] of Object.entries(T1)) for (const id of ids) {
+    const c = REGIONS[rk].conditions.find((x) => x.id === id)
+    const all = [c.blurb, ...(c.seePhysioIf || [])].join(' ')
+    if (!/doctor|emergency|911|imaging|maternity/i.test(all)) missing.push(rk + '/' + id)
+  }
+  const card = (rk, id) => REGIONS[rk].conditions.find((x) => x.id === id)
+  check('Tier 1 cards: every one sends its dangerous look-alike to a doctor, and the emergencies say so (chest pain 911, compartment and inguinal emergency department)',
+    !missing.length && card('upperback', 'costochondritis').seePhysioIf.some((l) => /call 911/.test(l)) &&
+    card('leg', 'cecs').seePhysioIf.some((l) => /emergency department now/.test(l)) && card('forearm', 'armpump').seePhysioIf.some((l) => /emergency department now/.test(l)) &&
+    card('hip', 'inguinal').seePhysioIf.some((l) => /emergency department now/.test(l)) && card('coccyx', 'trauma').seePhysioIf.some((l) => /emergency department now/.test(l)), missing)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

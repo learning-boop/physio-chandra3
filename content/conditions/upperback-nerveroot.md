@@ -5,6 +5,7 @@ name: Nerve pain around the chest
 clin: Thoracic radiculopathy / intercostal neuralgia
 # Shingles (rash or blisters) is a red flag in the region file, not this pattern.
 # DRAFT patient text written 24 Sep 2026 from content/regions/upperback.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -18,7 +19,7 @@ pointers:
 ---
 
 ## blurb
-A nerve leaving the mid back runs around the chest between the ribs. When it is irritated where it leaves the spine, it can send burning, tingling or band-like pain around the chest or tummy, sometimes with a numb or sensitive strip of skin.
+A nerve leaving the mid back runs around the chest between the ribs. When it is irritated where it leaves the spine, it can send burning, tingling or band-like pain around the chest or tummy, sometimes with a numb or sensitive strip of skin. A painful band that comes with a rash or blisters is shingles, which a doctor treats, and chest pain should never be put down to a nerve without a doctor's check.
 
 ## noticed
 - A band of pain around one side of the chest or tummy
@@ -34,3 +35,5 @@ A nerve leaving the mid back runs around the chest between the ribs. When it is 
 - It has not eased after a week or two
 - A numb patch is spreading or you notice weakness
 - You want the spine checked as the source
+- A rash or blisters appear in the same strip: see a doctor within a day or two, as shingles treatment works best early
+- Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911

@@ -4,6 +4,7 @@ id: slippingrib
 name: Slipping rib
 clin: Slipping rib syndrome
 # DRAFT patient text written 24 Sep 2026 from content/regions/tlj.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -17,7 +18,7 @@ pointers:
 ---
 
 ## blurb
-The lowest ribs are held only loosely at the front. If that hold gives, the end of a rib can slip and catch on the one above, giving a click and sharp pain at the rib edge, often followed by an ache that lasts for hours.
+The lowest ribs are held only loosely at the front. If that hold gives, the end of a rib can slip and catch on the one above, giving a click and sharp pain at the rib edge, often followed by an ache that lasts for hours. Pain at the rib edge can also come from the kidney, the gallbladder or other organs, so a click that you can feel and reproduce is the clue to this one.
 
 ## noticed
 - A click or slipping feeling at the bottom edge of the ribs
@@ -33,3 +34,4 @@ The lowest ribs are held only loosely at the front. If that hold gives, the end 
 - It keeps catching or clicking
 - It affects sport, work or sleep
 - You want the rib and its movement assessed
+- The pain comes with a fever, burning or blood when you pass urine, or after fatty meals, or does not change at all with movement: see a doctor first

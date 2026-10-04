@@ -4,6 +4,7 @@ id: inguinal
 name: Inguinal-related groin pain
 clin: Inguinal-related groin pain (Doha agreement 2015); hernia to be excluded
 # DRAFT patient text written 25 Sep 2026 from content/regions/hip.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -32,3 +33,4 @@ Just above the groin crease is a weaker area of the tummy wall, where the inguin
 - It keeps limiting your sport after 2 to 3 weeks
 - It keeps coming back each season
 - You notice a lump: see a doctor first
+- A painful groin lump that will not go back in, especially with feeling sick or vomiting: go to the emergency department now

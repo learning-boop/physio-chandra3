@@ -4,6 +4,7 @@ id: armpump
 name: Forearm "arm pump" (chronic exertional compartment syndrome)
 clin: Chronic exertional compartment syndrome of the forearm
 # DRAFT patient text written 25 Sep 2026 from content/regions/forearm.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -18,7 +19,7 @@ pointers:
 ---
 
 ## blurb
-In sports that need hard, repeated gripping, such as motocross, rowing, climbing, or paddling, the forearm muscles can swell inside their tight casing faster than the pressure can ease. The forearm goes tight, hard, and painful during the activity, sometimes with a weak or numb hand, and settles within 10 to 30 minutes of stopping.
+In sports that need hard, repeated gripping, such as motocross, rowing, climbing, or paddling, the forearm muscles can swell inside their tight casing faster than the pressure can ease. The forearm goes tight, hard, and painful during the activity, sometimes with a weak or numb hand, and settles within 10 to 30 minutes of stopping. Pain that keeps building after you stop, or that follows an injury, a broken bone or a tight cast, is not this: it is an emergency (acute compartment syndrome).
 
 ## noticed
 - The forearm goes tight, hard, and painful during sport
@@ -33,4 +34,5 @@ In sports that need hard, repeated gripping, such as motocross, rowing, climbing
 ## seePhysioIf
 - It keeps limiting your sport despite changing your grip and training
 - It takes longer and longer to settle after stopping
-- Pain lasts into the next day: that is not typical and should be checked
+- Pain lasts into the next day: see a doctor, as that is not typical
+- The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now

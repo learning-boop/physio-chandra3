@@ -441,7 +441,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It has not improved within 1 to 2 weeks",
         "It is limiting walking or sport",
-        "You need a graded plan back to twisting sport"
+        "You need a graded plan back to twisting sport",
+        "You could not take 4 steps straight after the injury, or the bone is tender to press: see a doctor for an X-ray first"
       ],
       "clinicNotes": [
         "JOSPT lateral ankle sprain CPG 2021: syndesmosis injury is a key differential and copathology of acute and persisting sprains; apply the full Ottawa ankle rules first. Multi-ligament sprains in high-school athletes cost more than 3 weeks of sport. Imaging (ACR, cited in the CPG): alignment change suggesting syndesmosis injury warrants leg and stress radiographs, MRI or CT; refer with any diastasis concern or failure to settle. Source: Martin RL et al., JOSPT 2021 (tests per Sman 2015)."
@@ -1061,7 +1062,7 @@ export const AUTHORED = [
       "id": "trauma",
       "name": "Bruised tailbone after a fall",
       "clin": "Traumatic coccydynia (Maigne 2000)",
-      "blurb": "A fall straight onto the bottom can bruise the tailbone or strain the small joint above it. Sitting, especially leaning back on a hard seat, presses on the sore spot. It usually settles over weeks to a few months as the bruising heals.",
+      "blurb": "A fall straight onto the bottom can bruise the tailbone or strain the small joint above it. Sitting, especially leaning back on a hard seat, presses on the sore spot. It usually settles over weeks to a few months as the bruising heals. A hard fall can occasionally crack the tailbone; an X-ray is only needed if the pain is severe or not settling, as it rarely changes the treatment.",
       "noticed": [
         "Pain right on the tip of the tailbone after landing on it",
         "Sitting on hard seats hurts, and leaning back makes it worse",
@@ -1076,7 +1077,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It hasn't eased after 6 to 8 weeks",
         "Sitting stays hard enough to limit work, driving or sleep",
-        "You want the tailbone assessed and a plan for sitting and activity"
+        "You want the tailbone assessed and a plan for sitting and activity",
+        "The pain is severe, or getting worse after the first two weeks: see a doctor, who may arrange an X-ray",
+        "Numbness around your bottom or genitals, or new trouble passing urine or controlling your bowels: go to the emergency department now"
       ]
     },
     "resolved": [
@@ -1428,7 +1431,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Tingling or heaviness keeps coming back with overhead work or carrying",
         "It is affecting your grip, work or sleep",
-        "You want a plan for posture, breathing and first-rib mobility that eases the outlet"
+        "You want a plan for posture, breathing and first-rib mobility that eases the outlet",
+        "The arm swells or turns blue or purple, or the hand goes cold, pale and painful: see a doctor the same day",
+        "The small muscles of the hand are getting thinner, or your grip is getting weak: see a doctor"
       ]
     },
     "resolved": [
@@ -1526,7 +1531,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The pain has not settled after 2 to 3 weeks",
         "Lifting or turning the forearm is getting weaker",
-        "You want a graded plan to return to lifting or sport"
+        "You want a graded plan to return to lifting or sport",
+        "You felt a pop, with bruising, or the bicep now bulges higher up the arm: see a doctor within a few days, as a tear is best repaired early"
       ]
     },
     "resolved": [
@@ -2962,7 +2968,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It is stopping your child from playing sport",
         "The pain is there at rest or at night: see a doctor first",
-        "You want a plan to manage sport through the growth spurt"
+        "You want a plan to manage sport through the growth spurt",
+        "The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first"
       ]
     },
     "resolved": [
@@ -3056,7 +3063,7 @@ export const AUTHORED = [
       "id": "armpump",
       "name": "Forearm \"arm pump\" (chronic exertional compartment syndrome)",
       "clin": "Chronic exertional compartment syndrome of the forearm",
-      "blurb": "In sports that need hard, repeated gripping, such as motocross, rowing, climbing, or paddling, the forearm muscles can swell inside their tight casing faster than the pressure can ease. The forearm goes tight, hard, and painful during the activity, sometimes with a weak or numb hand, and settles within 10 to 30 minutes of stopping.",
+      "blurb": "In sports that need hard, repeated gripping, such as motocross, rowing, climbing, or paddling, the forearm muscles can swell inside their tight casing faster than the pressure can ease. The forearm goes tight, hard, and painful during the activity, sometimes with a weak or numb hand, and settles within 10 to 30 minutes of stopping. Pain that keeps building after you stop, or that follows an injury, a broken bone or a tight cast, is not this: it is an emergency (acute compartment syndrome).",
       "noticed": [
         "The forearm goes tight, hard, and painful during sport",
         "Grip weakens or the hand goes numb as it builds",
@@ -3070,7 +3077,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It keeps limiting your sport despite changing your grip and training",
         "It takes longer and longer to settle after stopping",
-        "Pain lasts into the next day: that is not typical and should be checked"
+        "Pain lasts into the next day: see a doctor, as that is not typical",
+        "The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now"
       ]
     },
     "resolved": [
@@ -5306,7 +5314,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It keeps limiting your sport after 2 to 3 weeks",
         "It keeps coming back each season",
-        "You notice a lump: see a doctor first"
+        "You notice a lump: see a doctor first",
+        "A painful groin lump that will not go back in, especially with feeling sick or vomiting: go to the emergency department now"
       ]
     },
     "resolved": [
@@ -7119,7 +7128,7 @@ export const AUTHORED = [
       "id": "cecs",
       "name": "Exercise-related tight shin (chronic exertional compartment syndrome)",
       "clin": "Chronic exertional compartment syndrome of the leg (Pedowitz 1990)",
-      "blurb": "The muscles of the lower leg sit in tight compartments. In some runners and marching soldiers, the muscles swell with exercise faster than the pressure can ease, so the leg goes tight and painful at the same point in every session, sometimes with a numb or weak foot, and settles within 10 to 30 minutes of stopping. It is different from shin splints, which ease as you warm up.",
+      "blurb": "The muscles of the lower leg sit in tight compartments. In some runners and marching soldiers, the muscles swell with exercise faster than the pressure can ease, so the leg goes tight and painful at the same point in every session, sometimes with a numb or weak foot, and settles within 10 to 30 minutes of stopping. It is different from shin splints, which ease as you warm up. Pain that keeps building after you stop, or that follows an injury, a broken bone or a tight cast, is not this: it is an emergency (acute compartment syndrome).",
       "noticed": [
         "Tightness and aching at the same point in each run or session",
         "Sometimes numbness, tingling, or weakness in the foot as it builds",
@@ -7133,7 +7142,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It keeps stopping your running or sport",
         "Your foot goes numb or weak during exercise",
-        "It takes longer and longer to settle after stopping"
+        "It takes longer and longer to settle after stopping",
+        "The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now"
       ]
     },
     "resolved": [
@@ -10698,7 +10708,7 @@ export const AUTHORED = [
       "id": "slippingrib",
       "name": "Slipping rib",
       "clin": "Slipping rib syndrome",
-      "blurb": "The lowest ribs are held only loosely at the front. If that hold gives, the end of a rib can slip and catch on the one above, giving a click and sharp pain at the rib edge, often followed by an ache that lasts for hours.",
+      "blurb": "The lowest ribs are held only loosely at the front. If that hold gives, the end of a rib can slip and catch on the one above, giving a click and sharp pain at the rib edge, often followed by an ache that lasts for hours. Pain at the rib edge can also come from the kidney, the gallbladder or other organs, so a click that you can feel and reproduce is the clue to this one.",
       "noticed": [
         "A click or slipping feeling at the bottom edge of the ribs",
         "Sharp pain there when bending or twisting",
@@ -10712,7 +10722,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It keeps catching or clicking",
         "It affects sport, work or sleep",
-        "You want the rib and its movement assessed"
+        "You want the rib and its movement assessed",
+        "The pain comes with a fever, burning or blood when you pass urine, or after fatty meals, or does not change at all with movement: see a doctor first"
       ]
     },
     "resolved": [
@@ -10878,7 +10889,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It has not eased after a few weeks",
         "It keeps coming back",
-        "You want a plan to return to the gym or sport"
+        "You want a plan to return to the gym or sport",
+        "Chest pain with breathlessness, sweating, feeling sick, or pain spreading to the arm, jaw or back: call 911"
       ]
     },
     "resolved": [
@@ -10999,7 +11011,7 @@ export const AUTHORED = [
       "id": "nerveroot",
       "name": "Nerve pain around the chest",
       "clin": "Thoracic radiculopathy / intercostal neuralgia",
-      "blurb": "A nerve leaving the mid back runs around the chest between the ribs. When it is irritated where it leaves the spine, it can send burning, tingling or band-like pain around the chest or tummy, sometimes with a numb or sensitive strip of skin.",
+      "blurb": "A nerve leaving the mid back runs around the chest between the ribs. When it is irritated where it leaves the spine, it can send burning, tingling or band-like pain around the chest or tummy, sometimes with a numb or sensitive strip of skin. A painful band that comes with a rash or blisters is shingles, which a doctor treats, and chest pain should never be put down to a nerve without a doctor's check.",
       "noticed": [
         "A band of pain around one side of the chest or tummy",
         "Burning or tingling in a strip, with skin that is sensitive to clothing",
@@ -11013,7 +11025,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It has not eased after a week or two",
         "A numb patch is spreading or you notice weakness",
-        "You want the spine checked as the source"
+        "You want the spine checked as the source",
+        "A rash or blisters appear in the same strip: see a doctor within a day or two, as shingles treatment works best early",
+        "Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911"
       ]
     },
     "resolved": [

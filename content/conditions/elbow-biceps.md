@@ -4,6 +4,7 @@ id: biceps
 name: Front-of-elbow tendon pain (distal biceps)
 clin: Distal biceps tendinopathy or partial tear
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -33,3 +34,4 @@ The biceps attaches just below the front of the elbow. Heavy lifting, pulling, o
 - The pain has not settled after 2 to 3 weeks
 - Lifting or turning the forearm is getting weaker
 - You want a graded plan to return to lifting or sport
+- You felt a pop, with bruising, or the bicep now bulges higher up the arm: see a doctor within a few days, as a tear is best repaired early

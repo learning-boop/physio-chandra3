@@ -4,6 +4,7 @@ id: cecs
 name: Exercise-related tight shin (chronic exertional compartment syndrome)
 clin: Chronic exertional compartment syndrome of the leg (Pedowitz 1990)
 # DRAFT patient text written 25 Sep 2026 from content/regions/leg.md — not yet reviewed.
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -20,7 +21,7 @@ pointers:
 ---
 
 ## blurb
-The muscles of the lower leg sit in tight compartments. In some runners and marching soldiers, the muscles swell with exercise faster than the pressure can ease, so the leg goes tight and painful at the same point in every session, sometimes with a numb or weak foot, and settles within 10 to 30 minutes of stopping. It is different from shin splints, which ease as you warm up.
+The muscles of the lower leg sit in tight compartments. In some runners and marching soldiers, the muscles swell with exercise faster than the pressure can ease, so the leg goes tight and painful at the same point in every session, sometimes with a numb or weak foot, and settles within 10 to 30 minutes of stopping. It is different from shin splints, which ease as you warm up. Pain that keeps building after you stop, or that follows an injury, a broken bone or a tight cast, is not this: it is an emergency (acute compartment syndrome).
 
 ## noticed
 - Tightness and aching at the same point in each run or session
@@ -36,3 +37,4 @@ The muscles of the lower leg sit in tight compartments. In some runners and marc
 - It keeps stopping your running or sport
 - Your foot goes numb or weak during exercise
 - It takes longer and longer to settle after stopping
+- The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now
