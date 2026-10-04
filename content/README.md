@@ -32,6 +32,7 @@ content/
     hyperparathyroidism.md   (calcium balance: the undiagnosed screen pc-calcium, ca-parathyroid and its panel, the pseudogout and osteoporosis cross-links, src/data/parathyroid.js)
     hypopituitarism.md   (low pituitary hormones: the undiagnosed screen pc-lowhormone, ca-pituitary and its panel, the hydrocortisone adrenal-crisis wording, the concussion cross-link, and the deferred pattern questions fix)
     cushings.md   (Cushing's syndrome and steroid medicine: the undiagnosed weakness screen pc-hormone, ca-cushing, the steroid question on "A little about you", its red flags and results panel in src/data/steroids.js)
+    pregnancy.md   (pregnancy and the year after as context: the question on "A little about you", obstetric and postpartum red flags first in every area, the pelvic girdle gate and rank lift, the maternity-team limits question and the results panel in src/data/pregnancy.js)
     diabetes.md   (diabetes as context: the question on "A little about you", its red flags first, the doctor-first nerve screen without it, the details and burden tier, the rank lift and the results panel in src/data/diabetes.js)
 ```
 

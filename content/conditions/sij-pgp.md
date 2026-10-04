@@ -3,7 +3,9 @@ region: sij
 id: pgp
 name: Pregnancy-related pelvic girdle pain
 clin: Pelvic girdle pain in pregnancy or after birth (European guidelines, Vleeming 2008)
-# Only shown when it started during pregnancy or after giving birth.
+# Only shown when it started during pregnancy or after giving birth, or when
+# "A little about you" says pregnant or given birth in the last 12 months.
+# Blurb corrected 3 Oct 2026 ("Pregnancy.docx" section 2: no loose-ligament model).
 onset: pregnancy, postpartum
 # DRAFT patient text written 25 Sep 2026 from content/regions/sij.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
@@ -23,7 +25,7 @@ pointers:
 ---
 
 ## blurb
-During pregnancy, hormones loosen the joints of the pelvis so it can make room for the baby, while the load on it grows. Pain can then be felt at the back of the pelvis, over the pubic bone at the front, or both. It is common, it is not harmful to the baby, and it usually eases in the weeks after birth, faster with the right support.
+During pregnancy the load on the pelvis grows and the way the body carries it changes: weight and balance shift forward, and the tummy muscles stretch. Pain can then be felt at the back of the pelvis, over the pubic bone at the front, or both. The pelvis is strong, not loose or out of place: the pain is about how the load is being shared. It is common, it is not harmful to the baby, it responds well to physiotherapy, and most people find it has settled within three months of the birth.
 
 ## noticed
 - Pain at the back of the pelvis, over the pubic bone, or both

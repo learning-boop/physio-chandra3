@@ -16,6 +16,7 @@ import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js
 import { injuryFlow, injuryQuestion, limbAnswerFor as limbAs, ageFrom } from '../src/data/injuryScreen.js'
 import { MAX_HYPOTHESES } from '../src/data/clinicianSummary.js'
 import { summarizeZone, locationAnswers, minorZoneIds } from '../src/data/drawnLocation.js'
+import { pregnancyBonus } from '../src/data/pregnancy.js'
 
 /* Where on an area a test patient drew: a small cluster of body coordinates
    around { fy, az, lx } (see ../src/data/drawnLocation.js). */
@@ -453,6 +454,18 @@ const TESTS = {
       answers: { age: '30-49', onset: 'pregnancy', duration: 'd6w', P1: ['dimple'], P2: ['oneleg', 'roll'], P3: ['both'],
         P5: ['pubic', 'aslr', 'turning'] },
       expect: { top: 'sij/pgp', notRegion: ['lowback'], route: 'results' } },
+    // "Pregnancy.docx" (3 Oct 2026): pregnant on "A little about you", so the
+    // pelvic girdle record opens although the pain "came on gradually".
+    { name: '2b. Pregnant (28 weeks), pelvic girdle pain that came on gradually',
+      lines: [['sij'], ['hipL']],
+      answers: { age: '30-49', preg: 'p3', onset: 'gradual', duration: 'd6w', P1: ['dimple'], P2: ['oneleg', 'roll', 'stairs'], P3: ['both'],
+        P4: ['thigh'], P5: ['pubic', 'turning'] },
+      expect: { top: 'sij/pgp', notRegion: ['lowback'], route: 'results' } },
+    { name: '2c. Not pregnant, same answers: no pelvic girdle pain of pregnancy',
+      lines: [['sij'], ['hipL']],
+      answers: { age: '30-49', preg: 'no', onset: 'gradual', duration: 'd6w', P1: ['dimple'], P2: ['oneleg', 'roll', 'stairs'], P3: ['both'],
+        P4: ['thigh'], P5: ['pubic', 'turning'] },
+      expect: { not: ['sij/pgp'], route: 'results' } },
     { name: '3. Inflammatory look-alike (axial spondyloarthritis)',
       lines: [['sij']],
       answers: { age: '18-29', onset: 'gradual', duration: 'o3m', P3: ['switch'], P6: ['morning', 'exercise'] },
@@ -1096,6 +1109,8 @@ function run(rk, t) {
     return own.length && own.every((z) => minorIds.has(z.id))
   }))
   for (const q of context) if (all[q.id] !== undefined) ans[q.id] = all[q.id]
+  // "A little about you": pregnant or given birth in the last 12 months.
+  if (all.preg !== undefined) ans.preg = all.preg
   let id
   while ((id = nextQuestion(keys, ans, seen.asked.filter((x) => !x.includes(':')), MAX_SCORED_QUESTIONS,
     { draw: zones.map((z) => z.type), all, minor }))) {
@@ -1104,7 +1119,7 @@ function run(rk, t) {
     const own = twinIds(id).find((x) => all[x] !== undefined)
     if (own !== undefined) ans[id] = all[own]
   }
-  const shown = rankAcross(keys, ans, MAX_HYPOTHESES).map((x) => `${x.rk}/${x.c.id}`)
+  const shown = rankAcross(keys, ans, MAX_HYPOTHESES, pregnancyBonus(all)).map((x) => `${x.rk}/${x.c.id}`)
   return { ...seen, route: 'results', shown, specials: specialsAcross(keys, ans) }
 }
 

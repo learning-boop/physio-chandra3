@@ -113,7 +113,7 @@ export function buildClinicianSummary(ctx = {}) {
   const {
     zones = [], referral = [], keys = [], answers = {}, qaPairs = [], notes = '',
     ranked = [], behaviour = {}, psych = {}, painType = null,
-    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [],
+    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [], pregnancy = [],
   } = ctx
 
   const L = []
@@ -221,6 +221,12 @@ export function buildClinicianSummary(ctx = {}) {
   }
   push('')
 
+  // ── Pregnancy and the year after ("Pregnancy" document, ./pregnancy.js) ──
+  if (pregnancy.length) {
+    push('PREGNANCY / POSTPARTUM (self-reported; confirm gestation or weeks since birth, parity, mode of delivery, complications, VTE risk; PARmed-X for Pregnancy before exercise)')
+    push(...pregnancy.map((d) => '  ' + d))
+    push('')
+  }
   // ── Diabetes ("DiabetesMellitus" / "Diabetes RiskModule", ./diabetes.js) ──
   if (diabetes.length) {
     push('DIABETES (self-reported; confirm type, duration, last HbA1c, medicines and complications)')

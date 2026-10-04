@@ -195,6 +195,8 @@ export function regionAnswers(keys, rk, answers) {
     else v = answers[`${q.id}@${rk}`]
     if (v !== undefined) out[q.id] = v
   }
+  // Pregnancy ("A little about you", ./pregnancy.js) is every area's context.
+  if (answers.preg !== undefined) out.preg = answers.preg
   return out
 }
 

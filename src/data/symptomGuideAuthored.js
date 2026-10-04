@@ -9970,7 +9970,7 @@ export const AUTHORED = [
           "postpartum"
         ]
       },
-      "blurb": "During pregnancy, hormones loosen the joints of the pelvis so it can make room for the baby, while the load on it grows. Pain can then be felt at the back of the pelvis, over the pubic bone at the front, or both. It is common, it is not harmful to the baby, and it usually eases in the weeks after birth, faster with the right support.",
+      "blurb": "During pregnancy the load on the pelvis grows and the way the body carries it changes: weight and balance shift forward, and the tummy muscles stretch. Pain can then be felt at the back of the pelvis, over the pubic bone at the front, or both. The pelvis is strong, not loose or out of place: the pain is about how the load is being shared. It is common, it is not harmful to the baby, it responds well to physiotherapy, and most people find it has settled within three months of the birth.",
       "noticed": [
         "Pain at the back of the pelvis, over the pubic bone, or both",
         "Standing on one leg, climbing stairs or rolling over in bed brings it on",

@@ -564,12 +564,17 @@ function remainingMax(region, answers) {
   return rem
 }
 
+const PREG_ONSET = { p1: 'pregnancy', p2: 'pregnancy', p3: 'pregnancy', pp6: 'postpartum', pp12: 'postpartum' }
+
 function eligibleNow(c, unlocks, answers) {
   const g = c.gates || {}
   if (g.unlockedBy && unlocks[g.unlockedBy]) return true
   const age = answers['age'], onset = answers['onset']
   if (g.ages && age && !g.ages.includes(age)) return false
-  if (g.requiresOnset && onset && !g.requiresOnset.includes(onset)) return false
+  // Pregnant, or given birth in the last 12 months ("A little about you",
+  // ./pregnancy.js): a pregnancy-gated condition (pelvic girdle pain) opens
+  // whatever the start was.
+  if (g.requiresOnset && onset && !g.requiresOnset.includes(onset) && !g.requiresOnset.includes(PREG_ONSET[answers.preg])) return false
   return true
 }
 

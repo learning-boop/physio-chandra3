@@ -984,7 +984,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Diabetes: with known diabetes the nerve questions are left out (the results panel takes over)',
     /!\(dmKnown && isNerveFlag\(f\)\)/.test(src) && /\.\.\.diabetic, \.\.\.steroid, \.\.\.list, \.\.\.pattern/.test(src))
   check('Diabetes: asked on "A little about you" (required to continue), kept out of the anonymous copy',
-    /DM_STATUS\.options\.map/.test(src) && /!answers\.dm \|\|/.test(src) && /_other\$\|\^dm\|/.test(src))
+    /DM_STATUS\.options\.map/.test(src) && /answers\.dm && answers\.steroid/.test(src) && /disabled=\{!aboutDone\}/.test(src) && /_other\$\|\^dm\|/.test(src))
 
   check('Diabetes tier: type 1, over 10 years, well above target = high; type 2, under 5 years, in target = low; over 20 years or a foot ulcer = high; prediabetes = low',
     DM.diabetesTier({ dm: 'yes', dmType: 't1', dmYears: 'o10', dmControl: 'well' }) === 'high' &&
@@ -1075,7 +1075,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ['lowback', 'tlj', 'sij'].every((k) => REGIONS[k].redFlags.some((f) => f.group === 'osteo' || /steroid/.test(f.text))) &&
     REGIONS.hip.redFlags.some((f) => f.id === 'hpf-avn' && /steroid/.test(f.text)) && REGIONS.ankle.redFlags.some((f) => /steroid/.test(f.text)))
   check('Steroids: asked on "A little about you" (required), kept out of the anonymous copy',
-    /STEROID_STATUS\.options\.map/.test(src) && /!answers\.steroid\}/.test(src) && /\^steroid\$\)/.test(src))
+    /STEROID_STATUS\.options\.map/.test(src) && /answers\.steroid && \(!pregAsk/.test(src) && /\^steroid\$\|\^preg\)/.test(src))
   const p1 = ST.steroidPanel({ steroid: 'tabs' }, false), p2 = ST.steroidPanel({ steroid: 'no' }, true)
   check('Steroids panel: never stop suddenly, sit-to-stand, protect the back, ask about bone health; Cushing diagnosed: strength does not return by itself',
     p1 && p1.notes.some((n) => /Never stop steroid tablets suddenly/.test(n)) && p1.notes.some((n) => /firm chair/.test(n)) &&
@@ -1238,6 +1238,57 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([AC.ACROMEGALY_SCREEN, AC.ACROMEGALY_CAUTION, p])
   check('Acromegaly language: no "you have acromegaly", cure, guarantee or "damage"; "not from wearing out"',
     !/you (may )?have acromeg|cure|guarantee|permanent|damage/i.test(all) && /not from wearing out/.test(all), all.match(/you (may )?have acromeg|cure|guarantee|permanent|damage/i))
+}
+
+// ── 40. Pregnancy and the year after ("Pregnancy", v0.1, 3 Oct 2026) ──
+{
+  const PG = await imp('src/data/pregnancy.js')
+  const { emergencyLevel } = await imp('src/data/emergencyAdvice.js')
+  const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('Pregnancy: asked of female or "prefer not to say" aged 5 to 64, not of men, under 5s or 65 and over; required; out of the anonymous copy',
+    PG.pregnancyAsked({ sex: 'female', age: '30-49' }) && PG.pregnancyAsked({ sex: 'other', age: 'u18' }) &&
+    !PG.pregnancyAsked({ sex: 'male', age: '30-49' }) && !PG.pregnancyAsked({ sex: 'female', age: 'u5' }) && !PG.pregnancyAsked({ sex: 'female', age: 'o64' }) &&
+    /\(!pregAsk \|\| answers\.preg\)/.test(src) && /\^preg\)/.test(src))
+  const ids = (st, z) => PG.pregnancyRedFlags(ZN(z), { preg: st }).map((f) => f.id)
+  check('Pregnancy red flags: none when not pregnant; first on the safety pages, in every area (one wrist)',
+    !ids('no', ['wristL']).length && /\[\.\.\.obstetric, \.\.\.diabetic/.test(src) &&
+    ['pg-bleed', 'pg-labour', 'pg-preeclampsia', 'pg-movements', 'pg-pe', 'pg-dvt'].every((x) => ids('p3', ['wristL']).includes(x)))
+  check('Pregnancy red flags by stage: early pregnancy has no pre-eclampsia or movements question; after the birth, heavy bleeding, infection and mood; at a year, no clot or bleeding',
+    !ids('p1', ['sij']).includes('pg-preeclampsia') && !ids('p1', ['sij']).includes('pg-movements') &&
+    ['pg-pph', 'pg-postinfect', 'pg-mind', 'pg-preeclampsia', 'pg-pe'].every((x) => ids('pp6', ['sij']).includes(x)) &&
+    !['pg-pph', 'pg-pe', 'pg-dvt', 'pg-bleed'].some((x) => ids('pp12', ['sij']).includes(x)) && ids('pp12', ['sij']).includes('pg-mind'))
+  const F = Object.fromEntries(PG.PREG_RED_FLAGS.map((f) => [f.id, f]))
+  check('Pregnancy routes: heavy bleeding, a hard bump, postpartum haemorrhage and a lung clot call 911; waters, tightenings, pre-eclampsia and fewer movements go to labour and delivery; the mood flag goes now with 9-8-8',
+    ['pg-bleed', 'pg-abdo', 'pg-pph', 'pg-pe'].every((x) => emergencyLevel([F[x]]) === 'call911') &&
+    ['pg-labour', 'pg-preeclampsia', 'pg-movements'].every((x) => emergencyLevel([F[x]]) === 'labour') &&
+    emergencyLevel([F['pg-mind']]) === 'goNow' && /9-8-8/.test(F['pg-mind'].why.text))
+  const sij = (await imp('src/data/symptomGuide.js')).REGIONS.sij.redFlags
+  const onSij = PG.pregnancyRedFlags(ZN(['sij']), { preg: 'p3' }, sij)
+  check('Pregnancy red flags: not asked twice where the area already asks them (the pelvis\'s pregnancy, cauda equina and kidney questions)',
+    !onSij.some((f) => ['pg-bleed', 'pg-labour', 'pg-cauda', 'pg-infection'].includes(f.id)) && onSij.some((f) => f.id === 'pg-abdo'), onSij.map((f) => f.id))
+  check('Pregnancy: "No" leaves out the areas\' "Are you pregnant and…" questions, but not "could you be pregnant" (ectopic)',
+    /notPregnant && PREG_ASKED_IDS\.includes/.test(src) && !/'hpf-ectopic'|'srf-ectopic'/.test(src.match(/PREG_ASKED_IDS = \[[^\]]*\]/)[0]))
+  check('Pregnancy: from 13 weeks, the ectopic questions are left out',
+    /established && ECTOPIC_IDS\.includes/.test(src) && /ECTOPIC_IDS = \['hpf-ectopic', 'srf-ectopic'\]/.test(src))
+  const b = PG.pregnancyBonus({ preg: 'p3' })
+  check('Pregnancy lift: pelvic girdle, pubic, carpal tunnel and de Quervain\'s, by stage, in the order only; none when not pregnant',
+    b('sij', 'pgp') === 2 && b('wrist', 'median') === 2 && b('wrist', 'dq') === 2 && PG.pregnancyBonus({ preg: 'pp12' })('wrist', 'median') === 0 &&
+    PG.pregnancyBonus({ preg: 'no' }) === null && /pregnancyBonus\(answers\)/.test(src))
+  const rk = (rid, cid) => ({ rk: rid, c: { id: cid } })
+  const p = PG.pregnancyPanel({ preg: 'p2' }, [rk('sij', 'pgp')])
+  const pl = PG.pregnancyPanel({ preg: 'p2', pregLimit: ['placenta'] }, [rk('sij', 'pgp')])
+  const pp = PG.pregnancyPanel({ preg: 'pp6', pregBirth: 'caesarean' }, [rk('wrist', 'dq')])
+  check('Pregnancy panel: knees-together strategies and 150 minutes a week; with a contraindication, no dose and "confirm with your maternity team"; after a caesarean, the slower return and the scoop lift',
+    p.notes.some((n) => /knees together/.test(n)) && p.notes.some((n) => /150 minutes/.test(n)) &&
+    !pl.notes.some((n) => /150 minutes/.test(n)) && pl.notes.some((n) => /confirm with your maternity team/.test(n)) &&
+    pp.notes.some((n) => /after a caesarean/.test(n)) && pp.notes.some((n) => /scoop/.test(n)) && pp.notes.some((n) => /pelvic-health physiotherapist/.test(n)) &&
+    PG.pregnancyPanel({ preg: 'no' }, []) === null && /pregnancy: pgPanel/.test(src))
+  const pgp = (await imp('src/data/symptomGuide.js')).REGIONS.sij.conditions.find((c) => c.id === 'pgp')
+  const all = JSON.stringify([PG.PREG_RED_FLAGS, p, pl, pp, PG.pregnancyPanel({ preg: 'pp12' }, []), pgp.blurb])
+  check('Pregnancy language: no loose ligaments, instability or "out of alignment" (only "not loose or out of place"); no cure or guarantee',
+    !/unstable|instabil|alignment|ligaments? (are|is) loose|loosen|cure|guarantee/i.test(all) &&
+    (all.match(/loose/g) || []).length === (all.match(/not loose|about joints being loose/g) || []).length, all.match(/unstable|instabil|alignment|loosen|cure|guarantee/i))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

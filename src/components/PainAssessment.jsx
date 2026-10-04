@@ -29,6 +29,9 @@ import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } from '../data/thyroid'
 import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
+import {
+  PREG_STATUS, PREG_BIRTH, PREG_LIMITS, pregnancyAsked, isPregnant, isPostpartum, pregnancyRedFlags, pregnancyBonus, pregnancyPanel, pregnancySummary,
+} from '../data/pregnancy'
 import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
@@ -267,6 +270,13 @@ const CAUTION_CHECKS = [
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
 ]
+
+/* Region flags that ask "Are you pregnant (or have you had a baby) and…":
+   left out when "A little about you" says neither applies. */
+const PREG_ASKED_IDS = ['prf-pregnancy-bleed', 'prf-pregnancy', 'hrf-pregnancy']
+const ECTOPIC_IDS = ['hpf-ectopic', 'srf-ectopic']
+// The pregnancy answers, cleared when the question no longer applies.
+const dropPreg = ({ preg, pregBirth, pregLimit, ...a }) => a
 
 /* Why a flagged symptom needs looking at before physiotherapy. Region red
    flags in the guide carry a tier but no explanation, and inventing a clinical
@@ -618,7 +628,7 @@ export default function PainAssessment() {
     if (!keys.length) return answers
     // Answers the drawing gave (e.g. N2 "past the elbow") count even when that
     // question was not shown.
-    const keep = new Set([...ctxQuestions.map((q) => q.id), ...askedIds, ...Object.keys(drawn), 'notes'])
+    const keep = new Set([...ctxQuestions.map((q) => q.id), ...askedIds, ...Object.keys(drawn), 'notes', 'preg'])
     const out = {}
     for (const [k, v] of Object.entries(answers)) if (keep.has(k.replace(/_other$/, ''))) out[k] = v
     return out
@@ -685,11 +695,14 @@ export default function PainAssessment() {
   const ranked = useMemo(() => {
     if (!keys.length) return []
     // Two hypotheses, matching the summary Chandra receives (MAX_HYPOTHESES).
-    // Diabetes lifts the conditions it makes more likely, in the order only
-    // (../data/diabetes.js); it never decides whether one is shown.
-    try { return rankAcross(keys, scopedAnswers, MAX_HYPOTHESES, diabetesBonus(answers, zones)) } catch { return [] }
+    // Diabetes and pregnancy lift the conditions they make more likely, in the
+    // order only (../data/diabetes.js, ../data/pregnancy.js); they never
+    // decide whether one is shown.
+    const dmB = diabetesBonus(answers, zones), pgB = pregnancyBonus(answers)
+    const bonus = dmB || pgB ? (rk, id) => (dmB ? dmB(rk, id) : 0) + (pgB ? pgB(rk, id) : 0) : null
+    try { return rankAcross(keys, scopedAnswers, MAX_HYPOTHESES, bonus) } catch { return [] }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keys, scopedAnswers, answers.dm, answers.dmType, answers.dmYears, answers.dmControl, answers.dmTreat, answers.dmComp, answers.dmFeel, zones])
+  }, [keys, scopedAnswers, answers.preg, answers.dm, answers.dmType, answers.dmYears, answers.dmControl, answers.dmTreat, answers.dmComp, answers.dmFeel, zones])
   // Education cards the answers call for, e.g. "this may be coming from your
   // shoulder" when moving the arm hurts more than moving the neck.
   const specials = useMemo(() => {
@@ -747,7 +760,14 @@ export default function PainAssessment() {
     // Gout or pseudogout ("Hyperparathyroidism" document, open item 3): under
     // 60 or recurrent attacks are a reason to ask about calcium and PTH.
     const nerve = (f) => (isNerveFlag(f) ? { ...f, noBooking: true, why: NERVE_WHY } : CPPD_IDS.includes(f.id) ? { ...f, why: CPPD_WHY } : f)
-    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)))
+    // Not pregnant and no birth in the last 12 months: the areas' "Are you
+    // pregnant and…" questions cannot apply (the ectopic ones, "could you be
+    // pregnant", are still asked).
+    // Pregnant 13 weeks or more: an ectopic pregnancy no longer applies.
+    const notPregnant = answers.preg === 'no'
+    const established = answers.preg === 'p2' || answers.preg === 'p3'
+    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)) &&
+      !(notPregnant && PREG_ASKED_IDS.includes(f.id)) && !(established && ECTOPIC_IDS.includes(f.id)))
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
     const list = regional.map((f) => nerve({
       ...f, why: typeof f.why === 'string' ? { title: f.why, text: tierWhy(f).text } : tierWhy(f),
@@ -797,14 +817,17 @@ export default function PainAssessment() {
     // Long-term steroids ("Cushings Syndrome" document, section 6): the ones
     // the areas do not already ask, also first (../data/steroids.js).
     const steroid = steroidRedFlags(answers, [...list, ...pattern], zones)
-    const all = [...diabetic, ...steroid, ...list, ...pattern]
+    // Pregnant or in the year after ("Pregnancy" document, section 6): the
+    // obstetric and postpartum flags come first of all (../data/pregnancy.js).
+    const obstetric = pregnancyRedFlags(zones, answers, [...list, ...pattern])
+    const all = [...obstetric, ...diabetic, ...steroid, ...list, ...pattern]
     return {
       emergency: all.filter((f) => f.tier === 'emergency'),
       physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -926,6 +949,10 @@ export default function PainAssessment() {
   const thPanel = useMemo(() => thyroidPanel(flags.includes('ca-thyroid')), [flags])
   const hypoPanel = useMemo(() => hypothyroidPanel(flags.includes('ca-hypothyroid')), [flags])
   const acroPanel = useMemo(() => acromegalyPanel(flags.includes('ca-acromegaly')), [flags])
+  // Pregnant or in the year after ("Pregnancy" document; ../data/pregnancy.js).
+  const pgPanel = useMemo(() => pregnancyPanel(answers, shown), [answers, shown])
+  const pregAsk = pregnancyAsked(who)
+  const aboutDone = !!(answers.age && birthSex && answers.dm && answers.steroid && (!pregAsk || answers.preg))
   const pickDm = (q, oid) => setAnswers((a) => {
     if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }
     const cur = [].concat(a[q.id] || [])
@@ -1038,6 +1065,7 @@ export default function PainAssessment() {
       ranked: shown, behaviour, psych, painType, cautions: pickedCautions,
       diabetes: diabetesSummary(answers, zones, shown),
       steroids: steroidSummary(answers),
+      pregnancy: pregnancySummary(answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
       reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
@@ -1094,6 +1122,7 @@ export default function PainAssessment() {
     thyroid: thPanel,
     hypothyroid: hypoPanel,
     acromegaly: acroPanel,
+    pregnancy: pgPanel,
     answers: qaPairs,
     notes: notesText,
   })
@@ -1107,8 +1136,8 @@ export default function PainAssessment() {
     zones: zones.map((z) => ({ id: z.id, type: z.type, face: z.face, ink: z.ink })),
     lines,
     answers: Object.fromEntries(Object.entries(answers).filter(([k, v]) =>
-      // Diabetes and steroid answers (dm, dmType…, steroid) stay out of the anonymous copy.
-      !/(^notes$|^q5$|_other$|^dm|^steroid$)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
+      // Diabetes, steroid and pregnancy answers (dm, dmType…, steroid, preg…) stay out of the anonymous copy.
+      !/(^notes$|^q5$|_other$|^dm|^steroid$|^preg)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
     flags: flags.filter((f) => f !== '__other'),
     results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
     referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null })),
@@ -1881,7 +1910,7 @@ export default function PainAssessment() {
                   {ABOUT_AGES.map((o, i) => {
                     const sel = answers.age === o.id
                     return (
-                      <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, age: o.id }))}>
+                      <button key={o.id} style={chip(sel)} onClick={() => { const keep = pregnancyAsked({ age: o.id, sex: birthSex }); setAnswers((a) => (keep ? { ...a, age: o.id } : dropPreg({ ...a, age: o.id }))) }}>
                         <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
                       </button>
                     )
@@ -1892,7 +1921,7 @@ export default function PainAssessment() {
                   {ABOUT_SEX.map((o, i) => {
                     const sel = birthSex === o.id
                     return (
-                      <button key={o.id} style={chip(sel)} onClick={() => setBirthSex(o.id)}>
+                      <button key={o.id} style={chip(sel)} onClick={() => { setBirthSex(o.id); if (!pregnancyAsked({ age: answers.age, sex: o.id })) setAnswers(dropPreg) }}>
                         <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
                       </button>
                     )
@@ -1901,6 +1930,40 @@ export default function PainAssessment() {
                     Used only on this device to choose which safety questions to show (for example, pregnancy questions). It is not saved, not sent anywhere, and not included in your summary, PDF, AI overview or any shared copy.
                   </p>
                 </div>
+                {/* Pregnancy (../data/pregnancy.js): for a birth sex of female
+                    or "prefer not to say", aged 5 to 64. Puts the obstetric
+                    and postpartum red flags first and shapes the results. In
+                    the summary and PDF, never in the anonymous copy or the AI
+                    overview. */}
+                {pregAsk && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{PREG_STATUS.text}</span></p>
+                    {PREG_STATUS.options.map((o, i) => {
+                      const sel = answers.preg === o.id
+                      return (
+                        <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, preg: o.id, ...(o.id === 'pp6' || o.id === 'pp12' ? {} : { pregBirth: undefined }) }))}>
+                          <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                        </button>
+                      )
+                    })}
+                    {isPostpartum(answers) && (
+                      <>
+                        <p style={{ fontSize: 14.5, color: '#fff', margin: '10px 0 2px', lineHeight: 1.5 }}>{PREG_BIRTH.text}</p>
+                        {PREG_BIRTH.options.map((o) => {
+                          const sel = answers.pregBirth === o.id
+                          return (
+                            <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => setAnswers((a) => ({ ...a, pregBirth: sel ? undefined : o.id }))}>
+                              <span style={letterStyle(sel)}>{sel ? '✓' : '·'}</span><span>{o.label}</span>
+                            </button>
+                          )
+                        })}
+                      </>
+                    )}
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
+                      Pregnancy and the months after a birth change which safety questions matter and which exercise is right. This answer goes in your summary and PDF, not in any anonymous copy.
+                    </p>
+                  </div>
+                )}
                 {/* Diabetes (../data/diabetes.js): puts its red flags first and
                     shapes the results. In the summary and PDF, never in the
                     anonymous copy or the AI overview. */}
@@ -1932,8 +1995,8 @@ export default function PainAssessment() {
                 </div>
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary"
-                    style={{ ...goldBtn, opacity: answers.age && birthSex && answers.dm && answers.steroid ? 1 : 0.45, cursor: answers.age && birthSex && answers.dm && answers.steroid ? 'pointer' : 'not-allowed' }}
-                    disabled={!answers.age || !birthSex || !answers.dm || !answers.steroid}
+                    style={{ ...goldBtn, opacity: aboutDone ? 1 : 0.45, cursor: aboutDone ? 'pointer' : 'not-allowed' }}
+                    disabled={!aboutDone}
                     onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}>Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
                 </div>
@@ -2079,6 +2142,30 @@ export default function PainAssessment() {
                   </div>
                 )}
 
+                {/* While pregnant: what the maternity team has advised
+                    (../data/pregnancy.js, PREG_LIMITS). Optional; any tick
+                    removes the exercise dose from the results. */}
+                {isPregnant(answers) && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 2px' }}>
+                      <span aria-hidden="true" style={qMark} />
+                      <span>{PREG_LIMITS.text}</span>
+                    </p>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '0 0 6px', lineHeight: 1.6 }}>
+                      This decides whether your results suggest how much exercise to do, or ask you to check with your maternity team first.
+                    </p>
+                    {PREG_LIMITS.options.map((o) => {
+                      const sel = [].concat(answers.pregLimit || []).includes(o.id)
+                      return (
+                        <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(PREG_LIMITS, o.id)}>
+                          <span style={letterStyle(sel)}>{sel ? '✓' : '·'}</span>
+                          <span>{o.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+
                 {/* Cautions: they change how the first assessment is done,
                     they do not stop it. Kept visually separate so the screen
                     never reads as "more red flags". */}
@@ -2087,7 +2174,7 @@ export default function PainAssessment() {
                   <span aria-hidden="true" style={qMark} />
                   <span>Also worth telling us — these do not stop physiotherapy</span>
                 </p>
-                  {CAUTION_CHECKS.filter((f) => forPerson(f, who)).map((f, i) => {
+                  {CAUTION_CHECKS.filter((f) => forPerson(f, who) && !(f.id === 'ca-preg' && answers.preg)).map((f, i) => {
                     const sel = flags.includes(f.id)
                     return (
                       <button key={f.id} style={chip(sel)}
@@ -2439,6 +2526,20 @@ export default function PainAssessment() {
                       <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: '6px 0 0', lineHeight: 1.6 }}>
                         Please mention these when you book, so your first appointment can be planned around them.
                       </p>
+                    </div>
+                  </>
+                )}
+
+                {/* Pregnancy or the year after (../data/pregnancy.js). */}
+                {pgPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>{isPregnant(answers) ? 'Your pregnancy and this problem' : 'After your baby'}</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{pgPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{pgPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {pgPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
                     </div>
                   </>
                 )}

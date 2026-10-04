@@ -842,7 +842,8 @@ export const EXTRA_REGIONS = {
         { id: "belowknee", label: "Below the knee", special: "backref" }
       ]},
       { id: "P5", text: "Which of these apply? Tick all that apply.",
-        askIf: ({ ra }) => ra.onset === "pregnancy" || ra.onset === "postpartum",
+        // Or pregnant / given birth in the last 12 months (../data/pregnancy.js).
+        askIf: ({ ra }) => ra.onset === "pregnancy" || ra.onset === "postpartum" || ["p1", "p2", "p3", "pp6", "pp12"].includes(ra.preg),
         options: [
           { id: "pubic", label: "Pain at the front, over the pubic bone" },
           { id: "click", label: "Clicking or grinding at the pubic bone" },
