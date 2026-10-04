@@ -5,7 +5,7 @@ name: Ball-of-foot pain (metatarsalgia)
 clin: Metatarsalgia or plantar plate injury
 # DRAFT patient text written 25 Sep 2026 from content/regions/foot.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Pain under one toe joint, with swelling on top": 3
   "Feels like walking on a pebble or a folded sock": 2

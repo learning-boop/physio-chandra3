@@ -4,9 +4,9 @@ id: calfstrain
 name: Calf muscle strain ("tennis leg")
 clin: Medial gastrocnemius or soleus strain
 # DRAFT patient text written 25 Sep 2026 from content/regions/leg.md — not yet reviewed.
-# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review; signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Calf": 3
   "A sudden pain in the calf while pushing off": 3

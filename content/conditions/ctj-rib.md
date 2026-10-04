@@ -4,9 +4,9 @@ id: rib
 name: Upper rib joint strain
 clin: Upper rib joint (costovertebral) dysfunction
 # DRAFT patient text written 24 Sep 2026 from content/regions/ctj.md — not yet reviewed.
-# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review (draft, not yet reviewed).
+# 4 Oct 2026: doctor and emergency lines added for the Tier 2 review; signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "After a sudden movement, cough, or sneeze": 3
   "Around a rib, towards the side or front of my chest": 3

@@ -5,7 +5,7 @@ name: Rib joint strain
 clin: Rib joint (costovertebral) dysfunction
 # DRAFT patient text written 24 Sep 2026 from content/regions/upperback.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "After lifting, twisting, or reaching": 2
   "After a cough, sneeze, or sudden movement": 2

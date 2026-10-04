@@ -6,7 +6,7 @@ clin: Lateral femoral cutaneous nerve entrapment
 # DRAFT patient text written 25 Sep 2026 from content/regions/hip.md — not yet reviewed.
 # Patient text shared with thigh-meralgia.md: keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Burning or numb patch on the front and outer thigh": 3
   "A burning or numb patch on the outer thigh, with no weakness": 3

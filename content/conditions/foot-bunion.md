@@ -5,7 +5,7 @@ name: Bunion (hallux valgus)
 clin: Hallux valgus
 # DRAFT patient text written 25 Sep 2026 from content/regions/foot.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "A bump on the side of the joint, the toe leaning towards the others": 3
   "The big toe joint": 2

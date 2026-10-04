@@ -5,7 +5,7 @@ name: Insertional Achilles pain (back of the heel)
 clin: Insertional Achilles tendinopathy, retrocalcaneal bursitis or Haglund's bump
 # DRAFT patient text written 25 Sep 2026 from content/regions/ankle.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Back of the heel, where the heel cord attaches": 3
   "A tender bump at the back of the heel, sore in shoes": 3

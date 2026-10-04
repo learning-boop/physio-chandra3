@@ -5,7 +5,7 @@ name: Swelling on the front of the kneecap (prepatellar bursitis)
 clin: Prepatellar bursitis ("housemaid's knee")
 # DRAFT patient text written 25 Sep 2026 from content/regions/knee.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Swelling on the front of the kneecap (after kneeling)": 3
   "Kneeling": 3

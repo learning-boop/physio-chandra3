@@ -5,7 +5,7 @@ name: Hip flexor (iliopsoas) groin pain
 clin: Iliopsoas-related groin pain, sometimes with snapping (Doha agreement 2015)
 # DRAFT patient text written 25 Sep 2026 from content/regions/hip.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Pain at the front of the hip when lifting my knee": 3
   "Groin, or the front of the hip": 2

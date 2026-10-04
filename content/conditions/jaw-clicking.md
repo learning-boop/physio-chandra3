@@ -5,7 +5,7 @@ name: Clicking jaw joint
 clin: TMJ disc displacement with reduction (DC/TMD)
 # DRAFT patient text written 25 Sep 2026 from content/regions/jaw.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Pain just in front of the ear, at the joint": 2
   "Clicking or popping": 3
