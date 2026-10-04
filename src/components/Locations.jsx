@@ -27,13 +27,15 @@ export default function Locations() {
               fontFamily: 'var(--font-body)', fontSize: '13px',
               fontWeight: active === i ? 500 : 300,
               letterSpacing: '0.1em', textTransform: 'uppercase',
-              color: active === i ? 'var(--gold)' : 'rgba(255,255,255,0.3)',
+              color: active === i ? 'var(--gold)' : 'rgba(255,255,255,0.55)',
               borderBottom: active === i ? '2px solid var(--gold)' : '2px solid transparent',
               marginBottom: '-1px',
               transition: 'all 0.3s',
             }}
             className="loc-tab">
-            {l.name}
+            {/* The area leads: people choose the clinic nearest them. */}
+            <span style={{ display: 'block', fontSize: '15px', fontWeight: active === i ? 600 : 400, letterSpacing: '0.12em' }}>{l.area}</span>
+            <span style={{ display: 'block', marginTop: '4px', fontSize: '11.5px', letterSpacing: '0.06em', textTransform: 'none', fontWeight: 300, color: active === i ? 'rgba(232,213,176,0.85)' : 'rgba(255,255,255,0.35)' }}>{l.name}</span>
           </button>
         ))}
       </div>
