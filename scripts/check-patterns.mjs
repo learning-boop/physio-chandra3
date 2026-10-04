@@ -986,7 +986,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Diabetes: with known diabetes the nerve questions are left out (the results panel takes over)',
     /!\(dmKnown && isNerveFlag\(f\)\)/.test(src) && /\.\.\.diabetic, \.\.\.steroid, \.\.\.list, \.\.\.pattern/.test(src))
   check('Diabetes: asked on "A little about you" (required to continue), kept out of the anonymous copy',
-    /DM_STATUS\.options\.map/.test(src) && /answers\.dm && answers\.steroid/.test(src) && /disabled=\{!aboutDone\}/.test(src) && /_other\$\|\^dm\|/.test(src))
+    /arrangeOptions\(DM_STATUS\.options, DM_STATUS\.text\)\.map/.test(src) && /answers\.dm && answers\.steroid/.test(src) && /disabled=\{!aboutDone\}/.test(src) && /_other\$\|\^dm\|/.test(src))
 
   check('Diabetes tier: type 1, over 10 years, well above target = high; type 2, under 5 years, in target = low; over 20 years or a foot ulcer = high; prediabetes = low',
     DM.diabetesTier({ dm: 'yes', dmType: 't1', dmYears: 'o10', dmControl: 'well' }) === 'high' &&
@@ -1077,7 +1077,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ['lowback', 'tlj', 'sij'].every((k) => REGIONS[k].redFlags.some((f) => f.group === 'osteo' || /steroid/.test(f.text))) &&
     REGIONS.hip.redFlags.some((f) => f.id === 'hpf-avn' && /steroid/.test(f.text)) && REGIONS.ankle.redFlags.some((f) => /steroid/.test(f.text)))
   check('Steroids: asked on "A little about you" (required), kept out of the anonymous copy',
-    /STEROID_STATUS\.options\.map/.test(src) && /answers\.steroid && \(!pregAsk/.test(src) && /\^steroid\$\|\^preg\|/.test(src))
+    /arrangeOptions\(STEROID_STATUS\.options, STEROID_STATUS\.text\)\.map/.test(src) && /answers\.steroid && \(!pregAsk/.test(src) && /\^steroid\$\|\^preg\|/.test(src))
   const p1 = ST.steroidPanel({ steroid: 'tabs' }, false), p2 = ST.steroidPanel({ steroid: 'no' }, true)
   check('Steroids panel: never stop suddenly, sit-to-stand, protect the back, ask about bone health; Cushing diagnosed: strength does not return by itself',
     p1 && p1.notes.some((n) => /Never stop steroid tablets suddenly/.test(n)) && p1.notes.some((n) => /firm chair/.test(n)) &&
@@ -1477,6 +1477,52 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const all = JSON.stringify([PG.PAGET_SCREEN, PG.PAGET_CAUTION, p])
   check('Paget language: no cancer, cure, guarantee or "damage"; "tumour" not used',
     !/cancer|tumou?r|sarcoma|cure|guarantee|damage/i.test(all), all.match(/cancer|tumou?r|sarcoma|cure|guarantee|damage/i))
+}
+
+// ── 47. "No" first for yes/no questions; "None" and list negatives last (Chandra, 4 Oct 2026) ──
+{
+  const { arrangeOptions, kindOf, isListQuestion } = await imp('src/data/optionOrder.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const DM = await imp('src/data/diabetes.js')
+  const ST = await imp('src/data/steroids.js')
+  const PG = await imp('src/data/pregnancy.js')
+  const OI = await imp('src/data/oi.js')
+  const BN = await imp('src/data/osteopenia.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const sg = (await import('node:fs')).readFileSync(new URL('../src/components/SymptomGuide.jsx', import.meta.url), 'utf8')
+  const ids = (q) => arrangeOptions(q.options, q.text).map((o) => o.id)
+  check('Order: yes/no questions in "A little about you" show No and Not sure first (diabetes, steroids, pregnancy)',
+    ids(DM.DM_STATUS).slice(0, 2).join() === 'no,ns' && ids(ST.STEROID_STATUS).slice(0, 2).join() === 'no,ns' && ids(PG.PREG_STATUS)[0] === 'no')
+  check('Order: "None of these" goes last, after the list (maternity limits, bone risk factors)',
+    ids(PG.PREG_LIMITS).at(-1) === 'none' && ids(BN.BONE_DETAILS.find((q) => q.id === 'bnRisk')).at(-1) === 'none')
+  check('Order: a choice question keeps "Not sure" last (OI type); a yes/no one after an opening phrase puts "No" first (bone fracture since 40)',
+    ids(OI.OI_DETAILS.find((q) => q.id === 'oiType')).at(-1) === 'ns' && ids(BN.BONE_DETAILS.find((q) => q.id === 'bnFracture'))[0] === 'no' &&
+    ids(BN.BONE_DETAILS.find((q) => q.id === 'bnFalls'))[0] === 'no')
+  check('Order: question wording is read correctly',
+    !isListQuestion('Is there any swelling or change in the skin?') && !isListQuestion('Have you injured your lower leg in the last 6 weeks?') &&
+    !isListQuestion('Since age 40, have you broken a bone from a fall?') && isListQuestion('How does the pain behave with running or exercise?') &&
+    isListQuestion('Which of these bring it on? Tick all that apply.') && isListQuestion('Do any of these apply to you? Tick all that apply.') &&
+    isListQuestion('Over a typical day, when is it worst?'))
+  check('Order: answers are sorted by meaning',
+    kindOf({ label: 'None of these bring it on' }) === 'none' && kindOf({ label: 'Nothing specific' }) === 'none' && kindOf({ label: 'No, or I cannot find one' }) === 'no' &&
+    kindOf({ label: 'It is not linked to exercise' }) === 'no' && kindOf({ label: 'Never' }) === 'no' && kindOf({ label: 'Not on the bone, in the muscle beside it' }) === '' &&
+    kindOf({ label: 'Something else — type it below' }) === '' && kindOf({ label: 'I would rather not try' }) === '' && kindOf({ label: 'No falls, but I feel unsteady or hold on to furniture' }) === '' && kindOf({ label: 'No; it comes on when I use my forearm, with an ache in the forearm' }) === '' &&
+    kindOf({ label: 'Pain goes into the upper arm, but not past the elbow' }) === '')
+  // Every area question: "none" last; "no" first for yes/no questions, last for lists; the rest in its original order.
+  const qs = Object.values(REGIONS).flatMap((r) => [...(r.questions || []), ...(r.context || [])]).flatMap((q) => [q, ...(q.group || [])]).filter((q) => Array.isArray(q.options))
+  const bad = qs.filter((q) => {
+    const opts = q.options.map((o) => (typeof o === 'string' ? { id: o, label: o } : o))
+    const out = arrangeOptions(opts, q.text)
+    const list = isListQuestion(q.text)
+    const real = out.filter((o) => !kindOf(o)).map((o) => o.id).join() === opts.filter((o) => !kindOf(o)).map((o) => o.id).join()
+    const firstReal = out.findIndex((o) => !kindOf(o)), lastReal = out.map((o) => !kindOf(o)).lastIndexOf(true)
+    const placed = out.every((o, i) => !kindOf(o) || (kindOf(o) === 'none' || list ? i > lastReal : i < firstReal) || firstReal < 0)
+    return !real || !placed
+  })
+  check('Order: every area question places its "No", "Not sure" and "None" answers by these rules, the rest in order', qs.length > 100 && bad.length === 0, bad.map((q) => q.id))
+  const uses = (src.match(/arrange(Options|Split)\(/g) || []).length
+  check('Order: applied to every answer list (questions, grouped questions, About you, details, maternity limits, injury screens, Symptom Guide); emergency pages keep "None of these apply" below',
+    uses >= 10 && (sg.match(/arrangeOptions\(/g) || []).length >= 2 && !/\{q\.options\.map\(/.test(src) && !/negativesFirst/.test(src + sg) && /Something else — type it below<\/span>[\s\S]*?tail\.map/.test(src) && /None of These Apply — Continue/.test(src), uses)
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

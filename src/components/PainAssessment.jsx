@@ -4,6 +4,7 @@ import Body3D from './Body3D'
 import { Link } from 'react-router-dom'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
+import { arrangeOptions, arrangeSplit } from '../data/optionOrder'
 import { CLINICS } from '../data/clinics'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
@@ -1769,7 +1770,7 @@ export default function PainAssessment() {
                         <div key={sub.id} style={{ ...qPanel, marginBottom: si === subs.length - 1 ? 0 : 12 }}>
                           <div style={qText}><span aria-hidden="true" style={qMark} /><span>{sub.text}</span></div>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                            {(sub.id === 'pattern24' && restWorseKnown ? sub.options.filter((o) => o.id !== 'restWorse') : sub.options).map((opt) => {
+                            {arrangeOptions(sub.id === 'pattern24' && restWorseKnown ? sub.options.filter((o) => o.id !== 'restWorse') : sub.options, sub.text).map((opt) => {
                               const sel = isPicked(sub, opt.id)
                               return (
                                 <button key={opt.id} onClick={() => toggleAnswer(sub, opt.id)}
@@ -1801,28 +1802,36 @@ export default function PainAssessment() {
                     />
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
-                      {q.options.map((opt, oi) => {
-                        const sel = isPicked(q, opt.id)
-                        return (
-                          <button key={opt.id} style={chip(sel)} onClick={() => toggleAnswer(q, opt.id)}>
-                            <span style={letterStyle(sel)}>{LETTERS[oi] || '·'}</span>
-                            <span>{opt.label}</span>
-                            <Tick on={sel} />
-                          </button>
-                        )
-                      })}
-                      {/* Free-text alternative. It carries no weights, so the
-                          scoring engine ignores it — but it reaches the
-                          physiotherapist on the summary, which is the point. */}
-                      {q.multi && (() => {
-                        const sel = isPicked(q, OTHER_ID)
-                        return (
-                          <>
-                            <button style={chip(sel)} onClick={() => toggleAnswer(q, OTHER_ID)}>
-                              <span style={letterStyle(sel)}>{LETTERS[q.options.length] || '·'}</span>
-                              <span>Something else — type it below</span>
+                      {/* A direct "No" first, the real answers, "Something
+                          else", then "None of these" last (../data/optionOrder.js). */}
+                      {(() => {
+                        const { head, tail } = arrangeSplit(q.options, q.text)
+                        const chipFor = (opt, oi) => {
+                          const sel = isPicked(q, opt.id)
+                          return (
+                            <button key={opt.id} style={chip(sel)} onClick={() => toggleAnswer(q, opt.id)}>
+                              <span style={letterStyle(sel)}>{LETTERS[oi] || '·'}</span>
+                              <span>{opt.label}</span>
                               <Tick on={sel} />
                             </button>
+                          )
+                        }
+                        const other = q.multi ? 1 : 0
+                        return (
+                          <>
+                            {head.map((opt, oi) => chipFor(opt, oi))}
+                            {/* Free-text alternative. It carries no weights, so the
+                                scoring engine ignores it — but it reaches the
+                                physiotherapist on the summary, which is the point. */}
+                            {q.multi && (() => {
+                              const sel = isPicked(q, OTHER_ID)
+                              return (
+                                <>
+                                  <button style={chip(sel)} onClick={() => toggleAnswer(q, OTHER_ID)}>
+                                    <span style={letterStyle(sel)}>{LETTERS[head.length] || '·'}</span>
+                                    <span>Something else — type it below</span>
+                                    <Tick on={sel} />
+                                  </button>
                             {sel && (
                               <input
                                 autoFocus
@@ -1836,6 +1845,10 @@ export default function PainAssessment() {
                                 }}
                               />
                             )}
+                                </>
+                              )
+                            })()}
+                            {tail.map((opt, i) => chipFor(opt, head.length + other + i))}
                           </>
                         )
                       })()}
@@ -1982,7 +1995,7 @@ export default function PainAssessment() {
                 {pregAsk && (
                   <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
                     <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{PREG_STATUS.text}</span></p>
-                    {PREG_STATUS.options.map((o, i) => {
+                    {arrangeOptions(PREG_STATUS.options, PREG_STATUS.text).map((o, i) => {
                       const sel = answers.preg === o.id
                       return (
                         <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, preg: o.id, ...(o.id === 'pp6' || o.id === 'pp12' ? {} : { pregBirth: undefined }) }))}>
@@ -2013,7 +2026,7 @@ export default function PainAssessment() {
                     anonymous copy or the AI overview. */}
                 <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
                   <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{DM_STATUS.text}</span></p>
-                  {DM_STATUS.options.map((o, i) => {
+                  {arrangeOptions(DM_STATUS.options, DM_STATUS.text).map((o, i) => {
                     const sel = answers.dm === o.id
                     return (
                       <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, dm: o.id }))}>
@@ -2025,7 +2038,7 @@ export default function PainAssessment() {
                 {/* Steroid medicine (../data/steroids.js), same handling. */}
                 <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
                   <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{STEROID_STATUS.text}</span></p>
-                  {STEROID_STATUS.options.map((o, i) => {
+                  {arrangeOptions(STEROID_STATUS.options, STEROID_STATUS.text).map((o, i) => {
                     const sel = answers.steroid === o.id
                     return (
                       <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, steroid: o.id }))}>
@@ -2181,7 +2194,7 @@ export default function PainAssessment() {
                     {dmQuestions.map((q) => (
                       <div key={q.id} style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 8 }}>
                         <p style={{ fontSize: 14.5, color: '#fff', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
-                        {q.options.map((o) => {
+                        {arrangeOptions(q.options, q.text).map((o) => {
                           const sel = [].concat(answers[q.id] || []).includes(o.id)
                           return (
                             <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(q, o.id)}>
@@ -2207,7 +2220,7 @@ export default function PainAssessment() {
                     <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '0 0 6px', lineHeight: 1.6 }}>
                       This decides whether your results suggest how much exercise to do, or ask you to check with your maternity team first.
                     </p>
-                    {PREG_LIMITS.options.map((o) => {
+                    {arrangeOptions(PREG_LIMITS.options, PREG_LIMITS.text).map((o) => {
                       const sel = [].concat(answers.pregLimit || []).includes(o.id)
                       return (
                         <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(PREG_LIMITS, o.id)}>
@@ -2233,7 +2246,7 @@ export default function PainAssessment() {
                     {OI_DETAILS.map((q) => (
                       <div key={q.id} style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 8 }}>
                         <p style={{ fontSize: 14.5, color: '#fff', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
-                        {q.options.map((o) => {
+                        {arrangeOptions(q.options, q.text).map((o) => {
                           const sel = answers[q.id] === o.id
                           return (
                             <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(q, o.id)}>
@@ -2283,7 +2296,7 @@ export default function PainAssessment() {
                     {BONE_DETAILS.map((q) => (
                       <div key={q.id} style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 8 }}>
                         <p style={{ fontSize: 14.5, color: '#fff', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
-                        {q.options.map((o) => {
+                        {arrangeOptions(q.options, q.text).map((o) => {
                           const sel = [].concat(answers[q.id] || []).includes(o.id)
                           return (
                             <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(q, o.id)}>
@@ -2329,7 +2342,7 @@ export default function PainAssessment() {
                     <span aria-hidden="true" style={{ ...qMark, width: 5 }} />
                     <span>{q.text}</span>
                   </h2>
-                    {q.options.map((o, i) => (
+                    {arrangeOptions(q.options, q.text).map((o, i) => (
                       <button key={o.id} style={chip(picked(o.id))} onClick={() => tapInjury(q, o.id)}>
                         <span style={letterStyle(picked(o.id))}>{LETTERS[i] || '·'}</span>
                         <span>{o.label}</span>

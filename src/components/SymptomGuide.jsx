@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { arrangeOptions } from '../data/optionOrder'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   REGIONS, GENERAL_RED_FLAGS, PAIN_CHARACTER, SPECIAL_CARDS,
@@ -207,7 +208,7 @@ export default function SymptomGuide({ regionOptions }) {
           <div key={q.id} style={{ marginTop: 14 }}>
             <p style={{ ...label, letterSpacing: '0.12em', fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'none', margin: '0 0 8px' }}>{q.text}</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-              {q.options.map((o) => {
+              {arrangeOptions(q.options, q.text).map((o) => {
                 const a = answers[q.id]
                 const sel = q.multi ? (Array.isArray(a) && a.includes(o.id)) : a === o.id
                 return (
@@ -234,7 +235,7 @@ export default function SymptomGuide({ regionOptions }) {
         <p style={qText}>{q.text}</p>
         {q.multi && <p style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.5)', margin: '0 0 10px' }}>Choose all that apply, then continue.</p>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {q.options.map((o) => {
+          {arrangeOptions(q.options, q.text).map((o) => {
             const sel = q.multi ? (Array.isArray(a) && a.includes(o.id)) : a === o.id
             return (
               <button key={o.id} style={chip(sel)} onClick={() => q.multi ? setMulti(q.id, o.id) : setSingle(q.id, o.id, true)}>
