@@ -5,7 +5,7 @@ name: Intersection syndrome
 clin: Intersection syndrome (where the first and second extensor compartments cross)
 # DRAFT patient text written 25 Sep 2026 from content/regions/forearm.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Top of the forearm about four finger-widths above the wrist, on the thumb side": 3
   "Repeated wrist movements (rowing, paddling, weights)": 3

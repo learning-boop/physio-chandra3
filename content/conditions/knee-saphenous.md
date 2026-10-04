@@ -6,7 +6,7 @@ clin: Saphenous nerve irritation
 # DRAFT patient text written 25 Sep 2026 from content/regions/knee.md — not yet reviewed.
 # Patient text shared with leg-saphenous.md: keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "A burning or numb patch on the inner knee or shin": 3
   "Inner side of the knee": 1

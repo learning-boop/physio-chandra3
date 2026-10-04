@@ -5,7 +5,7 @@ name: Finger nerve irritation (digital nerve)
 clin: Digital nerve irritation or injury (for example bowler's thumb)
 # DRAFT patient text written 25 Sep 2026 from content/regions/hand.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Numbness down one side of one finger only": 3
   "A whole finger, or the fingertips": 2

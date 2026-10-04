@@ -5,7 +5,7 @@ name: Outer shin nerve irritation (peroneal nerve)
 clin: Common or superficial peroneal nerve irritation
 # DRAFT patient text written 25 Sep 2026 from content/regions/leg.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Pins and needles or numbness on the outer shin and top of the foot": 3
   "Outer side of the lower leg": 2

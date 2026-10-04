@@ -5,7 +5,7 @@ name: Thumb muscle overuse (texting, pinching)
 clin: Thenar and first dorsal interosseous muscle overload, with trigger point referral
 # DRAFT patient text written 25 Sep 2026 from content/regions/hand.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Typing, texting, or gaming with the thumbs": 3
   "After a lot of gripping, pinching, typing, or phone use": 2

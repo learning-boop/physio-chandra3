@@ -5,7 +5,7 @@ name: Tailbone that moves too much
 clin: Coccydynia with an unstable (hypermobile) coccyx (Maigne 2000; Garg & Ahuja 2021)
 # DRAFT patient text written 25 Sep 2026 from content/regions/coccyx.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "After giving birth": 3
   "More than 2 months": 1

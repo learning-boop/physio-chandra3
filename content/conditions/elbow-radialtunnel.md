@@ -5,9 +5,9 @@ name: Radial tunnel syndrome
 clin: Posterior interosseous nerve irritation at the radial tunnel
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
 # Patient text shared with forearm-radialtunnel.md: keep the two in step.
-# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "A deep ache in the top of the forearm, a few finger-widths below the outer elbow": 3
   "In the forearm or upper arm muscles, not at the elbow itself": 2

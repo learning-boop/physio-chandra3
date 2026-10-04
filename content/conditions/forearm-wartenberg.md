@@ -5,7 +5,7 @@ name: Superficial radial nerve irritation (Wartenberg's syndrome)
 clin: Superficial radial nerve entrapment (cheiralgia paresthetica)
 # DRAFT patient text written 25 Sep 2026 from content/regions/forearm.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Burning or tingling over the back of the thumb and wrist": 3
   "A tight watch strap, cuff, or bracelet": 3

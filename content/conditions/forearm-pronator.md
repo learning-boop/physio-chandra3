@@ -4,9 +4,9 @@ id: pronator
 name: Pronator syndrome (median nerve in the forearm)
 clin: Pronator syndrome (median nerve compression at the proximal forearm)
 # DRAFT patient text written 25 Sep 2026 from content/regions/forearm.md — not yet reviewed.
-# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Underside of the forearm near the elbow (palm side)": 3
   "Tingling or numbness in the thumb, index, and middle fingers": 3

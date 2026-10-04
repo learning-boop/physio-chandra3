@@ -4,9 +4,9 @@ id: ucl
 name: Inner elbow ligament strain (thrower's elbow)
 clin: Ulnar collateral ligament sprain (moving valgus stress; O'Driscoll 2005)
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
-# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); the rest of the text is still a draft.
+# 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Pain on the inside of the elbow as my arm goes back to throw": 3
   "I felt a pop on the inside of the elbow": 3
