@@ -2173,7 +2173,16 @@ export default function PainAssessment() {
                           <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
                             <button style={chip(open)} onClick={toggle} aria-expanded={open}>
                               <span style={letterStyle(open)}>{LETTERS[i] || '·'}</span>
-                              <span>{r.gate.text}</span>
+                              {/* Title in bold, the short signs beneath, for a quick scan. */}
+                              {(() => {
+                                const i = r.gate.text.indexOf(': ')
+                                return i < 0 ? <span>{r.gate.text}</span> : (
+                                  <span>
+                                    <strong style={{ display: 'block', color: '#fff', fontWeight: 600 }}>{r.gate.text.slice(0, i)}</strong>
+                                    <span style={{ display: 'block', marginTop: 3, fontSize: '0.93em', color: 'rgba(255,255,255,0.78)' }}>{r.gate.text.slice(i + 2)}</span>
+                                  </span>
+                                )
+                              })()}
                             </button>
                             {open && (
                               <div className="pa-gate-body">

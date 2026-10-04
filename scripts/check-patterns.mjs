@@ -1586,7 +1586,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ['af-dvt', 'af-cast', 'af-cancer'].every((id) => ids(counts.ankle[1]).includes(id)))
   const medText = (r, gid) => r.rows.find((x) => x.gate && x.gate.id === gid).gate.text
   check('Smart flow: each group lists only the signs that apply to this person (no child limp for an adult, no periods for a man)',
-    !/child/.test(medText(counts.knee[0], 'knee-medical')) && /child aged about 9 to 16/.test(medText(counts.knee[1], 'knee-medical')) &&
+    !/child/.test(medText(counts.knee[0], 'knee-medical')) && /a child limping/.test(medText(counts.knee[1], 'knee-medical')) &&
     /periods/.test(medText(counts.hip[0], 'hip-organ')) && !/periods/.test(medText(counts.hip[1], 'hip-organ')) &&
     !/child/.test(medText(counts.hip[0], 'hip-bone')) && /^Signs that need a medical check: /.test(medText(counts.knee[0], 'knee-medical')))
   // Back, neck and shoulder: the real page (the universal checks it keeps, and the drawing's pattern questions).
@@ -1643,6 +1643,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const hipWithPattern = (() => { const doc = [...counts.hip[1].list.filter((f) => !f.unsure), { id: 'pc-urinary', tier: 'urgent', text: 'u' }]; return G.gateRows([...doc, ...G.gateUnsureFlags(doc, 'hip')]) })()
   check('Smart flow: the drawing\x27s urinary pattern question joins the hip\x27s tummy-or-pelvis group instead of standing beside it',
     hipWithPattern.length === 5 && hipWithPattern.find((r) => r.gate && r.gate.id === 'hip-organ').members.some((m) => m.id === 'pc-urinary'))
+  const wordsOf = (t) => t.split(/s+/).length
+  const allTexts = Object.values(G.GATES).flat().map((g) => G.gateText(g, g.members.map((id) => ({ id }))))
+  check('Smart flow: group questions are short (every one under 50 words, half under 26), with a short sign for every member',
+    allTexts.every((t) => wordsOf(t) < 50) && allTexts.map(wordsOf).sort((a, b) => a - b)[Math.floor(allTexts.length / 2)] <= 26 &&
+    Object.values(G.GATES).flat().every((g) => g.members.every((id) => G.SHORT[id])), allTexts.filter((t) => wordsOf(t) >= 50))
   const u = counts.hip[0].list.find((f) => f.id === 'gate:hip-bone')
   check('Smart flow: "Not sure which" counts as a doctor flag, as urgent as the most urgent question in its group (the hip fracture with no fall: today)',
     u && u.tier === 'urgent' && u.sameDay && !u.noBooking && counts.knee[0].list.find((f) => f.id === 'gate:knee-circulation').sameDay)
