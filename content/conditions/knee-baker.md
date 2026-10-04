@@ -5,7 +5,7 @@ name: Back-of-knee swelling or tendon pain (Baker's cyst)
 clin: Popliteal (Baker's) cyst, or popliteus and hamstring tendon pain
 # DRAFT patient text written 25 Sep 2026 from content/regions/knee.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "A lump or fullness at the back of the knee": 3
   "Back of the knee": 3

@@ -5,7 +5,7 @@ name: Deep ankle ache after a sprain (cartilage injury)
 clin: Osteochondral lesion of the talus
 # DRAFT patient text written 25 Sep 2026 from content/regions/ankle.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Catching or locking deep in the ankle": 3
   "A deep ache inside the ankle after activity": 3

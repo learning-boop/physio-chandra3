@@ -4,9 +4,9 @@ id: highankle
 name: High ankle sprain (syndesmosis)
 clin: Syndesmosis (high ankle) sprain (Sman 2015)
 # DRAFT patient text written 25 Sep 2026 from content/regions/ankle.md — not yet reviewed.
-# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review; signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Just above the ankle, at the front between the two leg bones": 3
   "Running, jumping, or hopping": 1

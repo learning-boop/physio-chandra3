@@ -4,9 +4,9 @@ id: inguinal
 name: Inguinal-related groin pain
 clin: Inguinal-related groin pain (Doha agreement 2015); hernia to be excluded
 # DRAFT patient text written 25 Sep 2026 from content/regions/hip.md — not yet reviewed.
-# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review; signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Pain just above the groin crease, worse with coughing or sit-ups": 3
   "Groin, or the front of the hip": 1

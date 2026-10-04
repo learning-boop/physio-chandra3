@@ -4,9 +4,9 @@ id: cecs
 name: Exercise-related tight shin (chronic exertional compartment syndrome)
 clin: Chronic exertional compartment syndrome of the leg (Pedowitz 1990)
 # DRAFT patient text written 25 Sep 2026 from content/regions/leg.md — not yet reviewed.
-# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review (draft, not yet reviewed).
+# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review; signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Builds up during exercise at the same point, and eases within minutes of stopping": 3
   "The leg goes tight or hard": 3
