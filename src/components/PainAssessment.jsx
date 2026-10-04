@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import { arrangeOptions, arrangeSplit } from '../data/optionOrder'
-import { byMechanism, kneeOnly, gateUnsureFlags, gateRows } from '../data/safetyGates'
+import { byMechanism, smartArea, gateUnsureFlags, gateRows } from '../data/safetyGates'
 import { CLINICS } from '../data/clinics'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
@@ -769,9 +769,10 @@ export default function PainAssessment() {
      when one of those areas is marked (the neck's shoulder-tip flags). Its
      `why` line from the region document titles the explanation. */
   const injuryApplies = useMemo(() => injuryScreenApplies(flowZ), [flowZ])
-  // Knee prototype (../data/safetyGates.js): for a drawing of the knee only,
-  // the injury screen runs before the doctor page and its answer filters it.
-  const kneeFirst = injuryApplies && kneeOnly(flowZ)
+  // Smarter safety flow (../data/safetyGates.js): for a drawing of the knee,
+  // foot, hip or ankle only, the injury screen runs before the doctor page
+  // and its answer filters it; the doctor page is grouped.
+  const smartFirst = injuryApplies && !!smartArea(flowZ)
   // Gateway groups the person has opened on the doctor page.
   const [openGates, setOpenGates] = useState([])
   // Organ-referral and systemic maps the drawing alone matches; the ones that
@@ -858,14 +859,15 @@ export default function PainAssessment() {
       // Most severe first on each page (../data/emergencyAdvice.js, bySeverity).
       emergency: bySeverity(all.filter((f) => f.tier === 'emergency')),
       physician: (() => {
-        // Knee prototype: the mechanism filter, then the gateway groups.
+        // Smarter safety flow: the mechanism filter, then the gateway groups.
         const doc = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
-        return kneeOnly(flowZ) ? [...doc, ...gateUnsureFlags(doc)] : doc
+        const area = smartArea(flowZ)
+        return area ? [...doc, ...gateUnsureFlags(doc, area)] : doc
       })(),
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers['knee:I1']])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -961,8 +963,8 @@ export default function PainAssessment() {
   const holdToday = doctorFlags.some((f) => f.noBooking && f.sameDay)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
-    if (flaggedAt === 'physician') { if (injuryApplies && !kneeFirst) startInjury(); else startQuestions() }
-    else if (flaggedAt === 'injury') { if (kneeFirst) setStage('physician'); else startQuestions() }
+    if (flaggedAt === 'physician') { if (injuryApplies && !smartFirst) startInjury(); else startQuestions() }
+    else if (flaggedAt === 'injury') { if (smartFirst) setStage('physician'); else startQuestions() }
     else setStage('ok')
   }
   // Cautions never withhold booking — they shape the first assessment, and
@@ -1221,7 +1223,7 @@ export default function PainAssessment() {
   }
   // Back from the first question (or the area choice): the last safety step
   // answered, the injury questions when they applied.
-  const backToSafety = () => setStage(injuryApplies && injuryQ && !kneeFirst ? 'injury' : 'physician')
+  const backToSafety = () => setStage(injuryApplies && injuryQ && !smartFirst ? 'injury' : 'physician')
   // The questions come in parts: emergency signs, then signs for a doctor
   // (with the injury questions), then the pain itself. An area with no
   // emergency page starts at the doctor part.
@@ -1286,14 +1288,14 @@ export default function PainAssessment() {
     setInjuryPath((p) => (p.includes(injuryQ) ? p : [...p, injuryQ]))
     if (r.next) { setInjuryQ(r.next); setInjuryDraft(undefined); return }
     if (r.route === 'emergency' || r.route === 'urgent') routeUrgent('injury')
-    else if (kneeFirst) setStage('physician')
+    else if (smartFirst) setStage('physician')
     else startQuestions()
   }
   // Back one question; answers after it are cleared so a changed route
   // never reuses them without asking.
   const backInjury = () => {
     const p = injuryPath.filter((id) => id !== injuryQ)
-    if (!p.length) { setAnswers((a) => withoutInjury(a)); setStage(kneeFirst ? (screening.emergency.length ? 'emergency' : 'about') : 'physician'); return }
+    if (!p.length) { setAnswers((a) => withoutInjury(a)); setStage(smartFirst ? (screening.emergency.length ? 'emergency' : 'about') : 'physician'); return }
     const prev = p[p.length - 1]
     setInjuryDraft(answers[prev])
     setAnswers((a) => withoutInjury(a, p.slice(0, -1)))
@@ -2127,8 +2129,8 @@ export default function PainAssessment() {
               const next = () => {
                 if (gateOpenEmpty) return
                 if (ticked) { routeUrgent(stage); return }
-                if (emergency) { if (kneeFirst) startInjury(); else setStage('physician') }
-                else if (injuryApplies && !kneeFirst) startInjury()
+                if (emergency) { if (smartFirst) startInjury(); else setStage('physician') }
+                else if (injuryApplies && !smartFirst) startInjury()
                 else startQuestions()
               }
               const flagChip = (f, letter) => {
@@ -2196,7 +2198,7 @@ export default function PainAssessment() {
                     </button>
                     <button style={ghostBtn} onClick={() => {
                       // Knee prototype: the doctor page comes after the injury screen.
-                      if (!emergency && kneeFirst && injuryQ) { setStage('injury'); return }
+                      if (!emergency && smartFirst && injuryQ) { setStage('injury'); return }
                       setStage(emergency || !screening.emergency.length ? 'about' : 'emergency')
                     }}>Back</button>
                   </div>

@@ -1551,7 +1551,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /emergency: bySeverity\(/.test(src) && /byMechanism\(bySeverity\(\[\.\.\.all/.test(src) && /return bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
 }
 
-// ── 49. Knee prototype: mechanism first, gateway groups (Chandra, 4 Oct 2026) ──
+// ── 49. Smarter safety flow: knee, foot, hip, ankle (Chandra, 4 Oct 2026) ──
 {
   const G = await imp('src/data/safetyGates.js')
   const { REGIONS } = await imp('src/data/symptomGuide.js')
@@ -1559,35 +1559,50 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const { bySeverity } = await imp('src/data/emergencyAdvice.js')
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
   const UNI = [{ id: 'sc-neuro', tier: 'urgent', text: 'n' }, { id: 'sc-systemic', tier: 'urgent', text: 's' }]
-  const page = (age, inj) => {
-    const before = bySeverity([...REGIONS.knee.redFlags.filter((f) => f.tier !== 'emergency' && forPerson(f, { age, sex: 'male' })), ...UNI])
-    const doc = G.byMechanism(before, { 'knee:I1': inj })
-    return { before, list: [...doc, ...G.gateUnsureFlags(doc)], rows: G.gateRows([...doc, ...G.gateUnsureFlags(doc)]) }
+  const page = (area, age, sex, inj) => {
+    const before = bySeverity([...REGIONS[area].redFlags.filter((f) => f.tier !== 'emergency' && forPerson(f, { age, sex })), ...UNI])
+    const doc = G.byMechanism(before, { [area + ':I1']: inj })
+    const list = [...doc, ...G.gateUnsureFlags(doc, area)]
+    return { before, list, rows: G.gateRows(list) }
   }
-  const adult = page('30-49', 'no'), teen = page('u18', 'no'), hurt = page('30-49', 'twist')
-  check('Knee prototype: the doctor page goes from 9 to 12 separate questions to 4 items (three groups and the nerve question)',
-    adult.before.length === 9 && adult.rows.length === 4 && teen.before.length === 12 && teen.rows.length === 4 && hurt.rows.length === 4,
-    [adult.before.length, adult.rows.length, teen.before.length, teen.rows.length])
-  const all = (r) => r.rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id]))
-  check('Knee prototype: no red flag is lost (every question is still on the page, inside its group), except those the mechanism rules out',
-    adult.before.every((f) => all(adult).includes(f.id)) && teen.before.every((f) => all(teen).includes(f.id)) &&
-    hurt.before.filter((f) => !['kf-stress', 'kf-perthes'].includes(f.id)).every((f) => all(hurt).includes(f.id)))
-  check('Knee prototype: after a recent injury, the overuse stress fracture and "no injury" Perthes questions are skipped; clot, infection, cancer and tumour questions never are',
-    !all(hurt).includes('kf-stress') && all(adult).includes('kf-stress') &&
-    ['kf-dvt', 'kf-replacement', 'kf-cancer', 'sc-systemic'].every((id) => all(hurt).includes(id)) &&
-    Object.keys(G.MECHANISM).every((id) => !['kf-dvt', 'kf-septic', 'kf-cancer', 'kf-tumour', 'kf-replacement', 'kf-inflam', 'kf-artery', 'kf-gout', 'kf-sufe'].includes(id)))
-  const medText = (r) => r.rows.find((x) => x.gate && x.gate.id === 'medical').gate.text
-  check('Knee prototype: each group lists only the signs that apply to this person (no child limp for an adult; the teen sees it)',
-    !/child/.test(medText(adult)) && /child aged about 9 to 16/.test(medText(teen)) && /^Signs that need a medical check: /.test(medText(adult)))
-  const unsure = adult.list.find((f) => f.id === 'gate:circulation')
-  check('Knee prototype: "Not sure which" counts as a doctor flag, as urgent as the most urgent question in its group (the calf clot: today)',
-    unsure && unsure.tier === 'urgent' && unsure.sameDay && !unsure.noBooking)
-  check('Knee prototype: a group with only one question that applies shows that question with no gateway (sc-systemic alone elsewhere)',
-    G.gateRows([...UNI, ...G.gateUnsureFlags(UNI)]).every((r) => r.flag))
-  check('Knee prototype: knee-only drawings run the injury screen before the doctor page; emergencies stay first; a group opened but not answered blocks Continue',
-    /const kneeFirst = injuryApplies && kneeOnly\(flowZ\)/.test(src) && /if \(emergency\) \{ if \(kneeFirst\) startInjury\(\); else setStage\('physician'\) \}/.test(src) &&
-    /else if \(kneeFirst\) setStage\('physician'\)/.test(src) && /if \(gateOpenEmpty\) return/.test(src) &&
-    G.kneeOnly([{ type: 'knee' }, { type: 'knee' }]) && !G.kneeOnly([{ type: 'knee' }, { type: 'thigh' }]))
+  const counts = {
+    knee: [page('knee', '30-49', 'male', 'no'), page('knee', 'u18', 'male', 'no')],
+    foot: [page('foot', '30-49', 'male', 'no'), page('foot', 'o64', 'female', 'twist')],
+    hip: [page('hip', '30-49', 'female', 'no'), page('hip', '30-49', 'male', 'no'), page('hip', 'u18', 'male', 'fall')],
+    ankle: [page('ankle', '30-49', 'female', 'no'), page('ankle', 'o64', 'male', 'inversion')],
+  }
+  const summary = Object.entries(counts).map(([k, v]) => k + ' ' + v.map((x) => x.before.length + '→' + x.rows.length).join(' ')).join('; ')
+  check('Smart flow: the doctor page shrinks in every area (knee 9-12 → 4, foot 13 → 4, hip 10-12 → 5, ankle 12 → 4)',
+    Object.values(counts).flat().every((x) => x.rows.length <= 5 && x.rows.length < x.before.length) &&
+    counts.foot[0].rows.length === 4 && counts.ankle[0].rows.length === 4 && counts.hip[0].rows.length === 5 && counts.knee[0].rows.length === 4, summary)
+  const ids = (r) => r.rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id]))
+  check('Smart flow: no red flag is lost in any area (every question is still on the page, inside its group), except those the mechanism rules out',
+    Object.values(counts).flat().every((x) => x.before.filter((f) => !x.list.length || x.list.some((y) => y.id === f.id)).every((f) => ids(x).includes(f.id))) &&
+    Object.values(counts).flat().every((x) => x.list.filter((f) => !f.unsure).every((f) => ids(x).includes(f.id))), summary)
+  check('Smart flow: after a recent injury only the overuse stress fractures and "no injury" Perthes are skipped; the hip\'s sudden-pain-with-no-fall fracture question, clot, infection and cancer questions never are',
+    !ids(counts.foot[1]).includes('ft-stress') && ids(counts.foot[0]).includes('ft-stress') &&
+    !ids(counts.hip[2]).includes('hpf-stress') && ids(counts.hip[2]).includes('hpf-nofall') &&
+    Object.keys(G.MECHANISM).every((id) => /stress|perthes/.test(id)) &&
+    ['af-dvt', 'af-cast', 'af-cancer'].every((id) => ids(counts.ankle[1]).includes(id)))
+  const medText = (r, gid) => r.rows.find((x) => x.gate && x.gate.id === gid).gate.text
+  check('Smart flow: each group lists only the signs that apply to this person (no child limp for an adult, no periods for a man)',
+    !/child/.test(medText(counts.knee[0], 'knee-medical')) && /child aged about 9 to 16/.test(medText(counts.knee[1], 'knee-medical')) &&
+    /periods/.test(medText(counts.hip[0], 'hip-organ')) && !/periods/.test(medText(counts.hip[1], 'hip-organ')) &&
+    !/child/.test(medText(counts.hip[0], 'hip-bone')) && /^Signs that need a medical check: /.test(medText(counts.knee[0], 'knee-medical')))
+  const hipWithPattern = (() => { const doc = [...counts.hip[1].list.filter((f) => !f.unsure), { id: 'pc-urinary', tier: 'urgent', text: 'u' }]; return G.gateRows([...doc, ...G.gateUnsureFlags(doc, 'hip')]) })()
+  check('Smart flow: the drawing\x27s urinary pattern question joins the hip\x27s tummy-or-pelvis group instead of standing beside it',
+    hipWithPattern.length === 5 && hipWithPattern.find((r) => r.gate && r.gate.id === 'hip-organ').members.some((m) => m.id === 'pc-urinary'))
+  const u = counts.hip[0].list.find((f) => f.id === 'gate:hip-bone')
+  check('Smart flow: "Not sure which" counts as a doctor flag, as urgent as the most urgent question in its group (the hip fracture with no fall: today)',
+    u && u.tier === 'urgent' && u.sameDay && !u.noBooking && counts.knee[0].list.find((f) => f.id === 'gate:knee-circulation').sameDay)
+  check('Smart flow: every group member has plain-language signs; a group with one question that applies shows that question',
+    Object.values(G.GATES).flat().every((g) => g.members.every((id) => G.SIGNS[id])) &&
+    G.gateRows([...UNI, ...G.gateUnsureFlags(UNI, 'knee')]).every((r) => r.flag))
+  check('Smart flow: one of these areas drawn alone runs the injury screen before the doctor page; emergencies stay first; a group opened but not answered blocks Continue; other drawings unchanged',
+    /const smartFirst = injuryApplies && !!smartArea\(flowZ\)/.test(src) && /if \(emergency\) \{ if \(smartFirst\) startInjury\(\); else setStage\('physician'\) \}/.test(src) &&
+    /else if \(smartFirst\) setStage\('physician'\)/.test(src) && /if \(gateOpenEmpty\) return/.test(src) &&
+    G.smartArea([{ type: 'hip' }]) === 'hip' && G.smartArea([{ type: 'foot' }, { type: 'foot' }]) === 'foot' &&
+    G.smartArea([{ type: 'knee' }, { type: 'thigh' }]) === null && G.smartArea([{ type: 'shoulder' }]) === null)
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)
