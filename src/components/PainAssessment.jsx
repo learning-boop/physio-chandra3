@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import PainAIPanel from './PainAIPanel'
 import ClinicPicker from './ClinicPicker'
 import { arrangeOptions, arrangeSplit } from '../data/optionOrder'
+import { byMechanism, kneeOnly, gateUnsureFlags, gateRows } from '../data/safetyGates'
 import { CLINICS } from '../data/clinics'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
@@ -768,6 +769,11 @@ export default function PainAssessment() {
      when one of those areas is marked (the neck's shoulder-tip flags). Its
      `why` line from the region document titles the explanation. */
   const injuryApplies = useMemo(() => injuryScreenApplies(flowZ), [flowZ])
+  // Knee prototype (../data/safetyGates.js): for a drawing of the knee only,
+  // the injury screen runs before the doctor page and its answer filters it.
+  const kneeFirst = injuryApplies && kneeOnly(flowZ)
+  // Gateway groups the person has opened on the doctor page.
+  const [openGates, setOpenGates] = useState([])
   // Organ-referral and systemic maps the drawing alone matches; the ones that
   // need answers (the inflammatory pattern) are left for the final check.
   const earlyPatterns = useMemo(() => patternChecks(zones, {}, 12), [zones])
@@ -851,11 +857,15 @@ export default function PainAssessment() {
     return {
       // Most severe first on each page (../data/emergencyAdvice.js, bySeverity).
       emergency: bySeverity(all.filter((f) => f.tier === 'emergency')),
-      physician: bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]),
+      physician: (() => {
+        // Knee prototype: the mechanism filter, then the gateway groups.
+        const doc = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
+        return kneeOnly(flowZ) ? [...doc, ...gateUnsureFlags(doc)] : doc
+      })(),
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers['knee:I1']])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -951,8 +961,8 @@ export default function PainAssessment() {
   const holdToday = doctorFlags.some((f) => f.noBooking && f.sameDay)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
-    if (flaggedAt === 'physician') { if (injuryApplies) startInjury(); else startQuestions() }
-    else if (flaggedAt === 'injury') startQuestions()
+    if (flaggedAt === 'physician') { if (injuryApplies && !kneeFirst) startInjury(); else startQuestions() }
+    else if (flaggedAt === 'injury') { if (kneeFirst) setStage('physician'); else startQuestions() }
     else setStage('ok')
   }
   // Cautions never withhold booking — they shape the first assessment, and
@@ -1211,7 +1221,7 @@ export default function PainAssessment() {
   }
   // Back from the first question (or the area choice): the last safety step
   // answered, the injury questions when they applied.
-  const backToSafety = () => setStage(injuryApplies && injuryQ ? 'injury' : 'physician')
+  const backToSafety = () => setStage(injuryApplies && injuryQ && !kneeFirst ? 'injury' : 'physician')
   // The questions come in parts: emergency signs, then signs for a doctor
   // (with the injury questions), then the pain itself. An area with no
   // emergency page starts at the doctor part.
@@ -1276,13 +1286,14 @@ export default function PainAssessment() {
     setInjuryPath((p) => (p.includes(injuryQ) ? p : [...p, injuryQ]))
     if (r.next) { setInjuryQ(r.next); setInjuryDraft(undefined); return }
     if (r.route === 'emergency' || r.route === 'urgent') routeUrgent('injury')
+    else if (kneeFirst) setStage('physician')
     else startQuestions()
   }
   // Back one question; answers after it are cleared so a changed route
   // never reuses them without asking.
   const backInjury = () => {
     const p = injuryPath.filter((id) => id !== injuryQ)
-    if (!p.length) { setAnswers((a) => withoutInjury(a)); setStage('physician'); return }
+    if (!p.length) { setAnswers((a) => withoutInjury(a)); setStage(kneeFirst ? (screening.emergency.length ? 'emergency' : 'about') : 'physician'); return }
     const prev = p[p.length - 1]
     setInjuryDraft(answers[prev])
     setAnswers((a) => withoutInjury(a, p.slice(0, -1)))
@@ -1466,6 +1477,13 @@ export default function PainAssessment() {
             50%      { transform: translateX(15px);  opacity: 1; }
           }
           @keyframes pa-swipe-in { from { opacity: 0; } to { opacity: 1; } }
+
+          /* Gateway groups on the doctor page (knee prototype). */
+          .pa-gate { display: flex; flex-direction: column; gap: 8px; }
+          .pa-gate-body { display: flex; flex-direction: column; gap: 8px; margin: 2px 0 6px 18px; padding-left: 14px;
+            border-left: 2px solid rgba(201,169,110,0.55); }
+          .pa-gate-ask { margin: 2px 0 0; font-size: 13.5px; color: #e8d5b0; letter-spacing: 0.02em; }
+          .pa-gate-hint { margin: 4px 0 0; font-size: 13.5px; color: #fcd34d; }
 
           /* "We will ask about the ticked areas": a gold callout after drawing,
              with a short glow when it first appears. */
@@ -2102,11 +2120,26 @@ export default function PainAssessment() {
               const emergency = stage === 'emergency'
               const list = emergency ? screening.emergency : screening.physician
               const ticked = flaggedIn(list)
+              const rows = gateRows(list)
+              // A group opened but nothing in it chosen yet.
+              const gateOpenEmpty = rows.some((r) => r.gate && openGates.includes(r.gate.id) &&
+                ![...r.members, r.unsure].some((m) => flags.includes(m.id)))
               const next = () => {
+                if (gateOpenEmpty) return
                 if (ticked) { routeUrgent(stage); return }
-                if (emergency) setStage('physician')
-                else if (injuryApplies) startInjury()
+                if (emergency) { if (kneeFirst) startInjury(); else setStage('physician') }
+                else if (injuryApplies && !kneeFirst) startInjury()
                 else startQuestions()
+              }
+              const flagChip = (f, letter) => {
+                const sel = flags.includes(f.id)
+                return (
+                  <button key={f.id} style={chip(sel)}
+                    onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
+                    <span style={letterStyle(sel)}>{letter}</span>
+                    <span>{f.text}</span>
+                  </button>
+                )
               }
               return (
                 <Fade k={stage}>
@@ -2125,25 +2158,47 @@ export default function PainAssessment() {
                   </div>
                   {list.length > 0 ? (
                     <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
-                      {list.map((f, i) => {
-                        const sel = flags.includes(f.id)
+                      {rows.map((r, i) => {
+                        if (r.flag) return flagChip(r.flag, LETTERS[i] || '·')
+                        // A gateway group (../data/safetyGates.js): tick to see its questions.
+                        const open = openGates.includes(r.gate.id)
+                        const toggle = () => {
+                          setOpenGates((cur) => (open ? cur.filter((x) => x !== r.gate.id) : [...cur, r.gate.id]))
+                          if (open) setFlags((cur) => cur.filter((x) => ![...r.members, r.unsure].some((m) => m.id === x)))
+                        }
                         return (
-                          <button key={f.id} style={chip(sel)}
-                            onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
-                            <span style={letterStyle(sel)}>{LETTERS[i] || '·'}</span>
-                            <span>{f.text}</span>
-                          </button>
+                          <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
+                            <button style={chip(open)} onClick={toggle} aria-expanded={open}>
+                              <span style={letterStyle(open)}>{LETTERS[i] || '·'}</span>
+                              <span>{r.gate.text}</span>
+                            </button>
+                            {open && (
+                              <div className="pa-gate-body">
+                                <p className="pa-gate-ask">Which of these? Tick any that apply.</p>
+                                {r.members.map((m) => flagChip(m, '·'))}
+                                {flagChip({ ...r.unsure, text: 'Not sure which, but one of these signs applies' }, '?')}
+                              </div>
+                            )}
+                          </div>
                         )
                       })}
+                      {gateOpenEmpty && (
+                        <p className="pa-gate-hint" role="status">Please tick which one applies, or "Not sure which", or untick the group.</p>
+                      )}
                     </div>
                   ) : (
                     <p style={{ ...body, fontSize: 15, maxWidth: 520 }}>Nothing on this page applies to the area you marked.</p>
                   )}
                   <div className="pa-actions" style={{ marginTop: 20 }}>
-                    <button className="pa-primary" style={goldBtn} onClick={next}>
-                      {ticked ? 'Continue' : 'None of These Apply — Continue'}
+                    <button className="pa-primary" style={{ ...goldBtn, opacity: gateOpenEmpty ? 0.45 : 1, cursor: gateOpenEmpty ? 'not-allowed' : 'pointer' }}
+                      onClick={next} aria-disabled={gateOpenEmpty}>
+                      {ticked || gateOpenEmpty ? 'Continue' : 'None of These Apply — Continue'}
                     </button>
-                    <button style={ghostBtn} onClick={() => setStage(emergency || !screening.emergency.length ? 'about' : 'emergency')}>Back</button>
+                    <button style={ghostBtn} onClick={() => {
+                      // Knee prototype: the doctor page comes after the injury screen.
+                      if (!emergency && kneeFirst && injuryQ) { setStage('injury'); return }
+                      setStage(emergency || !screening.emergency.length ? 'about' : 'emergency')
+                    }}>Back</button>
                   </div>
                 </Fade>
               )

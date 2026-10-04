@@ -1305,7 +1305,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /dropOi = \(\{ oi, oiType, oiGoal, oiFalls, oiCare, \.\.\.a \}\)/.test(src))
   check('OI red flags: none without the tick; with it, first on the safety pages in every area, after the obstetric ones',
     !OI.oiRedFlags({}).length && OI.oiRedFlags({ oi: 'yes' }).length === 6 &&
-    /\[\.\.\.obstetric, \.\.\.oiFlags, \.\.\.diabetic, \.\.\.steroid, \.\.\.list, \.\.\.pattern\]/.test(src) && /answers\.preg, answers\.oi\]/.test(src))
+    /\[\.\.\.obstetric, \.\.\.oiFlags, \.\.\.diabetic, \.\.\.steroid, \.\.\.list, \.\.\.pattern\]/.test(src) && /answers\.preg, answers\.oi[,\]]/.test(src))
   const rf = Object.fromEntries(OI.OI_RED_FLAGS.map((f) => [f.id, f]))
   check('OI fracture first: new pain after a small knock, lift, twist or sneeze, even mild, or sudden severe back pain → X-ray today or tomorrow, booking after the X-ray',
     rf['oi-fracture'].tier === 'urgent' && rf['oi-fracture'].sameDay && rf['oi-fracture'].noBooking &&
@@ -1548,7 +1548,46 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Severity: dynamic, from the questions that apply (OI on: the emergency ones above the doctor-today ones)',
     oi.findIndex((f) => f.tier !== 'emergency') > oi.map((f) => f.tier).lastIndexOf('emergency'))
   check('Severity: applied to the emergency page, the doctor page, the final check and the Symptom Guide',
-    /emergency: bySeverity\(/.test(src) && /physician: bySeverity\(/.test(src) && /return bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
+    /emergency: bySeverity\(/.test(src) && /byMechanism\(bySeverity\(\[\.\.\.all/.test(src) && /return bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
+}
+
+// ── 49. Knee prototype: mechanism first, gateway groups (Chandra, 4 Oct 2026) ──
+{
+  const G = await imp('src/data/safetyGates.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const { forPerson } = await imp('src/data/assessmentFlow.js')
+  const { bySeverity } = await imp('src/data/emergencyAdvice.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const UNI = [{ id: 'sc-neuro', tier: 'urgent', text: 'n' }, { id: 'sc-systemic', tier: 'urgent', text: 's' }]
+  const page = (age, inj) => {
+    const before = bySeverity([...REGIONS.knee.redFlags.filter((f) => f.tier !== 'emergency' && forPerson(f, { age, sex: 'male' })), ...UNI])
+    const doc = G.byMechanism(before, { 'knee:I1': inj })
+    return { before, list: [...doc, ...G.gateUnsureFlags(doc)], rows: G.gateRows([...doc, ...G.gateUnsureFlags(doc)]) }
+  }
+  const adult = page('30-49', 'no'), teen = page('u18', 'no'), hurt = page('30-49', 'twist')
+  check('Knee prototype: the doctor page goes from 9 to 12 separate questions to 4 items (three groups and the nerve question)',
+    adult.before.length === 9 && adult.rows.length === 4 && teen.before.length === 12 && teen.rows.length === 4 && hurt.rows.length === 4,
+    [adult.before.length, adult.rows.length, teen.before.length, teen.rows.length])
+  const all = (r) => r.rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id]))
+  check('Knee prototype: no red flag is lost (every question is still on the page, inside its group), except those the mechanism rules out',
+    adult.before.every((f) => all(adult).includes(f.id)) && teen.before.every((f) => all(teen).includes(f.id)) &&
+    hurt.before.filter((f) => !['kf-stress', 'kf-perthes'].includes(f.id)).every((f) => all(hurt).includes(f.id)))
+  check('Knee prototype: after a recent injury, the overuse stress fracture and "no injury" Perthes questions are skipped; clot, infection, cancer and tumour questions never are',
+    !all(hurt).includes('kf-stress') && all(adult).includes('kf-stress') &&
+    ['kf-dvt', 'kf-replacement', 'kf-cancer', 'sc-systemic'].every((id) => all(hurt).includes(id)) &&
+    Object.keys(G.MECHANISM).every((id) => !['kf-dvt', 'kf-septic', 'kf-cancer', 'kf-tumour', 'kf-replacement', 'kf-inflam', 'kf-artery', 'kf-gout', 'kf-sufe'].includes(id)))
+  const medText = (r) => r.rows.find((x) => x.gate && x.gate.id === 'medical').gate.text
+  check('Knee prototype: each group lists only the signs that apply to this person (no child limp for an adult; the teen sees it)',
+    !/child/.test(medText(adult)) && /child aged about 9 to 16/.test(medText(teen)) && /^Signs that need a medical check: /.test(medText(adult)))
+  const unsure = adult.list.find((f) => f.id === 'gate:circulation')
+  check('Knee prototype: "Not sure which" counts as a doctor flag, as urgent as the most urgent question in its group (the calf clot: today)',
+    unsure && unsure.tier === 'urgent' && unsure.sameDay && !unsure.noBooking)
+  check('Knee prototype: a group with only one question that applies shows that question with no gateway (sc-systemic alone elsewhere)',
+    G.gateRows([...UNI, ...G.gateUnsureFlags(UNI)]).every((r) => r.flag))
+  check('Knee prototype: knee-only drawings run the injury screen before the doctor page; emergencies stay first; a group opened but not answered blocks Continue',
+    /const kneeFirst = injuryApplies && kneeOnly\(flowZ\)/.test(src) && /if \(emergency\) \{ if \(kneeFirst\) startInjury\(\); else setStage\('physician'\) \}/.test(src) &&
+    /else if \(kneeFirst\) setStage\('physician'\)/.test(src) && /if \(gateOpenEmpty\) return/.test(src) &&
+    G.kneeOnly([{ type: 'knee' }, { type: 'knee' }]) && !G.kneeOnly([{ type: 'knee' }, { type: 'thigh' }]))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)
