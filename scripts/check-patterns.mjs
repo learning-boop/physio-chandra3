@@ -1582,13 +1582,37 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Smart flow: after a recent injury only the overuse stress fractures and "no injury" Perthes are skipped; the hip\'s sudden-pain-with-no-fall fracture question, clot, infection and cancer questions never are',
     !ids(counts.foot[1]).includes('ft-stress') && ids(counts.foot[0]).includes('ft-stress') &&
     !ids(counts.hip[2]).includes('hpf-stress') && ids(counts.hip[2]).includes('hpf-nofall') &&
-    Object.keys(G.MECHANISM).every((id) => /stress|perthes/.test(id)) &&
+    Object.keys(G.MECHANISM).every((id) => /stress|perthes|pta/.test(id)) &&
     ['af-dvt', 'af-cast', 'af-cancer'].every((id) => ids(counts.ankle[1]).includes(id)))
   const medText = (r, gid) => r.rows.find((x) => x.gate && x.gate.id === gid).gate.text
   check('Smart flow: each group lists only the signs that apply to this person (no child limp for an adult, no periods for a man)',
     !/child/.test(medText(counts.knee[0], 'knee-medical')) && /child aged about 9 to 16/.test(medText(counts.knee[1], 'knee-medical')) &&
     /periods/.test(medText(counts.hip[0], 'hip-organ')) && !/periods/.test(medText(counts.hip[1], 'hip-organ')) &&
     !/child/.test(medText(counts.hip[0], 'hip-bone')) && /^Signs that need a medical check: /.test(medText(counts.knee[0], 'knee-medical')))
+  // Back, neck and shoulder: the real page (the universal checks it keeps, and the drawing's pattern questions).
+  const real = (area, region, extra, age, sex, inj) => {
+    const before = bySeverity([...REGIONS[region].redFlags.filter((f) => f.tier !== 'emergency' && !f.drawn && forPerson(f, { age, sex })), ...extra])
+    const doc = G.byMechanism(before, inj ? { [area + ':I1']: inj } : {})
+    return { before, rows: G.gateRows([...doc, ...G.gateUnsureFlags(doc, area)]) }
+  }
+  const T3 = [{ id: 'sc-neuro', tier: 'urgent', text: 'n' }, { id: 'sc-systemic', tier: 'urgent', text: 's' }, { id: 'sc-trauma', tier: 'urgent', sameDay: true, text: 't' }]
+  const more = {
+    lowback: real('lowerback', 'lowback', [...T3, { id: 'pc-urinary', tier: 'urgent', text: 'u' }], '50-64', 'female'),
+    upperback: real('upperback', 'upperback', [...T3, { id: 'pc-visceral', tier: 'urgent', text: 'v' }], '30-49', 'male'),
+    tlj: real('tlj', 'tlj', [...T3, { id: 'pc-visceral', tier: 'urgent', text: 'v' }, { id: 'pc-urinary', tier: 'urgent', text: 'u' }], '30-49', 'male'),
+    neck: real('neck', 'neck', [UNI[1]], '30-49', 'male', 'no'),
+    shoulder: real('shoulder', 'shoulder', UNI, '50-64', 'male', 'no'),
+    shoulderHurt: real('shoulder', 'shoulder', UNI, '30-49', 'male', 'fall'),
+  }
+  const ms = Object.entries(more).map(([k, v]) => k + ' ' + v.before.length + '→' + v.rows.length).join('; ')
+  check('Smart flow: back, neck and shoulder pages shrink too',
+    ['lowback', 'upperback', 'tlj'].every((k) => more[k].rows.length === 4) && more.neck.rows.length === 3 && more.shoulder.rows.length === 3 &&
+    Object.values(more).every((v) => v.rows.length < v.before.length), ms)
+  const ids2 = (v) => v.rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id]))
+  check('Smart flow: no back, neck or shoulder red flag is lost; after a shoulder injury only the "no injury" Parsonage-Turner question is skipped',
+    ['lowback', 'upperback', 'tlj', 'neck', 'shoulder'].every((k) => more[k].before.every((f) => ids2(more[k]).includes(f.id))) &&
+    !ids2(more.shoulderHurt).includes('srf-pta') && ids2(more.shoulderHurt).includes('srf-pancoast'))
+  console.log('    back/neck/shoulder: ' + ms)
   const hipWithPattern = (() => { const doc = [...counts.hip[1].list.filter((f) => !f.unsure), { id: 'pc-urinary', tier: 'urgent', text: 'u' }]; return G.gateRows([...doc, ...G.gateUnsureFlags(doc, 'hip')]) })()
   check('Smart flow: the drawing\x27s urinary pattern question joins the hip\x27s tummy-or-pelvis group instead of standing beside it',
     hipWithPattern.length === 5 && hipWithPattern.find((r) => r.gate && r.gate.id === 'hip-organ').members.some((m) => m.id === 'pc-urinary'))
@@ -1602,7 +1626,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /const smartFirst = injuryApplies && !!smartArea\(flowZ\)/.test(src) && /if \(emergency\) \{ if \(smartFirst\) startInjury\(\); else setStage\('physician'\) \}/.test(src) &&
     /else if \(smartFirst\) setStage\('physician'\)/.test(src) && /if \(gateOpenEmpty\) return/.test(src) &&
     G.smartArea([{ type: 'hip' }]) === 'hip' && G.smartArea([{ type: 'foot' }, { type: 'foot' }]) === 'foot' &&
-    G.smartArea([{ type: 'knee' }, { type: 'thigh' }]) === null && G.smartArea([{ type: 'shoulder' }]) === null)
+    G.smartArea([{ type: 'knee' }, { type: 'thigh' }]) === null && G.smartArea([{ type: 'elbow' }]) === null && G.smartArea([{ type: 'lowerback' }]) === 'lowerback')
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

@@ -1,7 +1,9 @@
 /* ─────────────────────────────────────────────────────────────────────────
    Smarter doctor page: mechanism first, then gateway groups.
    Knee prototype (Chandra, 4 Oct 2026), extended the same day to the foot,
-   hip and ankle.
+   hip and ankle, then the back (lower back, mid back, thoracolumbar
+   junction), neck and shoulder. The back has no injury screen, so it gets
+   the grouped doctor page only.
 
    It runs when ONE of these areas is the only one drawn (AREAS below):
    1. Mechanism first. The area's injury screen ("Have you injured your …
@@ -24,7 +26,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 /* The areas it runs for: the drawn zone type → its injury screen and groups. */
-export const AREAS = ['knee', 'foot', 'hip', 'ankle']
+export const AREAS = ['knee', 'foot', 'hip', 'ankle', 'lowerback', 'upperback', 'tlj', 'neck', 'shoulder']
 
 /* Gateway groups per area. Each takes the place of its most severe member
    on the page (the page is sorted by severity first). */
@@ -45,6 +47,34 @@ export const GATES = {
     { id: 'hip-bone', title: 'Signs of a problem in the bone', members: ['hpf-nofall', 'hpf-stress', 'hpf-avn', 'hpf-sufe'] },
     { id: 'hip-organ', title: 'Signs coming from the tummy or pelvis', members: ['hpf-hernia', 'hpf-kidney', 'pc-urinary', 'hpf-pelvic'] },
     { id: 'hip-medical', title: 'Signs that need a medical check', members: ['hpf-cancer', 'sc-systemic'] },
+  ],
+  // Lower back (zone type lowerback): no injury screen, so groups only.
+  lowerback: [
+    { id: 'lowback-bone', title: 'Signs of a problem in the bone', members: ['rf-osteo', 'sc-trauma', 'rf-cancer', 'rf-spondy'] },
+    { id: 'lowback-infection', title: 'Signs of infection or another medical cause', members: ['rf-infection', 'sc-systemic'] },
+    { id: 'lowback-organ', title: 'Signs coming from inside the body', members: ['rf-kidney', 'pc-urinary', 'rf-pelvic', 'rf-aaa-slow'] },
+    { id: 'lowback-nerve', title: 'Changes in feeling or strength', members: ['rf-footdrop', 'sc-neuro'] },
+  ],
+  // Mid back and front of the chest (zone type upperback).
+  upperback: [
+    { id: 'upperback-bone', title: 'Signs of a problem in the bone', members: ['trf-osteo', 'sc-trauma', 'trf-cancer'] },
+    { id: 'upperback-infection', title: 'Signs of infection or another medical cause', members: ['trf-infection', 'trf-shingles', 'sc-systemic'] },
+    { id: 'upperback-organ', title: 'Signs coming from inside the body', members: ['trf-kidney', 'trf-gut', 'pc-visceral'] },
+    { id: 'upperback-nerve', title: 'Changes in feeling or strength', members: ['trf-myelo', 'sc-neuro'] },
+  ],
+  // Thoracolumbar junction (zone type tlj).
+  tlj: [
+    { id: 'tlj-bone', title: 'Signs of a problem in the bone', members: ['jrf-osteo', 'sc-trauma', 'jrf-cancer'] },
+    { id: 'tlj-infection', title: 'Signs of infection or another medical cause', members: ['jrf-infection', 'jrf-shingles', 'sc-systemic'] },
+    { id: 'tlj-organ', title: 'Signs coming from inside the body', members: ['jrf-kidney', 'pc-urinary', 'pc-visceral'] },
+    { id: 'tlj-nerve', title: 'Changes in feeling or strength', members: ['jrf-legs', 'sc-neuro'] },
+  ],
+  neck: [
+    { id: 'neck-cord', title: 'Signs of pressure on the spinal cord or an unstable upper neck', members: ['nrf-myelo', 'nrf-upperinstab'] },
+  ],
+  shoulder: [
+    { id: 'shoulder-medical', title: 'Signs coming from the chest or tummy, or that need a medical check', members: ['srf-pancoast', 'srf-organ', 'sc-systemic'] },
+    { id: 'shoulder-nerve', title: 'Changes in feeling or strength', members: ['srf-pta', 'sc-neuro'] },
   ],
   ankle: [
     { id: 'ankle-circulation', title: 'Signs of a clot or a tight cast', members: ['af-cast', 'af-dvt'] },
@@ -105,7 +135,41 @@ export const SIGNS = {
   'af-crps': 'since an injury, surgery or cast, an ankle or foot that burns, swells, changes colour or is so sensitive that light touch hurts',
   'af-quinolone': 'Achilles pain after a recent quinolone antibiotic (such as ciprofloxacin) or steroid tablets',
   'af-cancer': 'a past cancer, a lump that is growing, or a deep ache at night that does not change with position',
+  // Lower back
+  'rf-osteo': 'pain that started suddenly after a minor strain, cough or lift, if you have low bone density, take long-term steroid tablets or are over 70',
+  'rf-cancer': 'a past cancer, with this new back pain',
+  'rf-spondy': 'under 20, with pain on arching the back, especially with sport such as gymnastics, dance, cricket bowling or tennis',
+  'rf-infection': 'a fever or chills, a weakened immune system, injected drugs, or a recent urine or skin infection, or a spine procedure or injection',
+  'rf-kidney': 'pain in waves from your side to your groin, or a fever, burning or blood when you pass urine',
+  'rf-pelvic': 'pain linked to your periods, unusual vaginal bleeding, or (for men) new trouble passing urine',
+  'rf-aaa-slow': 'over 50 with smoking, high blood pressure, diabetes or artery disease, and a deep, constant ache that does not change with movement, or a pulsing in your tummy',
+  'rf-footdrop': 'your foot slapping down or your toes catching when you walk',
+  // Mid back
+  'trf-osteo': 'pain that started suddenly after a minor strain, cough, lift or a fall from standing height, if you are over 50, have low bone density or take long-term steroid tablets',
+  'trf-cancer': 'a past cancer, with this new mid-back pain',
+  'trf-infection': 'a fever or chills, a weakened immune system, or injected drugs',
+  'trf-shingles': 'a band of burning pain around one side of the chest or back, with a rash or blisters',
+  'trf-kidney': 'pain in your side or lower ribs, with a fever, burning or blood when you pass urine',
+  'trf-gut': 'pain linked to eating, heartburn or black stools, or under the right shoulder blade after fatty meals',
+  'trf-myelo': 'legs that have gradually become stiff, heavy or clumsy when you walk',
+  // Thoracolumbar junction
+  'jrf-osteo': 'pain that started suddenly after a minor strain, cough or lift, if you have low bone density, take long-term steroid tablets or are over 70',
+  'jrf-cancer': 'a past cancer, with this new back pain',
+  'jrf-infection': 'a fever or chills, a weakened immune system, or injected drugs',
+  'jrf-shingles': 'a band of burning pain around one side of your body, with a rash or blisters',
+  'jrf-kidney': 'waves of severe pain from your side down to your groin, or a fever, burning or blood when you pass urine',
+  'jrf-legs': 'legs that have gradually become stiff, heavy or clumsy when you walk',
+  // Neck
+  'nrf-myelo': 'over days or weeks, an arm, hand or leg that is quickly becoming weaker, number or clumsier, or walking that is quickly becoming more unsteady',
+  'nrf-upperinstab': 'rheumatoid or another inflammatory arthritis, Down syndrome or long-term steroids with a head that feels too heavy to hold up, or tingling round the lips when you move your neck; or, over recent weeks without an injury, a hoarse voice, trouble swallowing, numbness on one side of the face, a drooping eyelid or double vision',
+  // Shoulder
+  'srf-pancoast': 'a cough that will not go away, coughing up blood, a drooping eyelid or a weak hand, if you smoke or used to',
+  'srf-organ': 'pain that is worse after fatty meals or when you breathe in deeply, or comes with feeling sick, fever or yellow skin or eyes, or does not change at all with movement',
+  'srf-pta': 'a sudden, severe shoulder pain with no injury that lasted several days, then shoulder or arm muscles became weak or thin',
+  // Drawing-based pattern questions (./patternChecks.js)
+  'pc-visceral': 'pain that does not change at all with movement or position, or comes with nausea, fever or feeling unwell',
   // Shared
+  'sc-trauma': 'a significant fall or accident, or any fall if you are 65 or over or have low bone density',
   'sc-systemic': 'fever, chills or weight loss you cannot explain, or a new or growing lump',
   'sc-neuro': 'new or worsening weakness, numbness or clumsiness in an arm or leg',
 }
@@ -121,7 +185,7 @@ export function gateText(gate, members = []) {
 /* Mechanism: question id → the injury screen whose first answer decides it.
    'noInjury' questions (overuse stress fractures, "no injury" Perthes) are
    skipped after a recent injury to that area. */
-export const MECHANISM = { 'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'hpf-stress': 'hip' }
+export const MECHANISM = { 'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'hpf-stress': 'hip', 'srf-pta': 'shoulder' }
 export const injuredIn = (screen, a = {}) => a[`${screen}:I1`] !== undefined && a[`${screen}:I1`] !== 'no'
 /** Kept for the knee prototype's wording. */
 export const kneeInjured = (a = {}) => injuredIn('knee', a)
