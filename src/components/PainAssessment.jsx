@@ -39,7 +39,7 @@ import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../
 import {
   PREG_STATUS, PREG_BIRTH, PREG_LIMITS, pregnancyAsked, isPregnant, isPostpartum, pregnancyRedFlags, pregnancyBonus, pregnancyPanel, pregnancySummary,
 } from '../data/pregnancy'
-import { emergencyLevel, EMERGENCY_ADVICE } from '../data/emergencyAdvice'
+import { emergencyLevel, EMERGENCY_ADVICE, bySeverity } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
 
 const GOLD = '#c9a96e'
@@ -849,8 +849,9 @@ export default function PainAssessment() {
     const oiFlags = oiRedFlags(answers, [...list, ...pattern])
     const all = [...obstetric, ...oiFlags, ...diabetic, ...steroid, ...list, ...pattern]
     return {
-      emergency: all.filter((f) => f.tier === 'emergency'),
-      physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
+      // Most severe first on each page (../data/emergencyAdvice.js, bySeverity).
+      emergency: bySeverity(all.filter((f) => f.tier === 'emergency')),
+      physician: bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]),
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -874,7 +875,8 @@ export default function PainAssessment() {
     // space runs out).
     patternChecks(zones, answers, 12).filter((p) => !early.has(p.id)).slice(0, 6).map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
       .filter((p) => !(answers.dm === 'yes' && isNerveFlag(p))).forEach((p) => out.push(p))
-    return out
+    // Most severe first, as on the earlier pages.
+    return bySeverity(out)
   }, [zones, answers, behaviour.nightConcern, earlyPatterns, screening.deferred])
 
   const safetyChecks = useMemo(

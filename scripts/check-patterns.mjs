@@ -1525,5 +1525,31 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     uses >= 10 && (sg.match(/arrangeOptions\(/g) || []).length >= 2 && !/\{q\.options\.map\(/.test(src) && !/negativesFirst/.test(src + sg) && /Something else — type it below<\/span>[\s\S]*?tail\.map/.test(src) && /None of These Apply — Continue/.test(src), uses)
 }
 
+// ── 48. Safety pages: most severe first, every time (Chandra, 4 Oct 2026) ──
+{
+  const { severityRank, bySeverity } = await imp('src/data/emergencyAdvice.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const OI = await imp('src/data/oi.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const sg = (await import('node:fs')).readFileSync(new URL('../src/components/SymptomGuide.jsx', import.meta.url), 'utf8')
+  check('Severity: 911, then emergency department or labour and delivery, then the crisis line; then doctor today with booking held, doctor today, doctor first in a few days, see your doctor',
+    severityRank({ tier: 'emergency', call911: true }) === 1 && severityRank({ tier: 'emergency', keepNeckStill: true }) === 1 &&
+    severityRank({ tier: 'emergency' }) === 2 && severityRank({ tier: 'emergency', goTo: 'labour' }) === 2 && severityRank({ tier: 'emergency', goTo: 'crisis' }) === 3 &&
+    severityRank({ tier: 'urgent', sameDay: true, noBooking: true }) === 4 && severityRank({ tier: 'urgent', sameDay: true }) === 5 &&
+    severityRank({ tier: 'urgent', noBooking: true }) === 6 && severityRank({ tier: 'urgent' }) === 7)
+  const mixed = [{ id: 'a', tier: 'urgent' }, { id: 'b', tier: 'urgent', sameDay: true }, { id: 'c', tier: 'urgent' }, { id: 'd', tier: 'urgent', sameDay: true, noBooking: true }, { id: 'e', tier: 'urgent', noBooking: true }]
+  check('Severity: sorted most severe first, equal severity keeps its order (a stable sort)',
+    bySeverity(mixed).map((f) => f.id).join() === 'd,b,e,a,c')
+  const leg = bySeverity(REGIONS.leg.redFlags.filter((f) => f.tier === 'emergency'))
+  const ranks = leg.map(severityRank)
+  check('Severity: a real page (lower leg emergencies) has every 911 question above the go-now ones',
+    leg.length > 3 && ranks.every((r, i) => i === 0 || ranks[i - 1] <= r) && ranks[0] === 1, leg.map((f) => f.id + ':' + severityRank(f)))
+  const oi = bySeverity(OI.oiRedFlags({ oi: 'yes' }))
+  check('Severity: dynamic, from the questions that apply (OI on: the emergency ones above the doctor-today ones)',
+    oi.findIndex((f) => f.tier !== 'emergency') > oi.map((f) => f.tier).lastIndexOf('emergency'))
+  check('Severity: applied to the emergency page, the doctor page, the final check and the Symptom Guide',
+    /emergency: bySeverity\(/.test(src) && /physician: bySeverity\(/.test(src) && /return bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

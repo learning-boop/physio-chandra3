@@ -5,7 +5,7 @@ import {
   REGIONS, GENERAL_RED_FLAGS, PAIN_CHARACTER, SPECIAL_CARDS,
   classifyPainType, isRelevant, shouldStop, answeredRegionCount, computeResults,
 } from '../data/symptomGuide'
-import { emergencyLevel, EMERGENCY_ADVICE, EMERGENCY_SHORT } from '../data/emergencyAdvice'
+import { emergencyLevel, EMERGENCY_ADVICE, EMERGENCY_SHORT, bySeverity } from '../data/emergencyAdvice'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -162,7 +162,8 @@ export default function SymptomGuide({ regionOptions }) {
 
   // 1 ── RED FLAGS
   if (step.type === 'flags') {
-    const all = region.redFlags.concat(GENERAL_RED_FLAGS)
+    // Most severe first (../data/emergencyAdvice.js, bySeverity).
+    const all = bySeverity(region.redFlags.concat(GENERAL_RED_FLAGS))
     const submit = () => {
       if (flags.length) {
         const picked = all.filter((f) => flags.includes(f.id))

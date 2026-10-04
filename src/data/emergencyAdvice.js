@@ -30,6 +30,25 @@ export function emergencyLevel(flags = []) {
   return 'labour'
 }
 
+/* Most severe first (Chandra, 4 Oct 2026). Each safety page is sorted by
+   this every time it is built, so the order follows the questions that
+   apply to this person rather than a fixed list. Equal severity keeps the
+   order the page gave (context questions such as pregnancy or diabetes
+   first, then the areas' own, then the drawing's pattern questions).
+     Emergency page: 1 call 911 · 2 emergency department or labour and
+       delivery now · 3 the crisis line (9-8-8, doctor today).
+     Doctor pages: 4 doctor today, booking held · 5 doctor today ·
+       6 doctor first in the next few days, booking held · 7 see your
+       doctor, booking still offered. */
+export function severityRank(f = {}) {
+  if (isEmergency(f)) return f.call911 || f.keepNeckStill ? 1 : f.goTo === 'crisis' ? 3 : 2
+  if (f.sameDay) return f.noBooking ? 4 : 5
+  return f.noBooking ? 6 : 7
+}
+/** The flags, most severe first; a stable sort, so equal severity keeps its order. */
+export const bySeverity = (flags = []) =>
+  flags.map((f, i) => [f, i]).sort((a, b) => severityRank(a[0]) - severityRank(b[0]) || a[1] - b[1]).map(([f]) => f)
+
 export const EMERGENCY_ADVICE = {
   call911: {
     title: 'Please Call 911 Now',
