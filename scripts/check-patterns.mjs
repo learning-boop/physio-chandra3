@@ -1075,7 +1075,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ['lowback', 'tlj', 'sij'].every((k) => REGIONS[k].redFlags.some((f) => f.group === 'osteo' || /steroid/.test(f.text))) &&
     REGIONS.hip.redFlags.some((f) => f.id === 'hpf-avn' && /steroid/.test(f.text)) && REGIONS.ankle.redFlags.some((f) => /steroid/.test(f.text)))
   check('Steroids: asked on "A little about you" (required), kept out of the anonymous copy',
-    /STEROID_STATUS\.options\.map/.test(src) && /answers\.steroid && \(!pregAsk/.test(src) && /\^steroid\$\|\^preg\)/.test(src))
+    /STEROID_STATUS\.options\.map/.test(src) && /answers\.steroid && \(!pregAsk/.test(src) && /\^steroid\$\|\^preg\|/.test(src))
   const p1 = ST.steroidPanel({ steroid: 'tabs' }, false), p2 = ST.steroidPanel({ steroid: 'no' }, true)
   check('Steroids panel: never stop suddenly, sit-to-stand, protect the back, ask about bone health; Cushing diagnosed: strength does not return by itself',
     p1 && p1.notes.some((n) => /Never stop steroid tablets suddenly/.test(n)) && p1.notes.some((n) => /firm chair/.test(n)) &&
@@ -1249,10 +1249,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Pregnancy: asked of female or "prefer not to say" aged 5 to 64, not of men, under 5s or 65 and over; required; out of the anonymous copy',
     PG.pregnancyAsked({ sex: 'female', age: '30-49' }) && PG.pregnancyAsked({ sex: 'other', age: 'u18' }) &&
     !PG.pregnancyAsked({ sex: 'male', age: '30-49' }) && !PG.pregnancyAsked({ sex: 'female', age: 'u5' }) && !PG.pregnancyAsked({ sex: 'female', age: 'o64' }) &&
-    /\(!pregAsk \|\| answers\.preg\)/.test(src) && /\^preg\)/.test(src))
+    /\(!pregAsk \|\| answers\.preg\)/.test(src) && /\^preg\|/.test(src))
   const ids = (st, z) => PG.pregnancyRedFlags(ZN(z), { preg: st }).map((f) => f.id)
   check('Pregnancy red flags: none when not pregnant; first on the safety pages, in every area (one wrist)',
-    !ids('no', ['wristL']).length && /\[\.\.\.obstetric, \.\.\.diabetic/.test(src) &&
+    !ids('no', ['wristL']).length && /\[\.\.\.obstetric, (\.\.\.oiFlags, )?\.\.\.diabetic/.test(src) &&
     ['pg-bleed', 'pg-labour', 'pg-preeclampsia', 'pg-movements', 'pg-pe', 'pg-dvt'].every((x) => ids('p3', ['wristL']).includes(x)))
   check('Pregnancy red flags by stage: early pregnancy has no pre-eclampsia or movements question; after the birth, heavy bleeding, infection and mood; at a year, no clot or bleeding',
     !ids('p1', ['sij']).includes('pg-preeclampsia') && !ids('p1', ['sij']).includes('pg-movements') &&
@@ -1289,6 +1289,45 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Pregnancy language: no loose ligaments, instability or "out of alignment" (only "not loose or out of place"); no cure or guarantee',
     !/unstable|instabil|alignment|ligaments? (are|is) loose|loosen|cure|guarantee/i.test(all) &&
     (all.match(/loose/g) || []).length === (all.match(/not loose|about joints being loose/g) || []).length, all.match(/unstable|instabil|alignment|loosen|cure|guarantee/i))
+}
+
+// ── 41. Osteogenesis imperfecta ("Osteogenesis Imperfecta", v0.1, 4 Oct 2026) ──
+{
+  const OI = await imp('src/data/oi.js')
+  const { emergencyLevel } = await imp('src/data/emergencyAdvice.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('OI: an optional tick on "A little about you" (not required to continue), out of the anonymous copy, cleared with its details',
+    /OI_STATUS\.text/.test(src) && !/answers\.oi/.test(src.match(/const aboutDone = [^\n]*/)[0]) && /\^preg\|\^oi\)/.test(src) &&
+    /dropOi = \(\{ oi, oiType, oiGoal, oiFalls, oiCare, \.\.\.a \}\)/.test(src))
+  check('OI red flags: none without the tick; with it, first on the safety pages in every area, after the obstetric ones',
+    !OI.oiRedFlags({}).length && OI.oiRedFlags({ oi: 'yes' }).length === 6 &&
+    /\[\.\.\.obstetric, \.\.\.oiFlags, \.\.\.diabetic, \.\.\.steroid, \.\.\.list, \.\.\.pattern\]/.test(src) && /answers\.preg, answers\.oi\]/.test(src))
+  const rf = Object.fromEntries(OI.OI_RED_FLAGS.map((f) => [f.id, f]))
+  check('OI fracture first: new pain after a small knock, lift, twist or sneeze, even mild, or sudden severe back pain → X-ray today or tomorrow, booking after the X-ray',
+    rf['oi-fracture'].tier === 'urgent' && rf['oi-fracture'].sameDay && rf['oi-fracture'].noBooking &&
+    /sneeze/.test(rf['oi-fracture'].text) && /even if it feels mild/.test(rf['oi-fracture'].text) && /back pain/.test(rf['oi-fracture'].text) &&
+    /today or tomorrow/.test(rf['oi-fracture'].why.text) && /welcome to book once you have had your X-ray/.test(rf['oi-fracture'].why.text))
+  check('OI emergencies: a deformed limb, any head injury, the skull-base headache and spreading weakness go to the emergency department; chest pain names 911',
+    ['oi-break', 'oi-head', 'oi-skullbase', 'oi-cord'].every((id) => rf[id].tier === 'emergency') &&
+    /cough, sneeze or strain/.test(rf['oi-skullbase'].text) && emergencyLevel([rf['oi-head']]) !== 'call911' &&
+    rf['oi-heart'].sameDay && /Call 911 now for chest pain/.test(rf['oi-heart'].why.text))
+  const low = OI.oiRedFlags({ oi: 'yes' }, REGIONS.lowback.redFlags)
+  check('OI red flags: the spinal cord question is not asked twice where the area asks about cauda equina',
+    !low.some((f) => f.id === 'oi-cord') && low.some((f) => f.id === 'oi-fracture'), low.map((f) => f.id))
+  const p = OI.oiPanel({ oi: 'yes' })
+  const pr = OI.oiPanel({ oi: 'yes', oiGoal: 'after', oiFalls: '2', oiCare: 'stopped' })
+  check('OI panel: OI-safe exercise rules and the gentle-handling statement always; the main problem leads; falls, stopped denosumab and specialist lines by answer; hearing',
+    p && p.notes.some((n) => /forceful stretching of loose joints/.test(n)) && p.notes.some((n) => /no forceful manipulation/.test(n)) &&
+    p.notes.some((n) => /hearing test/.test(n)) && /^After a fracture or surgery/.test(pr.text) && /cleared you/.test(pr.text) &&
+    pr.notes.some((n) => /review your bone medicine/.test(n)) && pr.notes.some((n) => /spine within months/.test(n)) &&
+    pr.notes.some((n) => /referral back to a bone or OI specialist/.test(n)) && !p.notes.some((n) => /referral back/.test(n)) &&
+    OI.oiPanel({}) === null && /oi: oiP/.test(src))
+  check('OI details: four optional questions on "Before your results"; summary lines for Chandra',
+    OI.OI_DETAILS.length === 4 && /OI_DETAILS\.map/.test(src) && OI.oiSummary({ oi: 'yes', oiType: 't1' }).some((l) => /Type I/.test(l)) && !OI.oiSummary({}).length)
+  const all = JSON.stringify([OI.OI_RED_FLAGS, p, pr, OI.OI_DETAILS])
+  check('OI language: "less tough", not "fragile"; "brittle" only as the common name; no cure or guarantee',
+    !/fragile|cure|guarantee|brittle/i.test(all) && /brittle bone disease/.test(OI.OI_STATUS.text), all.match(/fragile|cure|guarantee|brittle/i))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

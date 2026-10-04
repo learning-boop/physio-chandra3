@@ -29,6 +29,7 @@ import { STEROID_STATUS, steroidRedFlags, steroidPanel, steroidSummary, CUSHING_
 import { PARATHYROID_CAUTION, parathyroidPanel, CPPD_IDS, CPPD_WHY } from '../data/parathyroid'
 import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } from '../data/thyroid'
 import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
+import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
 import {
   PREG_STATUS, PREG_BIRTH, PREG_LIMITS, pregnancyAsked, isPregnant, isPostpartum, pregnancyRedFlags, pregnancyBonus, pregnancyPanel, pregnancySummary,
 } from '../data/pregnancy'
@@ -277,6 +278,8 @@ const PREG_ASKED_IDS = ['prf-pregnancy-bleed', 'prf-pregnancy', 'hrf-pregnancy']
 const ECTOPIC_IDS = ['hpf-ectopic', 'srf-ectopic']
 // The pregnancy answers, cleared when the question no longer applies.
 const dropPreg = ({ preg, pregBirth, pregLimit, ...a }) => a
+// The OI answers, cleared when the tick is taken off.
+const dropOi = ({ oi, oiType, oiGoal, oiFalls, oiCare, ...a }) => a
 
 /* Why a flagged symptom needs looking at before physiotherapy. Region red
    flags in the guide carry a tier but no explanation, and inventing a clinical
@@ -820,14 +823,17 @@ export default function PainAssessment() {
     // Pregnant or in the year after ("Pregnancy" document, section 6): the
     // obstetric and postpartum flags come first of all (../data/pregnancy.js).
     const obstetric = pregnancyRedFlags(zones, answers, [...list, ...pattern])
-    const all = [...obstetric, ...diabetic, ...steroid, ...list, ...pattern]
+    // Osteogenesis imperfecta ("Osteogenesis Imperfecta" document, section 6):
+    // fracture first, in every area (../data/oi.js).
+    const oiFlags = oiRedFlags(answers, [...list, ...pattern])
+    const all = [...obstetric, ...oiFlags, ...diabetic, ...steroid, ...list, ...pattern]
     return {
       emergency: all.filter((f) => f.tier === 'emergency'),
       physician: [...all.filter((f) => f.tier !== 'emergency'), ...universal],
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -951,6 +957,8 @@ export default function PainAssessment() {
   const acroPanel = useMemo(() => acromegalyPanel(flags.includes('ca-acromegaly')), [flags])
   // Pregnant or in the year after ("Pregnancy" document; ../data/pregnancy.js).
   const pgPanel = useMemo(() => pregnancyPanel(answers, shown), [answers, shown])
+  // Osteogenesis imperfecta ("Osteogenesis Imperfecta" document; ../data/oi.js).
+  const oiP = useMemo(() => oiPanel(answers), [answers])
   const pregAsk = pregnancyAsked(who)
   const aboutDone = !!(answers.age && birthSex && answers.dm && answers.steroid && (!pregAsk || answers.preg))
   const pickDm = (q, oid) => setAnswers((a) => {
@@ -1066,6 +1074,7 @@ export default function PainAssessment() {
       diabetes: diabetesSummary(answers, zones, shown),
       steroids: steroidSummary(answers),
       pregnancy: pregnancySummary(answers),
+      oi: oiSummary(answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
       reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
@@ -1123,6 +1132,7 @@ export default function PainAssessment() {
     hypothyroid: hypoPanel,
     acromegaly: acroPanel,
     pregnancy: pgPanel,
+    oi: oiP,
     answers: qaPairs,
     notes: notesText,
   })
@@ -1136,8 +1146,8 @@ export default function PainAssessment() {
     zones: zones.map((z) => ({ id: z.id, type: z.type, face: z.face, ink: z.ink })),
     lines,
     answers: Object.fromEntries(Object.entries(answers).filter(([k, v]) =>
-      // Diabetes, steroid and pregnancy answers (dm, dmType…, steroid, preg…) stay out of the anonymous copy.
-      !/(^notes$|^q5$|_other$|^dm|^steroid$|^preg)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
+      // Diabetes, steroid, pregnancy and OI answers (dm, dmType…, steroid, preg…, oi…) stay out of the anonymous copy.
+      !/(^notes$|^q5$|_other$|^dm|^steroid$|^preg|^oi)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
     flags: flags.filter((f) => f !== '__other'),
     results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
     referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null })),
@@ -1993,6 +2003,15 @@ export default function PainAssessment() {
                     Diabetes and steroid medicine change which safety questions matter and how some problems are best treated. These two answers go in your summary and PDF, not in any anonymous copy.
                   </p>
                 </div>
+                {/* Osteogenesis imperfecta (../data/oi.js): optional, a single
+                    tick; leave it blank if it does not apply. */}
+                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{OI_STATUS.text} <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13 }}>(optional)</span></span></p>
+                  <button style={chip(oiOn(answers))} aria-pressed={oiOn(answers)}
+                    onClick={() => setAnswers((a) => (oiOn(a) ? dropOi(a) : { ...a, oi: 'yes' }))}>
+                    <span style={letterStyle(oiOn(answers))}>{oiOn(answers) ? '✓' : '·'}</span><span>{OI_STATUS.yes}</span>
+                  </button>
+                </div>
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   <button className="pa-primary"
                     style={{ ...goldBtn, opacity: aboutDone ? 1 : 0.45, cursor: aboutDone ? 'pointer' : 'not-allowed' }}
@@ -2166,6 +2185,34 @@ export default function PainAssessment() {
                   </div>
                 )}
 
+                {/* Osteogenesis imperfecta details (../data/oi.js): optional;
+                    they choose what leads the results panel. */}
+                {oiOn(answers) && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 2px' }}>
+                      <span aria-hidden="true" style={qMark} />
+                      <span>A few details about your OI</span>
+                    </p>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '0 0 6px', lineHeight: 1.6 }}>
+                      These shape the advice in your results. Answer any you can; skip any you are not sure of.
+                    </p>
+                    {OI_DETAILS.map((q) => (
+                      <div key={q.id} style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 8 }}>
+                        <p style={{ fontSize: 14.5, color: '#fff', margin: 0, lineHeight: 1.5 }}>{q.text}</p>
+                        {q.options.map((o) => {
+                          const sel = answers[q.id] === o.id
+                          return (
+                            <button key={o.id} style={chip(sel)} aria-pressed={sel} onClick={() => pickDm(q, o.id)}>
+                              <span style={letterStyle(sel)}>{sel ? '✓' : '·'}</span>
+                              <span>{o.label}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 {/* Cautions: they change how the first assessment is done,
                     they do not stop it. Kept visually separate so the screen
                     never reads as "more red flags". */}
@@ -2192,7 +2239,7 @@ export default function PainAssessment() {
                       if (flaggedIn(finalChecks) || otherFlagged) routeUrgent('safety')
                       else setStage('ok')
                     }}>
-                    {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length || dmQuestions.some((q) => answers[q.id] !== undefined) ? 'Continue' : 'None Apply — Continue'}
+                    {flaggedIn(finalChecks) || otherFlagged || pickedCautions.length || dmQuestions.some((q) => answers[q.id] !== undefined) || OI_DETAILS.some((q) => answers[q.id] !== undefined) ? 'Continue' : 'None Apply — Continue'}
                   </button>
                   <button style={ghostBtn} onClick={() => setStage('review')}>Back</button>
                 </div>
@@ -2559,6 +2606,20 @@ export default function PainAssessment() {
                           {dmPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                         </ul>
                       )}
+                    </div>
+                  </>
+                )}
+
+                {/* Osteogenesis imperfecta (../data/oi.js). */}
+                {oiP && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Living and moving with OI</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{oiP.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{oiP.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {oiP.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
                     </div>
                   </>
                 )}
