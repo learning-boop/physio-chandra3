@@ -13,7 +13,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 import { LOCATION_QUESTION_IDS } from './drawnLocation.js'
 import {
-  REGIONS, ZONE_TO_REGION, computeResults, computeRaw, shouldStop, isRelevant, answeredRegionCount, questionValue,
+  REGIONS, ZONE_TO_REGION, computeResults, computeNearMisses, computeRaw, shouldStop, isRelevant, answeredRegionCount, questionValue,
 } from './symptomGuide.js'
 
 /* Regions on one anatomical chain, from the spine outwards. */
@@ -312,6 +312,22 @@ export function rankAcross(keys, answers, max = 3, bonus = null) {
   perRegion.map((list) => list[0]).filter(Boolean).sort(byRank).forEach(add)
   perRegion.flat().sort(byRank).forEach(add)
   return picked.sort(byRank)
+}
+
+/** "Also worth considering" (Chandra, 4 Oct 2026): up to `max` conditions
+    not on the results, by name. First any that qualified but ranked below
+    the ones shown, then those just under the display threshold
+    (computeNearMisses). `shown` and `excluded` (ids the AI review dropped)
+    are left out, and a name already shown is not repeated. */
+export function alsoConsiderAcross(keys, answers, shown = [], max = 2, excluded = []) {
+  const names = new Set(shown.map((x) => x.c.name))
+  const skip = new Set(excluded)
+  const out = []
+  const add = (x) => { if (out.length < max && !names.has(x.c.name) && !skip.has(x.c.id)) { names.add(x.c.name); out.push(x) } }
+  const byRank = (a, b) => b.rank - a.rank || b.score - a.score
+  keys.flatMap((k) => computeResults(REGIONS[k], regionAnswers(keys, k, answers)).ranked.map((x) => ({ ...x, rk: k }))).sort(byRank).forEach(add)
+  keys.flatMap((k) => computeNearMisses(REGIONS[k], regionAnswers(keys, k, answers)).map((x) => ({ ...x, rk: k }))).sort(byRank).forEach(add)
+  return out
 }
 
 /** Education cards the answers call for (e.g. "this may be coming from your

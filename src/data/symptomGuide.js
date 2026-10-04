@@ -685,6 +685,26 @@ export function computeResults(region, answers) {
   return { ranked, specials }
 }
 
+/* "Also worth considering" (Chandra, 4 Oct 2026): conditions just under the
+   display threshold. When someone misses two of a condition's telltale
+   answers it can drop below 40% and vanish; these are named (not given a
+   full card) so the physiotherapist can still check them. `floor` is the
+   share of the ceiling, `minScore` the least evidence. Tuned on the accuracy
+   patients, two telltale answers missed: 20% and 2 points bring back 72% of
+   the conditions that vanished, with under one extra name (0.66) for a
+   patient whose answers fit one condition exactly (25%: 63% and 0.42). */
+export const NEAR_MISS_FLOOR = 0.2
+export const NEAR_MISS_MIN_SCORE = 2
+export function computeNearMisses(region, answers, floor = NEAR_MISS_FLOOR, minScore = NEAR_MISS_MIN_SCORE) {
+  const { scores, unlocks } = computeRaw(region, answers)
+  const maxScore = maxScores(region)
+  return region.conditions
+    .filter(c => eligibleNow(c, unlocks, answers))
+    .map(c => { const score = scores[c.id] || 0; return { c, score, norm: score / maxScore[c.id], rank: rankValue(score, maxScore[c.id]) } })
+    .filter(x => !meetsThreshold(x.score, maxScore[x.c.id]) && x.score >= minScore && x.norm >= floor)
+    .sort((a, b) => b.rank - a.rank || b.score - a.score)
+}
+
 // Map pain-mapper zone types → guide region keys (only built regions listed)
 export const ZONE_TO_REGION = {
   lowerback: 'lowback',

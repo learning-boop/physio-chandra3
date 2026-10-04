@@ -1704,5 +1704,25 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /const area = smartArea\(flowZ\) \|\| smartAreas\(flowZ\)/.test(src) && /const smartFirst = injuryApplies && !!smartArea\(flowZ\)/.test(src))
 }
 
+// ── 51. "Also worth considering" (Chandra, 4 Oct 2026) ──
+{
+  const SG = await imp('src/data/symptomGuide.js')
+  const AF = await imp('src/data/assessmentFlow.js')
+  const fsm = await import('node:fs')
+  const src = fsm.readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const pdf = fsm.readFileSync(new URL('../src/components/resultsPdf.js', import.meta.url), 'utf8')
+  const sum = fsm.readFileSync(new URL('../src/data/clinicianSummary.js', import.meta.url), 'utf8')
+  check('Also worth considering: just under the display line means 20% of the condition maximum and 2 points; never a condition already over the line',
+    SG.NEAR_MISS_FLOOR === 0.2 && SG.NEAR_MISS_MIN_SCORE === 2 &&
+    Object.values(SG.REGIONS).every((r) => SG.computeNearMisses(r, {}).length === 0))
+  const shown = AF.rankAcross(['knee'], {}, 2)
+  check('Also worth considering: names only, at most two, never one already shown or one the AI review dropped',
+    AF.alsoConsiderAcross(['knee'], {}, shown, 2).length <= 2 &&
+    src.includes('alsoConsiderAcross(keys, scopedAnswers, shown, 2, (review?.dropped || []).map') && src.includes('review && review.noMatch)) return []'))
+  check('Also worth considering: on the results page below the main results, in the PDF, and in the summary for Chandra with each share of its maximum',
+    src.includes('alsoConsider.length > 0 &&') && src.includes('Also worth considering') && pdf.includes('d.alsoConsider && d.alsoConsider.length') &&
+    sum.includes('Also worth considering (below the cut-off or third)'))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

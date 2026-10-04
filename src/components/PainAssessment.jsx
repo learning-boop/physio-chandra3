@@ -16,7 +16,7 @@ import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextQuestion, rankAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS,
+  buildScreens, nextQuestion, rankAcross, alsoConsiderAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
@@ -744,6 +744,13 @@ export default function PainAssessment() {
     return ranked.filter((x) => !dropped.has(x.c.id))
       .sort((a, b) => (rank.has(a.c.id) ? rank.get(a.c.id) : 99) - (rank.has(b.c.id) ? rank.get(b.c.id) : 99))
   }, [ranked, review])
+  // "Also worth considering": up to two conditions not on the results, by
+  // name (../data/assessmentFlow.js). Not when the AI review judged that none
+  // fit, and never one it dropped.
+  const alsoConsider = useMemo(() => {
+    if (!keys.length || (review && review.noMatch)) return []
+    try { return alsoConsiderAcross(keys, scopedAnswers, shown, 2, (review?.dropped || []).map((d) => d.id)) } catch { return [] }
+  }, [keys, scopedAnswers, shown, review])
   const modelSmall = ['emergency', 'physician', 'questions', 'review', 'safety', 'injury', 'urgent', 'ok'].includes(stage)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
@@ -1118,6 +1125,7 @@ export default function PainAssessment() {
       diabetes: diabetesSummary(answers, zones, shown),
       steroids: steroidSummary(answers),
       pregnancy: pregnancySummary(answers),
+      alsoConsider,
       oi: oiSummary(answers),
       bone: boneSummary(flags, answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
@@ -1178,6 +1186,7 @@ export default function PainAssessment() {
     boneTumour: btPanel,
     paget: pgtPanel,
     boneWatch: boneWatch(zones, answers) ? BONE_WATCH : null,
+    alsoConsider: alsoConsider.map(({ c }) => c.name),
     thyroid: thPanel,
     hypothyroid: hypoPanel,
     acromegaly: acroPanel,
@@ -2720,6 +2729,26 @@ export default function PainAssessment() {
                       {keys.length
                         ? 'Your answers did not clearly match one of the patterns this guide describes for the area you marked. That is common — pain often does not fit a textbook pattern — and it is exactly what an in-person assessment is for.'
                         : 'This guide does not yet have a detailed set of patterns for the area you marked, so it cannot match your answers to a specific one. An in-person assessment is the right next step.'}
+                    </p>
+                  </div>
+                )}
+
+                {/* Also worth considering (Chandra, 4 Oct 2026): names only, below
+                    the main results, so a near match is not lost. */}
+                {alsoConsider.length > 0 && (
+                  <div className="pa-also" style={{ maxWidth: 520, margin: '0 0 24px' }}>
+                    <p style={{ ...label, fontSize: 12.5, margin: '0 0 8px' }}>{shown.length ? 'Also worth considering' : 'Worth considering'}</p>
+                    <ul style={{ margin: 0, paddingLeft: 18, fontSize: 15.5, lineHeight: 1.6, color: '#fff' }}>
+                      {alsoConsider.map(({ c, rk }) => (
+                        <li key={`${rk}/${c.id}`} style={{ marginBottom: 2 }}>
+                          {c.name}{multiArea ? <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13.5 }}> · {REGIONS[rk].name}</span> : null}
+                        </li>
+                      ))}
+                    </ul>
+                    <p style={{ fontSize: 13.5, lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', margin: '8px 0 0' }}>
+                      {shown.length
+                        ? 'These match some of your answers, but less closely than the patterns above. Your physiotherapist can check them at your assessment.'
+                        : 'These match some of your answers, though not closely enough to describe in detail. Your physiotherapist can check them at your assessment.'}
                     </p>
                   </div>
                 )}

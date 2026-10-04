@@ -113,7 +113,7 @@ export function buildClinicianSummary(ctx = {}) {
   const {
     zones = [], referral = [], keys = [], answers = {}, qaPairs = [], notes = '',
     ranked = [], behaviour = {}, psych = {}, painType = null,
-    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [], pregnancy = [], oi = [], bone = [],
+    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [], pregnancy = [], oi = [], bone = [], alsoConsider = [],
   } = ctx
 
   const L = []
@@ -284,6 +284,10 @@ export function buildClinicianSummary(ctx = {}) {
         push(...listOf(notesForStage(c.clinicNotes, stage), '      ! '))
       }
     })
+  }
+  // Near matches below the two hypotheses (assessmentFlow.js, alsoConsiderAcross).
+  if (alsoConsider.length) {
+    push(`  Also worth considering (below the cut-off or third): ${alsoConsider.map((x) => `${x.c.name} [${REGIONS[x.rk] ? REGIONS[x.rk].name : x.rk}, ${Math.round(100 * (x.norm || 0))}% of its maximum]`).join('; ')}`)
   }
   if (review) {
     const bits = []

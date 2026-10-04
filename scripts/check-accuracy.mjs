@@ -18,7 +18,7 @@
    Run it after adding or editing anything in content/conditions/.        */
 import { REGIONS } from '../src/data/symptomGuide.js'
 import {
-  REGION_CHAINS, MAX_SCORED_QUESTIONS, buildScreens, nextQuestion, rankAcross, regionAnswers,
+  REGION_CHAINS, MAX_SCORED_QUESTIONS, buildScreens, nextQuestion, rankAcross, regionAnswers, alsoConsiderAcross,
   twinIds,
 } from '../src/data/assessmentFlow.js'
 
@@ -175,6 +175,50 @@ for (const keys of triples) {
   }
 }
 say(`   ${in4}/${n4} in the results, ${first4}/${n4} shown first`)
+// 5. "Also worth considering" (Chandra, 4 Oct 2026). A patient who misses two
+// telltale answers can drop off the two results shown; the line should bring
+// most of them back, without crowding a patient whose answers fit exactly.
+say('\n5. Also worth considering — two telltale answers missed')
+{
+  const answered = (keys, full) => {
+    const { context } = buildScreens(keys)
+    const ans = {}
+    for (const q of context) if (full[q.id] !== undefined) ans[q.id] = full[q.id]
+    const asked = []
+    let id
+    while ((id = nextQuestion(keys, ans, asked, BUDGET))) {
+      asked.push(id)
+      const own = twinIds(id).find((x) => full[x] !== undefined)
+      if (own !== undefined) ans[id] = full[own]
+    }
+    return ans
+  }
+  const pairsOf = (base) => {
+    const tt = Object.entries(base).flatMap(([q, v]) => (Array.isArray(v) ? v.map((o) => [q, o]) : []))
+    const out = []
+    for (let i = 0; i < tt.length; i++) for (let j = i + 1; j < tt.length; j++) out.push([tt[i], tt[j]])
+    return out.slice(0, 12)
+  }
+  const drop = (base, pr) => { const b = JSON.parse(JSON.stringify(base)); for (const [q, o] of pr) { b[q] = b[q].filter((x) => x !== o); if (!b[q].length) delete b[q] } return b }
+  let gone = 0, back = 0, extras = 0, people = 0
+  for (const [rk, region] of Object.entries(REGIONS)) {
+    for (const c of region.conditions) {
+      const base = textbook(region, c)
+      const a0 = answered([rk], base), s0 = rankAcross([rk], a0, 2)
+      extras += alsoConsiderAcross([rk], a0, s0, 2).length; people++
+      for (const pr of pairsOf(base)) {
+        const a = answered([rk], drop(base, pr)), shown = rankAcross([rk], a, 2)
+        if (shown.some((x) => x.c.id === c.id)) continue
+        gone++
+        if (alsoConsiderAcross([rk], a, shown, 2).some((x) => x.c.id === c.id)) back++
+      }
+    }
+  }
+  const rate = back / gone, avg = extras / people
+  say(`   dropped off the results: ${gone}; brought back by the line: ${back} (${Math.round(100 * rate)}%)`)
+  say(`   names added for a patient whose answers fit exactly: ${avg.toFixed(2)} on average (at most 2)`)
+  if (rate < 0.65 || avg > 1) { failed++; say('   FAIL  the line should bring back at least 65% and add at most 1 name on average') }
+}
 say(`\nMost scored questions any patient was asked: ${maxAsked}`)
 
 say(failed ? `\n${failed} failure(s)` : '\nAll checks passed')
