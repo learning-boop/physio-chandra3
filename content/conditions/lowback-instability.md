@@ -1,9 +1,12 @@
 ---
 region: lowback
 id: instability
-name: Back that feels unstable or gives way
+name: Back that catches with small movements
 clin: Lumbar movement control impairment (instability) = low back pain with movement coordination impairments (JOSPT 2012)
 # DRAFT extracted from: Interventions for the Management of Acute and Chronic Low Back Pain: Revision 2021 (JOSPT Clinical Practice Guideline)
+# 5 Oct 2026: renamed from "Back that feels unstable or gives way" at Chandra's
+# request ("Non specific low back pain" document review): patient wording avoids
+# "unstable". The card stays separate from common low back pain.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 # Pointers re-mapped 24 Sep 2026 to the questions in content/regions/lowback.md.
@@ -16,7 +19,7 @@ pointers:
 ---
 
 ## blurb
-Some low back pain happens because the deep core muscles aren't controlling movement well, leading to a catching, weak, or unstable feeling with certain movements.
+Some low back pain happens because the deep core muscles aren't controlling movement well, leading to a catching or weak feeling with certain movements.
 
 ## noticed
 - A catching or giving-way feeling with everyday movements like rolling over in bed or standing on one leg

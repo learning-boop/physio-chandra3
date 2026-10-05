@@ -112,17 +112,24 @@ export const REGIONS = {
       ]},
       {id:"L5", text:"What happens when you walk?",
         askIf: ({ ra }) => ra.age === "50-64" || ra.age === "o64" || [].concat(ra.L1 || []).includes("belowknee"),
+        // From 50 with pain in the leg, asked early: the walking answer tells
+        // stenosis from common low back pain ("Non specific low back pain"
+        // document, Q6, 5 Oct 2026). Otherwise it lost its slot to L7.
+        priority: ({ ra }) => (ra.age === "50-64" || ra.age === "o64") && [].concat(ra.L1 || []).some((o) => o === "thigh" || o === "belowknee"),
         options:[
           {id:"eases", label:"Walking eases it"},
           {id:"claud", label:"Walking brings on leg pain, heaviness, or tingling that eases when I sit or bend forward"},
           {id:"backworse", label:"Walking makes my back worse, but not my legs"},
           {id:"nochange", label:"Walking does not change it"}
         ]},
+      // One worst spot (5 Oct 2026, "Non specific low back pain" document):
+      // the answers are alternatives (excl), so ticking one clears the others
+      // and only the best counts towards a condition's ceiling.
       {id:"L6", text:"If you point to the worst spot with one finger, where is it?", options:[
-        {id:"centre", label:"In the middle of the low back, on the spine"},
-        {id:"side", label:"On one side, beside the spine above the belt line"},
-        {id:"dimple", label:"Over the dimple at the back of my pelvis", special:"sijSource"},
-        {id:"wide", label:"Spread over a wide area; I cannot point to one spot"}
+        {id:"centre", label:"In the middle of the low back, on the spine", excl:"spot"},
+        {id:"side", label:"On one side, beside the spine above the belt line", excl:"spot"},
+        {id:"dimple", label:"Over the dimple at the back of my pelvis", special:"sijSource", excl:"spot"},
+        {id:"wide", label:"Spread over a wide area; I cannot point to one spot", excl:"spot"}
       ]},
       {id:"L7", text:"Which of these apply? Tick all that apply.", options:[
         {id:"catch", label:"My back catches or gives way with small movements"},

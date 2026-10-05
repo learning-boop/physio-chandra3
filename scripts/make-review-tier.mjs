@@ -115,7 +115,7 @@ const AREAS = {
     lede: 'The low back texts not yet signed: moved from the old site or taken from a guideline (JOSPT 2012 and 2021), plus the spondyloarthritis document. Signing all of them lets the low back area document be signed too.',
     list: [
       ['lowback-nslbp', 'The commonest result on the whole site.',
-        'No doctor line. The clinic notes say "failure to improve within 30 days is itself a flag": should the card say "not better after 4 to 6 weeks, or getting worse: see your doctor"? Is "the back remains strong" right as worded?'],
+        'Rewritten 5 Oct 2026 from the "Non specific low back pain" document (v0.1), with your choices: doctor at 4 to 6 weeks, no medication line, fracture line over 70. Is the new text right? Do the scores (below the knee, pins and needles, legs easing on sitting and long morning stiffness count against it) fit?'],
       ['lowback-radicular', 'Common; the nerve and cauda equina emergencies sit next to it.',
         'No doctor or emergency line on the card. Should it name: numbness in the saddle area, or a new change in bladder or bowel (emergency department now); a weak foot or leg that is getting worse (doctor the same day)? The safety questions ask these, but the card does not repeat them.'],
       ['lowback-stenosis', 'Common over 60; poor circulation in the legs looks similar.',
@@ -127,7 +127,7 @@ const AREAS = {
       ['lowback-facet', 'Common, one-sided, worse arching back.',
         'The clinic notes say: under 20 with pain arching back in sport, think of a stress fracture of the spine (spondylolysis) first. Should the card say so for young athletes (doctor or physiotherapist assessment, rest from sport)?'],
       ['lowback-instability', 'Recurrent episodes; core-control advice.',
-        'Is "the deep core muscles are not controlling movement well" a fair way to put it to patients? Only 5 pointers: is it matched often enough?'],
+        'Renamed 5 Oct 2026 from "Back that feels unstable or gives way". Is "the deep core muscles are not controlling movement well" a fair way to put it to patients? Only 5 pointers: is it matched often enough?'],
     ],
   },
 }

@@ -6,6 +6,12 @@
 # 2 Oct 2026: "Ankylosing spondylitis Spondyloarthritis.docx" (Conditions/General
 # conditions, v1.0): condition lowback-axspa and the inflammatory back pain question,
 # shared with the pelvis (P6). Marked (as) below.
+# 5 Oct 2026: "Non specific low back pain.docx" (Conditions/Lumbar, v0.1 draft):
+# lowback-nslbp rewritten, now "Common low back pain"; its scored questions are
+# mapped onto the questions below (no new question). The worst spot is one
+# answer, and the walking question comes early from 50 with leg pain. The
+# movement-control card is renamed "Back that catches with small movements".
+# Test patients 8 to 11.
 region: lowback
 name: Low back & pelvis
 source: George SZ et al. Interventions for the management of acute and chronic low back pain: Revision 2021. JOSPT 51(11), 2021; Delitto A et al. Low back pain CPG (classification). JOSPT 42(4), 2012; NICE NG59. Low back pain and sciatica in over 16s, 2016 (updated 2020); Finucane LM et al. International Framework for Red Flags. JOSPT 50(7), 2020; Konno S et al. Clinical diagnosis support tool for lumbar spinal stenosis. Eur Spine J 16, 2007; Laslett M et al. Sacroiliac joint provocation test cluster. Man Ther 10, 2005; Bogduk N. Pain 147, 2009; Fukui S et al. Clin J Pain 13(4), 1997; O'Neill CW et al. Spine 27(24), 2002; Lesher JM et al. Hip joint pain referral patterns. Pain Med 9(1), 2008; Donnelly JM et al. Travell, Simons & Simons' Trigger Point Manual, 3rd ed., 2019
@@ -93,12 +99,14 @@ Q: What happens when you walk?
 - Walking makes my back worse, but not my legs
 - Walking does not change it
 Ask only if: Age = "50 to 64" or "65 or over", or How far = "Below the knee, into the leg or foot"
+Asked early from 50 with pain down the thigh or below the knee (5 Oct 2026: it tells stenosis from common low back pain)
 
 Q: If you point to the worst spot with one finger, where is it?
 - In the middle of the low back, on the spine
 - On one side, beside the spine above the belt line
 - Over the dimple at the back of my pelvis
 - Spread over a wide area; I cannot point to one spot
+One answer (5 Oct 2026): ticking one clears the others
 
 Q: Which of these apply? Tick all that apply.
 - My back catches or gives way with small movements
@@ -175,3 +183,20 @@ Expect: top condition = inflammatory back pain (with the see-your-doctor note); 
 CASE: 7. 45, low back pain after lifting, eases with rest
 Answers: 30 to 49; after lifting; more than 3 months
 Expect: inflammatory question not asked; must not show = inflammatory back pain
+
+<!-- From "Non specific low back pain.docx" (v0.1, 5 Oct 2026): maximum 12 on the site, shown from 5. -->
+CASE: 8. 55, twisted in the garden, ache across the back, walking eases it
+Answers: 50 to 64; after a twist; less than 2 weeks; Q1 = low back only; Q4 = bending forward, or sitting + getting up; Q5 = walking eases it; Q6 = spread over a wide area; Q7 = stiff rather than weak
+Expect: top condition = common low back pain; must not show = stenosis, nerve-related leg pain
+
+CASE: 9. Pain below the knee with pins and needles in the foot
+Answers: 30 to 49; after lifting; less than 2 weeks; Q1 = low back + below the knee; Q2 = the leg pain; Q3 = pins and needles + shooting pain with cough; Q4 = bending or sitting + getting up; Q6 = middle; Q7 = stiff
+Expect: top condition = nerve-related leg pain; must not show = common low back pain
+
+CASE: 10. 68, legs heavy with walking, easing on sitting
+Answers: 65 or over; gradually; more than 3 months; Q1 = low back + thigh; Q2 = about the same; Q4 = arching or standing + getting up; Q5 = walking brings on leg pain that eases when I sit; Q6 = middle
+Expect: top condition = stenosis; must not show = common low back pain
+
+CASE: 11. Back catches with small movements, pushes on thighs, frequent flare-ups
+Answers: 30 to 49; after a twist; more than 3 months; Q1 = low back only; Q4 = rolling over or standing on one leg; Q6 = wide; Q7 = catches + pushes on thighs + flare-ups
+Expect: top condition = back that catches with small movements

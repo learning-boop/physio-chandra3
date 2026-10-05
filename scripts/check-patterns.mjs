@@ -1765,5 +1765,29 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     limbAnswerFor('blow', 'wrist') === 'blow' && limbAnswerFor('blow', 'hand') === 'jammed' && limbAnswerFor('fall', 'wrist') === 'fall')
 }
 
+// ── 54. Common low back pain ("Non specific low back pain", v0.1, 5 Oct 2026) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const R = REGIONS.lowback
+  const card = R.conditions.find((c) => c.id === 'nslbp')
+  const patient = (c) => [c.name, c.blurb, ...(c.noticed || []), ...(c.homeCare || []), ...(c.seePhysioIf || [])].join(' ')
+  const lines = card.seePhysioIf || []
+  check('Card: not better after 4 to 6 weeks sees a doctor; cauda equina to the emergency department; fracture line uses over 70, as the safety question does',
+    lines.some((l) => /4 to 6 weeks/.test(l) && /doctor/.test(l)) && lines.some((l) => /saddle/.test(l) && /emergency department now/.test(l)) &&
+    lines.some((l) => /over 70/.test(l) && /steroid/.test(l)) && !lines.some((l) => /over 50/.test(l)), lines)
+  check('No medication advice on the card (Chandra, 5 Oct 2026): pain relief is for a pharmacist or doctor',
+    !/paracetamol|ibuprofen|anti-inflammator|NSAID|naproxen/i.test(patient(card)) && card.homeCare.some((l) => /pharmacist/.test(l)))
+  const word = R.conditions.filter((c) => /unstable/i.test(patient(c))).map((c) => c.id)
+  check('Low back cards avoid "unstable" in patient wording; the movement-control card is renamed',
+    !word.length && R.conditions.find((c) => c.id === 'instability').name === 'Back that catches with small movements', word)
+  const opt = (qid, oid) => [...R.context, ...R.questions].find((q) => q.id === qid).options.find((o) => o.id === oid)
+  check('Answers that count against common low back pain: below the knee, pins and needles, legs that ease on sitting, long morning stiffness',
+    opt('L1', 'belowknee').weights.nslbp < 0 && opt('L3', 'pins').weights.nslbp < 0 && opt('L5', 'claud').weights.nslbp < 0 && opt('L9', 'morning').weights.nslbp < 0)
+  const L5 = R.questions.find((q) => q.id === 'L5'), L6 = R.questions.find((q) => q.id === 'L6')
+  check('The worst spot is one answer (excl), and from 50 with leg pain the walking question comes early',
+    L6.options.every((o) => o.excl === 'spot') && L5.priority({ ra: { age: 'o64', L1: ['thigh'] } }) && !L5.priority({ ra: { age: '30-49', L1: ['thigh'] } }) &&
+    !L5.priority({ ra: { age: 'o64', L1: ['back'] } }))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
