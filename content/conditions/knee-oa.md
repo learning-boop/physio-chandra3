@@ -6,6 +6,10 @@ clin: Knee osteoarthritis (NICE NG226 clinical diagnosis: 45 or over, morning st
 ages: 30-49, 50-64, o64
 # Patient text moved unchanged from the site's original knee region.
 # Pointers from content/regions/knee.md, 25 Sep 2026.
+# 5 Oct 2026: knee cross-check, approved by Chandra after his 2 Oct sign-off:
+# S8 doctor lines, P9 (stairs and squats +1, kneeling +1, a fall or blow -1,
+# twisting 0, 30 to 49 +1), A5 (no wedge insoles; "good for the joint";
+# walking stick and tai chi; manual imaging and lavage notes).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed: Chandra Matla, 2026-10-02
 pointers:
@@ -13,37 +17,47 @@ pointers:
   "Swelling after activity": 2
   "The whole knee is puffy": 2
   "Inner side of the knee": 2
+  "Going down stairs, squatting, or sitting a long time with the knee bent": 1
+  "Kneeling": 1
   "65 or over": 3
   "50 to 64": 2
+  "30 to 49": 1
   "More than 3 months": 1
   "Gradually, no clear reason": 1
+  "After a fall or a blow to the knee": -1
   "A twist or pivot in sport": -2
-  "Twisting or turning on the leg": -1
   "Jumping or landing": -1
   "Moving my low back": -2
 ---
 
 ## blurb
-A gradual change in the joint's cartilage and bone, common from midlife onward. Exercise is a core treatment, not a threat: stronger legs often mean less pain, and activity does not 'wear the knee out'.
+A gradual change in the joint's cartilage and bone, common from midlife onward. Exercise is a core treatment, not a threat: stronger legs often mean less pain, and staying active is good for the joint.
 
 ## noticed
 - Aching with first steps after rest, easing as you get going
 - Brief morning stiffness (minutes, not hours)
 - Intermittent puffiness after busier days
+- Kneeling, squatting and stairs can be uncomfortable
 
 ## homeCare
 - Regular strength work for thighs and hips: one of the most helpful things you can do
-- Keep walking or cycling; motion is lotion
+- Keep walking or cycling; motion is lotion. Tai chi is another good option
 - Weight management where relevant makes a measurable difference
+- A walking stick in the opposite hand can ease busy days or longer walks
 - Heat for stiffness, brief ice for flare-ups
 - During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
 
 ## seePhysioIf
+- The knee becomes hot, red and swollen, especially with a fever: get urgent medical care
+- Other joints swell too, or stiffness lasts well over half an hour each morning: see a doctor
+- It is getting quickly worse over a few weeks: see your doctor
 - Pain or stiffness limits walking, stairs, or sleep
 - You'd like a structured education and exercise programme (e.g., GLA:D-style)
 - You're weighing options and want conservative care optimized first
 
 ## clinicNotes
-- Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing.
-- Knee: ACR clinical criteria, knee pain plus 3 of: over 50, stiffness under 30 minutes, crepitus, bony tenderness, bony enlargement, no palpable warmth (sens 95%, spec 69%). Measures: KOOS, 30-s chair stand, 40-m fast-paced walk, stair climb. Cane in the opposite hand, unloader brace or wedge insoles in some cases (OARSI; ACR 2019).
+- Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 Ch. 2.9 pp. 572-581 and Ch. 2.7 pp. 426-445): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant (any loss helps; 10% likely better than 5%); manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. The AIM manual describes early OA from about 30 to 50 (p.7); the age band cannot separate under-45s.
+- Knee: ACR clinical criteria, knee pain plus 3 of: over 50, stiffness under 30 minutes, crepitus, bony tenderness, bony enlargement, no palpable warmth (sens 95%, spec 69%). Measures: KOOS, 30-s chair stand, 40-m fast-paced walk, stair climb. Walking aid (cane in the opposite hand: NICE consider, AAOS moderate); tai chi (ACR strong). Tibiofemoral (unloader) brace in some cases (ACR strong; NICE only with instability or abnormal loading when exercise alone is not enough). Lateral wedge insoles are not recommended (AAOS strong against; OARSI; ACR conditional against).
+- Atypical features needing a doctor (NICE NG226; AIM manual p.7): trauma, prolonged morning stiffness, rapid worsening, a hot swollen joint. Imaging is not needed in a typical case; if needed, a weight-bearing film plus a patellofemoral view, and image when progression is unexpectedly rapid (EULAR, p.8). Do not refer for arthroscopic lavage and debridement unless there is mechanical locking (p.11).
 - Knee injury and OA (Logerstedt 2018): a previous meniscal tear predicts tibiofemoral OA (OR 5.7), with OA in about half after meniscectomy; a previous ACL injury or delayed reconstruction adds meniscal and cartilage damage.
+- Sources: NICE NG226 (2022); Kolasinski SL et al. (ACR/AF), Arthritis Rheumatol 2020; Bannuru RR et al. (OARSI), 2019; AAOS Management of Osteoarthritis of the Knee (Non-Arthroplasty), 3rd ed., 2021; Teo PL et al., JOSPT 2019;49(7):501-512; AIM Theory Manual 2023.

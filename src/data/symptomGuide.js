@@ -336,9 +336,11 @@ export const REGIONS = {
       // train a lot (JOSPT patellofemoral pain CPG 2019); shared with the thigh.
       { id: "kf-stress", tier: "urgent", group: "femstress", why: "Possible stress fracture of the thigh bone: it needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep ache above the knee or in the thigh that is worse with hopping or each run, or aches at night or at rest?" },
-      { id: "kf-sufe", ages: ["u18"], tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE): hip problems in children are often felt only at the knee",
-        text: "Is a child aged about 9 to 16 limping with knee or thigh pain, or does moving the hip hurt?" },
-      { id: "kf-perthes", ages: ["u5", "u18"], tier: "urgent", why: "Possible Perthes disease or other hip problem felt at the knee",
+      // Same day, and asked to 16 and 17 year olds too (knee cross-check, Chandra 5 Oct 2026):
+      // SUFE is often first labelled a knee problem, and peaks at 13 to 15 in boys.
+      { id: "kf-sufe", ages: ["u18", "18-29"], sameDay: true, tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE): hip problems in children are often felt only at the knee",
+        text: "Is a child or teenager aged about 9 to 17 limping with knee or thigh pain, or does moving the hip hurt?" },
+      { id: "kf-perthes", ages: ["u5", "u18"], sameDay: true, tier: "urgent", why: "Possible Perthes disease or other hip problem felt at the knee",
         text: "Is a child aged about 4 to 10 limping, with knee or hip pain, but no injury?" },
       { id: "kf-tumour", ages: ["u5", "u18", "18-29"], tier: "urgent", why: "Bone tumours in young people are most common around the knee; needs imaging",
         text: "Are you under 25 with a deep ache around the knee that wakes you at night, or a lump near the knee that is growing?" },
@@ -395,10 +397,14 @@ export const REGIONS = {
         { id: "giveway", label: "The knee gives way" },
         { id: "swelling", label: "Swelling after activity" },
         { id: "stiff", label: "Stiff for less than 30 minutes in the morning or after sitting, then eases" },
+        // 5 Oct 2026 (knee cross-check): tells a kneecap that slips from an ACL tear.
+        { id: "kneecapshift", label: "The kneecap shifts or slips to the side" },
         { id: "none", label: "None of these" }
       ]},
-      { id: "K4", text: "About the twisting injury: which apply? Tick all that apply.",
-        askIf: ({ ra }) => ra.onset === "twist",
+      // After a twist or a blow (knee cross-check, 5 Oct 2026): about 30% of ACL
+      // tears are contact injuries (JOSPT 2017), and a blow could not reach the card.
+      { id: "K4", text: "About the injury: which apply? Tick all that apply.",
+        askIf: ({ ra }) => ra.onset === "twist" || ra.onset === "blow",
         priority: () => true,
         options: [
           { id: "pop", label: "I felt or heard a pop" },
@@ -411,6 +417,9 @@ export const REGIONS = {
         { id: "prepatellar", label: "Swelling on the front of the kneecap (after kneeling)" },
         { id: "back", label: "A lump or fullness at the back of the knee" },
         { id: "bump", label: "A tender bony bump just below the kneecap (in a teenager)" },
+        // Pes anserine bursitis (5 Oct 2026, knee cross-check): tender a few
+        // centimetres below the inner joint line, not on it.
+        { id: "pesanserine", label: "A tender spot on the inner shin, just below the knee" },
         { id: "puffy", label: "The whole knee is puffy" },
         { id: "none", label: "No swelling or lump" }
       ]},
@@ -422,7 +431,7 @@ export const REGIONS = {
         // at the knee.
         priority: ({ draw, ra }) => !draw || ["thigh", "hip"].some((t) => draw.has(t)) || ["u5", "u18"].includes(ra.age),
         options: [
-          { id: "yes", label: "Yes", special: "hipSource" },
+          { id: "yes", label: "Yes", special: "hipSourceKnee" },
           { id: "no", label: "No" },
           { id: "unsure", label: "Not sure" }
         ]},
@@ -445,7 +454,7 @@ export const REGIONS = {
         priority: ({ draw }) => !!draw && ["lowerback", "sij"].some((t) => draw.has(t)),
         options: [
           { id: "back", label: "Moving my low back", special: "lowbackHip" },
-          { id: "hip", label: "Moving my hip", special: "hipSource" },
+          { id: "hip", label: "Moving my hip", special: "hipSourceKnee" },
           { id: "knee", label: "Bending and loading my knee" },
           { id: "none", label: "None of these bring it on" }
         ]}
@@ -491,6 +500,9 @@ export function classifyPainType(answers){
 }
 
 export const SPECIAL_CARDS = {
+  // The knee's own version of hipSource (5 Oct 2026): that card starts "Groin pain".
+  hipSourceKnee: {title:"This may be coming from your hip",
+    body:"Knee or thigh pain that is worse when you <strong>move your hip</strong> often comes from the <strong>hip joint</strong>: the hip can send pain to the knee. Consider running the <strong>Hip</strong> guide too. In a child or teenager with a limp, a doctor should check the hip the same day."},
   inflammatory: {title:"A time-pattern worth mentioning to your doctor",
     body:"Morning stiffness lasting well over 30–60 minutes that improves with exercise — especially in younger adults and when it's gone on for months — is a pattern sometimes seen with <strong>inflammatory back pain</strong>. That's a medical question worth raising with your family doctor. It doesn't mean anything is confirmed; it's simply a pattern that deserves a proper check."},
   click: {title:"About painless clicking",

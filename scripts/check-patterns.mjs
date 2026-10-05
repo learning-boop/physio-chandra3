@@ -1789,5 +1789,45 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !L5.priority({ ra: { age: 'o64', L1: ['back'] } }))
 }
 
+// ── 55. Knee cross-check against the CPGs, the AIM manual and current evidence (all 44 approved by Chandra, 5 Oct 2026) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const { KNEE_INJURY } = await imp('src/data/injuryScreen.js')
+  const K = REGIONS.knee
+  const card = (id) => K.conditions.find((c) => c.id === id)
+  const patient = (c) => [c.name, c.blurb, ...(c.noticed || []), ...(c.homeCare || []), ...(c.seePhysioIf || [])].join(' ')
+  const flag = (r, id) => REGIONS[r].redFlags.find((f) => f.id === id)
+  const sufe = [['knee', 'kf-sufe'], ['hip', 'hpf-sufe'], ['thigh', 'tgf-sufe']].map(([r, id]) => flag(r, id))
+  check('Slipped hip growth plate (SUFE): same day and asked at 16 and 17 too, in the knee, hip and thigh; Perthes same day',
+    sufe.every((f) => f && f.sameDay && f.ages.includes('18-29') && /9 to 17/.test(f.text)) && flag('knee', 'kf-perthes').sameDay)
+  const hr = card('hipreferred')
+  check('Hip felt in the knee: the child-with-a-limp doctor line comes first; no score for "Under 5" (clinic age limit)',
+    /child or teenager.*limp.*same day/i.test(hr.seePhysioIf[0]) &&
+    !K.context.find((q) => q.id === 'age').options.find((o) => o.id === 'u5').weights?.hipreferred)
+  const q = (id) => K.questions.find((x) => x.id === id)
+  check('A blow can reach the ACL card: the injury question K4 is asked after a twist or a blow, and a blow scores for ACL',
+    q('K4').askIf({ ra: { onset: 'blow' } }) && q('K4').askIf({ ra: { onset: 'twist' } }) && !q('K4').askIf({ ra: { onset: 'gradual' } }) &&
+    K.context.find((x) => x.id === 'onset').options.find((o) => o.id === 'blow').weights.acl > 0)
+  const I = (id) => KNEE_INJURY.find((x) => x.id === id)
+  check('Knee injury screen: quick swelling with or without a pop is same day; a knee forced backwards can be reported; kneecap dislocation same day',
+    /with or without a pop/.test(I('I5').text) && I('I5').sameDay && I('I1').options.some((o) => o.id === 'hyper') && I('I7').sameDay)
+  const needDoctor = ['acl', 'mcl', 'lcl', 'meniscus', 'oa', 'pfoa', 'baker', 'pt', 'osgood', 'prepatellar', 'saphenous', 'itb', 'hipreferred', 'kneecap', 'pcl', 'pesanserine']
+  const noDoctor = needDoctor.filter((id) => !(card(id).seePhysioIf || []).some((l) => /doctor|emergency|911/i.test(l)))
+  check('Every knee card with a dangerous look-alike has a doctor or emergency line', !noDoctor.length, noDoctor)
+  check('ACL: quick swelling is a same-day doctor line, not a physio line; Baker\'s cyst names 911 for chest pain',
+    card('acl').seePhysioIf.some((l) => /swelled within 2 hours/.test(l) && /doctor the same day/.test(l)) &&
+    !card('acl').seePhysioIf.some((l) => /swelled up quickly/.test(l)) && card('baker').seePhysioIf.some((l) => /chest pain/.test(l) && /911/.test(l)))
+  const unstable = K.conditions.filter((c) => /unstable/i.test(patient(c))).map((c) => c.id)
+  check('No "unstable" in knee patient wording', !unstable.length, unstable)
+  const fs = await import('node:fs')
+  check('No wedge insoles recommended (AAOS, OARSI, ACR): knee arthritis notes and the osteoarthritis reference',
+    !card('oa').clinicNotes.some((l) => /wedge insoles in some cases/.test(l)) && /not recommended/.test(card('oa').clinicNotes.join(' ')) &&
+    !/wedge insoles in some cases/.test(fs.readFileSync(root + '/content/reference/osteoarthritis.md', 'utf8')))
+  check('New knee cards: kneecap slipping, PCL, pes anserine; Sinding-Larsen-Johansson folded into the Osgood-Schlatter card; kneecap arthritis from 50',
+    ['kneecap', 'pcl', 'pesanserine'].every((id) => card(id)) && /Sinding-Larsen/.test(card('osgood').name) &&
+    q('K3').options.some((o) => o.id === 'kneecapshift') && q('K5').options.some((o) => o.id === 'pesanserine') &&
+    JSON.stringify((card('pfoa').gates || {}).ages || card('pfoa').ages || []).includes('50-64'), card('pfoa').gates)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

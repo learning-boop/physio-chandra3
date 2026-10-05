@@ -38,7 +38,7 @@ A whole-joint condition: mechanical and biological events upset the balance of b
 |---|---|---|---|
 | Early | Surface fibrillation, fewer cells and proteoglycans; bone unaffected | Slight loss of movement, morning and evening stiffness, aching sometimes at night, arthrogenic muscle inhibition | Find it early; education, exercise, weight; active range |
 | Moderate | Thinner cartilage, instability, synovitis, capsular and ligament fibrosis, osteophytes, fibrosed mechanoreceptors | More capsular loss, a joint that gives way and cannot be trusted, more night ache, reduced proprioception; trouble with socks, standing after rest, stairs, floors, getting up from the floor; jars, writing, buttons (hands) | Neuromuscular and strength work through range for confidence; manual therapy and myofascial work for range; restore muscle balance (aligned loading, mild discomfort at most, enough repetitions for a muscle "burn") |
-| Advanced | Marked cartilage loss, clefting into bone, thickened trabeculae | Joint thickening, crepitus, deformity (e.g. varus) | Function in the best alignment, strength around the joint and neighbouring joints, range; prepare for surgery if needed; walking aids, unloader braces, wedge insoles in some cases |
+| Advanced | Marked cartilage loss, clefting into bone, thickened trabeculae | Joint thickening, crepitus, deformity (e.g. varus) | Function in the best alignment, strength around the joint and neighbouring joints, range; prepare for surgery if needed; walking aids, an unloader brace in some cases (lateral wedge insoles are not recommended: AAOS 2021, OARSI 2019, ACR 2019; knee cross-check, 5 Oct 2026) |
 
 ## Management
 

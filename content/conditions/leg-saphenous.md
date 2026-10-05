@@ -5,6 +5,7 @@ name: Inner knee nerve irritation (saphenous nerve)
 clin: Saphenous nerve irritation
 # Patient text shared with knee-saphenous.md: keep the two in step.
 # Pointers from content/regions/leg.md, 25 Sep 2026.
+# 5 Oct 2026: doctor line kept in step with knee-saphenous.md (knee cross-check S13, approved by Chandra).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -29,5 +30,5 @@ A skin nerve runs down the inside of the knee to the inner shin. It can be irrit
 
 ## seePhysioIf
 - The burning has not eased after a few weeks
-- The patch is spreading, or the leg feels weak: that points to the back instead
+- The numb patch is spreading, or the leg feels weak or gives way: see a doctor soon, as it may come from the back or a larger nerve
 - It is limiting sleep or walking

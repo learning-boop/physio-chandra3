@@ -390,6 +390,8 @@ export const KNEE_INJURY = [
     { id: 'blow', label: 'Yes, a blow to the knee (tackle, car dashboard)' },
     { id: 'fall', label: 'Yes, a fall onto the knee' },
     { id: 'kneecap', label: 'Yes, the kneecap slipped out of place' },
+    // Over-straightening tears the PCL and the outer corner (AIM manual p.61; 5 Oct 2026).
+    { id: 'hyper', label: 'Yes, my knee was forced backwards (over-straightened)' },
   ]},
   { id: 'I2', text: 'Is the knee out of shape, or is the kneecap still out of place?',
     options: yesNo('emergency', 'Possible knee or kneecap dislocation that has not gone back') },
@@ -407,14 +409,17 @@ export const KNEE_INJURY = [
   { id: 'I8', text: 'Are you under 12, or over 50?',
     askIf: (a) => a.I1 === 'fall' || a.I1 === 'blow', sameDay: true,
     options: yesNo('urgent', 'Pittsburgh knee rule: after a fall or a blow, an X-ray is needed under 12 or over 50') },
-  // Bleeding in the joint, which can mean a fracture: same day.
-  { id: 'I5', text: 'Did you hear or feel a pop, and did the knee swell up within 2 hours?',
-    sameDay: true, options: yesNo('urgent', 'Quick swelling means bleeding in the joint: possible ACL tear or fracture') },
+  // Bleeding in the joint, which can mean a fracture: same day. With or without
+  // a pop (5 Oct 2026): quick swelling also follows a kneecap dislocation or a
+  // bone or cartilage injury (AIM manual pp.56, 64, 78).
+  { id: 'I5', text: 'Did the knee swell up within 2 hours of the injury (with or without a pop)?',
+    sameDay: true, options: yesNo('urgent', 'Quick swelling means bleeding in the joint: possible ACL tear, kneecap dislocation, or a break in the bone or cartilage') },
   { id: 'I6', text: 'Is the knee stuck, so you cannot straighten it fully?',
     options: yesNo('urgent', 'Possible locked knee from a torn meniscus (bucket-handle tear): it needs an early surgical opinion') },
   // Asked after "the kneecap slipped out of place" only.
+  // Same day (5 Oct 2026): an X-ray in every suspected dislocation (AIM manual p.66).
   { id: 'I7', text: 'Did the kneecap pop out and go back in?',
-    askIf: (a) => a.I1 === 'kneecap',
+    askIf: (a) => a.I1 === 'kneecap', sameDay: true,
     options: yesNo('urgent', 'A first kneecap dislocation: imaging to check for a loose bone or cartilage fragment') },
 ]
 

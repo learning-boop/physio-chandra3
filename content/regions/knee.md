@@ -3,6 +3,16 @@
 # Built into src/data/symptomGuide.js (knee, question ids K1 to K8) and src/data/injuryScreen.js (knee screen, Ottawa knee rule adapted).
 # Conditions: content/conditions/knee-*.md. Body map: the knee band (KNEE_TOP in Body3D.jsx).
 # Test patients: npm run check:regions
+# 5 Oct 2026: knee cross-check against the JOSPT ligament (2017), ACL prevention
+# (2018/2023), meniscus (2018) and patellofemoral pain (2019) CPGs, the AAOS 2021
+# knee OA guideline, the AIM Theory Manual 2023 Ch. 2.7 and a current search; all
+# 44 items approved by Chandra (review/knee-crosscheck.html). Changes here: SUFE
+# and Perthes same day, SUFE asked at 16-17; the injury screen's quick-swelling
+# question with or without a pop, a knee forced backwards (I1), kneecap
+# dislocation same day (I7); K3 "kneecap shifts", K4 after a twist or a blow,
+# K5 "tender spot on the inner shin"; new cards knee-kneecap, knee-pcl,
+# knee-pesanserine; Sinding-Larsen-Johansson folded into knee-osgood.
+# Test patients 8 to 14.
 region: knee
 name: Knee
 source: Willy RW et al. Patellofemoral pain: clinical practice guidelines. JOSPT 49(9), 2019; Logerstedt DS et al. Knee pain and mobility impairments: meniscal and articular cartilage lesions, revision 2018. JOSPT 48(2), 2018; Logerstedt DS et al. Knee stability and movement coordination impairments: knee ligament sprain, revision 2017. JOSPT 47(11), 2017; Stiell IG et al. Prospective validation of a decision rule for the use of radiography in acute knee injuries (Ottawa knee rule). JAMA 275(8), 1996; NICE NG226. Osteoarthritis in over 16s: diagnosis and management, 2022; Malliaras P et al. Patellar tendinopathy: clinical diagnosis, load management, and advice for challenging case presentations. JOSPT 45(11), 2015; Peck DM et al. Slipped capital femoral epiphysis: diagnosis and management. Am Fam Physician 95(12), 2017; Lesher JM et al. Hip joint pain referral patterns: a descriptive study. Pain Med 9(1), 2008; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019
@@ -34,6 +44,7 @@ I1 Have you injured your knee in the last 6 weeks, for example in a twist, a fal
 - Yes, a blow to the knee (tackle, car dashboard)
 - Yes, a fall onto the knee
 - Yes, the kneecap slipped out of place
+- Yes, my knee was forced backwards (over-straightened)   (5 Oct 2026: PCL and outer corner)
 Route: No → skip this screen / Any Yes → I2
 Why: Gate question
 
@@ -113,20 +124,22 @@ Q: Which of these apply? Tick all that apply.
 - The knee gives way
 - Swelling after activity
 - Stiff for less than 30 minutes in the morning or after sitting, then eases
+- The kneecap shifts or slips to the side   (5 Oct 2026)
 - None of these
 
-Q: About the twisting injury: which apply? Tick all that apply.
+Q: About the injury: which apply? Tick all that apply.
 - I felt or heard a pop
 - It swelled within a couple of hours
 - It swelled the next day
 - I could not carry on playing
 - None of these
-Ask only if: How did it start? is “A twist or pivot in sport”
+Ask only if: How did it start? is “A twist or pivot in sport” or “After a fall or a blow to the knee” (5 Oct 2026: about 30% of ACL tears are contact injuries)
 
 Q: Is there any swelling or lump in one place?
 - Swelling on the front of the kneecap (after kneeling)
 - A lump or fullness at the back of the knee
 - A tender bony bump just below the kneecap (in a teenager)
+- A tender spot on the inner shin, just below the knee   (5 Oct 2026: pes anserine)
 - The whole knee is puffy
 - No swelling or lump
 
@@ -220,3 +233,33 @@ Drawing: Front of the right knee, a 10-year-old after a fall
 Answers: Age Under 18 · After a fall · Less than 2 weeks; Injury screen: I1 "Yes, a fall onto the knee"; I2, I3, I9, I4 No; I8 Yes
 Flags: Injury screen I8 (Pittsburgh knee rule)
 Expect: top condition = None; see a doctor first (same day, X-ray); route = Physician first
+
+<!-- Knee cross-check, 5 Oct 2026 (approved by Chandra). -->
+CASE: 8. ACL after a tackle
+Answers: 16 to 29; after a fall or a blow; 6 weeks to 3 months; no injury in the last 6 weeks; inner side; gives way; pop + quick swelling + could not carry on
+Expect: top condition = ACL tear
+
+CASE: 9. Kneecap that slips to the side and gives way
+Answers: 5 to 15; a twist; 6 weeks to 3 months; kneecap; kneecap shifts + gives way
+Expect: top condition = kneecap slipping out of place; ACL not on top
+
+CASE: 10. A 16-year-old limping with knee pain
+Answers: 16 to 29; gradually; 2 to 6 weeks; kneecap; moving the hip hurts
+Flags: kf-sufe (now asked at 16 and 17)
+Expect: route = physician first, same day
+
+CASE: 11. Kneels a lot, no swelling
+Answers: 30 to 49; after kneeling; kneecap; kneeling + stairs; no swelling or lump
+Expect: must not show = kneecap bursitis
+
+CASE: 12. Tender inner shin just below the knee
+Answers: 50 to 64; gradually; inner side; stairs; tender spot on the inner shin
+Expect: top condition = pes anserine bursitis
+
+CASE: 13. Kneecap pain at 32
+Answers: 30 to 49; gradually; more than 3 months; kneecap; stairs; none
+Expect: top condition = patellofemoral pain; must not show = kneecap arthritis
+
+CASE: 14. Knee forced backwards, quick swelling without a pop
+Answers: injury screen I1 "forced backwards"; I2, I3, I9, I4 No; I5 Yes
+Expect: route = physician first, same day

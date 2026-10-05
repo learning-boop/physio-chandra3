@@ -178,7 +178,7 @@ export const SIGNS = {
   'kf-cancer': 'a past cancer, or a deep ache at night that does not change with position, with weight loss',
   'kf-tumour': 'a deep ache around the knee that wakes you at night, or a lump near the knee that is growing',
   'kf-stress': 'a deep ache above the knee that is worse with running or hopping',
-  'kf-sufe': 'a child aged about 9 to 16 limping, or with hip pain',
+  'kf-sufe': 'a child or teenager aged about 9 to 17 limping, or with hip pain',
   'kf-perthes': 'a child aged about 4 to 10 limping, with no injury',
   // Foot
   'ft-puncture': 'something went through your shoe into your foot, and it is now swollen, red or painful to walk on',
@@ -198,7 +198,7 @@ export const SIGNS = {
   'hpf-nofall': 'hip or groin pain that came on suddenly with no fall (or only a small slip), so it now hurts to stand on that leg, if you are 65 or over or have low bone density',
   'hpf-stress': 'a deep groin ache that is worse with running or hopping',
   'hpf-avn': 'a deep groin ache if you take long-term steroid tablets, drink heavily or have sickle cell disease',
-  'hpf-sufe': 'a child aged about 9 to 16 limping, with hip, groin, thigh or knee pain',
+  'hpf-sufe': 'a child or teenager aged about 9 to 17 limping, with hip, groin, thigh or knee pain',
   'hpf-hernia': 'a soft lump in the groin that appears when you cough, strain or stand',
   'hpf-kidney': 'pain in waves from your side to your groin, or burning or blood when you pass urine',
   // The drawing's urinary pattern question (./patternChecks.js), asked for the hip.
@@ -328,7 +328,7 @@ export const SIGNS = {
   'tgf-femoral': 'a thigh muscle that has become weak or thin, or a knee that gives way, with no injury',
   'tgf-stress': 'a deep, aching thigh pain that is worse with hopping or aches at night, if you run or train hard',
   'tgf-tumour': 'a deep thigh ache that wakes you at night, or a lump in the thigh that is growing',
-  'tgf-sufe': 'a child aged about 9 to 16 limping, with thigh or knee pain',
+  'tgf-sufe': 'a child or teenager aged about 9 to 17 limping, with thigh or knee pain',
   'tgf-cancer': 'a past cancer, or a deep thigh ache at night that does not change with position, with weight loss',
   // Lower leg
   'lgf-cast': 'a cast, splint or bandage on the leg that feels more and more tight and painful',
@@ -360,7 +360,7 @@ export const SHORT = {
   'kf-cancer': 'a past cancer',
   'kf-tumour': 'night pain or a growing lump',
   'kf-stress': 'a deep ache with running',
-  'kf-sufe': 'a child limping',
+  'kf-sufe': 'a child or teen limping',
   'kf-perthes': 'a child limping',
   'ft-puncture': 'a wound from something through the shoe',
   'ft-charcot': 'diabetes with a hot foot or a wound',
