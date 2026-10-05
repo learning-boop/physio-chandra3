@@ -680,9 +680,26 @@ function limbQuestion(zones) {
   const weeks = Math.max(...ids.map((id) => LIMB_WEEKS[id]))
   const how = ids.includes('hand') ? 'a fall, accident, blow, crush, cut, or twist'
     : ids.includes('forearm') || ids.includes('wrist') ? 'a fall, accident, blow, crush, twist, or heavy lift' : 'a fall, accident, blow, or heavy lift'
+  const label = { fall: limbFallLabel(ids), blow: limbBlowLabel(ids) }
   return { id: 'I1', text: `Have you injured your ${where} in the last ${weeks} weeks, for example in ${how}?`,
     options: LIMB_OPTIONS.filter((o) => (!o.only || ids.includes(o.only)) && (!o.onlyAny || o.onlyAny.some((x) => ids.includes(x))))
-      .map(({ id, label }) => ({ id, label })) }
+      .map(({ id, label: l }) => ({ id, label: label[id] || l })) }
+}
+
+/* The fall and blow answers name only the areas drawn (Chandra, 5 Oct 2026):
+   a hand-and-wrist drawing was offered "a blow to the arm" and "I fell onto
+   my arm, hand, or elbow". Where each answer leads is unchanged. */
+function limbFallLabel(ids) {
+  if (ids.includes('shoulder') || ids.includes('arm')) return 'Yes, I fell onto my arm, hand, or elbow'
+  if (ids.includes('elbow') || ids.includes('forearm')) return 'Yes, I fell onto my hand or elbow'
+  return 'Yes, I fell onto my hand'
+}
+function limbBlowLabel(ids) {
+  // Up to three areas are named; more than that is the whole arm.
+  if (ids.length > 3) return 'Yes, a blow to the arm'
+  const names = ids.map((id) => LIMB_NAME[id])
+  const where = names.length > 2 ? names.slice(0, -1).join(', ') + ', or ' + names[names.length - 1] : names.join(' or ')
+  return `Yes, a blow to the ${where}`
 }
 const LIMB_WHEN = { id: 'I2', text: 'When did it happen?', options: [
   { id: 'recent', label: 'In the last 2 weeks' },

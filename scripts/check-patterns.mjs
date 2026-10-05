@@ -1750,5 +1750,20 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     card('head', 'tth').seePhysioIf.some((l) => /call 911/.test(l)) && card('thigh', 'doms').seePhysioIf.some((l) => /cola/.test(l) && /emergency department now/.test(l)), missing)
 }
 
+// ── 53. The shared arm injury question names only the areas drawn (Chandra, 5 Oct 2026) ──
+{
+  const { injuryQuestion, limbAnswerFor } = await imp('src/data/injuryScreen.js')
+  const opts = (types) => Object.fromEntries(injuryQuestion('limb:I1', types.map((type) => ({ type }))).q.options.map((o) => [o.id, o.label]))
+  const wh = opts(['wrist', 'hand']), ef = opts(['elbow', 'forearm']), sa = opts(['shoulder', 'upperarm'])
+  const all = opts(['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand'])
+  check('Wrist and hand drawn: "a blow to the wrist or hand" and "I fell onto my hand", with no arm or elbow',
+    wh.blow === 'Yes, a blow to the wrist or hand' && wh.fall === 'Yes, I fell onto my hand' && !/arm|elbow/.test(wh.blow + wh.fall), [wh.fall, wh.blow])
+  check('Elbow and forearm drawn: "a blow to the elbow or forearm" and "I fell onto my hand or elbow"; shoulder and the whole arm keep "arm"',
+    ef.blow === 'Yes, a blow to the elbow or forearm' && ef.fall === 'Yes, I fell onto my hand or elbow' &&
+    sa.blow === 'Yes, a blow to the shoulder or upper arm' && /onto my arm/.test(sa.fall) && all.blow === 'Yes, a blow to the arm', [ef, sa.blow, all.blow])
+  check('The new wording does not change where the answers lead (blow: wrist "blow", hand "jammed"; fall: wrist "fall")',
+    limbAnswerFor('blow', 'wrist') === 'blow' && limbAnswerFor('blow', 'hand') === 'jammed' && limbAnswerFor('fall', 'wrist') === 'fall')
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

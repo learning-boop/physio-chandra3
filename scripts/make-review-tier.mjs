@@ -5,6 +5,9 @@
    Run: node scripts/make-review-tier.mjs 1   →   review/tier1.html
         node scripts/make-review-tier.mjs 2   →   review/tier2.html
         node scripts/make-review-tier.mjs 3   →   review/tier3.html
+   Area pages for the older texts (moved from the site or taken from a
+   guideline), not yet signed:
+        node scripts/make-review-tier.mjs lowback   →   review/lowback.html
 
    Built from the condition files (what Chandra edits) and the live site data
    (the area's safety questions), so it always shows what is built. Opens in
@@ -14,7 +17,7 @@ import fs from 'node:fs'
 import { REGIONS } from '../src/data/symptomGuide.js'
 
 const TIER = String(process.argv[2] || '1')
-const OUT = `review/tier${TIER}.html`
+const OUT = /^\d+$/.test(TIER) ? `review/tier${TIER}.html` : `review/${TIER}.html`
 const TIER1 = [
   ['upperback-costochondritis', 'Chest pain: must not reassure away a heart problem.',
     'Does chest pain with breathlessness, sweating, or pain into the arm or jaw go to 911 first? Is "sore when pressed" never used to rule out the heart?'],
@@ -106,8 +109,34 @@ const TIER3 = [
   ['foot-sesamoid', 'Under the big toe; a stress fracture looks similar.', 'The "worse or at night: doctor first" line is there. Is it right?'],
   ['coccyx-unstable', 'A tailbone that catches on standing, often after childbirth.', 'Is the description and advice right?'],
 ]
-const LIST = TIER === '3' ? TIER3 : TIER === '2' ? TIER2 : TIER1
-const HEAD = TIER === '3'
+const AREAS = {
+  lowback: {
+    title: 'Low Back Review',
+    lede: 'The low back texts not yet signed: moved from the old site or taken from a guideline (JOSPT 2012 and 2021), plus the spondyloarthritis document. Signing all of them lets the low back area document be signed too.',
+    list: [
+      ['lowback-nslbp', 'The commonest result on the whole site.',
+        'No doctor line. The clinic notes say "failure to improve within 30 days is itself a flag": should the card say "not better after 4 to 6 weeks, or getting worse: see your doctor"? Is "the back remains strong" right as worded?'],
+      ['lowback-radicular', 'Common; the nerve and cauda equina emergencies sit next to it.',
+        'No doctor or emergency line on the card. Should it name: numbness in the saddle area, or a new change in bladder or bowel (emergency department now); a weak foot or leg that is getting worse (doctor the same day)? The safety questions ask these, but the card does not repeat them.'],
+      ['lowback-stenosis', 'Common over 60; poor circulation in the legs looks similar.',
+        'No doctor line. Should it name: legs that ache with walking but do not ease on sitting or leaning forward, or cold or pale feet (doctor: circulation); both legs getting weaker, or a change in bladder or bowel (emergency department)?'],
+      ['lowback-discderangement', 'Common after bending or lifting.',
+        'Leg symptoms spreading go to the physiotherapist. Should spreading numbness or weakness in the leg go to a doctor? Is the standing-backbend advice safe for everyone who will read it?'],
+      ['lowback-axspa', 'Inflammatory, not mechanical; early diagnosis changes the outcome.',
+        'It has a "doctor first" section, which the other low back texts do not. "Any new painful red eye ... needs medical care first": should that say "see a doctor the same day" (uveitis)? Is the ceiling of 20 (already diagnosed scores 0) right?'],
+      ['lowback-facet', 'Common, one-sided, worse arching back.',
+        'The clinic notes say: under 20 with pain arching back in sport, think of a stress fracture of the spine (spondylolysis) first. Should the card say so for young athletes (doctor or physiotherapist assessment, rest from sport)?'],
+      ['lowback-instability', 'Recurrent episodes; core-control advice.',
+        'Is "the deep core muscles are not controlling movement well" a fair way to put it to patients? Only 5 pointers: is it matched often enough?'],
+    ],
+  },
+}
+const AREA = AREAS[TIER]
+const LIST = AREA ? AREA.list : TIER === '3' ? TIER3 : TIER === '2' ? TIER2 : TIER1
+const LABEL = AREA ? AREA.title.replace(/ Review$/, '') : `Tier ${TIER}`
+const HEAD = AREA
+  ? { title: AREA.title, h1: `${AREA.title.replace(/ Review$/, '')} review: ${AREA.list.length} condition texts`, lede: AREA.lede }
+  : TIER === '3'
   ? { title: 'Tier 3 Review', h1: `Tier 3 review: ${TIER3.length} condition texts`, lede: 'Drafted by Claude, not yet signed: the less common problems, mostly nerve entrapments.' }
   : TIER === '2'
     ? { title: 'Tier 2 Review', h1: `Tier 2 review: ${TIER2.length} condition texts`, lede: 'Drafted by Claude, not yet signed: the common problems most patients will see.' }
@@ -160,10 +189,11 @@ const cards = LIST.map(([key, why, check], i) => {
         <p class="clin">Clinical label: ${esc(c.clin)}</p>
       </div>
     </header>
-    <div class="why"><strong>Why Tier ${TIER}:</strong> ${esc(why)}<br><strong>Check:</strong> ${esc(check)}</div>
+    <div class="why"><strong>${AREA ? 'Why it matters' : `Why Tier ${TIER}`}:</strong> ${esc(why)}<br><strong>Check:</strong> ${esc(check)}</div>
     <h3>What patients read</h3>
     <div class="patient">
       <p>${esc((s.blurb || []).join(' '))}</p>
+      ${s.doctorFirst ? `<h4>See your doctor first</h4><p>${esc(s.doctorFirst.join(' '))}</p>` : ''}
       <h4>What people often notice</h4>${list(s.noticed)}
       <h4>What often helps</h4>${list(s.homeCare)}
       <h4>See a physiotherapist if</h4>${list(s.seePhysioIf)}
@@ -243,7 +273,7 @@ const html = `<!doctype html>
   })
   refresh()
   document.getElementById('copy').addEventListener('click', async () => {
-    const lines = ['Tier ${TIER} review (' + new Date().toISOString().slice(0, 10) + ')']
+    const lines = ['${LABEL} review (' + new Date().toISOString().slice(0, 10) + ')']
     cards.forEach((card) => {
       const k = card.dataset.key, s = state[k] || {}, name = card.querySelector('h2').textContent
       const ticks = ['wording', 'doctor', 'pointers'].filter((f) => s[f]).join(', ')
