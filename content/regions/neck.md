@@ -2,6 +2,17 @@
 # From "Cervical assessment.docx" (Joint wise assessment folder), 24 Sep 2026.
 # Built into src/data/symptomGuideExtra.js (neck) and src/data/injuryScreen.js.
 # Test patients: npm run check:regions
+# 5 Oct 2026: neck cross-check against the JOSPT neck pain CPG 2017, the 2021
+# cervical interventions guideline, the whiplash guidelines (OPTIMa 2021,
+# Australian 2023, SIRA 2024), the AIM Theory Manual 2023 Ch. 2.1, the Cervical
+# Clinic Manual 2026, Chandra's neck and whiplash protocols and a current search;
+# all items approved by Chandra in advance (review/neck-crosscheck.html).
+# Changes here: nrf-after-doc also asks a sudden, severe, unusual neck pain or
+# headache without an injury; N1 turning answers are one answer (excl); N5 asked
+# early after an accident; N9 cord signs show a doctor card (cordSign); N2
+# weakness shows "book promptly"; N5 trouble concentrating shows a concussion
+# check; N11 adds the artery signs (dizzyVascular) and dizziness on standing
+# (dizzyStanding); new card neck-wryneck. Test patients 46 to 49.
 region: neck
 name: Neck (cervical spine)
 source: Blanpied PR et al. Neck Pain: Revision 2017. JOSPT 47(7), 2017; Rushton A et al. International IFOMPT Cervical Framework. JOSPT 53(1), 2023; Stiell IG et al. The Canadian C-Spine Rule. JAMA 286, 2001; Wainner RS et al. Radiculopathy test cluster. Spine 28, 2003; Cook C et al. Cervical myelopathy clinical findings cluster. JOSPT 40, 2010; Bogduk N. Definitions and physiology of back pain, referred pain, and radicular pain. Pain 147, 2009; Cloward RB. Cervical diskography. Ann Surg 150, 1959; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction, 3rd ed., 2019
@@ -551,3 +562,20 @@ Expect: top condition = cervical myelopathy; must not show = sensitive nerve
 CASE: 40. Base-of-the-skull pain since a car accident
 Answers: After a car accident; Q13 = base of the skull + tender; Q1 = stiff one side; Q5 = within 2 days + weak or tired + headaches or shoulder pain
 Expect: top condition = whiplash; must not show = upper neck pain
+
+<!-- Neck cross-check, 5 Oct 2026 (approved by Chandra). -->
+CASE: 46. Clumsy hands only, steady
+Answers: 50 to 64; gradually; more than 3 months; N9 = clumsy hands; N10 = staying about the same
+Expect: the "see your doctor" cord-sign card shows, whatever the condition scores
+
+CASE: 47. Dizzy with brief double vision that went away
+Answers: 30 to 49; gradually; N9 = dizzy; N11 = unsteady + brief double vision, slurred speech...
+Expect: the "see a doctor today" dizziness card shows
+
+CASE: 48. Woke up with the neck locked, under 2 weeks
+Answers: 30 to 49; woke up with it; less than 2 weeks; N1 = locked
+Expect: top condition = acute wry neck
+
+CASE: 49. Whiplash with trouble concentrating weeks later
+Answers: 30 to 49; car accident; 2 to 6 weeks; no injury in the last 6 weeks; N1 = stiff both ways; N5 = within 2 days + tired + trouble concentrating
+Expect: top condition = whiplash; the concussion check card shows

@@ -64,7 +64,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 
 | Area on the body map | Region | Built from | Test patients |
 | --- | --- | --- | --- |
-| Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents; + Cervical Radiculopathy document, N2, N3 and N12, reasoning in reference/cervical-radiculopathy.md; + Cervicogenic Headache 1 and Upper Cervical Pain documents, N13 and the upper neck pain condition, reasoning in reference/upper-cervical.md; + Cervical Neural Mechanosensitivity document, N14, reasoning in reference/neural-mechanosensitivity.md; + the Canadian C-Spine Rule's limits and a concussion check in the injury screen, I8, I3 and I9, from the JOSPT neck 2017 and concussion 2020 CPGs) | 56 |
+| 60 || Neck | `neck` | Cervical assessment (+ Cervical Myelopathy condition document, questions N9–N10; + Cervicogenic dizziness condition document, N9's dizziness answer and N11; + Neck Pain Mobility Deficits, Whiplash WAD and Cervicogenic Headache documents; + Cervical Radiculopathy document, N2, N3 and N12, reasoning in reference/cervical-radiculopathy.md; + Cervicogenic Headache 1 and Upper Cervical Pain documents, N13 and the upper neck pain condition, reasoning in reference/upper-cervical.md; + Cervical Neural Mechanosensitivity document, N14, reasoning in reference/neural-mechanosensitivity.md; + the Canadian C-Spine Rule's limits and a concussion check in the injury screen, I8, I3 and I9, from the JOSPT neck 2017 and concussion 2020 CPGs); cross-checked against the CPGs, whiplash guidelines and manuals, 5 Oct 2026 | 57 |
 | Base of neck (C7–T3) | `ctj` | CT junction assessment | 5 |
 | Mid back, front of chest | `upperback` | Thoracic assessment (+ Osteoporosis document, T9) | 8 |
 | Mid-to-low back, flank | `tlj` | TL-junction assessment | 5 |
@@ -73,7 +73,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Tailbone | `coccyx` | Coccyx assessment | 5 |
 | Jaw | `jaw` | TMJ assessment | 5 |
 | Head | `head` | Head assessment (+ Cervicogenic Headache 1 document, D2 and D3; + Concussion document, the head injury screen, D8 and D9) | 14 |
-| Shoulder | `shoulder` | Shoulder assessment (cross-checked against the CPGs, AIM manual and Chandra's protocols, 5 Oct 2026) | 9 |
+| 11 || Shoulder | `shoulder` | Shoulder assessment (cross-checked against the CPGs, AIM manual and Chandra's protocols, 5 Oct 2026) | 9 |
 | Upper arm | `arm` | Upper arm assessment | 5 |
 | Elbow | `elbow` | Elbow assessment | 6 |
 | Forearm | `forearm` | Forearm assessment | 5 |

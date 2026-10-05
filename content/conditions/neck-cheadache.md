@@ -10,6 +10,10 @@ clin: Cervicogenic headache (ICHD-3 11.2.1)
 # Reviewed and approved by Chandra, 28 Sep 2026.
 # The patient text is shared with head-cgh.md: keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 5 Oct 2026: neck cross-check, approved by Chandra after his sign-off: the
+# headache warning signs named, a headache after an injury sees a doctor first,
+# a both-sides band (tension-type) -1, self-SNAG dose, ICHD-3 B and D, and the
+# headache protocol's differences from the CPG.
 reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4) as the
 # neck's questions can carry it:
@@ -35,6 +39,7 @@ pointers:
   "Throbbing, with feeling sick or finding light hard to take": -3
   "Only an occasional ache at the back of my head": -2
   "I do not get headaches": -3
+  "Both sides, like a tight band or pressure": -1
   "It is stiff or painful turning to one side": 2
   "Long spells at a desk, screen, or driving": 1
 ---
@@ -60,19 +65,26 @@ A cervicogenic headache is a headache that starts in the joints, muscles or nerv
 ## seePhysioIf
 - Your headaches are happening regularly, or are affecting work or sleep
 - You are taking pain medicine for them often: a physiotherapy assessment can help find out whether your neck is involved, and no doctor's referral is needed
-- You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer. If any of the warning signs apply, see a doctor first
+- You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer
+- A sudden, severe headache, the worst of your life: call 911
+- A headache with fever and a stiff neck, or a rash: call 911
+- Over 50 with a new headache, a tender scalp, jaw pain when chewing, or a change in vision: see a doctor the same day
+- A headache that wakes you with vomiting, is worse lying down, coughing or straining, or is steadily getting worse: see a doctor
+- It started after a knock to the head or a car accident: see a doctor first to check for concussion
 
 ## clinicNotes
 - Physio-led after the headache red-flag screen (SNNOOP10). Refer to the GP if pain medicine is used on 10 or more days a month, if there are red or orange flags, or if there is no change after 6 to 8 weeks of well-delivered care.
 - Subjective: headache diary (frequency, intensity, duration), side-locking, onset relative to neck pain, triggers, medication days a month, migraine and tension-type features. Outcomes: HIT-6, NDI, PSFS.
-- ICHD-3 11.2.1: evidence of a cervical disorder plus at least two of: temporal relation, parallel improvement, reduced range with provocation, abolition by diagnostic block.
+- ICHD-3 11.2.1: A, any headache fulfilling C; B, clinical or imaging evidence of a cervical disorder known to cause headache; C, causation shown by at least two of: temporal relation, parallel improvement, reduced range with provocation, abolition by diagnostic block; D, not better accounted for by another ICHD-3 diagnosis (Cervical Clinic Manual 2026 §10.2).
 - Flexion-rotation test: positive at 32 degrees or less, or about 10 degrees less than the other side (sensitivity about 91%, specificity about 90% for C1-2 CGH; Ogince 2007).
 - Jull triad: reduced extension + painful C0-C3 joint dysfunction reproducing the familiar headache + impaired craniocervical flexion test (sensitivity 100%, specificity 94% against migraine and tension-type; Jull 2007). Absence of the triad makes a neck source unlikely.
 - Manual examination C0-C3: reproduction and easing of the familiar headache; suboccipital, upper trapezius and SCM palpation; thoracic and scapular posture.
 - Screen: cervical arterial dysfunction per the IFOMPT framework; upper cervical ligament tests only with risk factors (trauma, RA, Down syndrome, long-term steroids, recent throat infection, connective tissue disorder); cranial nerves and neuro exam if indicated.
-- Management: education (a sensitive upper neck can drive head pain without damage in the head); upper cervical and thoracic manual therapy; progressive deep neck flexor and scapular exercise starting with craniocervical flexion; C1-2 self-SNAG for use when a headache starts (Hall 2007); desk, screen, driving and sleep set-up; work with the GP on medicine use.
+- Management: education (a sensitive upper neck can drive head pain without damage in the head); upper cervical and thoracic manual therapy; progressive deep neck flexor and scapular exercise starting with craniocervical flexion; C1-2 self-SNAG twice daily as a routine, and when a headache starts (Hall 2007 used it twice daily); desk, screen, driving and sleep set-up; work with the GP on medicine use.
 - JOSPT 2017 stage-matched options: acute: active mobility exercise (B), C1-2 self-SNAG (C). Subacute: cervical manipulation and mobilisation (B), C1-2 self-SNAG (C). Chronic: one combined recommendation (B), cervical or cervicothoracic manipulation or mobilisation together with shoulder girdle and neck stretching, strengthening and endurance exercise. Public text names hands-on techniques only; manipulation of the upper neck is left to clinical judgement after screening.
 - Look-alikes: migraine (throbbing, switches sides, nausea, light and sound sensitivity, aura); tension-type (pressing band on both sides); occipital neuralgia (brief shooting scalp pain, scalp sore to touch: card); upper neck pain without main headache (neck-upper); TMD (jaw region); post-concussion (head injury path); medication overuse (card); sinus or eye problem (GP or optometrist). Neck pain with migraine features is common: a possible match, suggest assessment, do not force one label.
 - Reasoning appendix (segmental referral, upper cervical nerves and dermatomes, telling headache types apart, tests): content/reference/upper-cervical.md.
 - JOSPT Neck Pain CPG 2017 (Blanpied et al.): CFRT sens 0.90-0.95, spec 0.90-0.97, +LR 9.0-9.4, -LR 0.11-0.27 (healthy 39-45 degrees, cervicogenic headache 20-28; MDC90 4.7-7 degrees). C0-C3 PAIVM +LR 2.9-4.9; C1-2 the most common level. Headache worse with exertion: a positive Valsalva has +LR 2.3 for serious intracranial pathology. With TMD signs, adding TMJ-directed manual therapy and exercise beat a craniocervical-only programme.
 - Sources: ICHD-3 2018; Sjaastad et al. 1998; Bogduk and Govind 2009; Haldeman and Dagenais 2001; Jull et al. 2007 and 2008; Ogince et al. 2007; Jull et al. 2002 (exercise and manipulative therapy RCT); Hall et al. 2007 (self-SNAG); JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; Dreyfuss et al. 1994; Lord et al. 1994; SNNOOP10 (Do et al. 2019); IFOMPT 2023 (Rushton et al.); Hutting et al. 2013.
+- Chandra's headache protocol versus the CPG and Clinic Manual: it treats reproducing the familiar head pain as "diagnostic" and gives a normal flexion-rotation range of about 44 degrees with "asymmetry or pain reproduction = positive"; the CPG cut-off is under 32 degrees or about a 10-degree side difference, and the Clinic Manual (§5, §7) does not support reproduction as diagnostic.
+- Note on the flow: N4 (headache type) is not asked of people 50 or over who marked only the neck, so this card cannot show for them; head-cgh covers them when the head is marked (intended: a new headache over 50 goes to the doctor-first checks).

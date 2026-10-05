@@ -9,6 +9,10 @@ clin: Upper-limb neural mechanosensitivity (nerve-related neck and arm pain; med
 # elbow and wrist-hand: here it is reached when the neck is asked (a neck
 # mark, or a line from the neck down the arm). An arm-only drawing does not
 # ask the neck yet.
+# 5 Oct 2026: neck cross-check, approved by Chandra after his 28 Sep sign-off:
+# the warning signs named, numbness or weakness that persists involves the
+# doctor, the shoulder look-alike counts against (-1), neuralgic amyotrophy and
+# stinger look-alike lines.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
@@ -43,6 +47,7 @@ pointers:
   "Numbness or pins and needles in both hands": -16
   "My hands have become clumsy": -16
   "My walking or balance has changed": -16
+  "Moving my shoulder and arm": -1
 ---
 
 ## blurb
@@ -63,8 +68,12 @@ Nerves run from the neck to the fingers and have to slide and stretch every time
 
 ## seePhysioIf
 - Tingling, burning or aching along the arm keeps returning, or is affecting sleep or work
-- You notice numbness or weakness: a physiotherapy assessment can help work out which nerve is involved and where, and no doctor's referral is needed
-- If any of the warning signs apply, see a doctor first
+- You notice numbness or weakness: book promptly; you do not need a referral to see us, and we will involve your doctor if numbness or weakness persists or is getting worse
+- Bladder or bowel changes, or new weakness or numbness in both legs: go to an emergency department now
+- Clumsy hands, symptoms in both arms or hands, unsteady walking, or weakness getting worse over days: see a doctor today
+- A cold, pale or blue hand, or a swollen, discoloured arm: see a doctor the same day
+- Severe shoulder or arm pain that eases and is followed by weakness: see a doctor
+- A burning or "dead arm" after a tackle or collision that settles within minutes is usually a stretched nerve (a "stinger"); if it happens in both arms, or keeps coming back, see a doctor before returning to sport
 
 ## clinicNotes
 - Physio-led. Refer for nerve conduction studies or to the GP with progressive loss of function, wasting, bilateral or systemic features, or no change after 6 to 8 weeks of well-delivered care.
@@ -74,6 +83,7 @@ Nerves run from the neck to the fingers and have to slide and stretch every time
 - Conduction screen: light touch, pinprick, vibration, key muscles, reflexes (Schmid 2009).
 - Local tests: Tinel, Phalen, CTS prediction rule (Wainner 2005: all 5 positive, +LR about 18); elbow flexion test, Froment; radial tunnel tenderness 4 to 5 cm below the lateral epicondyle; thoracic outlet provocation with caution (low specificity). Cervical root: Wainner cluster (see neck-radic).
 - Root, plexus or nerve: neck movement changes it, dermatomal, reflex change → root (neck-radic). Inner forearm numb with ring and little fingers → C8, lower trunk or thoracic outlet, not the ulnar nerve. Thumb-base palm feeling normal with thumb to middle finger tingling → carpal tunnel. Weakness without numbness in finger and thumb extension → posterior interosseous nerve, prompt assessment. Findings at two levels → keep both.
+- Look-alikes to name to the patient: neuralgic amyotrophy (Parsonage-Turner: severe shoulder pain, then weakness days later; doctor); stinger or burner (brachial plexus traction after a collision; bilateral or recurrent: medical assessment). Cervical Clinic Manual 2026 §10.9: new persistent numbness or weakness changes the referral plan; §10.8: a cold, pale or blue hand or a swollen discoloured arm is an urgent vascular sign.
 - Neuropathic pain screening: DN4, S-LANSS or painDETECT; screen for widespread sensitisation.
 - Interfaces: cervical spine, scalenes and first rib, pectoralis minor, shoulder girdle depression, elbow, wrist.
 - Management: education (a sensitive nerve is usually a healthy nerve that needs space, blood flow and movement); unload the aggravating positions for now, then reintroduce them; nerve sliders progressed as symptoms settle (Coppieters and Butler 2008); treat the interfaces with exercise and manual therapy; a night splint for some entrapments; work with the GP if numbness or weakness persists. Neural mobilisation: Basson 2017; Nee 2012 RCT.

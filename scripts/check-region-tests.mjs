@@ -232,10 +232,12 @@ const TESTS = {
       // to N9, a shoulder question, N8, N2 and N4 (the same before this
       // document), so N1, N6 and N7 are never asked. Open for Chandra.
       expect: { not: ['neck/radic'], route: 'results' } },
-    { name: '34. The document\'s "possible" band: 7 points is shown',
+    // 5 Oct 2026: the two Wainner items (+1 each, approved by Chandra) raise the
+    // ceiling to 19, so the card shows from 8 (was 7 of 17).
+    { name: '34. The "possible" band: 8 points is shown (ceiling 19 since 5 Oct 2026)',
       lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N9: ['none'],
-        N2: ['pastelbow', 'armsame', 'handhead'], N3: ['neither'] },
+        N2: ['pastelbow', 'armsame', 'handhead'], N3: ['neither'], N14: ['stretch'] },
       expect: { top: 'neck/radic', route: 'results' } },
     { name: '35. Below the document\'s band: 6 points is not shown',
       lines: [['neck', 'shoulderR', 'elbowR', 'wristR']],
@@ -314,6 +316,23 @@ const TESTS = {
       lines: [['neck']],
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N1: ['onestiff'], N9: ['none'], N6: ['desk'], N7: ['eases'] },
       expect: { top: 'neck/mech', not: ['neck/cgd'], notAsked: ['N10', 'N11'], route: 'results' } },
+    // Neck cross-check (JOSPT 2017, whiplash guidelines, AIM manual, Cervical Clinic Manual 2026, protocols), approved 5 Oct 2026.
+    { name: '46. Clumsy hands only, steady: no card may reach its line, but the doctor card shows',
+      lines: [['neck']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', N9: ['clumsy'], N10: ['steady'] },
+      expect: { special: 'cordSign', route: 'results' } },
+    { name: '47. Dizzy with brief double vision that went away: doctor today card',
+      lines: [['neck']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N9: ['dizzy'], N11: ['unsteady', 'fived'] },
+      expect: { special: 'dizzyVascular', route: 'results' } },
+    { name: '48. Woke up with the neck locked, under 2 weeks: acute wry neck (new card)',
+      lines: [['neck']],
+      answers: { age: '30-49', onset: 'woke', duration: 'd2w', N9: ['none'], N1: ['locked'] },
+      expect: { top: 'neck/wryneck', route: 'results' } },
+    { name: '49. Whiplash with trouble concentrating weeks later: concussion check card',
+      lines: [['neck']],
+      answers: { age: '30-49', onset: 'car', duration: 'd6w', I1: 'no', N9: ['none'], N1: ['bothstiff'], N5: ['within2d', 'tired', 'concentrate'] },
+      expect: { top: 'neck/whiplash', special: 'concussionCheck', route: 'results' } },
   ],
   ctj: [
     { name: '1. Desk worker, stiff at the base of the neck',
@@ -1104,6 +1123,10 @@ function toScreen(keys, rk, own) {
       const hit = q.options.find((o) => regionAnswers(keys, rk, { [q.id]: o.id })[q.id] === own[q.id])
       if (hit) out[q.id] = hit.id
     } else if (q.id === `onset@${rk}` && own.onset) out[q.id] = own.onset
+    // Another drawn area's "how did it start?": a real patient answers it too.
+    // When it offers the same answer, use it (5 Oct 2026; left blank, it let a
+    // card that needs a particular start, such as wry neck, look possible).
+    else if (q.id.startsWith('onset@') && own.onset && q.options.some((o) => o.id === own.onset)) out[q.id] = own.onset
   }
   return out
 }

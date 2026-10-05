@@ -76,7 +76,10 @@ export const EXTRA_REGIONS = {
       // A2.1: ongoing dizziness or signs after an accident + new, not severe
       // pain after a manipulation or jerk. The pain part is now same day.
       { id: "nrf-after-doc", sameDay: true, tier: "urgent", group: ["trauma5d-doc", "cad"], why: "After an accident, manipulation, jerk or knock, these need a doctor today",
-        text: "Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before?" },
+        // + no injury (neck cross-check, Chandra 5 Oct 2026): a neck artery tear
+        // can start as ordinary-seeming neck pain or headache without any injury
+        // (IFOMPT cervical framework 2020; Cervical Clinic Manual 2026 §3, §14).
+        text: "Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before? Or, even without any injury, has a new neck pain or headache come on suddenly that is severe and feels unlike anything you have had before?" },
       // A2.2: hands or walking quickly worse + the general "new or worsening
       // weakness or numbness" (group "neuro" replaces it). Now same day.
       // The slow pattern is asked in N9/N10 and scored (neck-dcm.md).
@@ -134,9 +137,11 @@ export const EXTRA_REGIONS = {
     questions: [
       { id: "N1", text: "When you turn your head to look over your shoulder, what happens?", options: [
         { id: "full", label: "I can turn fully both ways" },
-        { id: "onestiff", label: "It is stiff or painful turning to one side" },
-        { id: "bothstiff", label: "It is stiff or painful turning both ways" },
-        { id: "locked", label: "It is locked and I can barely turn it at all" }
+        // One answer (excl, neck cross-check 5 Oct 2026): a patient can really
+        // tick only one, so only the best counts towards a ceiling.
+        { id: "onestiff", excl: "turn", label: "It is stiff or painful turning to one side" },
+        { id: "bothstiff", excl: "turn", label: "It is stiff or painful turning both ways" },
+        { id: "locked", excl: "turn", label: "It is locked and I can barely turn it at all" }
       ]},
       // "Upper Cervical Pain headache related.docx" (v1.0, 28 Sep 2026): its
       // Q1 (where the pain mainly is: base of the skull 3, middle or lower
@@ -178,7 +183,7 @@ export const EXTRA_REGIONS = {
           { id: "burning", label: "The arm pain is burning, shooting or electric, or runs in a line down the arm" },
           { id: "handhead", label: "Resting my hand on top of my head eases the arm pain" },
           // Myotomal weakness, a radiating-pain feature in the JOSPT 2017 CPG.
-          { id: "weak", label: "Weakness in that arm or hand, such as a weaker grip" }
+          { id: "weak", label: "Weakness in that arm or hand, such as a weaker grip", special: "nerveLoss" }
         ]},
       // The document's Q4 (Spurling-type provocation). Asked whenever the arm
       // is involved, and early when N2 has a nerve-type answer: it is then the
@@ -254,6 +259,10 @@ export const EXTRA_REGIONS = {
         ]},
       { id: "N5", text: "Since your accident or injury, which of these apply? Tick all that apply.",
         askIf: ({ ra }) => ra.onset === "car" || ra.onset === "fall",
+        // Early after an accident or a fall (neck cross-check, 5 Oct 2026): with
+        // the turning answers counted as one (N1 excl), N1 was no longer reached
+        // on a long line, and whiplash went unfound; this is its telling question.
+        priority: () => true,
         options: [
           // From the "Whiplash WAD" document (draft v0.1, 28 Sep 2026): its Q2,
           // Q4, Q5, Q6 and Q7. Q6 (nerve signs) and Q7 (stress after the
@@ -263,7 +272,9 @@ export const EXTRA_REGIONS = {
           { id: "spread", label: "Headaches at the back of my head, or pain across my shoulders or upper back" },
           { id: "nerve", label: "Pins and needles, numbness or weakness in my arms or hands", special: "wadNerve" },
           { id: "stress", label: "I find it hard to stop thinking about the accident, or I feel on edge or easily startled", special: "wadSupport" },
-          { id: "concentrate", label: "Trouble concentrating or sleeping since it happened" },
+          // A concussion check (5 Oct 2026): the injury screen's concussion
+          // question is asked only 2 to 7 days after the injury.
+          { id: "concentrate", label: "Trouble concentrating or sleeping since it happened", special: "concussionCheck" },
           { id: "sensitive", label: "My neck is very sensitive to touch or cold" },
           { id: "settling", label: "It is settling a bit more each week" }
         ]},
@@ -298,9 +309,12 @@ export const EXTRA_REGIONS = {
       { id: "N9", text: "Have you noticed any of these changes? Tick all that apply.",
         priority: () => true,
         options: [
-          { id: "bothhands", label: "Numbness or pins and needles in both hands" },
-          { id: "clumsy", label: "My hands have become clumsy: buttons, writing, using a phone, or dropping things" },
-          { id: "walking", label: "My walking or balance has changed: unsteady, tripping, or legs feel stiff or heavy" },
+          // Each shows a "see your family doctor soon" card whatever the scores
+          // (neck cross-check, 5 Oct 2026): one or two cord signs can leave the
+          // myelopathy card under its line and the radiculopathy card pulled down.
+          { id: "bothhands", label: "Numbness or pins and needles in both hands", special: "cordSign" },
+          { id: "clumsy", label: "My hands have become clumsy: buttons, writing, using a phone, or dropping things", special: "cordSign" },
+          { id: "walking", label: "My walking or balance has changed: unsteady, tripping, or legs feel stiff or heavy", special: "cordSign" },
           { id: "lhermitte", label: "Bending my head forward sends an electric feeling down my back, arms, or legs" },
           // Cervicogenic dizziness: the gateway to N11. Not a cord sign.
           { id: "dizzy", label: "Feeling dizzy, light-headed, or off-balance at times" },
@@ -332,7 +346,10 @@ export const EXTRA_REGIONS = {
           { id: "headpos", label: "Turning my head, or holding it in one position (desk, driving, looking up), brings it on" },
           { id: "tracks", label: "When my neck feels better, the dizziness is better too" },
           { id: "bppv", label: "Rolling over in bed or lying down brings on a short burst of spinning, under a minute", special: "bppv" },
-          { id: "ear", label: "Hearing changes, ringing, or a full feeling in one ear", special: "innerEar" }
+          { id: "ear", label: "Hearing changes, ringing, or a full feeling in one ear", special: "innerEar" },
+          // Neck cross-check, 5 Oct 2026: the artery and blood-pressure look-alikes.
+          { id: "fived", label: "With the dizziness: brief double vision, slurred speech, trouble swallowing, sudden falls, or a numb face, even if they went away", special: "dizzyVascular" },
+          { id: "standing", label: "It mainly happens when I stand up", special: "dizzyStanding" }
         ]}
     ],
     conditions: []
@@ -2819,7 +2836,16 @@ export const EXTRA_SPECIAL_CARDS = {
   wadNerve: { title: "Nerve symptoms after an injury: see your doctor as well",
     body: "Pins and needles, numbness or weakness in the arms or hands after a whiplash-type injury can mean a nerve in the neck is involved. Please see your family doctor so the nerves can be checked. Physiotherapy can help alongside. If the numbness or weakness is new in the last few days, or getting worse, go to an emergency department." },
   wadSupport: { title: "Extra support is available",
-    body: "Finding it hard to stop thinking about an accident, or feeling on edge, is a common reaction. It can make pain harder to shake off, and it is worth mentioning at your assessment: your physiotherapist can work with your doctor or a psychologist so you get the right support alongside your recovery." },
+    body: "Finding it hard to stop thinking about an accident, or feeling on edge, is a common reaction. It can make pain harder to shake off, and it is worth mentioning at your assessment: your physiotherapist can work with your doctor or a psychologist so you get the right support alongside your recovery. In BC, after a car crash, ICBC also pre-approves counselling and psychology sessions in the first 12 weeks." },
+  // Neck cross-check, 5 Oct 2026 (approved by Chandra).
+  cordSign: { title: "Changes in both hands or in your walking: please see your doctor",
+    body: "Numbness in <strong>both hands</strong>, hands becoming <strong>clumsy</strong>, or changes in your <strong>walking or balance</strong> can come from pressure on the spinal cord in the neck, even when the neck hurts little. Please see your family doctor soon so it can be checked; physiotherapy can help alongside. If it is getting quickly worse, see a doctor today, and if you lose control of your bladder or bowels, go to an emergency department." },
+  concussionCheck: { title: "Foggy, poor sleep or concentration since the injury: a concussion check",
+    body: "Trouble concentrating, sleeping, or feeling foggy since an accident or a knock can come from a <strong>concussion</strong>, even without hitting your head. Please see your family doctor so it can be checked; a physiotherapist can then guide a gradual return to activity. If you have a severe or worsening headache, repeated vomiting, confusion or drowsiness, go to an emergency department." },
+  dizzyVascular: { title: "Dizziness with these signs: please see a doctor today",
+    body: "Dizziness that comes with <strong>double vision, slurred speech, trouble swallowing, sudden falls or a numb face</strong>, even if they went away, can come from the blood supply to the brain rather than the neck. Please see a doctor today, and <strong>call 911</strong> if they are happening now." },
+  dizzyStanding: { title: "Light-headed when you stand up: worth seeing your doctor",
+    body: "Feeling light-headed or faint mainly when you stand up often comes from your <strong>blood pressure</strong> (for example a medicine, not drinking enough, or the heart) rather than the neck. Please see your family doctor so it can be checked." },
   // Cervicogenic dizziness look-alikes (the neck's N11).
   bppv: { title: "Short spins when you roll over: often the inner ear",
     body: "Short bursts of spinning, under a minute, when you roll over in bed, lie down, or look up are typical of <strong>BPPV</strong>: tiny crystals in the inner ear that have come loose. It is common, and a physiotherapist can check for it and treat it with simple head movements. It can happen alongside neck-related dizziness, so your assessment will check both." },

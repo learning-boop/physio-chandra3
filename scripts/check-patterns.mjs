@@ -55,8 +55,9 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   const { maxScores } = await imp('src/data/symptomGuide.js')
   const { referralMechanism } = await imp('src/data/referral.js')
   // The document's single-choice answers share an `excl` group in N2 and N3,
-  // so only one of each counts: 16 from the document + 1 for weakness.
-  check('radiculopathy ceiling is the document\'s 16 (+1 weakness), not the sum of every answer', maxScores(REGIONS.neck).radic === 17, maxScores(REGIONS.neck).radic)
+  // so only one of each counts: 16 from the document + 1 for weakness, + the two
+  // Wainner items (ULNT1 and rotation, neck cross-check 5 Oct 2026) = 19.
+  check('radiculopathy ceiling is the document\'s 16 (+1 weakness, +2 Wainner items), not the sum of every answer', maxScores(REGIONS.neck).radic === 19, maxScores(REGIONS.neck).radic)
   const arm = detectReferral([['neck', 'shoulderL', 'elbowL', 'wristL']])[0]
   check('burning, shooting arm pain reads the arm line as nerve pain', referralMechanism(arm, { N2: ['burning'] }) === 'radicular', referralMechanism(arm, { N2: ['burning'] }))
   check('tingling in the whole hand reads the arm line as nerve pain', referralMechanism(arm, { N2: ['wholehand'] }) === 'radicular')
@@ -1859,6 +1860,31 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     card('frozen').noticed.some((l) => /turn the arm outwards/.test(l)) && !/It does improve/.test(card('frozen').blurb) && !card('frozen').clinicNotes.join(' ').includes('89% vs 64%'))
   check('Question picker: a leader needs at least 2 points (one point from age or duration is not a contest)',
     CONTENDER_MIN === 2 && !contenders(S, { age: '18-29', duration: 'd2w' }).some((x) => x.c.id === 'instability'))
+}
+
+// ── 57. Neck cross-check: JOSPT 2017, whiplash guidelines, AIM manual, Cervical Clinic Manual 2026, protocols (all approved, 5 Oct 2026) ──
+{
+  const { REGIONS, SPECIAL_CARDS } = await imp('src/data/symptomGuide.js')
+  const N = REGIONS.neck
+  const card = (id) => N.conditions.find((c) => c.id === id)
+  const q = (id) => N.questions.find((x) => x.id === id)
+  const opt = (qid, oid) => q(qid).options.find((o) => o.id === oid)
+  check('A sudden, severe, unusual neck pain or headache is asked even without an injury (same day), on the existing question',
+    /even without any injury/.test(N.redFlags.find((f) => f.id === 'nrf-after-doc').text) && N.redFlags.find((f) => f.id === 'nrf-after-doc').sameDay)
+  check('Each spinal cord sign shows a doctor card whatever the scores; weakness shows "book promptly"; trouble concentrating after an accident shows a concussion check',
+    ['bothhands', 'clumsy', 'walking'].every((o) => opt('N9', o).special === 'cordSign') && opt('N2', 'weak').special === 'nerveLoss' &&
+    opt('N5', 'concentrate').special === 'concussionCheck' && ['cordSign', 'concussionCheck', 'dizzyVascular', 'dizzyStanding'].every((k) => SPECIAL_CARDS[k]))
+  check('Dizziness look-alikes: artery signs (doctor today, 911 if now) and on standing (blood pressure) are answers with cards, and count against neck dizziness',
+    opt('N11', 'fived').special === 'dizzyVascular' && opt('N11', 'standing').special === 'dizzyStanding' &&
+    opt('N11', 'fived').weights.cgd < 0 && opt('N11', 'standing').weights.cgd < 0 && opt('N9', 'clumsy').weights.cgd < 0)
+  const named = ['mech', 'upper', 'cheadache', 'whiplash', 'radic', 'neural'].filter((id) => (card(id).seePhysioIf || []).some((l) => /warning signs? apply/.test(l)) || !(card(id).seePhysioIf || []).some((l) => /911|emergency|doctor/.test(l)))
+  check('Neck cards name their warning signs (no bare "if any of the warning signs apply")', !named.length, named)
+  check('Turning answers count as one (N1 excl); after an accident the whiplash question comes early',
+    ['onestiff', 'bothstiff', 'locked'].every((o) => opt('N1', o).excl === 'turn') && q('N5').priority && q('N5').priority({}))
+  check('WhipPredict quoted correctly (NDI 40% and the PDS), the Australian guideline published (not draft); no "wear and tear"; myofascial pressing kept off the front and side of the neck',
+    /NDI 40% or more/.test(card('whiplash').clinicNotes.join(' ')) && /PDS/.test(card('whiplash').clinicNotes.join(' ')) && !/draft/.test(card('whiplash').clinicNotes.join(' ')) &&
+    !/wear and tear/.test(card('mech').blurb) && card('myofascial').homeCare.some((l) => /never the front or side of the neck/.test(l)))
+  check('New card: acute wry neck, not shown under 5 (clinic age limit)', !!card('wryneck') && !((card('wryneck').gates || {}).ages || []).includes('u5') && ((card('wryneck').gates || {}).ages || []).includes('u18'))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

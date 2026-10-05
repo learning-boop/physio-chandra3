@@ -8,6 +8,12 @@ clin: Neck pain with mobility deficits (non-specific mechanical neck pain; JOSPT
 # The everyday stiff, sore neck: the other neck records catch injury
 # (whiplash), arm symptoms (radiculopathy), headache, dizziness and hand or
 # walking changes (myelopathy) first.
+# 5 Oct 2026: neck cross-check (JOSPT 2017, whiplash guidelines, Cervical Clinic
+# Manual 2026, Chandra's protocols, current search), all items approved by
+# Chandra after his sign-off: doctor and emergency lines, no "wear and
+# tear" wording, recurrence named, a car accident -2 (whiplash card first), the
+# turning answers are one answer (N1 excl), clinic notes (prognosis sources,
+# IFOMPT 2020, the 5 Ds and 3 Ns cue, facet joints, movement coordination).
 reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
 #   Q1 where: neck, or neck and top of the shoulder 2. Everyone on the neck
@@ -45,11 +51,12 @@ pointers:
   "Stiff at first, then eases as I move": 2
   "Moving my neck": 1
   "Moving my shoulder and arm": -3
+  "After a car accident or whiplash-type jolt": -2
   "None of these": 1
 ---
 
 ## blurb
-This is the common type of neck pain where the neck feels stiff and sore, and turning or tilting the head is limited or uncomfortable at the end of the movement. It usually involves the joints and muscles of the neck and upper back, and it is not a sign of damage or "wear and tear" that needs a scan. Neck pain like this is very common and usually settles. Keeping the neck moving is one of the most helpful things you can do, and the right exercises can help you move more easily and reduce the chance of it coming back.
+This is the common type of neck pain where the neck feels stiff and sore, and turning or tilting the head is limited or uncomfortable at the end of the movement. It usually involves the joints and muscles of the neck and upper back, and it is not a sign of damage and does not usually need a scan. Neck pain like this is very common and usually settles. It can come back from time to time, which is common and not a sign of damage. Keeping the neck moving is one of the most helpful things you can do, and the right exercises can help you move more easily and reduce the chance of it coming back.
 
 ## noticed
 - Stiffness and aching, often more limited turning one way than the other
@@ -68,6 +75,8 @@ This is the common type of neck pain where the neck feels stiff and sore, and tu
 - Your neck is still stiff or sore after a week or two
 - It keeps coming back
 - It is affecting your work, driving or sleep; a physiotherapy assessment can help you find the right exercises and plan, and no doctor's referral is needed
+- Pins and needles in both hands, clumsy hands, changes in your walking, a fever or weight loss you cannot explain, or a past cancer: see a doctor first
+- A sudden, severe neck pain or headache unlike any before, with dizziness, double vision, slurred speech or trouble swallowing: call 911
 
 ## clinicNotes
 - JOSPT 2017 category: neck pain with mobility deficits. Stage: acute (under 6 weeks), subacute (6-12 weeks), chronic (over 12 weeks); rate irritability. Physio-led (direct access).
@@ -78,5 +87,8 @@ This is the common type of neck pain where the neck feels stiff and sore, and tu
 - Chronic: multimodal approach (B); combined cervical/thoracic exercise plus thrust manipulation or mobilisation (B); neuromuscular exercise for the cervical and scapulothoracic regions (B); supervised upper-quarter strength and endurance exercise (B); thoracic thrust manipulation (B); general fitness (B); advice to stay active (C).
 - Passive modalities: JOSPT 2017's chronic multimodal package (B) includes dry needling, laser or intermittent mechanical or manual traction (TENS appears only in its flow chart, and its evidence showed no benefit of TENS over manual therapy or ultrasound); the German guideline 2025 recommends against laser, electrotherapy, ultrasound, traction and kinesiotaping. Not listed on the public page.
 - JOSPT Neck Pain CPG 2017 (Blanpied et al.), mobility deficits: classification (C) central or one-sided neck pain with limited motion that reproduces it, possibly referring to the shoulder girdle or arm; limited CROM, end-range pain, restricted cervical and thoracic segmental mobility, segmental provocation reproduces the pain. Measure (B): CROM, CFRT, segmental mobility, pressure-pain threshold algometry at upper trapezius (widespread low thresholds suggest altered central processing). No imaging without red flags.
-- Course (2017): idiopathic neck pain changes little after about 6.5 weeks and recovery slows after 6-12 weeks; 50-85% still report pain at 1-5 years, often episodic. Poorer prognosis: older age, previous musculoskeletal problems, poorer psychological health. Expert opinion: manual therapy benefit falls after the acute stage; manipulation may offer no advantage over mobilisation; cervical and scapulothoracic exercise is essential from the subacute stage.
+- Course (2017): idiopathic neck pain changes little after about 6.5 weeks and recovery slows after 6-12 weeks; 50-85% still report pain at 1-5 years, often episodic. Poorer prognosis (JOSPT 2017 p.a13): older age and previous musculoskeletal problems; psychological factors (worry, distress) come from other sources (2008 CPG, OPTIMa), not the 2017 list. The course is best seen as recurrent. Expert opinion: manual therapy benefit falls after the acute stage; manipulation may offer no advantage over mobilisation; cervical and scapulothoracic exercise is essential from the subacute stage.
 - Sources: JOSPT Neck Pain CPG 2017 (Blanpied et al.), grades in brackets; El-Allawy et al., Dtsch Arztebl Int 2025; OPTIMa (Cote et al.) 2016; Cochrane exercise review (Gross et al.) 2015; IFOMPT framework 2023. Record NDI, NPRS and PSFS at the first visit.
+- Safety cue (Cervical Clinic Manual 2026 §10.1; IFOMPT cervical framework 2020, published JOSPT 2023): do not require the full 5 Ds and 3 Ns before suspecting a vascular cause; a new, unusual neck pain or headache can be the first sign of an artery tear (the site asks it in nrf-after-doc, with or without an injury).
+- Facet joints (Hurley 2021): cause about 25-67% of chronic neck pain and about 54% of chronic WAD; no history or exam sign identifies them; refer for medial branch blocks only after at least 6 weeks (C) or 3 months (B) of conservative care.
+- Neck pain with movement coordination impairments without trauma (JOSPT category: poor endurance, the neck tires holding the head up): folded into this card for now; the "neck tires" answer is asked after an injury only.

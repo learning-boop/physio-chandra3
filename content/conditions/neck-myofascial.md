@@ -13,20 +13,26 @@ clin: Myofascial pain syndrome: upper trapezius, levator scapulae, suboccipitals
 # Patient wording: "can be associated with a sensitive, tight muscle", never
 # "you have knots" or "damaged muscle".
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 5 Oct 2026: neck cross-check A, approved by Chandra after his 2 Oct sign-off:
+# pressing only at the back of the neck or top of the shoulder (not the front or
+# side) and gently with easy bruising or blood thinners; a non-spreading spot 0
+# (it showed for most acute stiff necks); a fall or knock -2 like a car accident;
+# 30 to 45 minutes as on the other neck cards; softer wording.
 reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Yes: pressing a tender spot brings on my usual ache, including where it spreads": 4
-  "There is a tender spot, but pressing it does not spread the ache": 1
+  "There is a tender spot, but pressing it does not spread the ache": 0
   "No, or I cannot find one": -2
   "After long hours at a desk, screen, or in one position": 2
   "Woke up with it": 1
   "After a car accident or whiplash-type jolt": -2
+  "After a fall, sport, or knock to the head or neck": -2
   "Less than 2 weeks": 1
   "2 to 6 weeks": 1
 ---
 
 ## blurb
-A muscle that has become tight and sensitive, often from being held in one position or worked harder than usual, can send a deep ache to a nearby area, such as from the top of the shoulder or side of the neck to the temple or the back of the head. That spreading ache is a normal trick of the nervous system, not a trapped nerve or a damaged joint. A tender "knot" is not a tangle or a tear: it is a patch of muscle held tense to protect you, and it can be taught to let go again. It is common, not dangerous, and usually settles once the muscle is moved, loaded gradually, and the posture or habit that overloaded it is changed.
+A muscle that has become tight and sensitive, often from being held in one position or worked harder than usual, can send a deep ache to a nearby area, such as from the top of the shoulder or side of the neck to the temple or the back of the head. That spreading ache is a normal trick of the nervous system, usually not a trapped nerve or a damaged joint. A tender "knot" is not a tangle or a tear: it is thought to be a patch of muscle held tense to protect you, and it can be taught to let go again. It is common, not dangerous, and usually settles once the muscle is moved, loaded gradually, and the posture or habit that overloaded it is changed.
 
 ## noticed
 - A deep, dull ache or heaviness in the neck or top of the shoulder, worse after long spells at a screen or driving
@@ -34,9 +40,9 @@ A muscle that has become tight and sensitive, often from being held in one posit
 - The ache may spread to the head (a tension-type headache), behind the eye, or the upper arm, but not into the hand, and without tingling or numbness
 
 ## homeCare
-- Change position every 20 to 30 minutes; set a reminder if you work at a screen
+- Change position every 30 to 45 minutes; set a reminder if you work at a screen
 - Warmth (a shower or heat pack), then gently stretch the tight muscle a few times a day
-- Press and hold the tender spot with your fingers or a ball for 30 to 60 seconds while breathing out, then move the area: firm, but not bruising
+- Press and hold the tender spot with your fingers or a ball for 30 to 60 seconds while breathing out, then move the area: firm, but not bruising. Only on the back of the neck or the top of the shoulder, never the front or side of the neck; go gently if you bruise easily or take blood thinners
 - Keep using the area normally: the spreading ache is safe to move through
 - Look at what loaded the muscle (a new chair, bag, pillow or task) and change it
 

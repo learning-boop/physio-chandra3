@@ -6,6 +6,11 @@ clin: Degenerative cervical myelopathy (DCM)
 # From "Cervical Myelopathy.docx" (Conditions/Neck and headache), draft v0.1,
 # 26 Sep 2026. Refer-first condition: the ## doctorFirst note is shown at the
 # top of its results card.
+# 5 Oct 2026: neck cross-check, approved by Chandra after his 28 Sep sign-off:
+# urinary urgency in "noticed", falls and contact-sport caution, outcome and
+# natural-history figures updated (AO Spine 2017; Chandra's myelopathy
+# protocol), AO Spine treatment rules; each cord sign in N9 now also shows a
+# "see your doctor" card whatever the scores.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
@@ -47,10 +52,12 @@ Please see your family doctor soon. These symptoms need a medical assessment, wh
 - An electric feeling down the back or limbs when bending the head forward
 - Neck ache or stiffness, though not always
 - Hand and balance changes that do not settle with rest or stretching
+- Sometimes needing to pass urine more urgently or more often
 
 ## homeCare
 - Keep walking and staying active in ways that feel safe
 - Reduce fall risk at home: good lighting, handrails, non-slip mats
+- Take extra care to avoid falls, and avoid contact sport, diving or ladders until a doctor has checked you
 - Avoid long spells with the neck fully bent up or down; set screens at eye level
 - Do not have your neck manipulated ("cracked") while you have these symptoms
 - Note any changes in your hands, walking or bladder, and tell your doctor or physiotherapist
@@ -70,5 +77,7 @@ Please see your family doctor soon. These symptoms need a medical assessment, wh
 - Contraindicated: cervical HVLA manipulation. Traction only with medical clearance.
 - AIM Theory Manual 2023 (pp. 255-264; content/reference/cervical-conditions-manual.md): Cook cluster 3 or 4 of 5, post-test probability 94-99%. MRI sens 79-95%, spec 82-88%; X-ray does not rule in or out. Differentials: MS, B12 deficiency, ALS, nerve entrapment, stroke, Guillain-Barre, tumour.
 - Performance cut-offs (10 s; one arm and one leg test): foot tapping 24 or fewer (normal 31); grip and release F 11 or fewer, M 16 or fewer (normal 20/22); triangle step 17 or fewer (24); step test 13 or fewer (20); tally counter below 33 (47). Grip dynamometer MCID 5-6 kg. Normal ageing lowers all. Also JOA, European Myelopathy Score, Nurick.
-- Conservative care (low-moderate evidence): monitor neuro status every visit; thoracic extension mobilisation or manipulation for axial extension; DNF stabilisation, postural retraining in axial extension, diaphragmatic breathing; balance, aerobic, grip and lower limb strength, gait aids; avoid positions that worsen neuro signs. The manual lists manual and mechanical traction as options: here, only with medical clearance. After surgery about a third improve, a third stay the same, a third worsen.
-- JOSPT Neck Pain CPG 2017 (Blanpied et al.): clinical myelopathy tests generally have low sensitivity and should not be used to screen: a negative cluster does not remove suspicion; MRI is the diagnostic test (gadolinium if tumour, infection, inflammation or vascular cause is suspected). Natural history: about two thirds deteriorate progressively; surgical outcomes were better than nonsurgical; routine traction is advised against in moderate to severe DCM.
+- Conservative care (low-moderate evidence): monitor neuro status every visit; thoracic extension mobilisation or manipulation for axial extension; DNF stabilisation, postural retraining in axial extension, diaphragmatic breathing; balance, aerobic, grip and lower limb strength, gait aids; avoid positions that worsen neuro signs. The manual lists manual and mechanical traction as options: here, only with medical clearance. After surgery, 50-75% have a good recovery and 10-25% little improvement or some deterioration (Chandra's myelopathy protocol §2.7.3, citing Dijkman 2021 and Tetreault 2018); mJOA improves at mild, moderate and severe grades (AO Spine). The AIM manual's older figure was about a third each improve, stay the same or worsen.
+- JOSPT Neck Pain CPG 2017 (Blanpied et al.): clinical myelopathy tests generally have low sensitivity and should not be used to screen: a negative cluster does not remove suspicion; MRI is the diagnostic test (gadolinium if tumour, infection, inflammation or vascular cause is suspected). Natural history: 20-62% deteriorate by at least 1 mJOA point within 3-6 years without surgery (AO Spine 2017, Fehlings); the CPG's older estimate is about two thirds; surgical outcomes were better than nonsurgical; routine traction is advised against in moderate to severe DCM.
+- AO Spine guideline (2017) and practice recommendations (2025): moderate or severe DCM, surgery recommended; mild DCM, surgery or a supervised structured rehabilitation trial, with surgery if it deteriorates (Chandra's protocol §3; Cervical Clinic Manual 2026 §10.5). Mild DCM recommendations 2026 (Neal et al.); surgery timing review (EFORT Open Rev 2025). Tromner: sensitivity 93-97% in case-control studies (Jiang 2024; Sharma 2025), probably optimistic. Cook cluster: a negative screen does not exclude DCM (CPG 2017; Jiang 2024), whatever the AIM manual's "can be ruled out".
+- Sources: JOSPT Neck Pain CPG 2017; Fehlings MG et al., Global Spine J 2017; AO Spine practice recommendations, Global Spine J 2025; Jiang 2024; Sharma 2025; AIM Theory Manual 2023 pp.255-264; Cervical Clinic Manual 2026; Chandra's cervical myelopathy protocol.

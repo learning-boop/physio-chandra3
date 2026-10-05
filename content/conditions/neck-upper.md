@@ -8,6 +8,10 @@ clin: Upper cervical (craniovertebral, C0-C3) mechanical neck pain
 # Pain and stiffness at the top of the neck without headache as the main
 # problem; a headache-dominant picture is neck-cheadache (and head-cgh).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 5 Oct 2026: neck cross-check, approved by Chandra after his sign-off: the
+# warning signs named (artery tear 911; RA, Down syndrome, steroids or a heavy
+# head: doctor first), middle or lower neck -2 (it showed for an ordinary
+# lower-neck ache), flexion-rotation cut-off wording, wry neck now a card.
 reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
 #   Q1 base of the skull or very top of the neck 3, middle or lower neck 1
@@ -32,7 +36,7 @@ reviewed: Chandra Matla, 2026-09-28
 # Maximum 12, the document's; shown at 5, its "possible match" line.
 pointers:
   "At the base of my skull, or the very top of my neck": 3
-  "In the middle or lower part of my neck": 1
+  "In the middle or lower part of my neck": -2
   "The base of my skull is tender to press": 2
   "It is stiff or painful turning to one side": 2
   "Long spells at a desk, screen, or driving": 1
@@ -65,12 +69,13 @@ The joints and muscles at the very top of the neck, where the skull sits on the 
 ## seePhysioIf
 - Pain or stiffness is limiting driving, work or sleep
 - It has not started to ease after a week or two, or it keeps coming back: a physiotherapy assessment can help you find the right plan, and no doctor's referral is needed
-- If any of the warning signs apply, see a doctor first
+- A sudden, new, severe pain unlike before, or dizziness, double vision, trouble speaking or swallowing, or a numb face: call 911
+- You have rheumatoid arthritis, Down syndrome, or take steroid tablets long term, or your head feels too heavy to hold up: see a doctor first
 
 ## clinicNotes
 - Physio-led. Refer to the GP with red flags, systemic features, or no change after 6 to 8 weeks of well-delivered care. Over 50 with both shoulders and the neck stiff in the morning and feeling unwell: GP (polymyalgia rheumatica).
 - Subjective: body chart, irritability, 24-hour behaviour, work and screen set-up, dizziness history. Outcomes: NDI, PSFS, NPRS.
-- AROM including upper cervical flexion and extension (nodding) and rotation; flexion-rotation test (positive at 32 degrees or less, or about 10 degrees side difference).
+- AROM including upper cervical flexion and extension (nodding) and rotation; flexion-rotation test (positive below 32 degrees of rotation, or about 10 degrees side difference; JOSPT 2017 p.a19).
 - Passive accessory and physiological movements C0-C3; suboccipital, upper trapezius, levator scapulae and SCM palpation; thoracic and scapular posture. Craniocervical flexion test; deep neck flexor and extensor endurance.
 - If dizziness: joint position error, smooth-pursuit neck torsion test, Dix-Hallpike to separate cervicogenic from vestibular causes (see neck-cgd).
 - Screen: cervical arterial dysfunction per the IFOMPT framework; upper cervical ligament tests only with risk factors; neuro exam if arm or bilateral symptoms.
