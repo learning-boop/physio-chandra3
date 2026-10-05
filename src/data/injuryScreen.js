@@ -340,8 +340,10 @@ export const HIP_INJURY = [
   ]},
   // The questions that start "Since the fall or accident", "After a minor
   // fall" and "did you feel a pop" are asked after that injury only.
-  { id: 'I2', text: 'Since the fall or accident, can you not stand or walk on the leg, or does the leg look shorter or turned out?',
-    askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle',
+  // After a twist or tackle in sport too (hip cross-check S3): a traumatic hip
+  // subluxation carries a risk to the blood supply of the hip.
+  { id: 'I2', text: 'Since the injury, can you not stand or walk on the leg, or does the leg look shorter or turned out?',
+    askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle' || a.I1 === 'twist',
     options: yesNo('emergency', 'Possible hip fracture or dislocation', { call911: true }) },
   { id: 'I3', text: 'Was it a high-speed crash, or a fall from higher than a few stairs?',
     askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle',

@@ -3,6 +3,17 @@
 # Built into src/data/symptomGuideExtra.js (hip, question ids G1 to G8) and src/data/injuryScreen.js (hip screen).
 # Conditions: content/conditions/hip-*.md. Body map: the hip band (hip + side in Body3D.jsx classify()).
 # Test patients: npm run check:regions
+# 5 Oct 2026: hip cross-check against the JOSPT hip OA CPG 2025, the nonarthritic
+# hip pain CPG 2014 (revised 2023), the hip fracture CPG, the hamstring CPG 2022,
+# the AIM Theory Manual 2023 Ch. 2.6, Chandra's hip protocols and a current search
+# (Warwick, Doha, ESSKA 2024, LEAP, FASHIoN); all 25 items approved by Chandra
+# (review/hip-crosscheck.html). Changes here: hpf-strangulated "or" vomiting;
+# hpf-sufe from age 5 (and tgf-sufe), limping or not taking weight; hpf-avn adds
+# lupus, transplant, past hip fracture or dislocation; hpf-stress names the
+# pelvis; injury screen I2 after a twist or tackle too; new answers: G2 sitting
+# 20-30 minutes, G4 the sit bone, onset after hip surgery; G1 asked first; G5 early
+# only for groin or inner-thigh pain; G7 priority strength 3 with the low back
+# drawn; new cards hip-hamstring and hip-postop. Test patients 7 to 12.
 region: hip
 name: Hip & groin
 source: Cibulka MT et al. Hip pain and mobility deficits: hip osteoarthritis, revision 2017. JOSPT 47(6), 2017; Enseki KR et al. Hip pain and movement dysfunction associated with nonarthritic hip joint pain: a revision. JOSPT 53(7), 2023; Griffin DR et al. The Warwick Agreement on femoroacetabular impingement syndrome. Br J Sports Med 50, 2016; Grimaldi A et al. Gluteal tendinopathy: a review of mechanisms, assessment and management. Sports Med 45(8), 2015; Weir A et al. Doha agreement meeting on terminology and definitions in groin pain in athletes. Br J Sports Med 49, 2015; Lesher JM et al. Hip joint pain referral patterns: a descriptive study. Pain Med 9(1), 2008; Peck DM et al. Slipped capital femoral epiphysis: diagnosis and management. Am Fam Physician 95(12), 2017; Finucane LM et al. International Framework for Red Flags for Potential Serious Spinal Pathologies. JOSPT 50(7), 2020; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019
@@ -225,3 +236,28 @@ Drawing: Right groin, sudden pain with osteoporosis and no fall
 Answers: Age 65 or over · Gradually · Less than 2 weeks; Injury screen: I1 No
 Flags: "Are you 65 or over, or do you have osteoporosis, and did groin or hip pain start suddenly (with no fall…)?"
 Expect: top condition = None; see a doctor first (same day, X-ray); route = Physician first
+
+<!-- Hip cross-check, 5 Oct 2026 (approved by Chandra). -->
+CASE: 7. A 7-year-old limping with hip pain
+Flags: hpf-sufe (now from age 5)
+Expect: route = physician first, same day
+
+CASE: 8. A tender groin lump that will not go back in, without vomiting
+Flags: hpf-strangulated
+Expect: route = emergency
+
+CASE: 9. Sit-bone pain worse sitting, a runner
+Answers: 30 to 49; after running or sport; 6 weeks to 3 months; buttock; sitting 20-30 minutes; points to the sit bone
+Expect: top condition = proximal hamstring tendinopathy
+
+CASE: 10. Weeks after a hip replacement, stairs and socks hard
+Answers: 65 or over; after hip surgery; 2 to 6 weeks; stairs + socks
+Expect: top condition = recovering after hip surgery
+
+CASE: 11. Buttock pain without sitting trouble
+Answers: 30 to 49; gradually; buttock; points to the buttock
+Expect: must not show = deep gluteal
+
+CASE: 12. A twist in sport, cannot stand on the leg
+Answers: injury screen I1 twist or tackle; I2 Yes
+Expect: route = emergency

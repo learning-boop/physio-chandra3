@@ -12,6 +12,10 @@ clin: Myofascial pain syndrome: gluteus medius and minimus, piriformis (referral
 # so it never changes which scored questions are asked.
 # Patient wording: "can be associated with a sensitive, tight muscle", never
 # "you have knots" or "damaged muscle".
+# 5 Oct 2026: hip cross-check (nonarthritic hip CPG 2014/2023, AIM Theory Manual
+# 2023 Ch. 2.6, Chandra's protocols, Doha 2015, ESSKA 2024, current search),
+# approved by Chandra after his 2 Oct sign-off (A7): the referral line
+# matches the gluteus minimus map (it can reach the calf); hip-specific rule-outs.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed: Chandra Matla, 2026-10-02
 pointers:
@@ -29,7 +33,7 @@ pointers:
 A muscle that has become tight and sensitive, often from being held in one position or worked harder than usual, can send a deep ache to a nearby area, such as from the buttock down the side or back of the thigh, often mistaken for sciatica. That spreading ache is a normal trick of the nervous system, not a trapped nerve or a damaged joint. A tender "knot" is not a tangle or a tear: it is a patch of muscle held tense to protect you, and it can be taught to let go again. It is common, not dangerous, and usually settles once the muscle is moved, loaded gradually, and the posture or habit that overloaded it is changed.
 
 ## noticed
-- A deep ache in the buttock that can spread down the side or back of the thigh, usually stopping above the knee
+- A deep ache in the buttock that can spread down the side or back of the thigh, usually above the knee, though the side-of-hip muscle can send an ache to the calf
 - A tender spot in the buttock muscle; pressing it brings on the thigh ache
 - No tingling or numbness in the leg or foot
 
@@ -49,7 +53,7 @@ A muscle that has become tight and sensitive, often from being held in one posit
 ## clinicNotes
 - Hip and buttock referral maps: gluteus minimus to the lateral and posterior thigh and calf ("pseudo-sciatica"); gluteus medius to the iliac crest, sacrum and buttock; piriformis to the buttock and posterior thigh. Distinguish from gluteal tendinopathy (tender over the greater trochanter, single-leg stance), deep gluteal syndrome (sciatic nerve signs) and lumbar radiculopathy.
 - Myofascial pain syndrome, 2018 Delphi criteria (2 of 3): taut band, hypersensitive spot, referred pain on stimulation (local twitch supportive, not required). Palpation reliability is only moderate: treat the label as a working hypothesis and judge by response. The site asks the patient to press the spot themselves (the shared tender-spot question).
-- Rule out first: radiculopathy (dermatomal, neuro signs, SLR/ULNT, Spurling), facet or disc referral, tendinopathy or bursitis, visceral referral (cardiac, hepatobiliary, renal), PMR, myopathy, red flags. Perpetuating factors: sustained posture, workstation, sleep position, load spikes, nearby joint restriction, fatigue, stress, cold; low iron, thyroid or vitamin D (GP if suspected).
+- Rule out first (hip): the hip joint itself (the commonest source of referred buttock pain, 71%, Lesher 2008), vascular claudication (buttock cramp on walking), sacral or pelvic stress fracture; and radiculopathy (dermatomal, neuro signs, SLR/ULNT, Spurling), facet or disc referral, tendinopathy or bursitis, visceral referral (cardiac, hepatobiliary, renal), PMR, myopathy, red flags. Perpetuating factors: sustained posture, workstation, sleep position, load spikes, nearby joint restriction, fatigue, stress, cold; low iron, thyroid or vitamin D (GP if suspected).
 - Treatment (2023-2025 evidence: modest, mostly short-term effects, adjuncts to active care): pressure release and soft tissue techniques; dry needling within CHCPBC authorisation and with consent (GRADE weak, very low certainty long-term); heat, contract-relax stretch; then the active core: graded loading, movement variability, workstation, sleep and load changes, self-release teaching. Measures: PPT (optional), ROM, PSFS or the region's index (NDI, ODI, SPADI).
 - Over 3 months, several regions and poor sleep: shift to the persistent-pain framing and the widespread-pain plan (content/reference/fibromyalgia.md); do not keep chasing spots.
 - Source: Fernandez-de-las-Penas C, Dommerholt J, Pain Med 2018;19:142-150 (Delphi); Myofascial pain syndrome update, Pain Med 2025; Quintner 2015; Lucas 2009; dry needling reviews 2023-2025 (Grob 2025; Gattie JOSPT 2017); Bogduk, PAIN 2009; AIM Theory Manual 2023 Ch. 2.9.

@@ -2018,8 +2018,10 @@ export const EXTRA_REGIONS = {
         text: "Could you be pregnant, and do you have sudden one-sided pain low in your tummy or groin, bleeding, or feeling faint?" },
       { id: "hpf-torsion", sex: "male", tier: "emergency", why: "Possible testicular torsion",
         text: "Do you have sudden, severe pain in a testicle?" },
+      // "or", not "and" (hip cross-check S2, Chandra 5 Oct 2026): a painful or
+      // firm lump that will not go back in is an emergency without vomiting.
       { id: "hpf-strangulated", tier: "emergency", why: "Possible trapped (strangulated) hernia",
-        text: "Is there a lump in your groin that is hard, very painful, will not go back in, and are you vomiting?" },
+        text: "Is there a lump in your groin that is painful or firm and will not go back in, or a groin lump with vomiting or not passing wind?" },
       { id: "hpf-cauda", tier: "emergency", group: "cauda", why: "Possible cauda equina syndrome",
         text: "Do you have new numbness between your legs or around your bottom, or new trouble passing urine or controlling your bowels?" },
       // After a hip replacement or a hip fracture operation (JOSPT hip fracture
@@ -2032,12 +2034,14 @@ export const EXTRA_REGIONS = {
       // 2021: hidden fractures in osteoporosis; the injury screen asks after a fall).
       { id: "hpf-nofall", sameDay: true, tier: "urgent", why: "Possible hip or pelvic fracture, even without a fall: an X-ray is needed today",
         text: "Are you 65 or over, or do you have osteoporosis or low bone density, and did groin or hip pain start suddenly (with no fall, or only a small slip or twist), so that it now hurts to stand or walk on that leg?" },
-      { id: "hpf-sufe", ages: ["u18", "18-29"], sameDay: true, tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE); hip problems in children are often felt at the knee",
-        text: "Is a child or teenager aged about 9 to 17 limping, with pain in the hip, groin, thigh, or knee?" },
-      { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip (femoral neck); needs imaging before more running",
+      // From age 5 (hip cross-check S4): Perthes, an irritable or infected hip
+      // at 5 to 8 are covered too; under 5 is outside the clinic's age range.
+      { id: "hpf-sufe", ages: ["u18", "18-29"], sameDay: true, tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE), Perthes, or an irritable or infected hip; hip problems in children are often felt at the knee",
+        text: "Is a child or teenager aged about 5 to 17 limping or not wanting to take weight on the leg, with pain in the hip, groin, thigh, or knee?" },
+      { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip or pelvis (femoral neck or pubic bone); needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep groin ache that is worse with running or hopping, or aches at night?" },
       { id: "hpf-avn", tier: "urgent", why: "Possible loss of blood supply to the hip bone (avascular necrosis)",
-        text: "Do you take long-term steroid tablets, drink heavily, or have sickle cell disease, and have a deep groin ache?" },
+        text: "Do you take long-term steroid tablets, drink heavily, have sickle cell disease or lupus, have had an organ transplant, or a past hip fracture or dislocation, and have a deep groin ache?" },
       { id: "hpf-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); emergency if you are also short of breath",
         text: "Is your leg swollen, warm, or tender in the calf or thigh, especially after surgery, a long journey, or time in bed?" },
       // Dark urine with muscle pain or weakness, asked generally ("Poly myositis"
@@ -2068,7 +2072,9 @@ export const EXTRA_REGIONS = {
         { id: "walk", label: "After a long walk, standing, or lying on my side" },
         { id: "twist", label: "A sudden twist, kick, or change of direction" },
         { id: "fall", label: "After a fall" },
-        { id: "pregnancy", label: "During pregnancy, or since having a baby" }
+        { id: "pregnancy", label: "During pregnancy, or since having a baby" },
+        // Recovery after hip surgery (hip cross-check N2, 5 Oct 2026).
+        { id: "surgery", label: "After hip surgery (a hip replacement or a fracture repair)" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -2087,7 +2093,10 @@ export const EXTRA_REGIONS = {
       ]}
     ],
     questions: [
-      { id: "G1", text: "Where is the pain mainly?", options: [
+      // Asked first (hip cross-check, 5 Oct 2026): where it hurts decides the
+      // follow-up (groin: the sports groin question G5; buttock: sitting and the
+      // sit bone), so on a long line the hip's one or two slots are well spent.
+      { id: "G1", text: "Where is the pain mainly?", priority: () => true, options: [
         { id: "groin", label: "Groin, or the front of the hip" },
         { id: "outer", label: "Outer hip, over the bony point at the side" },
         { id: "buttock", label: "Buttock" },
@@ -2099,7 +2108,10 @@ export const EXTRA_REGIONS = {
         { id: "socks", label: "Putting on socks and shoes, or getting in and out of a car" },
         { id: "lowchair", label: "Sitting in a low chair, or deep squatting" },
         { id: "stairs", label: "Climbing stairs, or standing on that leg" },
-        { id: "walking", label: "Walking a distance, easing when I sit or bend forward", special: "lowbackHip" }
+        { id: "walking", label: "Walking a distance, easing when I sit or bend forward", special: "lowbackHip" },
+        // Sitting intolerance, the defining feature of deep gluteal syndrome and
+        // proximal hamstring tendinopathy (hip cross-check P1, 5 Oct 2026).
+        { id: "sitting", label: "Sitting for more than 20 to 30 minutes, especially on a hard seat" }
       ]},
       { id: "G3", text: "Which of these apply? Tick all that apply.", options: [
         { id: "amstiff", label: "Stiff in the morning for less than an hour, then it eases" },
@@ -2112,11 +2124,17 @@ export const EXTRA_REGIONS = {
         { id: "csign", label: "Grips the side of my hip in a “C” shape, thumb at the back and fingers in the groin" },
         { id: "spot", label: "Points to one spot on the outer hip" },
         { id: "groin", label: "Points into the groin" },
-        { id: "back", label: "Points to my buttock or low back" }
+        { id: "back", label: "Points to my buttock or low back" },
+        // Proximal hamstring tendinopathy (hip cross-check N1, 5 Oct 2026): the
+        // sit bone tells it from deep gluteal pain, which also hurts to sit.
+        { id: "sitbone", label: "Points to the bone I sit on, at the bottom of the buttock" }
       ]},
       { id: "G5", text: "If it came on with sport (kicking, sprinting, changing direction): which apply? Tick all that apply.",
         askIf: ({ ra }) => ra.onset === "sport" || ra.onset === "twist",
-        priority: () => true,
+        // Early only for groin or inner-thigh pain (hip cross-check, 5 Oct 2026):
+        // its answers are all groin sources, and always jumping the queue after
+        // a sports start crowded out the buttock questions (sit-bone pain).
+        priority: ({ ra }) => [].concat(ra.G1 || []).some((o) => o === "groin" || o === "inner"),
         options: [
           { id: "adductor", label: "Pain where the inner thigh muscle meets the pubic bone" },
           { id: "inguinal", label: "Pain just above the groin crease, worse with coughing or sit-ups" },
@@ -2138,7 +2156,9 @@ export const EXTRA_REGIONS = {
         askIf: ({ draw, ra }) => !draw || ["lowerback", "sij"].some((t) => draw.has(t)) ||
           [].concat(ra.G1 || []).includes("buttock") || [].concat(ra.G6 || []).some((o) => o !== "none"),
         // Early when the low back or buttock is drawn too: the back look-alike.
-        priority: ({ draw }) => !!draw && ["lowerback", "sij"].some((t) => draw.has(t)),
+        // Strength 3 (hip cross-check, 5 Oct 2026): the new sitting answer made
+        // G2 outweigh a plain priority on a back-to-thigh line.
+        priority: ({ draw }) => (!!draw && ["lowerback", "sij"].some((t) => draw.has(t)) ? 3 : false),
         options: [
           { id: "back", label: "Moving my low back", special: "lowbackHip" },
           { id: "hip", label: "Moving my hip", special: "hipSource" },
@@ -2193,7 +2213,7 @@ export const EXTRA_REGIONS = {
       { id: "tgf-tumour", ages: ["u5", "u18", "18-29"], tier: "urgent", why: "Bone or soft-tissue lumps in the thigh need imaging to rule out a tumour",
         text: "Are you under 25 with a deep thigh ache that wakes you at night, or a lump or swelling in the thigh that is growing?" },
       { id: "tgf-sufe", ages: ["u18", "18-29"], sameDay: true, tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE), often felt in the thigh or knee",
-        text: "Is a child or teenager aged about 9 to 17 limping, with pain in the thigh or knee?" },
+        text: "Is a child or teenager aged about 5 to 17 limping or not wanting to take weight on the leg, with pain in the thigh or knee?" },
       { id: "tgf-claudication", tier: "urgent", group: "claudication", why: "Possible narrowed leg arteries (vascular claudication)",
         text: "Do you get a cramping pain in the thigh or buttock when walking that eases within minutes of standing still, and do you smoke or have diabetes?" },
       { id: "tgf-femoral", tier: "urgent", why: "Nerve weakness (femoral nerve or L3–L4) needs medical review",

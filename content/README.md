@@ -79,7 +79,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Forearm | `forearm` | Forearm assessment | 5 |
 | Wrist | `wrist` | Wrist assessment (+ CRPS document, W9) | 8 |
 | Hand & fingers | `hand` | Hand and fingers assessment (+ CRPS document, H9; + Dupuytren's document, H2) | 8 |
-| Hip & groin | `hip` | Hip assessment (question ids G1–G8; + hip fracture CPG 2021: a dislocated or painful hip replacement and a fracture without a fall, red flags) | 8 |
+| Hip & groin | `hip` | Hip assessment (question ids G1–G8; + hip fracture CPG 2021: a dislocated or painful hip replacement and a fracture without a fall, red flags; cross-checked against the CPGs, AIM manual and protocols, 5 Oct 2026) | 14 |
 | Thigh | `thigh` | Thigh assessment (question ids R1–R8) | 6 |
 | Knee (from just above the kneecap to just below it) | `knee` | Knee assessment (question ids K1–K8; + the Pittsburgh knee rule and the peroneal nerve in the injury screen, I8 and I9, and a femoral stress fracture flag; cross-checked against the CPGs and AIM manual, 5 Oct 2026) | 14 |
 | Lower leg (calf & shin) | `leg` (zone type `lowerleg`) | Lower leg assessment (question ids V1–V8) | 6 |

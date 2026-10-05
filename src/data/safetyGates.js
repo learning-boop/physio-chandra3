@@ -196,9 +196,9 @@ export const SIGNS = {
   'hpf-replacement': 'a hip replacement or hip fracture operation, and the hip is newly painful, warm or swollen, the wound red or leaking, or a fever',
   'hpf-dvt': 'a leg that is swollen, warm or tender in the calf or thigh',
   'hpf-nofall': 'hip or groin pain that came on suddenly with no fall (or only a small slip), so it now hurts to stand on that leg, if you are 65 or over or have low bone density',
-  'hpf-stress': 'a deep groin ache that is worse with running or hopping',
-  'hpf-avn': 'a deep groin ache if you take long-term steroid tablets, drink heavily or have sickle cell disease',
-  'hpf-sufe': 'a child or teenager aged about 9 to 17 limping, with hip, groin, thigh or knee pain',
+  'hpf-stress': 'a deep groin or pubic ache that is worse with running or hopping',
+  'hpf-avn': 'a deep groin ache with long-term steroids, heavy drinking, sickle cell, lupus, a transplant or a past hip fracture',
+  'hpf-sufe': 'a child or teenager aged about 5 to 17 limping or not taking weight, with hip, groin, thigh or knee pain',
   'hpf-hernia': 'a soft lump in the groin that appears when you cough, strain or stand',
   'hpf-kidney': 'pain in waves from your side to your groin, or burning or blood when you pass urine',
   // The drawing's urinary pattern question (./patternChecks.js), asked for the hip.
@@ -328,7 +328,7 @@ export const SIGNS = {
   'tgf-femoral': 'a thigh muscle that has become weak or thin, or a knee that gives way, with no injury',
   'tgf-stress': 'a deep, aching thigh pain that is worse with hopping or aches at night, if you run or train hard',
   'tgf-tumour': 'a deep thigh ache that wakes you at night, or a lump in the thigh that is growing',
-  'tgf-sufe': 'a child or teenager aged about 9 to 17 limping, with thigh or knee pain',
+  'tgf-sufe': 'a child or teenager aged about 5 to 17 limping or not taking weight, with thigh or knee pain',
   'tgf-cancer': 'a past cancer, or a deep thigh ache at night that does not change with position, with weight loss',
   // Lower leg
   'lgf-cast': 'a cast, splint or bandage on the leg that feels more and more tight and painful',

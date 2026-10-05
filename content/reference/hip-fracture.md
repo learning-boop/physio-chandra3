@@ -9,7 +9,7 @@
 
 - **Emergency (911):** the hip injury screen, after a fall: cannot stand or walk, or the leg looks shorter or turned out; a high-energy injury; the SI region's fracture flag.
 - **Same day:** after a minor fall, walking but with groin pain on weight bearing, at 65 or over or with osteoporosis (hidden fractures are often missed on the first X-ray).
-- **Not built (see the CPG review notes):** sudden groin pain with no remembered fall in osteoporosis; dislocation after a hip operation; a "recovering from a hip operation" condition.
+- **Built since:** sudden groin pain with no remembered fall in osteoporosis (hpf-nofall); dislocation after a hip operation (hpf-dislocation); a "recovering from hip surgery" condition (hip-postop, 5 Oct 2026, with the onset answer "After hip surgery").
 
 ## Key facts
 

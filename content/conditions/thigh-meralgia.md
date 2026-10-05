@@ -5,6 +5,11 @@ name: Numb or burning outer thigh (meralgia paraesthetica)
 clin: Lateral femoral cutaneous nerve entrapment
 # Patient text shared with hip-meralgia.md: keep the two in step.
 # Pointers from content/regions/thigh.md, 25 Sep 2026.
+# 5 Oct 2026: hip cross-check (nonarthritic hip CPG 2014/2023, AIM Theory Manual
+# 2023 Ch. 2.6, Chandra's protocols, Doha 2015, ESSKA 2024, current search),
+# approved by Chandra: doctor and emergency lines
+# (weakness or spreading, both thighs or a lump, saddle numbness: S1), diabetes and
+# recent surgery as causes (A7); kept in step with the hip copy.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -17,7 +22,7 @@ pointers:
 ---
 
 ## blurb
-A skin nerve passes just inside the front of the hip bone on its way to the outer thigh. Tight belts or clothing, pregnancy, weight change, or long standing can press on it, giving a burning, tingling, or numb patch on the front and outer thigh. The leg is not weak, because this nerve only carries feeling.
+A skin nerve passes just inside the front of the hip bone on its way to the outer thigh. Tight belts or clothing, pregnancy, weight change, diabetes, recent surgery (such as a hernia repair or Caesarean), or long standing can press on or affect it, giving a burning, tingling, or numb patch on the front and outer thigh. The leg is not weak, because this nerve only carries feeling.
 
 ## noticed
 - A burning, tingling, or numb patch on the front and outer thigh
@@ -31,5 +36,7 @@ A skin nerve passes just inside the front of the hip bone on its way to the oute
 
 ## seePhysioIf
 - The burning or numbness lasts more than a few weeks after loosening clothing
-- The patch is spreading, or the leg feels weak: that points to the back instead
+- The numbness is spreading, the thigh feels weak, or the knee gives way: see your doctor soon, as the nerve to the thigh muscles or a nerve in the low back may be involved
+- Both thighs are affected, you are losing weight without trying, or there is a lump in the tummy or groin: see your doctor
+- Numbness between the legs, or new trouble passing urine or controlling your bowels: go to the emergency department now
 - You want help working out the cause

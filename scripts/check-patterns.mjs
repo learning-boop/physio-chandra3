@@ -1802,7 +1802,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const flag = (r, id) => REGIONS[r].redFlags.find((f) => f.id === id)
   const sufe = [['knee', 'kf-sufe'], ['hip', 'hpf-sufe'], ['thigh', 'tgf-sufe']].map(([r, id]) => flag(r, id))
   check('Slipped hip growth plate (SUFE): same day and asked at 16 and 17 too, in the knee, hip and thigh; Perthes same day',
-    sufe.every((f) => f && f.sameDay && f.ages.includes('18-29') && /9 to 17/.test(f.text)) && flag('knee', 'kf-perthes').sameDay)
+    sufe.every((f) => f && f.sameDay && f.ages.includes('18-29') && /(5|9) to 17/.test(f.text)) && flag('knee', 'kf-perthes').sameDay)
   const hr = card('hipreferred')
   check('Hip felt in the knee: the child-with-a-limp doctor line comes first; no score for "Under 5" (clinic age limit)',
     /child or teenager.*limp.*same day/i.test(hr.seePhysioIf[0]) &&
@@ -1885,6 +1885,30 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /NDI 40% or more/.test(card('whiplash').clinicNotes.join(' ')) && /PDS/.test(card('whiplash').clinicNotes.join(' ')) && !/draft/.test(card('whiplash').clinicNotes.join(' ')) &&
     !/wear and tear/.test(card('mech').blurb) && card('myofascial').homeCare.some((l) => /never the front or side of the neck/.test(l)))
   check('New card: acute wry neck, not shown under 5 (clinic age limit)', !!card('wryneck') && !((card('wryneck').gates || {}).ages || []).includes('u5') && ((card('wryneck').gates || {}).ages || []).includes('u18'))
+}
+
+// ── 58. Hip cross-check: JOSPT hip OA 2025, nonarthritic hip 2014/2023, AIM manual, protocols, Doha, ESSKA (all 25 approved, 5 Oct 2026) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const { HIP_INJURY } = await imp('src/data/injuryScreen.js')
+  const R = REGIONS.hip
+  const card = (id) => R.conditions.find((c) => c.id === id)
+  const flag = (id) => R.redFlags.find((f) => f.id === id)
+  const q = (id) => [...R.context, ...R.questions].find((x) => x.id === id)
+  const noDoctor = R.conditions.filter((c) => c.id !== 'myofascial' && !(c.seePhysioIf || []).some((l) => /doctor|emergency|911|maternity/i.test(l))).map((c) => c.id)
+  check('Every hip card (but myofascial) has a doctor or emergency line', !noDoctor.length, noDoctor)
+  check('Strangulated hernia: a painful or firm lump that will not go back is enough ("or", not "and" vomiting)', /painful or firm and will not go back in, or/.test(flag('hpf-strangulated').text))
+  check('Hip safety page: a limping child from 5; AVN risks include lupus, transplant, past fracture or dislocation; stress fracture names the pelvis',
+    /5 to 17/.test(flag('hpf-sufe').text) && /lupus/.test(flag('hpf-avn').text) && /dislocation/.test(flag('hpf-avn').text) && /pelvis/.test(flag('hpf-stress').why))
+  check('Injury screen: "cannot stand, or the leg looks shorter" is asked after a twist or tackle in sport too', HIP_INJURY.find((x) => x.id === 'I2').askIf({ I1: 'twist' }))
+  check('New answers: sitting for 20 to 30 minutes (G2), the sit bone (G4), after hip surgery (onset); new cards: sit-bone pain and recovery after hip surgery',
+    q('G2').options.some((o) => o.id === 'sitting') && q('G4').options.some((o) => o.id === 'sitbone') && q('onset').options.some((o) => o.id === 'surgery') &&
+    !!card('hamstring') && !!card('postop'))
+  check('No "unstable" in hip patient wording; gluteal tendinopathy is not called bursitis first; no wedge-style stretch advice on the outer hip',
+    !R.conditions.some((c) => /unstable/i.test([c.name, c.blurb, ...(c.noticed || []), ...(c.homeCare || []), ...(c.seePhysioIf || [])].join(' '))) &&
+    !/^Irritation of the gluteal tendons and bursa/.test(card('gtps').blurb) && card('gtps').homeCare.some((l) => /Avoid stretching across the outer hip/.test(l)))
+  check('Groin questions: the sports groin question (G5) jumps the queue only for groin or inner-thigh pain; the hip location question is asked first',
+    !q('G5').priority({ ra: { G1: ['buttock'] } }) && q('G5').priority({ ra: { G1: ['groin'] } }) && q('G1').priority && q('G1').priority({}))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)
