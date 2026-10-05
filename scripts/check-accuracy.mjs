@@ -14,6 +14,11 @@
    3. Lines across two areas (shoulder → elbow, hip → knee …) — a patient with
       a condition in either area, answering nothing for the other area. The
       condition must be among the results. Any miss fails the run.
+   4–5. Lines across three areas; "also worth considering".
+   6. Harder patients (5 Oct 2026): two telltale answers missed, and one
+      missed plus one answer that fits a rival condition. The floors in 3, 4
+      and 6 guard the gain from asking the question that tells the leaders
+      apart (SEPARATE_WEIGHT in src/data/assessmentFlow.js).
 
    Run it after adding or editing anything in content/conditions/.        */
 import { REGIONS } from '../src/data/symptomGuide.js'
@@ -154,10 +159,12 @@ for (const keys of pairs) {
 }
 failed += fail3
 say(`   ${n3 - fail3}/${n3} in the results, ${first3}/${n3} shown first`)
+// Telling the leaders apart across the two areas (5 Oct 2026): 493 → 501 of 501 shown first.
+if (first3 / n3 < 0.99) { failed++; say('   FAIL  at least 99% should be shown first') }
 
 // Lines across three areas share the same question budget between more areas,
-// so they are reported (not failed) to show what the budget costs there.
-say('\n4. Lines across three areas (reported only)')
+// so a few misses are allowed; only the floor below fails the run.
+say('\n4. Lines across three areas (at least 90% in the results)')
 const triples = []
 for (const chain of REGION_CHAINS) for (let i = 0; i + 2 < chain.length; i++) triples.push(chain.slice(i, i + 3))
 let n4 = 0, in4 = 0, first4 = 0
@@ -175,6 +182,8 @@ for (const keys of triples) {
   }
 }
 say(`   ${in4}/${n4} in the results, ${first4}/${n4} shown first`)
+// 5 Oct 2026: 512 → 530 of 579 in the results once the leaders are told apart.
+if (in4 / n4 < 0.9) { failed++; say('   FAIL  at least 90% should be in the results') }
 // 5. "Also worth considering" (Chandra, 4 Oct 2026). A patient who misses two
 // telltale answers can drop off the two results shown; the line should bring
 // most of them back, without crowding a patient whose answers fit exactly.
@@ -218,6 +227,40 @@ say('\n5. Also worth considering — two telltale answers missed')
   say(`   dropped off the results: ${gone}; brought back by the line: ${back} (${Math.round(100 * rate)}%)`)
   say(`   names added for a patient whose answers fit exactly: ${avg.toFixed(2)} on average (at most 2)`)
   if (rate < 0.65 || avg > 1) { failed++; say('   FAIL  the line should bring back at least 65% and add at most 1 name on average') }
+}
+say('\n6. Harder patients — shown first (in the 2 shown)')
+{
+  const ticks = (base) => Object.entries(base).flatMap(([q, v]) => (Array.isArray(v) ? v.map((o) => [q, o]) : []))
+  const drop = (base, list) => { const b = JSON.parse(JSON.stringify(base)); for (const [q, o] of list) { b[q] = b[q].filter((x) => x !== o); if (!b[q].length) delete b[q] } return b }
+  // One extra tick, in a tick-all question, that points at another condition and not this one.
+  const rivals = (region, c, base) => {
+    const out = []
+    for (const q of region.questions) if (q.multi) for (const o of q.options) {
+      const have = [].concat(base[q.id] || [])
+      if ((o.weights?.[c.id] || 0) > 0 || have.includes(o.id) || !Object.values(o.weights || {}).some((w) => w > 0)) continue
+      if (o.excl && have.some((id) => q.options.find((x) => x.id === id)?.excl === o.excl)) continue
+      out.push({ ...base, [q.id]: [...have, o.id] })
+    }
+    return out
+  }
+  const sets = { 'two missed': [], 'one missed + a rival answer': [] }
+  for (const [rk, region] of Object.entries(REGIONS)) for (const c of region.conditions) {
+    const b = textbook(region, c), t = ticks(b)
+    for (let i = 0; i < t.length; i++) for (let j = i + 1; j < t.length; j++) sets['two missed'].push([rk, c.id, drop(b, [t[i], t[j]])])
+    t.slice(0, 3).forEach((x) => rivals(region, c, drop(b, [x])).slice(0, 3).forEach((v) => sets['one missed + a rival answer'].push([rk, c.id, v])))
+  }
+  // 5 Oct 2026: 91.6% and 89.2%.
+  const floor = { 'two missed': 0.91, 'one missed + a rival answer': 0.88 }
+  for (const [name, list] of Object.entries(sets)) {
+    let first = 0, top2 = 0
+    for (const [rk, cid, full] of list) {
+      const shown = runFlow([rk], full).ranked.slice(0, 2)
+      if (shown[0]?.c.id === cid) first++
+      if (shown.some((x) => x.c.id === cid)) top2++
+    }
+    say(`   ${name}: ${(100 * first / list.length).toFixed(1)}% (${(100 * top2 / list.length).toFixed(1)}%) of ${list.length}`)
+    if (first / list.length < floor[name]) { failed++; say(`   FAIL  at least ${100 * floor[name]}% should be shown first`) }
+  }
 }
 say(`\nMost scored questions any patient was asked: ${maxAsked}`)
 

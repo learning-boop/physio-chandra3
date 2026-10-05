@@ -628,6 +628,40 @@ export function questionValue(q, region, answers) {
   return v
 }
 
+/* Telling the leaders apart (Chandra, 5 Oct 2026). questionValue() favours a
+   question that can add points to many conditions, even when it adds the same
+   to the two that are level. A clinician asks the question that separates
+   them: "on the kneecap or just below it?". contenders() are one area's
+   conditions with evidence so far, as { c, region, rank }, best first (at
+   most `max`); the flow merges them across the drawn areas, since on a line
+   from the back to the pelvis the contest is between the two areas' leaders.
+   separationValue() is how far a question's answers could move each pair
+   apart, in rank units (rankValue), the leading pair counting in full and the
+   others half. A question moves only its own area's conditions. */
+export function contenders(region, answers, max = 3) {
+  const { scores, unlocks } = computeRaw(region, answers)
+  const maxS = maxScores(region)
+  return region.conditions
+    .filter(c => (scores[c.id] || 0) > 0 && possiblyEligible(c, unlocks, region, answers))
+    .map(c => ({ c, region, rank: rankValue(scores[c.id] || 0, maxS[c.id]) }))
+    .sort((a, b) => b.rank - a.rank)
+    .slice(0, max)
+}
+
+export function separationValue(q, region, cons) {
+  if (!cons || cons.length < 2) return 0
+  const maxS = maxScores(region)
+  const unit = (o, x) => (x.region === region && o.weights && o.weights[x.c.id] ? o.weights[x.c.id] / (maxS[x.c.id] + RANK_PRIOR) : 0)
+  let v = 0
+  for (let i = 0; i < cons.length; i++) for (let j = i + 1; j < cons.length; j++) {
+    const d = q.options.map(o => unit(o, cons[i]) - unit(o, cons[j]))
+    // One answer: the widest gap between two options. Tick-all: each tick counts.
+    const sep = q.multi ? d.reduce((s, x) => s + Math.abs(x), 0) : Math.max(0, ...d) - Math.min(0, ...d)
+    v += (i === 0 && j === 1 ? 1 : 0.5) * sep
+  }
+  return v
+}
+
 export function answeredRegionCount(region, answers) {
   return region.questions.filter(q => {
     const a = answers[q.id]

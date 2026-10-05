@@ -14,6 +14,7 @@
 import { LOCATION_QUESTION_IDS } from './drawnLocation.js'
 import {
   REGIONS, ZONE_TO_REGION, computeResults, computeNearMisses, computeRaw, shouldStop, isRelevant, answeredRegionCount, questionValue,
+  contenders, separationValue,
 } from './symptomGuide.js'
 
 /* Regions on one anatomical chain, from the spine outwards. */
@@ -223,6 +224,19 @@ const SILENT_AREA_WEIGHT = 0.25
 // elbow): its first question comes after the main area's. Once its own
 // answers point somewhere, it counts in full.
 const YIELD_WEIGHT = 0.2
+// How much telling the leading conditions apart counts against plain reach
+// (separationValue, ./symptomGuide.js). 0 = reach only, the flow before
+// 5 Oct 2026. Tuned on two sets: the made-up patients of
+// scripts/check-accuracy.mjs and the 196 test patients of the area documents
+// (scripts/check-region-tests.mjs). 0.5 is the only value tried that passes
+// both: lines across two areas shown first 493 → 501 of 501, three areas in
+// the results 512 → 530 of 579. From 0.75 the made-up patients gain more (16:
+// three areas 561 of 579) but test patients fail, mostly neck-to-arm lines
+// whose nerve, dizziness or "this may be your neck" questions get crowded
+// out; 0.25 misses two-area conditions again. Asking every question of an
+// area does no better on missed answers, so what is still wrong there comes
+// from the scoring, not from which questions are asked.
+export const SEPARATE_WEIGHT = 0.5
 
 /** True when any of these asked questions got an answer that points at a condition. */
 function gaveSignal(questions, ra) {
@@ -262,24 +276,30 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
   if (askedIds.length >= budget) return null
   // A question whose twin (same `same` key) was asked in another area is done.
   const askedSame = new Set(askedIds.map((id) => SAME_OF[id]).filter(Boolean))
-  const live = []
-  for (const k of keys) {
+  // A question the drawing pre-answered (N2 "past the elbow") is still to
+  // be asked and can still gain points: judging it as already answered
+  // made the neck's arm question look useless and skipped it.
+  const areas = keys.map((k) => {
     const region = REGIONS[k]
     const ra = regionAnswers(keys, k, answers)
+    const open = { ...ra }
+    for (const q of region.questions) if (!askedIds.includes(q.id)) delete open[q.id]
+    return { k, region, ra, open }
+  })
+  // The leading conditions across every drawn area (contenders, ./symptomGuide.js).
+  const sepW = ctx.separate ?? SEPARATE_WEIGHT
+  const cons = sepW ? areas.flatMap((a) => contenders(a.region, a.open)).sort((x, y) => y.rank - x.rank).slice(0, 3) : []
+  const live = []
+  for (const { k, region, ra, open } of areas) {
     if (answeredRegionCount(region, ra) >= 2 && shouldStop(region, ra)) continue
     const askedHere = region.questions.filter((q) => askedIds.includes(q.id))
     const yields = (region.yieldsTo || []).some((y) => keys.includes(y)) || !!(ctx.minor && ctx.minor.has(k))
     const weight = askedHere.length ? (gaveSignal(askedHere, ra) ? 1 : SILENT_AREA_WEIGHT) : yields ? YIELD_WEIGHT : 1
-    // A question the drawing pre-answered (N2 "past the elbow") is still to
-    // be asked and can still gain points: judging it as already answered
-    // made the neck's arm question look useless and skipped it.
-    const open = { ...ra }
-    for (const q of region.questions) if (!askedIds.includes(q.id)) delete open[q.id]
     for (const q of region.questions) {
       if (askedIds.includes(q.id) || (q.same && askedSame.has(q.same)) || !isRelevant(q, region, open)) continue
       if (LOCATION_QUESTION_IDS.has(q.id) && [].concat(answers[q.id] ?? []).length) continue
       if (q.askIf && !q.askIf({ draw, ra: open, all })) continue
-      live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: questionValue(q, region, open) * weight + (q.priority && q.priority({ draw, ra: open, all }) ? 1 : 0) })
+      live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: (questionValue(q, region, open) + sepW * separationValue(q, region, cons)) * weight + (q.priority && q.priority({ draw, ra: open, all }) ? 1 : 0) })
     }
   }
   const pool = keys.length > 1 && live.some((x) => x.unseenArea) ? live.filter((x) => x.unseenArea) : live

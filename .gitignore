@@ -20,3 +20,6 @@ server/dist/
 
 # Generated review page (npm run review)
 review/
+
+# Anonymised clinic test cases (scripts/check-cases.mjs): kept off the repository
+cases/
