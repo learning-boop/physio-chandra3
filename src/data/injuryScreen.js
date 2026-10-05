@@ -468,6 +468,12 @@ const ottawaPoints = (why) => [
   { id: 'cannot', label: 'It is too painful to press on them', route: 'urgent', why },
 ]
 
+// 6 Oct 2026 (ankle and foot cross-check S1, approved by Chandra): the Ottawa
+// rules were not validated with reduced feeling (diabetes, neuropathy), so a
+// fracture can hurt little. Worded the same in both screens: asked once.
+const NUMB_FEET = 'Do you have diabetes, or numbness in your feet?'
+const numbFeet = (why) => yesNo('urgent', why)
+
 /* ── Ankle: rolled, twisted or landed badly (Ottawa ankle rules, Stiell 1993,
    in full: the 4 steps and the bone-tenderness points, I4 and I8). ── */
 export const ANKLE_INJURY = [
@@ -482,16 +488,26 @@ export const ANKLE_INJURY = [
     options: yesNo('emergency', 'Possible fracture or dislocation') },
   { id: 'I3', text: 'Since the injury, is your foot cold, pale, or numb?',
     options: yesNo('emergency', 'Possible artery or nerve injury') },
+  { id: 'I9', text: NUMB_FEET, sameDay: true,
+    options: numbFeet('With diabetes or numb feet, the ankle X-ray rules are not reliable: an X-ray is needed after an injury, even if you can walk on it') },
   // A possible fracture: same day.
   { id: 'I4', text: 'Could you not take 4 steps straight after the injury, and still cannot?',
     sameDay: true, options: yesNo('urgent', 'Ottawa ankle rule: an X-ray is needed to rule out a fracture') },
   { id: 'I8', text: OTTAWA_POINTS, sameDay: true,
     options: ottawaPoints('Ottawa ankle rules: tenderness over the ankle or midfoot bones needs an X-ray to rule out a fracture') },
-  // Asked after "a kick to the back of the ankle" only. Same day, as for the
-  // lower leg's Achilles question.
-  { id: 'I5', text: 'Did it feel like a kick to the back of the ankle, and now you cannot rise onto your toes on that leg, or feel a gap in the tendon?',
-    askIf: (a) => a.I1 === 'kick', sameDay: true,
+  // Same day, as for the lower leg's Achilles question. Asked after every
+  // injury (S2, 6 Oct 2026): most ruptures happen pushing off or landing.
+  { id: 'I5', text: 'Since the injury, can you not rise onto your toes on that leg, or is there a gap or dip in the tendon at the back of the ankle? (It often feels like a kick or a snap.)',
+    sameDay: true,
     options: yesNo('urgent', 'Possible Achilles tendon rupture: early treatment matters') },
+  // S3: a high fibula fracture (Maisonneuve) after an outward twist.
+  { id: 'I10', text: 'Is the bone on the outside of your leg tender to press just below the knee?',
+    askIf: (a) => a.I1 === 'eversion', sameDay: true,
+    options: yesNo('urgent', 'Possible fracture high on the outer leg bone (Maisonneuve) with a high ankle sprain: an X-ray of the whole leg is needed') },
+  // N1: a peroneal tendon slipping out of its groove, best repaired early.
+  { id: 'I11', text: 'Since the injury, does something snap or slide over the bony bump on the outer ankle?',
+    askIf: (a) => a.I1 === 'inversion' || a.I1 === 'eversion',
+    options: yesNo('urgent', 'Possible peroneal tendon slipping out of place: best assessed early, as some need repair') },
   { id: 'I6', text: 'Is the pain higher up, at the front just above the ankle between the two leg bones, and worse when pushing off or twisting?',
     options: yesNo('urgent', 'Possible high ankle (syndesmosis) sprain: some need surgery') },
   // A possible growth plate fracture: same day.
@@ -517,6 +533,8 @@ export const FOOT_INJURY = [
   { id: 'I3', text: 'After a crush, is the foot getting tighter and more painful by the hour, with pain on moving the toes?',
     askIf: (a) => a.I1 === 'crush',
     options: yesNo('emergency', 'Possible compartment syndrome of the foot') },
+  { id: 'I9', text: NUMB_FEET, sameDay: true,
+    options: numbFeet('With diabetes or numb feet, the foot X-ray rules are not reliable: an X-ray is needed after an injury, even if you can walk on it') },
   // Possible fractures: same day. Worded as the ankle's I4, so it is asked once
   // when both apply.
   { id: 'I4', text: 'Could you not take 4 steps straight after the injury, and still cannot?',

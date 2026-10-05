@@ -1,15 +1,16 @@
 ---
 region: ankle
 id: cai
-name: Long-term ankle instability
+name: An ankle that keeps rolling or giving way
 clin: Chronic ankle instability (CAI)
 # DRAFT extracted from: Ankle Stability and Movement Coordination Impairments: Lateral Ankle Ligament Sprains, Revision 2021 (JOSPT Clinical Practice Guidelines)
 # Pointers moved to the rebuilt ankle questions (content/regions/ankle.md), 25 Sep 2026.
+# 6 Oct 2026: ankle and foot cross-check, approved by Chandra (review/ankle-foot-crosscheck.html).
+# W1, W3: renamed (no "instability"), blurb, brace, joint-problem and surgeon lines.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
   "It keeps rolling, or feels like it will give way": 3
-  "It still feels unstable": 3
   "Walking on uneven ground": 3
   "More than 3 months": 2
   "6 weeks to 3 months": 1
@@ -17,10 +18,11 @@ pointers:
   "Outer ankle, in front of or below the bony bump": 1
   "I rolled it recently, felt a pop, and it bruised": -1
   "Less than 2 weeks": -2
+  "I still don't trust the ankle, or it feels like it could give way": 3
 ---
 
 ## blurb
-This is a lasting sense that your ankle isn't fully steady, often starting months after a sprain that never quite settled down.
+This is when an ankle carries on rolling or giving way, or never feels quite trustworthy, after a sprain that did not fully settle. It is common, and balance and strength training help most people.
 
 ## noticed
 - A feeling that the ankle might roll or 'give way', especially on uneven ground, turns, or in sports
@@ -31,10 +33,13 @@ This is a lasting sense that your ankle isn't fully steady, often starting month
 - Practice balance exercises, such as standing on one leg or using a wobble cushion, to retrain the ankle's sense of position
 - Build strength in the ankle, outer leg, and hip muscles with simple resistance exercises
 - Gradually reintroduce turning, running, or uneven-ground activities as your confidence and control improve
+- For sport, a brace or tape helps prevent another sprain while you rebuild balance and strength
 
 ## seePhysioIf
 - Your ankle keeps giving way or rolling despite weeks of steady home exercise
 - You've had several sprains and still don't feel confident or steady walking on uneven surfaces
+- The ankle also aches deep inside, catches or locks, or keeps swelling: see us, as other problems inside the joint or a tendon may need checking, sometimes with a scan
+- It still keeps rolling after 3 to 6 months of a steady exercise programme: ask us or your doctor about a surgeon's opinion
 
 ## clinicNotes
 - Definition (JOSPT 2021): instability or giving way persisting 12 months or more after the first sprain, with activity limitation; mechanical and/or functional (sensorimotor). About 40% of first-time sprains.
@@ -43,3 +48,4 @@ This is a lasting sense that your ankle isn't fully steady, often starting month
 - Copathology to refer if not recovering: fibularis tendon problems, impingement, osteochondral or chondral lesions, synovitis, loose bodies, syndesmosis, arthritis, os trigonum.
 - Treatment: proprioceptive and neuromuscular training (A); manual therapy (graded mobilisation or thrust, weight-bearing and non-weight-bearing MWM) for dorsiflexion and balance, short term (A); combine exercise and manual therapy with balance training (B); fibularis dry needling with proprioceptive training (C); brace or tape not as a stand-alone for balance (B). Balance-training responders: SEBT posteromedial reach 85% or less and FAAM-ADL 92.6% or less (70% success). Nonsurgical care for 3 to 6 months before surgery is considered.
 - Source: Martin RL et al., JOSPT 2021;51(4):CPG1-CPG80 (lateral ankle sprain revision 2021), grades in brackets.
+- International Ankle Consortium definition (Gribble 2013, JOSPT 43:585): a significant sprain at least 12 months ago; at least 2 episodes of giving way in the last 6 months and/or recurrent sprains and/or feelings of instability; plus a questionnaire cut-off (IAC cut-offs differ slightly from the CPG summary, e.g. AII 5 or more "yes"; not re-checked against the full text).

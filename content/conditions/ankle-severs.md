@@ -1,21 +1,19 @@
 ---
-region: foot
+region: ankle
 id: severs
 name: Heel growth plate pain (Sever's disease)
 clin: Calcaneal apophysitis
 ages: u18
-# DRAFT patient text written 25 Sep 2026 from content/regions/foot.md — not yet reviewed.
-# 4 Oct 2026: doctor and emergency lines added for the Tier 1 review; signed by Chandra Matla, 4 Oct 2026.
-# 6 Oct 2026: ankle and foot cross-check, approved by Chandra (review/ankle-foot-crosscheck.html).
-# S5, W4: renamed, outlook wording, heel squeeze +2 (the Sever's test in a child), clinic notes. Copied to ankle-severs.md.
+# 6 Oct 2026: ankle and foot cross-check S4, approved by Chandra: a copy of foot-severs.md for
+# children who draw the back of the heel (the ankle area). Keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Heel pain in a child aged about 8 to 14, worse with sport": 3
-  "Under the heel": 2
-  "Running or jumping": 2
-  "After increasing running, walking, or standing": 1
-  "Pain when squeezing the sides of the heel, or hopping": 2
+  "Back of the heel, where the heel cord attaches": 3
+  "5 to 15": 2
+  "Running, jumping, or hopping": 2
+  "After increasing running, jumping, or hill walking": 1
+  "The pain is higher, 2 to 6 cm above the heel": -2
 ---
 
 ## blurb

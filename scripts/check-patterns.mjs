@@ -702,12 +702,12 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const pts = ANKLE_INJURY.find((q) => q.id === 'I8')
   check('Ottawa: the ankle and foot screens ask the same bone-tenderness question (asked once when both apply)',
     pts && FOOT_INJURY.find((q) => q.id === 'I8').text === pts.text && /OUTER/.test(pts.text) && /INNER/.test(pts.text) && /outer edge of your foot/.test(pts.text))
-  const both = { 'ankle:I1': 'inversion', 'ankle:I2': 'no', 'ankle:I3': 'no', 'ankle:I4': 'no', 'ankle:I8': 'no', 'ankle:I6': 'no', 'ankle:I7': 'no', 'foot:I1': 'twist', 'foot:I2': 'no', 'foot:I5': 'no' }
+  const both = { 'ankle:I1': 'inversion', 'ankle:I2': 'no', 'ankle:I3': 'no', 'ankle:I9': 'no', 'ankle:I4': 'no', 'ankle:I8': 'no', 'ankle:I5': 'no', 'ankle:I11': 'no', 'ankle:I6': 'no', 'ankle:I7': 'no', 'foot:I1': 'twist', 'foot:I2': 'no', 'foot:I5': 'no' }
   const r = injuryFlow(Z(['ankleR', 'footR']), both)
   check('Ottawa: an ankle and foot drawing does not ask the tenderness or 4-steps question twice', r.route === 'continue', r)
-  const tender = injuryFlow(Z(['ankleR']), { 'ankle:I1': 'inversion', 'ankle:I2': 'no', 'ankle:I3': 'no', 'ankle:I4': 'no', 'ankle:I8': 'cannot' })
+  const tender = injuryFlow(Z(['ankleR']), { 'ankle:I1': 'inversion', 'ankle:I2': 'no', 'ankle:I3': 'no', 'ankle:I9': 'no', 'ankle:I4': 'no', 'ankle:I8': 'cannot' })
   check('Ottawa: too painful to press counts as tender (X-ray the same day)', tender.route === 'urgent' && tender.sameDay, tender)
-  const stub = injuryFlow(Z(['footR']), { 'foot:I1': 'stub', 'foot:I2': 'no', 'foot:I4': 'no', 'foot:I5': 'no' })
+  const stub = injuryFlow(Z(['footR']), { 'foot:I1': 'stub', 'foot:I2': 'no', 'foot:I9': 'no', 'foot:I4': 'no', 'foot:I5': 'no' })
   check('Ottawa: not asked after a stubbed toe (outside the rule)', stub.next === 'foot:I7', stub)
   const neck = (a, age) => injuryFlow(Z(['neck']), Object.fromEntries(Object.entries(a).map(([k, v]) => ['neck:' + k, v])), age)
   check('C-Spine Rule: alertness, intoxication and distracting injury are asked first',
@@ -1909,6 +1909,46 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !/^Irritation of the gluteal tendons and bursa/.test(card('gtps').blurb) && card('gtps').homeCare.some((l) => /Avoid stretching across the outer hip/.test(l)))
   check('Groin questions: the sports groin question (G5) jumps the queue only for groin or inner-thigh pain; the hip location question is asked first',
     !q('G5').priority({ ra: { G1: ['buttock'] } }) && q('G5').priority({ ra: { G1: ['groin'] } }) && q('G1').priority && q('G1').priority({}))
+}
+
+// ── 59. Ankle and foot cross-check: JOSPT ankle sprain 2021, heel pain 2014/2023, Achilles 2018/2024, AIM manual, protocols (all 57 approved, 6 Oct 2026) ──
+{
+  const { REGIONS, computeRaw } = await imp('src/data/symptomGuide.js')
+  const { ANKLE_INJURY, FOOT_INJURY } = await imp('src/data/injuryScreen.js')
+  const { GATES, SIGNS, SHORT, MECHANISM } = await imp('src/data/safetyGates.js')
+  const A = REGIONS.ankle, F = REGIONS.foot
+  const card = (R, id) => R.conditions.find((c) => c.id === id)
+  const q = (R, id) => [...R.context, ...R.questions].find((x) => x.id === id)
+  const text = (c) => [c.name, c.blurb, ...(c.noticed || []), ...(c.homeCare || []), ...(c.seePhysioIf || [])].join(' ')
+  const chronic = ['sinustarsi', 'posteriorimp', 'anteriorimp']
+  const noDoctor = [...A.conditions, ...F.conditions].filter((c) => !chronic.includes(c.id) && !(c.seePhysioIf || []).some((l) => /doctor|911/i.test(l))).map((c) => c.id)
+  check('Every ankle and foot card (but sinus tarsi and anterior and posterior impingement) has a doctor line', !noDoctor.length, noDoctor)
+  check('No "unstable" or "instability" in ankle or foot patient wording, answers included',
+    ![...A.conditions, ...F.conditions].some((c) => /unstable|instability/i.test(text(c))) && !q(A, 'A4').options.some((o) => /unstable/i.test(o.label)))
+  check('Injury screens: diabetes or numb feet asked once in both (same wording), same day; Achilles rupture asked after any injury; Maisonneuve after an outward twist; a slipping peroneal tendon after a roll',
+    ANKLE_INJURY.find((x) => x.id === 'I9').text === FOOT_INJURY.find((x) => x.id === 'I9').text && ANKLE_INJURY.find((x) => x.id === 'I9').sameDay &&
+    !ANKLE_INJURY.find((x) => x.id === 'I5').askIf && ANKLE_INJURY.find((x) => x.id === 'I10').askIf({ I1: 'eversion' }) && !ANKLE_INJURY.find((x) => x.id === 'I10').askIf({ I1: 'inversion' }) &&
+    ANKLE_INJURY.find((x) => x.id === 'I11').askIf({ I1: 'inversion' }))
+  check('Stress fractures: the foot question names the big toe joint and walking; the ankle area has its own (gated, short sign, skipped after an ankle injury)',
+    /big toe joint/.test(F.redFlags.find((f) => f.id === 'ft-stress').text) && /walking/.test(F.redFlags.find((f) => f.id === 'ft-stress').text) &&
+    !!A.redFlags.find((f) => f.id === 'af-stress') && GATES.ankle.some((g) => g.members.includes('af-stress')) && !!SIGNS['af-stress'] && !!SHORT['af-stress'] && MECHANISM['af-stress'] === 'ankle')
+  const adult = computeRaw(F, { age: '30-49', B2: ['squeeze'] }).specials, child = computeRaw(F, { age: 'u18', B2: ['squeeze'] }).specials
+  check("Children: a heel squeeze is the Sever's test, not the stress-fracture card; Sever's in the ankle area; the adult insertional card is 16 and over",
+    adult.includes('footStress') && !child.includes('footStress') && !!card(A, 'severs') && (card(A, 'severs').gates.ages || []).join() === 'u18' &&
+    !(card(A, 'insertional').gates.ages || []).includes('u18') && !(card(A, 'insertional').gates.ages || []).includes('u5'))
+  check('CRPS reachable after surgery or a cast, and after an outward twist; fracture rehabilitation shown only after surgery or a cast',
+    card(A, 'crps').gates.requiresOnset.includes('surgery') && card(A, 'crps').gates.requiresOnset.includes('twistout') && card(F, 'crps').gates.requiresOnset.includes('surgery') &&
+    q(A, 'A9').askIf({ ra: { onset: 'surgery', duration: 'd6w' } }) && q(F, 'B9').askIf({ ra: { onset: 'surgery', duration: 'd6w' } }) &&
+    card(A, 'fracture').gates.requiresOnset.join() === 'surgery' && card(F, 'fracture').gates.requiresOnset.join() === 'surgery')
+  check("Neuroma: the ball-of-foot question is asked for 'between the toes' too, with a click answer; the arch split from the top of the midfoot; the outer edge added",
+    q(F, 'B3').askIf({ ra: { B1: ['toes'] } }) && q(F, 'B3').options.some((o) => o.id === 'click') &&
+    ['arch', 'instep', 'outer'].every((id) => q(F, 'B1').options.some((o) => o.id === id)))
+  check('New cards: peroneal tendons, sinus tarsi, posterior impingement, fracture rehabilitation (ankle); cuboid, tibialis posterior copy (foot); copies share names so they show once',
+    ['peroneal', 'sinustarsi', 'posteriorimp', 'fracture', 'severs'].every((id) => !!card(A, id)) && ['cuboid', 'tibpost', 'fracture'].every((id) => !!card(F, id)) &&
+    card(A, 'tibpost').name === card(F, 'tibpost').name && card(A, 'severs').name === card(F, 'severs').name)
+  check('High ankle sprain: assessed in the first week (not "1 to 2 weeks"); plantar heel pain notes graded to the 2023 revision',
+    !card(A, 'highankle').seePhysioIf.some((l) => /1 to 2 weeks/.test(l)) && card(A, 'highankle').seePhysioIf.some((l) => /first week/.test(l)) &&
+    /2023 revision/.test(card(F, 'pf').clinicNotes.join(' ')) && !/not yet been checked/.test(card(F, 'pf').clinicNotes.join(' ')))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

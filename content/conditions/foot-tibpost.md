@@ -1,24 +1,21 @@
 ---
-region: ankle
+region: foot
 id: tibpost
 name: Tibialis posterior tendon dysfunction
 clin: Posterior tibial tendinopathy / progressive collapsing foot deformity (PCFD; Myerson 2020)
-# Patient text moved unchanged from the site's original ankle region.
-# Pointers from content/regions/ankle.md, 25 Sep 2026.
-# 6 Oct 2026: ankle and foot cross-check, approved by Chandra (review/ankle-foot-crosscheck.html).
-# S12, W8: doctor lines, PCFD terminology, strengthening wording.
+# 6 Oct 2026: ankle and foot cross-check W8, approved by Chandra: the foot copy of ankle-tibpost.md
+# for patients who point to the arch. Keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "Inner ankle, behind or below the bony bump": 3
-  "My arch is getting flatter on that side": 3
-  "I cannot rise onto my toes on that leg as well as the other": 3
-  "Swelling behind the inner ankle bone": 2
+  "The arch, underneath": 3
+  "Rising up onto my toes": 2
+  "Standing or walking a long time": 1
   "50 to 64": 1
   "65 or over": 1
-  "After a long walk, or standing a lot": 1
   "Gradually, no clear reason": 1
-  "Burning or tingling into the sole and inner heel, worse standing": -1
+  "Moving my low back": -2
+  "Under the heel": -1
 ---
 
 ## blurb

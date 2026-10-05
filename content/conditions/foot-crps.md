@@ -12,7 +12,8 @@ clin: Complex regional pain syndrome, type I (no major nerve injury) or type II 
 reviewed: Chandra Matla, 2026-10-02
 # Only after an injury-type start (the document's Q1: no injury, route to
 # other causes).
-onset: injury
+# 6 Oct 2026 (S15): also after surgery or a cast.
+onset: injury, surgery
 # Pointers follow the document's scored question set (section 4), asked as
 # one tick-all question (W9 / H9 / A9 / B9, asked once); max 17:
 #   Q1 after a fracture, operation or cast 3 · Q2 out of proportion 3 ·
@@ -61,7 +62,7 @@ If this fits, please see your family doctor or surgeon within the next few days.
 - Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day
 
 ## clinicNotes
-- Budapest clinical criteria (Harden 2010): continuing disproportionate pain + at least one symptom in 3 of 4 categories (sensory, vasomotor, sudomotor/oedema, motor/trophic) + at least one sign in 2 of 4 at examination + no better explanation. CRPS I without, CRPS II with a major nerve lesion; CRPS-NOS if criteria are not met.
+- Budapest clinical criteria (Harden 2010): continuing disproportionate pain + at least one symptom in 3 of 4 categories (sensory, vasomotor, sudomotor/oedema, motor/trophic) + at least one sign in 2 of 4 at examination + no better explanation. CRPS I without, CRPS II with a major nerve lesion. Valencia update (Goebel 2021, Pain): "CRPS-NOS" is kept for people never documented as meeting the criteria; people who met them before and now meet only some are "CRPS with remission of some features".
 - Measure side to side: skin temperature (infrared thermometer), girth, colour, sweating; allodynia (light touch, brush) and hyperalgesia (pinprick) map; goniometry; grip and pinch or toe strength; tremor and dystonia; left/right judgement accuracy and speed (Recognise) as a GMI baseline; Bath body perception disturbance scale; TSK-11, PCS; sleep.
 - Exclude and refer (GP or surgeon): infection, DVT, arterial insufficiency, compartment syndrome, non-union or hardware problems, nerve entrapment; also brachial neuritis, Raynaud's, thoracic outlet syndrome, lymphatic or venous obstruction, small-fibre neuropathy (AIM manual p. 611).
 - Epidemiology (AIM manual p. 608): 4-7% after a limb fracture or surgery, fractures 44% of cases; women 3:1; upper limb more often in adults, lower limb 6 times more often in children; older adults after a Colles fracture and immobilisation, younger after a peripheral nerve injury; most resolve within a year, 15% still have symptoms at 2 years; warm (inflammatory) CRPS can become cold (autonomic) CRPS; 74% report the limb feels disconnected.

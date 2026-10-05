@@ -2515,6 +2515,9 @@ export const EXTRA_REGIONS = {
         text: "Is your foot slapping down or your toes catching when you walk?" },
       { id: "af-neuropathy", tier: "urgent", noBooking: true, group: "neuropathy", why: "Possible peripheral neuropathy; needs medical review and foot checks",
         text: "Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes?" },
+      // 6 Oct 2026: ankle and foot cross-check, approved by Chandra.
+      { id: "af-stress", tier: "urgent", why: "Possible stress fracture of the navicular or the inner ankle bone; these are high-risk and need imaging",
+        text: "After more running, walking, marching or training, is there pain on one spot of bone (the inner ankle bone, or the top of the inner midfoot) that is worse with every step or hopping, or aches at night?" },
       { id: "af-cancer", tier: "urgent", group: "cancer", why: "A lump or bone lesion needs medical review",
         text: "Have you ever had cancer, or is there a lump that is growing, or deep pain at night that does not change with position?" },
       // "CRPS" document red flag (2 Oct 2026); shared with the foot, asked once.
@@ -2536,7 +2539,10 @@ export const EXTRA_REGIONS = {
         { id: "running", label: "After increasing running, jumping, or hill walking" },
         { id: "walking", label: "After a long walk, or standing a lot" },
         { id: "shoes", label: "After new or different shoes" },
-        { id: "landing", label: "After landing badly or a fall" }
+        { id: "landing", label: "After landing badly or a fall" },
+        // 6 Oct 2026: ankle and foot cross-check, approved by Chandra.
+        { id: "twistout", label: "My foot was planted and twisted outwards" },
+        { id: "surgery", label: "After surgery, or time in a cast or boot, for a broken ankle or foot" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -2548,13 +2554,14 @@ export const EXTRA_REGIONS = {
     questions: [
       { id: "A1", text: "Where is the pain mainly?", options: [
         { id: "outer", label: "Outer ankle, in front of or below the bony bump" },
+        { id: "outerback", label: "Outer ankle, behind the bony bump" },
         { id: "inner", label: "Inner ankle, behind or below the bony bump" },
         { id: "front", label: "Front of the ankle, in the crease" },
         { id: "heel", label: "Back of the heel, where the heel cord attaches" },
         { id: "high", label: "Just above the ankle, at the front between the two leg bones" }
       ]},
       { id: "A2", text: "Have you sprained this ankle before?",
-        askIf: ({ ra }) => [].concat(ra.A1 || []).includes("outer") || ra.onset === "twist",
+        askIf: ({ ra }) => [].concat(ra.A1 || []).includes("outer") || ["twist", "twistout"].includes(ra.onset),
         priority: () => true,
         options: [
           { id: "once", label: "Once or twice, and it recovered" },
@@ -2567,7 +2574,8 @@ export const EXTRA_REGIONS = {
         { id: "running", label: "Running, jumping, or hopping" },
         { id: "squat", label: "Squatting, lunging, or going down stairs" },
         { id: "firststeps", label: "The first steps in the morning, or after sitting" },
-        { id: "shoes", label: "Shoes pressing on the back of the heel" }
+        { id: "shoes", label: "Shoes pressing on the back of the heel" },
+        { id: "point", label: "Pointing my foot down hard (dance, kicking, going downhill)" }
       ]},
       { id: "A4", text: "Some weeks after a sprain, which apply? Tick all that apply.",
         askIf: ({ ra }) => [].concat(ra.A2 || []).some((o) => o !== "never") && (ra.duration === "d3m" || ra.duration === "o3m"),
@@ -2576,7 +2584,7 @@ export const EXTRA_REGIONS = {
           { id: "swells", label: "It still swells after activity" },
           { id: "catching", label: "Catching or locking deep in the ankle" },
           { id: "deepache", label: "A deep ache inside the ankle after activity" },
-          { id: "unstable", label: "It still feels unstable" },
+          { id: "unstable", label: "I still don't trust the ankle, or it feels like it could give way" },
           { id: "normal", label: "It feels back to normal" }
         ]},
       { id: "A5", text: "About the inner ankle: which apply? Tick all that apply.",
@@ -2623,8 +2631,8 @@ export const EXTRA_REGIONS = {
       // `same: "crps"`: a glove or sock drawing across two areas asks it once.
       { id: "A9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
         // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
-        askIf: ({ ra }) => (!ra.onset || ["twist", "landing"].includes(ra.onset)) && ra.duration !== "d2w",
-        priority: ({ ra }) => ["twist", "landing"].includes(ra.onset),
+        askIf: ({ ra }) => (!ra.onset || ["twist", "twistout", "landing", "surgery"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["twist", "twistout", "landing", "surgery"].includes(ra.onset),
         options: [
           { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
           { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },
@@ -2632,6 +2640,16 @@ export const EXTRA_REGIONS = {
           { id: "swelling", label: "It is more swollen than the other side, or sweats more or less" },
           { id: "touch", label: "Light touch (clothes, sheets, water in the shower) hurts on that area" },
           { id: "motor", label: "It is stiff, weak or shaky, or the nails, hair or skin there have changed" },
+          { id: "none", label: "None of these" }
+        ]},
+      // 6 Oct 2026: ankle and foot cross-check, approved by Chandra (N1 peroneal tendons, N4 sinus tarsi).
+      { id: "A10", text: "About the outer ankle: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.A1 || []).some((o) => o === "outer" || o === "outerback"),
+        priority: () => true,
+        options: [
+          { id: "snap", label: "Something snaps or slides over the bony bump on the outer ankle" },
+          { id: "pushoff", label: "Pain behind the outer ankle bone when pushing off or walking on uneven ground" },
+          { id: "sinus", label: "An ache in the soft hollow just in front of the outer ankle bone" },
           { id: "none", label: "None of these" }
         ]}
     ],
@@ -2680,7 +2698,7 @@ export const EXTRA_REGIONS = {
       { id: "ft-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS)",
         text: "Since a foot injury, surgery, or cast, is your foot burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts?" },
       { id: "ft-stress", tier: "urgent", why: "Possible stress fracture; navicular and 5th metatarsal stress fractures are high-risk and need imaging",
-        text: "Do you run, march, or train hard, and is there pain on one foot bone (heel, midfoot, or a metatarsal) that is worse with every step or hopping, or aches at night?" },
+        text: "After more running, walking, marching or training, is there pain on one foot bone (heel, midfoot, a metatarsal, or under the big toe joint) that is worse with every step or hopping, or aches at night?" },
       { id: "ft-footdrop", tier: "urgent", group: "footdrop", why: "Foot drop (peroneal nerve or L5) needs medical review",
         text: "Is your foot slapping down or your toes catching when you walk?" },
       { id: "ft-lump", tier: "urgent", group: "cancer", why: "A growing lump or nail mark needs medical review",
@@ -2701,7 +2719,8 @@ export const EXTRA_REGIONS = {
         { id: "shoes", label: "After new or different shoes, or going barefoot" },
         { id: "injury", label: "After an injury (twist, crush, stubbed toe)" },
         { id: "sudden", label: "It came on suddenly overnight, with swelling", special: "hotJoint" },
-        { id: "weight", label: "After weight gain, pregnancy, or a change in work" }
+        { id: "weight", label: "After weight gain, pregnancy, or a change in work" },
+        { id: "surgery", label: "After surgery, or time in a cast or boot, for a broken ankle or foot" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -2713,7 +2732,11 @@ export const EXTRA_REGIONS = {
     questions: [
       { id: "B1", text: "Where is the pain mainly?", options: [
         { id: "heel", label: "Under the heel" },
-        { id: "arch", label: "The arch, or the top of the midfoot" },
+        // 6 Oct 2026 (C5, N3): the arch split from the top of the midfoot (the drawing's
+        // top-of-foot mark stays "arch"), and the outer edge added.
+        { id: "arch", label: "The top of the middle of the foot" },
+        { id: "instep", label: "The arch, underneath" },
+        { id: "outer", label: "The outer edge of the foot" },
         { id: "ball", label: "The ball of the foot, under the toes" },
         { id: "bigtoe", label: "The big toe joint" },
         { id: "toes", label: "Between the toes, or in the toes" }
@@ -2724,15 +2747,17 @@ export const EXTRA_REGIONS = {
         options: [
           { id: "firststep", label: "Worst on the first steps in the morning, then eases, returns after standing" },
           { id: "bruised", label: "A deep bruised feeling in the middle of the heel, worse on hard floors" },
-          { id: "squeeze", label: "Pain when squeezing the sides of the heel, or hopping", special: "footStress" },
+          // S5: in children this is the Sever's test, not a stress fracture.
+          { id: "squeeze", label: "Pain when squeezing the sides of the heel, or hopping", special: "footStress", specialIf: (a) => a.age !== "u18" && a.age !== "u5" },
           { id: "burning", label: "Burning or tingling in the heel or sole" },
           { id: "child", label: "Heel pain in a child aged about 8 to 14, worse with sport" }
         ]},
       { id: "B3", text: "About the ball of the foot: which apply? Tick all that apply.",
-        askIf: ({ ra }) => [].concat(ra.B1 || []).includes("ball"),
+        askIf: ({ ra }) => [].concat(ra.B1 || []).some((o) => o === "ball" || o === "toes"),
         priority: () => true,
         options: [
           { id: "neuroma", label: "Burning, tingling, or shooting into two toes, better with shoes off" },
+          { id: "click", label: "A click, or a sharp pain, between two toes when the foot is squeezed from the sides" },
           { id: "pebble", label: "Feels like walking on a pebble or a folded sock" },
           { id: "plate", label: "Pain under one toe joint, with swelling on top" },
           { id: "bone", label: "Pain on one bone that is worse with every step or hopping", special: "footStress" },
@@ -2790,8 +2815,8 @@ export const EXTRA_REGIONS = {
       // `same: "crps"`: a glove or sock drawing across two areas asks it once.
       { id: "B9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
         // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
-        askIf: ({ ra }) => (!ra.onset || ["injury"].includes(ra.onset)) && ra.duration !== "d2w",
-        priority: ({ ra }) => ["injury"].includes(ra.onset),
+        askIf: ({ ra }) => (!ra.onset || ["injury", "surgery"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["injury", "surgery"].includes(ra.onset),
         options: [
           { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
           { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },

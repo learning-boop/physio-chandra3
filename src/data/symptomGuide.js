@@ -537,7 +537,8 @@ export function computeRaw(region, answers) {
       if (!opt) return
       if (opt.weights) Object.entries(opt.weights).forEach(([cid, w]) => { scores[cid] = (scores[cid] || 0) + w })
       if (opt.unlocks) unlocks[opt.unlocks] = true
-      if (opt.special && !specials.includes(opt.special)) specials.push(opt.special)
+      // `specialIf(answers)`: the special shows only when it is true (e.g. not for children).
+      if (opt.special && (!opt.specialIf || opt.specialIf(answers)) && !specials.includes(opt.special)) specials.push(opt.special)
     })
   })
   return { scores, unlocks, specials }

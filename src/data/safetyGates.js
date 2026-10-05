@@ -161,7 +161,7 @@ export const GATES = {
     { id: 'ankle-circulation', title: 'Signs of a clot or a tight cast', members: ['af-cast', 'af-dvt'] },
     { id: 'ankle-infection', title: 'Signs of infection or a flare-up', members: ['af-charcot', 'af-gout', 'af-inflam'] },
     { id: 'ankle-nerve', title: 'Changes in feeling or strength', members: ['af-neuropathy', 'af-footdrop', 'af-crps', 'sc-neuro'] },
-    { id: 'ankle-medical', title: 'Signs that need a medical check', members: ['af-quinolone', 'af-cancer', 'sc-systemic'] },
+    { id: 'ankle-medical', title: 'Signs that need a medical check', members: ['af-quinolone', 'af-stress', 'af-cancer', 'sc-systemic'] },
   ],
 }
 
@@ -190,7 +190,7 @@ export const SIGNS = {
   'ft-neuropathy': 'both feet numb, burning or tingling, like wearing socks',
   'ft-footdrop': 'your foot slapping down or your toes catching when you walk',
   'ft-crps': 'since an injury, surgery or cast, a foot that burns, swells, changes colour or is so sensitive that light touch hurts',
-  'ft-stress': 'pain on one foot bone that is worse with every step or hopping, if you run, march or train hard',
+  'ft-stress': 'pain on one foot bone (or under the big toe joint) that is worse with every step or hopping, after more running, walking or training',
   'ft-lump': 'a lump in the foot that is growing, or a new dark mark under a toenail',
   // Hip
   'hpf-replacement': 'a hip replacement or hip fracture operation, and the hip is newly painful, warm or swollen, the wound red or leaking, or a fever',
@@ -215,6 +215,7 @@ export const SIGNS = {
   'af-footdrop': 'your foot slapping down or your toes catching when you walk',
   'af-crps': 'since an injury, surgery or cast, an ankle or foot that burns, swells, changes colour or is so sensitive that light touch hurts',
   'af-quinolone': 'Achilles pain after a recent quinolone antibiotic (such as ciprofloxacin) or steroid tablets',
+  'af-stress': 'pain on one spot of bone at the inner ankle or midfoot that is worse with every step or hopping, after more running, walking or training',
   'af-cancer': 'a past cancer, a lump that is growing, or a deep ache at night that does not change with position',
   // Lower back
   'rf-osteo': 'pain that started suddenly after a minor strain, cough or lift, if you have low bone density, take long-term steroid tablets or are over 70',
@@ -371,7 +372,7 @@ export const SHORT = {
   'ft-neuropathy': 'numb or burning feet',
   'ft-footdrop': 'the foot slapping down',
   'ft-crps': 'burning or colour change after an injury',
-  'ft-stress': 'pain on one bone with running',
+  'ft-stress': 'pain on one foot bone with every step',
   'ft-lump': 'a growing lump or a dark nail mark',
   'hpf-replacement': 'a painful hip replacement or wound',
   'hpf-dvt': 'a swollen, warm or tender leg',
@@ -502,6 +503,7 @@ export const SHORT = {
   'af-footdrop': 'the foot slapping down',
   'af-crps': 'burning or colour change after an injury',
   'af-quinolone': 'Achilles pain after certain antibiotics or steroids',
+  'af-stress': 'pain on one ankle bone with every step',
   'af-cancer': 'a past cancer or a growing lump',
   'sc-systemic': 'fever or weight loss',
   'sc-neuro': 'new weakness or numbness',
@@ -522,7 +524,7 @@ export function gateText(gate, members = []) {
    'noInjury' questions (overuse stress fractures, "no injury" Perthes) are
    skipped after a recent injury to that area. */
 export const MECHANISM = {
-  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'hpf-stress': 'hip', 'srf-pta': 'shoulder',
+  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'af-stress': 'ankle', 'hpf-stress': 'hip', 'srf-pta': 'shoulder',
   'frf-stress': 'forearm', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
 }
 export const injuredIn = (screen, a = {}) => a[`${screen}:I1`] !== undefined && a[`${screen}:I1`] !== 'no'
