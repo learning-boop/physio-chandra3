@@ -998,8 +998,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     JSON.stringify(DM.diabetesFlags({ dmTreat: 'insulin', dmComp: ['eyes', 'kidneys', 'heart'], dmFeel: 'reduced' })) === JSON.stringify({ HYPO: true, EYE: true, KIDNEY: true, CARDIAC: true, FOOT: true }))
 
   const shZ = ZN(['shoulderL'])
-  const a = { age: '50-64', onset: 'gradual', duration: 'd3m', S1: 'deep', S2: 'top', S3: ['behind', 'highshelf', 'lying'], S6: ['weakness'], S7: 'shoulder' }
-  const order = (b, ans = a) => rankAcross(['shoulder'], ans, 2, b).map((x) => x.c.id).join()
+  const a = { age: '50-64', onset: 'gradual', duration: 'o3m', S1: 'deep', S2: 'top', S3: ['behind', 'highshelf', 'lying'], S6: ['weakness'], S7: 'shoulder' }
+  // The order of the two conditions the lift is about (5 Oct 2026: the new
+  // rotator cuff tear card can now sit between them on these answers).
+  const order = (b, ans = a) => rankAcross(['shoulder'], ans, 9, b).map((x) => x.c.id).filter((id) => id === 'rc' || id === 'frozen').join()
   check('Diabetes lift: rotator cuff narrowly ahead of frozen shoulder → frozen shoulder first with long-standing diabetes; unchanged without it',
     order(null) === 'rc,frozen' && order(DM.diabetesBonus({ dm: 'yes', dmYears: 'o20' }, shZ)) === 'frozen,rc' &&
     order(DM.diabetesBonus({ dm: 'no' }, shZ)) === 'rc,frozen', [order(null), order(DM.diabetesBonus({ dm: 'yes', dmYears: 'o20' }, shZ))])
@@ -1827,6 +1829,36 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ['kneecap', 'pcl', 'pesanserine'].every((id) => card(id)) && /Sinding-Larsen/.test(card('osgood').name) &&
     q('K3').options.some((o) => o.id === 'kneecapshift') && q('K5').options.some((o) => o.id === 'pesanserine') &&
     JSON.stringify((card('pfoa').gates || {}).ages || card('pfoa').ages || []).includes('50-64'), card('pfoa').gates)
+}
+
+// ── 56. Shoulder cross-check: CPGs, the AIM manual, Chandra's protocols, current evidence (all 24 approved, 5 Oct 2026) ──
+{
+  const { REGIONS, contenders, CONTENDER_MIN } = await imp('src/data/symptomGuide.js')
+  const { SHOULDER_INJURY } = await imp('src/data/injuryScreen.js')
+  const S = REGIONS.shoulder
+  const card = (id) => S.conditions.find((c) => c.id === id)
+  const patient = (c) => [c.name, c.blurb, ...(c.noticed || []), ...(c.homeCare || []), ...(c.seePhysioIf || [])].join(' ')
+  const noDoctor = ['rc', 'calcific', 'frozen', 'acj', 'instability', 'cufftear', 'oa', 'labral']
+    .filter((id) => !(card(id).seePhysioIf || []).some((l) => /doctor|emergency|911/i.test(l)))
+  check('Every shoulder card with a dangerous look-alike has a doctor or emergency line', !noDoctor.length, noDoctor)
+  const I = (id) => SHOULDER_INJURY.find((q) => q.id === id)
+  check('Shoulder injury screen: an AC step is same day (not emergency), a dislocation still out is emergency; weakness counts, not only "cannot lift at all"',
+    I('I7') && I('I7').sameDay && I('I7').options.find((o) => o.id === 'yes').route === 'urgent' && !/step/.test(I('I2').text) &&
+    I('I2').options.find((o) => o.id === 'yes').route === 'emergency' && /much weaker/.test(I('I4').text))
+  const hot = ['shoulder', 'elbow', 'wrist', 'hand'].map((r) => REGIONS[r].redFlags.find((f) => f.group === 'hotjoint'))
+  check('Hot-joint question: "red or swollen", fever or unwell, or after an injection, in every arm joint', hot.every((f) => f && /red or swollen/.test(f.text) && /injection/.test(f.text)))
+  const unstable = [...S.conditions.filter((c) => /unstable|instability/i.test(patient(c))).map((c) => c.id), ...S.questions.filter((q) => /unstable/i.test(q.text)).map((q) => q.id)]
+  check('No "unstable" or "instability" in shoulder patient wording (cards and questions)', !unstable.length, unstable)
+  const opt = (qid, oid) => [...S.context, ...S.questions].find((q) => q.id === qid).options.find((o) => o.id === oid)
+  check('Pseudoparalysis ("goes up only if I help it") no longer scores for cuff tendinopathy and counts against frozen shoulder; it points to a cuff tear',
+    !(opt('S2', 'cantlift').weights || {}).rc && opt('S2', 'cantlift').weights.frozen < 0 && opt('S2', 'cantlift').weights.cufftear > 0)
+  check('Slipping shoulder: no age gate, and a first dislocation reaches the card at 50 to 64',
+    !(card('instability').gates || {}).ages && opt('S5', 'popped').weights.instability >= 5)
+  check('New shoulder cards: rotator cuff tear, shoulder arthritis (from 50), labral tear', ['cufftear', 'oa', 'labral'].every((id) => card(id)) && JSON.stringify((card('oa').gates || {}).ages || []).includes('o64'))
+  check('Frozen shoulder names the outward rotation loss and has no guarantee; wedge-free and no "64%" at 2 years',
+    card('frozen').noticed.some((l) => /turn the arm outwards/.test(l)) && !/It does improve/.test(card('frozen').blurb) && !card('frozen').clinicNotes.join(' ').includes('89% vs 64%'))
+  check('Question picker: a leader needs at least 2 points (one point from age or duration is not a contest)',
+    CONTENDER_MIN === 2 && !contenders(S, { age: '18-29', duration: 'd2w' }).some((x) => x.c.id === 'instability'))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

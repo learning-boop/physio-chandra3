@@ -4,6 +4,15 @@
 # Conditions: content/conditions/shoulder-*.md. An upper-arm mark also asks these questions.
 # Not built: "Subjective S15: Diabetes" in test patient 2 (the subjective questions are not on the site yet).
 # Test patients: npm run check:regions
+# 5 Oct 2026: shoulder cross-check against the JOSPT rotator cuff (2025) and
+# adhesive capsulitis (2013) CPGs, the AIM Theory Manual 2023 Ch. 2.2, Chandra's
+# shoulder protocols and a current search; all 24 items approved by Chandra
+# (review/shoulder-crosscheck.html). Changes here: the hot-joint question "red
+# or swollen" and after an injection (all arm joints); S5 reworded without
+# "unstable"; injury screen I2 dislocation only (emergency), new I7 for a step
+# at the top of the shoulder (same-day X-ray), I4 includes "much weaker"; S7
+# priority strength 3 when the drawing reaches below the elbow; new cards
+# shoulder-cufftear, shoulder-oa, shoulder-labral. Test patients 7 to 11.
 region: shoulder
 name: Shoulder
 source: Kulkarni R et al. BESS/BOA Patient Care Pathways: Subacromial shoulder pain. Shoulder Elbow 7(2), 2015; Brownson P et al. BESS/BOA Patient Care Pathways: Traumatic anterior shoulder instability. Shoulder Elbow 8(3), 2016; Kelley MJ et al. Shoulder pain and mobility deficits: adhesive capsulitis. JOSPT 43(5), 2013; Lewis J. Rotator cuff related shoulder pain: assessment, management and uncertainties. Man Ther 23, 2016; Park HB et al. Diagnostic accuracy of clinical tests for the different degrees of subacromial impingement syndrome. JBJS Am 87(7), 2005; Hegedus EJ et al. Which physical examination tests provide clinicians with the most value when examining the shoulder? Br J Sports Med 46, 2012; Chronopoulos E et al. Diagnostic value of physical tests for isolated chronic acromioclavicular lesions. Am J Sports Med 32(3), 2004; Donnelly JM et al. Travell, Simons & Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual, 3rd ed. Wolters Kluwer, 2019; Giamberardino MA. Referred muscle pain/hyperalgesia and central sensitisation. J Rehabil Med Suppl 41, 2003
@@ -38,15 +47,19 @@ I1 Have you injured your shoulder in the last 6 weeks, for example in a fall, an
 Route: No → skip this screen / Any Yes → I2
 Why: Gate question. Keeps the screen to recent injuries
 
-I2 Is your shoulder still out of place, or does it look a different shape, or is there a new lump or step at the top of the shoulder?
+I2 Is your shoulder still out of place, or does it look a different shape?
 Route: Yes → EMERGENCY
 Why: Possible dislocation or fracture that has not been put back
+
+I7 Is there a new lump or step at the top of the shoulder since the injury?   (5 Oct 2026: split from I2)
+Route: Yes → PHYSICIAN FIRST, same day
+Why: Possible AC joint separation or collarbone fracture: an X-ray is needed the same day
 
 I3 Since the injury, has your arm or hand been cold, pale, or blue?
 Route: Yes → EMERGENCY
 Why: Possible blood vessel injury
 
-I4 Since the injury, have you been unable to lift your arm at all, or is there a numb patch on the outer upper arm?
+I4 Since the injury, are you unable to lift your arm, or is it much weaker than before, or is there a numb patch on the outer upper arm?   (5 Oct 2026: "much weaker" added)
 Route: Yes → PHYSICIAN FIRST
 Why: Possible acute rotator cuff tear or axillary nerve injury; early surgical opinion matters (BESS pathway)
 
@@ -95,7 +108,7 @@ Q: How has the movement changed over time?
 - No real stiffness, just pain
 - --row--
 
-Q: Does your shoulder feel unstable?
+Q: Does your shoulder ever slip, or feel as if it might come out of place?   (5 Oct 2026: no "unstable")
 - It has popped out and needed putting back
 - It slips or clunks, then goes back on its own
 - I worry it will pop out with my arm up and back
@@ -168,3 +181,24 @@ Drawing: Outer left upper arm after a fall
 Answers: Age 65 or over · After a fall onto the arm or shoulder · Less than 2 weeks; Injury screen: I1 “Yes, I fell onto my arm or shoulder”; I2 No; I3 No; I4 Yes
 Flags: Injury screen I4 (cannot lift the arm at all)
 Expect: top condition = None; see a doctor first; must not show = Any shoulder condition shown before the physician-first message; route = Physician first
+
+<!-- Shoulder cross-check, 5 Oct 2026 (approved by Chandra). -->
+CASE: 7. First dislocation at 55, weeks ago
+Answers: 50 to 64; it popped out; 6 weeks to 3 months; no injury in the last 6 weeks; popped out and needed putting back
+Expect: top condition = shoulder that slips or has come out of place (now at any age)
+
+CASE: 8. Over 65, stiff in every direction and grating
+Answers: 65 or over; gradually; more than 3 months; deep or front; will not go as high even when helped; behind the back; getting stiffer; clicking deep
+Expect: top condition = shoulder arthritis; frozen shoulder not on top
+
+CASE: 9. Weak after a fall months ago, arm goes up only when helped
+Answers: 65 or over; after a fall; 6 weeks to 3 months; goes up only if helped; lying on it; weakness
+Expect: top condition = rotator cuff tear; must not show = frozen shoulder
+
+CASE: 10. Thrower with a deep click
+Answers: 16 to 29; overhead sport; 2 to 6 weeks; deep or front; throwing; clicking deep; feels stable
+Expect: top condition = labral tear
+
+CASE: 11. New step at the top of the shoulder after a fall
+Answers: injury screen I1 fall; I2, I3 No; I7 Yes
+Expect: route = physician first, same day (X-ray), not the emergency department

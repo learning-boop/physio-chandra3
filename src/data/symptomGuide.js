@@ -192,8 +192,10 @@ export const REGIONS = {
       // Chandra 2 Oct 2026); shared with the arm, hip, thigh and leg.
       {id:"srf-rhabdo", tier:"emergency", group:"rhabdo", why:"Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
         text:"Do you have severe muscle pain or weakness, with urine that is dark like cola? (Especially after very hard exercise, a crush, a long time lying on the floor, a new medicine such as a statin, or a recent illness.)"},
+      // "red or swollen", and after an injection (shoulder cross-check S8, Chandra
+      // 5 Oct 2026): a deep joint infection may not look red or swollen.
       {id:"rf-hotjoint", tier:"emergency", group: "hotjoint", why:"Possible joint infection (septic arthritis)",
-        text: "Is a painful joint hot, red and swollen, with a fever or feeling very unwell?"},
+        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, or after a recent injection?"},
       {id:"srf-pmr", ages:["50-64", "o64"], tier:"urgent", why:"Possible polymyalgia rheumatica; needs blood tests and medical care",
         text:"If you are over 50: are both shoulders (and often both hips) stiff and aching, worst in the morning for more than 45 minutes, and do you feel generally unwell?"},
       {id:"srf-pancoast", tier:"urgent", group:"pancoast", why:"Possible tumour at the top of the lung (Pancoast), felt in the shoulder and inner arm",
@@ -269,7 +271,8 @@ export const REGIONS = {
           {id:"easing", label:"The stiffness is slowly easing"},
           {id:"nostiff", label:"No real stiffness, just pain"}
         ]},
-      {id:"S5", text:"Does your shoulder feel unstable?",
+      // No "unstable" in patient wording (shoulder cross-check A1, 5 Oct 2026).
+      {id:"S5", text:"Does your shoulder ever slip, or feel as if it might come out of place?",
         // "Under 40": the age bands split at 50, so 30 to 49 is included.
         askIf: ({ ra }) => !ra.age || ["u5", "u18", "18-29", "30-49"].includes(ra.age) || ra.onset === "popped" || ra.onset === "overhead",
         options:[
@@ -289,7 +292,9 @@ export const REGIONS = {
         askIf: ({ draw, all }) => !draw || ["neck", "ctj", "upperback", "elbow", "forearm", "wrist"].some((t) => draw.has(t)) ||
           [].concat(all.painQuality || []).includes("tingling"),
         // Asked early when the drawing runs below the elbow: the neck look-alike.
-        priority: ({ draw }) => !!draw && ["elbow", "forearm", "wrist"].some((t) => draw.has(t)),
+        // Strength 3 (5 Oct 2026): the three new shoulder cards made the lifting
+        // question outweigh a plain priority, and the neck question lost its slot.
+        priority: ({ draw }) => (!!draw && ["elbow", "forearm", "wrist"].some((t) => draw.has(t)) ? 3 : false),
         options:[
           {id:"neck", label:"Moving my neck", special:"neckSource"},
           {id:"shoulder", label:"Moving my shoulder and arm"},
@@ -657,11 +662,16 @@ export function questionValue(q, region, answers) {
    separationValue() is how far a question's answers could move each pair
    apart, in rank units (rankValue), the leading pair counting in full and the
    others half. A question moves only its own area's conditions. */
+// At least this much evidence to count as a leader (5 Oct 2026): a single
+// point, such as an age band or how long it has lasted, is not a contest
+// worth a question. With 1, new shoulder age weights made a third "leader"
+// and an upper-arm drawing lost its own questions.
+export const CONTENDER_MIN = 2
 export function contenders(region, answers, max = 3) {
   const { scores, unlocks } = computeRaw(region, answers)
   const maxS = maxScores(region)
   return region.conditions
-    .filter(c => (scores[c.id] || 0) > 0 && possiblyEligible(c, unlocks, region, answers))
+    .filter(c => (scores[c.id] || 0) >= CONTENDER_MIN && possiblyEligible(c, unlocks, region, answers))
     .map(c => ({ c, region, rank: rankValue(scores[c.id] || 0, maxS[c.id]) }))
     .sort((a, b) => b.rank - a.rank)
     .slice(0, max)

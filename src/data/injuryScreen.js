@@ -180,12 +180,18 @@ export const SHOULDER_INJURY = [
     { id: 'popped', label: 'Yes, it popped out of place' },
     { id: 'pull', label: 'Yes, a sudden pull, lift, or jerk' },
   ]},
-  { id: 'I2', text: 'Is your shoulder still out of place, or does it look a different shape, or is there a new lump or step at the top of the shoulder?',
+  { id: 'I2', text: 'Is your shoulder still out of place, or does it look a different shape?',
     options: yesNo('emergency', 'Possible dislocation or fracture that has not been put back') },
   { id: 'I3', text: 'Since the injury, has your arm or hand been cold, pale, or blue?',
     options: yesNo('emergency', 'Possible blood vessel injury') },
-  { id: 'I4', text: 'Since the injury, have you been unable to lift your arm at all, or is there a numb patch on the outer upper arm?',
-    options: yesNo('urgent', 'Possible acute rotator cuff tear or nerve injury: an early surgical opinion matters') },
+  // A new step at the top of the shoulder is an X-ray the same day, not the
+  // emergency department (shoulder cross-check S5, Chandra 5 Oct 2026): the
+  // AC joint grade decides the care; in children, a collarbone growth plate.
+  { id: 'I7', text: 'Is there a new lump or step at the top of the shoulder since the injury?',
+    sameDay: true, options: yesNo('urgent', 'Possible AC joint separation or collarbone fracture: an X-ray is needed the same day') },
+  // Wider (shoulder cross-check S7): marked weakness with some lift is a tear too.
+  { id: 'I4', text: 'Since the injury, are you unable to lift your arm, or is it much weaker than before, or is there a numb patch on the outer upper arm?',
+    options: yesNo('urgent', 'Possible acute rotator cuff tear or nerve injury: see a doctor within a few days, as a repair works best within about 3 weeks') },
   { id: 'I5', text: 'Did it pop out for the first time, and are you 40 or older?', askIf: (a) => a.I1 === 'popped',
     options: yesNo('urgent', 'Rotator cuff tear and nerve injury are common after a first dislocation over 40') },
   { id: 'I6', text: 'Did it happen during a seizure (fit) or an electric shock?',

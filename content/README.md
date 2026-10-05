@@ -73,7 +73,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Tailbone | `coccyx` | Coccyx assessment | 5 |
 | Jaw | `jaw` | TMJ assessment | 5 |
 | Head | `head` | Head assessment (+ Cervicogenic Headache 1 document, D2 and D3; + Concussion document, the head injury screen, D8 and D9) | 14 |
-| Shoulder | `shoulder` | Shoulder assessment | 6 |
+| Shoulder | `shoulder` | Shoulder assessment (cross-checked against the CPGs, AIM manual and Chandra's protocols, 5 Oct 2026) | 9 |
 | Upper arm | `arm` | Upper arm assessment | 5 |
 | Elbow | `elbow` | Elbow assessment | 6 |
 | Forearm | `forearm` | Forearm assessment | 5 |

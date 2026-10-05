@@ -299,7 +299,9 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
       if (askedIds.includes(q.id) || (q.same && askedSame.has(q.same)) || !isRelevant(q, region, open)) continue
       if (LOCATION_QUESTION_IDS.has(q.id) && [].concat(answers[q.id] ?? []).length) continue
       if (q.askIf && !q.askIf({ draw, ra: open, all })) continue
-      live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: (questionValue(q, region, open) + sepW * separationValue(q, region, cons)) * weight + (q.priority && q.priority({ draw, ra: open, all }) ? 1 : 0) })
+      // A priority of true adds 1; a number adds that much (a stronger nudge).
+      const pr = q.priority ? q.priority({ draw, ra: open, all }) : 0
+      live.push({ id: q.id, unseenArea: askedHere.length === 0 && !yields, v: (questionValue(q, region, open) + sepW * separationValue(q, region, cons)) * weight + (pr === true ? 1 : Number(pr) || 0) })
     }
   }
   const pool = keys.length > 1 && live.some((x) => x.unseenArea) ? live.filter((x) => x.unseenArea) : live
