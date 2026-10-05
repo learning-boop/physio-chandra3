@@ -7825,7 +7825,7 @@ export const AUTHORED = [
       "id": "nslbp",
       "name": "Common low back pain (non-specific low back pain)",
       "clin": "Non-specific low back pain, mechanical pattern (NICE NG59; JOSPT 2012 low back pain with mobility deficits)",
-      "blurb": "This is the most common kind of back pain. The muscles, joints, discs and ligaments of the lower back have become sensitive and sore, usually after a change in load, posture or activity, but no single structure is the cause and nothing is damaged in a way that needs fixing. Most episodes settle over a few weeks, especially for people who keep moving, and scans are rarely needed.",
+      "blurb": "This is the most common kind of back pain. The muscles, joints, discs and ligaments of the lower back have become sensitive and sore, usually after a change in load, posture or activity, but no single structure is the cause and nothing is damaged in a way that needs fixing. The back is a strong, adaptable structure. Most episodes settle over a few weeks, especially for people who keep moving, and scans are rarely needed.",
       "noticed": [
         "A dull ache, tightness or stiffness across the lower back, sometimes sharp or catching on certain movements",
         "It may spread into a buttock or the back of the thigh, but not usually below the knee, and there is no numbness or weakness",
@@ -7835,6 +7835,8 @@ export const AUTHORED = [
       ],
       "homeCare": [
         "Keep moving: short, frequent walks and your normal daily activities are usually safe and help recovery; bed rest tends to slow it down",
+        "Carry on with work and normal activities as much as you can, even if it still hurts a little, and pace bigger jobs",
+        "Gentle exercise you enjoy, such as walking, swimming or cycling, helps; a physiotherapist can guide strengthening",
         "Change position often: there is no single right posture, and the best posture is the next one",
         "Use heat, such as a warm pack or shower, for comfort if it helps",
         "Expect some ups and downs: a flare after doing more is normal and not a setback",
@@ -7852,15 +7854,15 @@ export const AUTHORED = [
       ],
       "clinicNotes": [
         "Non-specific low back pain, mechanical (nociceptive) pattern: symptoms change with posture and activity; no nerve root signs, no red flags. JOSPT 2012 (B) classification for the acute, often one-sided pattern: low back pain with mobility deficits (restricted lumbar range and segmental mobility, pain reproduced by segmental provocation).",
-        "First visit: red-flag screen including cauda equina (GIRFT 2023 pathway); STarT Back risk stratification, re-screened at 2 to 4 weeks; pain-type classification (nociceptive/mechanical, neuropathic, nociplastic: IASP 2021 criteria, Kosek 2021).",
+        "First visit: red-flag screen including cauda equina (GIRFT 2023 pathway); STarT Back risk stratification, re-screened at 2 to 4 weeks, to inform prognosis, review frequency and the intensity of care (NICE NG59 1.1.3 as amended 29 Jul 2026: no longer a route to psychological therapy); pain-type classification (nociceptive/mechanical, neuropathic, nociplastic: IASP 2021 criteria, Kosek 2021).",
         "Examination: observation and active lumbar range with symptom response; repeated movements for a directional preference (centralisation or peripheralisation); hip screen (FADIR, FABER, range); SIJ cluster (Laslett) if buttock-dominant; segmental palpation and PAIVMs; neuro screen L2-S1 (myotomes, dermatomes, reflexes); SLR or slump only with leg symptoms; standing extension test if stenosis is suspected; functional measures (sit-to-stand, walk, lift). Outcomes: NPRS, Oswestry or RMDQ (MCID 10 points or 30%; 5 points or 30%), PSFS; yellow flags via STarT Back or ÖMPSQ rather than informal judgement.",
-        "Imaging is not indicated without red flags (NICE NG59). Not clearly better at 4 to 6 weeks, or worsening: GP review (NICE improvement window; replaces the 30-day flag of JOSPT 2012, Chandra 5 Oct 2026).",
+        "Imaging is not indicated without red flags (NICE NG59). Not clearly better at 4 to 6 weeks, or worsening: GP review (NICE improvement window; the card's line for people managing on their own, Chandra 5 Oct 2026). Not improving within 30 days of physiotherapy care: reconsider the classification or refer (JOSPT 2012: failure of conservative care within 30 days is a red flag, +LR 3.0 for a back-related tumour).",
         "Thrust manipulation prediction rule (Flynn/Childs): symptoms under 16 days, none below the knee, lumbar hypomobility, hip IR over 35 degrees on at least one side, FABQ-W under 19; 4 of 5 +LR 13.2; the 2-item version (under 16 days, nothing below the knee) +LR 7.2.",
-        "Management (NICE NG59, WHO 2023, Stochkendahl 2018): explanation and reassurance that pain does not mean damage; stay active and return to normal activity, work and sport, paced to recovery; exercise of any type, progressed over weeks (the one the person will keep doing); manual therapy (mobilisation, manipulation, soft tissue) only within an active plan, not on its own; a combined physical and psychological approach when pain persists (sleep, pacing, stress, confidence to move). Medication is for the GP or pharmacist (NICE: paracetamol alone is not recommended); the site gives no medication advice (Chandra, 5 Oct 2026).",
+        "Management (NICE NG59, WHO 2023, Stochkendahl 2018): explanation and reassurance that pain does not mean damage; stay active and return to normal activity, work and sport, paced to recovery; exercise of any type, progressed over weeks (the one the person will keep doing); manual therapy (mobilisation, manipulation, soft tissue) only within an active plan, not on its own; when pain persists, address sleep, pacing, stress and confidence to move within the physiotherapy plan. Psychological therapy: NICE withdrew 1.2.13 (CBT within an exercise package) and 1.2.14 (combined physical and psychological programmes) on 29 Jul 2026, as partly based on retracted evidence; WHO 2023 still says operant therapy and CBT may be offered for chronic primary low back pain within a broader plan, and JOSPT 2021 grades pain neuroscience education alongside exercise or manual therapy A. Refer for psychological care on clinical judgement. Medication is for the GP or pharmacist (NICE: paracetamol alone is not recommended); the site gives no medication advice (Chandra, 5 Oct 2026).",
         "Interventions (JOSPT 2021): acute, thrust or non-thrust mobilisation (A), soft tissue mobilisation for short-term pain (B), exercise including trunk activation (C); chronic, exercise of any type (A), mobilisation (A), pain neuroscience education alongside exercise or manual therapy (A), movement control or trunk mobility exercise (B), dry needling as an adjunct (C); older adults, general exercise (A).",
-        "Prognosis: most improve noticeably within 2 to 6 weeks; recurrence is common. Persistence is linked more to distress, low mood, poor sleep, fear-avoidance and low recovery expectation than to examination findings (Hartvigsen 2018); also symptoms below the knee and previous episodes.",
+        "Prognosis: most improve noticeably within 2 to 6 weeks; recurrence is common. Persistence is linked more to distress, low mood, poor sleep, fear-avoidance, low recovery expectation, high pain intensity and passive coping than to examination findings (Hartvigsen 2018; JOSPT 2012), and to symptoms below the knee. Previous episodes predict recurrence, not how long an episode lasts (JOSPT 2012: a past history does not change the duration of sick leave).",
         "Look-alikes: nerve-related leg pain (below the knee, in a line, pins and needles); stenosis (over 50, both legs with walking, eased by sitting or leaning forward); positional disc pain (clear directional preference, centralising); facet irritation (one side, worse arching or standing from sitting); SIJ pain (dimple, one-leg standing, stairs, rolling; pregnancy or recent birth); inflammatory back pain (under 45, over 3 months, morning stiffness over 30 minutes, better with exercise, second-half-of-night waking: doctor first); young-athlete extension pain (under 20, arching sport: doctor first, X-ray); persistent widespread pain (over 3 months, several areas, poor sleep and fatigue); hip joint (groin, socks, car, limp); kidney or other organ (flank pain unchanged by movement, fever, urinary symptoms: doctor first).",
-        "Sources: NICE NG59 (2016, updated 2020); WHO guideline for chronic primary low back pain (2023); Hartvigsen J et al., Lancet 2018;391:2356-67; Stochkendahl MJ et al., Eur Spine J 2018;27:60-75; GIRFT National Suspected Cauda Equina Syndrome Pathway (2023); Kosek E et al., PAIN 2021;162:2629-34; Hill JC et al. (STarT Back), Lancet 2011;378:1560-71; Delitto A et al., JOSPT 2012;42(4):A1-A57; George SZ et al., JOSPT 2021;51(11):CPG1-CPG60; course manual Section 2 Ch. 2.5 (differentials only); Jones and Rivett, Clinical Reasoning in Musculoskeletal Practice, 2nd ed. 2019."
+        "Sources: NICE NG59 (2016, updated 2020; recommendations 1.2.13-1.2.14 withdrawn and 1.1.3, 1.2.7 amended 29 Jul 2026); WHO guideline for chronic primary low back pain (2023); Hartvigsen J et al., Lancet 2018;391:2356-67; Stochkendahl MJ et al., Eur Spine J 2018;27:60-75; GIRFT National Suspected Cauda Equina Syndrome Pathway (2023); Kosek E et al., PAIN 2021;162:2629-34; Hill JC et al. (STarT Back), Lancet 2011;378:1560-71; Delitto A et al., JOSPT 2012;42(4):A1-A57; George SZ et al., JOSPT 2021;51(11):CPG1-CPG60; course manual Section 2 Ch. 2.5 (differentials only); Jones and Rivett, Clinical Reasoning in Musculoskeletal Practice, 2nd ed. 2019."
       ]
     },
     "resolved": [
@@ -7893,6 +7895,12 @@ export const AUTHORED = [
         "oid": "back",
         "label": "Low back only",
         "weight": 2
+      },
+      {
+        "qid": "L1",
+        "oid": "buttock",
+        "label": "Into the buttock",
+        "weight": 1
       },
       {
         "qid": "L1",
