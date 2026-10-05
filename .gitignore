@@ -23,3 +23,6 @@ review/
 
 # Anonymised clinic test cases (scripts/check-cases.mjs): kept off the repository
 cases/
+
+# OCR text of manuals and scanned CPGs (scripts/ocr-pdf.mjs): personal use, not committed
+evidence-text/
