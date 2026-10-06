@@ -249,3 +249,6 @@ Expect: top condition = CRPS; route = results
 
 CASE: CRPS 2. A fresh sprain, under 2 weeks
 Expect: the CRPS question is not asked; must not show = CRPS
+
+## changes 6 Oct 2026 (neurodynamics, second batch; DRAFT for Chandra's review)
+A7 gains the first web space and outer-edge nerve answers as a card pointing to the Foot guide (footNerve), and now also opens for pain at the front of the ankle or behind the outer ankle bone. Scored ankle twins were tried and removed: they made A7 crowd out the ankle's own questions. Test patient N1. Sources: Butler NOI neurodynamic techniques workbook; Shacklock NDS lower-quarter manual 2017-18.

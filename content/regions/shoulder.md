@@ -202,3 +202,6 @@ Expect: top condition = labral tear
 CASE: 11. New step at the top of the shoulder after a fall
 Answers: injury screen I1 fall; I2, I3 No; I7 Yes
 Expect: route = physician first, same day (X-ray), not the emergency department
+
+## changes 6 Oct 2026 (neurodynamics, second batch; DRAFT for Chandra's review)
+New S9 "About the back of the shoulder" (hollow shoulder blade, weak turning out, overhead sport or work), asked after "Back of the shoulder" (S1, which unlocks it with no weight of its own) or weakness turning out (S6); a mark on the back of the shoulder answers S1 from the drawing (shoulder-suprascapular, nerveLossShoulder card). Test patients N1-N2. Sources: Butler NOI neurodynamic techniques workbook; Shacklock NDS lower-quarter manual 2017-18.

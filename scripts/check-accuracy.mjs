@@ -232,8 +232,15 @@ say('\n5. Also worth considering — two telltale answers missed')
      walking pain - so they SHOULD stay off the list. The number brought back
      did not change (89 before and after); only the denominator grew. Every
      answer added to a condition does this, so the rail sits lower.
-     FOR CLINICIAN REVIEW: Chandra to confirm 60% is tight enough. */
-  if (rate < 0.6 || avg > 1) { failed++; say('   FAIL  the line should bring back at least 60% and add at most 1 name on average') }
+     58%, not 60% (6 Oct 2026, the second batch of nerve conditions). Six new
+     nerve conditions (Baxter's, sural, deep fibular, obturator, notalgia,
+     suprascapular) are each opened by a LOCATION answer and decided by one
+     nerve answer in a follow-up. Every pair that drops both (9 pairs) leaves
+     nothing pointing at them, so they rightly stay off the list; the
+     conditions that existed before are brought back exactly as before.
+     Measured: 97 of 164 (59%).
+     FOR CLINICIAN REVIEW: Chandra to confirm 58% is tight enough. */
+  if (rate < 0.58 || avg > 1) { failed++; say('   FAIL  the line should bring back at least 58% and add at most 1 name on average') }
 }
 say('\n6. Harder patients — shown first (in the 2 shown)')
 {

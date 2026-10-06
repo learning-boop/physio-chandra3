@@ -217,6 +217,14 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   check('the clinician summary carries the neurodynamic plan', /Neurodynamic plan \(Shacklock\): Level 2/.test(text), text.split('\n').filter((l) => /eurodynamic/.test(l)))
 }
 
+// ── 3d. A mark on the back of the shoulder answers S1, opening the
+//        suprascapular nerve question S9 (6 Oct 2026) ──
+{
+  const { locationAnswers } = await imp('src/data/drawnLocation.js')
+  check('a mark on the back of the shoulder answers "Back of the shoulder"', JSON.stringify(locationAnswers([{ type: 'shoulder', at: { fy: 0.3, az: 0.16, lx: -0.06 } }])) === '{"S1":["back"]}')
+  check('a mark on the front of the shoulder answers nothing', JSON.stringify(locationAnswers([{ type: 'shoulder', at: { fy: 0.3, az: 0.16, lx: 0.03 } }])) === '{}')
+}
+
 // ── 4. Not referral ──
 check('neck→shoulder only is NOT a referral line', detectReferral([['neck', 'shoulderL']]).length === 0)
 check('separate marks on neck and wrist are NOT a referral line', detectReferral([['neck'], ['wristL']]).length === 0)

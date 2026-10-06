@@ -591,11 +591,14 @@ export const EXTRA_REGIONS = {
         { id: "bandcough", label: "Coughing or sneezing sends pain around my chest like a band" }
       ]},
       { id: "T4", text: "Which of these do you notice? Tick all that apply.",
-        askIf: ({ ra }) => [].concat(ra.T1 || []).some((o) => o === "rib" || o === "band") || [].concat(ra.T3 || []).includes("bandcough"),
+        // Also beside the spine: notalgia paraesthetica, a skin nerve beside
+        // the shoulder blade. // Neurodynamics, second batch (Chandra, 6 Oct 2026; Butler NOI workbook, Shacklock NDS manual). FOR CLINICIAN REVIEW: wording.
+        askIf: ({ ra }) => [].concat(ra.T1 || []).some((o) => o === "rib" || o === "band" || o === "beside") || [].concat(ra.T3 || []).includes("bandcough"),
         options: [
           { id: "burning", label: "Burning or tingling in a strip around my chest or tummy" },
           { id: "skin", label: "The skin in that strip is sensitive to touch or clothing" },
           { id: "numb", label: "A numb patch on my chest or tummy" },
+          { id: "itch", label: "An itchy, burning or numb patch beside or below the shoulder blade, with no rash" },
           { id: "none", label: "None of these" }
         ]},
       { id: "T5", text: "How do you spend most of your day?", options: [
@@ -2184,12 +2187,14 @@ export const EXTRA_REGIONS = {
           { id: "pubic", label: "Pain in the middle, over the pubic bone" }
         ]},
       { id: "G6", text: "Which of these do you notice in the leg? Tick all that apply.",
-        askIf: ({ draw, all }) => !draw || ["knee", "ankle"].some((t) => draw.has(t)) ||
+        // Also with inner thigh pain: the obturator nerve. // Neurodynamics, second batch (Chandra, 6 Oct 2026; Butler NOI workbook, Shacklock NDS manual). FOR CLINICIAN REVIEW: wording.
+        askIf: ({ draw, ra, all }) => !draw || ["knee", "ankle"].some((t) => draw.has(t)) || [].concat(ra.G1 || []).includes("inner") ||
           [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
         options: [
           { id: "belowknee", label: "Pain below the knee", special: "backref" },
           { id: "pins", label: "Pins and needles or numbness in the leg or foot", special: "lowbackHip" },
           { id: "patch", label: "A burning or numb patch on the outer thigh, with no weakness" },
+          { id: "innerthigh", label: "Tingling, burning or numbness down the inner thigh, sometimes to the knee" },
           { id: "knee", label: "Knee pain, with the hip hardly hurting" },
           { id: "none", label: "None of these" }
         ]},
@@ -2318,7 +2323,8 @@ export const EXTRA_REGIONS = {
           { id: "nottried", label: "I have not tried" }
         ]},
       { id: "R5", text: "Which of these do you notice? Tick all that apply.",
-        askIf: ({ draw, all }) => !draw || ["knee", "ankle", "hip", "lowerback", "sij"].some((t) => draw.has(t)) ||
+        // Also with inner thigh pain: the obturator nerve. // Neurodynamics, second batch (Chandra, 6 Oct 2026; Butler NOI workbook, Shacklock NDS manual). FOR CLINICIAN REVIEW: wording.
+        askIf: ({ draw, ra, all }) => !draw || ["knee", "ankle", "hip", "lowerback", "sij"].some((t) => draw.has(t)) || [].concat(ra.R1 || []).includes("inner") ||
           [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
         // Early with nerve-type pain (or when the drawing is unknown).
         priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
@@ -2326,6 +2332,9 @@ export const EXTRA_REGIONS = {
           { id: "pins", label: "Pins and needles or numbness in the leg or foot", special: "lowbackHip" },
           { id: "belowknee", label: "Pain goes below the knee", special: "backref" },
           { id: "patch", label: "A burning or numb patch on the outer thigh, with no weakness" },
+          // Scored in the Hip guide (hip-obturator); here a card, for the same
+          // reason as the ankle's foot-nerve answers.
+          { id: "innerthigh", label: "Tingling, burning or numbness down the inner thigh, sometimes to the knee", special: "obturatorNerve" },
           { id: "weak", label: "Weakness: the knee gives way on stairs", special: "thighDoctor" },
           { id: "none", label: "None of these" }
         ]},
@@ -2649,7 +2658,9 @@ export const EXTRA_REGIONS = {
           { id: "none", label: "None of these" }
         ]},
       { id: "A7", text: "Which of these do you notice in the foot? Tick all that apply.",
-        askIf: ({ draw, all }) => !draw || ["lowerleg", "thigh", "lowerback", "sij"].some((t) => draw.has(t)) ||
+        // Also with pain at the front of the ankle or behind the outer ankle
+        // bone: the deep fibular and sural nerves. // Neurodynamics, second batch (Chandra, 6 Oct 2026; Butler NOI workbook, Shacklock NDS manual). FOR CLINICIAN REVIEW: wording.
+        askIf: ({ draw, ra, all }) => !draw || ["lowerleg", "thigh", "lowerback", "sij"].some((t) => draw.has(t)) || [].concat(ra.A1 || []).some((o) => o === "front" || o === "outerback") ||
           [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
         // Early with nerve-type pain (or when the drawing is unknown).
         priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
@@ -2657,6 +2668,10 @@ export const EXTRA_REGIONS = {
           { id: "top", label: "Pins and needles or numbness on the top of the foot" },
           { id: "sole", label: "Pins and needles or numbness in the sole or heel" },
           { id: "both", label: "Burning or numbness in both feet, like socks", special: "calfDoctor" },
+          // Scored in the Foot guide (foot-deepfibular, foot-sural); here a card,
+          // since scored ankle twins made this question crowd out the ankle's own.
+          { id: "web", label: "Numbness or tingling in the web between the big toe and the second toe", special: "footNerve" },
+          { id: "outeredge", label: "Tingling, burning or numbness along the outer edge of the foot or the outer heel", special: "footNerve" },
           { id: "slap", label: "The foot slaps down, or the toes catch", special: "footDrop" },
           { id: "none", label: "None of these" }
         ]},
@@ -2791,6 +2806,9 @@ export const EXTRA_REGIONS = {
           // S5: in children this is the Sever's test, not a stress fracture.
           { id: "squeeze", label: "Pain when squeezing the sides of the heel, or hopping", special: "footStress", specialIf: (a) => a.age !== "u18" && a.age !== "u5" },
           { id: "burning", label: "Burning or tingling in the heel or sole" },
+          // Baxter's nerve: builds through the day, not first-step pain.
+          // Neurodynamics, second batch (Chandra, 6 Oct 2026; Butler NOI workbook, Shacklock NDS manual). FOR CLINICIAN REVIEW: wording.
+          { id: "heelday", label: "Burning or aching on the inner side of the heel that builds through the day, rather than being worst on the first steps" },
           { id: "child", label: "Heel pain in a child aged about 8 to 14, worse with sport" }
         ]},
       { id: "B3", text: "About the ball of the foot: which apply? Tick all that apply.",
@@ -2819,10 +2837,14 @@ export const EXTRA_REGIONS = {
         { id: "running", label: "Running or jumping" },
         { id: "tightshoes", label: "Tight, narrow, or high-heeled shoes" },
         { id: "barefoot", label: "Walking barefoot or on hard floors" },
-        { id: "tiptoe", label: "Rising up onto my toes" }
+        { id: "tiptoe", label: "Rising up onto my toes" },
+        // The deep fibular nerve under the laces. // Neurodynamics, second batch (Chandra, 6 Oct 2026; Butler NOI workbook, Shacklock NDS manual). FOR CLINICIAN REVIEW: wording.
+        { id: "laces", label: "Tight laces, or ski, skate or work boots pressing on the top of the foot" }
       ]},
       { id: "B6", text: "Which of these do you notice in the foot? Tick all that apply.",
-        askIf: ({ draw, all }) => !draw || ["lowerleg", "thigh", "lowerback", "sij"].some((t) => draw.has(t)) ||
+        // Also with pain on the top of the foot, the outer edge or the toes:
+        // the deep fibular and sural nerves. // Neurodynamics, second batch (Chandra, 6 Oct 2026; Butler NOI workbook, Shacklock NDS manual). FOR CLINICIAN REVIEW: wording.
+        askIf: ({ draw, ra, all }) => !draw || ["lowerleg", "thigh", "lowerback", "sij"].some((t) => draw.has(t)) || [].concat(ra.B1 || []).some((o) => o === "arch" || o === "outer" || o === "toes") ||
           [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
         // Early with nerve-type pain (or when the drawing is unknown).
         priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).some((q) => q === "tingling" || q === "burning"),
@@ -2830,6 +2852,8 @@ export const EXTRA_REGIONS = {
           { id: "top", label: "Pins and needles or numbness on the top of the foot" },
           { id: "sole", label: "Pins and needles or numbness in the sole or heel" },
           { id: "both", label: "Burning or numbness in both feet, like socks", special: "calfDoctor" },
+          { id: "web", label: "Numbness or tingling in the web between the big toe and the second toe" },
+          { id: "outeredge", label: "Tingling, burning or numbness along the outer edge of the foot or the outer heel" },
           { id: "fromback", label: "Pain that starts in the back or buttock and travels down", special: "lowbackHip" },
           { id: "none", label: "None of these" }
         ]},
@@ -2970,6 +2994,14 @@ export const EXTRA_SPECIAL_CARDS = {
   // or drags, or weakness getting worse, is the doctor's (rf-footdrop, rf-legs).
   legNerveLoss: { title: "Numbness that stays, or leg weakness: please book promptly",
     body: "Numbness that does not go away, a foot or toes that catch, trouble rising onto your toes, or a knee that gives way can mean a nerve is not carrying its signals as well as it should, not just that it is sensitive. It needs a hands-on check of feeling, strength and reflexes soon, so please book an assessment promptly. If the weakness is <strong>getting worse</strong>, or your foot slaps down when you walk, see a doctor the same day." },
+  // Neurodynamics, second batch (6 Oct 2026): nerve answers asked outside the
+  // area that scores them.
+  nerveLossShoulder: { title: "A thinner shoulder blade muscle: please book promptly",
+    body: "When the muscle at the back of the shoulder blade looks hollow or thinner than the other side, the nerve that supplies it may not be carrying its signals well. It needs a hands-on check of strength soon, so please book an assessment promptly. If it came with severe pain that eased and was followed by weakness, or after a fall or a dislocation, see a doctor as well." },
+  footNerve: { title: "This may be a small nerve in the foot",
+    body: "Numbness in the web between the big toe and the second toe often comes from a nerve pinched on the <strong>top of the foot</strong> (tight laces or boots), and tingling along the <strong>outer edge of the foot</strong> from a nerve behind the outer ankle, often after sprains. Consider running the <strong>Foot</strong> guide too. Your assessment will check both. If the foot slaps down or the toes catch, see a doctor first." },
+  obturatorNerve: { title: "Inner thigh tingling can come from a nerve",
+    body: "Tingling, burning or numbness down the <strong>inner thigh</strong>, especially with an ache that builds with running or kicking, can come from the <strong>obturator nerve</strong> at the top of the inner thigh. Consider running the <strong>Hip</strong> guide too. Your assessment will check both. New numbness or weakness there after pelvic or hip surgery, or after childbirth, should be checked by your doctor." },
   meralgiaSource: { title: "Outer thigh burning is often a skin nerve",
     body: "Burning, tingling or numbness on the <strong>outer thigh</strong> only, worse with a tight belt or waistband, long standing or walking, is often a skin nerve pinched where it passes the front of the hip (<strong>meralgia paraesthetica</strong>) rather than the back. Consider running the <strong>Thigh</strong> guide too. Your assessment will check both." },
   handWeakness: { title: "Hand weakness should be checked by a doctor",

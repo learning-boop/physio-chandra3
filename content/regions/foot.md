@@ -237,3 +237,6 @@ Drawing: Both feet, soles and toes
 Answers: Age 65 or over · Gradually, no clear reason · More than 3 months · Subjective S15: Diabetes; Q6: burning or numbness in both feet, like socks; Q8: I have diabetes
 Flags: “Do both feet feel numb, burning, or tingling, like wearing socks?”
 Expect: top condition = None; see a doctor first; must not show = Plantar heel pain or Morton's neuroma as the only result; route = Physician first
+
+## changes 6 Oct 2026 (neurodynamics, second batch; DRAFT for Chandra's review)
+B2 gains "builds through the day on the inner heel" (heel nerve, foot-baxter); B5 gains "tight laces or boots on the top of the foot"; B6 gains the first web space and outer-edge nerve answers and now also opens for pain on the top of the foot, the outer edge or the toes (foot-deepfibular, foot-sural). Test patients N1-N4. Sources: Butler NOI neurodynamic techniques workbook; Shacklock NDS lower-quarter manual 2017-18.

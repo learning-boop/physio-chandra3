@@ -201,3 +201,6 @@ Drawing: Deep ache in the front of the left thigh
 Answers: Age 16 to 29 · After increasing running or training · 2 to 6 weeks; Q1: front of the thigh
 Flags: “Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night?”
 Expect: top condition = None; see a doctor first; must not show = Quadriceps strain without the physician-first message; route = Physician first
+
+## changes 6 Oct 2026 (neurodynamics, second batch; DRAFT for Chandra's review)
+R5 gains the inner thigh nerve answer as a card pointing to the Hip guide (obturatorNerve), and now also opens for inner thigh pain. Test patient N1. Sources: Butler NOI neurodynamic techniques workbook; Shacklock NDS lower-quarter manual 2017-18.

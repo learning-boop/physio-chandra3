@@ -180,3 +180,6 @@ Expect: must not show = osteoporosis; route = results
 CASE: 8. Under 50, sudden pain after a cough
 Answers: 30 to 49; after a cough; Q1 = middle of the back
 Expect: question 9 not asked; must not show = osteoporosis
+
+## changes 6 Oct 2026 (neurodynamics, second batch; DRAFT for Chandra's review)
+T4 gains "an itchy, burning or numb patch beside or below the shoulder blade, with no rash" and now also opens for pain beside the spine (upperback-notalgia). Test patient N1. Sources: Butler NOI neurodynamic techniques workbook; Shacklock NDS lower-quarter manual 2017-18.

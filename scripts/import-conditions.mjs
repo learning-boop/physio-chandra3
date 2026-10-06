@@ -117,6 +117,17 @@ for (const file of files) {
     gates = { ...(gates || {}), requiresOnset: onsets }
   }
 
+  // Optional `unlockedBy: <key>` — the answer (an option with `unlocks: key`)
+  // that opens this condition's gated question, carrying no weight of its own
+  // (6 Oct 2026: the suprascapular nerve behind "Back of the shoulder"). It
+  // does not block the condition; it tells the flow and the accuracy check
+  // which answer leads there, so a location answer needs no score.
+  if (meta.unlockedBy) {
+    const key = meta.unlockedBy
+    if (!allQuestions(region).some((q) => q.options.some((o) => o.unlocks === key))) { fail(file, `unlockedBy: no option in "${meta.region}" unlocks "${key}"`); continue }
+    gates = { ...(gates || {}), unlockedBy: key }
+  }
+
   authored.push({ region: meta.region, cond: {
     id: meta.id, name: meta.name, clin: meta.clin || '', ...(gates ? { gates } : {}),
     blurb: sections.blurb, noticed: sections.noticed,

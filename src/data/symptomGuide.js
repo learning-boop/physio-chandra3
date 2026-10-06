@@ -342,7 +342,7 @@ export const REGIONS = {
         {id:"top", label:"On top of the shoulder, at the bony point"},
         {id:"outer", label:"Outer upper arm, below the shoulder"},
         {id:"deep", label:"Deep inside, or at the front of the shoulder"},
-        {id:"back", label:"Back of the shoulder"},
+        {id:"back", label:"Back of the shoulder", unlocks:"scapback"},
         {id:"topneck", label:"Top of the shoulder spreading up into the neck"}
       ]},
       {id:"S2", text:"When you lift your arm out to the side and up, what happens?", options:[
@@ -383,6 +383,21 @@ export const REGIONS = {
         {id:"builtup", label:"The pain built up over a day or two to very severe, with no injury"},
         {id:"deadarm", label:"A “dead arm” feeling with the arm overhead"},
         {id:"acrossbody", label:"Pain on top of the shoulder when I reach across my body"}
+      ]},
+      // The suprascapular nerve (neurodynamics, second batch, 6 Oct 2026;
+      // Butler NOI workbook): asked only when the pain is at the back of the
+      // shoulder. In S6 its answer made that always-asked question crowd out
+      // the arm's and the neck's own. FOR CLINICIAN REVIEW: wording.
+      {id:"S9", text:"About the back of the shoulder: which apply? Tick all that apply.",
+        // Or after weakness turning the arm out (S6, the shoulder's first
+        // question): on a neck-to-shoulder line S1 is often not reached.
+        askIf: ({ ra }) => [].concat(ra.S1 || []).includes("back") || [].concat(ra.S6 || []).includes("weakness"),
+        priority: () => true,
+        options:[
+        {id:"wasting", label:"The back of my shoulder blade looks hollow, or thinner than the other side", special:"nerveLossShoulder"},
+        {id:"weakout", label:"Turning my arm outwards is weak or tires quickly"},
+        {id:"overhead", label:"It came on with overhead sport or work (volleyball, throwing, tennis, lifting overhead)"},
+        {id:"none", label:"None of these"}
       ]},
       {id:"S7", text:"Which hurts more: moving your neck, or moving your shoulder and arm?",
         askIf: ({ draw, all }) => !draw || ["neck", "ctj", "upperback", "elbow", "forearm", "wrist"].some((t) => draw.has(t)) ||

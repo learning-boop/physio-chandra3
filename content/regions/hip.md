@@ -261,3 +261,6 @@ Expect: must not show = deep gluteal
 CASE: 12. A twist in sport, cannot stand on the leg
 Answers: injury screen I1 twist or tackle; I2 Yes
 Expect: route = emergency
+
+## changes 6 Oct 2026 (neurodynamics, second batch; DRAFT for Chandra's review)
+G6 gains "tingling, burning or numbness down the inner thigh" and now also opens for inner thigh pain (hip-obturator). Test patient N1. Sources: Butler NOI neurodynamic techniques workbook; Shacklock NDS lower-quarter manual 2017-18.

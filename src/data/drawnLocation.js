@@ -132,6 +132,11 @@ export const LOCATION_QUESTIONS = {
     if (at.fy < -0.48) return at.lx < -0.02 ? 'heel' : at.lx > 0.04 ? 'ball' : null
     return at.lx < 0.05 ? 'arch' : null
   } },
+  // The shoulder (6 Oct 2026): a mark clearly on the back of the shoulder
+  // answers "Back of the shoulder", which opens the suprascapular nerve
+  // question (S9). Anything else is left to the person. The lx cut-off is an
+  // estimate, not measured on the mesh like the limb rows above.
+  shoulder: { q: 'S1', pick: (at) => (at.lx < -0.035 ? 'back' : null) },
   // The back of the neck runs from the shoulder line (fy 0.33) to the base of
   // the skull (0.41, where the head begins; Body3D.jsx). Marks in its top
   // part: the base of the skull; low on it: the middle or lower neck. The

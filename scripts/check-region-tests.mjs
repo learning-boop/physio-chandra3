@@ -365,6 +365,12 @@ const TESTS = {
       expect: { route: 'urgent' } },
   ],
   upperback: [
+    // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
+    // Butler NOI workbook and the Shacklock NDS manual.
+    { name: 'N1. An itchy, burning patch beside the shoulder blade, no rash: notalgia paraesthetica',
+      lines: [['upperback']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', T1: ['beside'], T4: ['itch'], T6: ['notstiff'], T2: ['sitting'] },
+      expect: { top: 'upperback/notalgia', asked: ['T4'], route: 'results' } },
     { name: '1. Desk worker, stiff mid back',
       lines: [['upperback']],
       answers: { age: '30-49', onset: 'sitting', duration: 'd3m', T1: ['spine'], T2: ['slump', 'sitting'], T5: ['desk'], T6: ['eases'], T8: ['tall'] },
@@ -731,6 +737,16 @@ const TESTS = {
       expect: { not: ['head/concussion'], route: 'results' } },
   ],
   shoulder: [
+    // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
+    // Butler NOI workbook and the Shacklock NDS manual.
+    { name: 'N1. Volleyball player, deep ache at the back of the shoulder, weak turning out, hollow shoulder blade: suprascapular nerve',
+      lines: [['shoulderR']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'd3m', S1: ['back'], S2: ['fullfree'], S9: ['wasting', 'weakout', 'overhead'], S6: ['weakness'], S3: ['throwing'] },
+      expect: { top: 'shoulder/suprascapular', asked: ['S9'], special: 'nerveLossShoulder', route: 'results' } },
+    { name: 'N2. Pain at the back of the shoulder with none of the nerve signs: suprascapular is not claimed',
+      lines: [['shoulderR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', S1: ['back'], S2: ['midarc'], S9: ['none'], S3: ['highshelf', 'lying'], S4: ['nostiff'] },
+      expect: { not: ['shoulder/suprascapular'], route: 'results' } },
     // "Outer right upper arm, below the shoulder": an upper-arm mark, which
     // also asks the shoulder.
     { name: '1. Rotator cuff related shoulder pain',
@@ -1037,6 +1053,12 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'], I1: 'no', H1: ['whole'], H4: ['thumb'], H5: ['use'], H8: ['fingers'] },
       expect: { top: 'hand/median', route: 'results' } },
   ],  hip: [
+    // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
+    // Butler NOI workbook and the Shacklock NDS manual.
+    { name: 'N1. Footballer, inner thigh ache with tingling down to the knee after training: obturator nerve',
+      lines: [['hipL']],
+      answers: { age: '18-29', onset: 'sport', duration: 'd6w', G1: ['inner'], G6: ['innerthigh'], G2: ['walking'] },
+      expect: { top: 'hip/obturator', asked: ['G6'], route: 'results' } },
     { name: '7. Clunk and cannot stand, 3 weeks after a hip replacement (911)',
       lines: [['hipL']],
       answers: { age: 'o64', onset: 'gradual', duration: 'd6w', I1: 'no' },
@@ -1102,6 +1124,12 @@ const TESTS = {
       answers: { age: '18-29', onset: 'twist', duration: 'd2w', I1: 'twist', I2: 'yes' },
       expect: { route: 'emergency' } },
   ],  thigh: [
+    // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
+    // Butler NOI workbook and the Shacklock NDS manual.
+    { name: 'N1. Tingling down the inner thigh: the obturator card points to the Hip guide',
+      lines: [['thighL']],
+      answers: { age: '18-29', onset: 'sport', duration: 'd6w', R1: ['inner'], R5: ['innerthigh'], R2: ['sprint'] },
+      expect: { asked: ['R5'], special: 'obturatorNerve', route: 'results' } },
     { name: '1. Hamstring strain while sprinting',
       lines: [['thighR']],
       answers: { age: '18-29', onset: 'sprint', duration: 'd2w', I1: 'sprint', I2: 'no', I4: 'no', I5: 'no',
@@ -1260,6 +1288,12 @@ const TESTS = {
         V1: ['lateral'], V6: ['outer'], V7: ['back'] },
       expect: { notRegion: ['leg'], areas: ['lowback'], route: 'results' } },
   ],  ankle: [
+    // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
+    // Butler NOI workbook and the Shacklock NDS manual.
+    { name: 'N1. Numb web space after tight ski boots, front of the ankle: the foot nerve card',
+      lines: [['ankleR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', A1: ['front'], A7: ['web'], A2: ['never'], A3: ['squat'] },
+      expect: { asked: ['A7'], special: 'footNerve', route: 'results' } },
     { name: 'CRPS 1. Foot and ankle cold, blotchy and sensitive 6 weeks after a sprain',
       lines: [['ankleR']],
       answers: { age: '30-49', onset: 'twist', duration: 'd3m', I1: 'no', A9: ['trigger', 'outofprop', 'colour', 'swelling', 'touch'] },
@@ -1337,6 +1371,24 @@ const TESTS = {
       answers: { age: '18-29', onset: 'twistout', duration: 'd2w', I1: 'eversion', I2: 'no', I3: 'no', I9: 'no', I4: 'no', I8: 'no', I5: 'no', I10: 'no', I11: 'no', I6: 'no', I7: 'no', A1: ['high'] },
       expect: { top: 'ankle/highankle', route: 'results' } },
   ],  foot: [
+    // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
+    // Butler NOI workbook and the Shacklock NDS manual.
+    { name: 'N1. Runner, inner heel burning that builds through the day, not first-step pain: heel nerve (Baxter)',
+      lines: [['footR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd3m', B1: ['heel'], B2: ['heelday', 'burning'], B5: ['standing', 'running'] },
+      expect: { top: 'foot/baxter', notTop: ['foot/pf'], route: 'results' } },
+    { name: 'N2. Classic first-step heel pain still reads as plantar fasciitis with the new heel answer in place',
+      lines: [['footR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', B1: ['heel'], B2: ['firststep'], B5: ['standing', 'barefoot'] },
+      expect: { top: 'foot/pf', notTop: ['foot/baxter'], route: 'results' } },
+    { name: 'N3. Aching on top of the foot, numb between the big and second toes, tight laces: deep fibular nerve',
+      lines: [['footL']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', B1: ['arch'], B6: ['web', 'top'], B5: ['laces', 'tightshoes'] },
+      expect: { top: 'foot/deepfibular', asked: ['B6'], route: 'results' } },
+    { name: 'N4. Tingling along the outer edge of the foot after sprains: sural nerve',
+      lines: [['footR']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'd6w', B1: ['outer'], B6: ['outeredge'], B5: ['running'] },
+      expect: { top: 'foot/sural', asked: ['B6'], route: 'results' } },
     { name: '1. Plantar heel pain',
       lines: [['footR']],
       answers: { age: '30-49', onset: 'load', duration: 'd3m', B1: ['heel'], B2: ['firststep'] },
