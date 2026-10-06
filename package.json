@@ -15,7 +15,8 @@
     "check:cases": "node scripts/check-cases.mjs",
     "cases:form": "node scripts/make-case-form.mjs",
     "review": "node scripts/make-review.mjs",
-    "import:conditions": "node scripts/import-conditions.mjs"
+    "import:conditions": "node scripts/import-conditions.mjs",
+    "signoff": "node scripts/make-signoff.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",
