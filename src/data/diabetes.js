@@ -32,10 +32,10 @@
 
 /* ── 1. The context question ── */
 export const DM_STATUS = {
-  id: 'dm', text: 'Have you been told you have diabetes or high blood sugar?',
+  id: 'dm', text: 'Has a doctor told you that you have diabetes or high blood sugar?',
   options: [
     { id: 'yes', label: 'Yes, diabetes (any type)' },
-    { id: 'pre', label: 'Prediabetes, or diabetes during a past pregnancy' },
+    { id: 'pre', label: 'Borderline diabetes (prediabetes), or diabetes only during a past pregnancy (gestational diabetes)' },
     { id: 'no', label: 'No' },
     { id: 'ns', label: 'Not sure' },
   ],

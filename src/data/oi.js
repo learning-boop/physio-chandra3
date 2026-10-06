@@ -29,8 +29,8 @@
 
 /* ── 1. The context tick ── */
 export const OI_STATUS = {
-  id: 'oi', text: 'Do you have osteogenesis imperfecta (brittle bone disease)?',
-  yes: 'Yes, I have osteogenesis imperfecta',
+  id: 'oi', text: 'Do you have brittle bone disease (osteogenesis imperfecta, OI)?',
+  yes: 'Yes, I have brittle bone disease (OI)',
 }
 export const oiOn = (a = {}) => a.oi === 'yes'
 
@@ -87,25 +87,25 @@ export const OI_DETAILS = [
       { id: 'other', label: 'Another type' },
       { id: 'ns', label: 'Not sure' },
     ] },
-  { id: 'oiGoal', text: 'Which best describes the main problem you want help with?',
+  { id: 'oiGoal', text: 'What is the main problem you want help with?',
     options: [
       { id: 'pain', label: 'Pain that has been around for months, in several areas' },
       { id: 'strength', label: 'Feeling weaker, less steady or less fit than I was' },
-      { id: 'loose', label: 'Joints that feel loose, click or give way' },
-      { id: 'spine', label: 'Pain mainly from a curved or rounded spine' },
-      { id: 'after', label: 'Recovering after a recent fracture or surgery' },
+      { id: 'loose', label: 'Loose joints that click or give way (hypermobility)' },
+      { id: 'spine', label: 'Pain mainly from a curved or rounded spine (scoliosis or kyphosis)' },
+      { id: 'after', label: 'Getting better after a recent broken bone (fracture) or operation' },
     ] },
-  { id: 'oiFalls', text: 'In the last year, how many fractures have you had, and have you fallen?',
+  { id: 'oiFalls', text: 'In the last year, how many broken bones (fractures) and falls have you had?',
     options: [
       { id: '0', label: 'No fractures and no falls' },
       { id: '1', label: 'One fracture, or one fall' },
       { id: '2', label: 'Two or more fractures, or more than one fall' },
     ] },
-  { id: 'oiCare', text: 'Are you seeing a bone or OI specialist?',
+  { id: 'oiCare', text: 'Do you see a bone specialist?',
     options: [
-      { id: 'yes', label: 'Yes, and I have had a bone-density scan in the last 2 to 3 years' },
+      { id: 'yes', label: 'Yes, and I have had a bone-strength scan (DXA) in the last 2 to 3 years' },
       { id: 'lost', label: 'No, or not for years, or no scan for years' },
-      { id: 'stopped', label: 'I have stopped bone medicine (such as Prolia/denosumab, or a bisphosphonate) without a review' },
+      { id: 'stopped', label: 'I stopped a bone-strengthening medicine (such as Prolia/denosumab, or a bisphosphonate) without my doctor checking' },
       { id: 'ns', label: 'Not sure' },
     ] },
 ]

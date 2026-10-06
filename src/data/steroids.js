@@ -33,11 +33,11 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 export const STEROID_STATUS = {
-  id: 'steroid', text: 'Do you take steroid medicine, or have you in the past year?',
+  id: 'steroid', text: 'Do you take steroid medicine (corticosteroids), or have you in the past year?',
   options: [
     // 6 Oct 2026, general conditions cross-check (approved by Chandra), S9: adrenal suppression can follow about 4 weeks; Addison's is named.
-    { id: 'tabs', label: 'Yes, steroid tablets (such as prednisone, dexamethasone, or hydrocortisone replacement, including for Addison\'s disease) for 4 weeks or more' },
-    { id: 'other', label: 'Yes, other steroids: high-dose inhalers, repeated injections, or a herbal, skin or body-building product that may contain steroids' },
+    { id: 'tabs', label: 'Yes, steroid tablets for 4 weeks or more (such as prednisone, dexamethasone, or hydrocortisone taken because your body does not make enough, as in Addison\'s disease)' },
+    { id: 'other', label: 'Yes, other steroids: strong (high-dose) inhalers, repeated injections, or a herbal, skin or body-building product that may contain steroids' },
     { id: 'no', label: 'No, or only a short course (less than 4 weeks)' },
     { id: 'ns', label: 'Not sure' },
   ],

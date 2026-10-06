@@ -41,9 +41,9 @@ export const SPONDY_CAUTION = {
    many are diagnosed late). */
 export const SPONDY_STATUS = {
   id: 'spondy',
-  text: 'Has a doctor confirmed a stress injury in your lower back (spondylolysis or a small slip) and cleared you for rehabilitation?',
+  text: 'Has a doctor found a stress crack in a lower back bone (spondylolysis) or a small slip of that bone (spondylolisthesis), and said you can start rehab?',
   options: [
-    { id: 'yes', label: 'Yes, it has been scanned and I have been cleared' },
+    { id: 'yes', label: 'Yes, I have had a scan and been told I can start' },
     { id: 'no', label: 'No, or it has not been checked yet' },
   ],
 }

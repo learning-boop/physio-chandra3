@@ -16,7 +16,7 @@ Diabetes is not a region condition, and the guide never diagnoses it or shows a 
 
 ## On the site
 
-1. **The context question** (intake §4 overlay, open item 1: adopted). On "A little about you", after age and birth sex: "Have you been told you have diabetes or high blood sugar?" (Yes, diabetes / Prediabetes, or diabetes during a past pregnancy / No / Not sure). Required to continue. Stored as `answers.dm`.
+1. **The context question** (intake §4 overlay, open item 1: adopted). On "A little about you", after age and birth sex: "Has a doctor told you that you have diabetes or high blood sugar?" (Yes, diabetes / Borderline diabetes (prediabetes), or diabetes only during a past pregnancy (gestational diabetes) / No / Not sure). Required to continue. Stored as `answers.dm`.
 2. **Red flags first** (intake §6, module §6). With diabetes, `DM_RED_FLAGS` go to the front of the safety pages, minus any the page already asks:
    - 911: ketoacidosis (vomiting or stomach pain with deep fast breathing, fruity breath, extreme thirst, drowsiness or confusion); "silent" heart symptoms with exertion (skipped where the area already asks its own heart question).
    - Emergency department: a black, dusky or cold toe, or a spreading foot infection (skipped where the foot asks ft-diabeticinfection).

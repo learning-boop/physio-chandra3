@@ -12,7 +12,7 @@ Almost everyone with OI who reaches the site already knows they have it, so this
 
 ## On the site
 
-- **The tick (open item 1, adopted):** "Do you have osteogenesis imperfecta (brittle bone disease)?" on "A little about you", as a single OPTIONAL tick ("Yes, I have osteogenesis imperfecta"). It is optional, unlike the diabetes and steroid questions, because OI is about 1 in 10,000 to 15,000: every visitor should not have to answer it. Taking the tick off clears the details.
+- **The tick (open item 1, adopted):** "Do you have brittle bone disease (osteogenesis imperfecta, OI)?" on "A little about you", as a single OPTIONAL tick ("Yes, I have brittle bone disease (OI)"). It is optional, unlike the diabetes and steroid questions, because OI is about 1 in 10,000 to 15,000: every visitor should not have to answer it. Taking the tick off clears the details.
 - **Red flags first, in every area** (document §6), after the obstetric ones and before diabetes and steroids, minus any the page already asks:
   - Emergency department: after a fall or knock, a limb that is bent, cannot take weight or be used, or is numb, pale or cold (911 if cold, pale, numb, or no safe way there).
   - Emergency department today: a knock to the head or neck in the last few days, even small, not yet checked.

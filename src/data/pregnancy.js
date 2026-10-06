@@ -48,8 +48,8 @@ export const PREG_BIRTH = {
   id: 'pregBirth', text: 'How was your baby born? (optional)',
   options: [
     { id: 'vaginal', label: 'Vaginal birth' },
-    { id: 'assisted', label: 'Vaginal birth with forceps, ventouse or a large tear' },
-    { id: 'caesarean', label: 'Caesarean section' },
+    { id: 'assisted', label: 'Vaginal birth with forceps, a suction cup (ventouse) or a large tear' },
+    { id: 'caesarean', label: 'C-section (caesarean)' },
   ],
 }
 
