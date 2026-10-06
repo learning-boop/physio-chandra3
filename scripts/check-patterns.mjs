@@ -2146,5 +2146,30 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /\{gateList\(list\)\}/.test(src) && /const gateClosed = !q\.group && !listOpen\(q\)/.test(src))
 }
 
+// ── The "also worth telling us" groups (../src/data/cautionGroups.js) ──
+{
+  const nodeFs = await import('node:fs')
+  const { CAUTION_GROUPS, cautionRows, tickedIn, groupOfCaution } = await imp('src/data/cautionGroups.js')
+  // Cautions are declared in the component AND in their own data modules
+  // (paget.js, osteomalacia.js, thyroid.js …), so both are scanned.
+  const files = ['/src/components/PainAssessment.jsx',
+    ...nodeFs.readdirSync(root + '/src/data').filter((f) => f.endsWith('.js')).map((f) => '/src/data/' + f)]
+  const declared = files.flatMap((f) => [...nodeFs.readFileSync(root + f, 'utf8').matchAll(/id: '(ca-[a-z]+)'/g)].map((m) => m[1]))
+  // Every caution on the screen must sit in exactly one group, so a new
+  // condition cannot be added and quietly lost in an ungrouped list.
+  const uniq = [...new Set(declared)]
+  const ungrouped = uniq.filter((id) => !groupOfCaution(id))
+  check('every caution belongs to a group', !ungrouped.length, ungrouped)
+  const members = CAUTION_GROUPS.flatMap((g) => g.members)
+  check('no caution is in two groups', members.length === new Set(members).size)
+  check('no group names a caution that does not exist', members.every((id) => uniq.includes(id)), members.filter((id) => !uniq.includes(id)))
+  const rows = cautionRows(uniq.map((id) => ({ id, text: id })))
+  check('the whole list becomes five openers, not twenty-five rows', rows.length === 5, rows.length)
+  check('each opener names the conditions it holds', rows.every((r) => r.group && r.group.names.length > 20))
+  const one = cautionRows([{ id: 'ca-paget', text: 'x' }])
+  check('a group with only one condition showing is shown as that condition', one.length === 1 && !!one[0].flag, one)
+  check('the opener counts how many are ticked', tickedIn(CAUTION_GROUPS[0], ['ca-bone', 'ca-paget', 'ca-ms']) === 2)
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

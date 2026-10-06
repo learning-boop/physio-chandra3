@@ -37,6 +37,7 @@ import { PAGET_CAUTION, pagetPanel } from '../data/paget'
 import { BONE_TUMOUR_CAUTION, boneTumourPanel, TUMOUR_IDS, BONE_WHY_YOUNG, BONE_WATCH, boneWatch } from '../data/boneTumour'
 import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
+import { cautionRows, tickedIn } from '../data/cautionGroups'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -493,6 +494,8 @@ export default function PainAssessment() {
   const [zones, setZones] = useState([])
   const [answers, setAnswers] = useState({})   // { q1: 'text'|'__other', q1_other: '' }
   const [flags, setFlags] = useState([])       // ids from safetyChecks, plus '__other'
+  // Which "also worth telling us" groups are open (../data/cautionGroups.js).
+  const [openCautions, setOpenCautions] = useState([])
   const [flagOther, setFlagOther] = useState('')
   const [clearSignal, setClearSignal] = useState(0)
   const [undoSignal, setUndoSignal] = useState(0)
@@ -1419,7 +1422,7 @@ export default function PainAssessment() {
     setFlaggedAt(null)
     setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
     setClearSignal((n) => n + 1); setFromReview(false); setDrawMode(false); setShowAnswers(false); setReview(null)
-    setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined)
+    setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined); setOpenCautions([])
     setVisitCode(null); codeAsked.current = false
   }
 
@@ -2426,16 +2429,47 @@ export default function PainAssessment() {
                   <span aria-hidden="true" style={qMark} />
                   <span>Also worth telling us — these do not stop physiotherapy</span>
                 </p>
-                  {CAUTION_CHECKS.filter((f) => forPerson(f, who) && !(f.id === 'ca-preg' && answers.preg)).map((f, i) => {
-                    const sel = flags.includes(f.id)
-                    return (
-                      <button key={f.id} style={chip(sel)}
-                        onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
-                        <span style={letterStyle(sel)}>{i + 1}</span>
-                        <span>{f.text}</span>
-                      </button>
-                    )
-                  })}
+                  {/* Grouped: 25 conditions on one screen, one tap from the
+                      results, is a wall of text (Chandra, 6 Oct 2026). Each
+                      group NAMES what it holds, so nothing is hidden, and a
+                      group with anything ticked stays open. */}
+                  {cautionRows(CAUTION_CHECKS.filter((f) => forPerson(f, who) && !(f.id === 'ca-preg' && answers.preg)))
+                    .map((row) => {
+                      const tickChip = (f) => {
+                        const sel = flags.includes(f.id)
+                        return (
+                          <button key={f.id} style={chip(sel)} aria-pressed={sel}
+                            onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
+                            <span style={letterStyle(sel)}>{sel ? '✓' : '·'}</span>
+                            <span>{f.text}</span>
+                          </button>
+                        )
+                      }
+                      if (row.flag) return tickChip(row.flag)
+                      const { group, members } = row
+                      const n = tickedIn(group, flags)
+                      const open = openCautions.includes(group.id) || n > 0
+                      return (
+                        <div key={group.id} style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                          <button style={chip(n > 0)} aria-expanded={open}
+                            onClick={() => setOpenCautions((cur) => cur.includes(group.id) ? cur.filter((x) => x !== group.id) : [...cur, group.id])}>
+                            <span style={letterStyle(n > 0)}>{open ? '▾' : '▸'}</span>
+                            <span>
+                              {group.title}
+                              {n > 0 && <span style={{ color: GOLD, fontWeight: 600 }}> · {n} selected</span>}
+                              <span style={{ display: 'block', fontSize: 13.5, color: 'rgba(255,255,255,0.55)', marginTop: 3, lineHeight: 1.5 }}>
+                                {group.names}
+                              </span>
+                            </span>
+                          </button>
+                          {open && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 9, paddingLeft: 14, borderLeft: '1px solid rgba(201,169,110,0.25)' }}>
+                              {members.map(tickChip)}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
                 </div>
 
                 {/* Osteopenia ticked (../data/osteopenia.js): optional risk
