@@ -35,13 +35,13 @@ const NARROW = [
       'af-septic', 'af-necfasc', 'ft-necfasc', 'ft-diabeticinfection', 'dm-foot-black'] },
   { id: 'em-limb', title: 'Signs of pressure or blocked blood flow in an arm or leg',
     members: ['kf-compartment', 'erf-compartment', 'frf-compartment', 'wrf-compartment', 'hnd-compartment', 'tgf-compartment', 'lgf-compartment',
-      'af-compartment', 'ft-compartment', 'lgf-ischaemia', 'af-ischaemia', 'ft-ischaemia', 'srf-rhabdo', 'arf-rhabdo', 'hpf-rhabdo', 'tgf-rhabdo', 'lgf-rhabdo'] },
+      'af-compartment', 'ft-compartment', 'lgf-ischaemia', 'af-ischaemia', 'ft-ischaemia', 'srf-rhabdo', 'arf-rhabdo', 'hpf-rhabdo', 'tgf-rhabdo', 'lgf-rhabdo', 'ws-rhabdo'] },
   { id: 'em-belly', title: 'Sudden, severe pain in the tummy, the groin or the pelvis',
     members: ['srf-kehr', 'nrf-kehr', 'srf-ectopic', 'trf-pancreas', 'jrf-pancreas', 'jrf-testis', 'hpf-ectopic', 'hpf-torsion', 'hpf-strangulated'] },
   { id: 'em-pregnancy', title: 'Warning signs in pregnancy or after a birth',
     members: ['prf-pregnancy-bleed', 'prf-pregnancy', 'pg-bleed', 'pg-abdo', 'pg-earlybleed', 'pg-labour', 'pg-preeclampsia', 'pg-movements', 'pg-pph'] },
   { id: 'em-mind', title: 'Sudden changes in thinking or mood',
-    members: ['pg-mind', 'st-mind'] },
+    members: ['pg-mind', 'st-mind', 'ws-crisis'] },
   { id: 'em-body', title: 'Signs of a blood-sugar or hormone emergency',
     members: ['dm-dka', 'dm-hhs', 'st-adrenal'] },
 ]
@@ -217,6 +217,8 @@ export const EM_SHORT = {
   // Thinking and mood
   'pg-mind': 'thoughts of harming yourself or your baby, or seeing or hearing things',
   'st-mind': 'confusion, seeing or hearing things, or thoughts of harming yourself',
+  'ws-crisis': 'thoughts of harming yourself, or feeling unable to cope',
+  'ws-rhabdo': 'severe muscle pain or weakness with urine dark like cola',
   // Blood sugar and hormones
   'dm-dka': 'vomiting with deep fast breathing, fruity breath or drowsiness',
   'dm-hhs': 'very high sugars with extreme thirst and drowsiness',

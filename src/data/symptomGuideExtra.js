@@ -938,6 +938,94 @@ export const EXTRA_REGIONS = {
      Reached from a narrow midline strip on the body map where the buttock
      crease begins (COCCYX_* in src/components/Body3D.jsx).
      Conditions: content/conditions/coccyx-*.md. */
+  /* ══════════════ PAIN IN MANY PLACES (path 4) ══════════════
+     Chandra, 6 Oct 2026: a drawing with pain in 4 or more areas, on both
+     sides, above and below the waist (the ACR widespread pattern), whose owner
+     says the pain is "in many places, most days", is not asked each area's
+     joint questions and red flags. It follows this route instead: the scored
+     block of the signed "Fibromyalgia" document (section 4), its look-alikes
+     (section 5) and the red flags it adds (section 6). The systemic screens
+     the drawing already raises (thyroid, myositis, calcium, PMR, inflammatory)
+     still run (./patternChecks.js), as do the universal checks.
+     Scoring (document section 4): Q1 areas 3 (answered by the drawing, WS1),
+     Q2 how long (duration: more than 3 months 3, 6 weeks to 3 months 1),
+     Q3 tiredness, sleep, thinking 3, Q4 tender to light pressure or moving
+     pain 2, Q5 no single cause and no map 2, Q6 related sensitivities 2.
+     Maximum 15. The card ("possible") shows at 6, the site's 40%; the full
+     explainer (./widespreadPain.js) at the document's route, 9 or more or Q1
+     and Q2 both 3. ⚠ FOR CLINICIAN REVIEW: wording and the look-alike question.
+     Conditions: content/conditions/widespread-*.md. */
+  widespread: {
+    name: "Pain in many places",
+    redFlags: [
+      // Document section 6, the items the cross-region screen did not have.
+      { id: "ws-medicine", tier: "urgent", why: "Some medicines can cause muscle aching: a doctor or pharmacist should check",
+        text: "Did the aching all over start after starting or changing a medicine (for example one for cholesterol), or after cancer treatment?" },
+      { id: "ws-rhabdo", tier: "emergency", group: "rhabdo", why: "Severe muscle pain with dark urine can mean muscle breakdown, which can affect the kidneys",
+        text: "Do you have severe muscle pain or weakness with urine that is dark like cola?" },
+      { id: "ws-crisis", tier: "emergency", goTo: "crisis", why: "Support is available now, any time of day or night",
+        text: "Have you had thoughts of harming yourself, or do you feel unable to cope right now?" }
+    ],
+    context: [
+      { id: "age", text: "Your age?", options: [
+        { id: "u5", label: "Under 5" },
+        { id: "u18", label: "5 to 15" },
+        { id: "18-29", label: "16 to 29" },
+        { id: "30-49", label: "30 to 49" },
+        { id: "50-64", label: "50 to 64" },
+        { id: "o64", label: "65 or over" }
+      ]},
+      // The document's Q2: how long pain has been present most days.
+      { id: "duration", text: "How long has pain been present on most days?", options: [
+        // Recent widespread aching is not a sensitised pain system (IASP 2021:
+        // 3 months or more): the doctor card, and -8 against widespread-wsp.
+        { id: "d6w", label: "Less than 6 weeks", special: "wsRecent" },
+        { id: "d3m", label: "6 weeks to 3 months" },
+        { id: "o3m", label: "More than 3 months" }
+      ]}
+    ],
+    questions: [
+      // The document's Q1, answered by the drawing (PainAssessment.jsx, drawn):
+      // never shown, so it costs no screen, but it counts towards the score.
+      { id: "WS1", text: "How many areas of your body hurt at the moment?", askIf: () => false, options: [
+        { id: "many", label: "Many: both sides, above and below the waist" }
+      ]},
+      { id: "WS3", text: "Over the last week, how have your tiredness, sleep and concentration been?", priority: () => true, options: [
+        { id: "most", label: "Tired most of the time, sleep does not refresh me, and it is hard to think clearly" },
+        { id: "some", label: "Some of these, on some days" },
+        { id: "fine", label: "Mostly fine" }
+      ]},
+      { id: "WS4", text: "Do your muscles hurt when pressed lightly, or does the pain move from place to place over days or weeks?", priority: () => true, options: [
+        { id: "both", label: "Yes, both" },
+        { id: "one", label: "One of these" },
+        { id: "no", label: "No" }
+      ]},
+      // The document's "master gate": asked even when the result looks clear (mustAsk).
+      { id: "WS5", text: "Did it start with a single injury, and does it clearly follow one joint, a nerve line or one muscle?", priority: () => true, mustAsk: true, options: [
+        { id: "nomap", label: "No: there was no single cause, and it does not follow a pattern I can trace" },
+        { id: "clear", label: "Yes: one clear injury, or it follows one clear line or joint", special: "oneArea" }
+      ]},
+      // One answer, so the document's "two or more 2, one 1" keeps its maximum of 2.
+      { id: "WS6", text: "How many of these do you also have: frequent headaches, an irritable bowel, jaw pain, or sensitivity to light, noise or smells?", priority: () => true, options: [
+        { id: "two", label: "Two or more of them" },
+        { id: "one", label: "One of them" },
+        { id: "none", label: "None of them" }
+      ]},
+      // Look-alikes (document section 5), one question: inflammatory arthritis
+      // and PMR (doctor), osteoarthritis in several joints, hypermobility, and
+      // a diagnosis already made (no family-doctor line then).
+      { id: "WS7", text: "Which of these also apply? Tick all that apply.", priority: () => true, mustAsk: true, options: [
+        { id: "amstiff", label: "Stiff for more than an hour in the morning, or joints that look swollen or feel hot", special: "wsInflam" },
+        { id: "pmr", label: "I am over 50 and both shoulders and hips are stiff and sore, worst in the morning", special: "wsInflam" },
+        { id: "usejoints", label: "The pain is mainly in my joints: worse the more I use them, easier with rest" },
+        { id: "knobbly", label: "Knobbly finger joints, or a knee or hip that creaks and stiffens after sitting" },
+        { id: "flexible", label: "My joints are very flexible, and I often sprain or dislocate them", special: "hypermobile" },
+        { id: "diagnosed", label: "A doctor has already diagnosed fibromyalgia" },
+        { id: "none", label: "None of these" }
+      ]}
+    ],
+    conditions: []
+  },
   coccyx: {
     name: "Tailbone (coccyx)",
     redFlags: [
@@ -3025,6 +3113,15 @@ export const EXTRA_SPECIAL_CARDS = {
   // or drags, or weakness getting worse, is the doctor's (rf-footdrop, rf-legs).
   legNerveLoss: { title: "Numbness that stays, or leg weakness: please book promptly",
     body: "Numbness that does not go away, a foot or toes that catch, trouble rising onto your toes, or a knee that gives way can mean a nerve is not carrying its signals as well as it should, not just that it is sensitive. It needs a hands-on check of feeling, strength and reflexes soon, so please book an assessment promptly. If the weakness is <strong>getting worse</strong>, or your foot slaps down when you walk, see a doctor the same day." },
+  // Pain in many places (path 4, 6 Oct 2026; the "Fibromyalgia" document's look-alikes).
+  wsRecent: { title: "Aching in many places that started recently",
+    body: "When aching all over has started in the last few weeks, it is worth seeing your <strong>family doctor</strong>, especially after an illness, an injury or a change in medicines, or with fever, tiredness or stiffness in the mornings. A few simple blood tests can check for causes such as a viral illness or an inflammatory condition. Physiotherapy can help alongside." },
+  oneArea: { title: "One area may be the place to start",
+    body: "When pain started with one clear injury, or follows one joint, nerve or muscle, it is usually best looked at area by area. Consider running the guide again and choosing <strong>the area that bothers you most</strong>; your assessment will look at the others too." },
+  wsInflam: { title: "Please see your doctor as well",
+    body: "Morning stiffness lasting more than an hour, joints that look swollen or feel hot, or (over 50) stiff and sore shoulders and hips that are worst in the morning can point to an <strong>inflammatory condition</strong> such as inflammatory arthritis or polymyalgia rheumatica. A few blood tests from your family doctor can check for these. Physiotherapy can help alongside." },
+  hypermobile: { title: "Very flexible joints",
+    body: "Joints that are very flexible, with frequent sprains or dislocations, often go with aches in many places. This is worth mentioning at your assessment: strength and control work helps a great deal, and sometimes your doctor or a rheumatologist is involved too." },
   // Neurodynamics, second batch (6 Oct 2026): nerve answers asked outside the
   // area that scores them.
   // The arm self-tests (the neck's N15, 6 Oct 2026; Butler's active quick tests).

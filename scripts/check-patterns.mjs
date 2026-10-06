@@ -710,8 +710,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   // 59 with the low back's sexual-function question (rf-sexual), the fifth
   // cauda equina red flag of the GIRFT 2023 Pathway (CaudaEquina document,
   // signed 5 Oct 2026).
-  check('911 split: 59 region flags send the person to emergency now',
-    em.filter((f) => !f.call911).length === 59, em.filter((f) => !f.call911).map((f) => f.id))
+  // 61 with the many-places route's dark-urine and self-harm questions
+  // (path 4, 6 Oct 2026; the Fibromyalgia document's section 6).
+  check('911 split: 61 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 61, em.filter((f) => !f.call911).map((f) => f.id))
   check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
   // A shared group must lead to the same place in every area that asks it.
   const byGroup = {}
@@ -1849,7 +1851,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     G.smartArea([{ type: 'chest' }]) === 'upperback' && G.smartArea([{ type: 'flank' }]) === 'tlj' && G.smartArea([{ type: 'chest' }, { type: 'upperback' }]) === 'upperback' &&
     G.smartAreas([{ type: 'chest' }, { type: 'upperback' }]) === null && JSON.stringify(G.smartAreas([{ type: 'knee' }, { type: 'stomach' }])) === 'null')
   check('Several areas: grouped on the doctor page; the injury screens keep their place after it (only a single area moves its injury question first)',
-    /const area = smartArea\(flowZ\) \|\| smartAreas\(flowZ\)/.test(src) && /const smartFirst = injuryApplies && !!smartArea\(flowZ\)/.test(src))
+    /const area = (widespreadPath \? null : )?smartArea\(flowZ\) \|\| smartAreas\(flowZ\)/.test(src) && /const smartFirst = injuryApplies && !!smartArea\(flowZ\)/.test(src))
 }
 
 // ── 51. "Also worth considering" (Chandra, 4 Oct 2026) ──

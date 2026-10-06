@@ -275,6 +275,15 @@ function gaveSignal(questions, ra) {
    slots: it is an optional extra screen for the people it fits, and taking a
    slot would cost the question that tells a nerve root from a sensitive
    nerve (N3). */
+/* The many-places route's safety questions (path 4, 6 Oct 2026): its own
+   few, plus every drawn area's EMERGENCY questions (`areaFlags`, e.g. from
+   regionRedFlags) that it does not already ask under the same group. */
+export function widespreadFlags(areaFlags = []) {
+  const own = REGIONS.widespread.redFlags
+  const groups = new Set(own.flatMap((f) => [].concat(f.group || [])))
+  return [...own, ...areaFlags.filter((f) => f.tier === 'emergency' && ![].concat(f.group || []).some((g) => groups.has(g)))]
+}
+
 export const isBonus = (id) => Object.values(REGIONS).some((r) => r.questions.some((q) => q.id === id && q.bonus))
 
 export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTIONS, ctx = {}) {
@@ -307,11 +316,16 @@ export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTI
   const cons = sepW ? areas.flatMap((a) => contenders(a.region, a.open)).sort((x, y) => y.rank - x.rank).slice(0, 3) : []
   const live = []
   for (const { k, region, ra, open } of areas) {
-    if (answeredRegionCount(region, ra) >= 2 && shouldStop(region, ra)) continue
+    // Once one condition is clearly ahead the area stops, except for a
+    // `mustAsk` question not yet asked (6 Oct 2026: the many-places route's
+    // master gate and look-alikes are never skipped by stopping early).
+    const stopped = answeredRegionCount(region, ra) >= 2 && shouldStop(region, ra)
+    if (stopped && !region.questions.some((q) => q.mustAsk && !askedIds.includes(q.id))) continue
     const askedHere = region.questions.filter((q) => askedIds.includes(q.id))
     const yields = (region.yieldsTo || []).some((y) => keys.includes(y)) || !!(ctx.minor && ctx.minor.has(k))
     const weight = askedHere.length ? (gaveSignal(askedHere, ra) ? 1 : SILENT_AREA_WEIGHT) : yields ? YIELD_WEIGHT : 1
     for (const q of region.questions) {
+      if (stopped && !q.mustAsk) continue
       if (askedIds.includes(q.id) || (q.same && askedSame.has(q.same)) || !isRelevant(q, region, open)) continue
       if (LOCATION_QUESTION_IDS.has(q.id) && [].concat(answers[q.id] ?? []).length) continue
       if (q.askIf && !q.askIf({ draw, ra: open, all })) continue

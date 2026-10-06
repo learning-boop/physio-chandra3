@@ -10,7 +10,7 @@ import { REGIONS, ZONE_TO_REGION } from '../src/data/symptomGuide.js'
 import {
   questionRegions, needsAreaChoice, buildScreens, nextQuestion, rankAcross, regionAnswers,
   specialsAcross, regionRedFlags, MAX_SCORED_QUESTIONS,
-  twinIds,
+  twinIds, widespreadFlags,
 } from '../src/data/assessmentFlow.js'
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
 import { spondyDiagnosed } from '../src/data/spondylolysis.js'
@@ -633,6 +633,59 @@ const TESTS = {
       answers: { age: '30-49', onset: 'lift', duration: 'd6w', P1: ['lowback'], P4: ['belowknee'], P7: ['lot'] },
       // Either low-back card answers the document's "message suggesting the low back".
       expect: { notTop: ['sij/sij'], special: ['lowbackSource', 'backref'], route: 'results' } },
+  ],
+  // Path 4, pain in many places (6 Oct 2026): the signed Fibromyalgia
+  // document's scored block (section 4), look-alikes (5) and red flags (6).
+  // `path: 'widespread'` = "I have pain in many places, on most days".
+  widespread: [
+    { name: '1. Pain everywhere for a year, exhausted, sleep does not refresh, tender to light touch, headaches and IBS: persistent widespread pain',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['kneeL'], ['kneeR']],
+      answers: { age: '30-49', duration: 'o3m', WS3: 'most', WS4: 'both', WS5: 'nomap', WS6: 'two', WS7: ['none'] },
+      // The master gate (WS5) and the look-alikes (WS7) are always asked (mustAsk).
+      expect: { top: 'widespread/wsp', asked: ['WS3', 'WS5', 'WS7'], notAsked: ['N9', 'L1', 'S1', 'K1'], route: 'results' } },
+    { name: '2. The route asks its own safety questions and every drawn area emergency one (cauda equina, septic knee), not the doctor-tier lists',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['kneeL'], ['kneeR']],
+      answers: { age: '30-49', duration: 'o3m', WS3: 'most' },
+      expect: { flagOffered: ['ws-medicine', 'ws-rhabdo', 'ws-crisis', 'rf-saddle', 'rf-bladder', 'nrf-cord', 'kf-septic'], noFlag: ['rf-cancer', 'rf-aaa-slow', 'nrf-myelo', 'srf-rhabdo'], route: 'results' } },
+    { name: '2b. Saddle numbness ticked on the widespread route: emergency',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['kneeL'], ['kneeR']],
+      answers: { age: '30-49', duration: 'o3m' },
+      flags: ['rf-saddle'],
+      expect: { route: 'emergency' } },
+    { name: '2c. Aching all over for 3 weeks, exhausted, tender, headaches: not a sensitive pain system yet - the see-your-doctor card',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['kneeL'], ['kneeR']],
+      answers: { age: '30-49', duration: 'd6w', WS3: 'most', WS4: 'both', WS5: 'nomap', WS6: 'two', WS7: ['none'] },
+      expect: { not: ['widespread/wsp'], special: 'wsRecent', route: 'results' } },
+    { name: '3. 68, joints ache with use and ease with rest, knobbly fingers, no tiredness: several-joint osteoarthritis, not widespread pain',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['handL'], ['handR'], ['kneeL'], ['kneeR']],
+      answers: { age: 'o64', duration: 'o3m', WS3: 'fine', WS4: 'no', WS5: 'clear', WS6: 'none', WS7: ['usejoints', 'knobbly'] },
+      expect: { top: 'widespread/multioa', not: ['widespread/wsp'], route: 'results' } },
+    { name: '4. Over 50, stiff shoulders and hips worst in the morning: the see-your-doctor card',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['hipL'], ['hipR']],
+      answers: { age: 'o64', duration: 'd3m', WS3: 'some', WS4: 'no', WS5: 'nomap', WS6: 'none', WS7: ['pmr', 'amstiff'] },
+      expect: { special: 'wsInflam', not: ['widespread/wsp'], route: 'results' } },
+    { name: '5. Started with one clear injury: the one-area card',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['kneeL'], ['kneeR']],
+      answers: { age: '30-49', duration: 'd3m', WS3: 'fine', WS4: 'no', WS5: 'clear', WS6: 'none', WS7: ['none'] },
+      expect: { special: 'oneArea', not: ['widespread/wsp'], route: 'results' } },
+    { name: '6. Thoughts of harming yourself: the 9-8-8 crisis page',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['kneeL'], ['kneeR']],
+      answers: { age: '30-49', duration: 'o3m' },
+      flags: ['ws-crisis'],
+      expect: { route: 'emergency' } },
+    { name: '7. Very flexible joints, frequent sprains: the hypermobility card alongside',
+      path: 'widespread',
+      lines: [['neck'], ['lowerback'], ['shoulderL'], ['shoulderR'], ['kneeL'], ['kneeR']],
+      answers: { age: '18-29', duration: 'o3m', WS3: 'some', WS4: 'one', WS5: 'nomap', WS6: 'one', WS7: ['flexible'] },
+      expect: { top: 'widespread/wsp', special: 'hypermobile', route: 'results' } },
   ],
   coccyx: [
     { name: '1. Bruised tailbone after a fall',
@@ -1506,9 +1559,15 @@ function run(rk, t) {
   }
   const referral = detectReferral(t.lines)
   const flowZ = flowZones(zones, referral)
+  // Path 4 (6 Oct 2026): `path: 'widespread'` is the "pain in many places"
+  // answer on the Draw page: the route's own questions and red flags, no
+  // injury screen, and the drawing answers "how many areas" (WS1).
+  const wide = t.path === 'widespread'
   const focus = needsAreaChoice(flowZ, null) ? (t.focus || rk) : null
-  const keys = questionRegions(flowZ, focus)
-  const seen = { asked: [], flagsOffered: regionRedFlags(flowZ, zones)
+  const keys = wide ? ['widespread'] : questionRegions(flowZ, focus)
+  // On it, every drawn area's emergency questions are still asked (6 Oct 2026).
+  const wideFlags = () => widespreadFlags(regionRedFlags(flowZ, zones))
+  const seen = { asked: [], flagsOffered: (wide ? wideFlags() : regionRedFlags(flowZ, zones))
     .filter((f) => !(spondyDiagnosed(t.cautions || [], t.answers || {}) && f.id === 'rf-spondy'))
     .map((f) => f.id), keys }
 
@@ -1561,7 +1620,7 @@ function run(rk, t) {
   // has already been imaged is not sent back for the same X-ray
   // (PainAssessment.jsx does the same filtering).
   const cautions = t.cautions || []
-  const offered = regionRedFlags(flowZ, zones)
+  const offered = (wide ? wideFlags() : regionRedFlags(flowZ, zones))
     .filter((f) => !(spondyDiagnosed(cautions, t.answers || {}) && f.id === 'rf-spondy'))
   const allFlags = Object.values(REGIONS).flatMap((r) => r.redFlags)
   const onScreen = (id) => {
@@ -1583,7 +1642,7 @@ function run(rk, t) {
   // child-only injury questions depend on it). The shared
   // arm question (limb:I1) is answered as the region's own I1 would be; a
   // follow-up from another area's screen gets the answer that does not route.
-  {
+  if (!wide) {
     const own = SCREEN_OF[rk]
     const ia = {}
     let s
@@ -1609,7 +1668,7 @@ function run(rk, t) {
 
   // Questions: opening screen, then whatever the flow picks.
   const { context } = buildScreens(keys)
-  const ans = { ...drawnAnswers(referral), ...locationAnswers(flowZ) }
+  const ans = wide ? { WS1: ['many'] } : { ...drawnAnswers(referral), ...locationAnswers(flowZ) }
   const minorIds = minorZoneIds(flowZ)
   const minor = new Set(keys.filter((k) => {
     const own = flowZ.filter((z) => !z.implied && ZONE_TO_REGION[z.type] === k)

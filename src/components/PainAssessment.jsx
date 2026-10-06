@@ -14,10 +14,10 @@ import { preloadPdf } from './resultsPdf'
 import GuideVideo from './GuideVideo'
 import GuideSteps from './GuideSteps'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
-import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
+import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS, computeRaw } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextQuestion, rankAcross, alsoConsiderAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS, isBonus,
+  buildScreens, nextQuestion, rankAcross, alsoConsiderAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS, isBonus, widespreadFlags,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
@@ -25,7 +25,7 @@ import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism }
 import { detectReferral, possibleReferral, confirmedReferral, travelAnswerOf, travelQuestion, TRAVEL_OPTIONS, referralKey, flowZones, drawnAnswers, referralSummary, referralMechanism, setAsideAreas } from '../data/referral'
 import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
 import { patternChecks } from '../data/patternChecks'
-import { WIDESPREAD, widespreadRoute } from '../data/widespreadPain'
+import { WIDESPREAD, widespreadRoute, chronicWidespread, PATH_QUESTION, PATH_OPTIONS } from '../data/widespreadPain'
 import {
   DM_STATUS, diabetesRedFlags, isNerveFlag, NERVE_WHY, diabetesBranch, diabetesQuestions, diabetesBonus, diabetesPanel, diabetesSummary,
 } from '../data/diabetes'
@@ -530,6 +530,18 @@ export default function PainAssessment() {
   const [travel, setTravel] = useState({})
   const referral = useMemo(() => confirmedReferral(possibleRef, travel, strokeRef), [possibleRef, travel, strokeRef])
   const travelPending = possibleRef.some((r) => !travelAnswerOf(r, travel, strokeRef))
+  /* Path 4, pain in many places (Chandra, 6 Oct 2026; ../data/widespreadPain.js):
+     marks in 4 or more areas, on both sides, above and below the waist, ask
+     on the Draw page whether the pain is in many places most days, or one
+     area bothers them most. "Many places" follows the "Pain in many places"
+     route (REGIONS.widespread) instead of each area's joint questions and
+     red flags; "one area" keeps the usual area choice. */
+  const widespreadDrawing = useMemo(() => chronicWidespread(zones), [zones])
+  const [pathPick, setPathPick] = useState(null)
+  const widespreadPath = widespreadDrawing && pathPick === 'many'
+  const pathPending = widespreadDrawing && !pathPick
+  // Continue on the Draw page waits for the travel and path questions.
+  const drawBlocked = !zones.length || (travelPending && !widespreadPath) || pathPending
   const drawnZ = useMemo(() => flowZones(zones, referral), [zones, referral])
   // Areas the marks only grazed (a sliver of a line that caught the next
   // area): they start unticked on the Draw page, and their questions come
@@ -552,7 +564,7 @@ export default function PainAssessment() {
      questions but keeps its emergency safety questions (regionRedFlagsFor).
      `areaPick` holds the person's taps, by area; the rest follow the ink. */
   const [areaPick, setAreaPick] = useState({})
-  useEffect(() => { if (!zones.length) { setAreaPick({}); setTravel({}) } }, [zones])
+  useEffect(() => { if (!zones.length) { setAreaPick({}); setTravel({}); setPathPick(null) } }, [zones])
   const areaChips = useMemo(() => {
     const seen = new Set(); const out = []
     drawnZ.filter((z) => !z.implied).forEach((z) => {
@@ -577,7 +589,8 @@ export default function PainAssessment() {
   // Answers the drawing gives: a line down a limb ("past the elbow"), and
   // where in an area the marks sit ("back of the knee"), which answers that
   // area's location question so it is not asked again (../data/drawnLocation.js).
-  const drawn = useMemo(() => ({ ...drawnAnswers(referral), ...locationAnswers(flowZ) }), [referral, flowZ])
+  // On the many-places route the drawing answers its "how many areas" (WS1).
+  const drawn = useMemo(() => (widespreadPath ? { WS1: ['many'] } : { ...drawnAnswers(referral), ...locationAnswers(flowZ) }), [widespreadPath, referral, flowZ])
   const regionChoices = useMemo(() => {
     const seen = new Set(); const out = []
     // Implied areas are not choices: they come with the area they belong to.
@@ -625,7 +638,7 @@ export default function PainAssessment() {
   // what lets the answers actually decide which condition (and therefore which
   // treatment guidance) is shown. Areas with no authored region — currently
   // only the stomach — fall back to the generic set.
-  const keys = useMemo(() => questionRegions(flowZ, focusKey), [flowZ, focusKey])
+  const keys = useMemo(() => (widespreadPath ? ['widespread'] : questionRegions(flowZ, focusKey)), [widespreadPath, flowZ, focusKey])
   const multiArea = keys.length > 1
   // Age / how it started / how long are one-tap answers, so they share a single
   // opening screen instead of costing three. With several areas, age and
@@ -808,7 +821,7 @@ export default function PainAssessment() {
      emergency checks (the neck has ten). A flag with `drawn` is asked only
      when one of those areas is marked (the neck's shoulder-tip flags). Its
      `why` line from the region document titles the explanation. */
-  const injuryApplies = useMemo(() => injuryScreenApplies(flowZ), [flowZ])
+  const injuryApplies = useMemo(() => !widespreadPath && injuryScreenApplies(flowZ), [widespreadPath, flowZ])
   // Smarter safety flow (../data/safetyGates.js): for a drawing of the knee,
   // foot, hip or ankle only, the injury screen runs before the doctor page
   // and its answer filters it; the doctor page is grouped.
@@ -841,7 +854,11 @@ export default function PainAssessment() {
     // Pregnant 13 weeks or more: an ectopic pregnancy no longer applies.
     const notPregnant = answers.preg === 'no'
     const established = answers.preg === 'p2' || answers.preg === 'p3'
-    const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)) &&
+    // The many-places route asks its own few plus every drawn area's
+    // EMERGENCY questions (cauda equina, a septic joint, a fracture can sit
+    // inside widespread pain; they group into a few theme headings), but not
+    // each area's doctor-tier list (Chandra, 6 Oct 2026, quality review).
+    const regional = (widespreadPath ? widespreadFlags(regionRedFlagsFor(flowZ, zones, leftOutZ)) : regionRedFlagsFor(flowZ, zones, leftOutZ)).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)) &&
       // Already imaged and cleared: do not send them back for the same X-ray.
       !(spondyDiagnosed(flags, answers) && f.id === 'rf-spondy') &&
       !(notPregnant && PREG_ASKED_IDS.includes(f.id)) && !(established && ECTOPIC_IDS.includes(f.id)))
@@ -913,13 +930,13 @@ export default function PainAssessment() {
         // Smarter safety flow: the mechanism filter, then the gateway groups.
         const doc = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
         // One area, or several merged by theme (../data/safetyGates.js).
-        const area = smartArea(flowZ) || smartAreas(flowZ)
+        const area = widespreadPath ? null : smartArea(flowZ) || smartAreas(flowZ)
         return area ? [...doc, ...gateUnsureFlags(doc, area)] : doc
       })(),
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers.spondy, flags, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
+  }, [widespreadPath, flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers.spondy, flags, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -1078,8 +1095,10 @@ export default function PainAssessment() {
   const pickedCautions = CAUTION_CHECKS.filter((f) => flags.includes(f.id))
   // Persistent widespread pain (fibromyalgia document): physio route with a
   // nudge to the family doctor, unless a doctor has already diagnosed it.
-  const fibroDiagnosed = flags.includes('ca-fibro')
-  const showWidespread = widespreadRoute(painType, fibroDiagnosed, zones, answers)
+  const fibroDiagnosed = flags.includes('ca-fibro') || [].concat(answers.WS7 || []).includes('diagnosed')
+  // On the many-places route, its score too (the document's route: 9 or more).
+  const wspScore = keys.includes('widespread') ? computeRaw(REGIONS.widespread, scopedAnswers).scores.wsp || 0 : 0
+  const showWidespread = widespreadRoute(painType, fibroDiagnosed, zones, answers, wspScore)
   // Diabetes ("DiabetesMellitus" and "Diabetes RiskModule" documents, signed
   // 3 Oct 2026; ../data/diabetes.js). The details are asked on "Before your
   // results" when a condition diabetes makes more likely qualifies (counted
@@ -1327,7 +1346,7 @@ export default function PainAssessment() {
   // Marks along one chain are asked about together; marks in genuinely
   // separate areas ask the person to choose one first.
   const startQuestions = () => {
-    if (needsAreaChoice(flowZ, focusKey)) { setStage('area'); return }
+    if (!widespreadPath && needsAreaChoice(flowZ, focusKey)) { setStage('area'); return }
     // What the drawing already answers (a line to the hand = "past the
     // elbow") — shown selected, and still changeable.
     setAnswers((a) => ({ ...drawn, ...a }))
@@ -1433,7 +1452,7 @@ export default function PainAssessment() {
 
   const restart = () => {
     setFlaggedAt(null)
-    setStage('landing'); setQIndex(0); setZones([]); setLines([]); setTravel({}); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
+    setStage('landing'); setQIndex(0); setZones([]); setLines([]); setTravel({}); setPathPick(null); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
     setClearSignal((n) => n + 1); setFromReview(false); setDrawMode(false); setShowAnswers(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined); setOpenCautions([])
     setVisitCode(null); codeAsked.current = false
@@ -1739,7 +1758,22 @@ export default function PainAssessment() {
                 {/* One pain that travels, or separate pains? Asked when the
                     marks on one side run from the spine down the limb, so
                     a line drawn in two strokes is not read as separate joints. */}
-                {possibleRef.map((r) => {
+                {/* Path 4: pain in many places, or one area most? */}
+                {widespreadDrawing && (
+                  <div role="group" aria-label={PATH_QUESTION} style={{ marginBottom: 18, maxWidth: 520 }}>
+                    <p style={{ ...body, margin: '0 0 10px', fontWeight: 600 }}>{PATH_QUESTION}</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {PATH_OPTIONS.map((o) => (
+                        <button key={o.id} style={chip(pathPick === o.id)} aria-pressed={pathPick === o.id}
+                          onClick={() => setPathPick(o.id)}>
+                          <span>{o.label}</span>
+                          <Tick on={pathPick === o.id} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {!widespreadPath && possibleRef.map((r) => {
                   const a = travelAnswerOf(r, travel, strokeRef)
                   return (
                     <div key={referralKey(r)} role="group" aria-label={travelQuestion(r)} style={{ marginBottom: 18, maxWidth: 520 }}>
@@ -1788,8 +1822,8 @@ export default function PainAssessment() {
                 <div className="pa-actions">
                   <button
                     className="pa-primary"
-                    style={{ ...goldBtn, opacity: zones.length && !travelPending ? 1 : 0.45, cursor: zones.length && !travelPending ? 'pointer' : 'not-allowed' }}
-                    disabled={!zones.length || travelPending}
+                    style={{ ...goldBtn, opacity: drawBlocked ? 0.45 : 1, cursor: drawBlocked ? 'not-allowed' : 'pointer' }}
+                    disabled={drawBlocked}
                     onClick={() => setStage('about')}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('guide')}>Back</button>
@@ -1800,7 +1834,12 @@ export default function PainAssessment() {
                     Please draw at least one line on the body to continue.
                   </p>
                 )}
-                {zones.length > 0 && travelPending && (
+                {zones.length > 0 && pathPending && (
+                  <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.5)', margin: '14px 0 0' }}>
+                    Please answer the question about where your pain is to continue.
+                  </p>
+                )}
+                {zones.length > 0 && travelPending && !widespreadPath && (
                   <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.5)', margin: '14px 0 0' }}>
                     Please answer the question about how your pain travels to continue.
                   </p>

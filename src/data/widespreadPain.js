@@ -18,7 +18,7 @@
 
 /** Show the section? `painType` from classifyPainMechanism; `diagnosed` when
     the person ticked a doctor's fibromyalgia diagnosis. */
-export function widespreadRoute(painType, diagnosed, zones = [], answers = {}) {
+export function widespreadRoute(painType, diagnosed, zones = [], answers = {}, wspScore = 0) {
   if (diagnosed) return true
   // 6 Oct 2026, general conditions cross-check (approved by Chandra), C4: morning stiffness over an hour (an inflammatory
   // pattern) goes to the doctor-first checks, not this section.
@@ -26,9 +26,19 @@ export function widespreadRoute(painType, diagnosed, zones = [], answers = {}) {
   // Pain on both sides, above and below the waist, in 4 or more areas for
   // over 3 months is shown whatever the pain type (an atypical fibromyalgia).
   if (['o3m', 'years'].includes(answers.duration) && chronicWidespread(zones)) return true
+  // The many-places route (path 4): the document's score of 9 or more (of 15).
+  if (wspScore >= 9) return true
   if (!painType || !painType.widespread) return false
   return [painType.primary, painType.secondary].includes('nociplastic')
 }
+/* Path 4 (6 Oct 2026): asked on the Draw page when the marks are widespread
+   (chronicWidespread, without the duration). "Many places" follows the "Pain
+   in many places" route (REGIONS.widespread); "one area" the usual flow. */
+export const PATH_QUESTION = 'Your marks cover many parts of your body. Which fits best?'
+export const PATH_OPTIONS = [
+  { id: 'many', label: 'I have pain in many places, on most days' },
+  { id: 'one', label: 'One area bothers me much more than the others' },
+]
 const UPPER = ['neck', 'ctj', 'upperback', 'chest', 'shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'head', 'jaw']
 const LOWER = ['lowerback', 'sij', 'coccyx', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot']
 export function chronicWidespread(zones = []) {
