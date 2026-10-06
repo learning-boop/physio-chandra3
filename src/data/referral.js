@@ -82,6 +82,71 @@ export function detectReferral(lines = []) {
   return out
 }
 
+/* ── Read together, then asked ───────────────────────────────────────────
+   Chandra, 6 Oct 2026: a person who lifts their finger halfway down the leg
+   (to turn the body, or because it is two strokes) drew the same pain as one
+   unbroken line, but detectReferral sees separate marks and the knee and
+   ankle get their own questions. So all the strokes on one side are read
+   together, and when they COULD be one travelling pain the person is asked
+   (travelQuestion): one pain travelling down, separate pains, or not sure.
+   The drawing suggests; the person decides. */
+
+/** Stable key for one referral (limb and side), for the person's answer. */
+export const referralKey = (r) => `${r.kind}-${r.side || 'mid'}`
+
+/** Referral patterns the marks could make when every stroke on one side is
+    read as one line — a superset of detectReferral(lines). */
+export function possibleReferral(lines = []) {
+  const all = lines.flat()
+  const out = []
+  for (const s of ['L', 'R']) {
+    const ids = all.filter((id) => !/[LR]$/.test(id) || id.endsWith(s))
+    for (const r of detectReferral([ids])) {
+      if (out.some((o) => referralKey(o) === referralKey(r))) continue
+      out.push({ ...r, felt: [...new Set(r.felt)] })
+    }
+  }
+  return out
+}
+
+/** The question asked on the Draw page for one possible referral. */
+export function travelQuestion(r) {
+  const side = r.side ? `${r.side} ` : ''
+  return r.kind === 'arm'
+    ? `Does your pain start in your neck and travel down your ${side}arm?`
+    : `Does your pain start in your low back or buttock and travel down your ${side}leg?`
+}
+export const TRAVEL_OPTIONS = [
+  { id: 'one', label: 'Yes, it is one pain that travels' },
+  { id: 'separate', label: 'No, they are separate pains' },
+  { id: 'unsure', label: 'Not sure' },
+]
+
+/** The referrals the questions follow, given the person's answers
+    (by referralKey: 'one' | 'separate' | 'unsure'). Unanswered ones default
+    to 'one' when a single unbroken stroke drew the whole of it, otherwise
+    wait for an answer: a back-to-knee line plus a separate ankle mark may be
+    a sprained ankle. 'unsure' reads as referral but keeps the limb areas
+    named on the card (`unsure: true`), so the physiotherapist checks them. */
+export function travelAnswerOf(r, travel = {}, strokeRef = []) {
+  const whole = strokeRef.some((s) => referralKey(s) === referralKey(r) && r.felt.every((id) => s.felt.includes(id)))
+  return travel[referralKey(r)] ?? (whole ? 'one' : null)
+}
+export function confirmedReferral(possible = [], travel = {}, strokeRef = []) {
+  return possible
+    .map((r) => ({ r, a: travelAnswerOf(r, travel, strokeRef) }))
+    .filter(({ a }) => a === 'one' || a === 'unsure')
+    .map(({ r, a }) => (a === 'unsure' ? { ...r, unsure: true } : r))
+}
+
+/** How the clinician summary describes where a referral reading came from. */
+export function referralBasis(r) {
+  const from = r.kind === 'arm' ? 'neck' : 'low back'
+  return r.unsure
+    ? `marks from the ${from} down the limb; the patient was NOT SURE it is one pain - check the limb areas in their own right`
+    : `the patient confirmed one pain travelling from the ${from}`
+}
+
 /** Zones for the question flow: a referral line's limb areas are folded into
     its spinal source, so the neck (or low back) questions are asked — once —
     instead of each limb area's own. Other marks are left untouched.
@@ -194,6 +259,19 @@ const SET_ASIDE_LINE = {
   flank: 'The flank and the lower ribs, which can refer pain into the back and buttock',
 }
 
+const FELT_WORD = {
+  shoulder: 'shoulder', upperarm: 'upper arm', elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand',
+  hip: 'hip', thigh: 'thigh', knee: 'knee', lowerleg: 'lower leg', ankle: 'ankle', foot: 'foot',
+}
+/* When the person was not sure the marks were one travelling pain, the limb
+   areas they marked are named as things to check in their own right. */
+function unsureLine(r) {
+  const words = [...new Set((r.felt || []).map((id) => FELT_WORD[zoneType(id)]).filter(Boolean))]
+  if (!words.length) return null
+  const list = words.length > 1 ? `${words.slice(0, -1).join(', ')} and ${words[words.length - 1]}` : words[0]
+  return `Your ${list} themselves: you were not sure whether this is one pain, so your physiotherapist will check them as well`
+}
+
 export function referralSummary(r, mechanism = 'unclear', setAside = []) {
   const side = r.side ? `${r.side} ` : ''
   const limb = r.kind === 'arm' ? 'arm' : 'leg'
@@ -203,11 +281,11 @@ export function referralSummary(r, mechanism = 'unclear', setAside = []) {
     : 'the hip, knee and foot'
   return {
     title: `A ${TITLE_WORD[mechanism]} travelling from the ${from} into the ${side}${limb}`,
-    text: `You drew one continuous line from your ${from} down to ${REACH_WORDS[r.reach]}. ${MEANS[limb][mechanism]} That is why the questions focused on your ${from} rather than treating ${rest} as separate problems.`,
+    text: `${r.unsure ? `Your marks run from your ${from} down to ${REACH_WORDS[r.reach]}` : `You told us your pain travels from your ${from} down to ${REACH_WORDS[r.reach]}`}. ${MEANS[limb][mechanism]} That is why the questions focused on your ${from} rather than treating ${rest} as separate problems.`,
     // Somatic sources that refer along the same limb (Referred Pain Clinical
     // Reference, section 5; ./referralMap.js). Organs are never listed to a
     // visitor: those are screened by the safety check.
-    ruleOut: r.kind === 'arm'
+    ruleOut: [...(r.unsure ? [unsureLine(r)].filter(Boolean) : []), ...(r.kind === 'arm'
       ? [
           'A nerve being irritated further down the arm — at the elbow (cubital tunnel) or the wrist (carpal tunnel)',
           'The shoulder joint or rotator cuff, which can refer pain down the upper arm',
@@ -220,6 +298,6 @@ export function referralSummary(r, mechanism = 'unclear', setAside = []) {
           'A buttock muscle (gluteus minimus) whose referred pain can look like sciatica without pins and needles',
           'A nerve being irritated at the ankle (tarsal tunnel)',
           ...setAside.map((t) => SET_ASIDE_LINE[t]).filter(Boolean),
-        ],
+        ])],
   }
 }

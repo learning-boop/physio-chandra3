@@ -143,6 +143,57 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   check('the back-history question opens when pain goes below the knee', L11 && L11.askIf({ ra: { L1: ['belowknee'] } }) && !L11.askIf({ ra: { L1: ['back'] } }), !!L11)
 }
 
+// ── 3b. Drawn in pieces, then asked (Chandra, 6 Oct 2026) ──
+/* A person who lifts their finger at the knee to turn the body, or dots the
+   back and the foot, drew one travelling pain too. The strokes on one side
+   are read together and the person is asked: one pain, separate, not sure. */
+{
+  const { possibleReferral, confirmedReferral, travelAnswerOf, travelQuestion, referralKey } = await imp('src/data/referral.js')
+  const flow = (lines, travel) => {
+    const ref = confirmedReferral(possibleReferral(lines), travel, detectReferral(lines))
+    return { ref, keys: questionRegions(flowZones(zonesOf(lines), ref), null) }
+  }
+  // Back → knee, then knee → foot: two strokes.
+  const twoStrokes = [['lowerback', 'hipR', 'thighR', 'kneeR'], ['kneeR', 'lowerlegR', 'ankleR', 'footR']]
+  const pr = possibleReferral(twoStrokes)
+  check('back→knee + knee→foot strokes are a POSSIBLE right-leg referral', pr.length === 1 && pr[0].kind === 'leg' && pr[0].side === 'right' && pr[0].reach === 'foot', pr)
+  check('...asked, not assumed: no answer yet', travelAnswerOf(pr[0], {}, detectReferral(twoStrokes)) === null)
+  check('...the question names the back and the right leg', /low back.*right leg/.test(travelQuestion(pr[0])), travelQuestion(pr[0]))
+  const one = flow(twoStrokes, { 'leg-right': 'one' })
+  check('...answered "one pain": low back questions only, no knee or ankle', JSON.stringify(one.keys) === '["lowback"]', one.keys)
+  check('...and the drawing answers "below the knee"', JSON.stringify(drawnAnswers(one.ref).L1) === '["belowknee"]')
+  const sep = flow(twoStrokes, { 'leg-right': 'separate' })
+  check('...answered "separate": no referral, the areas stay their own', sep.ref.length === 0 && sep.keys.length > 1, sep.keys)
+  const uns = flow(twoStrokes, { 'leg-right': 'unsure' })
+  const unsCard = referralSummary(uns.ref[0], 'unclear').ruleOut
+  check('...answered "not sure": low back questions, and the card names the knee and foot to check', JSON.stringify(uns.keys) === '["lowback"]' && unsCard.some((l) => /knee/.test(l) && /foot/.test(l) && /not sure/.test(l)), [uns.keys, unsCard])
+  check('...the "not sure" line is NOT on a confirmed card', !referralSummary(one.ref[0], 'unclear').ruleOut.some((l) => /not sure/.test(l)))
+
+  // Dots: neck, then a separate mark on the left hand.
+  const dots = [['neck'], ['forearmL', 'handL']]
+  const pa = possibleReferral(dots)
+  check('a neck dot + a separate left-hand mark is a POSSIBLE arm referral', pa.length === 1 && pa[0].kind === 'arm' && pa[0].side === 'left' && /neck.*left arm/.test(travelQuestion(pa[0])), pa)
+  check('...answered "one pain": neck questions, not the wrist or hand', JSON.stringify(flow(dots, { [referralKey(pa[0])]: 'one' }).keys) === '["neck","ctj"]', flow(dots, { 'arm-left': 'one' }).keys)
+
+  // Neck → shoulder, stop to turn, elbow → hand.
+  const armPieces = [['neck', 'shoulderL'], ['elbowL', 'forearmL', 'wristL', 'handL']]
+  check('neck→shoulder + elbow→hand strokes: "one pain" asks the neck only', JSON.stringify(flow(armPieces, { 'arm-left': 'one' }).keys) === '["neck","ctj"]', flow(armPieces, { 'arm-left': 'one' }).keys)
+
+  // One unbroken stroke starts as "one pain" (already answered), but the
+  // person can still say they are separate.
+  const unbroken = [['lowerback', 'hipR', 'kneeR', 'ankleR']]
+  check('one unbroken stroke starts answered as "one pain"', travelAnswerOf(possibleReferral(unbroken)[0], {}, detectReferral(unbroken)) === 'one')
+  check('...and "separate" overrides it', flow(unbroken, { 'leg-right': 'separate' }).ref.length === 0)
+
+  // Not asked: other side, or not reaching down the limb.
+  check('low back + LEFT knee + RIGHT foot: no possible referral down one leg reaching the foot',
+    !possibleReferral([['lowerback'], ['kneeL'], ['footR']]).some((r) => r.side === 'right' && r.reach !== 'foot') && possibleReferral([['lowerback'], ['kneeL'], ['footR']]).length === 2,
+    possibleReferral([['lowerback'], ['kneeL'], ['footR']]))
+  check('neck + right shoulder only: not asked', possibleReferral([['neck'], ['shoulderR']]).length === 0)
+  check('hip + knee only: not asked', possibleReferral([['hipR'], ['kneeR']]).length === 0)
+  check('knee + ankle with no back or buttock: not asked', possibleReferral([['kneeR'], ['ankleR']]).length === 0)
+}
+
 // ── 4. Not referral ──
 check('neck→shoulder only is NOT a referral line', detectReferral([['neck', 'shoulderL']]).length === 0)
 check('separate marks on neck and wrist are NOT a referral line', detectReferral([['neck'], ['wristL']]).length === 0)

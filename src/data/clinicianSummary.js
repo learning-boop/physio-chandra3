@@ -18,6 +18,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 import { REGIONS, allQuestions } from './symptomGuide.js'
 import { REFERRAL_MAP, SCREENING_SEQUENCE, mappedTypes, organsForType } from './referralMap.js'
+import { referralBasis } from './referral.js'
 
 /* The CPA Orthopaedic Division subjective booklet asks for the two most
    likely hypotheses. The result screen shows the same two, so the patient's
@@ -130,7 +131,7 @@ export function buildClinicianSummary(ctx = {}) {
   push(...painAreas(zones, referral).map((s) => '  ' + s))
   for (const r of referral) {
     const where = `${r.side ? r.side + ' ' : ''}${r.kind}`.trim()
-    push(`  Referred into the ${where}, as far as the ${r.reach} — one continuous line from the ${r.kind === 'arm' ? 'neck' : 'low back'}`)
+    push(`  Referred into the ${where}, as far as the ${r.reach} — ${referralBasis(r)}`)
   }
   if (keys.length) push(`  Questions asked from: ${keys.map((k) => (REGIONS[k] ? REGIONS[k].name : k)).join(', ')}`)
   push('')

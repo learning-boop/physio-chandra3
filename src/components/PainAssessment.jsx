@@ -22,7 +22,7 @@ import {
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
 import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism } from '../data/painType'
-import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism, setAsideAreas } from '../data/referral'
+import { detectReferral, possibleReferral, confirmedReferral, travelAnswerOf, travelQuestion, TRAVEL_OPTIONS, referralKey, flowZones, drawnAnswers, referralSummary, referralMechanism, setAsideAreas } from '../data/referral'
 import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
 import { patternChecks } from '../data/patternChecks'
 import { WIDESPREAD, widespreadRoute } from '../data/widespreadPain'
@@ -519,7 +519,17 @@ export default function PainAssessment() {
   // separate shoulder, elbow and wrist problems. `zones` stays the full list
   // for display, the AI overview and the pain-type rules.
   const [lines, setLines] = useState([])
-  const referral = useMemo(() => detectReferral(lines), [lines])
+  /* Strokes on one side are also read together (possibleReferral): a person
+     who lifts their finger at the knee to turn the body drew one travelling
+     pain too. Each possible pattern is asked on the Draw page — one pain,
+     separate pains, or not sure — and only the confirmed ones are folded
+     into the spine (Chandra, 6 Oct 2026). One unbroken stroke starts as
+     "one pain", so the question is already answered for it. */
+  const strokeRef = useMemo(() => detectReferral(lines), [lines])
+  const possibleRef = useMemo(() => possibleReferral(lines), [lines])
+  const [travel, setTravel] = useState({})
+  const referral = useMemo(() => confirmedReferral(possibleRef, travel, strokeRef), [possibleRef, travel, strokeRef])
+  const travelPending = possibleRef.some((r) => !travelAnswerOf(r, travel, strokeRef))
   const drawnZ = useMemo(() => flowZones(zones, referral), [zones, referral])
   // Areas the marks only grazed (a sliver of a line that caught the next
   // area): they start unticked on the Draw page, and their questions come
@@ -542,7 +552,7 @@ export default function PainAssessment() {
      questions but keeps its emergency safety questions (regionRedFlagsFor).
      `areaPick` holds the person's taps, by area; the rest follow the ink. */
   const [areaPick, setAreaPick] = useState({})
-  useEffect(() => { if (!zones.length) setAreaPick({}) }, [zones])
+  useEffect(() => { if (!zones.length) { setAreaPick({}); setTravel({}) } }, [zones])
   const areaChips = useMemo(() => {
     const seen = new Set(); const out = []
     drawnZ.filter((z) => !z.implied).forEach((z) => {
@@ -1186,7 +1196,7 @@ export default function PainAssessment() {
     }),
     ...referral.map((r) => ({
       question: 'Drawn pattern (from the body diagram)',
-      answer: `One continuous line from the ${r.kind === 'arm' ? 'neck' : 'low back'} down the ${r.side ? r.side + ' ' : ''}${r.kind} to the ${r.reach} — ${({ radicular: 'nerve-type referral', somatic: 'a referred ache, NOT nerve pain', unclear: 'referred pain, nerve involvement unclear' })[referralMechanism(r, answers)]}`,
+      answer: `${r.unsure ? 'Marks (patient NOT SURE it is one pain)' : 'One pain the patient says travels'} from the ${r.kind === 'arm' ? 'neck' : 'low back'} down the ${r.side ? r.side + ' ' : ''}${r.kind} to the ${r.reach} — ${({ radicular: 'nerve-type referral', somatic: 'a referred ache, NOT nerve pain', unclear: 'referred pain, nerve involvement unclear' })[referralMechanism(r, answers)]}`,
     })),
     ...(painType ? [{
       question: "Pain type suggested by the clinic's rules (not the visitor's words)",
@@ -1299,7 +1309,8 @@ export default function PainAssessment() {
       !/(^notes$|^q5$|_other$|^dm|^steroid$|^preg|^oi|^bn)/.test(k) && (typeof v === 'string' || Array.isArray(v)))),
     flags: flags.filter((f) => f !== '__other'),
     results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
-    referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null })),
+    referral: referral.map((r) => ({ kind: r.kind, side: r.side || null, reach: r.reach || null, unsure: !!r.unsure })),
+    travel: possibleRef.map((r) => ({ kind: r.kind, side: r.side || null, answer: travelAnswerOf(r, travel, strokeRef) })),
     painType: painType ? { primary: painType.primary, secondary: painType.secondary || null, subtype: painType.subtype || null } : null,
   })
 
@@ -1420,7 +1431,7 @@ export default function PainAssessment() {
 
   const restart = () => {
     setFlaggedAt(null)
-    setStage('landing'); setQIndex(0); setZones([]); setLines([]); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
+    setStage('landing'); setQIndex(0); setZones([]); setLines([]); setTravel({}); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
     setClearSignal((n) => n + 1); setFromReview(false); setDrawMode(false); setShowAnswers(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined); setOpenCautions([])
     setVisitCode(null); codeAsked.current = false
@@ -1723,6 +1734,26 @@ export default function PainAssessment() {
                     model panel); only the marked areas and Clear All stay here. */}
                 {/* The areas the questions will be about: ticked when drawn on,
                     unticked when the line only touched them; a tap changes it. */}
+                {/* One pain that travels, or separate pains? Asked when the
+                    marks on one side run from the spine down the limb, so
+                    a line drawn in two strokes is not read as separate joints. */}
+                {possibleRef.map((r) => {
+                  const a = travelAnswerOf(r, travel, strokeRef)
+                  return (
+                    <div key={referralKey(r)} role="group" aria-label={travelQuestion(r)} style={{ marginBottom: 18, maxWidth: 520 }}>
+                      <p style={{ ...body, margin: '0 0 10px', fontWeight: 600 }}>{travelQuestion(r)}</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {TRAVEL_OPTIONS.map((o) => (
+                          <button key={o.id} style={chip(a === o.id)} aria-pressed={a === o.id}
+                            onClick={() => setTravel((t) => ({ ...t, [referralKey(r)]: o.id }))}>
+                            <span>{o.label}</span>
+                            <Tick on={a === o.id} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
                 {zones.length > 0 && (
                   <div style={{ marginBottom: 18, maxWidth: 520 }}>
                     {/* Highlighted (Chandra, 4 Oct 2026): a gold callout that
@@ -1755,8 +1786,8 @@ export default function PainAssessment() {
                 <div className="pa-actions">
                   <button
                     className="pa-primary"
-                    style={{ ...goldBtn, opacity: zones.length ? 1 : 0.45, cursor: zones.length ? 'pointer' : 'not-allowed' }}
-                    disabled={!zones.length}
+                    style={{ ...goldBtn, opacity: zones.length && !travelPending ? 1 : 0.45, cursor: zones.length && !travelPending ? 'pointer' : 'not-allowed' }}
+                    disabled={!zones.length || travelPending}
                     onClick={() => setStage('about')}
                   >Continue</button>
                   <button style={ghostBtn} onClick={() => setStage('guide')}>Back</button>
@@ -1765,6 +1796,11 @@ export default function PainAssessment() {
                 {!zones.length && (
                   <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.5)', margin: '14px 0 0' }}>
                     Please draw at least one line on the body to continue.
+                  </p>
+                )}
+                {zones.length > 0 && travelPending && (
+                  <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.5)', margin: '14px 0 0' }}>
+                    Please answer the question about how your pain travels to continue.
                   </p>
                 )}
               </Fade>
