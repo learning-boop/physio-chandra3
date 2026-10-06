@@ -12,6 +12,7 @@ import SaveResults from './SaveResults'
 import FeedbackForm from './FeedbackForm'
 import { preloadPdf } from './resultsPdf'
 import GuideVideo from './GuideVideo'
+import GuideSteps from './GuideSteps'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
@@ -583,7 +584,8 @@ export default function PainAssessment() {
   // the How it works page kept the body under the Turn / Draw buttons).
   const [recentre, setRecentre] = useState(0)
   useEffect(() => { if (stage === 'draw') setRecentre((n) => n + 1) }, [stage])
-  const swipeHint = !hasTurned && (stage === 'guide' || (stage === 'draw' && !drawMode && !zones.length))
+  // The How it works page has no 3D body (pictures instead, 6 Oct 2026).
+  const swipeHint = !hasTurned && stage === 'draw' && !drawMode && !zones.length
 
   /* ── Every crossed area counts, in at most 8 screens ──────────────────
      A line along one chain (shoulder → elbow, low back → knee) draws on EACH
@@ -1465,6 +1467,12 @@ export default function PainAssessment() {
             color: rgba(255,255,255,0.72);
           }
 
+          /* How it works: one centred column, phone and desktop (no 3D body). */
+          .pa-guide { max-width: 940px; margin: 0 auto; padding-bottom: 32px; }
+          .pa-guide-video { display: flex; justify-content: center; }
+          .pa-guide-video > div { margin: 0 0 18px !important; }
+          .pa-guide-actions { margin: 4px auto 0; }
+
           /* Gesture list: badge + text, wrapping safely on narrow phones. */
           .pa-gestures {
             list-style: none; margin: 0 0 22px; padding: 0;
@@ -1550,7 +1558,7 @@ export default function PainAssessment() {
           }
 
           @media (min-width: 900px) {
-            .pa-grid { grid-template-columns: ${stage === 'landing' ? '1fr' : modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
+            .pa-grid { grid-template-columns: ${stage === 'landing' || stage === 'guide' ? '1fr' : modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
             .pa-model { order: 2; height: min(86vh, 820px); }
             /* From the questions onward the panel grows much taller than the
                figure, and centring it parks the figure halfway down a long
@@ -1603,59 +1611,28 @@ export default function PainAssessment() {
               </Fade>
             )}
 
-            {/* HOW IT WORKS — a page of its own after Start (Chandra, 28 Sep
-                2026): the three steps, how to move the body, and the video.
-                The body is shown, so the person can try turning it here
-                before drawing on the next page. */}
+            {/* HOW IT WORKS: a page of its own after Start (Chandra, 28 Sep
+                2026). Redesigned 6 Oct 2026 (Chandra): no 3D body here, the three
+                steps and how to move the body as pictures (./GuideSteps.jsx),
+                centred on phone and desktop. The body first appears on the
+                next page, where the "Drag to turn" hint shows on it. */}
             {stage === 'guide' && (
               <Fade k="guide">
-                <div style={headBand()}>
-                  <span style={label}>How It Works</span>
-                  <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 0' }}>
-                    Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
-                  </h2>
-                </div>
-                <ul className="pa-gestures" style={qPanel}>
-                  {[
-                    ['1', 'Turn the body', `so the sore side faces you. Try it now: ${isPhone ? 'swipe' : 'drag'} the body.`],
-                    ['2', 'Draw where it hurts', 'tap Draw, then trace every painful area, including where the pain spreads.'],
-                    ['3', 'Answer a few questions', 'safety questions first, then a few about your pain. About 5 minutes.'],
-                  ].map(([n, action, result]) => (
-                    <li key={n}>
-                      <span className="pa-gestures__badge" aria-hidden="true">{n}</span>
-                      <span><b>{action}</b> — {result}</span>
-                    </li>
-                  ))}
-                </ul>
-                {/* One arrow, one action, one result. The verb follows the input
-                    the visitor actually has: "swipe" means nothing on a mouse,
-                    "scroll" means nothing on a phone. */}
-                <span style={{ ...label, display: 'block', fontSize: 11.5, margin: '4px 0 10px' }}>Moving the body</span>
-                <ul className="pa-gestures">
-                  {(isPhone
-                    ? [
-                        ['↔', 'Swipe left or right', 'spin the body around'],
-                        ['↕', 'Swipe up or down', 'see the soles of the feet'],
-                        ['⊕', 'Pinch', 'zoom in and out'],
-                      ]
-                    : [
-                        ['↔', 'Drag left or right', 'spin the body around'],
-                        ['↕', 'Drag up or down', 'see the soles of the feet'],
-                        ['⊕', 'Scroll on it', 'zoom in and out'],
-                      ]
-                  ).map(([arrow, action, result]) => (
-                    <li key={action}>
-                      <span className="pa-gestures__badge" aria-hidden="true">{arrow}</span>
-                      <span><b>{action}</b> — {result}</span>
-                    </li>
-                  ))}
-                </ul>
-                {/* A short video on how the guide works, for anyone unsure of
-                    the gestures (shown once public/videos/guide-intro.mp4 exists). */}
-                <GuideVideo />
-                <div className="pa-actions">
-                  <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
-                  <button style={ghostBtn} onClick={restart}>Back</button>
+                <div className="pa-guide">
+                  <div style={{ ...headBand(), maxWidth: 'none' }}>
+                    <span style={label}>How It Works</span>
+                    <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 0' }}>
+                      Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
+                    </h2>
+                  </div>
+                  <GuideSteps phone={isPhone} />
+                  {/* A short video on how the guide works, behind a button
+                      (shown once public/videos/guide-intro.mp4 exists). */}
+                  <div className="pa-guide-video"><GuideVideo /></div>
+                  <div className="pa-actions pa-guide-actions">
+                    <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
+                    <button style={ghostBtn} onClick={restart}>Back</button>
+                  </div>
                 </div>
               </Fade>
             )}
@@ -3141,7 +3118,7 @@ export default function PainAssessment() {
 
         {/* ── RIGHT: the 3D model (shrinks after confirm, marks persist) ──
             Not on the landing page: it appears once Start is pressed. */}
-        {stage !== 'landing' && (
+        {stage !== 'landing' && stage !== 'guide' && (
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
