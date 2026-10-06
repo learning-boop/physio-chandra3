@@ -8,6 +8,7 @@
    writes "reviewed: Chandra Matla, <date>" into each signed file and makes
    the requested changes (Chandra, 6 Oct 2026). */
 import fs from 'node:fs'
+import { pathToFileURL } from 'node:url'
 import { conditionSignoff } from './check-review.mjs'
 
 const ORDER = ['neck', 'ctj', 'upperback', 'tlj', 'lowback', 'sij', 'coccyx', 'jaw', 'head', 'shoulder', 'arm', 'elbow', 'forearm', 'wrist', 'hand', 'hip', 'thigh', 'knee', 'leg', 'ankle', 'foot']
@@ -19,7 +20,7 @@ const AREA = {
 }
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-function parse(file) {
+export function parse(file) {
   const t = fs.readFileSync(file, 'utf8').replace(/\r/g, '')
   const fm = t.split('\n---\n')[0]
   const get = (k) => ((fm.match(new RegExp('^' + k + ':\\s*(.*)$', 'm')) || [])[1] || '').trim()
@@ -47,15 +48,18 @@ function parse(file) {
 }
 
 const status = conditionSignoff()
-const cards = Object.entries(status).filter(([, s]) => !s.signed).map(([key, s]) => ({ key, ...s, ...parse(s.file) }))
 const byName = {}
 for (const c of Object.values(status)) { const p = parse(c.file); (byName[p.name] = byName[p.name] || []).push(`${p.region}/${p.id}`) }
-cards.sort((a, b) => ORDER.indexOf(a.region) - ORDER.indexOf(b.region) || a.name.localeCompare(b.name))
-const areas = ORDER.filter((r) => cards.some((c) => c.region === r))
+/** Cards for the given condition keys ("region/id"), or every unsigned one. */
+export function signoffCards(keys = null) {
+  return Object.entries(status).filter(([key, s]) => (keys ? keys.includes(key) : !s.signed))
+    .map(([key, s]) => ({ key, ...s, ...parse(s.file) }))
+    .sort((a, b) => ORDER.indexOf(a.region) - ORDER.indexOf(b.region) || a.name.localeCompare(b.name))
+}
 
-const list = (v) => (Array.isArray(v) ? `<ul>${v.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : `<p>${esc(v)}</p>`)
+export const list = (v) => (Array.isArray(v) ? `<ul>${v.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : `<p>${esc(v)}</p>`)
 const SECTION = [['blurb', 'What it is'], ['doctorFirst', 'Doctor first'], ['noticed', 'What you may notice'], ['homeCare', 'What you can do'], ['seePhysioIf', 'When to get help']]
-const cardHtml = (c) => {
+export const cardHtml = (c) => {
   const twins = (byName[c.name] || []).filter((k) => k !== c.key)
   const doctor = [].concat(c.sections.seePhysioIf || []).filter((l) => /doctor|911|emergency/i.test(l)).length
   return `<section class="card" data-key="${esc(c.key)}" data-area="${esc(c.region)}">
@@ -76,9 +80,14 @@ const cardHtml = (c) => {
 </section>`
 }
 
-const html = `<!doctype html>
+/** A sign-off page. `cards` from signoffCards; `extra` = { title, html } blocks
+    placed first, whose own .card sections (with data-key) are decided and
+    copied the same way; `storageKey` keeps each page's choices apart. */
+export function renderPage({ cards, title = 'Card Sign-off', heading, lede, extra = [], storageKey = 'signoff-v1' }) {
+const areas = ORDER.filter((r) => cards.some((c) => c.region === r))
+return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Card Sign-off</title>
+<title>${esc(title)}</title>
 <style>
   :root { --ink: #1b2430; --muted: #5d6b7a; --line: #dde3ea; --bg: #f6f8fb; --card: #fff; --gold: #9a7a3c; --ok: #1d7a46; --todo: #b2561c; --soft: #fbf7ef; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #e8edf3; --muted: #a3b0be; --line: #2c3846; --bg: #0f1722; --card: #162131; --gold: #d6b67a; --ok: #6fd39b; --todo: #f0a46a; --soft: #1d2a3b; } }
@@ -111,16 +120,17 @@ const html = `<!doctype html>
   h3.area { margin: 26px 0 10px; font-size: 20px; }
 </style></head>
 <body><main>
-  <h1>Card sign-off: ${cards.length} cards</h1>
-  <p class="lede">Every condition card that is not yet signed, from the condition files as they are on ${new Date().toISOString().slice(0, 10)}. Each shows the patient text, what changed and why, its clinic notes and the answers that point to it. Mark "Sign off" when every line is checked, or "Needs changes" with a note. Your choices stay in this browser; press "Copy my decisions" and paste them to Claude, who adds your sign-off to each file and makes the changes. Cards marked <span class="tag">drafted by Claude</span> deserve the closest read.</p>
+  <h1>${heading ? esc(heading) : `Card sign-off: ${cards.length} cards`}</h1>
+  ${lede ? `<p class="lede">${lede}</p>` : `<p class="lede">Every condition card that is not yet signed, from the condition files as they are on ${new Date().toISOString().slice(0, 10)}. Each shows the patient text, what changed and why, its clinic notes and the answers that point to it. Mark "Sign off" when every line is checked, or "Needs changes" with a note. Your choices stay in this browser; press "Copy my decisions" and paste them to Claude, who adds your sign-off to each file and makes the changes. Cards marked <span class="tag">drafted by Claude</span> deserve the closest read.</p>`}
   <div class="bar">
     <div class="row"><button id="copy">Copy my decisions</button><button class="ghost" id="hideDone">Hide decided</button><button class="ghost" id="clear">Clear</button><span class="progress" id="progress"></span></div>
-    <div class="row" id="areas"><button class="chip on" data-area="">All areas</button>${areas.map((a) => `<button class="chip" data-area="${a}">${esc(AREA[a])} (${cards.filter((c) => c.region === a).length})</button>`).join('')}</div>
+    <div class="row" id="areas"><button class="chip on" data-area="">All</button>${extra.map((x) => `<button class="chip" data-area="${esc(x.area)}">${esc(x.title)}</button>`).join('')}${areas.map((a) => `<button class="chip" data-area="${a}">${esc(AREA[a])} (${cards.filter((c) => c.region === a).length})</button>`).join('')}</div>
   </div>
+  ${extra.map((x) => `<h3 class="area" data-area="${esc(x.area)}">${esc(x.title)}</h3>` + x.html).join('')}
   ${areas.map((a) => `<h3 class="area" data-area="${a}">${esc(AREA[a])}</h3>` + cards.filter((c) => c.region === a).map(cardHtml).join('\n')).join('\n')}
 </main>
 <script>
-  const KEY = 'signoff-v1'
+  const KEY = '${storageKey}'
   let state = {}
   try { state = JSON.parse(localStorage.getItem(KEY) || '{}') } catch (e) { state = {} }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)) } catch (e) {} }
@@ -155,7 +165,7 @@ const html = `<!doctype html>
   document.getElementById('hideDone').addEventListener('click', (e) => { hideDone = !hideDone; e.target.textContent = hideDone ? 'Show decided' : 'Hide decided'; refresh() })
   document.getElementById('clear').addEventListener('click', () => { if (confirm('Clear all sign-off choices and notes on this page?')) { state = {}; save(); refresh() } })
   document.getElementById('copy').addEventListener('click', async () => {
-    const lines = ['Card sign-off decisions (' + new Date().toISOString().slice(0, 10) + ')']
+    const lines = ['${esc(title)} decisions (' + new Date().toISOString().slice(0, 10) + ')']
     for (const el of cards) {
       const s = state[el.dataset.key]; if (!s || (!s.d && !s.note)) continue
       lines.push((s.d === 'sign' ? 'SIGN ' : s.d === 'change' ? 'CHANGE ' : 'NOTE ') + el.dataset.key + (s.note ? ' | ' + s.note.replace(/\\n/g, ' ') : ''))
@@ -168,6 +178,11 @@ const html = `<!doctype html>
 </script>
 </body></html>`
 
-fs.mkdirSync('review', { recursive: true })
-fs.writeFileSync('review/signoff.html', html)
-console.log(`review/signoff.html: ${cards.length} unsigned cards in ${areas.length} areas`)
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const cards = signoffCards()
+  fs.mkdirSync('review', { recursive: true })
+  fs.writeFileSync('review/signoff.html', renderPage({ cards }))
+  console.log(`review/signoff.html: ${cards.length} unsigned cards in ${new Set(cards.map((c) => c.region)).size} areas`)
+}
