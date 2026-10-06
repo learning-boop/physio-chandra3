@@ -14,6 +14,8 @@ import {
 } from '../src/data/assessmentFlow.js'
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
 import { spondyDiagnosed } from '../src/data/spondylolysis.js'
+import { patternChecks } from '../src/data/patternChecks.js'
+import { isNerveFlag } from '../src/data/diabetes.js'
 import { injuryFlow, injuryQuestion, limbAnswerFor as limbAs, ageFrom } from '../src/data/injuryScreen.js'
 import { MAX_HYPOTHESES } from '../src/data/clinicianSummary.js'
 import { summarizeZone, locationAnswers, minorZoneIds } from '../src/data/drawnLocation.js'
@@ -868,6 +870,16 @@ const TESTS = {
       flags: ['frf-compartment'],
       expect: { route: 'emergency' } },
   ],  wrist: [
+    // The pattern screens: known diabetes answers the nerve screen already
+    // (../src/data/diabetes.js, NERVE_WHY), 6 Oct 2026 audit.
+    { name: 'P1. Both wrists: the glove-and-stocking nerve screen is asked',
+      lines: [['wristL'], ['wristR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m' },
+      expect: { pattern: ['pc-polyneuropathy'], route: 'results' } },
+    { name: 'P2. Both wrists with known diabetes: it is not asked again',
+      lines: [['wristL'], ['wristR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', dm: 'yes' },
+      expect: { noPattern: ['pc-polyneuropathy'], route: 'results' } },
     // "CRPS.docx" (v1.0 draft, 2 Oct 2026): max 17, shown from 7.
     { name: 'CRPS 1. Wrist burning, swollen and discoloured 2 months after a fracture in a cast',
       lines: [['wristR']],
@@ -1088,6 +1100,22 @@ const TESTS = {
       flags: ['tgf-stress'],
       expect: { route: 'urgent' } },
   ],  knee: [
+    // The pattern screens (../src/data/patternChecks.js), 6 Oct 2026 audit.
+    { name: 'P1. Both knees, stiff for well over 30 minutes each morning: the inflammatory screen is asked',
+      lines: [['kneeL'], ['kneeR']],
+      focus: 'knee',
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', pattern24: ['amLong'] },
+      expect: { pattern: ['pc-inflammatory'], route: 'results' } },
+    { name: 'P2. The same person ticks it: a doctor first',
+      lines: [['kneeL'], ['kneeR']],
+      focus: 'knee',
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', pattern24: ['amLong'] },
+      patterns: ['pc-inflammatory'],
+      expect: { route: 'urgent' } },
+    { name: 'P3. One knee only: the inflammatory screen is not asked',
+      lines: [['kneeR']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', pattern24: ['amLong'] },
+      expect: { noPattern: ['pc-inflammatory'], route: 'results' } },
     { name: '7. Child of 10, fell onto the knee, walking (Pittsburgh knee rule)',
       lines: [['kneeR']],
       answers: { age: 'u18', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I9: 'no', I4: 'no', I8: 'yes' },
@@ -1155,6 +1183,20 @@ const TESTS = {
       answers: { age: '30-49', onset: 'blow', duration: 'd2w', I1: 'hyper', I2: 'no', I3: 'no', I9: 'no', I4: 'no', I5: 'yes' },
       expect: { route: 'urgent' } },
   ],  leg: [
+    // The pattern screens (../src/data/patternChecks.js), 6 Oct 2026 audit.
+    { name: 'P1. Child of 12, both lower legs: the early muscle-signs screen is asked',
+      lines: [['lowerlegL'], ['lowerlegR']],
+      answers: { age: 'u18', onset: 'gradual', duration: 'o3m' },
+      expect: { pattern: ['pc-child-muscle'], route: 'results' } },
+    { name: 'P2. The parent ticks it: a doctor first, and the booking waits',
+      lines: [['lowerlegL'], ['lowerlegR']],
+      answers: { age: 'u18', onset: 'gradual', duration: 'o3m' },
+      patterns: ['pc-child-muscle'],
+      expect: { route: 'urgent', noBooking: true } },
+    { name: 'P3. The same drawing by an adult: the child screen is not asked',
+      lines: [['lowerlegL'], ['lowerlegR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'o3m' },
+      expect: { noPattern: ['pc-child-muscle'], route: 'results' } },
     { name: '1. Shin splints in both shins',
       lines: [['lowerlegL'], ['lowerlegR']],
       answers: { age: '18-29', onset: 'running', duration: 'd6w', V1: ['medial'], V2: ['warmup'], V3: ['long'] },
@@ -1365,6 +1407,48 @@ function run(rk, t) {
     .filter((f) => !(spondyDiagnosed(t.cautions || [], t.answers || {}) && f.id === 'rf-spondy'))
     .map((f) => f.id), keys }
 
+  /* The pattern screens (../src/data/patternChecks.js): the questions the
+     DRAWING raises, asked on the doctor page, and the ones the ANSWERS raise,
+     asked on the final check. This mirrors the two blocks in
+     PainAssessment.jsx (screening.pattern and finalChecks) closely enough to
+     test which screens a patient is offered: the area's own questions replace
+     the generic ones, known diabetes removes the nerve screens, and the same
+     caps apply (two drawing-led ones beyond emergencies; six answer-led, plus
+     two hormone screens). */
+  const patternsFor = () => {
+    const a = t.answers || {}
+    const own = (g) => regionRedFlags(flowZ, zones).some((f) => [].concat(f.group || []).includes(g))
+    const dmKnown = a.dm === 'yes'
+    const early = patternChecks(zones, {}, 12)
+      .filter((f) => !(own('stroke') && f.id === 'pc-stroke') && !((dmKnown || own('cardiac')) && f.id === 'pc-cardiac') &&
+        !(own('clot') && f.id === 'pc-dvt') && !(own('organ') && f.id === 'pc-visceral') &&
+        !(own('neuropathy') && f.id === 'pc-polyneuropathy') && !(dmKnown && isNerveFlag(f)))
+    const rest = early.filter((f) => f.tier !== 'emergency')
+    const shownEarly = [...early.filter((f) => f.tier === 'emergency'), ...rest.slice(0, 2)]
+    const deferred = new Set(rest.slice(2).map((f) => f.id))
+    // As in the app: EVERY screen the drawing raised is taken out of the
+    // answer-led list, including the ones the area's own questions replaced —
+    // only the ones its two-question limit deferred come back here.
+    const drawingLed = new Set(patternChecks(zones, {}, 12).map((f) => f.id))
+    const later = patternChecks(zones, a, 30).filter((f) => !drawingLed.has(f.id) || deferred.has(f.id))
+    const laterRest = later.filter((f) => f.tier !== 'emergency')
+    const HORMONE = ['pc-calcium', 'pc-thyroid', 'pc-hypothyroid', 'pc-acromegaly', 'pc-lowhormone', 'pc-hormone']
+    const shownLater = [...later.filter((f) => f.tier === 'emergency'), ...laterRest.slice(0, 6),
+      ...laterRest.slice(6).filter((f) => HORMONE.includes(f.id)).slice(0, 2)]
+      .filter((f) => !(dmKnown && isNerveFlag(f)))
+    return [...shownEarly, ...shownLater]
+  }
+  const patterns = patternsFor()
+  seen.patternsOffered = patterns.map((f) => f.id)
+
+  // A test may tick a pattern screen; its tier routes, as a red flag's does.
+  for (const id of t.patterns || []) {
+    const f = patterns.find((x) => x.id === id)
+    if (!f) return { ...seen, error: `pattern screen ${id} is not offered` }
+    if (f.tier === 'emergency') return { ...seen, route: 'emergency' }
+    if (f.tier === 'urgent') return { ...seen, route: 'urgent', noBooking: !!f.noBooking }
+  }
+
   // Safety check: the ticked flags must be on the screen; their tier routes.
   // A flag shared with a neighbouring area (same `group`) is shown once, in
   // the wording of the area that was drawn, so that one counts as ticked.
@@ -1458,6 +1542,9 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     for (const c of e.shows || []) if (!(r.shown || []).includes(c)) why.push(`does not show ${c}`)
     for (const f of e.noFlag || []) if ((r.flagsOffered || []).includes(f)) why.push(`still asks ${f}`)
     for (const f of e.flagOffered || []) if (!(r.flagsOffered || []).includes(f)) why.push(`does not ask ${f}`)
+    for (const f of e.pattern || []) if (!(r.patternsOffered || []).includes(f)) why.push(`does not ask ${f}`)
+    for (const f of e.noPattern || []) if ((r.patternsOffered || []).includes(f)) why.push(`still asks ${f}`)
+    if (e.noBooking !== undefined && !!r.noBooking !== e.noBooking) why.push(`noBooking ${!!r.noBooking}, expected ${e.noBooking}`)
     for (const c of e.notTop || []) if ((r.shown || [])[0] === c) why.push(`${c} is on top`)
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)
     for (const q of e.notAsked || []) if (r.asked.includes(q)) why.push(`asked ${q}`)
@@ -1469,7 +1556,8 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     console.log(`${why.length ? 'FAIL' : 'PASS'}  ${t.name}`)
     console.log(`      areas ${r.keys.join(' + ')} · asked ${r.asked.join(' ') || '—'} · ${r.route}` +
       (r.shown ? ` · shown ${r.shown.join(', ') || 'nothing'}` : '') +
-      (r.specials && r.specials.length ? ` · card ${r.specials.join(', ')}` : ''))
+      (r.specials && r.specials.length ? ` · card ${r.specials.join(', ')}` : '') +
+      (r.patternsOffered && r.patternsOffered.length ? ` · screens ${r.patternsOffered.join(' ')}` : ''))
     for (const w of why) console.log(`      ✗ ${w}`)
   }
 }
