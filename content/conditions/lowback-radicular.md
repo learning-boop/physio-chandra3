@@ -20,6 +20,10 @@ pointers:
   # and previous treatment are what confirm the spine as the source.
   "I have had pain down the leg like this before": 1
   "I have had back surgery, a spinal injection, or a scan that showed a disc": 1
+  # 6 Oct 2026, neurodynamics (L12): the head-forward and arching answers are
+  # NOT scored here - adding them raised this condition's ceiling and pushed
+  # textbook sciatica below disc pain (check:regions 9). They are read in the
+  # clinician summary instead (src/data/neurodynamics.js).
 ---
 
 ## blurb

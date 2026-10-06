@@ -194,6 +194,29 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   check('knee + ankle with no back or buttock: not asked', possibleReferral([['kneeR'], ['ankleR']]).length === 0)
 }
 
+// ── 3c. Neurodynamic reading for the clinician summary (Shacklock levels) ──
+{
+  const { neurodynamicReading } = await imp('src/data/neurodynamics.js')
+  const { buildClinicianSummary } = await imp('src/data/clinicianSummary.js')
+  const legRef = detectReferral([['lowerback', 'hipR', 'kneeR', 'ankleR']])
+  check('no nerve picture (back only): no neurodynamic plan', neurodynamicReading({ answers: { L1: ['back'] } }) === null)
+  const calm = neurodynamicReading({ answers: { L1: ['belowknee'], L12: ['stretch', 'neckdown'] }, behaviour: { irritability: 'mild' }, referral: legRef })
+  check('calm leg nerve picture → level 2, tension dysfunction with the patient\'s own differentiation', calm.level === 2 && calm.findings.some((f) => /tension dysfunction/.test(f) && /structural differentiation/.test(f)), calm)
+  const hot = neurodynamicReading({ answers: { L1: ['belowknee'], L12: ['stretch'], sinSettle: 'nextday' }, behaviour: { irritability: 'moderate' }, referral: legRef })
+  check('irritable, slow to settle → level 1', hot.level === 1 && hot.levelWhy.some((w) => /latent/.test(w)), hot)
+  const closing = neurodynamicReading({ answers: { L1: ['belowknee'], L12: ['closing'] }, behaviour: { irritability: 'mild' } })
+  check('arching sends it down the leg → reduced closing, level 1', closing.level === 1 && closing.findings.some((f) => /CLOSING/.test(f)), closing)
+  const neck = neurodynamicReading({ answers: { N2: ['pastelbow'], N3: ['arm'], N14: ['tiltaway'] }, behaviour: { irritability: 'mild' } })
+  check('arm: looking up sends it down the arm and head tilt away worse → closing and tension together', neck.findings.some((f) => /CLOSING/.test(f)) && neck.findings.some((f) => /combined/.test(f)), neck)
+  const zero = neurodynamicReading({ answers: { L1: ['belowknee'] }, behaviour: { irritability: 'mild' }, flagIds: ['rf-footdrop'] })
+  check('foot drop ticked → level 0', zero.level === 0, zero)
+  const loss = neurodynamicReading({ answers: { L1: ['front'], L13: ['kneeweak', 'pkb'] }, behaviour: { irritability: 'mild' } })
+  check('knee giving way → deficit, level 1, and the slump knee bend named', loss.level === 1 && loss.findings.some((f) => /slump knee bend/.test(f)), loss)
+  const text = buildClinicianSummary({ zones: zonesOf([['lowerback', 'hipR', 'kneeR', 'ankleR']]), referral: legRef, keys: ['lowback'],
+    answers: { L1: ['belowknee'], L12: ['stretch', 'neckdown'] }, behaviour: { irritability: 'mild' } })
+  check('the clinician summary carries the neurodynamic plan', /Neurodynamic plan \(Shacklock\): Level 2/.test(text), text.split('\n').filter((l) => /eurodynamic/.test(l)))
+}
+
 // ── 4. Not referral ──
 check('neck→shoulder only is NOT a referral line', detectReferral([['neck', 'shoulderL']]).length === 0)
 check('separate marks on neck and wrist are NOT a referral line', detectReferral([['neck'], ['wristL']]).length === 0)

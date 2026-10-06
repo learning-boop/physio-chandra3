@@ -12,6 +12,16 @@
 # answer, and the walking question comes early from 50 with leg pain. The
 # movement-control card is renamed "Back that catches with small movements".
 # Test patients 8 to 11.
+# 6 Oct 2026: neurodynamics (Shacklock NDS lower-quarter manual, Butler NOI
+# workbook, Wood & Grahovec; DRAFT, for Chandra's review): two new questions,
+# L12 (leg nerve: line, stretch positions, head forward, toes up, arching sends
+# it down the leg, tender along the nerve, numbness or weakness that stays)
+# and L13 (front of the thigh: tingling, prone knee bend, knee weak, groin and
+# outer-thigh look-alikes). L3 now comes early with pain below the knee and
+# L12 follows it. New conditions lowback-neural and lowback-upperroot; new
+# cards legNerveLoss and meralgiaSource. Exam level and closing/tension
+# reading on the clinician summary (src/data/neurodynamics.js). Test patients
+# 18 to 24 in scripts/check-region-tests.mjs.
 region: lowback
 name: Low back & pelvis
 source: George SZ et al. Interventions for the management of acute and chronic low back pain: Revision 2021. JOSPT 51(11), 2021; Delitto A et al. Low back pain CPG (classification). JOSPT 42(4), 2012; NICE NG59. Low back pain and sciatica in over 16s, 2016 (updated 2020); Finucane LM et al. International Framework for Red Flags. JOSPT 50(7), 2020; Konno S et al. Clinical diagnosis support tool for lumbar spinal stenosis. Eur Spine J 16, 2007; Laslett M et al. Sacroiliac joint provocation test cluster. Man Ther 10, 2005; Bogduk N. Pain 147, 2009; Fukui S et al. Clin J Pain 13(4), 1997; O'Neill CW et al. Spine 27(24), 2002; Lesher JM et al. Hip joint pain referral patterns. Pain Med 9(1), 2008; Donnelly JM et al. Travell, Simons & Simons' Trigger Point Manual, 3rd ed., 2019

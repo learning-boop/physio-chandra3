@@ -30,6 +30,9 @@ pointers:
   "The leg pain is worse when I bend forward or sit": -2
   # 6 Oct 2026, the back-history question (L11).
   "I have had back surgery, a spinal injection, or a scan that showed a disc": 1
+  # 6 Oct 2026, neurodynamics (L12): extension closes the canal and foramen
+  # (Shacklock's reduced closing dysfunction).
+  "Arching my back or standing up tall sends the symptoms further down the leg": 1
 ---
 
 ## blurb

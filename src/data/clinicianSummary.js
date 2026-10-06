@@ -19,6 +19,7 @@
 import { REGIONS, allQuestions } from './symptomGuide.js'
 import { REFERRAL_MAP, SCREENING_SEQUENCE, mappedTypes, organsForType } from './referralMap.js'
 import { referralBasis } from './referral.js'
+import { neurodynamicReading, LEVEL_TEXT } from './neurodynamics.js'
 
 /* The CPA Orthopaedic Division subjective booklet asks for the two most
    likely hypotheses. The result screen shows the same two, so the patient's
@@ -114,7 +115,7 @@ export function buildClinicianSummary(ctx = {}) {
   const {
     zones = [], referral = [], keys = [], answers = {}, qaPairs = [], notes = '',
     ranked = [], behaviour = {}, psych = {}, painType = null,
-    cautions = [], declinedFlags = [], reportedFlags = [], review = null, date = new Date(), diabetes = [], steroids = [], pregnancy = [], oi = [], bone = [], alsoConsider = [],
+    cautions = [], declinedFlags = [], reportedFlags = [], flagIds = [], review = null, date = new Date(), diabetes = [], steroids = [], pregnancy = [], oi = [], bone = [], alsoConsider = [],
   } = ctx
 
   const L = []
@@ -313,6 +314,13 @@ export function buildClinicianSummary(ctx = {}) {
   if (behaviour.examCaution) push('  ' + behaviour.examCaution)
   if (painType && (painType.primary === 'neuropathic' || painType.secondary === 'neuropathic')) {
     push('  Nerve-type symptoms reported — include neurological conduction (myotomes, dermatomes, reflexes) and neurodynamic testing, sequenced by irritability.')
+  }
+  // Neurodynamics (Shacklock; Butler; ./neurodynamics.js): exam level and mechanism.
+  const nd = neurodynamicReading({ answers, behaviour, referral, flagIds })
+  if (nd) {
+    push(`  Neurodynamic plan (Shacklock): ${nd.level === null ? 'level not established (irritability not answered)' : LEVEL_TEXT[nd.level]}`)
+    push(...listOf(nd.levelWhy, '      · '))
+    push(...listOf(nd.findings, '      · '))
   }
   if (referral.length) {
     push(`  Referral pattern drawn — examine the ${referral[0].kind === 'arm' ? 'cervical spine' : 'lumbar spine'} as a source, and clear the local ${referral[0].kind} structures as alternatives.`)

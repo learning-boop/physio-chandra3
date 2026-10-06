@@ -109,10 +109,56 @@ export const REGIONS = {
         ]},
       {id:"L3", text:"Which of these do you notice in the leg? Tick all that apply.",
         askIf: ({ ra }) => [].concat(ra.L1 || []).includes("belowknee"),
+        // Early with pain below the knee (6 Oct 2026): the root's telltale
+        // answers, and the leg nerve question L12 follows it.
+        priority: ({ ra }) => [].concat(ra.L1 || []).includes("belowknee"),
         options:[
           {id:"pins", label:"Pins and needles or numbness in the foot or toes"},
           {id:"cough", label:"Shooting pain down the leg when I cough or sneeze"},
           {id:"bendsit", label:"The leg pain is worse when I bend forward or sit"},
+          {id:"none", label:"None of these"}
+        ]},
+      // Neurodynamics (Chandra, 6 Oct 2026; Shacklock NDS lower-quarter manual
+      // 2017-18, Butler NOI workbook, Wood & Grahovec): the leg counterpart of
+      // the neck's N14. Is the nerve SENSITIVE to stretch (along a line, slump
+      // positions, the head-forward and toes-up checks: Butler's active quick
+      // test, structural differentiation), is the interface CLOSING on it
+      // (arching or standing sends it down the leg: Shacklock's reduced
+      // closing dysfunction, suspect a space-occupying cause), and is it
+      // CONDUCTING poorly (the loss answer, a "book promptly" card)?
+      // ⚠ FOR CLINICIAN REVIEW: wording, and the weights in the condition files.
+      {id:"L12", text:"About the leg symptoms: which of these apply? Tick all that apply.",
+        // Below the knee it follows L3 (pins and needles, cough: the root's
+        // own question, which has priority there), so sciatica keeps its
+        // telltale answers.
+        askIf: ({ ra }) => [].concat(ra.L1 || []).some((o) => o === "thigh" || o === "belowknee"),
+        priority: ({ ra }) => ([].concat(ra.L1 || []).includes("belowknee") && ra.L3 !== undefined) ? 2 : 0,
+        options:[
+          {id:"line", excl:"spread", label:"The symptoms run along a line down the leg, for example the back of the thigh into the calf, or the outer shin to the top of the foot"},
+          {id:"vague", excl:"spread", label:"The symptoms are spread over a vague area of the leg"},
+          {id:"stretch", excl:"stretch", label:"Positions that stretch the leg clearly bring them on: sitting with the leg straight out, getting into a car, or reaching for my toes with the knee straight, and it feels like tingling, burning or pulling rather than a muscle stretch"},
+          {id:"stretchsome", excl:"stretch", label:"Those stretch positions sometimes bring them on"},
+          {id:"neckdown", label:"In that position, bending my head forward makes the leg worse, and lifting my head eases it"},
+          {id:"toesup", label:"In that position, pulling my toes and foot up towards me makes the leg worse"},
+          {id:"closing", label:"Arching my back or standing up tall sends the symptoms further down the leg"},
+          {id:"tender", label:"It is tender to press along the nerve: deep in the middle of the buttock, behind the knee, or just below the outer knee"},
+          {id:"loss", label:"Numbness that does not go away, or weakness: the foot or toes catching, or trouble rising onto my toes", special:"legNerveLoss"}
+        ]},
+      // Upper lumbar nerve roots (L2-L4) and the femoral nerve: pain at the
+      // front of the thigh (Butler: prone knee bend and slump knee bend; Lai
+      // 2012; Trainor and Pinnington 2011). Before 6 Oct 2026 the "front of
+      // the thigh" answer above pointed at nothing. The hip and the outer
+      // thigh skin nerve (meralgia) are the look-alikes.
+      // ⚠ FOR CLINICIAN REVIEW: wording, and the weights in the condition files.
+      {id:"L13", text:"About the front of the thigh: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.L1 || []).includes("front"),
+        priority: ({ ra }) => [].concat(ra.L1 || []).includes("front"),
+        options:[
+          {id:"fronttingle", label:"Tingling, burning or numbness on the front of the thigh, or down the inside of the shin"},
+          {id:"pkb", label:"Lying on my front with the knee bent, or a long stride with that leg behind me, brings on the thigh symptoms"},
+          {id:"kneeweak", label:"My knee gives way or feels weak, especially going down stairs", special:"legNerveLoss"},
+          {id:"groinhip", label:"It is mostly a groin ache, worse putting on socks or getting in and out of a car", special:"hipSource"},
+          {id:"outerthigh", label:"It is burning or numbness on the outer thigh only, worse with a tight belt or long standing", special:"meralgiaSource"},
           {id:"none", label:"None of these"}
         ]},
       {id:"L4", text:"Which of these bring it on? Tick all that apply.", options:[

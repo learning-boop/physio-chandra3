@@ -2966,6 +2966,12 @@ export const EXTRA_SPECIAL_CARDS = {
   // Mechanosensitivity" document: book promptly; getting worse, a doctor.
   nerveLoss: { title: "Numbness that stays, or weakness: please book promptly",
     body: "Numbness that does not go away, weakness, or hand muscles that are getting thinner can mean a nerve is not carrying its signals as well as it should, not just that it is sensitive. It needs a hands-on check of feeling, strength and reflexes soon, so please book an assessment promptly. If it is <strong>getting worse</strong>, see your doctor as well; nerve conduction tests may be needed." },
+  // The leg counterpart (low back L12 and L13, 6 Oct 2026). A foot that slaps
+  // or drags, or weakness getting worse, is the doctor's (rf-footdrop, rf-legs).
+  legNerveLoss: { title: "Numbness that stays, or leg weakness: please book promptly",
+    body: "Numbness that does not go away, a foot or toes that catch, trouble rising onto your toes, or a knee that gives way can mean a nerve is not carrying its signals as well as it should, not just that it is sensitive. It needs a hands-on check of feeling, strength and reflexes soon, so please book an assessment promptly. If the weakness is <strong>getting worse</strong>, or your foot slaps down when you walk, see a doctor the same day." },
+  meralgiaSource: { title: "Outer thigh burning is often a skin nerve",
+    body: "Burning, tingling or numbness on the <strong>outer thigh</strong> only, worse with a tight belt or waistband, long standing or walking, is often a skin nerve pinched where it passes the front of the hip (<strong>meralgia paraesthetica</strong>) rather than the back. Consider running the <strong>Thigh</strong> guide too. Your assessment will check both." },
   handWeakness: { title: "Hand weakness should be checked by a doctor",
     body: "Not being able to make an “OK” sign with the thumb and index finger, or to lift the wrist or straighten the fingers, can mean a nerve in the forearm is being pressed on. A doctor should check this. Physiotherapy can help alongside or afterwards." },
   armDoctor: { title: "Please have this checked by a doctor",

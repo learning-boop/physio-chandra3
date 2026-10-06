@@ -1227,6 +1227,7 @@ export default function PainAssessment() {
       oi: oiSummary(answers),
       bone: boneSummary(flags, answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
+      flagIds: flags,
       reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
       review,
