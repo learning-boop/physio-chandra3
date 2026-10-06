@@ -13,6 +13,7 @@ import {
   twinIds,
 } from '../src/data/assessmentFlow.js'
 import { detectReferral, flowZones, drawnAnswers } from '../src/data/referral.js'
+import { spondyDiagnosed } from '../src/data/spondylolysis.js'
 import { injuryFlow, injuryQuestion, limbAnswerFor as limbAs, ageFrom } from '../src/data/injuryScreen.js'
 import { MAX_HYPOTHESES } from '../src/data/clinicianSummary.js'
 import { summarizeZone, locationAnswers, minorZoneIds } from '../src/data/drawnLocation.js'
@@ -509,6 +510,16 @@ const TESTS = {
       answers: { age: 'o64', onset: 'gradual', duration: 'o3m', L1: ['buttock', 'thigh'], L2: ['leg'], L4: ['arch'],
         L5: ['claud'], L7: ['slipknown'], L10: ['both', 'uphill', 'shorter'] },
       expect: { top: 'lowback/stenosis', route: 'results' } },
+    // "Spondylolysis.docx" (approved in session, 6 Oct 2026), the two states.
+    { name: '16. 16, gymnast, arching hurts, no X-ray yet: the doctor-first gate is asked',
+      lines: [['lowerback']],
+      answers: { age: 'u18', onset: 'gradual', duration: 'd6w', L1: ['back'], L4: ['arch'], L6: ['centre'], L8: ['arching'] },
+      expect: { flagOffered: ['rf-spondy'], route: 'results' } },
+    { name: '17. 16, same gymnast, already diagnosed and cleared: no second X-ray, physiotherapy route',
+      lines: [['lowerback']],
+      cautions: ['ca-spondy'],
+      answers: { age: 'u18', onset: 'gradual', duration: 'd6w', L1: ['back'], L4: ['arch'], L6: ['centre'], L8: ['arching'] },
+      expect: { noFlag: ['rf-spondy'], route: 'results' } },
     // "CaudaEquina.docx" (signed 5 Oct 2026): the fifth Pathway red flag.
     { name: '15. New loss of feeling during sex with the back pain: emergency, no booking',
       lines: [['lowerback']],
@@ -1344,12 +1355,19 @@ function run(rk, t) {
   const flowZ = flowZones(zones, referral)
   const focus = needsAreaChoice(flowZ, null) ? (t.focus || rk) : null
   const keys = questionRegions(flowZ, focus)
-  const seen = { asked: [], flagsOffered: regionRedFlags(flowZ, zones).map((f) => f.id), keys }
+  const seen = { asked: [], flagsOffered: regionRedFlags(flowZ, zones)
+    .filter((f) => !(spondyDiagnosed(t.cautions || []) && f.id === 'rf-spondy'))
+    .map((f) => f.id), keys }
 
   // Safety check: the ticked flags must be on the screen; their tier routes.
   // A flag shared with a neighbouring area (same `group`) is shown once, in
   // the wording of the area that was drawn, so that one counts as ticked.
+  // A ticked caution can remove a safety question: someone whose pars injury
+  // has already been imaged is not sent back for the same X-ray
+  // (PainAssessment.jsx does the same filtering).
+  const cautions = t.cautions || []
   const offered = regionRedFlags(flowZ, zones)
+    .filter((f) => !(spondyDiagnosed(cautions) && f.id === 'rf-spondy'))
   const allFlags = Object.values(REGIONS).flatMap((r) => r.redFlags)
   const onScreen = (id) => {
     const f = allFlags.find((x) => x.id === id)
@@ -1432,6 +1450,8 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     if (e.top && ![].concat(e.top).includes((r.shown || [])[0])) why.push(`top ${(r.shown || [])[0] || 'nothing'}, expected ${[].concat(e.top).join(' or ')}`)
     for (const c of e.not || []) if ((r.shown || []).includes(c)) why.push(`shows ${c}`)
     for (const c of e.shows || []) if (!(r.shown || []).includes(c)) why.push(`does not show ${c}`)
+    for (const f of e.noFlag || []) if ((r.flagsOffered || []).includes(f)) why.push(`still asks ${f}`)
+    for (const f of e.flagOffered || []) if (!(r.flagsOffered || []).includes(f)) why.push(`does not ask ${f}`)
     for (const c of e.notTop || []) if ((r.shown || [])[0] === c) why.push(`${c} is on top`)
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)
     for (const q of e.notAsked || []) if (r.asked.includes(q)) why.push(`asked ${q}`)

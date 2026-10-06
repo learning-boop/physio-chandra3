@@ -36,6 +36,7 @@ import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
 import { PAGET_CAUTION, pagetPanel } from '../data/paget'
 import { BONE_TUMOUR_CAUTION, boneTumourPanel, TUMOUR_IDS, BONE_WHY_YOUNG, BONE_WATCH, boneWatch } from '../data/boneTumour'
 import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
+import { SPONDY_CAUTION, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -246,6 +247,10 @@ const CAUTION_CHECKS = [
       text: 'Claims come with their own forms and reports, so your first assessment can cover what they need.' } },
   // "Multiple Sclerosis" document (v0.1, 2 Oct 2026), route B: diagnosed MS.
   // "Fibromyalgia" document (signed by Chandra, 2 Oct 2026): diagnosed route.
+  // "Spondylolysis.docx" (approved in session, 6 Oct 2026), state 2: the
+  // diagnosed athlete, cleared for rehabilitation. Ticking it also takes the
+  // X-ray gate (rf-spondy) out of their safety questions.
+  SPONDY_CAUTION,
   { id: 'ca-fibro', tier: 'caution', text: 'Fibromyalgia, diagnosed by a doctor',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Fibromyalgia does not stop physiotherapy: regular exercise built up slowly is the treatment with the strongest evidence, alongside understanding the pain, sleep and pacing. Your programme starts below what you can manage now and builds in small planned steps, so flares become shorter and less worrying.' } },
@@ -823,6 +828,8 @@ export default function PainAssessment() {
     const notPregnant = answers.preg === 'no'
     const established = answers.preg === 'p2' || answers.preg === 'p3'
     const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)) &&
+      // Already imaged and cleared: do not send them back for the same X-ray.
+      !(spondyDiagnosed(flags) && f.id === 'rf-spondy') &&
       !(notPregnant && PREG_ASKED_IDS.includes(f.id)) && !(established && ECTOPIC_IDS.includes(f.id)))
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
     const list = regional.map((f) => nerve({
@@ -1076,6 +1083,7 @@ export default function PainAssessment() {
   const omPanel = useMemo(() => osteomalaciaPanel(flags.includes('ca-osteomalacia')), [flags])
   // Paget's disease of bone, diagnosed (../data/paget.js).
   const pgtPanel = useMemo(() => pagetPanel(flags.includes('ca-paget')), [flags])
+  const spondyPanel = useMemo(() => spondylolysisPanel(spondyDiagnosed(flags)), [flags])
   // A bone tumour, treated (../data/boneTumour.js).
   const btPanel = useMemo(() => boneTumourPanel(flags.includes('ca-bonetumour')), [flags])
   // Osteopenia, low bone density (../data/osteopenia.js).
@@ -1262,6 +1270,7 @@ export default function PainAssessment() {
     bone: bnPanel,
     boneTumour: btPanel,
     paget: pgtPanel,
+    spondylolysis: spondyPanel,
     boneWatch: boneWatch(zones, answers) ? BONE_WATCH : null,
     cesWarning: cesWarning(zones, keys) ? cesWarningText() : null,
     alsoConsider: alsoConsider.map(({ c }) => c.name),
@@ -2902,6 +2911,21 @@ export default function PainAssessment() {
                       <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{caPanel.text}</p>
                       <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
                         {caPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {/* A pars stress injury, already diagnosed and cleared for
+                    rehabilitation (../data/spondylolysis.js). */}
+                {spondyPanel && (
+                  <>
+                    <span style={{ ...label, marginBottom: 12 }}>Your back and your sport</span>
+                    <div style={{ ...card, maxWidth: 520, margin: '12px 0 26px' }}>
+                      <p style={{ fontSize: 17, color: GOLD_LIGHT, margin: 0, lineHeight: 1.4, fontWeight: 500 }}>{spondyPanel.title}</p>
+                      <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{spondyPanel.text}</p>
+                      <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.78)' }}>
+                        {spondyPanel.notes.map((t, i) => <li key={i} style={{ marginBottom: 5 }}>{t}</li>)}
                       </ul>
                     </div>
                   </>
