@@ -202,7 +202,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !ids(['neck'], { age: 'o64', N4: ['onesided'] }).some((x) => x.startsWith('pc-over50stiff')), ids(['neck'], { age: 'o64', N4: ['onesided'] }))
   check('neck without dizziness → no dizziness checks',
     !ids(['neck'], { N9: ['none'] }).some((x) => x.startsWith('pc-dizzy')), ids(['neck'], { N9: ['none'] }))
-  check('one knee only → no pattern questions at all', patternChecks(zonesOf([['kneeL']]), {}, 3).length === 0, ids(['kneeL']))
+  // 6 Oct 2026: the stroke question (pc-stroke) is asked for every drawing.
+  check('one knee only → no pattern questions but the stroke one', patternChecks(zonesOf([['kneeL']]), {}, 3).every((p) => p.id === 'pc-stroke'), ids(['kneeL']))
   check('at most 2 pattern questions are added', patternChecks(zonesOf([['chest', 'shoulderL', 'abdomen', 'lowerback']]), {}, 2).length <= 2)
   const shape = drawingShape(zonesOf([['neck', 'shoulderL', 'elbowL'], ['kneeR']]), [['neck', 'shoulderL', 'elbowL'], ['kneeR']])
   check('drawing shape: 4 regions, crosses midline, has a line', shape.regions === 4 && shape.crossesMidline && shape.linear && shape.widespread, shape)
@@ -571,8 +572,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   // and hand compartment questions and the calf rhabdomyolysis one (2 Oct 2026).
   // 56 with the general dark-urine question on the shoulder and hip (2 Oct 2026).
   // 57 with the elbow compartment question (elbow cross-check, 6 Oct 2026).
-  check('911 split: 57 region flags send the person to emergency now',
-    em.filter((f) => !f.call911).length === 57, em.filter((f) => !f.call911).map((f) => f.id))
+  // 58 with the knee's (general conditions cross-check, 6 Oct 2026).
+  check('911 split: 58 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 58, em.filter((f) => !f.call911).map((f) => f.id))
   check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
   // A shared group must lead to the same place in every area that asks it.
   const byGroup = {}
@@ -1085,7 +1087,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const p1 = ST.steroidPanel({ steroid: 'tabs' }, false), p2 = ST.steroidPanel({ steroid: 'no' }, true)
   check('Steroids panel: never stop suddenly, sit-to-stand, protect the back, ask about bone health; Cushing diagnosed: strength does not return by itself',
     p1 && p1.notes.some((n) => /Never stop steroid tablets suddenly/.test(n)) && p1.notes.some((n) => /firm chair/.test(n)) &&
-    p1.notes.some((n) => /vitamin D/.test(n)) && p2 && /does not come back by itself/.test(p2.text) &&
+    p1.notes.some((n) => /bone-health check/.test(n)) && p2 && /does not come back by itself/.test(p2.text) &&
     !p2.notes.some((n) => /Never stop steroid/.test(n)) && ST.steroidPanel({ steroid: 'no' }, false) === null)
   const all = JSON.stringify([ST.STEROID_RED_FLAGS, ST.HORMONE_SCREEN, ST.CUSHING_CAUTION, p1, p2])
   check('Steroids language: no "you have Cushing\'s", cure, guarantee or "damage" except "not … damaged by use"',
@@ -1175,7 +1177,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /const em = kept\.filter\(\(f\) => f\.tier === 'emergency'\)/.test(src) && /!\(ownNeuropathy && f\.id === 'pc-polyneuropathy'\)/.test(src) && /const deferred = rest\.slice\(2\)/.test(src) && /patternChecks\(zones, \{\}, 12\)/.test(src))
   const order = patternChecks(ZN(['thighL', 'thighR']), { age: '50-64' }, 12).map((x) => x.id)
   check('Hyperthyroidism: both thighs at 50 to 64 still fits every check (911 on the first page, two others there, six on the final check)',
-    order.filter((x) => x !== 'pc-paralysis').length === 8 && order.indexOf('pc-paralysis') === 0, order)
+    order.filter((x) => !['pc-paralysis', 'pc-stroke'].includes(x)).length === 8 && order.indexOf('pc-paralysis') === 1, order)
   const panel = TH.thyroidPanel(true)
   check('Hyperthyroidism route B: diagnosed on the cautions list; light to moderate activity until controlled; stop signs; agranulocytosis, eye and thyroid-storm warnings; sit-to-stand and step-ups',
     /THYROID_CAUTION,/.test(src) && /no vigorous or heavy exercise/.test(TH.THYROID_CAUTION.why.text) && panel &&
@@ -1209,7 +1211,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
   const p = TH.hypothyroidPanel(true)
   check('Hypothyroidism route B: diagnosed on the cautions list; panel with the dose check, thyroxine timing, night splint, statin, over-replacement and 911 signs',
-    /HYPOTHYROID_CAUTION,/.test(src) && p && /dose may need adjusting/.test(p.text) && p.notes.some((n) => /empty stomach/.test(n)) &&
+    /HYPOTHYROID_CAUTION,/.test(src) && p && /dose may need adjusting/.test(p.text) && p.notes.some((n) => /exactly as your doctor or pharmacist advised/.test(n)) &&
     p.notes.some((n) => /night splint/.test(n)) && p.notes.some((n) => /cholesterol tablet/.test(n)) && p.notes.some((n) => /too high/.test(n)) &&
     p.notes.some((n) => /911/.test(n) && /very low temperature/.test(n)) && TH.hypothyroidPanel(false) === null)
   const cts = ['wrist', 'hand'].map((k) => REGIONS[k].conditions.find((c) => c.id === 'median'))
@@ -1234,7 +1236,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !!get(['hipL', 'hipR']) && !!get(['handL', 'handR']) && !!get(['jaw']) && !!get(['neck', 'shoulderL', 'hipR', 'kneeL']) && !get(['kneeL']))
   const order = patternChecks(ZN(['shoulderL', 'shoulderR']), { age: '50-64' }, 12).map((x) => x.id)
   check('Acromegaly route A: the last pattern question; both shoulders at 50 to 64 still fit (two on the doctor page, six on the final check)',
-    order[order.length - 1] === 'pc-acromegaly' && order.filter((x) => !['pc-cardiac', 'pc-visceral'].includes(x)).length === 8, order)
+    order[order.length - 1] === 'pc-acromegaly' && order.filter((x) => !['pc-cardiac', 'pc-visceral', 'pc-stroke'].includes(x)).length === 8, order)
   const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
   const p = AC.acromegalyPanel(true)
   check('Acromegaly route B: diagnosed on the cautions list; panel with joint-protective activity, back fractures despite a normal scan, sleep apnoea, after-surgery signs, 911 headache and chest pain, bowel line',
@@ -1311,10 +1313,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !OI.oiRedFlags({}).length && OI.oiRedFlags({ oi: 'yes' }).length === 6 &&
     /\[\.\.\.obstetric, \.\.\.oiFlags, \.\.\.diabetic, \.\.\.steroid, \.\.\.list, \.\.\.pattern\]/.test(src) && /answers\.preg, answers\.oi[,\]]/.test(src))
   const rf = Object.fromEntries(OI.OI_RED_FLAGS.map((f) => [f.id, f]))
-  check('OI fracture first: new pain after a small knock, lift, twist or sneeze, even mild, or sudden severe back pain → X-ray today or tomorrow, booking after the X-ray',
+  check('OI fracture first: new pain after a small knock, lift, twist or sneeze, even mild, or sudden severe back pain → X-ray today, booking after the X-ray',
     rf['oi-fracture'].tier === 'urgent' && rf['oi-fracture'].sameDay && rf['oi-fracture'].noBooking &&
     /sneeze/.test(rf['oi-fracture'].text) && /even if it feels mild/.test(rf['oi-fracture'].text) && /back pain/.test(rf['oi-fracture'].text) &&
-    /today or tomorrow/.test(rf['oi-fracture'].why.text) && /welcome to book once you have had your X-ray/.test(rf['oi-fracture'].why.text))
+    /today, and avoid/.test(rf['oi-fracture'].why.text) && /welcome to book once you have had your X-ray/.test(rf['oi-fracture'].why.text))
   check('OI emergencies: a deformed limb, any head injury, the skull-base headache and spreading weakness go to the emergency department; chest pain names 911',
     ['oi-break', 'oi-head', 'oi-skullbase', 'oi-cord'].every((id) => rf[id].tier === 'emergency') &&
     /cough, sneeze or strain/.test(rf['oi-skullbase'].text) && emergencyLevel([rf['oi-head']]) !== 'call911' &&
@@ -1327,7 +1329,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('OI panel: OI-safe exercise rules and the gentle-handling statement always; the main problem leads; falls, stopped denosumab and specialist lines by answer; hearing',
     p && p.notes.some((n) => /forceful stretching of loose joints/.test(n)) && p.notes.some((n) => /no forceful manipulation/.test(n)) &&
     p.notes.some((n) => /hearing test/.test(n)) && /^After a fracture or surgery/.test(pr.text) && /cleared you/.test(pr.text) &&
-    pr.notes.some((n) => /review your bone medicine/.test(n)) && pr.notes.some((n) => /spine within months/.test(n)) &&
+    pr.notes.some((n) => /review of your bone health/.test(n)) && pr.notes.some((n) => /stopped a bone medicine without a plan/.test(n)) &&
     pr.notes.some((n) => /referral back to a bone or OI specialist/.test(n)) && !p.notes.some((n) => /referral back/.test(n)) &&
     OI.oiPanel({}) === null && /oi: oiP/.test(src))
   check('OI details: four optional questions on "Before your results"; summary lines for Chandra',
@@ -1364,7 +1366,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     osteo && JSON.stringify(osteo).includes('vitamin D, calcium and parathyroid hormone have been checked'))
   const p = OM.osteomalaciaPanel(true)
   check('Osteomalacia route C: diagnosed on the cautions list; panel with keep taking supplements, gradual strength, weight-bearing plan, the 3-month review, the groin crack and low calcium (911 seizure); in the PDF',
-    /OSTEOMALACIA_CAUTION,/.test(src) && p && p.notes.some((n) => /come back when supplements stop/.test(n)) && p.notes.some((n) => /sit-to-stands/.test(n)) &&
+    /OSTEOMALACIA_CAUTION,/.test(src) && p && p.notes.some((n) => /plan for vitamin D and calcium/.test(n)) && p.notes.some((n) => /sit-to-stands/.test(n)) &&
     p.notes.some((n) => /about 3 months/.test(n)) && p.notes.some((n) => /groin, hip or thigh/.test(n)) && p.notes.some((n) => /Call 911 for a seizure/.test(n)) &&
     OM.osteomalaciaPanel(false) === null && /osteomalacia: omPanel/.test(src))
   const all = JSON.stringify([c, OM.RICKETS_SCREEN, OM.OSTEOMALACIA_CAUTION, p, OM.STRESS_LINE])
@@ -1390,7 +1392,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     R({ bnFracture: 'hipspine' }).askDoctor && R({ bnFracture: 'two' }).reclassify && R({ bnHeight: 'yes' }).askDoctor && R({ bnRisk: ['gut'] }).askDoctor &&
     R({ bnFalls: 'two', age: 'o64' }).askDoctor && !R({ bnFalls: 'two', age: '50-64' }).askDoctor && !R({ bnRisk: ['smoke'] }).askDoctor &&
     R({ bnFracture: 'one', bnFalls: 'one' }).askDoctor && R({ bnRisk: ['smoke', 'parent'], steroid: 'tabs', bnFalls: 'one' }).askDoctor &&
-    !R({ bnRisk: ['smoke', 'parent'], bnFalls: 'one' }).askDoctor)
+    // 6 Oct 2026 (C1): two FRAX factors, steroid tablets alone, or one fragility fracture also ask.
+    R({ bnRisk: ['smoke', 'parent'] }).askDoctor && R({ steroid: 'tabs' }).askDoctor && R({ bnFracture: 'one' }).askDoctor)
   const plain = OP.bonePanel(['ca-osteopenia'], {}), high = OP.bonePanel(['ca-osteopenia'], { bnFracture: 'hipspine', bnHeight: 'yes', bnFalls: 'one' })
   check('Osteopenia panel: strength twice a week, daily balance, gradual impact without a spine fracture, hip-hinge technique; the FRAX, osteoporosis, spine X-ray and falls lines only when the answers call for them; no number shown',
     plain.notes.some((n) => /twice a week/.test(n)) && plain.notes.some((n) => /heel drops/.test(n) && /not had a spine fracture/.test(n)) &&
@@ -2028,6 +2031,66 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     !/injection/.test((await import('node:fs')).readFileSync(new URL('../src/data/diabetes.js', import.meta.url), 'utf8').match(/catching fingers[^']*/)[0]))
   check('New cards: recovery after a broken wrist (after a fracture only), deep back-of-wrist pain, finger and thumb injury aftercare',
     card(W, 'fracture').gates.requiresOnset.join() === 'surgery' && !!card(W, 'dorsal') && !!card(H, 'fingerinjury'))
+}
+
+// ── 62. General conditions cross-check (all 29 approved, 6 Oct 2026) ──
+{
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const PG = await imp('src/data/pregnancy.js')
+  const DM = await imp('src/data/diabetes.js')
+  const ST = await imp('src/data/steroids.js')
+  const TH = await imp('src/data/thyroid.js')
+  const OP = await imp('src/data/osteopenia.js')
+  const BT = await imp('src/data/boneTumour.js')
+  const PA = await imp('src/data/paget.js')
+  const WP = await imp('src/data/widespreadPain.js')
+  const PT = await imp('src/data/painType.js')
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  const Z = (ids) => ids.map((id) => ({ id, type: id.replace(/[LR]$/, ''), label: id }))
+  const ids = (z, a) => patternChecks(Z(z), a, 30).map((p) => p.id)
+  const preg = (stage) => PG.pregnancyRedFlags(Z(['lowerback']), { preg: stage }, []).map((f) => f.id)
+  check('Pregnancy: bleeding in the first 12 weeks goes to the emergency department, labour and delivery from 13 weeks; pre-eclampsia names the upper tummy, vomiting and breathlessness; twins after 28 weeks',
+    preg('p1').includes('pg-earlybleed') && !preg('p1').includes('pg-labour') && preg('p2').includes('pg-labour') && !preg('p2').includes('pg-earlybleed') &&
+    !PG.PREG_RED_FLAGS.find((f) => f.id === 'pg-earlybleed').goTo && /middle of your tummy/.test(PG.PREG_RED_FLAGS.find((f) => f.id === 'pg-preeclampsia').text) &&
+    PG.PREG_LIMITS.options.some((o) => /twins after 28 weeks/.test(o.label)))
+  check('Stroke (911) for every drawing, left out where the area asks its own; the MS screen also with weakness; painful one-eye vision the same day',
+    ids(['kneeL'], {}).includes('pc-stroke') && /ownStroke && f\.id === 'pc-stroke'/.test(src) &&
+    ids(['thighL'], { R2: ['weak'] }).includes('pc-neuro') && ids(['thighL'], { painQuality: ['tingling'] }).includes('pc-optic') && !ids(['thighL'], {}).includes('pc-neuro'))
+  check('Muscle crisis: "new or getting worse"; weakness climbing from the feet goes to the emergency department',
+    patternChecks(Z(['thighL']), { R2: ['weak'] }, 30).some((p) => p.id === 'pc-gbs' && p.tier === 'emergency' && !p.call911) &&
+    /new or getting worse/.test(patternChecks(Z(['thighL']), { R2: ['weak'] }, 30).find((p) => p.id === 'pc-muscle-crisis').text))
+  check('Children: one sports knee at 5 to 15 is not asked the young-child muscle question; adult muscle, hormone and calcium screens are not asked under 16; Duchenne caution names fat embolism and the steroid emergency plan',
+    !ids(['kneeL'], { age: 'u18' }).includes('pc-child-muscle') && ids(['thighL', 'thighR'], { age: 'u18' }).includes('pc-child-muscle') &&
+    !ids(['thighL', 'thighR', 'lowerback'], { age: 'u5' }).some((x) => ['pc-myositis', 'pc-hormone', 'pc-lowhormone', 'pc-muscle', 'pc-calcium', 'pc-thyroid'].includes(x)) &&
+    /days after a fall or a broken bone needs 911/.test(src) && /emergency plan/.test(src))
+  check('Diabetes: 911 for the hyperosmolar state; the low-sugar line with 911 after two treatments, also for "not sure"; barefoot indoors too; heart at rest 911, on exertion doctor today',
+    DM.DM_RED_FLAGS.some((f) => f.id === 'dm-hhs' && f.call911) && DM.DM_RED_FLAGS.some((f) => f.id === 'dm-exertion' && f.sameDay) &&
+    !DM.DM_RED_FLAGS.find((f) => f.id === 'dm-cardiac').covers.includes('pc-cardiac') && /dmKnown && f\.id === 'pc-cardiac'/.test(src) &&
+    JSON.stringify(DM.diabetesPanel({ dm: 'yes', dmTreat: 'ns' }, Z(['footL', 'footR']), [])).includes('two treatments') &&
+    (await import('node:fs')).readFileSync(new URL('../src/data/diabetes.js', import.meta.url), 'utf8').includes('in thin slippers, indoors or outdoors'))
+  check('Steroids: 4 weeks or more, Addison\'s named; no dose advice on sick days; thyroxine without timing advice',
+    /4 weeks or more/.test(ST.STEROID_STATUS.options.find((o) => o.id === 'tabs').label) && /Addison/.test(ST.STEROID_STATUS.options.find((o) => o.id === 'tabs').label) &&
+    !/doubling the dose/.test(JSON.stringify(ST)) && !/empty stomach/.test(JSON.stringify(TH.hypothyroidPanel(true))))
+  check('Final check: emergencies do not use a place and the hormone screens get up to two more (both shoulders at 50 to 64 with weakness keeps the thyroid screens)',
+    /laterRest\.slice\(0, 6\)/.test(src) && /later\.filter\(\(p\) => p\.tier === 'emergency'\)/.test(src) && /HORMONE\.includes\(p\.id\)\)\.slice\(0, 2\)/.test(src))
+  check('Compartment syndrome: the knee asks it (shared with the lower leg); every version names surgery, lying on the limb and blood thinners',
+    REGIONS.knee.redFlags.some((f) => f.id === 'kf-compartment' && f.group === 'compartment-leg') &&
+    Object.values(REGIONS).flatMap((r) => r.redFlags).filter((f) => /compartment/.test(f.id)).every((f) => /operation on the limb/.test(f.text) && /blood thinners/.test(f.text)))
+  check('Bone tumour: three neighbouring areas of one limb, or the pelvis with the low back and one hip, count as one bone; both sides do not',
+    BT.oneBone(Z(['thighR', 'kneeR', 'lowerlegR'])) && BT.oneBone(Z(['sijL', 'lowerback', 'hipL'])) && !BT.oneBone(Z(['thighR', 'kneeR', 'kneeL', 'lowerlegR'])) &&
+    ids(['thighR', 'kneeR', 'lowerlegR'], { age: '18-29', duration: 'd6w' }).includes('pc-bone-young'))
+  check('Osteopenia and osteoporosis: steroid tablets, two FRAX factors or one fragility fracture prompt a doctor check; the osteoporosis caution has the panel (no "thin"); no denosumab or vitamin D advice',
+    OP.boneRisk({ steroid: 'tabs' }).askDoctor && OP.boneRisk({ bnRisk: ['smoke', 'parent'] }).askDoctor && OP.boneRisk({ bnFracture: 'one' }).askDoctor &&
+    !!OP.bonePanel(['ca-bone'], {}) && /Too Fit to Fracture/.test(JSON.stringify(OP.bonePanel(['ca-bone'], {}))) && !/thinning bones/.test(src) &&
+    !/denosumab|vitamin D in the winter/.test(JSON.stringify(OP.bonePanel(['ca-osteopenia'], {}))))
+  check('Paget\'s: "years" and the pelvis chain are asked; widespread pain: morning stiffness over an hour does not open it, both sides above and below the waist for months does; nociplastic needs touch or a widespread drawing',
+    PA.pagetApplies(Z(['lowerlegL']), { age: 'o64', duration: 'years' }) && PA.pagetApplies(Z(['sijL', 'lowerback', 'hipL']), { age: 'o64', duration: 'o3m' }) &&
+    !WP.widespreadRoute({ primary: 'nociplastic', widespread: true }, false, Z(['handL', 'handR', 'wristL', 'wristR']), { pattern24: ['amLong'], duration: 'o3m' }) &&
+    WP.widespreadRoute({ primary: 'nociceptive', widespread: true }, false, Z(['neck', 'shoulderL', 'shoulderR', 'hipL', 'kneeR']), { duration: 'years' }) &&
+    PT.classifyPainMechanism({ zones: Z(['kneeL']), answers: { duration: 'years', easing: ['none'], yfFear: 'agree', yfOutlook: 'agree', yfMood: 'agree', sinSettle: 'constant' } })?.primary !== 'nociplastic')
+  check('New cautions: ME/CFS (energy management), hypermobility, rheumatoid arthritis; the widespread self-care names post-exertional malaise',
+    /ca-mecfs/.test(src) && /ca-hypermobility/.test(src) && /ca-ra'/.test(src) && WP.WIDESPREAD.selfCare.some((l) => /a day or two later/.test(l)))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

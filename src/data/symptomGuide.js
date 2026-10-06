@@ -327,6 +327,10 @@ export const REGIONS = {
   knee: {
     name: "Knee",
     redFlags: [
+      // 6 Oct 2026, general conditions cross-check (approved by Chandra), S11: tibial plateau fractures and knee dislocations cause it; worded
+      // as the lower leg's, so asked once.
+      { id: "kf-compartment", tier: "emergency", group: "compartment-leg", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your toes are gently moved?" },
       { id: "kf-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
         text: "Is your knee hot, red, and swollen, with a fever or feeling unwell, especially after an injection, surgery, or a cut?" },
       { id: "kf-pe", tier: "emergency", call911: true, group: "legclotlung", why: "Possible blood clot that has travelled to the lung",

@@ -94,7 +94,8 @@ export function hypothyroidPanel(ticked = false) {
     title: 'An underactive thyroid and rebuilding strength',
     text: 'With too little thyroid hormone, the body runs slow: muscles become stiff, achy and slow to recover, and fluid in the tissues can squeeze the nerve at the wrist and stiffen shoulders and joints. The muscles and nerves have been running slow and swollen, not damaged: with the right thyroxine dose, aches, cramps and numb hands usually ease within weeks to a few months, and strength rebuilds with training. If aches, cramps, tiredness and slow recovery creep back, ask your doctor to check your thyroid levels: the dose may need adjusting.',
     notes: [
-      'Take thyroxine on an empty stomach at the same time each day, 30 to 60 minutes before food and 4 hours apart from calcium, iron or antacids, and do not stop it without advice.',
+      // 6 Oct 2026, general conditions cross-check (approved by Chandra), W1: no medication advice on patient pages (timing is in the clinic notes).
+      'Take thyroxine exactly as your doctor or pharmacist advised, and do not stop it without advice.',
       'Keep moving daily but build slowly: a short walk and a few sit-to-stands, adding a little each week only if you have recovered by the next day; warm up longer than you think you need.',
       'For numb hands at night, keep the wrist straight (a simple night splint from a pharmacy) and avoid sleeping with the wrist bent under you.',
       'If you take a cholesterol tablet and your muscles ache, mention both to your doctor; the thyroid is checked first.',

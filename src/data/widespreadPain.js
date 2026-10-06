@@ -18,10 +18,23 @@
 
 /** Show the section? `painType` from classifyPainMechanism; `diagnosed` when
     the person ticked a doctor's fibromyalgia diagnosis. */
-export function widespreadRoute(painType, diagnosed) {
+export function widespreadRoute(painType, diagnosed, zones = [], answers = {}) {
   if (diagnosed) return true
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), C4: morning stiffness over an hour (an inflammatory
+  // pattern) goes to the doctor-first checks, not this section.
+  if ([].concat(answers.pattern24 || []).includes('amLong')) return false
+  // Pain on both sides, above and below the waist, in 4 or more areas for
+  // over 3 months is shown whatever the pain type (an atypical fibromyalgia).
+  if (['o3m', 'years'].includes(answers.duration) && chronicWidespread(zones)) return true
   if (!painType || !painType.widespread) return false
   return [painType.primary, painType.secondary].includes('nociplastic')
+}
+const UPPER = ['neck', 'ctj', 'upperback', 'chest', 'shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'head', 'jaw']
+const LOWER = ['lowerback', 'sij', 'coccyx', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot']
+export function chronicWidespread(zones = []) {
+  const types = new Set(zones.map((z) => z.type))
+  const sides = new Set(zones.map((z) => (/L$/.test(z.id) ? 'L' : /R$/.test(z.id) ? 'R' : 'M')))
+  return types.size >= 4 && sides.has('L') && sides.has('R') && [...types].some((t) => UPPER.includes(t)) && [...types].some((t) => LOWER.includes(t))
 }
 
 export const WIDESPREAD = {
@@ -36,6 +49,8 @@ export const WIDESPREAD = {
     'Pace yourself: break tasks into chunks and rest before you have to, not after.',
     'Warmth helps many people: a warm bath, heat pack or warm pool before exercise.',
     'Hurt does not mean harm: a flare is the alarm system being loud, not something breaking.',
+    // S13 (NICE NG206): post-exertional malaise.
+    'If even small amounts of activity leave you much worse a day or two later, tell your doctor and Chandra: the plan then starts with managing energy rather than building exercise.',
   ],
-  physio: 'Physiotherapy can help with a clear explanation of what is happening, movement built up slowly from a level you can manage (walking, cycling, pool exercise and gentle strengthening have the strongest evidence), pacing and a plan for flares, sleep, and ways to calm the system such as breathing, relaxation, tai chi or yoga. Hands-on treatment and heat can ease pain for a while and help you get moving; they support the plan rather than replace it. Where it helps, Chandra works alongside your doctor or a chronic-pain programme.',
+  physio: 'Physiotherapy can help with a clear explanation of what is happening, movement built up slowly from a level you can manage (walking, cycling, pool exercise and gentle strengthening have the strongest evidence), pacing and a plan for flares, sleep, and ways to calm the system such as breathing, relaxation, tai chi or yoga. Heat, and for some people gentle hands-on treatment, can ease pain for a while and help you get moving; they support the plan rather than replace it. Where it helps, Chandra works alongside your doctor or a chronic-pain programme.',
 }

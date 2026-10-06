@@ -173,7 +173,9 @@ export function classifyPainMechanism({ zones = [], answers = {}, behaviour = {}
     add('nociceptive', 2, 'it is a deep ache spreading from the spine, with no nerve-type symptoms')
   }
   if (d.localised) add('nociceptive', 2, 'the pain is in one area')
-  if (ease.length && !ease.includes('none')) add('nociceptive', 2, 'particular positions or activities ease it')
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), C4: warmth eases sensitised pain too, so heat alone does not count.
+  const easeNotHeat = ease.filter((x) => !/heat|warm/i.test(String(x)))
+  if (easeNotHeat.length && !ease.includes('none')) add('nociceptive', 2, 'particular positions or activities ease it')
   if (pattern.includes('none') || pattern.includes('amShort') || pattern.includes('pm')) add('nociceptive', 1, 'it changes with what you do')
   if ((q.has('ache') || q.has('sharp')) && !nerveWords) add('nociceptive', 1, 'it feels achy or sharp with movement')
   if (settle === 'minutes' || settle === 'hours') add('nociceptive', 1, null)
@@ -191,8 +193,8 @@ export function classifyPainMechanism({ zones = [], answers = {}, behaviour = {}
     if (d.widespread) add('nociplastic', 3, 'it is spread across several areas')
     if (ease.includes('none') || settle === 'constant') add('nociplastic', 2, 'it does not follow a clear pattern of what eases it')
     if (behaviour.irritability === 'severe' && answers.sinSeverity === 'severe') add('nociplastic', 1, 'it is severe and slow to settle')
-    if (psychCount >= 3) add('nociplastic', 2, 'it is affecting sleep, mood or confidence')
-    else if (psychCount === 2) add('nociplastic', 1, null)
+    // C4 (Kosek 2021): mood and beliefs add at most 1; sleep is the comorbidity item.
+    if (psychCount >= 2) add('nociplastic', 1, 'it is affecting sleep, mood or confidence')
     if (q.has('touch')) add('nociplastic', 1, 'the area is sensitive to light touch')
     if (answers.yfSleep === 'agree') add('nociplastic', 1, null)
   }
@@ -202,7 +204,8 @@ export function classifyPainMechanism({ zones = [], answers = {}, behaviour = {}
   const qualifies = {
     nociceptive: score.nociceptive >= 3,
     neuropathic: score.neuropathic >= 3 && nerveWords,
-    nociplastic: score.nociplastic >= 6,
+    // C4 (Kosek 2021): sensitised pain needs touch sensitivity or a widespread drawing.
+    nociplastic: score.nociplastic >= 6 && (q.has('touch') || d.widespread),
   }
   const ranked = Object.keys(score).filter((t) => qualifies[t]).sort((a, b) => score[b] - score[a])
   if (!ranked.length) return null

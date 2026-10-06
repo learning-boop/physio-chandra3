@@ -28,3 +28,8 @@
 ## Sources
 
 Birnkrant DJ et al., Lancet Neurol 2018;17:251-267, 347-361, 445-455; Scottish Muscle Network DMD Physiotherapy Management Profile v2, 2024; Suslov 2023 (Front Neurol, hydrokinesitherapy); Muscular Dystrophy Canada; BC Children's Hospital Neuromuscular Clinic; AIM Theory Manual 2023 Ch. 2.9.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Age labels: the youngest answers are now "Under 5" (u5) and "5 to 15" (u18); the "Under 18" wording above is out of date.
+- Caution additions (Birnkrant 2018 part 3): fat embolism after a fall (911), heart and breathing warning signs (neuromuscular team), adrenal crisis on daily steroids (the team's emergency plan).
+- The child muscle question for 5 to 15 now needs both legs, the hip, thigh or low back, or a weakness answer (not one sports knee); the adult muscle, hormone and calcium screens are not asked under 16.

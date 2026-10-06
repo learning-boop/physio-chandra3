@@ -1433,7 +1433,7 @@ export const EXTRA_REGIONS = {
         text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, or after a recent injection?" },
       // 6 Oct 2026: elbow cross-check, approved by Chandra (S1, S12): worded as the forearm's, so asked once.
       { id: "erf-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your fingers are gently moved?" },
       { id: "erf-cast", tier: "urgent", sameDay: true, group: "casttight-arm", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this arm feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "erf-cellulitis", sameDay: true, tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
@@ -1577,7 +1577,7 @@ export const EXTRA_REGIONS = {
       // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "frf-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your fingers are gently moved?" },
       { id: "frf-cast", tier: "urgent", sameDay: true, group: "casttight-arm", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this arm feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "frf-necfasc", tier: "emergency", why: "Possible severe skin and tissue infection (necrotising fasciitis)",
@@ -1713,7 +1713,7 @@ export const EXTRA_REGIONS = {
       // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "wrf-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your fingers are gently moved?" },
       { id: "wrf-cast", tier: "urgent", sameDay: true, group: "casttight-arm", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this arm feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "wrf-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
@@ -1879,7 +1879,7 @@ export const EXTRA_REGIONS = {
       // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "hnd-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your fingers are gently moved?" },
       { id: "hnd-cast", tier: "urgent", sameDay: true, group: "casttight-arm", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this hand feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "hnd-bite", tier: "emergency", group: "handbite", why: "Possible tendon sheath or joint infection; needs urgent surgical review",
@@ -2238,7 +2238,7 @@ export const EXTRA_REGIONS = {
       // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "tgf-compartment", tier: "emergency", why: "Possible compartment syndrome of the thigh: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a heavy knock, a crush, a broken bone or very hard exercise in the last day or two: is your thigh pain far worse than expected and still climbing, no longer helped by pain relief, with the thigh tense, hard and swollen?" },
+        text: "Since a heavy knock, a crush, a broken bone, an operation on the limb, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is your thigh pain far worse than expected and still climbing, no longer helped by pain relief, with the thigh tense, hard and swollen?" },
       { id: "tgf-rhabdo", tier: "emergency", group: "rhabdo", why: "Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
         text: "Do you have severe muscle pain or weakness, with urine that is dark like cola? (Especially after very hard exercise, a crush, a long time lying on the floor, a new medicine such as a statin, or a recent illness.)" },
       { id: "tgf-necfasc", tier: "emergency", group: "legnecfasc", why: "Possible severe skin and tissue infection",
@@ -2378,7 +2378,7 @@ export const EXTRA_REGIONS = {
       // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "lgf-compartment", tier: "emergency", group: "compartment-leg", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved?" },
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your toes are gently moved?" },
       { id: "lgf-cast", tier: "urgent", sameDay: true, group: "casttight-leg", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this leg feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "lgf-rhabdo", tier: "emergency", group: "rhabdo", why: "Possible muscle breakdown (rhabdomyolysis), which can damage the kidneys",
@@ -2531,7 +2531,7 @@ export const EXTRA_REGIONS = {
       // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "af-compartment", tier: "emergency", group: "compartment-leg", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved?" },
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your toes are gently moved?" },
       { id: "af-cast", tier: "urgent", sameDay: true, group: "casttight-leg", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this leg feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "af-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
@@ -2715,7 +2715,7 @@ export const EXTRA_REGIONS = {
       // "Acute Compartment Syndrome" document (signed by Chandra, 2 Oct 2026): pain relief no
       // longer helping, the trigger in the last day or two, and one shared question per limb.
       { id: "ft-compartment", tier: "emergency", group: "compartment-leg", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
-        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your toes are gently moved?" },
+        text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your lower leg or foot far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your toes are gently moved?" },
       { id: "ft-cast", tier: "urgent", sameDay: true, group: "casttight-leg", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this foot feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "ft-ischaemia", tier: "emergency", group: "limbischaemia", why: "Possible blocked artery",

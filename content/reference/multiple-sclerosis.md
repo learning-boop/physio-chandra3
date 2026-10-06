@@ -35,3 +35,7 @@
 ## Sources
 
 NICE NG220 (2022, amended 2026); Montalban X et al., Lancet Neurol 2025 (2024 McDonald criteria); Kalb R et al., Mult Scler J 2020; Latimer-Cheung 2013 (Canadian MS physical activity guidelines); Cochrane reviews (Heine 2015 fatigue; mobility and balance; Gunn 2015 falls; vestibular rehabilitation); MS Society of Canada; AIM Theory Manual 2023 Ch. 2.9.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Sudden loss of vision in one eye, or sudden one-sided weakness, numbness, face droop or slurred speech in the last few hours, is now a 911 question for every drawing (pc-stroke; AHA 2021 CRAO "eye stroke"), unless the area asks its own stroke question.
+- Painful, blurred vision in one eye over days (optic neuritis) is a separate same-day question (pc-optic). The MS screen is now asked with tingling, a weakness answer or the neck's cord signs.

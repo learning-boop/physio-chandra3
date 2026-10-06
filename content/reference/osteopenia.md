@@ -47,3 +47,9 @@ A DXA reading between -1 and -2.5, not a disease and not a cause of pain. Most f
 ## Sources
 
 Morin SN et al., CMAJ 2023;195:E1333-48 and the Osteoporosis Canada algorithm; Giangregorio LM et al., Osteoporos Int 2014 and Too Fit to Fracture resources 2023; CaMos (Menopause 2010); Siris ES et al., NORA, Arch Intern Med 2004; Montero-Odasso M et al., Age Ageing 2022; ISCD 2023 Official Positions; BHOF clinician's guide 2022; Reventlow 2006, Rothmann 2014 (label effects); Health Canada and Osteoporosis Canada calcium and vitamin D; Butler & Moseley, Explain Pain.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Ask-your-doctor prompt now also for steroid tablets, two or more FRAX factors, or any fragility fracture since 40 (Osteoporosis Canada 2023; ACR 2022). "About 4 in 10" adults over 50 (Wright 2014, from memory).
+- Medication lines replaced by: "Follow your doctor's plan for any bone medicine or supplements, and ask them before changing or stopping anything." Denosumab rebound and vitamin D dosing are clinic-note topics.
+- Diagnosed osteoporosis (ca-bone, now worded without "thin") uses the same panel, with a "no impact or loaded bending after a spine fracture" line (Too Fit to Fracture).
+- AIM p. 624 (high-intensity exercise no better than walking) is out of date (LIFTMOR; Osteoporosis Canada 2023 prefers progressive resistance).

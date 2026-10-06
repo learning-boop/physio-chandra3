@@ -65,14 +65,25 @@ export const DM_RED_FLAGS = [
     text: 'A toe or part of your foot that has turned black, dusky or cold, or a foot wound with spreading redness, pus, a bad smell or a fever',
     why: { title: 'This can threaten the foot',
       text: 'With diabetes, a darkening toe or a spreading foot infection needs hospital care today. Keep weight off the foot.' } },
-  { id: 'dm-cardiac', tier: 'emergency', call911: true, covers: ['pc-cardiac', 'cardiac'],
-    text: 'Pressure or pain in the chest, jaw, arm or upper back, breathlessness, or unusual exhaustion when you exert yourself (with diabetes, heart symptoms can be mild or unusual)',
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), S7: the hyperosmolar state (very high sugars without vomiting).
+  { id: 'dm-hhs', tier: 'emergency', call911: true,
+    text: 'Very high sugar readings (over 20, or "HI" on the meter) with extreme thirst, passing a lot of urine, and drowsiness or confusion',
+    why: { title: 'Possible high-blood-sugar emergency',
+      text: 'With diabetes, very high sugars with thirst, a lot of urine and drowsiness can mean a hyperosmolar state, which needs hospital treatment straight away.' } },
+  // S8: the generic heart question is left out with known diabetes (PainAssessment.jsx);
+  // at rest or lasting is 911, exertional that settles is doctor today.
+  { id: 'dm-cardiac', tier: 'emergency', call911: true, covers: ['cardiac'],
+    text: 'Pressure or pain in the chest, jaw, arm or upper back, or breathlessness, at rest or lasting more than a few minutes (with diabetes, heart symptoms can be mild or unusual)',
     why: { title: 'This needs emergency assessment',
       text: 'With diabetes, the heart can give milder or unusual warning signs than the classic crushing chest pain. These need checking straight away.' } },
+  { id: 'dm-exertion', tier: 'urgent', sameDay: true,
+    text: 'New breathlessness, chest tightness or unusual exhaustion when you exert yourself, that settles with rest',
+    why: { title: 'Please see a doctor today',
+      text: 'With diabetes, the heart can give mild warning signs that only show on effort. Please see a doctor the same day and hold off harder exercise until you have been checked. Call 911 if it comes on at rest or lasts more than a few minutes.' } },
   { id: 'dm-foot-hot', tier: 'urgent', sameDay: true, group: 'charcot',
     text: 'One foot that is red, warm and swollen, even if it does not hurt much and you do not remember hurting it; or a blister, cut or sore on your foot that is not healing, or that you did not feel',
     why: { title: 'Please see a doctor today and keep weight off that foot',
-      text: 'With diabetes, a hot, swollen foot can be an infection or a Charcot foot, where the bones of the foot soften; keeping weight off it early protects the foot. A wound that is not healing needs a doctor or diabetes foot clinic within a day or two; please do not walk on it barefoot. Go to the emergency department if you also have a fever or feel unwell.' } },
+      text: 'With diabetes, a hot, swollen foot can be an infection or a Charcot foot, where the bones of the foot soften; keeping weight off it early protects the foot. A wound that is not healing needs a doctor or diabetes foot clinic today, or within a day at the latest; please keep weight off it. Go to the emergency department if you also have a fever or feel unwell.' } },
   { id: 'dm-thigh', tier: 'urgent', sameDay: true,
     when: (z) => has(z, 'thigh', 'knee', 'lowerleg'),
     text: 'Sudden, severe pain with firm swelling in one thigh or calf, with no injury',
@@ -129,7 +140,7 @@ export const DM_QUESTIONS = [
   ] },
   { id: 'dmTreat', text: 'How is it treated?', status: ['yes'], options: [
     { id: 'diet', label: 'Diet and exercise', pts: 0 },
-    { id: 'tablets', label: 'Tablets, such as metformin', pts: 0 },
+    { id: 'tablets', label: 'Tablets that do not cause low sugars (such as metformin)', pts: 0 },
     { id: 'insulin', label: 'Insulin, or tablets that can cause low sugars (such as gliclazide or glyburide)', pts: 1, flag: 'HYPO' },
     { id: 'ns', label: 'Not sure', pts: 0 },
   ] },
@@ -249,16 +260,17 @@ const PROGNOSIS = {
 const COORDINATE = 'It is worth mentioning this to your family doctor or diabetes team at your next visit: joint and nerve problems like this often go with how long and how high sugars have been running, and the same steps help both.'
 const NERVE_TEAM = 'Burning or numb feet are worth mentioning to your diabetes doctor or nurse at your next visit, and a foot-care specialist can check your feet once a year or more often.'
 const NOTES = {
-  HYPO: 'Because of your insulin or sugar-lowering tablets, check your sugar before and after new activity for the first few sessions, and keep fast-acting sugar with you.',
-  FOOT: 'Check both feet every day (a mirror or someone else can help) for cuts, blisters, redness or swelling; wear well-fitting shoes and seamless socks, and do not walk barefoot outdoors. Balance practice holding a counter is a good place to start.',
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), S7: what to do with a low reading, and when to call 911.
+  HYPO: 'Because of your insulin or sugar-lowering tablets, check your sugar before and after new activity for the first few sessions, and keep fast-acting sugar with you. If your reading is low, or you feel shaky, sweaty, hungry or muddled, have 15 g of fast sugar (such as juice or glucose tablets) and recheck in 15 minutes; do not start exercise while it is under 4.0, and use the starting number your diabetes team gave you if they did. Sugar can drop for up to a day afterwards, including overnight. Call 911 if low sugar does not improve after two treatments, or the person is too drowsy or confused to swallow.',
+  FOOT: 'Check both feet every day (a mirror or someone else can help) for cuts, blisters, redness or swelling; wear well-fitting shoes and seamless socks, and do not walk barefoot, in socks only or in thin slippers, indoors or outdoors. Balance practice holding a counter is a good place to start.',
   EYE: 'If you have been told you have advanced eye changes, avoid very heavy straining or head-down positions until your eye doctor says they are fine.',
-  KIDNEY: 'Drink to thirst during exercise, and tell us about any swelling or breathlessness.',
+  KIDNEY: 'Drink to thirst during exercise, unless your kidney team has asked you to limit fluids, and tell us about any swelling or breathlessness.',
   CARDIAC: 'Please check with your doctor before anything much harder than brisk walking.',
 }
 const STEROID = 'If your doctor suggests a steroid injection, it can push sugars up for several days; worth planning with your diabetes team.'
 const GENERAL_ACTIVE = {
   title: 'Diabetes and staying active',
-  text: 'Movement is part of the treatment for diabetes as well as for pain, and building up gradually is safe. Check your feet every day for cuts, blisters or redness, and wear well-fitting shoes. If you use insulin or tablets that can cause low sugars, check your sugar before and after new activity for the first few sessions, and keep fast-acting sugar with you.',
+  text: 'Movement is part of the treatment for diabetes as well as for pain, and building up gradually is safe. Check your feet every day for cuts, blisters or redness, and wear well-fitting shoes. If you use insulin or tablets that can cause low sugars, check your sugar before and after new activity for the first few sessions, and keep fast-acting sugar with you; call 911 if low sugar does not improve after two treatments, or the person is too drowsy or confused to swallow.',
 }
 const PRE = {
   title: 'Prediabetes and staying active',
@@ -290,7 +302,7 @@ export function diabetesPanel(answers = {}, zones = [], shown = []) {
     // The feet panel already carries the foot-care line.
     if (flags.FOOT || (variant === 'feet')) notes.push(NOTES.FOOT)
     for (const f of ['HYPO', 'EYE', 'KIDNEY', 'CARDIAC']) if (flags[f]) notes.push(NOTES[f])
-    if (!flags.HYPO && answers.dmTreat === undefined) notes.push('If you use insulin or tablets that can cause low sugars, check your sugar before and after new activity for the first few sessions, and keep fast-acting sugar with you.')
+    if (!flags.HYPO && (answers.dmTreat === undefined || answers.dmTreat === 'ns')) notes.push('If you use insulin or tablets that can cause low sugars, check your sugar before and after new activity for the first few sessions, and keep fast-acting sugar with you. Call 911 if low sugar does not improve after two treatments, or the person is too drowsy or confused to swallow.')
     return { title: PANELS[variant].title, text: PANELS[variant].text, notes: [...new Set(notes)] }
   }
   if (dm === 'pre') return lead || feet ? { title: PRE.title, text: PRE.text, notes: [] } : null

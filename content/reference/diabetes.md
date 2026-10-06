@@ -91,3 +91,10 @@ The manual's "types I-V" (about 2018) do not match current naming. ADA 2026: typ
 ## Sources
 
 ADA Standards of Care in Diabetes 2026 §2, §12; Diabetes Canada CPG 2018 Ch.4, 10, 14 (2023 update), 31, 32 and App. 11A/11B; IDF type 5 (2025) and Lancet Diabetes Endocrinol 2025; Upper-limb complications in diabetes, Diabetes Care 2025;48(11):1865; Zreik NH et al., MLTJ 2016; Int Orthop 2026 diabetic shoulder meta-analysis; Yian 2012; Juel (Dialong) 2017; J Pharm Bioallied Sci 2024; IWGDF 2023; EMJ 2020 (amyotrophy); exercise in DPN umbrella review 2024/2025; Butler & Moseley, Explain Pain.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Added: 911 for the hyperosmolar state (dm-hhs); the low-sugar line with what to do with a low reading and when to call 911, also for "not sure" treatment; the tablets answer now reads "Tablets that do not cause low sugars (such as metformin)".
+- The pre-exercise number: the site says do not start under 4.0 and use the team's own starting number; the 5.5 mmol/L figure was not verified (Diabetes Canada Ch.10 not readable), so it is not used. Type 1: glucose over about 14 to 15 with ketones 1.5 or more, no exercise (Riddell 2017; figures not verified).
+- Heart: with known diabetes the generic heart question is left out; at rest or lasting is 911 (dm-cardiac), new exertional symptoms that settle with rest are doctor today (dm-exertion).
+- Feet: no barefoot walking, socks only or thin slippers, indoors or outdoors (IWGDF 2023). Kidneys: "unless your kidney team has asked you to limit fluids".
+- Chandra's diabetes education protocol differs: swimming with a foot ulcer (ADA and IWGDF advise against), paraffin wax with numb hands (burn risk), no numeric glucose thresholds, consumer sources.

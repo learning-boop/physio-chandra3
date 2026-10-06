@@ -38,3 +38,7 @@
 ## Source
 
 Daley D et al., JOSPT 2021;51(8):CPG1-CPG102 (grades in brackets).
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Time off work is now asked (bfOffWork); the "nothing asks about time off work" note above is out of date.
+- Clinician summary: "high return-to-work risk" with time off plus 2 or more yellow flags or a low expectation of recovery; off work over 6 weeks adds the CPG lines (multidisciplinary assessment at 6 to 8 weeks, B; intense graded work-oriented exercise, C; not light exercise alone, B). The psychosocial level is labelled as the site's own count, not a validated scale.

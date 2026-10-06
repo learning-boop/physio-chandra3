@@ -54,3 +54,7 @@ The guide never diagnoses Cushing's. Steroid medicine is by far the commonest ca
 ## Sources
 
 Nieman LK et al., JCEM 2008 (diagnosis) and 2015 (treatment); Fleseriu M et al., Lancet Diabetes Endocrinol 2021; Vogel F et al., JCEM 2020; Cushing's disease and bone, Pituitary 2024; glucocorticoid myopathy reviews (Endocrinol Metab 2021); ACR 2022 GIO guideline; Osteoporosis Canada 2023; avascular necrosis reviews (J Med Case Rep 2021); NHS / Society for Endocrinology steroid emergency card guidance; Butler & Moseley, Explain Pain.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Steroid question: tablets "for 4 weeks or more" (adrenal suppression can follow about 4 weeks; ESE/Endocrine Society 2024; NHS steroid card threshold not verified), "including for Addison's disease"; bone line: a bone-health check for everyone on steroid tablets for 3 months or more (ACR 2022).
+- Sick days: "follow the sick-day rules your doctor or endocrinologist gave you" (no dose advice on patient pages). AIM p. 605 (adrenalectomy, trilostane first) is out of date: resect the primary lesion first (Endocrine Society 2015).

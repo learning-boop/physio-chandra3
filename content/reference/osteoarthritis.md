@@ -56,3 +56,7 @@ Inflammatory arthritis (morning stiffness over an hour, several swollen joints, 
 ## Key references
 
 NICE NG226 (2022); Bannuru 2019 (OARSI); Kolasinski 2020 (ACR/AF 2019); Kloppenburg 2019 (EULAR hand 2018); Koc 2025 (JOSPT hip OA revision; Cibulka 2017 superseded); AAOS knee OA 3rd ed. 2021; Skou and Roos 2017 (GLA:D); Ageberg 2010 (NEMEX-TJR); Roos and Arden 2016; Hunter and Bierma-Zeinstra 2019 (Lancet); Sutlive 2008; Altman 1986; McAlindon 2014 (OARSI knee); Jevsevar 2013 (AAOS knee 2nd ed.); Hendry 2006; Villafane 2013; Geenen 2018 (EULAR pain management); AIM Theory Manual 2023 pp. 572-581.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- EULAR 2023 non-pharmacological core management of hip and knee OA (Moseng et al., Ann Rheum Dis 2024;83:730): self-management education reinforced at later visits; exercise and weight as before.
+- Dry needling: NICE NG226 says do not offer acupuncture or dry needling; the JOSPT hip OA 2025 revision gives dry needling of hip trigger points grade A for short-term (about 3 weeks) gains from one RCT. Shared decision, adjunct only.

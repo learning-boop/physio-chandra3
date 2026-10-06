@@ -58,8 +58,8 @@ export const OI_RED_FLAGS = [
       text: 'These can mean pressure on the spinal cord or the nerves at the base of the spine, which needs emergency assessment today.' } },
   { id: 'oi-fracture', tier: 'urgent', sameDay: true, noBooking: true,
     text: 'New pain in the last couple of weeks, even if it feels mild, after a small knock, lift, twist, sneeze or fall, or for no reason you remember: in one spot that is tender or swollen, or a sudden, severe back pain (especially with losing height or pain on sitting up)',
-    why: { title: 'Please get an X-ray today or tomorrow',
-      text: 'With osteogenesis imperfecta, a new pain like this is treated as a broken bone until an X-ray says otherwise, even when it feels mild: in OI a fracture can hurt surprisingly little. Please see your doctor, a walk-in or urgent care centre, or the emergency department today or tomorrow, and avoid putting weight or load through that area until it has been checked. Physiotherapy comes next: rehabilitation after a fracture is where it helps most, and you are welcome to book once you have had your X-ray.' } },
+    why: { title: 'Please get an X-ray today',
+      text: 'With osteogenesis imperfecta, a new pain like this is treated as a broken bone until an X-ray says otherwise, even when it feels mild: in OI a fracture can hurt surprisingly little. Please see your doctor, a walk-in or urgent care centre, or the emergency department today, and avoid putting weight or load through that area until it has been checked. Physiotherapy comes next: rehabilitation after a fracture is where it helps most, and you are welcome to book once you have had your X-ray (Chandra sees children from 5; for a younger child, a children\'s physiotherapist can help).' } },
   { id: 'oi-heart', tier: 'urgent', sameDay: true,
     text: 'Chest pain, getting breathless with everyday activity or when lying flat, a racing or irregular heartbeat, or swollen ankles, that is new or getting worse',
     why: { title: 'Please see a doctor today',
@@ -127,10 +127,11 @@ export function oiPanel(answers = {}) {
     'Keep moving every day with low-impact activity (walking, the pool, a bike) and a few controlled strength exercises. Avoid jumping, contact sports, activities with a high risk of falling, heavy lifting with the back bent or twisted, and forceful stretching of loose joints.',
     'Treatment at the clinic uses gentle, controlled hands-on techniques only: no forceful manipulation and no hard stretching.',
   ]
-  if (answers.oiFalls === '2') notes.push('Because of your falls or fractures this year: make your home fall-safe (good lighting, no loose rugs, rails, shoes with grip), practise balance holding a counter, and ask your doctor to review your bone medicine.')
+  if (answers.oiFalls === '2') notes.push('Because of your falls or fractures this year: make your home fall-safe (good lighting, no loose rugs, rails, shoes with grip), practise balance holding a counter, and and ask your doctor for a review of your bone health.')
   else notes.push('Make your home fall-safe (good lighting, no loose rugs, rails, shoes with grip) and practise balance holding a counter.')
-  if (answers.oiCare === 'stopped') notes.push('Please see your doctor about the bone medicine you stopped: stopping denosumab (Prolia) without a follow-on plan can lead to fractures of the spine within months. New back pain after stopping it needs your doctor promptly.')
-  else notes.push('Never stop denosumab (Prolia) without a plan from your doctor; new back pain after stopping it needs your doctor promptly.')
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), W1: the stopped-medicine safety line stays; no other medication advice.
+  if (answers.oiCare === 'stopped') notes.push('If you have stopped a bone medicine without a plan, please see your doctor soon; new back pain after stopping needs your doctor promptly.')
+  else notes.push('Follow your doctor\'s plan for any bone medicine or supplements, and ask them before changing or stopping anything.')
   if (['lost', 'stopped', 'ns'].includes(answers.oiCare)) notes.push('Ask your family doctor for a referral back to a bone or OI specialist (for example an adult metabolic bone clinic): adults with OI benefit from ongoing review, especially after 50 or the menopause, including vitamin D, calcium and whether bone medicine is right for you.')
   else notes.push('Stay in touch with your bone specialist, especially after 50 or the menopause, and ask about vitamin D, calcium and whether bone medicine is right for you.')
   notes.push('Hearing often changes with OI, usually from the 20s to the 40s, and it is treatable: if it is changing, ask your doctor for a hearing test.')

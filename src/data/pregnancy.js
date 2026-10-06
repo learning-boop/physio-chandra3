@@ -84,12 +84,18 @@ export const PREG_RED_FLAGS = [
     text: 'Severe, constant pain in your tummy, or a bump that feels hard and very tender',
     why: { title: 'Please call 911 now',
       text: 'Constant severe tummy pain or a hard, tender bump in pregnancy can mean a problem with the placenta, which needs emergency care straight away.' } },
-  { id: 'pg-labour', tier: 'emergency', goTo: 'labour', stages: PREGNANT, covers: ['prf-pregnancy'],
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), S1: bleeding before about 20 weeks belongs at the emergency
+  // department (or early pregnancy assessment), not labour and delivery.
+  { id: 'pg-earlybleed', tier: 'emergency', stages: ['p1'], covers: ['prf-pregnancy'],
+    text: 'Bleeding from the vagina, or pain low down on one side of your tummy',
+    why: { title: 'Please go to an emergency department now',
+      text: 'Bleeding or one-sided tummy pain in the first weeks of pregnancy needs checking at the hospital today, to make sure the pregnancy is in the right place and to look after you.' } },
+  { id: 'pg-labour', tier: 'emergency', goTo: 'labour', stages: ['p2', 'p3'], covers: ['prf-pregnancy'],
     text: 'Bleeding from the vagina; or, before 37 weeks, your waters breaking or leaking, or regular painful tightenings',
     why: { title: 'Please go to your labour and delivery unit now',
       text: 'Bleeding in pregnancy, waters breaking early or regular tightenings before 37 weeks need checking at the hospital today. Call your maternity unit on the way if you can.' } },
   { id: 'pg-preeclampsia', tier: 'emergency', goTo: 'labour', stages: ['p2', 'p3', 'pp6'],
-    text: 'After 20 weeks of pregnancy, or in the weeks since the birth: a severe headache, flashing lights or blurred vision, pain under the right ribs, sudden swelling of your face or hands, or feeling very unwell',
+    text: 'After 20 weeks of pregnancy, or in the weeks since the birth: a severe headache, flashing lights or blurred vision, pain under the right ribs or high in the middle of your tummy, nausea or vomiting, new breathlessness, sudden swelling of your face or hands, or feeling very unwell',
     why: { title: 'Please go to your labour and delivery unit now',
       text: 'These can be signs of pre-eclampsia, a blood-pressure problem of pregnancy that can also start in the weeks after the birth. It needs checking at the hospital today. Call 911 for a fit, severe chest pain or trouble breathing.' } },
   { id: 'pg-movements', tier: 'emergency', goTo: 'labour', stages: ['p2', 'p3'],
@@ -184,7 +190,9 @@ export const PREG_LIMITS = {
     { id: 'placenta', label: 'A low-lying placenta (placenta praevia) after 28 weeks' },
     { id: 'bp', label: 'High blood pressure or pre-eclampsia in this pregnancy' },
     { id: 'cervix', label: 'A cervical stitch, or a "short cervix"' },
-    { id: 'twins', label: 'Twins or more, with complications' },
+    { id: 'twins', label: 'Triplets or more, or twins after 28 weeks' },
+    { id: 'preterm', label: 'A previous preterm birth, or repeated miscarriages' },
+    { id: 'weight', label: 'An eating disorder, or being very underweight' },
     { id: 'heart', label: 'A heart or lung condition' },
     { id: 'growth', label: 'A baby growing slowly (growth restriction)' },
     { id: 'other', label: 'Severe anaemia, or diabetes or thyroid disease that is not well controlled' },
@@ -209,13 +217,13 @@ export function pregnancyPanel(answers = {}, shown = []) {
   if (pregnant) {
     notes.push(exerciseLimited(answers)
       ? 'Because of what you ticked, please confirm with your maternity team before starting or increasing exercise. Physiotherapy can still help now, with pain-relief strategies, comfortable positions and pelvic-floor exercises, working alongside your maternity team.'
-      : 'Unless your maternity team has advised otherwise, staying active is recommended and safe for you and your baby: about 150 minutes a week of moderate activity (you can talk, but not sing) over at least 3 days, with some strength work, such as walking, swimming, pool exercise or a stationary bike. Stop and contact your maternity team if you have bleeding, dizziness, chest pain, regular tightenings or fluid leaking.')
+      : 'Unless your maternity team has advised otherwise, staying active is recommended and safe for you and your baby: about 150 minutes a week of moderate activity (you can talk, but not sing) over at least 3 days, with some strength work, such as walking, swimming, pool exercise or a stationary bike. Stop and contact your maternity team if you have bleeding, fluid leaking, regular painful tightenings, chest pain, breathlessness or dizziness that does not settle with rest, a headache, or a painful swollen calf.')
     notes.push(answers.preg === 'p1'
       ? 'In the first weeks, nausea and tiredness are common: shorter, more frequent activity is fine.'
       : 'Later in pregnancy, if lying flat on your back makes you light-headed, exercise lying on your side or propped up instead; avoid contact sports, activities with a risk of falling, and very hot conditions.')
   } else {
     notes.push(`A staged return to activity: pelvic-floor exercises and gentle walking from the early days, as comfortable; strength work from around six weeks, or when you have been cleared${answers.pregBirth === 'caesarean' ? ' (a little longer after a caesarean, letting the scar settle first)' : ''}; running and jumping usually from about twelve weeks, after a pelvic-health check.`)
-    notes.push('Leaking urine, a feeling of heaviness or a bulge in the vagina, or pain with sex is common after a birth and very treatable: a pelvic-health physiotherapist can help. A gap down the middle of the tummy usually narrows over the first 6 to 12 months with the right exercises.')
+    notes.push('Leaking urine, a feeling of heaviness or a bulge in the vagina, or pain with sex is common after a birth and very treatable: a pelvic-health physiotherapist can help. A gap down the middle of the tummy narrows most in the first two months, and any gap that remains is common and responds to the right exercises.')
   }
   notes.push('Practise pelvic-floor squeezes daily: a gentle lift and hold, then let go fully.')
   if (pregnant) notes.push('Sleep on your side with a pillow between your knees.')

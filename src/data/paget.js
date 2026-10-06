@@ -26,12 +26,15 @@ const bothSides = (zones, type) =>
 
 export const PAGET_TYPES = ['lowerleg', 'thigh', 'hip', 'sij', 'lowerback', 'head']
 const OVER_50 = ['50-64', 'o64']
-const MONTHS = ['d3m', 'o3m']
+// 6 Oct 2026, general conditions cross-check (approved by Chandra), C2: "comes and goes over years" too.
+const MONTHS = ['d3m', 'o3m', 'years']
+// C2: the pelvis and spine chain (the commonest sites) as one area.
+const PELVIS_CHAIN = ['sij', 'lowerback', 'hip']
 
 /** 50 and over, one Paget's area drawn (one side), for 6 weeks or more. */
 export function pagetApplies(zones = [], a = {}) {
   const types = new Set(zones.map((z) => z.type))
-  return OVER_50.includes(a.age) && MONTHS.includes(a.duration) && types.size >= 1 && types.size <= 2 &&
+  return OVER_50.includes(a.age) && MONTHS.includes(a.duration) && ((types.size >= 1 && types.size <= 2) || (types.size === 3 && [...types].every((t) => PELVIS_CHAIN.includes(t)))) &&
     PAGET_TYPES.some((t) => has(zones, t) && !bothSides(zones, t))
 }
 
@@ -52,10 +55,10 @@ export function pagetPanel(ticked = false) {
   if (!ticked) return null
   return {
     title: 'Paget\'s disease of bone and this area',
-    text: 'In Paget\'s disease one bone, or a few, renews itself too fast, so it becomes larger, warmer and can bend under load. Pain can come from four places, and each has its own answer: the bone itself (a deep, constant ache that usually settles with your doctor\'s bisphosphonate treatment, often a single infusion), the hip or knee next to it (ordinary arthritis), the way a bowed limb carries weight, or a nerve where the spine is involved. The last three are where physiotherapy can help: an arthritis programme of progressive strength and movement, footwear, insoles or a heel raise for a leg-length difference, a walking aid for longer distances when it keeps you active, and strength and balance work to prevent falls. Pagetic bone is strong enough for everyday activity and exercise.',
+    text: 'In Paget\'s disease one bone, or a few, renews itself too fast, so it becomes larger, warmer and can bend under load. Pain can come from four places, and each has its own answer: the bone itself (a deep, constant ache that usually settles with your doctor\'s treatment, often a single infusion), the hip or knee next to it (ordinary arthritis), the way a bowed limb carries weight, or a nerve where the spine is involved. The last three are where physiotherapy can help: an arthritis programme of progressive strength and movement, footwear, insoles or a heel raise for a leg-length difference, a walking aid for longer distances when it keeps you active, and strength and balance work to prevent falls. Pagetic bone is strong enough for everyday activity and exercise.',
     notes: [
       'Keep moving every day with low-to-moderate impact activity (walking, cycling, the pool) and simple strength exercises. Avoid jumping and heavy impact on a bowed shin or thigh.',
-      'Ask your doctor when your alkaline phosphatase was last checked (usually every one to two years) and whether treatment is due.',
+      'Ask your doctor when your alkaline phosphatase was last checked (usually every one to two years).',
       'Tell any surgeon, dentist or anaesthetist that you have Paget\'s disease: it affects bleeding and planning. If you need a hip or knee replacement, it usually does well, and physiotherapy can help before and after.',
       'New pain in that bone that is steadily getting worse over weeks, or a new swelling or lump over it, after a settled period: see your doctor for an X-ray of the whole bone within a week, rather than more physiotherapy for that area. Rarely, Paget\'s bone can change in a way that needs early imaging.',
       'A sudden sharp pain in a bowed shin or thigh after a stumble or a small knock, or not being able to take weight: urgent care or the emergency department today (a crack through the bone).',

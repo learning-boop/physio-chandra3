@@ -59,3 +59,7 @@
 ## Sources
 
 Narayanaswami P et al., Neurology 2021;96:114-122; MG exercise and rehabilitation systematic reviews 2024-2025 (eNeurologicalSci 2025; Peng, Complement Ther Med 2024); MGFA classification, MG-ADL and cautionary drugs; Ashizawa T et al., Neurol Clin Pract 2018;8:507-520 (DM1); Schoser B et al., Neurol Clin Pract 2019;9:343-353 (DM2); Okkersen K et al., Lancet Neurol 2018;17:671-680; Voet NB et al., Cochrane 2019; Oldroyd AGS et al., Rheumatology 2022;61:1760-1768 (BSR myositis guideline); Lundberg IE et al., Ann Rheum Dis 2017;76:1955-1964 (EULAR/ACR criteria); Varone N et al., Clin Exp Rheumatol 2024;42:436-444; Alexanderson 2018; Myositis Canada; Mary Pack Arthritis Program; Muscular Dystrophy Canada; AIM Theory Manual 2023 Ch. 2.9.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- The 911 crisis question now reads "new or getting worse over hours or days" (long-standing breathlessness lying flat from heart or lung disease is not this). Weakness spreading up from the feet over hours to days (Guillain-Barre) is a new emergency-department question (pc-gbs).
+- The MG caution says "the time of day you are usually strongest" (no medication timing on patient pages).

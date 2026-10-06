@@ -43,3 +43,7 @@ A focal disorder: one bone or a few (pelvis, lumbar spine, femur, tibia, skull) 
 ## Sources
 
 Ralston SH et al., J Bone Miner Res 2019;34:579-604; Singer FR et al., JCEM 2014;99:4408; Nairn C, Ralston SH, The Practitioner 2020; Paget's Association professional resources; prevalence studies (UK, NZ, Spain, Italy); OARSI 2019, NICE NG226, GLA:D; Osteoporosis Canada 2023; ESMO 2021; Butler & Moseley, Explain Pain.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- The screen now includes "comes and goes over years" and the pelvis, low back and one hip drawn together. "Whether treatment is due" removed (Ralston 2019: treat symptoms, not an ALP target); the bone-pain line no longer names bisphosphonates.
+- Symptomatic share: AIM p. 588 says 20-25% asymptomatic; this reference says about 70%. Neither verified against the Ralston full text.

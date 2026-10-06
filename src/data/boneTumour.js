@@ -34,9 +34,18 @@ export const YOUNG = ['u5', 'u18', '18-29']
 
 /** One bone drawn: one of the bone areas, on one side, and no more than
     two kinds of area in all (a knee and the thigh above it still count). */
+// 6 Oct 2026, general conditions cross-check (approved by Chandra), S12: a bone drawn generously over three neighbouring areas of one
+// limb, or the pelvis with the low back and one hip, is still one bone.
+export const ONE_BONE_SEGMENTS = [['shoulder', 'upperarm', 'elbow'], ['hip', 'thigh', 'knee'], ['thigh', 'knee', 'lowerleg'],
+  ['knee', 'lowerleg', 'ankle'], ['sij', 'lowerback', 'hip']]
+const oneSide = (zones) => !([...new Set(zones.map((z) => z.type))].some((t) => bothSides(zones, t)))
+export const oneSegment = (zones = []) => {
+  const types = [...new Set(zones.map((z) => z.type))]
+  return types.length === 3 && oneSide(zones) && ONE_BONE_SEGMENTS.some((s) => types.every((t) => s.includes(t)))
+}
 export function oneBone(zones = []) {
   const types = new Set(zones.map((z) => z.type))
-  return types.size >= 1 && types.size <= 2 && BONE_TYPES.some((t) => has(zones, t) && !bothSides(zones, t))
+  return ((types.size >= 1 && types.size <= 2) || oneSegment(zones)) && BONE_TYPES.some((t) => has(zones, t) && !bothSides(zones, t))
 }
 
 export const BONE_SCREEN = {
@@ -50,7 +59,7 @@ export const BONE_SCREEN_ADULT = {
   text: 'Not explained by a condition you have already been diagnosed with: pain deep in one bone (around the knee, the shin, the thigh, the hip or pelvis, the shoulder or the upper arm), not in the joint or a tendon, that has gone on for more than three weeks and is getting worse week by week and is there at rest or wakes you at night; or a firm swelling, a lump, or warmth over the bone. If you have Paget\'s disease of bone, answer yes for new pain in that bone that is steadily getting worse over weeks, or a new swelling over it',
 }
 
-const WHY_TEXT = (when) => `Most pain in a bone comes from training, growth or a knock and settles over a few weeks. Very occasionally, pain in one bone that behaves like this has a cause inside the bone itself, and the only way to tell is a simple X-ray. Please see your family doctor, a walk-in clinic or urgent care ${when} and ask for an X-ray of the painful bone (the whole bone, not just the joint). This is a precaution: most X-rays are reassuring, and if anything is found, finding it early matters. Please do not start or continue physiotherapy, massage or strapping for this area until the X-ray is done; you are welcome to book once you have the result.`
+const WHY_TEXT = (when) => `Most pain in a bone comes from training, growth or a knock and settles over a few weeks. Very occasionally, pain in one bone that behaves like this has a cause inside the bone itself, and the only way to tell is a simple X-ray. Please see your family doctor, a walk-in clinic or urgent care ${when} and ask for an X-ray of the painful bone (the whole bone, not just the joint). This is a precaution: most X-rays are reassuring, and if anything is found, finding it early matters. Please do not start or continue physiotherapy, massage or strapping for this area until the X-ray is done; you are welcome to book once you have the result (Chandra sees children from 5; for a younger child, a children\'s physiotherapist can help after the X-ray).`
 export const BONE_WHY_YOUNG = { title: 'Please get an X-ray today or tomorrow', text: WHY_TEXT('today or tomorrow') }
 export const BONE_WHY_ADULT = { title: 'Please get an X-ray this week', text: WHY_TEXT('this week') }
 

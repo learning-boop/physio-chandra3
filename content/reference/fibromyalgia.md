@@ -31,3 +31,10 @@
 ## Sources
 
 Macfarlane GJ et al., Ann Rheum Dis 2017;76:318-328; Fitzcharles MA et al., Pain Res Manag 2013;18:119-126; Wolfe F et al., Semin Arthritis Rheum 2016;46:319-329; NICE NG193 (2021); Kosek E et al., PAIN 2021; Bidonde J et al., Cochrane 2017; Busch AJ et al., Cochrane 2013; Watson JA et al., J Pain 2019; Moseley and Butler, Explain Pain Supercharged 2017; Pain BC; AIM Theory Manual 2023 Ch. 2.9.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Patient wording: "Heat, and for some people gentle hands-on treatment, can ease pain for a while" (EULAR 2017 rates massage weak against).
+- Post-exertional malaise (NICE NG206 2021): if small amounts of activity leave the person much worse a day or two later, start with energy management, not graded exercise. Added to the widespread-pain self-care list; diagnosed ME/CFS has its own caution (ca-mecfs).
+- Routing: morning stiffness over an hour (inflammatory pattern) no longer opens the widespread section; pain on both sides above and below the waist in 4 or more areas for over 3 months opens it whatever the pain type (widespreadPain.js).
+- Chandra's fibromyalgia protocol differs from this reference: symptom-contingent ("listen to the body") pacing vs quota-based progression here; an anti-inflammatory diet (weak evidence); over-the-counter topical analgesics (not for patient pages).
+- AIM manual pp. 597-599 still uses the 1990 tender points (dropped by ACR 2010/2016) and amitriptyline: use this reference, not AIM, there.

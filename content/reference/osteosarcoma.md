@@ -50,3 +50,7 @@ About 4 per million a year, three-quarters under 25, a second small peak after 6
 ## Sources
 
 NICE NG12 (2015, updated 2023/2025); Strauss SJ et al., Ann Oncol 2021;32:1520; BC Children's Hospital diagnostic-delay study, BCMJ; CCLG systematic review and meta-analysis 2025; Dtsch Arztebl Int 2023; Bone Cancer Research Trust and Sarcoma UK; Campbell KL et al., Med Sci Sports Exerc 2019; ASCO/NCCN cancer-related fatigue; limb-salvage and amputation rehabilitation reviews (TESS); Butler & Moseley, Explain Pain.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- One-bone rule: three neighbouring areas of one limb (shoulder/upper arm/elbow, hip/thigh/knee, thigh/knee/lower leg, knee/lower leg/ankle) or the pelvis with the low back and one hip now count as one bone (boneTumour.js).
+- AIM p. 586 errors: incidence is about 3 to 4 per million per year (not "3.4 million"); it is the commonest primary malignant bone tumour.

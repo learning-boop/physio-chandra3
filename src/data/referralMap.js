@@ -49,7 +49,7 @@ export const REFERRAL_MAP = {
     joints: ['C4–C5 facet (top of shoulder)', 'C5–C6 facet (supraspinous fossa, lateral shoulder)', 'Glenohumeral joint / capsule (deltoid area, rarely below the elbow)', 'Acromioclavicular joint (top of shoulder, localised)'],
     roots: ['C4 (top of shoulder)', 'C5 (lateral shoulder, deltoid patch)'],
     muscles: ['Supraspinatus (mid-deltoid)', 'Infraspinatus (deep anterior shoulder)', 'Teres minor (posterior deltoid)', 'Subscapularis (posterior shoulder)', 'Scalenes (anterior chest, lateral arm)'],
-    organs: ['Diaphragm (shoulder tip, C3–C5)', 'Liver / gallbladder (right shoulder)', 'Spleen (left shoulder tip, Kehr\'s sign)', 'Heart (left shoulder)', 'Lung / pleura (shoulder tip)', 'Ectopic pregnancy (shoulder tip)'],
+    organs: ['Diaphragm (shoulder tip, C3–C5)', 'Liver / gallbladder (right shoulder)', 'Spleen (left shoulder tip, Kehr\'s sign)', 'Heart (left shoulder)', 'Lung / pleura (shoulder tip)', 'Ectopic pregnancy (shoulder tip)', 'Pre-eclampsia / HELLP (right shoulder, with upper right tummy pain; after 20 weeks or postpartum)'],
   },
   upperarm: {
     joints: ['Glenohumeral joint / capsule (deltoid area, C5 zone)'],
@@ -85,13 +85,13 @@ export const REFERRAL_MAP = {
     joints: ['Costovertebral joints (along the rib to the front of the chest)', 'Costochondral joints (breastbone)'],
     roots: ['Thoracic roots (a band around the chest)'],
     muscles: ['Pectoralis major / minor (anterior chest)', 'Scalenes (anterior chest)', 'Serratus anterior (lateral chest wall)'],
-    organs: ['Heart and aorta (retrosternal, left chest)', 'Oesophagus (retrosternal burning)', 'Lungs / pleura (chest wall, worse with breathing)', 'Stomach (epigastric)'],
+    organs: ['Heart and aorta (retrosternal, left chest)', 'Oesophagus (retrosternal burning)', 'Lungs / pleura (chest wall, worse with breathing)', 'Stomach (epigastric)', 'Lung clot (sudden breathlessness, pain on breathing)', 'Pericardium (worse lying flat, eased sitting forward)'],
   },
   upperback: {
     joints: ['Thoracic facets T4–T12 (mostly one side, about one segment below the joint)', 'Costovertebral joints (along the rib)'],
     roots: ['Thoracic roots (a band around the chest or tummy)'],
     muscles: ['Rhomboids / middle trapezius (medial scapula)', 'Serratus anterior (inferior scapular angle)', 'Latissimus dorsi (inferior scapular angle)', 'Rectus abdominis / obliques (a band across the mid back)'],
-    organs: ['Heart and aorta (interscapular)', 'Stomach / duodenum (T6–T10 mid back)', 'Liver / gallbladder (right inferior scapular angle, Boas\' sign)', 'Pancreas (a band through to the mid back)', 'Oesophagus (interscapular)'],
+    organs: ['Heart and aorta (interscapular)', 'Stomach / duodenum (T6–T10 mid back)', 'Liver / gallbladder (right inferior scapular angle, Boas\' sign)', 'Pancreas (a band through to the mid back)', 'Oesophagus (interscapular)', 'Pre-eclampsia / HELLP (right lower ribs; after 20 weeks or postpartum)'],
   },
   tlj: {
     joints: ['Thoracolumbar junction T11–L2 (Maigne: low back, iliac crest, buttock, lateral hip, groin)', 'L1–L2 facets (flank, iliac crest)', 'Lower rib joints'],
@@ -109,19 +109,19 @@ export const REFERRAL_MAP = {
     joints: ['Lower thoracic facets'],
     roots: ['T10 (at the belly button)'],
     muscles: ["Rectus abdominis / obliques (can mimic organ pain; worse tensing the tummy, Carnett's sign)"],
-    organs: ['Stomach / duodenum (epigastric)', 'Pancreas (epigastric, through to the back)', 'Small intestine and early appendix (periumbilical)', 'Colon (lower abdomen)', 'Bladder (suprapubic)'],
+    organs: ['Stomach / duodenum (epigastric)', 'Pancreas (epigastric, through to the back)', 'Small intestine and early appendix (periumbilical)', 'Colon (lower abdomen)', 'Bladder (suprapubic)', 'Liver / gallbladder (upper right)', 'Aorta / aneurysm (central, through to the back)', 'Kidney (flank to the front)', 'Uterus / ovary (lower)', 'Ectopic pregnancy (lower, one side)', 'Pre-eclampsia / HELLP (upper right or upper middle; after 20 weeks or postpartum)'],
   },
   lowerback: {
     joints: ['L3–L4, L4–L5 facets (low back, buttock, trochanter, lateral and posterior thigh)', 'L5–S1 facet (lower lumbar, buttock, posterior thigh)', 'Lumbar disc (central low back; spreads further as it worsens)', 'Sacroiliac joint (lower lumbar in 72%)', 'Interspinous, SI and iliolumbar ligaments'],
     roots: [],
     muscles: ['Quadratus lumborum', 'Iliopsoas (vertical band beside the lumbar spine)', 'Lumbar multifidus (sacrum, buttock)', 'Gluteus medius (posterior iliac crest, SIJ)'],
-    organs: ['Aorta / aneurysm', 'Kidney', 'Small intestine and colon (mid lumbar)', 'Prostate', 'Uterus / ovary (lumbosacral, linked to periods)', 'Bladder (lower back, sacrum)'],
+    organs: ['Aorta / aneurysm', 'Kidney', 'Small intestine and colon (mid lumbar)', 'Prostate', 'Uterus / ovary (lumbosacral, linked to periods)', 'Bladder (lower back, sacrum)', 'Ectopic pregnancy'],
   },
   sij: {
     joints: ['Sacroiliac joint (buttock 94%, lower lumbar 72%, thigh 48%, below the knee 28%, groin 14%, foot 12%; Fortin finger test within 1 cm of the PSIS)', 'L5–S1 facet (buttock, dimple area)', 'Lumbar disc', 'Hip joint (buttock 71%)', 'SI and iliolumbar ligaments'],
     roots: ['S1 (buttock, posterior thigh)', 'S2–S4 (sacrum, perineum, saddle area)'],
     muscles: ['Gluteus medius (posterior iliac crest, SIJ, outer buttock)', 'Quadratus lumborum (SIJ, top of the hip bone, buttock)', 'Piriformis (middle of the buttock, posterior thigh)', 'Lumbar multifidus (sacrum, buttock)'],
-    organs: ['Rectum, bladder neck, prostate, cervix (sacrum and perineum, S2–S4)', 'Uterus (lumbosacral, SIJ; linked to periods or pregnancy)', 'Colon (sacrum)'],
+    organs: ['Rectum, bladder neck, prostate, cervix (sacrum and perineum, S2–S4)', 'Uterus (lumbosacral, SIJ; linked to periods or pregnancy)', 'Colon (sacrum)', 'Ectopic pregnancy', 'Endometriosis (cyclical, sciatic-type pain)'],
   },
   coccyx: {
     joints: ['Sacrococcygeal joint and coccyx (sitting pain, worse leaning back)', 'Lumbar discs (referred to the tailbone)'],
@@ -133,7 +133,7 @@ export const REFERRAL_MAP = {
     joints: ['Hip joint (front of the thigh 57%; knee via the obturator nerve; Lesher 2008)', 'Lumbar facets and discs L1–L3 (front of the thigh), L4–S1 (outer and back of the thigh)', 'Sacroiliac joint (buttock and back of the thigh)', 'Thoracolumbar junction T12–L1 (upper inner thigh)'],
     roots: ['L2–L4 (front and inner thigh to the knee)', 'L5–S1 (outer and back of the thigh)'],
     muscles: ['Gluteus minimus (outer and back of the thigh, "pseudo-sciatica")', 'Tensor fascia lata (outer thigh)', 'Piriformis (back of the thigh)', 'Vastus medialis / lateralis (front of the thigh, knee)', 'Adductor longus / brevis (inner thigh)', 'Iliopsoas (front of the thigh)'],
-    organs: ['Leg veins: clot (swollen, warm, tender thigh or calf)', 'Leg arteries: claudication (cramp on walking, eases standing still)', 'Kidney, ureter and pelvic organs (upper inner thigh)'],
+    organs: ['Leg veins: clot (swollen, warm, tender thigh or calf)', 'Leg arteries: claudication (cramp on walking, eases standing still)', 'Kidney, ureter and pelvic organs (upper inner thigh)', 'Endometriosis (cyclical, sciatic-type pain)'],
   },
   foot: {
     joints: ['Lumbar facets and discs (can refer to the foot without a nerve root)'],
@@ -151,7 +151,7 @@ export const REFERRAL_MAP = {
     joints: ['Hip joint (buttock 71%, groin 55%)', 'Sacroiliac joint (buttock 94%, groin 14%)', 'L3–L5 facets (buttock, greater trochanter)', 'L1–L3 facets (groin)'],
     roots: ['L2 (groin, upper anterior thigh)', 'S2–S4 (perineum, saddle area)'],
     muscles: ['Gluteus medius (lateral buttock and hip)', 'Piriformis (buttock, posterior hip)', 'Quadratus lumborum (greater trochanter)', 'Iliopsoas (anterior thigh)', 'Lumbar multifidus (buttock)'],
-    organs: ['Ureter (groin, testis or labia, in waves)', 'Ovary / testis (groin)', 'Appendix (right groin)', 'Bladder and prostate (perineum)'],
+    organs: ['Ureter (groin, testis or labia, in waves)', 'Ovary / testis (groin)', 'Appendix (right groin)', 'Bladder and prostate (perineum)', 'Ectopic pregnancy', 'Endometriosis (cyclical)'],
   },
   knee: {
     joints: ['Hip joint (thigh 57%, below the knee 22%, medial knee via the obturator nerve)', 'Sacroiliac joint (thigh 48%, below the knee 28%)', 'L4–L5, L5–S1 facets and discs (thigh, occasionally calf)'],

@@ -225,7 +225,8 @@ const UNIVERSAL_CHECKS = [
    withhold booking, and they reach Chandra with the summary so the first
    assessment can be planned around them. */
 const CAUTION_CHECKS = [
-  { id: 'ca-bone', tier: 'caution', text: 'Osteoporosis, thinning bones, or long-term steroid medication',
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), W2: never "thin"; N2: it has the bone panel now (../data/osteopenia.js).
+  { id: 'ca-bone', tier: 'caution', text: 'Osteoporosis (on a scan, or after a bone broken in a small fall), or long-term steroid tablets',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Where bone strength may be reduced, hands-on techniques and loading are chosen more carefully. It does not stop physiotherapy — it shapes how it starts.' } },
   // "Osteopenia" document (v0.1, 4 Oct 2026): the physio route, with optional risk questions.
@@ -252,7 +253,7 @@ const CAUTION_CHECKS = [
   // "Myasthenia Gravis" and "Myotonic Dystrophy" documents (signed by Chandra, 2 Oct 2026), route B.
   { id: 'ca-mg', tier: 'caution', text: 'Myasthenia gravis, diagnosed by a neurologist',
     why: { title: 'Worth knowing before your first assessment',
-      text: 'When myasthenia is stable, moderate exercise is safe and can help strength, stamina and balance. Sessions are planned for your best time of day, after your medication, in a cool room, in short bouts that stop well before you tire, alongside your neurology team. A fever, infection or new medicine followed by worse weakness is worth a call to your neurology team the same day; any trouble breathing or swallowing is a reason to call 911.' } },
+      text: 'When myasthenia is stable, moderate exercise is safe and can help strength, stamina and balance. Sessions are planned for the time of day you are usually strongest, in a cool room, in short bouts that stop well before you tire, alongside your neurology team. A fever, infection or new medicine followed by worse weakness is worth a call to your neurology team the same day; any trouble breathing or swallowing is a reason to call 911.' } },
   { id: 'ca-dm', tier: 'caution', text: 'Myotonic dystrophy or another muscle disease, diagnosed by a neurologist',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Regular, moderate exercise is safe with myotonic dystrophy and current guidance encourages it; it does not speed the condition up. Your programme is paced around your energy, with warm-ups for stiff hands and help with walking, balance and falls, alongside your neuromuscular team. Fainting, a racing or irregular heartbeat, or new trouble breathing or swallowing needs emergency care, and every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
@@ -264,7 +265,7 @@ const CAUTION_CHECKS = [
   // item 1 (Chandra, 2 Oct 2026): no children under 5 in clinic.
   { id: 'ca-dmd', tier: 'caution', text: 'Duchenne or Becker muscular dystrophy, diagnosed by a neuromuscular team (for a child or young person)',
     why: { title: 'Worth knowing before the first assessment',
-      text: 'Chandra sees children from 5 years old; for a child under 5, please ask the neuromuscular team at BC Children\'s Hospital about a paediatric physiotherapist. Physiotherapy works alongside the neuromuscular team on daily stretching, night splints, enjoyable activity such as swimming or cycling, walking, posture and equipment. Very hard or "eccentric" exercise (downhill walking, jumping, heavy lifting, pushing to exhaustion) is avoided. Severe muscle pain with dark, cola-coloured urine after activity, or a fall followed by leg pain or refusal to stand, needs the emergency department; and every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
+      text: 'Chandra sees children from 5 years old; for a child under 5, please ask the neuromuscular team at BC Children\'s Hospital about a paediatric physiotherapist. Physiotherapy works alongside the neuromuscular team on daily stretching, night splints, enjoyable activity such as swimming or cycling, walking, posture and equipment. Very hard or "eccentric" exercise (downhill walking, jumping, heavy lifting, pushing to exhaustion) is avoided. Severe muscle pain with dark, cola-coloured urine after activity, or a fall followed by leg pain or refusal to stand, needs the emergency department. Confusion, drowsiness or breathlessness in the days after a fall or a broken bone needs 911. Breathlessness, a fast heartbeat, morning headaches or repeated chest infections: contact the neuromuscular team. If your child takes daily steroid medicine and becomes very unwell, vomiting or drowsy, follow the team\'s emergency plan and get urgent care. Every surgeon, dentist and anaesthetist should know about the diagnosis before any procedure.' } },
   // "Cushings Syndrome" document (signed by Chandra, 3 Oct 2026), route B.
   CUSHING_CAUTION,
   // "Hypopituitarism" document (signed by Chandra, 3 Oct 2026), route B.
@@ -283,6 +284,16 @@ const CAUTION_CHECKS = [
   HYPOTHYROID_CAUTION,
   // "Acromegaly" document (signed by Chandra, 3 Oct 2026), route B.
   ACROMEGALY_CAUTION,
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra): N1 ME/CFS (NICE NG206), N3 hypermobility and rheumatoid arthritis.
+  { id: 'ca-mecfs', tier: 'caution', text: 'ME/CFS (chronic fatigue syndrome), diagnosed by a doctor',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'With ME/CFS, the plan starts with managing your energy, not with building exercise: activity is kept within what your body can manage without a crash a day or two later, and only increased if and when you are ready (NICE 2021). Physiotherapy can help with energy management, comfort, posture and gentle movement that does not make you worse.' } },
+  { id: 'ca-hypermobility', tier: 'caution', text: 'Hypermobility or Ehlers-Danlos syndrome, diagnosed by a doctor',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Hypermobile joints do well with steady strength and control work built up gradually, and hands-on techniques avoid forceful end-of-range movements. Tiredness and dizziness on standing are common and are planned around. With vascular Ehlers-Danlos syndrome, sudden severe pain anywhere in the body, especially the chest, tummy or back, needs 911.' } },
+  { id: 'ca-ra', tier: 'caution', text: 'Rheumatoid arthritis, diagnosed by a doctor',
+    why: { title: 'Worth knowing before your first assessment',
+      text: 'Exercise is safe and helps with rheumatoid arthritis: strength, movement and fitness are built up around flares, which are paced rather than pushed through. Hands-on work at the top of the neck is avoided unless it has been checked, as RA can affect the upper neck joints. A flare with a fever, or one joint much hotter and more swollen than the rest, needs your doctor or rheumatology team the same day.' } },
   { id: 'ca-cardio', tier: 'caution', text: 'A heart or lung condition that limits what you can do physically',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exertion during assessment and exercise is paced to what is comfortable and safe for you.' } },
@@ -834,11 +845,15 @@ export default function PainAssessment() {
     // replaces the general one (shorter questionnaire A2.2, A3.3).
     const ownOrgan = list.some((f) => inGroup(f, 'organ'))
     const ownNeuro = list.some((f) => inGroup(f, 'neuro'))
+    // 6 Oct 2026, general conditions cross-check (approved by Chandra): an area that asks its own stroke question (head, neck, arms)
+    // replaces the drawing's (S3); with known diabetes, the diabetes heart
+    // questions replace the generic one (S8).
+    const ownStroke = list.some((f) => inGroup(f, 'stroke'))
     const universal = UNIVERSAL_CHECKS.filter((f) => !(injuryApplies && f.id === 'sc-trauma') && !(ownNeuro && f.id === 'sc-neuro'))
     // An area that asks about numb or burning feet itself (group "neuropathy":
     // lower leg, ankle, foot) replaces the drawing's gloves-and-socks question.
     const ownNeuropathy = list.some((f) => inGroup(f, 'neuropathy'))
-    const kept = earlyPatterns.filter((f) => !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral') &&
+    const kept = earlyPatterns.filter((f) => !(ownStroke && f.id === 'pc-stroke') && !(dmKnown && f.id === 'pc-cardiac') && !(ownCardiac && f.id === 'pc-cardiac') && !(ownClot && f.id === 'pc-dvt') && !(ownOrgan && f.id === 'pc-visceral') &&
       !(ownNeuropathy && f.id === 'pc-polyneuropathy'))
       .filter((f) => !(dmKnown && isNerveFlag(f)))
     // Emergencies the drawing calls for are always asked here, on top of a
@@ -893,7 +908,13 @@ export default function PainAssessment() {
     // and steroid screens, the nerve and muscle screen, and the calcium and
     // two thyroid screens, then acromegaly (the last ones drop first when
     // space runs out).
-    patternChecks(zones, answers, 12).filter((p) => !early.has(p.id)).slice(0, 6).map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
+    // 6 Oct 2026, general conditions cross-check (approved by Chandra), S10: emergencies are never cut and do not use a place, and the
+    // hormone screens get up to two places beyond the six.
+    const later = patternChecks(zones, answers, 30).filter((p) => !early.has(p.id))
+    const laterRest = later.filter((p) => p.tier !== 'emergency')
+    const HORMONE = ['pc-calcium', 'pc-thyroid', 'pc-hypothyroid', 'pc-acromegaly', 'pc-lowhormone', 'pc-hormone']
+    ;[...later.filter((p) => p.tier === 'emergency'), ...laterRest.slice(0, 6), ...laterRest.slice(6).filter((p) => HORMONE.includes(p.id)).slice(0, 2)]
+      .map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
       .filter((p) => !(answers.dm === 'yes' && isNerveFlag(p))).forEach((p) => out.push(p))
     // Most severe first, as on the earlier pages.
     return bySeverity(out)
@@ -981,7 +1002,7 @@ export default function PainAssessment() {
   // Persistent widespread pain (fibromyalgia document): physio route with a
   // nudge to the family doctor, unless a doctor has already diagnosed it.
   const fibroDiagnosed = flags.includes('ca-fibro')
-  const showWidespread = widespreadRoute(painType, fibroDiagnosed)
+  const showWidespread = widespreadRoute(painType, fibroDiagnosed, zones, answers)
   // Diabetes ("DiabetesMellitus" and "Diabetes RiskModule" documents, signed
   // 3 Oct 2026; ../data/diabetes.js). The details are asked on "Before your
   // results" when a condition diabetes makes more likely qualifies (counted

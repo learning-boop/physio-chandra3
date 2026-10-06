@@ -259,7 +259,15 @@ export function buildClinicianSummary(ctx = {}) {
   push(`  Blue: ${f.blue.length ? f.blue.join(' | ') : 'none endorsed'}`)
   push(`  Black: ${f.black.length ? f.black.join(' | ') : 'none endorsed'}`)
   push(`  Pink (protective): ${f.pink.length ? f.pink.join(' | ') : 'none endorsed'}`)
-  if (psych.level) push(`  Psychosocial risk from this screen: ${psych.level}`)
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), C5: the site's own 5 statements, not a validated tool.
+  if (psych.level) push(`  Psychosocial risk from this screen: ${psych.level} (the site's own 5-statement count, not a validated scale; consider STarT Back or ÖMPSQ-SF at the first visit)`)
+  // Return to work (JOSPT work after injury CPG): off work for over 6 weeks, or a high-risk mix.
+  if (answers.bfOffWork === 'agree') {
+    const long = ['d3m', 'o3m', 'years'].includes(answers.duration)
+    const yellow = ['yfFear', 'yfOutlook', 'yfMood', 'yfSleep', 'yfRoles'].filter((id) => answers[id] === 'agree').length
+    if (yellow >= 2 || answers.pfExpect === 'disagree') push('  High return-to-work risk: off work or on modified duties with several yellow flags or a low expectation of recovery.')
+    if (long) push('  Off work over 6 weeks: the work CPG recommends a multidisciplinary assessment at 6 to 8 weeks (B) and intense, graded, work-oriented exercise (C), not light exercise alone (B); consider WAI, FABQ-W, ÖMPSQ-SF.')
+  }
   push('')
 
   // ── Hypotheses with supporting findings (question 6) ──

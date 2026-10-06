@@ -42,10 +42,11 @@ export function osteomalaciaPanel(ticked = false) {
     title: 'Soft bones and getting strong again',
     text: 'Osteomalacia means "soft bones": new bone needs calcium and phosphate, delivered with the help of vitamin D, to harden. Once the shortage is treated, hip and thigh strength usually returns over 4 to 12 weeks, bone aches fade over 3 to 6 months, and small cracks heal over a similar time. The bone has been waiting for its building materials, and muscle that was under-supplied rebuilds. Physiotherapy can help with a strength and walking programme that keeps pace with your recovery, retrains a side-to-side walk so it does not become a habit, and protects any bone that is still healing.',
     notes: [
-      'Keep taking the vitamin D and calcium your doctor prescribed, and ask when your levels will be rechecked: the aches and weakness tend to come back when supplements stop. Do not take very high doses on your own.',
+      // 6 Oct 2026, general conditions cross-check (approved by Chandra), W1.
+      'Follow your doctor\'s plan for vitamin D and calcium, and ask when your levels will be rechecked; ask them before changing or stopping anything.',
       'Build up gradually as strength returns: short walks, sit-to-stands from a firm chair and step-ups holding a rail. If your doctor has said a bone may have a crack, follow their plan for weight-bearing (crutches for a time, if advised).',
       'Practise balance holding a counter and clear trip hazards at home while your hips are still weak.',
-      'Include calcium-rich foods every day (milk or fortified alternatives, yogurt, tofu set with calcium, leafy greens, canned fish with bones), get some safe midday sun on your skin in spring and summer, and ask your doctor about a vitamin D supplement through the winter.',
+      'Include calcium-rich foods every day (milk or fortified alternatives, yogurt, tofu set with calcium, leafy greens, canned fish with bones), get some safe midday sun on your skin in spring and summer.',
       'If your pain and weakness are not clearly better after about 3 months of treatment, ask your doctor to review: a few rarer forms need a different treatment.',
       'A sudden sharp pain in the groin, hip or thigh with difficulty taking weight needs a doctor or emergency department the same day; avoid putting weight on it until it is checked.',
       'Tingling around the mouth or in the fingers, or cramps or spasms in the hands and feet, need a doctor the same day (very low calcium). Call 911 for a seizure.',

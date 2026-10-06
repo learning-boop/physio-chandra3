@@ -480,3 +480,7 @@ This sequence is a screening aid; mixed presentations are common, so more than o
 
 This document is an educational summary for clinicians and students; referral maps vary between individuals and do not replace clinical examination or medical assessment.
 
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Cauda equina: the site routes it to the emergency department now (not "same-day referral").
+- Referral map additions (clinician only): abdomen (liver and gallbladder, aorta, kidney, uterus and ovary, ectopic pregnancy, pre-eclampsia/HELLP), chest (lung clot, pericardium), ectopic pregnancy on the low back, pelvis and hip, endometriosis on the pelvis, hip and thigh, pre-eclampsia/HELLP on the upper back and right shoulder.
+- Pain type (Kosek 2021): nociplastic now needs touch sensitivity or a widespread drawing; mood and belief answers add at most 1; heat alone does not count as an easing factor for tissue pain.

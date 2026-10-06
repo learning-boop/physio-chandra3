@@ -41,3 +41,8 @@ Stop the assessment. Do not elevate above heart level. Release any circumferenti
 ## Sources
 
 BOAST, Diagnosis and Management of Compartment Syndrome of the Extremities (2025); Donaldson J et al., Open Orthop J 2014; RCEM Learning, acute compartment syndrome (2024/25); AIM Theory Manual 2023 Ch. 2.9.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Chronic exertional compartment syndrome is now built (lower-leg and forearm cards); the "not yet built" note above is out of date.
+- Question wording now lists surgery on the limb, lying on the limb for a long time and a knock on blood thinners, and reads "...and is the muscle tight and swollen, or much worse when..." (BOAST 10, July 2025). The knee asks it too (kf-compartment).
+- AIM p. 603 glosses poikilothermia as "core temperature"; it means a cool limb.

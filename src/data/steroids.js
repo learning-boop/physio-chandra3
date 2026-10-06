@@ -35,9 +35,10 @@
 export const STEROID_STATUS = {
   id: 'steroid', text: 'Do you take steroid medicine, or have you in the past year?',
   options: [
-    { id: 'tabs', label: 'Yes, steroid tablets (such as prednisone, dexamethasone, or hydrocortisone replacement) for 3 months or more' },
+    // 6 Oct 2026, general conditions cross-check (approved by Chandra), S9: adrenal suppression can follow about 4 weeks; Addison's is named.
+    { id: 'tabs', label: 'Yes, steroid tablets (such as prednisone, dexamethasone, or hydrocortisone replacement, including for Addison\'s disease) for 4 weeks or more' },
     { id: 'other', label: 'Yes, other steroids: high-dose inhalers, repeated injections, or a herbal, skin or body-building product that may contain steroids' },
-    { id: 'no', label: 'No, or only a short course' },
+    { id: 'no', label: 'No, or only a short course (less than 4 weeks)' },
     { id: 'ns', label: 'Not sure' },
   ],
 }
@@ -49,7 +50,7 @@ export const STEROID_RED_FLAGS = [
   { id: 'st-adrenal', tier: 'emergency', call911: true,
     text: 'Very weak, dizzy or faint, with vomiting, diarrhoea, stomach pain, a fever or confusion, or unable to keep your steroid tablets down, while taking steroids or since stopping them',
     why: { title: 'Possible adrenal crisis',
-      text: 'With steroid medicine, including hydrocortisone replacement, or soon after stopping it, these together can mean the body is short of its own steroid hormone (an adrenal crisis). It needs emergency treatment. If you carry a steroid emergency card or injection, use it as instructed while you wait. On a day you are ill but well enough to keep tablets down, follow your sick-day rules (usually doubling the dose) and call your doctor.' } },
+      text: 'With steroid medicine, including hydrocortisone replacement, or soon after stopping it, these together can mean the body is short of its own steroid hormone (an adrenal crisis). It needs emergency treatment. If you carry a steroid emergency card or injection, use it as instructed while you wait. On a day you are ill but well enough to keep tablets down, follow the sick-day rules your doctor or endocrinologist gave you and call your doctor.' } },
   { id: 'st-mind', tier: 'emergency',
     text: 'Since starting or changing steroid medicine: confusion, seeing or hearing things that are not there, or very low mood with thoughts of harming yourself',
     why: { title: 'Please get help today',
@@ -110,11 +111,11 @@ const SELF_CARE = [
   'Never stop steroid tablets suddenly or on your own: the dose is lowered on a plan from your doctor. Keep your steroid card or sick-day instructions with you if you have them.',
   'Practise standing up from a firm chair without using your hands, a few times, a few times a day, and add gentle step-ups holding a rail. Small, regular amounts build muscle safely.',
   'Protect your back while your bones are at risk: bend at the hips and knees, avoid lifting and twisting at the same time, and tell your doctor about any sudden new back pain.',
-  'Ask your doctor about calcium, vitamin D, and whether a bone-density check or bone medicine is right for you; this is recommended for most people on steroid tablets for more than three months.',
+  'A bone-health check is recommended for everyone taking steroid tablets for three months or more: ask your doctor about one. Follow your doctor\'s plan for any medicine or supplements, and ask them before changing or stopping anything.',
 ]
 
 const PITUITARY_SELF_CARE = [
-  'If you take hydrocortisone or prednisone replacement, never miss doses, carry your steroid card, and follow your sick-day rules (usually doubling the dose when you are ill); ask your doctor for them if you have not been given them.',
+  'If you take hydrocortisone or prednisone replacement, never miss doses, carry your steroid card, and follow the sick-day rules your doctor or endocrinologist gave you; ask your doctor for them if you have not been given them.',
   'Build activity in small steps: a short daily walk and a few sit-to-stands from a firm chair, adding a little each week only if you have recovered by the next day.',
   'Drink to thirst and keep salt in your diet unless your doctor has told you otherwise, and stand up slowly if you get light-headed.',
   'Ask your doctor about a bone-density check and vitamin D.',

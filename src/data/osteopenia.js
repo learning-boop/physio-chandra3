@@ -30,7 +30,9 @@ export const OSTEOPENIA_CAUTION = {
   why: { title: 'Worth knowing before your first assessment',
     text: 'Low bone density is a reason to build strength and balance, not to hold back: Canadian guidelines recommend strength and balance training at least twice a week for anyone with a bone-health concern. Your programme is built around that, with safe ways to bend and lift.' },
 }
-export const osteopeniaOn = (flags = []) => flags.includes('ca-osteopenia')
+export const osteopeniaOn = (flags = []) => flags.includes('ca-osteopenia') || flags.includes('ca-bone')
+// 6 Oct 2026, general conditions cross-check (approved by Chandra), N2: osteoporosis (or long-term steroid tablets) uses the same panel.
+const osteoporosisOn = (flags = []) => flags.includes('ca-bone') && !flags.includes('ca-osteopenia')
 
 /* Document Q2, Q3, Q6, Q4 + Q5. Steroid tablets come from "A little about
    you" (answers.steroid), so they are not asked again. */
@@ -85,7 +87,9 @@ export function boneRisk(a = {}) {
   const falls = a.bnFalls === 'two'
   const total = ({ hipspine: 4, two: 4, one: 3 }[a.bnFracture] || 0) + ({ two: 3, one: 2, unsteady: 1 }[a.bnFalls] || 0) +
     Math.min(frax, 3) + (secondary ? 2 : 0) + ({ yes: 3, ns: 1 }[a.bnHeight] || 0)
-  const askDoctor = total >= 5 || reclassify || vertebral || secondary || (falls && a.age === 'o64')
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), C1: steroid tablets, two or more FRAX factors, or any fragility fracture.
+  const askDoctor = total >= 5 || reclassify || vertebral || secondary || (falls && a.age === 'o64') ||
+    a.steroid === 'tabs' || frax >= 2 || (a.bnFracture !== undefined && a.bnFracture !== 'no')
   return { askDoctor, reclassify, vertebral, secondary, fell: ['two', 'one'].includes(a.bnFalls) }
 }
 
@@ -98,17 +102,23 @@ export function bonePanel(flags = [], a = {}) {
     'Practise balance every day: stand on one leg while the kettle boils, walk heel-to-toe along a line, and get up from a chair without using your hands.',
     'Walk briskly most days and include stairs or hills. If you have not had a spine fracture and your balance is good, a little impact, built up gradually (heel drops, small hops or skips), helps bones too.',
     'Bend and lift with your hips and knees rather than rounding your back under a load, and avoid lifting and twisting at the same time. In yoga or Pilates, swap deep forward rounds and loaded twists for other poses. Specific movements are adjusted; activity is not avoided.',
-    'Eat some protein at each meal and calcium-rich foods every day, ask your doctor about vitamin D in the winter, do not smoke, keep alcohol modest, and make your home and footwear fall-safe.',
+    'Eat some protein at each meal and calcium-rich foods every day, do not smoke, keep alcohol modest, and make your home and footwear fall-safe. Follow your doctor\'s plan for any bone medicine or supplements, and ask them before changing or stopping anything.',
   ]
   if (r.askDoctor) notes.push('Your scan result on its own does not decide what you need. Please ask your family doctor, at your next visit, for a full fracture-risk assessment: they combine the scan with your age, past fractures, falls and health conditions into a 10-year risk estimate (FRAX), check for treatable causes of bone loss, and decide whether bone medicine is worth discussing.')
   if (r.reclassify) notes.push('A past hip or spine fracture, or two or more fractures from small injuries, is treated as osteoporosis whatever the scan number: please tell your doctor about it.')
   if (r.vertebral) notes.push('Height loss or a newly rounded upper back can mean a spine fracture that happened without much pain: ask your doctor about a spine X-ray.')
   if (r.fell) notes.push('Because you have fallen this year, ask your doctor for a falls check (medicines, eyesight, blood pressure on standing). Balance and strength training is the part physiotherapy can help with.')
-  notes.push('Sudden new back pain after bending, lifting, coughing or a small fall needs a doctor within a day or two for an X-ray. If you take denosumab (Prolia), never stop it without a follow-on plan from your doctor.')
+  notes.push('Sudden new back pain after bending, lifting, coughing or a small fall needs your doctor soon, before treatment of the back starts, for an X-ray.')
   notes.push('Low bone density does not cause aches. Deep aching bones on both sides that are tender to press, with weak hips, are worth a bone blood test with your doctor (vitamin D and calcium).')
+  if (osteoporosisOn(flags)) notes.push('If you have had a fracture of the spine, leave out impact (hops, skips, jumping) and loaded forward bending or twisting until your physiotherapist has shown you safe versions (Too Fit to Fracture).')
+  if (osteoporosisOn(flags)) return {
+    title: 'Bone health: bones that respond to loading',
+    text: 'Osteoporosis, or long-term steroid tablets, means bones need looking after, and the most useful response is to load them on purpose, safely. Strength and balance improve within 8 to 12 weeks of regular training, which cuts the falls that cause most fractures, and progressive loading helps keep bone. Specific movements are adjusted; activity is not avoided. Physiotherapy can help with a clear, safe plan, alongside your doctor\'s plan for any bone medicine.',
+    notes,
+  }
   return {
     title: 'Low bone density: bones that respond to loading',
-    text: 'Osteopenia means a bone-density scan put your bones in the band between "typical for a young adult" and osteoporosis. It is a measurement, not an illness, and it does not hurt: about half of adults over 50 are in this band. Bone density is one of several things that decide how likely a bone is to break; past fractures, falls, some medicines and conditions, and family history matter as much. For most people it is a prompt, not a problem, and the most useful response is the opposite of what the word suggests: load your bones and muscles on purpose. Strength and balance improve within 8 to 12 weeks of regular training, which cuts the falls that cause most fractures, and progressive loading helps keep bone. Holding back from activity because of the label is what makes bones and balance worse. Physiotherapy can help with a clear, safe plan.',
+    text: 'Osteopenia means a bone-density scan put your bones in the band between "typical for a young adult" and osteoporosis. It is a measurement, not an illness, and it does not hurt: about 4 in 10 adults over 50 are in this band. Bone density is one of several things that decide how likely a bone is to break; past fractures, falls, some medicines and conditions, and family history matter as much. For most people it is a prompt, not a problem, and the most useful response is the opposite of what the word suggests: load your bones and muscles on purpose. Strength and balance improve within 8 to 12 weeks of regular training, which cuts the falls that cause most fractures, and progressive loading helps keep bone. Holding back from activity because of the label is what makes bones and balance worse. Physiotherapy can help with a clear, safe plan.',
     notes,
   }
 }

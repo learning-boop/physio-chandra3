@@ -54,6 +54,11 @@ const limbSpread = (zones, side) => {
     ones with their own route (the thumb, the pinch) are left out. */
 const WEAK_IDS = ['weak', 'weakness', 'weakgrip', 'footslap', 'slap']
 const weakAnswer = (a = {}) => Object.values(a).some((v) => [].concat(v).some((x) => WEAK_IDS.includes(x)))
+// 6 Oct 2026, general conditions cross-check (approved by Chandra): under 5 and 5 to 15 are children; an unknown age counts as an adult.
+const adult = (a = {}) => !['u5', 'u18'].includes(a.age)
+// The MS screen (S4): tingling, a weakness answer, or the neck's cord signs.
+const msTrigger = (a = {}) => [].concat(a.painQuality || []).includes('tingling') || weakAnswer(a) ||
+  [].concat(a.N9 || []).some((id) => id !== 'none' && id !== 'dizzy')
 
 /** Age 50 or over, from any of the age answer ids (a50, 50-64, o64…). */
 const over50 = (id) => !!id && !/^u/.test(id) && Number((/\d+/.exec(id) || [0])[0]) >= 50
@@ -66,6 +71,19 @@ const WHY = {
   neuroScreen: {
     title: 'Please see your family doctor in the next few days',
     text: 'Along with numbness or tingling, these can come from the nervous system rather than a muscle or joint. Please see your family doctor within the next few days for a neurological check, and note when each symptom started and how long it lasted. If you have lost vision in one eye, please see a doctor today or go to urgent care. Most people with numbness or tingling do not have a serious cause, and when one is found, starting treatment early makes a real difference. Physiotherapy can follow once the cause is known.',
+  },
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra): S3 and S5.
+  stroke: {
+    title: 'Please call 911 now',
+    text: 'Sudden loss of vision in one eye, a face that droops, weakness or numbness down one side, or slurred speech can be a stroke, including an "eye stroke". Call 911 now: treatment works best in the first hours. Do not drive yourself.',
+  },
+  optic: {
+    title: 'Please see a doctor today',
+    text: 'Blurred, dim or washed-out vision in one eye, especially if it hurts to move the eye, needs an eye or medical check the same day (an eye doctor, your family doctor, urgent care or an emergency department). Physiotherapy can wait until you have been seen.',
+  },
+  gbs: {
+    title: 'Please go to an emergency department now',
+    text: 'Weakness that climbs up from the feet over hours to days, often with tingling, can come from inflammation of the nerves (Guillain-Barré syndrome). It needs hospital assessment today, because it can affect breathing. Call 911 if breathing or swallowing becomes difficult.',
   },
   muscleCrisis: {
     title: 'Please call 911 now',
@@ -156,6 +174,14 @@ const WHY = {
 /* Each entry: shown only when the drawing matches, in this order.
    tier 'emergency' → emergency screen (call911: 911, else go now); 'urgent' → see a physician first. */
 const PATTERNS = [
+  // 6 Oct 2026, general conditions cross-check (approved by Chandra), S3: sudden vision loss in one eye or one-sided weakness, for every
+  // drawing (the head, neck and arm areas ask their own stroke question,
+  // group "stroke", and PainAssessment.jsx then leaves this one out).
+  {
+    id: 'pc-stroke', tier: 'emergency', call911: true, why: WHY.stroke,
+    text: 'Starting in the last few hours: sudden loss of vision in one eye, a face that droops, weakness or numbness down one side of the body, or slurred speech',
+    when: (z) => z.length > 0,
+  },
   {
     // Dizziness reported after a head injury (the head's D8). The safety
     // screen asked about it first (groups "trauma5d" and "trauma5d-doc");
@@ -183,8 +209,15 @@ const PATTERNS = [
   // until a doctor has seen them (noBooking).
   {
     id: 'pc-neuro', tier: 'urgent', noBooking: true, why: WHY.neuroScreen,
-    text: 'Not explained by a neurological condition you have already been diagnosed with: in the last few months, blurred or lost vision in one eye (often painful when you move the eye) or double vision; a brief electric-shock feeling down your back or limbs when you bend your head forward; numbness or weakness clearly worse when you are hot; or earlier episodes of numbness, weakness or unsteadiness that came and went on their own',
-    when: (z, a) => [].concat(a.painQuality || []).includes('tingling'),
+    text: 'Not explained by a neurological condition you have already been diagnosed with: in the last few months, double vision, or vision in one eye that went blurred and then recovered; a brief electric-shock feeling down your back or limbs when you bend your head forward; numbness or weakness clearly worse when you are hot; or earlier episodes of numbness, weakness or unsteadiness that came and went on their own',
+    // 6 Oct 2026, general conditions cross-check (approved by Chandra), S4: weakness or the neck's cord signs too (the MS document scores
+    // weakness, heaviness or clumsiness as numbness).
+    when: (z, a) => msTrigger(a),
+  },
+  {
+    id: 'pc-optic', tier: 'urgent', sameDay: true, noBooking: true, why: WHY.optic,
+    text: 'Over the last few days, blurred, dim or washed-out vision in one eye, especially if it hurts to move the eye',
+    when: (z, a) => msTrigger(a),
   },
   // Weakness from nerve-muscle or muscle disease ("Myasthenia Gravis" and
   // "Myotonic Dystrophy" documents, signed 2 Oct 2026, route A; not named, as
@@ -194,7 +227,14 @@ const PATTERNS = [
   // dystrophy) is 911.
   {
     id: 'pc-muscle-crisis', tier: 'emergency', call911: true, why: WHY.muscleCrisis,
-    text: 'With the weakness: difficulty breathing or being breathless when you lie flat, a weak cough, trouble swallowing or clearing saliva, or fainting, near-fainting or a racing or irregular heartbeat',
+    // 6 Oct 2026, general conditions cross-check (approved by Chandra), S5: new or worsening breathing trouble (long-standing breathlessness
+    // lying flat from heart or lung disease is not this).
+    text: 'With the weakness, new or getting worse over hours or days: difficulty breathing or being breathless when you lie flat, a weak cough, trouble swallowing or clearing saliva, or fainting, near-fainting or a racing or irregular heartbeat',
+    when: (z, a) => weakAnswer(a),
+  },
+  {
+    id: 'pc-gbs', tier: 'emergency', why: WHY.gbs,
+    text: 'Weakness that is spreading up from your feet over hours to days, often with tingling',
     when: (z, a) => weakAnswer(a),
   },
   // Sudden painless weakness of both legs ("Hyperthyroidism" document, signed
@@ -312,7 +352,10 @@ const PATTERNS = [
   {
     id: 'pc-child-muscle', tier: 'urgent', noBooking: true, why: WHY.childMuscle,
     text: 'For a young child: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
-    when: (z, a) => ['u5', 'u18'].includes(a.age) && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'),
+    // 6 Oct 2026, general conditions cross-check (approved by Chandra), S6: from 5 to 15, not for one sports knee.
+    when: (z, a) => (a.age === 'u5' && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot')) ||
+      (a.age === 'u18' && (weakAnswer(a) || has(z, 'lowerback', 'hip', 'thigh') ||
+        ['knee', 'lowerleg', 'ankle', 'foot'].some((t) => bothSides(z, t)))),
   },
   // Rickets ("Osteomalacia" document, v0.1, 4 Oct 2026; the child route):
   // bowed legs or knock-knees, thick wrists or ankles, a bumpy chest, leg
@@ -322,7 +365,9 @@ const PATTERNS = [
     text: RICKETS_SCREEN.text,
     // Under 5: any leg or wrist; 5 to 15: both legs (a teenager's one sore wrist is not asked).
     when: (z, a) => (a.age === 'u5' && has(z, 'thigh', 'knee', 'lowerleg', 'ankle', 'wrist')) ||
-      (a.age === 'u18' && ['thigh', 'knee', 'lowerleg'].some((t) => bothSides(z, t))),
+      (a.age === 'u18' && (['thigh', 'knee', 'lowerleg'].some((t) => bothSides(z, t)) ||
+        // 6 Oct 2026, general conditions cross-check (approved by Chandra), C3: one leg for 6 weeks or more (one-sided bowing is a doctor matter too).
+        (has(z, 'thigh', 'knee', 'lowerleg') && ['d3m', 'o3m', 'years'].includes(a.duration)))),
   },
   // Pain in one bone that is not settling ("Osteosarcoma" document, v0.1,
   // 4 Oct 2026; the recognition rule, every area): one knee, shin, thigh,
@@ -364,11 +409,11 @@ const PATTERNS = [
   // part of the nerve and muscle gate, not named). Before the general screen,
   // for the same triggers. A yes holds the booking (doctor this week, CK).
   {
-    id: 'pc-myositis', tier: 'urgent', noBooking: true, why: WHY.myositisScreen,
+    id: 'pc-myositis', tier: 'urgent', noBooking: true, why: WHY.myositisScreen, adultOnly: true,
     text: 'Not explained by a condition you have already been diagnosed with: weakness in both thighs or hips, or both shoulders or upper arms, that has built up steadily over weeks to a few months without an injury (trouble getting up from a chair or out of a car, climbing stairs, or lifting your arms to wash your hair), with or without a purple or red rash on the eyelids, knuckles, chest or upper back, a new dry cough or breathlessness, or trouble swallowing',
     // Proximal only: a weak grip or foot drop alone goes to the general screen.
-    when: (z, a) => (weakAnswer(a) && has(z, 'neck', 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
-      ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
+    when: (z, a) => adult(a) && ((weakAnswer(a) && has(z, 'neck', 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
+      ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t))),
   },
   // Cortisol or steroid medicine ("Cushings Syndrome" document, signed by
   // Chandra, 3 Oct 2026; route A, not named): the same both-sided proximal
@@ -377,8 +422,8 @@ const PATTERNS = [
   {
     id: 'pc-hormone', tier: 'urgent', noBooking: true, why: HORMONE_SCREEN.why,
     text: HORMONE_SCREEN.text,
-    when: (z, a) => (weakAnswer(a) && has(z, 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
-      ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
+    when: (z, a) => adult(a) && ((weakAnswer(a) && has(z, 'shoulder', 'upperarm', 'hip', 'thigh', 'knee')) ||
+      ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t))),
   },
   // Too little pituitary hormone ("Hypopituitarism" document, signed by
   // Chandra, 3 Oct 2026; route A, not named): exhaustion or both-sided muscle
@@ -390,8 +435,8 @@ const PATTERNS = [
   {
     id: 'pc-lowhormone', tier: 'urgent', noBooking: true, why: LOW_HORMONE_SCREEN.why,
     text: LOW_HORMONE_SCREEN.text,
-    when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)) ||
-      typesOf(z).size >= 4 || (has(z, 'head') && ['o3m', 'years'].includes(a.duration)),
+    when: (z, a) => adult(a) && (weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)) ||
+      typesOf(z).size >= 4 || (has(z, 'head') && ['o3m', 'years'].includes(a.duration))),
   },
   // The nerve and muscle screen (myasthenia gravis: fatigable, eyes and
   // bulbar, worse by evening; myotonic dystrophy: grip myotonia, both hands
@@ -400,7 +445,7 @@ const PATTERNS = [
   // list, so it never pushes out the checks above. A yes holds the booking
   // until a doctor has seen them (noBooking, in the next few days).
   {
-    id: 'pc-muscle', tier: 'urgent', noBooking: true, why: WHY.muscleScreen,
+    id: 'pc-muscle', tier: 'urgent', noBooking: true, why: WHY.muscleScreen, adultOnly: true,
     text: 'Not explained by a condition you have already been diagnosed with: muscles that work at first, then fade the more you use them and recover after rest (often worse by evening); a drooping eyelid or double vision that comes and goes; your jaw tiring when you chew, or speech becoming slurred or nasal as you talk; a grip that is slow to let go, especially in the cold; or weakness in both hands or both feet that has crept on over months or years, especially with early cataracts or muscle weakness in the family',
     when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
   },
@@ -410,7 +455,7 @@ const PATTERNS = [
   // calcium result never followed up. Last, so it never pushes out the
   // checks above. A yes holds the booking (family doctor, a blood test).
   {
-    id: 'pc-calcium', tier: 'urgent', noBooking: true, why: CALCIUM_SCREEN.why,
+    id: 'pc-calcium', tier: 'urgent', noBooking: true, why: CALCIUM_SCREEN.why, adultOnly: true,
     text: CALCIUM_SCREEN.text,
     when: (z) => ['lowerleg', 'thigh', 'hip'].some((t) => bothSides(z, t)) || typesOf(z).size >= 4,
   },
@@ -419,7 +464,7 @@ const PATTERNS = [
   // racing-heart/heat/tremor cluster with a neck swelling or eye changes.
   // Last, like the calcium question. A yes holds the booking.
   {
-    id: 'pc-thyroid', tier: 'urgent', noBooking: true, why: THYROID_SCREEN.why,
+    id: 'pc-thyroid', tier: 'urgent', noBooking: true, why: THYROID_SCREEN.why, adultOnly: true,
     text: THYROID_SCREEN.text,
     when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'hip', 'thigh'].some((t) => bothSides(z, t)),
   },
@@ -428,7 +473,7 @@ const PATTERNS = [
   // sides, or both hands numb at night, with the "slowing" cluster. Doctor
   // in the next few weeks, but booking is still offered (its open item 1).
   {
-    id: 'pc-hypothyroid', tier: 'urgent', why: HYPOTHYROID_SCREEN.why,
+    id: 'pc-hypothyroid', tier: 'urgent', why: HYPOTHYROID_SCREEN.why, adultOnly: true,
     text: HYPOTHYROID_SCREEN.text,
     when: (z, a) => weakAnswer(a) || ['shoulder', 'upperarm', 'thigh', 'lowerleg', 'hand', 'wrist'].some((t) => bothSides(z, t)) ||
       typesOf(z).size >= 4,
@@ -436,7 +481,7 @@ const PATTERNS = [
   // Growth-hormone excess ("Acromegaly" document, signed by Chandra,
   // 3 Oct 2026; route A): the growth change is the gate. Booking still offered.
   {
-    id: 'pc-acromegaly', tier: 'urgent', why: ACROMEGALY_SCREEN.why,
+    id: 'pc-acromegaly', tier: 'urgent', why: ACROMEGALY_SCREEN.why, adultOnly: true,
     text: ACROMEGALY_SCREEN.text,
     when: (z) => ['knee', 'hip', 'shoulder', 'hand', 'wrist'].some((t) => bothSides(z, t)) || has(z, 'jaw') || typesOf(z).size >= 4,
   },
@@ -452,6 +497,8 @@ export function patternChecks(zones = [], answers = {}, max = 3) {
     if (out.length >= max) break
     // call911 and keepNeckStill pick the emergency screen (./emergencyAdvice.js).
     try {
+      // 6 Oct 2026, general conditions cross-check (approved by Chandra), S6: the adult muscle, hormone and calcium screens are not for children.
+      if (p.adultOnly && !adult(answers)) continue
       if (p.when(zones, answers)) out.push({ id: p.id, text: p.text, tier: p.tier, why: p.why,
         ...(p.sameDay ? { sameDay: true } : {}), ...(p.call911 ? { call911: true } : {}), ...(p.keepNeckStill ? { keepNeckStill: true } : {}),
         ...(p.noBooking ? { noBooking: true } : {}) })

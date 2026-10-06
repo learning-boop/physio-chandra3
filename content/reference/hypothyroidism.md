@@ -53,3 +53,7 @@ Dark (cola-coloured) urine with severe muscle pain (rhabdomyolysis, emergency); 
 ## Sources
 
 Jonklaas J et al., Thyroid 2014;24:1670 (ATA); NICE NG145 (2019, updated 2023) and CKS Hypothyroidism; Duyff RF et al., JNNP 2000;68:750; hypothyroid myopathy and Hoffmann's syndrome reports (BMJ Case Rep 2019; J Med Case Rep 2023); Shiri 2014 carpal tunnel meta-analysis; Cureus 2021 cohort; Canadian Cardiovascular Society 2021 dyslipidaemia guideline; EAS statin consensus; frozen shoulder and thyroid studies (Schiefer 2017; reviews 2020-2024); Osteoporosis Canada 2023; Butler & Moseley, Explain Pain.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Panel: "Take thyroxine exactly as your doctor or pharmacist advised, and do not stop it without advice" (no medication timing on patient pages). Clinic note: empty stomach, 30 to 60 minutes before food, 4 hours from calcium, iron or antacids.
+- Final check: emergencies no longer use a place in the six, and the hormone screens get up to two more places, so this screen is no longer cut for both-shoulder or widespread drawings with weakness.

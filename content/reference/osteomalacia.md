@@ -56,3 +56,6 @@ The curable look-alike inside widespread aching ("fibromyalgia"), both-sided pro
 ## Sources
 
 BMJ Best Practice, Osteomalacia (Mar 2025); Uday S, Högler W, J Steroid Biochem Mol Biol 2019; Arboleya L et al., J Clin Med 2023; Munns CF et al., JCEM 2016;101:394; Demay MB et al., JCEM 2024;109:1907; NICE CKS vitamin D deficiency (2024); Royal Osteoporosis Society 2020; Health Canada, Osteoporosis Canada 2023; tumour-induced osteomalacia review 2024; XLH and hypophosphatasia guidelines 2019-2022; Butler & Moseley, Explain Pain.
+
+## Cross-check 6 Oct 2026 (approved by Chandra)
+- Rickets for 5 to 15: one leg is now asked when it has lasted 6 weeks or more (one-sided bowing: Blount's or dysplasia, a doctor matter). Vitamin D and calcium lines now say "Follow your doctor's plan" (no dose advice).
