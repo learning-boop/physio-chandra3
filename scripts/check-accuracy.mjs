@@ -24,7 +24,7 @@
 import { REGIONS } from '../src/data/symptomGuide.js'
 import {
   REGION_CHAINS, MAX_SCORED_QUESTIONS, buildScreens, nextQuestion, rankAcross, regionAnswers, alsoConsiderAcross,
-  twinIds,
+  twinIds, isBonus,
 } from '../src/data/assessmentFlow.js'
 
 const BUDGET = Number(process.argv[2]) || MAX_SCORED_QUESTIONS
@@ -78,7 +78,8 @@ function runFlow(keys, full) {
     const own = twinIds(id).find((x) => full[x] !== undefined)
     if (own !== undefined) ans[id] = full[own]
   }
-  return { ranked: rankAcross(keys, ans), asked: asked.length }
+  // A bonus question (isBonus) is an optional extra, not one of the budget.
+  return { ranked: rankAcross(keys, ans), asked: asked.filter((x) => !isBonus(x)).length }
 }
 
 /** Translate one region's answers into the shared ids of a multi-area screen. */

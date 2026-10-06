@@ -48,6 +48,11 @@ pointers:
   "My hands have become clumsy": -16
   "My walking or balance has changed": -16
   "Moving my shoulder and arm": -1
+  # 6 Oct 2026, the optional self-tests N15 (Butler's active quick tests):
+  # a positive test is not scored (it would raise this document's ceiling of
+  # 12 and drop its "possible" line at 5 below the 40% rule); none bringing on
+  # the usual symptoms counts against.
+  "I tried them and none brought on my usual symptoms": -2
 ---
 
 ## blurb

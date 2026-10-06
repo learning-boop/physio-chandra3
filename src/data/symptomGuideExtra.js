@@ -219,6 +219,37 @@ export const EXTRA_REGIONS = {
           { id: "tender", label: "It is tender to press along the nerve: the inner upper arm, the funny-bone groove, or the front of the wrist" },
           { id: "loss", label: "Numbness that does not go away, weakness, or the hand muscles getting thinner", special: "nerveLoss" }
         ]},
+      // Self-tests (Chandra, 6 Oct 2026): Butler's "active quick tests" from
+      // the NOI neurodynamic techniques workbook - the patient's own version of
+      // the upper limb neurodynamic tests with structural differentiation
+      // (median: arm out, wrist back, head tilt away; ulnar: hand on the ear,
+      // lift the elbow; radial: fist round the thumb, elbow straight, arm
+      // turned in, shoulder down). Offered only to a stretch-sensitive picture
+      // with NO numbness that stays, weakness, or cord signs (Shacklock: no
+      // testing beyond level 1 with a deficit), and only to the first onset
+      // of the usual symptoms, once. Never required: "rather not" scores
+      // nothing. A positive test is NOT scored: the signed neural document's
+      // ceiling is 12 with its "possible" line at 5, and any weight here would
+      // raise the ceiling and drop that line below the site's 40% rule. It
+      // shows a card and names the nerve in the clinician summary; "none
+      // brought them on" counts -2 against the sensitive nerve.
+      // ⚠ FOR CLINICIAN REVIEW: wording, safety gate and weights.
+      { id: "N15", text: "Optional: try these gently, one at a time, and stop as soon as your usual arm symptoms start. Do not push into pain or hold the position, and skip them if your pain is severe or easily stirred up. Which bring on your usual symptoms? Tick all that apply.",
+        askIf: ({ ra }) => {
+          const n14 = [].concat(ra.N14 || []), n2 = [].concat(ra.N2 || []), n9 = [].concat(ra.N9 || [])
+          return ["stretch", "stretchsome", "tiltaway"].some((o) => n14.includes(o)) && !n14.includes("loss") &&
+            !n2.includes("weak") && !n9.some((o) => ["bothhands", "clumsy", "walking", "lhermitte"].includes(o))
+        },
+        // Straight after N14, outside the five scored questions (isBonus,
+        // ./assessmentFlow.js): an optional extra screen.
+        bonus: true,
+        options: [
+          { id: "median", special: "selfTestNerve", label: "Arm out to the side at shoulder height, palm up, then bend the wrist back: it brings them on, and tilting my head away from that arm makes them worse" },
+          { id: "ulnar", special: "selfTestNerve", label: "Hand flat over my ear, then lift the elbow up and out to the side: it brings them on, in the ring and little fingers or inner forearm" },
+          { id: "radial", special: "selfTestNerve", label: "Arm by my side, fist closed around my thumb, elbow straight, turn the arm in and push the shoulder down: it brings them on, on the back of the forearm or thumb" },
+          { id: "nonebrought", label: "I tried them and none brought on my usual symptoms" },
+          { id: "skip", label: "I would rather not try them, or it hurt too much to try" }
+        ]},
       // The document's Q9: which fingers the tingling is in. Not scored; a
       // level estimate for Chandra's summary (thumb and index C6, middle C7,
       // ring and little C8), read with the hand and nerve maps in
@@ -2996,6 +3027,9 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Numbness that does not go away, a foot or toes that catch, trouble rising onto your toes, or a knee that gives way can mean a nerve is not carrying its signals as well as it should, not just that it is sensitive. It needs a hands-on check of feeling, strength and reflexes soon, so please book an assessment promptly. If the weakness is <strong>getting worse</strong>, or your foot slaps down when you walk, see a doctor the same day." },
   // Neurodynamics, second batch (6 Oct 2026): nerve answers asked outside the
   // area that scores them.
+  // The arm self-tests (the neck's N15, 6 Oct 2026; Butler's active quick tests).
+  selfTestNerve: { title: "Your self-test points to a sensitive nerve",
+    body: "The movement that brought on your usual symptoms gently takes up the slack in one of the nerves of the arm, and tilting the head or dropping the shoulder changes how much. A nerve that reacts like this is usually <strong>sensitive</strong>, not damaged, and gentle movements that help it glide often help it settle. Your physiotherapist will repeat the test with you, check how the nerve is working, and show you which movements to use. For now, avoid holding positions that bring the symptoms on." },
   nerveLossShoulder: { title: "A thinner shoulder blade muscle: please book promptly",
     body: "When the muscle at the back of the shoulder blade looks hollow or thinner than the other side, the nerve that supplies it may not be carrying its signals well. It needs a hands-on check of strength soon, so please book an assessment promptly. If it came with severe pain that eased and was followed by weakness, or after a fall or a dislocation, see a doctor as well." },
   footNerve: { title: "This may be a small nerve in the foot",

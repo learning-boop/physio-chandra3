@@ -17,7 +17,7 @@ import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS } from '../data/symptomGuide'
 import {
   primaryRegion, questionRegions, needsAreaChoice,
-  buildScreens, nextQuestion, rankAcross, alsoConsiderAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS,
+  buildScreens, nextQuestion, rankAcross, alsoConsiderAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS, isBonus,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
@@ -673,7 +673,8 @@ export default function PainAssessment() {
   )
   // Screens this selection can take: the opening one plus the scored limit.
   // It ends sooner when one condition is clearly ahead.
-  const plannedScreens = keys.length ? 1 + TAIL_IDS.length + Math.min(MAX_SCORED_QUESTIONS, regionQuestions.length) : activeQuestions.length
+  // An optional bonus screen (the arm self-tests) adds one once it is shown.
+  const plannedScreens = keys.length ? 1 + TAIL_IDS.length + Math.min(MAX_SCORED_QUESTIONS, regionQuestions.length) + askedIds.filter(isBonus).length : activeQuestions.length
   // Only the opening answers, the questions on the current path and the free
   // text count. After going Back and taking a different route, the abandoned
   // question's answer must not quietly shape the result.

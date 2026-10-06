@@ -27,6 +27,25 @@ const spot = (fy, az, lx) => [-1, 0, 1].flatMap((i) => [-1, 0, 1].map((j) => ({ 
 
 const TESTS = {
   neck: [
+    // Self-tests (N15, 6 Oct 2026; Butler's active quick tests): offered only
+    // to a stretch-sensitive picture with no numbness that stays, weakness or
+    // cord signs; a positive test shows a card, none counts against.
+    { name: 'S1. Line down the arm brought on by stretch positions, the median self-test reproduces it: card, sensitive nerve',
+      lines: [['neck', 'shoulderL', 'elbowL', 'wristL']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N9: ['none'], N2: ['pastelbow', 'burning'], N14: ['line', 'stretch', 'tiltaway'], N15: ['median'], N3: ['neither'] },
+      expect: { top: 'neck/neural', asked: ['N15'], special: 'selfTestNerve', route: 'results' } },
+    { name: 'S2. Numbness that stays: the self-tests are NOT offered',
+      lines: [['neck', 'shoulderL', 'elbowL', 'wristL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', N9: ['none'], N2: ['fingers'], N14: ['line', 'stretch', 'loss'], N3: ['neither'] },
+      expect: { notAsked: ['N15'], route: 'results' } },
+    { name: 'S3. Clumsy hands: the self-tests are NOT offered',
+      lines: [['neck', 'shoulderL', 'elbowL', 'wristL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'd3m', N9: ['clumsy'], N2: ['wholehand'], N14: ['stretch'], N3: ['neither'] },
+      expect: { notAsked: ['N15'] } },
+    { name: 'S4. The document 5-point "possible" picture, but no self-test brings it on: sensitive nerve not claimed',
+      lines: [['neck', 'shoulderL', 'elbowL', 'wristL']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', N9: ['none'], N2: ['wholehand'], N14: ['vague', 'tiltaway', 'tender'], N15: ['nonebrought'], N3: ['neither'] },
+      expect: { not: ['neck/neural'], asked: ['N15'], route: 'results' } },
     { name: '1. Desk worker, stiff one side',
       lines: [['neck', 'upperback']],
       // N9 (asked of everyone first, since 26 Sep) answered as a real patient

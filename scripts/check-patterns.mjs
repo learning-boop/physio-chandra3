@@ -212,6 +212,10 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
   check('foot drop ticked → level 0', zero.level === 0, zero)
   const loss = neurodynamicReading({ answers: { L1: ['front'], L13: ['kneeweak', 'pkb'] }, behaviour: { irritability: 'mild' } })
   check('knee giving way → deficit, level 1, and the slump knee bend named', loss.level === 1 && loss.findings.some((f) => /slump knee bend/.test(f)), loss)
+  const selfPos = neurodynamicReading({ answers: { N2: ['pastelbow'], N14: ['stretch'], N15: ['median', 'ulnar'] }, behaviour: { irritability: 'mild' } })
+  check('self-tests: the nerves that reacted are named with the clinician tests to confirm', selfPos.findings.some((f) => /median/.test(f) && /ULNT1/.test(f) && /ulnar/.test(f) && /ULNT3/.test(f)), selfPos)
+  const selfSkip = neurodynamicReading({ answers: { N2: ['pastelbow'], N14: ['stretch'], N15: ['skip'] }, behaviour: { irritability: 'mild' } })
+  check('self-tests too painful to try → level 1', selfSkip.level === 1, selfSkip)
   const text = buildClinicianSummary({ zones: zonesOf([['lowerback', 'hipR', 'kneeR', 'ankleR']]), referral: legRef, keys: ['lowback'],
     answers: { L1: ['belowknee'], L12: ['stretch', 'neckdown'] }, behaviour: { irritability: 'mild' } })
   check('the clinician summary carries the neurodynamic plan', /Neurodynamic plan \(Shacklock\): Level 2/.test(text), text.split('\n').filter((l) => /eurodynamic/.test(l)))

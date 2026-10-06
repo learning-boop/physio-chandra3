@@ -11521,6 +11521,12 @@ export const AUTHORED = [
         "oid": "shoulder",
         "label": "Moving my shoulder and arm",
         "weight": -1
+      },
+      {
+        "qid": "N15",
+        "oid": "nonebrought",
+        "label": "I tried them and none brought on my usual symptoms",
+        "weight": -2
       }
     ]
   },

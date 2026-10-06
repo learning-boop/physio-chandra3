@@ -270,10 +270,26 @@ function gaveSignal(questions, ra) {
     like an area with `yieldsTo`, they give up their first slot.
     A "Where is the pain?" question the drawing has already answered
     (LOCATION_QUESTION_IDS) is not asked again. */
+/* A `bonus` question (6 Oct 2026: the neck's optional arm self-tests, N15)
+   is asked as soon as its askIf holds and does not use one of the budget's
+   slots: it is an optional extra screen for the people it fits, and taking a
+   slot would cost the question that tells a nerve root from a sensitive
+   nerve (N3). */
+export const isBonus = (id) => Object.values(REGIONS).some((r) => r.questions.some((q) => q.id === id && q.bonus))
+
 export function nextQuestion(keys, answers, askedIds, budget = MAX_SCORED_QUESTIONS, ctx = {}) {
   const draw = ctx.draw ? new Set(ctx.draw) : null
   const all = { ...answers, ...(ctx.all || {}) }
-  if (askedIds.length >= budget) return null
+  for (const k of keys) {
+    const region = REGIONS[k]
+    const ra = regionAnswers(keys, k, answers)
+    const open = { ...ra }
+    for (const q of region.questions) if (!askedIds.includes(q.id)) delete open[q.id]
+    for (const q of region.questions) {
+      if (q.bonus && !askedIds.includes(q.id) && (!q.askIf || q.askIf({ draw, ra: open, all }))) return q.id
+    }
+  }
+  if (askedIds.filter((id) => !isBonus(id)).length >= budget) return null
   // A question whose twin (same `same` key) was asked in another area is done.
   const askedSame = new Set(askedIds.map((id) => SAME_OF[id]).filter(Boolean))
   // A question the drawing pre-answered (N2 "past the elbow") is still to

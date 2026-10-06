@@ -41,7 +41,7 @@ function nervePicture(answers, referral) {
   return referral.length > 0
     || as(answers.L1).some((o) => o === 'thigh' || o === 'belowknee' || o === 'front')
     || as(answers.N2).some((o) => ['pastelbow', 'fingers', 'wholehand', 'burning', 'weak'].includes(o))
-    || ['L12', 'L13', 'N14'].some((q) => as(answers[q]).length > 0)
+    || ['L12', 'L13', 'N14', 'N15'].some((q) => as(answers[q]).length > 0)
     || as(answers.painQuality).some((o) => o === 'burning' || o === 'tingling')
 }
 
@@ -66,6 +66,17 @@ export function neurodynamicReading({ answers = {}, behaviour = {}, referral = [
   if (closing && tension) findings.push('Both together — Shacklock\'s combined interface and tension picture: start with openers and sliders, progress to closers and tensioners as irritability falls.')
   if (loss) findings.push('Possible conduction loss reported (numbness that stays, weakness) — full neurological examination first; treat the sensitivity, monitor conduction closely.')
   if (has(leg, 'tender') || has(arm, 'tender')) findings.push('Tender along the nerve reported — palpate the tract and compare sides (thickening, swelling, reproduction).')
+  // The arm self-tests (N15; Butler's active quick tests): which nerve reacted.
+  const self = as(answers.N15)
+  const SELF = {
+    median: 'median (arm out, wrist back, head tilt away) - confirm with ULNT1 / ULNT2a',
+    ulnar: 'ulnar (hand on the ear, elbow lifted) - confirm with ULNT3; check the cubital tunnel and Guyon canal',
+    radial: 'radial (fist round the thumb, elbow straight, arm turned in, shoulder down) - confirm with ULNT2b; radial tunnel vs lateral elbow',
+  }
+  const positive = Object.keys(SELF).filter((k) => self.includes(k))
+  if (positive.length) findings.push(`Patient self-test reproduced the usual symptoms: ${positive.map((k) => SELF[k]).join('; ')}. A home test without structural differentiation by a clinician - repeat it, differentiate and compare sides.`)
+  if (self.includes('nonebrought')) findings.push('Patient self-tests did not reproduce the symptoms - a neural source is less likely; weigh the musculoskeletal and interface findings.')
+  if (self.includes('skip')) findings.push('Self-tests declined or too painful to try - start at level 1.')
   if (has(front, 'pkb') || has(front, 'fronttingle')) findings.push('Front-of-thigh nerve features — slump knee bend (differentiate with the neck); add hip abduction for the obturator nerve, adduction for the lateral femoral cutaneous nerve.')
 
   // ── Exam level ──
@@ -82,7 +93,9 @@ export function neurodynamicReading({ answers = {}, behaviour = {}, referral = [
     if (slowSettle) levelWhy.push('Slow to settle — latent responses are possible, so warning comes late.')
     if (loss) levelWhy.push('Possible neurological deficit.')
     if (closing) levelWhy.push('Likely interface pathology (closing).')
-    level = irritable || slowSettle || loss || closing ? 1 : behaviour.irritability === 'mild' ? 2 : null
+    const tooSore = as(answers.N15).includes('skip')
+    if (tooSore) levelWhy.push('Self-tests declined or too painful to try.')
+    level = irritable || slowSettle || loss || closing || tooSore ? 1 : behaviour.irritability === 'mild' ? 2 : null
     if (level === 2) levelWhy.push('Low irritability, no deficit or closing reported.')
   }
   return { level, levelWhy, findings }

@@ -75,3 +75,15 @@ Two separate questions drive the reasoning: (1) is the nerve **sensitive** (gain
 
 - **In scope:** one-sided arm symptoms from heightened mechanosensitivity of the brachial plexus or the median, ulnar or radial nerves, with or without mild peripheral entrapment and without progressive loss of function.
 - **Routed elsewhere:** neck-led dermatomal pattern → radiculopathy; established carpal or cubital tunnel → their own records; progressive weakness, wasting, bilateral or systemic symptoms, vascular signs → red-flag screen or GP; post-surgical or post-fracture nerve injury → assessment.
+
+## A6. Patient self-tests (added 6 Oct 2026)
+
+Butler's active quick tests (NOI neurodynamic techniques workbook), offered online as the neck's optional N15 to a stretch-sensitive picture without conduction loss or cord signs:
+
+| Self-test | Nerve bias | Confirm in clinic |
+|---|---|---|
+| Arm out at shoulder height, palm up, wrist back, then head tilt away | Median, C5-C7 | ULNT1 / ULNT2a with differentiation |
+| Hand flat over the ear, then lift the elbow up and out | Ulnar, C8-T1 | ULNT3; cubital tunnel, Guyon canal |
+| Arm by the side, fist round the thumb, elbow straight, arm turned in, shoulder down | Radial (superficial radial, PIN) | ULNT2b; radial tunnel vs lateral elbow |
+
+A home test is not a clinician's structural differentiation: it suggests a sensitive nerve and which one, to be repeated and compared side to side. Not scored (the condition's ceiling stays 12); a negative set counts -2 against it.
