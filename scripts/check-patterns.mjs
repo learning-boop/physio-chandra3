@@ -570,8 +570,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   // 54 since the compartment syndrome document added the ankle, foot, wrist
   // and hand compartment questions and the calf rhabdomyolysis one (2 Oct 2026).
   // 56 with the general dark-urine question on the shoulder and hip (2 Oct 2026).
-  check('911 split: 56 region flags send the person to emergency now',
-    em.filter((f) => !f.call911).length === 56, em.filter((f) => !f.call911).map((f) => f.id))
+  // 57 with the elbow compartment question (elbow cross-check, 6 Oct 2026).
+  check('911 split: 57 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 57, em.filter((f) => !f.call911).map((f) => f.id))
   check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
   // A shared group must lead to the same place in every area that asks it.
   const byGroup = {}
@@ -1949,6 +1950,44 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('High ankle sprain: assessed in the first week (not "1 to 2 weeks"); plantar heel pain notes graded to the 2023 revision',
     !card(A, 'highankle').seePhysioIf.some((l) => /1 to 2 weeks/.test(l)) && card(A, 'highankle').seePhysioIf.some((l) => /first week/.test(l)) &&
     /2023 revision/.test(card(F, 'pf').clinicNotes.join(' ')) && !/not yet been checked/.test(card(F, 'pf').clinicNotes.join(' ')))
+}
+
+// ── 60. Elbow cross-check: JOSPT lateral elbow pain 2022, BESS 2023, AIM manual, protocols (all 28 approved, 6 Oct 2026) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const { ELBOW_INJURY, ARM_INJURY, injuryFlow } = await imp('src/data/injuryScreen.js')
+  const { GATES, SIGNS, SHORT } = await imp('src/data/safetyGates.js')
+  const R = REGIONS.elbow
+  const card = (id) => R.conditions.find((c) => c.id === id)
+  const q = (id) => [...R.context, ...R.questions].find((x) => x.id === id)
+  const iq = (id) => ELBOW_INJURY.find((x) => x.id === id)
+  const flag = (id) => R.redFlags.find((f) => f.id === id)
+  const text = (c) => [c.name, c.blurb, ...(c.noticed || []), ...(c.homeCare || []), ...(c.seePhysioIf || [])].join(' ')
+  const noDoctor = R.conditions.filter((c) => !(c.seePhysioIf || []).some((l) => /doctor|911|emergency/i.test(l))).map((c) => c.id)
+  check('Every elbow card has a doctor line', !noDoctor.length, noDoctor)
+  check('Elbow safety: compartment syndrome, tight cast and cellulitis worded as the forearm\'s (asked once), with gates and short signs; erf-nerve asks about straightening the fingers',
+    flag('erf-compartment').text === REGIONS.forearm.redFlags.find((f) => f.id === 'frf-compartment').text && flag('erf-compartment').tier === 'emergency' &&
+    flag('erf-cast').text === REGIONS.forearm.redFlags.find((f) => f.id === 'frf-cast').text && !!flag('erf-cellulitis') &&
+    GATES.elbow.some((g) => g.members.includes('erf-cast') && g.members.includes('erf-cellulitis')) && !!SIGNS['erf-cast'] && !!SHORT['erf-cellulitis'] &&
+    /straighten your fingers/.test(flag('erf-nerve').text))
+  check('Elbow injury screen: nerve question worded as the upper arm\'s (asked once); numb fingers or no OK sign; a dislocation that went back; a tender point of the elbow; a child not using the arm',
+    iq('I7').text === ARM_INJURY.find((x) => x.id === 'I5').text && /OK sign/.test(iq('I8').text) && !!iq('I9') &&
+    iq('I10').askIf({ I1: 'fall' }) && iq('I11').askIf({ I1: 'fall' }, 'u18') && !iq('I11').askIf({ I1: 'fall' }, '30-49'))
+  const Z = [{ id: 'elbowR', type: 'elbow', label: 'elbowR' }]
+  const pulled = injuryFlow(Z, { 'elbow:I1': 'pop', 'elbow:I2': 'no', 'elbow:I3': 'no', 'elbow:I4': 'no', 'elbow:I12': 'yes' }, 'u5')
+  const adultPop = injuryFlow(Z, { 'elbow:I1': 'pop', 'elbow:I2': 'no', 'elbow:I3': 'no', 'elbow:I4': 'no' }, '30-49')
+  check('Pulled elbow under 5: a doctor or urgent care the same day, no booking; adults go to the biceps question instead',
+    pulled.route === 'urgent' && pulled.sameDay && pulled.noBooking && adultPop.next === 'elbow:I5')
+  check('Children: tennis, golfer\'s and the inner ligament card are 16 and over',
+    ['tennis', 'golfer', 'ucl'].every((id) => !(card(id).gates.ages || []).includes('u18') && !(card(id).gates.ages || []).includes('u5')))
+  check('Biceps: same day after a pop (matches injury screen I5); bursitis: same day even without a fever; cubital tunnel: weakness or wasting means a doctor; radial tunnel copies match',
+    card('biceps').seePhysioIf.some((l) => /same day/.test(l)) && !card('biceps').seePhysioIf.some((l) => /within a few days, as a tear/.test(l)) &&
+    /even without a fever/.test(card('posterior').blurb) && card('cubital').seePhysioIf.some((l) => /thinner/.test(l) && /doctor/.test(l)) &&
+    card('radialtunnel').seePhysioIf.join() === REGIONS.forearm.conditions.find((c) => c.id === 'radialtunnel').seePhysioIf.join())
+  check('No "unstable" in elbow patient wording, answers included; the throwing questions follow a ticked throwing answer too; a pushing answer for the triceps; fracture rehabilitation only after a fracture or dislocation',
+    !R.conditions.some((c) => /unstable|instability/i.test(text(c))) && !q('E5').options.some((o) => /unstable/i.test(o.label)) &&
+    q('E8').askIf({ ra: { onset: 'gradual', E2: ['throw'] } }) && q('E2').options.some((o) => o.id === 'push') &&
+    card('fracture').gates.requiresOnset.join() === 'surgery')
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

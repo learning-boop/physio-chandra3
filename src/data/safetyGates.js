@@ -124,6 +124,7 @@ export const GATES = {
   // Elbow.
   elbow: [
     { id: 'elbow-infection', title: 'Signs of infection or a flare-up', members: ['erf-bursa', 'erf-gout'] },
+    { id: 'elbow-skin', title: 'Signs of infection or a tight cast', members: ['erf-cast', 'erf-cellulitis'] },
     { id: 'elbow-nerve', title: 'Changes in feeling or strength', members: ['erf-nerve', 'erf-myelo', 'erf-pta', 'sc-neuro'] },
   ],
   // Forearm.
@@ -293,7 +294,9 @@ export const SIGNS = {
   // Elbow
   'erf-bursa': 'a swelling at the point of the elbow that is red, warm or has a cut or graze over it',
   'erf-gout': 'a joint that became suddenly hot, swollen and very painful overnight, with gout or pseudogout before',
-  'erf-nerve': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist you cannot lift',
+  'erf-nerve': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist or fingers you cannot straighten',
+  'erf-cast': 'a cast, splint or bandage on the arm that feels more and more tight and painful',
+  'erf-cellulitis': 'spreading redness, a red streak up the arm, or a hot swollen area, with a fever',
   'erf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
   'erf-pta': 'a sudden, severe arm pain with no injury that lasted several days, then weak arm or hand muscles',
   // Forearm
@@ -452,6 +455,8 @@ export const SHORT = {
   'erf-bursa': 'a red, warm swelling at the elbow tip',
   'erf-gout': 'a joint suddenly hot and swollen',
   'erf-nerve': 'a weaker or thinner hand',
+  'erf-cast': 'a tight cast',
+  'erf-cellulitis': 'spreading redness with a fever',
   'erf-myelo': 'both hands numb or clumsy',
   'erf-pta': 'sudden pain then weak muscles',
   'frf-cast': 'a tight cast',

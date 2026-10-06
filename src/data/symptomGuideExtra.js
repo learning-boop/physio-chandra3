@@ -1431,12 +1431,19 @@ export const EXTRA_REGIONS = {
     redFlags: [
       { id: "erf-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
         text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, or after a recent injection?" },
+      // 6 Oct 2026: elbow cross-check, approved by Chandra (S1, S12): worded as the forearm's, so asked once.
+      { id: "erf-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
+        text: "Since a broken bone, a crush, a tight cast or bandage, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, with the muscle tight, hard and swollen, or much worse when your fingers are gently moved?" },
+      { id: "erf-cast", tier: "urgent", sameDay: true, group: "casttight-arm", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
+        text: "Is a cast, splint or bandage on this arm feeling more and more tight and painful? Please do not cut it off yourself." },
+      { id: "erf-cellulitis", sameDay: true, tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
+        text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
       { id: "erf-bursa", sameDay: true, tier: "urgent", why: "Possible infected bursa at the back of the elbow",
         text: "Is there a swelling at the point of your elbow that is red, warm, or has a cut or graze over it?" },
       { id: "erf-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
         text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
-      { id: "erf-nerve", tier: "urgent", group: "handweak", why: "Nerve weakness (ulnar or radial nerve) needs medical review",
-        text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
+      { id: "erf-nerve", tier: "urgent", group: "handweak", why: "Nerve weakness (ulnar, radial or posterior interosseous nerve) needs medical review",
+        text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist or straighten your fingers?" },
       { id: "erf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
       { id: "erf-child", ages: ["u5", "u18"], tier: "urgent", why: "Possible growth plate injury or osteochondritis dissecans; needs imaging",
@@ -1459,7 +1466,9 @@ export const EXTRA_REGIONS = {
         { id: "throw", label: "After throwing, or a racquet or golf swing" },
         { id: "fall", label: "After a fall onto the hand or elbow" },
         { id: "pop", label: "I felt a pop while lifting or pulling" },
-        { id: "swell", label: "Sudden pain and swelling with no injury" }
+        { id: "swell", label: "Sudden pain and swelling with no injury" },
+        // 6 Oct 2026 (elbow cross-check N1): the fracture rehabilitation card.
+        { id: "surgery", label: "After a broken elbow or a dislocation, in a cast or after surgery" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -1481,7 +1490,9 @@ export const EXTRA_REGIONS = {
         { id: "twist", label: "Turning a key or screwdriver, or lifting with the palm up" },
         { id: "throw", label: "Throwing, a golf swing, or a racquet shot" },
         { id: "lean", label: "Leaning on my elbow" },
-        { id: "bent", label: "Keeping my elbow bent for a long time (phone, sleeping with arm bent)" }
+        { id: "bent", label: "Keeping my elbow bent for a long time (phone, sleeping with arm bent)" },
+        // 6 Oct 2026 (elbow cross-check C7): triceps tendinopathy.
+        { id: "push", label: "Pushing, push-ups, or straightening the arm against resistance" }
       ]},
       { id: "E3", text: "Which of these do you notice in your hand? Tick all that apply.",
         askIf: ({ draw, all }) => !draw || draw.has("wrist") || [].concat(all.painQuality || []).includes("tingling"),
@@ -1505,13 +1516,14 @@ export const EXTRA_REGIONS = {
           { id: "unsure", label: "Not sure" }
         ]},
       { id: "E5", text: "How does your elbow move?",
-        // Early from 50: stiffness or catching points to the joint itself.
-        priority: ({ ra }) => ra.age === "50-64" || ra.age === "o64",
+        // Early from 30, or after a fall: stiffness or catching points to the joint
+        // itself (elbow OA is often under 60, or after an old injury; 6 Oct 2026).
+        priority: ({ ra }) => ["30-49", "50-64", "o64"].includes(ra.age) || ra.onset === "fall",
         options: [
         { id: "full", label: "It straightens and bends fully" },
         { id: "nostraight", label: "It will not straighten fully" },
         { id: "locks", label: "It catches or locks at times" },
-        { id: "clicks", label: "It clicks or feels unstable" },
+        { id: "clicks", label: "It clicks, clunks, or feels like it could slip out" },
         { id: "swelling", label: "There is a soft swelling at the point of the elbow" }
       ]},
       { id: "E6", text: "Which hurts more: moving your neck, or using your arm and hand?",
@@ -1533,7 +1545,8 @@ export const EXTRA_REGIONS = {
           { id: "whole", label: "It is spread across the whole arm" }
         ]},
       { id: "E8", text: "If you throw or play racquet sports: which apply? Tick all that apply.",
-        askIf: ({ ra }) => ra.onset === "throw",
+        // 6 Oct 2026 (C3): also a thrower whose pain came on gradually.
+        askIf: ({ ra }) => ra.onset === "throw" || [].concat(ra.E2 || []).includes("throw"),
         priority: () => true,
         options: [
           { id: "backthrow", label: "Pain on the inside of the elbow as my arm goes back to throw" },

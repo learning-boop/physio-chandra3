@@ -5,8 +5,10 @@ name: Front-of-elbow tendon pain (distal biceps)
 clin: Distal biceps tendinopathy or partial tear
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
 # 4 Oct 2026: doctor and emergency lines added for the Tier 1 review; signed by Chandra Matla, 4 Oct 2026.
+# 6 Oct 2026: elbow cross-check, approved by Chandra (review/elbow-crosscheck.html).
+# S7, C6, W5: same-day doctor line (matches injury screen I5), location negatives, clinic notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed: Chandra Matla, 2026-10-04
+reviewed:
 pointers:
   "Front of the elbow, in the crease": 3
   "Turning a key or screwdriver, or lifting with the palm up": 3
@@ -15,10 +17,13 @@ pointers:
   "Gripping, shaking hands, or lifting a mug or kettle": 1
   "Tingling or numbness in the little and ring fingers": -1
   "Moving my neck": -2
+  "Outer elbow, on the bony bump on the thumb side": -2
+  "Inner elbow, on the bony bump on the little-finger side": -2
+  "Back of the elbow, at the point": -2
 ---
 
 ## blurb
-The biceps attaches just below the front of the elbow. Heavy lifting, pulling, or repeated turning of the forearm palm-up can overload the tendon there, giving pain in the elbow crease. A sudden pop with bruising or a bulge in the upper arm is different: that can be a tear, which needs a doctor quickly.
+The biceps attaches just below the front of the elbow. Heavy lifting, pulling, or repeated turning of the forearm palm-up can overload the tendon there, giving pain in the elbow crease. A sudden pop with bruising or a bulge in the upper arm is different: that can be a tear, which needs a doctor the same day.
 
 ## noticed
 - Pain deep in the front of the elbow crease
@@ -34,4 +39,8 @@ The biceps attaches just below the front of the elbow. Heavy lifting, pulling, o
 - The pain has not settled after 2 to 3 weeks
 - Lifting or turning the forearm is getting weaker
 - You want a graded plan to return to lifting or sport
-- You felt a pop, with bruising, or the bicep now bulges higher up the arm: see a doctor within a few days, as a tear is best repaired early
+- You felt a pop, with bruising, or the biceps now bulges higher up the arm: see a doctor the same day, as a tear is best repaired early. If it happened more than 2 weeks ago, still see a doctor within a few days
+
+## clinicNotes
+- Hook test: 100% sensitivity and specificity in the original series (O'Driscoll 2007); later series lower (reported about 78% overall, 83% complete, 30% partial tears), so a negative test does not exclude a tear. Ultrasound or MRI if a tear is suspected. Acute repair preferred; over about 4 weeks often needs reconstruction (ISAKOS 2023). Non-operative care reportedly loses about 40-50% of supination endurance (secondary source).
+- Differentials: brachialis strain, bicipitoradial bursitis, lateral antebrachial cutaneous nerve entrapment, C5-6 radiculopathy.

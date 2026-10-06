@@ -236,11 +236,19 @@ export const ELBOW_INJURY = [
     options: yesNo('emergency', 'Possible blood vessel or nerve injury') },
   { id: 'I4', text: 'Is the pain in your forearm getting worse and worse, with the forearm tight and swollen, and much worse when your fingers are moved?',
     options: yesNo('emergency', 'Possible compartment syndrome (pressure building up in the forearm)') },
-  // Asked after a pop only: it does not fit a fall or a blow.
+  // 6 Oct 2026 (elbow cross-check S5, approved by Chandra): a pulled elbow in
+  // a child under 5. The clinic does not see under-5s: doctor, no booking.
+  { id: 'I12', text: 'Was your child\'s arm pulled or swung by the hand, and now they hold it still and will not use it?',
+    askIf: (a, age) => age === 'u5', sameDay: true, options: [
+      { id: 'no', label: 'No' },
+      { id: 'yes', label: 'Yes', route: 'urgent', noBooking: true,
+        why: 'Possible pulled elbow (or a fracture): a doctor or urgent care should check your child today' },
+    ]},
+  // Asked after a pop only: it does not fit a fall or a blow. Not under 5 (I12).
   // Same day (Chandra, 25 Sep 2026): a sudden forced effort, a pop, click or
   // tearing feeling, and a change in the shape of the biceps.
   { id: 'I5', text: 'Did you feel a pop, click, or tearing at the front of the elbow during a sudden, forceful lift or pull, and now have bruising there or a change in the shape of your biceps?',
-    askIf: (a) => a.I1 === 'pop', sameDay: true,
+    askIf: (a, age) => a.I1 === 'pop' && age !== 'u5', sameDay: true,
     options: yesNo('urgent', 'Possible torn biceps tendon at the elbow: repair works best within about 2 to 3 weeks, so a doctor should check it the same day') },
   // The elbow extension test (Appelboam 2008): a possible fracture, so same day.
   { id: 'I6', text: 'After the fall or blow, can you fully straighten your elbow?',
@@ -249,6 +257,22 @@ export const ELBOW_INJURY = [
       { id: 'no', label: 'No, it will not straighten fully', route: 'urgent',
         why: 'Not being able to straighten the elbow after an injury raises the chance of a fracture' },
     ]},
+  // 6 Oct 2026 (elbow cross-check S2 to S4, approved by Chandra). The
+  // straightening test misses olecranon fractures and is weaker in children
+  // (Appelboam 2008); nerve injuries come with supracondylar fractures (BOAST 11).
+  { id: 'I10', text: 'Since the fall or blow, is the point of your elbow very sore to press?',
+    askIf: (a) => a.I1 === 'fall' || a.I1 === 'blow', sameDay: true,
+    options: yesNo('urgent', 'A tender point of the elbow after a fall or blow can be a fracture: an X-ray is needed') },
+  { id: 'I11', text: 'Is the elbow swollen, or is your child not using the arm?',
+    askIf: (a, age) => (a.I1 === 'fall' || a.I1 === 'blow') && (age === 'u5' || age === 'u18'), sameDay: true,
+    options: yesNo('urgent', 'In children, elbow fractures are common and the straightening test can miss them: an X-ray is needed') },
+  { id: 'I9', text: 'Did your elbow go out of place, even if it went back by itself?', sameDay: true,
+    options: yesNo('urgent', 'An elbow that has been out of place can have a fracture with it: an X-ray is needed') },
+  // Worded as the upper arm's I5 and the forearm's I6, so asked once.
+  { id: 'I7', text: 'Since the injury, can you not lift your wrist or straighten your fingers?', sameDay: true,
+    options: yesNo('urgent', 'Possible radial or posterior interosseous nerve injury, often with a fracture or dislocation') },
+  { id: 'I8', text: 'Since the injury, are some fingers numb, or can you not make an OK sign with your thumb and index finger?', sameDay: true,
+    options: yesNo('urgent', 'Possible nerve injury with an elbow fracture: a doctor should check it today') },
 ]
 
 /* ── Forearm: fall, blow or crush ── */
@@ -622,15 +646,16 @@ function headInjuryStep(a = {}) {
 /** Step through a simple screen: each question in order (skipping any whose
     askIf is false), ending at the first picked option that has a route. */
 function linearStep(questions) {
-  return (a = {}) => {
+  return (a = {}, ageId) => {
     for (const q of questions) {
-      if (q.askIf && !q.askIf(a)) continue
+      // askIf(answers, ageId): the opening screen's age, for child-only questions.
+      if (q.askIf && !q.askIf(a, ageId)) continue
       if (a[q.id] === undefined) return { next: q.id }
       for (const oid of list(a[q.id])) {
         const o = q.options.find((x) => x.id === oid)
         if (o && o.route) {
-          const { route, why, call911, keepNeckStill, goTo } = o
-          return { route, why, question: q.text, ...(call911 ? { call911 } : {}), ...(keepNeckStill ? { keepNeckStill } : {}), ...(goTo ? { goTo } : {}), ...(q.sameDay ? { sameDay: true } : {}) }
+          const { route, why, call911, keepNeckStill, goTo, noBooking } = o
+          return { route, why, question: q.text, ...(call911 ? { call911 } : {}), ...(keepNeckStill ? { keepNeckStill } : {}), ...(goTo ? { goTo } : {}), ...(q.sameDay ? { sameDay: true } : {}), ...(noBooking ? { noBooking } : {}) }
         }
       }
     }
