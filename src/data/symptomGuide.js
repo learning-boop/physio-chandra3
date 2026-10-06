@@ -158,6 +158,10 @@ export const REGIONS = {
         {id:"centre", label:"In the middle of the low back, on the spine", excl:"spot"},
         {id:"side", label:"On one side, beside the spine above the belt line", excl:"spot"},
         {id:"dimple", label:"Over the dimple at the back of my pelvis", special:"sijSource", excl:"spot"},
+        // Deep gluteal (piriformis-type) pain, Chandra 6 Oct 2026: sitting on
+        // something hard is the giveaway, and it is the main look-alike for a
+        // nerve root on a buttock-to-leg line.
+        {id:"deepbutt", label:"Deep in the buttock, and worse sitting on a hard seat", excl:"spot"},
         {id:"wide", label:"Spread over a wide area; I cannot point to one spot", excl:"spot"}
       ]},
       {id:"L7", text:"Which of these apply? Tick all that apply.", options:[
@@ -183,6 +187,19 @@ export const REGIONS = {
       // helps, rest does not), Q5 (night pain easing on rising), Q6 (switching
       // buttocks) and its bonus features. The same answers as the pelvis's P6.
       // Asked for pain of 6 weeks or more that came on gradually.
+      // Chandra, 6 Oct 2026: on a line drawn from the back or buttock down the
+      // leg, the history is what confirms the spine as the source. Asked as ONE
+      // question, and only when the pain goes into the leg — which a referral
+      // line has already answered for them (./referral.js, drawnAnswers).
+      // ⚠ FOR CLINICIAN REVIEW: wording, and the weights in the condition files.
+      {id:"L11", text:"Your back, before this episode: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.L1 || []).some((o) => o === "thigh" || o === "belowknee"),
+        options:[
+        {id:"episodes", label:"I have had back pain or back trouble before this"},
+        {id:"legbefore", label:"I have had pain down the leg like this before"},
+        {id:"treated", label:"I have had back surgery, a spinal injection, or a scan that showed a disc or nerve problem"},
+        {id:"none", label:"No, this is the first time"}
+      ]},
       {id:"L9", text:"Which of these apply? Tick all that apply.",
         askIf: ({ ra }) => (!ra.duration || ra.duration === "d3m" || ra.duration === "o3m") && (!ra.onset || ra.onset === "gradual"),
         priority: ({ ra }) => ra.duration === "o3m" && ra.onset === "gradual",

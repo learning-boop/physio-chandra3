@@ -56,6 +56,8 @@ pointers:
   "It feels stiff rather than weak": 2
   "My back is stiff for more than 30 minutes in the morning": -1
   "Less than 2 weeks": 1
+  # 6 Oct 2026, the back-history question (L11): recurrent mechanical back pain.
+  "I have had back pain or back trouble before this": 1
 ---
 
 ## blurb

@@ -16,6 +16,10 @@ pointers:
   "Shooting pain down the leg when I cough or sneeze": 2
   "The leg pain is worse when I bend forward or sit": 2
   "Bending forward, or sitting": 1
+  # 6 Oct 2026, the back-history question (L11): previous leg pain like this
+  # and previous treatment are what confirm the spine as the source.
+  "I have had pain down the leg like this before": 1
+  "I have had back surgery, a spinal injection, or a scan that showed a disc": 1
 ---
 
 ## blurb

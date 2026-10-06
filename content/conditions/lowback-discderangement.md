@@ -18,6 +18,9 @@ pointers:
   "In the middle of the low back, on the spine": 1
   "Heavy lifting at work or the gym": 1
   "Sitting most of the day": 1
+  # 6 Oct 2026, the back-history question (L11).
+  "I have had back pain or back trouble before this": 1
+  "I have had back surgery, a spinal injection, or a scan that showed a disc": 1
 ---
 
 ## blurb

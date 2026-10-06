@@ -23,6 +23,9 @@ pointers:
   "Less than 2 weeks": 1
   "2 to 6 weeks": 1
   "Gradually, no clear reason": 1
+  # 6 Oct 2026: deep gluteal (piriformis-type) pain, the main look-alike for a
+  # nerve root on a buttock-to-leg line (L6).
+  "Deep in the buttock, and worse sitting on a hard seat": 3
 ---
 
 ## blurb

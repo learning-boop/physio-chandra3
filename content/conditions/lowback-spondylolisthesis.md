@@ -34,6 +34,8 @@ pointers:
   "Walking brings on leg pain, heaviness, or tingling that eases when I sit or bend forward": 2
   "65 or over": 1
   "50 to 64": 1
+  # 6 Oct 2026, the back-history question (L11).
+  "I have had back pain or back trouble before this": 1
 ---
 
 ## blurb

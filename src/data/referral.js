@@ -29,7 +29,12 @@ const LIMBS = [
   { kind: 'arm', region: 'neck', spine: ['neck', 'ctj'], sources: ['neck', 'ctj'], chain: ['shoulder', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand'] },
   // A leg line from the back of the pelvis (sacroiliac) asks both it and the
   // low back, where nerve-root leg pain comes from (content/regions/sij.md).
-  { kind: 'leg', region: 'lowback', spine: ['lowback', 'sij'], sources: ['lowerback'], chain: ['hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'] },
+  { kind: 'leg', region: 'lowback', spine: ['lowback', 'sij'], sources: ['lowerback'], chain: ['hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot'],
+    // Chandra, 6 Oct 2026: a line from the BUTTOCK or the HIP down past the
+    // knee is referred leg pain as well — sciatica and deep gluteal pain are
+    // commonly drawn that way, with no back pain to mark. It has to reach the
+    // lower leg: a buttock-to-thigh line stays a local hip or thigh problem.
+    deepStart: ['hip'], deepReach: 'lowerleg' },
 ]
 
 /* Areas a mark implies even when it is not drawn. Pain from the TL junction
@@ -54,9 +59,14 @@ export function detectReferral(lines = []) {
   for (const ids of lines) {
     const types = ids.map(zoneType)
     for (const limb of LIMBS) {
-      if (!limb.spine.some((s) => types.includes(s))) continue
+      const fromSpine = limb.spine.some((s) => types.includes(s))
+      const fromLimb = (limb.deepStart || []).some((s) => types.includes(s))
+      if (!fromSpine && !fromLimb) continue
       const reach = Math.max(-1, ...types.map((t) => limb.chain.indexOf(t)))
-      if (reach < MIN_REACH) continue
+      // From the spine: past the first chain area. From inside the limb: it
+      // has to travel past the knee before it reads as referred pain.
+      const need = fromSpine ? MIN_REACH : limb.chain.indexOf(limb.deepReach)
+      if (reach < need) continue
       const limbZone = ids.find((id) => limb.chain.includes(zoneType(id)))
       const side = limbZone ? limbZone.slice(-1) : null
       out.push({
@@ -78,10 +88,32 @@ export function detectReferral(lines = []) {
     Every source area of the line is included even when it was not drawn
     (an arm line from the neck also asks about the base of the neck), and so
     is every area a mark implies (IMPLIES). Added areas carry `implied`. */
+/* Spinal neighbours of the low back. On a LEG referral line they are set
+   aside: the questions come from the low back alone, and these are named on
+   the result as areas to check at the assessment (Chandra, 6 Oct 2026 — three
+   spinal areas each asking their own set is where the question count came
+   from). They are still asked when nothing refers down the leg. */
+const LEG_SET_ASIDE = ['sij', 'tlj', 'flank']
+
+/** The drawn spinal areas a leg referral line sets aside, as zone types.
+    The back of the pelvis is an exception: when the line STARTS there and no
+    low back was marked, the sacroiliac joint is as likely a source as the
+    back, so its questions are still asked. With a low-back mark as well, the
+    back leads and the pelvis becomes a rule-out. */
+export function setAsideAreas(zones = [], referral = []) {
+  if (!referral.some((r) => r.kind === 'leg')) return []
+  const drawnBack = zones.some((z) => z.type === 'lowerback')
+  return [...new Set(zones
+    .filter((z) => LEG_SET_ASIDE.includes(z.type) && !(z.type === 'sij' && !drawnBack))
+    .map((z) => z.type))]
+}
+
 export function flowZones(zones, referral = []) {
   const felt = new Set(referral.flatMap((r) => r.felt))
-  const out = zones.filter((z) => !felt.has(z.id))
+  const aside = new Set(setAsideAreas(zones, referral))
+  const out = zones.filter((z) => !felt.has(z.id) && !aside.has(z.type))
   const want = [...referral.flatMap((r) => r.sources || []), ...out.flatMap((z) => IMPLIES[z.type] || [])]
+    .filter((t) => !(referral.some((r) => r.kind === 'leg') && LEG_SET_ASIDE.includes(t)))
   for (const t of want) {
     if (!out.some((z) => z.type === t)) out.push({ id: t, type: t, label: t, implied: true })
   }
@@ -154,7 +186,15 @@ const TITLE_WORD = { radicular: 'nerve-type pain', somatic: 'referred ache', unc
 
 /** Plain-language card for the result screen.
     `mechanism` comes from referralMechanism() — 'radicular' | 'somatic' | 'unclear'. */
-export function referralSummary(r, mechanism = 'unclear') {
+/* Areas a leg line set aside (./setAsideAreas) are named on the card, so a
+   drawn area is never silently dropped from the questions. The sacroiliac
+   joint is already in the leg list below. */
+const SET_ASIDE_LINE = {
+  tlj: 'The junction where the mid back meets the low back, which refers pain into the buttock, the side of the hip and the groin',
+  flank: 'The flank and the lower ribs, which can refer pain into the back and buttock',
+}
+
+export function referralSummary(r, mechanism = 'unclear', setAside = []) {
   const side = r.side ? `${r.side} ` : ''
   const limb = r.kind === 'arm' ? 'arm' : 'leg'
   const from = r.kind === 'arm' ? 'neck' : 'low back'
@@ -179,6 +219,7 @@ export function referralSummary(r, mechanism = 'unclear') {
           'The sacroiliac joint or the hip joint, both of which can refer pain into the thigh and sometimes below the knee',
           'A buttock muscle (gluteus minimus) whose referred pain can look like sciatica without pins and needles',
           'A nerve being irritated at the ankle (tarsal tunnel)',
+          ...setAside.map((t) => SET_ASIDE_LINE[t]).filter(Boolean),
         ],
   }
 }

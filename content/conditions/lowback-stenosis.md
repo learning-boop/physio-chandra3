@@ -28,6 +28,8 @@ pointers:
   "65 or over": 2
   "50 to 64": 1
   "The leg pain is worse when I bend forward or sit": -2
+  # 6 Oct 2026, the back-history question (L11).
+  "I have had back surgery, a spinal injection, or a scan that showed a disc": 1
 ---
 
 ## blurb

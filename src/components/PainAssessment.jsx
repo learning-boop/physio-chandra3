@@ -22,7 +22,7 @@ import {
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
 import { PAIN_QUALITY, PAIN_TYPES, NOCICEPTIVE_SUBTYPES, classifyPainMechanism } from '../data/painType'
-import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism } from '../data/referral'
+import { detectReferral, flowZones, drawnAnswers, referralSummary, referralMechanism, setAsideAreas } from '../data/referral'
 import { locationAnswers, minorZoneIds } from '../data/drawnLocation'
 import { patternChecks } from '../data/patternChecks'
 import { WIDESPREAD, widespreadRoute } from '../data/widespreadPain'
@@ -2742,7 +2742,7 @@ export default function PainAssessment() {
                     Comes first because it explains why the conditions below
                     are about the neck or back rather than the arm or leg. */}
                 {referral.map((r, i) => {
-                  const s = referralSummary(r, referralMechanism(r, answers))
+                  const s = referralSummary(r, referralMechanism(r, answers), setAsideAreas(zones, referral))
                   return (
                     <div key={i} style={{ ...card, maxWidth: 520, marginBottom: 14 }}>
                       <span style={{ ...label, fontSize: 11.5 }}>Your drawing shows a referral pattern</span>

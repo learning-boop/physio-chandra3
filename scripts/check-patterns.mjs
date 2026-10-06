@@ -6,7 +6,7 @@
 import { pathToFileURL } from 'node:url'
 const root = process.argv[2] || process.cwd()
 const imp = (p) => import(pathToFileURL(root + '/' + p).href)
-const { detectReferral, flowZones, drawnAnswers } = await imp('src/data/referral.js')
+const { detectReferral, flowZones, drawnAnswers, setAsideAreas, referralSummary, referralMechanism } = await imp('src/data/referral.js')
 const { questionRegions, needsAreaChoice, rankAcross } = await imp('src/data/assessmentFlow.js')
 const { REGIONS } = await imp('src/data/symptomGuide.js')
 const { classifyPainMechanism } = await imp('src/data/painType.js')
@@ -93,13 +93,54 @@ check('a 2-point graze across the chest is still ignored', !newRule(graze).inclu
 }
 
 // ── 3. Low back → foot ──
+/* Chandra, 6 Oct 2026: a line down the back of the leg is one referred pain,
+   so it earns ONE set of questions - the low back - and the areas the line
+   passed through become rule-outs named on the card, not question sets. */
 {
   const lines = [['lowerback', 'hipR', 'kneeR', 'ankleR']]
   const ref = detectReferral(lines)
-  const fz = flowZones(zonesOf(lines), ref)
+  const zones = zonesOf(lines)
+  const fz = flowZones(zones, ref)
   check('low back→foot line detected as leg referral', ref.length === 1 && ref[0].kind === 'leg' && ref[0].reach === 'ankle', ref)
-  check('questions come from the LOW BACK and the TL junction it implies (not hip/knee/ankle)', JSON.stringify(questionRegions(fz, null)) === '["tlj","lowback"]', questionRegions(fz, null))
+  check('questions come from the LOW BACK alone (not the TL junction, hip, knee or ankle)', JSON.stringify(questionRegions(fz, null)) === '["lowback"]', questionRegions(fz, null))
   check('drawing pre-answers L1 = "below the knee"', JSON.stringify(drawnAnswers(ref).L1) === '["belowknee"]', drawnAnswers(ref))
+}
+{
+  // The back of the pelvis: set aside when the back was drawn too...
+  const withBack = [['lowerback', 'sij', 'hipR', 'kneeR', 'ankleR']]
+  const rb = detectReferral(withBack)
+  check('back + pelvis → foot: the pelvis is set aside, low back leads', JSON.stringify(setAsideAreas(zonesOf(withBack), rb)) === '["sij"]' && JSON.stringify(questionRegions(flowZones(zonesOf(withBack), rb), null)) === '["lowback"]',
+    [setAsideAreas(zonesOf(withBack), rb), questionRegions(flowZones(zonesOf(withBack), rb), null)])
+  // An area loses its questions only if the card still names it, so nothing
+  // set aside goes unmentioned. (The leg card names the sacroiliac joint in
+  // its standing rule-outs; the TL junction needs its own line.)
+  {
+    const tlj = [['tlj', 'lowerback', 'hipR', 'kneeR', 'ankleR']]
+    const rt = detectReferral(tlj)
+    const asideT = setAsideAreas(zonesOf(tlj), rt)
+    const outT = referralSummary(rt[0], referralMechanism(rt[0], {}), asideT).ruleOut
+    check('the TL junction is set aside AND named as a rule-out', asideT.includes('tlj') && outT.some((l) => /lowest ribs|thoracolumbar|junction/i.test(l)), [asideT, outT])
+    check('the sacroiliac joint set aside is still named on the card',
+      referralSummary(rb[0], referralMechanism(rb[0], {}), setAsideAreas(zonesOf(withBack), rb)).ruleOut.some((l) => /sacroiliac/i.test(l)),
+      referralSummary(rb[0], 'unclear', setAsideAreas(zonesOf(withBack), rb)).ruleOut)
+  }
+  // ...but kept when the line STARTS there with no back mark: the joint is
+  // then as likely a source as the back, so it still gets its questions.
+  const pelvisOnly = [['sij', 'hipR', 'kneeR', 'ankleR']]
+  const rp = detectReferral(pelvisOnly)
+  check('pelvis → foot with no back mark: the pelvis keeps its questions', JSON.stringify(setAsideAreas(zonesOf(pelvisOnly), rp)) === '[]' && questionRegions(flowZones(zonesOf(pelvisOnly), rp), null).includes('sij'),
+    [setAsideAreas(zonesOf(pelvisOnly), rp), questionRegions(flowZones(zonesOf(pelvisOnly), rp), null)])
+  // A buttock-or-below start reaching past the knee is referred pain too
+  // (piriformis and the deep buttock belong in the same reading as the disc).
+  const hipStart = [['hipR', 'thighR', 'kneeR', 'ankleR']]
+  const rh = detectReferral(hipStart)
+  check('buttock → foot line is read as referred leg pain, asking the low back', rh.length === 1 && rh[0].kind === 'leg' && JSON.stringify(questionRegions(flowZones(zonesOf(hipStart), rh), null)) === '["lowback"]',
+    [rh, questionRegions(flowZones(zonesOf(hipStart), rh), null)])
+  // Short lines stay local: a hip-to-knee ache is not referred leg pain.
+  check('hip → knee only is NOT read as referred leg pain', detectReferral([['hipR', 'thighR', 'kneeR']]).length === 0, detectReferral([['hipR', 'thighR', 'kneeR']]))
+  // The grouped history question (Chandra, 6 Oct 2026) opens for leg pain.
+  const L11 = REGIONS.lowback.questions.find((q) => q.id === 'L11')
+  check('the back-history question opens when pain goes below the knee', L11 && L11.askIf({ ra: { L1: ['belowknee'] } }) && !L11.askIf({ ra: { L1: ['back'] } }), !!L11)
 }
 
 // ── 4. Not referral ──

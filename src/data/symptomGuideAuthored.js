@@ -9617,6 +9617,18 @@ export const AUTHORED = [
         "oid": "sitting",
         "label": "Sitting most of the day",
         "weight": 1
+      },
+      {
+        "qid": "L11",
+        "oid": "episodes",
+        "label": "I have had back pain or back trouble before this",
+        "weight": 1
+      },
+      {
+        "qid": "L11",
+        "oid": "treated",
+        "label": "I have had back surgery, a spinal injection, or a scan that showed a disc or nerve problem",
+        "weight": 1
       }
     ]
   },
@@ -9850,6 +9862,12 @@ export const AUTHORED = [
         "oid": "gradual",
         "label": "Gradually, no clear reason",
         "weight": 1
+      },
+      {
+        "qid": "L6",
+        "oid": "deepbutt",
+        "label": "Deep in the buttock, and worse sitting on a hard seat",
+        "weight": 3
       }
     ]
   },
@@ -10007,6 +10025,12 @@ export const AUTHORED = [
         "oid": "d2w",
         "label": "Less than 2 weeks",
         "weight": 1
+      },
+      {
+        "qid": "L11",
+        "oid": "episodes",
+        "label": "I have had back pain or back trouble before this",
+        "weight": 1
       }
     ]
   },
@@ -10087,6 +10111,18 @@ export const AUTHORED = [
         "qid": "L4",
         "oid": "bendsit",
         "label": "Bending forward, or sitting",
+        "weight": 1
+      },
+      {
+        "qid": "L11",
+        "oid": "legbefore",
+        "label": "I have had pain down the leg like this before",
+        "weight": 1
+      },
+      {
+        "qid": "L11",
+        "oid": "treated",
+        "label": "I have had back surgery, a spinal injection, or a scan that showed a disc or nerve problem",
         "weight": 1
       }
     ]
@@ -10176,6 +10212,12 @@ export const AUTHORED = [
         "qid": "age",
         "oid": "50-64",
         "label": "50 to 64",
+        "weight": 1
+      },
+      {
+        "qid": "L11",
+        "oid": "episodes",
+        "label": "I have had back pain or back trouble before this",
         "weight": 1
       }
     ]
@@ -10273,6 +10315,12 @@ export const AUTHORED = [
         "oid": "bendsit",
         "label": "The leg pain is worse when I bend forward or sit",
         "weight": -2
+      },
+      {
+        "qid": "L11",
+        "oid": "treated",
+        "label": "I have had back surgery, a spinal injection, or a scan that showed a disc or nerve problem",
+        "weight": 1
       }
     ]
   },
