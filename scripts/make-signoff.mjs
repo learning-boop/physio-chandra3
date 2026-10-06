@@ -82,20 +82,25 @@ export const cardHtml = (c) => {
 
 /** A sign-off page. `cards` from signoffCards; `extra` = { title, html } blocks
     placed first, whose own .card sections (with data-key) are decided and
-    copied the same way; `storageKey` keeps each page's choices apart. */
-export function renderPage({ cards, title = 'Card Sign-off', heading, lede, extra = [], storageKey = 'signoff-v1' }) {
+    copied the same way; `storageKey` keeps each page's choices apart.
+    `bare`: leave out the doctype and the html, head and body tags, for
+    publishing as a claude.ai artifact (its viewer adds its own), so the page
+    can be opened as a link on a phone. */
+export function renderPage({ cards, title = 'Card Sign-off', heading, lede, extra = [], storageKey = 'signoff-v1', bare = false }) {
 const areas = ORDER.filter((r) => cards.some((c) => c.region === r))
-return `<!doctype html>
+const head = bare ? '' : `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)}</title>
+`
+return `${head}<title>${esc(title)}</title>
 <style>
   :root { --ink: #1b2430; --muted: #5d6b7a; --line: #dde3ea; --bg: #f6f8fb; --card: #fff; --gold: #9a7a3c; --ok: #1d7a46; --todo: #b2561c; --soft: #fbf7ef; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #e8edf3; --muted: #a3b0be; --line: #2c3846; --bg: #0f1722; --card: #162131; --gold: #d6b67a; --ok: #6fd39b; --todo: #f0a46a; --soft: #1d2a3b; } }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #e8edf3; --muted: #a3b0be; --line: #2c3846; --bg: #0f1722; --card: #162131; --gold: #d6b67a; --ok: #6fd39b; --todo: #f0a46a; --soft: #1d2a3b; color-scheme: dark; } }
+  :root[data-theme="dark"] { --ink: #e8edf3; --muted: #a3b0be; --line: #2c3846; --bg: #0f1722; --card: #162131; --gold: #d6b67a; --ok: #6fd39b; --todo: #f0a46a; --soft: #1d2a3b; color-scheme: dark; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
   main { max-width: 880px; margin: 0 auto; padding: 24px 16px 80px; }
   h1 { font-size: 26px; margin: 0 0 6px; } .lede { color: var(--muted); margin: 0 0 14px; }
-  .bar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); margin-bottom: 18px; display: grid; gap: 8px; }
+  .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); margin-bottom: 18px; display: grid; gap: 8px; }
   .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   button { font: inherit; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--gold); background: var(--gold); color: #fff; cursor: pointer; font-weight: 600; }
   button.ghost { background: transparent; color: var(--gold); }
@@ -117,13 +122,14 @@ return `<!doctype html>
   .approve { font-weight: 700; }
   textarea { width: 100%; min-height: 56px; font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
   .hidden { display: none; }
+  #copyBox { min-height: 120px; font: 13px/1.4 ui-monospace, Consolas, monospace; }
   h3.area { margin: 26px 0 10px; font-size: 20px; }
-</style></head>
-<body><main>
+</style>${bare ? '' : '</head>\n<body>'}<main>
   <h1>${heading ? esc(heading) : `Card sign-off: ${cards.length} cards`}</h1>
   ${lede ? `<p class="lede">${lede}</p>` : `<p class="lede">Every condition card that is not yet signed, from the condition files as they are on ${new Date().toISOString().slice(0, 10)}. Each shows the patient text, what changed and why, its clinic notes and the answers that point to it. Mark "Sign off" when every line is checked, or "Needs changes" with a note. Your choices stay in this browser; press "Copy my decisions" and paste them to Claude, who adds your sign-off to each file and makes the changes. Cards marked <span class="tag">drafted by Claude</span> deserve the closest read.</p>`}
   <div class="bar">
     <div class="row"><button id="copy">Copy my decisions</button><button class="ghost" id="hideDone">Hide decided</button><button class="ghost" id="clear">Clear</button><span class="progress" id="progress"></span></div>
+    <textarea id="copyBox" class="hidden" readonly aria-label="Your decisions, to copy"></textarea>
     <div class="row" id="areas"><button class="chip on" data-area="">All</button>${extra.map((x) => `<button class="chip" data-area="${esc(x.area)}">${esc(x.title)}</button>`).join('')}${areas.map((a) => `<button class="chip" data-area="${a}">${esc(AREA[a])} (${cards.filter((c) => c.region === a).length})</button>`).join('')}</div>
   </div>
   ${extra.map((x) => `<h3 class="area" data-area="${esc(x.area)}">${esc(x.title)}</h3>` + x.html).join('')}
@@ -163,7 +169,12 @@ return `<!doctype html>
     document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('on', c === b)); refresh(); window.scrollTo(0, 0)
   })
   document.getElementById('hideDone').addEventListener('click', (e) => { hideDone = !hideDone; e.target.textContent = hideDone ? 'Show decided' : 'Hide decided'; refresh() })
-  document.getElementById('clear').addEventListener('click', () => { if (confirm('Clear all sign-off choices and notes on this page?')) { state = {}; save(); refresh() } })
+  // Tap twice to clear (a confirm() dialog is blocked on a published page).
+  let armed = null
+  document.getElementById('clear').addEventListener('click', (e) => {
+    if (!armed) { e.target.textContent = 'Tap again to clear all'; armed = setTimeout(() => { armed = null; e.target.textContent = 'Clear' }, 4000); return }
+    clearTimeout(armed); armed = null; e.target.textContent = 'Clear'; state = {}; save(); refresh()
+  })
   document.getElementById('copy').addEventListener('click', async () => {
     const lines = ['${esc(title)} decisions (' + new Date().toISOString().slice(0, 10) + ')']
     for (const el of cards) {
@@ -171,12 +182,14 @@ return `<!doctype html>
       lines.push((s.d === 'sign' ? 'SIGN ' : s.d === 'change' ? 'CHANGE ' : 'NOTE ') + el.dataset.key + (s.note ? ' | ' + s.note.replace(/\\n/g, ' ') : ''))
     }
     const btn = document.getElementById('copy')
-    try { await navigator.clipboard.writeText(lines.join('\\n')); btn.textContent = 'Copied ' + (lines.length - 1) } catch (err) { btn.textContent = 'Copy failed' }
-    setTimeout(() => { document.getElementById('copy').textContent = 'Copy my decisions' }, 2500)
+    // Some phone views refuse the clipboard: then show the text to select by hand.
+    const box = document.getElementById('copyBox')
+    try { await navigator.clipboard.writeText(lines.join('\\n')); btn.textContent = 'Copied ' + (lines.length - 1); box.classList.add('hidden') }
+    catch (err) { box.value = lines.join('\\n'); box.classList.remove('hidden'); box.focus(); box.select(); btn.textContent = 'Select the text below to copy' }
+    setTimeout(() => { document.getElementById('copy').textContent = 'Copy my decisions' }, 4000)
   })
   refresh()
-</script>
-</body></html>`
+</script>${bare ? '' : '\n</body></html>'}`
 
 }
 

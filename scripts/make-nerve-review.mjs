@@ -87,9 +87,9 @@ const checks = [
 ].join('')
 
 const cards = signoffCards(NEW_CONDITIONS)
-const html = renderPage({
+const page = (bare) => renderPage({
   cards,
-  title: 'Nerve Review',
+  title: 'Neurodynamics Review',
   heading: `Neurodynamics review: ${cards.length} conditions, ${questions.split('class="card"').length - 1} questions, and the changes around them`,
   lede: `Everything built on ${new Date().toISOString().slice(0, 10)} from your neurodynamics books (Shacklock NDS lower-quarter manual, Butler NOI workbook, Wood &amp; Grahovec) that needs your sign-off, read from the live site data. Questions first, as the patient sees them, with what each answer points to; then the changes to files you had already signed; then the checks; then the eight new condition cards. Mark each "Approve" or "Needs changes" with a note. Choices stay in this browser; press "Copy my decisions" and paste them to Claude.`,
   extra: [
@@ -98,6 +98,7 @@ const html = renderPage({
     { area: 'checks', title: 'Checks and the summary', html: checks },
   ],
   storageKey: 'nerve-review-v1',
+  bare,
 })
   // Styles for the question tables (the sign-off page has none).
   .replace('</style>', `  table.opts th { text-align: left; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line); padding: 4px; }
@@ -106,5 +107,8 @@ const html = renderPage({
 </style>`)
 
 fs.mkdirSync('review', { recursive: true })
-fs.writeFileSync('review/nerve-review.html', html)
-console.log(`review/nerve-review.html: ${cards.length} condition cards + question, signed-file and check cards`)
+fs.writeFileSync('review/nerve-review.html', page(false))
+// The same page without its own html/head/body tags, for publishing as a
+// claude.ai artifact link that opens on a phone.
+fs.writeFileSync('review/nerve-review-link.html', page(true))
+console.log(`review/nerve-review.html (+ nerve-review-link.html for the phone link): ${cards.length} condition cards + question, signed-file and check cards`)
