@@ -174,6 +174,13 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('both wrists → glove-and-stocking question', ids(['wristL', 'wristR']).includes('pc-polyneuropathy:urgent'), ids(['wristL', 'wristR']))
   check('both knees + long morning stiffness → inflammatory question',
     ids(['kneeL', 'kneeR'], { pattern24: ['amLong'] }).includes('pc-inflammatory:urgent'), ids(['kneeL', 'kneeR'], { pattern24: ['amLong'] }))
+  // 6 Oct 2026 audit: rheumatoid arthritis is on the cautions list, so the
+  // screen has to let someone already diagnosed answer it without being told
+  // to go back to a doctor for it.
+  check('inflammatory screen lets a diagnosed arthritis out of it, in the question itself',
+    /already been diagnosed with/.test(ids(['kneeL', 'kneeR'], { pattern24: ['amLong'] }).length
+      ? patternChecks(zonesOf([['kneeL', 'kneeR']]), { pattern24: ['amLong'] }, 3).find((c) => c.id === 'pc-inflammatory').text : ''),
+    patternChecks(zonesOf([['kneeL', 'kneeR']]), { pattern24: ['amLong'] }, 3).find((c) => c.id === 'pc-inflammatory')?.text.slice(0, 80))
   check('both knees WITHOUT long morning stiffness → no inflammatory question',
     !ids(['kneeL', 'kneeR']).some((x) => x.startsWith('pc-inflammatory')), ids(['kneeL', 'kneeR']))
   check('whole left leg → limb colour/swelling question', ids(['hipL', 'kneeL', 'ankleL']).includes('pc-limb:urgent'), ids(['hipL', 'kneeL', 'ankleL']))
@@ -797,6 +804,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const kid = patternChecks(ZN(['lowerlegL', 'lowerlegR']), { age: 'u18' }, 9).find((p) => p.id === 'pc-child-muscle')
   check('Duchenne: under 18 with the legs drawn asks the early-signs question; a yes holds the booking (doctor in a week or two, CK test)',
     kid && kid.noBooking && /creatine kinase/.test(kid.why.text) && !/Duchenne/i.test(kid.text + kid.why.text), kid)
+  // 6 Oct 2026 audit: Duchenne is on the cautions list too, and these are its
+  // signs — a family already under a neuromuscular team must be able to pass.
+  check('Duchenne screen lets a child already diagnosed out of it, in the question itself',
+    /already been diagnosed with/.test(kid.text), kid.text.slice(0, 80))
   check('Duchenne: not asked for an adult, or for a child with only an arm drawn',
     !patternChecks(ZN(['lowerlegR']), { age: '30-49' }, 9).some((p) => p.id === 'pc-child-muscle') &&
     !patternChecks(ZN(['wristR']), { age: 'u18' }, 9).some((p) => p.id === 'pc-child-muscle'))

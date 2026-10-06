@@ -327,8 +327,13 @@ const PATTERNS = [
     when: (z) => has(z, 'lowerback', 'tlj', 'flank', 'sij', 'abdomen', 'hip'),
   },
   {
+    // The escape the nerve, muscle and myositis screens already carry
+    // (6 Oct 2026 audit, approved by Chandra): someone with diagnosed
+    // rheumatoid or another inflammatory arthritis answers this truthfully
+    // and was being told a medical cause should be checked first — for the
+    // condition they are already under care for.
     id: 'pc-inflammatory', tier: 'urgent', why: WHY.systemic,
-    text: 'The same joints painful, stiff or swollen on BOTH sides, with morning stiffness lasting more than 30 minutes',
+    text: 'Not explained by an inflammatory arthritis you have already been diagnosed with: the same joints painful, stiff or swollen on BOTH sides, with morning stiffness lasting more than 30 minutes',
     when: (z, a) => ['wrist', 'hand', 'knee', 'ankle', 'foot', 'elbow', 'shoulder', 'thigh'].some((t) => bothSides(z, t))
       && [].concat(a.pattern24 || []).includes('amLong'),
   },
@@ -350,8 +355,11 @@ const PATTERNS = [
   // drawn: the parent answers for the child. Never reassures; a yes holds the
   // booking until a doctor has seen the child (noBooking).
   {
+    // Same escape (6 Oct 2026 audit): these are the signs of Duchenne, which
+    // is on the cautions list, so a family already under a neuromuscular team
+    // was being sent back to a doctor and refused a booking.
     id: 'pc-child-muscle', tier: 'urgent', noBooking: true, why: WHY.childMuscle,
-    text: 'For a young child: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
+    text: 'Not explained by a muscle condition the child has already been diagnosed with: getting up from the floor by turning onto the front and pushing the hands up the legs; much slower than other children at running, jumping or climbing stairs; walking late (after 18 months) or losing a skill they used to have; walking on the toes, waddling, or a swayed lower back; or unusually large, firm calves',
     // 6 Oct 2026, general conditions cross-check (approved by Chandra), S6: from 5 to 15, not for one sports knee.
     when: (z, a) => (a.age === 'u5' && has(z, 'lowerback', 'hip', 'thigh', 'knee', 'lowerleg', 'ankle', 'foot')) ||
       (a.age === 'u18' && (weakAnswer(a) || has(z, 'lowerback', 'hip', 'thigh') ||
