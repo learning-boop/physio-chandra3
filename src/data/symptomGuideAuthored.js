@@ -10088,47 +10088,58 @@ export const AUTHORED = [
     "cond": {
       "id": "stenosis",
       "name": "Spinal stenosis pattern",
-      "clin": "Lumbar spinal stenosis / neurogenic claudication",
+      "clin": "Degenerative lumbar spinal stenosis with neurogenic claudication",
       "gates": {
         "ages": [
           "50-64",
           "o64"
         ]
       },
-      "blurb": "With age, the passageways for the spinal nerves can narrow. The classic pattern: legs that ache, heavy or tingle with walking, easing quickly when you sit or lean forward (like on a shopping cart).",
+      "blurb": "Lumbar spinal stenosis means the space for the nerves in the lower back has become narrower, usually through the normal changes of ageing in the discs, joints and ligaments. When you stand or walk the space narrows a little more, and the nerves to the legs get less room and less blood flow. That is why the legs feel heavy, tired, tingly or weak after a distance, and why sitting or bending forward brings them back. Narrowing shows up on scans in many people over 60 who have no symptoms at all, so the picture on a scan does not decide how you will do: for most people symptoms stay stable or improve, and a walking and exercise plan built around comfortable positions can help you get your distance back.",
       "noticed": [
-        "Walking distance limited by leg heaviness or ache",
-        "Relief within minutes of sitting or bending forward",
-        "Often better cycling than walking"
+        "Heavy, tired, rubbery or \"dead\" legs, or aching, cramping or tingling in the buttocks, thighs and calves, after standing or walking for a while; usually both legs, sometimes one more than the other",
+        "They come back within a few minutes of sitting, bending forward, or leaning on a trolley, bench or walking frame",
+        "Walking uphill, climbing stairs or cycling is easier than walking on the flat or downhill",
+        "Your comfortable walking distance has crept down over months or years, and you stop more on walks",
+        "The back itself is often only mildly sore"
       ],
       "homeCare": [
-        "Keep walking within your comfortable distance — little and often",
-        "Cycling or pool walking maintain fitness with less symptom",
-        "A slight forward lean (poles, cart) extends walking range"
+        "Use the \"rest and go\" approach: walk until the legs start, sit or lean forward until they settle, then carry on",
+        "Try an exercise bike or walking in a pool for fitness on days when walking is limited",
+        "Lie on your back with your knees bent, or on your side curled up, to ease the legs after activity",
+        "Choose stairs or a gentle uphill route rather than long flat stretches when you can"
       ],
       "seePhysioIf": [
-        "Walking distance is shrinking",
-        "You'd like a structured exercise and walking plan, which often helps this pattern",
-        "Symptoms affect balance or confidence"
+        "New difficulty passing or holding urine, loss of bowel control, or numbness around the genitals, back passage or inner thighs: go to the nearest emergency department now",
+        "Leg weakness that is getting worse, a foot that slaps or drags, or new tripping or falls: see a doctor today",
+        "Calf pain on walking that stops as soon as you stand still, with cold or pale feet, or you have diabetes or smoke: see your doctor to check the circulation in your legs",
+        "Constant pain that does not change with position or at night, a fever, weight loss you cannot explain, or a past history of cancer: see your doctor",
+        "New clumsiness of the hands, unsteady walking, stiff legs, or neck pain with the leg symptoms: see a doctor promptly, as the spinal cord higher up may be involved",
+        "Your walking distance has shrunk, your legs tire or tingle when you stand or walk, or you have been told you have spinal stenosis and want a plan for it: a physiotherapy assessment can help you work out the right next steps"
       ],
       "clinicNotes": [
-        "Not a separate category in JOSPT 2012 or 2021; nearest is chronic low back pain with radiating pain in an older adult with flexion preference. 2012 (C): flexion exercise with manual therapy, strengthening, nerve mobilisation and progressive walking (Whitman: manual therapy, exercise and body-weight-supported treadmill walking). 2021: general exercise for older adults (A); with leg pain, mobilisation (B), neural mobilisation (B), no mechanical traction (D). After decompression: general exercise (C), education (B).",
-        "Differentials: vascular claudication (over 50, smoker, hypertension, diabetes); progressive, bilateral or sphincter signs need urgent referral. Measure walking tolerance as the performance measure.",
-        "Source: Delitto A et al., JOSPT 2012;42(4):A1-A57 (classification, risk, examination); George SZ et al., JOSPT 2021;51(11):CPG1-CPG60 (interventions revision, supersedes the 2012 intervention grades). Manual therapy named per the AAOMPT terminology (Mintken 2008): thrust or non-thrust, with rate, range, direction, target and position."
+        "From \"Stenosis lumbar.docx\" (v1.0, signed by Chandra 5 Oct 2026). History: N-CLASS criteria (Genevay 2018; reported specificity 92%, sensitivity 80%): bilateral leg symptoms, provoked by standing or walking, relieved by sitting or flexion, age, and no pain with sitting. Observation: flexed posture, flattened lordosis, gait.",
+        "Examination: standing lumbar extension 30-second test; repeated-movement response; neuro screen L3-S1 (myotomes, dermatomes, reflexes), Romberg and balance; SLR and slump (usually negative). Vascular screen: pedal pulses, capillary refill, skin changes; bicycle versus treadmill test to separate neurogenic from vascular claudication. Hip screen (FADIR, FABER, internal rotation range). Upper motor neuron screen if any hand or gait clues (Hoffmann, clonus, Babinski).",
+        "Baselines: self-paced walking test (time or distance to onset and to limit), Swiss Spinal Stenosis Questionnaire or Oswestry. Imaging: MRI correlates poorly with symptoms, so the diagnosis is clinical; a standing lateral X-ray if a slip is suspected.",
+        "Refer on: progressive neurological deficit, suspected vascular disease, cauda equina or myelopathy signs, or persistent disabling claudication despite 12 weeks of supervised care.",
+        "Management: education (narrowing on a scan is common and does not set the future); a supervised programme of flexion-biased mobility and stretching, leg and trunk strengthening and graded walking over 6 to 12 weeks (supervised better than home exercise alone: Ammendolia 2018, Minetama 2019); fitness in comfortable positions (cycling, pool walking, inclined treadmill); manual therapy to the back, pelvis and hips and short-term use of a pole, trolley or frame as adjuncts; pacing and rest-and-go walking; a surgical opinion is one option if walking distance or strength keeps worsening despite a good trial of conservative care (Cochrane 2016, Zaina: surgery versus conservative care inconclusive, complications 10-24%).",
+        "JOSPT: not a separate category in the 2012 or 2021 low back pain CPGs; nearest is chronic low back pain with radiating pain in an older adult with flexion preference. 2012 (C): flexion exercise with manual therapy, strengthening, nerve mobilisation and progressive walking (Whitman: manual therapy, exercise and body-weight-supported treadmill walking). 2021: general exercise for older adults (A); with leg pain, mobilisation (B), neural mobilisation (B), no mechanical traction (D). After decompression: general exercise (C), education (B).",
+        "Look-alikes: vascular claudication (standing still is enough, flat easier than uphill, cold feet, smoker or diabetes: the circulation doctor card), degenerative spondylolisthesis (no card yet; the document's co-display is not built), sciatica (one leg, sharp or electric, worse sitting or coughing), hip OA (groin, stiff hip, socks and shoes), peripheral neuropathy (constant burning in both feet), non-specific low back pain.",
+        "Sources: Kreiner DS et al., NASS guideline (revised 2011), Spine J 2013;13(7):734-743 (still the current edition, checked 6 Oct 2026); Genevay S et al., Spine J 2018;18(6):941-947 (N-CLASS); Ammendolia C et al., Arch Phys Med Rehabil 2018;99(12):2408-2419; Minetama M et al., Spine J 2019;19(8):1310-1318; Zaina F et al., Cochrane 2016 CD010264; Delitto A et al., JOSPT 2012;42(4):A1-A57; George SZ et al., JOSPT 2021;51(11):CPG1-CPG60; Ch 2.5 Lumbar and Pelvis manual (2019) pp. 342-363."
       ]
     },
     "resolved": [
       {
-        "qid": "onset",
-        "oid": "gradual",
-        "label": "Gradually, no clear reason",
-        "weight": 1
+        "qid": "L5",
+        "oid": "claud",
+        "label": "Walking brings on leg pain, heaviness, or tingling that eases when I sit or bend forward",
+        "weight": 6
       },
       {
-        "qid": "duration",
-        "oid": "o3m",
-        "label": "More than 3 months",
-        "weight": 1
+        "qid": "L10",
+        "oid": "both",
+        "label": "Both legs (or both buttocks), not just one",
+        "weight": 3
       },
       {
         "qid": "L1",
@@ -10137,15 +10148,27 @@ export const AUTHORED = [
         "weight": 1
       },
       {
-        "qid": "L1",
-        "oid": "thigh",
-        "label": "Down the thigh, stopping above the knee",
-        "weight": 1
+        "qid": "L10",
+        "oid": "uphill",
+        "label": "Walking uphill, climbing stairs or cycling is easier than walking on the flat",
+        "weight": 2
       },
       {
-        "qid": "L2",
-        "oid": "same",
-        "label": "About the same",
+        "qid": "L10",
+        "oid": "shorter",
+        "label": "My comfortable walking distance has got shorter over the last year",
+        "weight": 2
+      },
+      {
+        "qid": "age",
+        "oid": "o64",
+        "label": "65 or over",
+        "weight": 2
+      },
+      {
+        "qid": "age",
+        "oid": "50-64",
+        "label": "50 to 64",
         "weight": 1
       },
       {
@@ -10153,18 +10176,6 @@ export const AUTHORED = [
         "oid": "bendsit",
         "label": "The leg pain is worse when I bend forward or sit",
         "weight": -2
-      },
-      {
-        "qid": "L4",
-        "oid": "arch",
-        "label": "Arching back, or standing for a long time",
-        "weight": 2
-      },
-      {
-        "qid": "L5",
-        "oid": "claud",
-        "label": "Walking brings on leg pain, heaviness, or tingling that eases when I sit or bend forward",
-        "weight": 3
       }
     ]
   },

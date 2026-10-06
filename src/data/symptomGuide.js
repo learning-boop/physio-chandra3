@@ -122,6 +122,23 @@ export const REGIONS = {
           {id:"backworse", label:"Walking makes my back worse, but not my legs"},
           {id:"nochange", label:"Walking does not change it"}
         ]},
+      // "Stenosis lumbar" document (v1.0, signed by Chandra 5 Oct 2026): its Q1
+      // (both legs), Q4 (uphill or cycling easier) and Q6 (walking distance
+      // shorter), and its circulation look-alike (standing still is enough, or
+      // the flat is easier than uphill: the circulation doctor card). Asked
+      // after the walking answer above, or from 50 with pain down the leg.
+      {id:"L10", text:"About your legs when you walk or stand: which apply? Tick all that apply.",
+        askIf: ({ ra }) => [].concat(ra.L5 || []).includes("claud") ||
+          ((ra.age === "50-64" || ra.age === "o64") && [].concat(ra.L1 || []).some((o) => o === "thigh" || o === "belowknee")),
+        priority: ({ ra }) => [].concat(ra.L5 || []).includes("claud"),
+        options:[
+          {id:"both", label:"Both legs (or both buttocks), not just one"},
+          {id:"uphill", label:"Walking uphill, climbing stairs or cycling is easier than walking on the flat", excl:"slope"},
+          {id:"flatbetter", label:"Walking on the flat is easier than walking uphill", special:"calfDoctor", excl:"slope"},
+          {id:"standstill", label:"Standing still settles my legs, without needing to sit or bend forward", special:"calfDoctor"},
+          {id:"shorter", label:"My comfortable walking distance has got shorter over the last year"},
+          {id:"none", label:"None of these"}
+        ]},
       // One worst spot (5 Oct 2026, "Non specific low back pain" document):
       // the answers are alternatives (excl), so ticking one clears the others
       // and only the best counts towards a condition's ceiling.

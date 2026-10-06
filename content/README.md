@@ -68,7 +68,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Base of neck (C7–T3) | `ctj` | CT junction assessment | 5 |
 | Mid back, front of chest | `upperback` | Thoracic assessment (+ Osteoporosis document, T9) | 8 |
 | Mid-to-low back, flank | `tlj` | TL-junction assessment | 5 |
-| Lower back | `lowback` | Lumbar assessment (+ Ankylosing spondylitis document, L9; Non specific low back pain document, v0.1, 5 Oct 2026) | 11 |
+| Lower back | `lowback` | Lumbar assessment (+ Ankylosing spondylitis document, L9; Non specific low back pain document, v0.1, 5 Oct 2026; Stenosis lumbar document, v1.0, L10, 6 Oct 2026) | 13 |
 | Back of pelvis & buttock | `sij` | SI assessment (+ Ankylosing spondylitis document, P6) | 5 |
 | Tailbone | `coccyx` | Coccyx assessment | 5 |
 | Jaw | `jaw` | TMJ assessment | 5 |

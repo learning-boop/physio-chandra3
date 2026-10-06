@@ -101,6 +101,15 @@ Q: What happens when you walk?
 Ask only if: Age = "50 to 64" or "65 or over", or How far = "Below the knee, into the leg or foot"
 Asked early from 50 with pain down the thigh or below the knee (5 Oct 2026: it tells stenosis from common low back pain)
 
+Q: About your legs when you walk or stand: which apply? Tick all that apply.   (stenosis, new 6 Oct 2026, "Stenosis lumbar.docx" v1.0 signed 5 Oct 2026)
+- Both legs (or both buttocks), not just one   (stenosis Q1: 3)
+- Walking uphill, climbing stairs or cycling is easier than walking on the flat   (stenosis Q4: 2)
+- Walking on the flat is easier than walking uphill   (circulation look-alike: shows the circulation doctor card)
+- Standing still settles my legs, without needing to sit or bend forward   (circulation look-alike: shows the card)
+- My comfortable walking distance has got shorter over the last year   (stenosis Q6: 2)
+- None of these
+Ask only if: the walking answer is "Walking brings on leg pain, heaviness, or tingling...", or age 50 or over with pain down the thigh or below the knee; asked early after that walking answer. The two slope answers are alternatives (one clears the other).
+
 Q: If you point to the worst spot with one finger, where is it?
 - In the middle of the low back, on the spine
 - On one side, beside the spine above the belt line
