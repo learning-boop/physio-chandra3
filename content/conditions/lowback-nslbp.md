@@ -1,4 +1,5 @@
 ---
+# APPROVAL: "Non specific low back pain.docx" v0.1 — approved by Chandra in session, 6 Oct 2026 (the Word document's own sign-off box was left unticked; Chandra confirmed approval in writing).
 region: lowback
 id: nslbp
 name: Common low back pain (non-specific low back pain)
@@ -13,7 +14,7 @@ clin: Non-specific low back pain, mechanical pattern (NICE NG59; JOSPT 2012 low 
 # 4 to 6 weeks (NICE), replacing the 30-day flag; no medication line; the
 # fracture line keeps the safety question's over 70 (rf-osteo), not over 50.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-06 (approved in session)
 # Pointers follow the document's scored question set (section 4, max 14,
 # possible 6-9, likely 10+), mapped onto the low back questions already asked
 # (no new question: the flow asks 5):

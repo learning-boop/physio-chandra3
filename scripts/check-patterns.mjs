@@ -573,8 +573,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   // 56 with the general dark-urine question on the shoulder and hip (2 Oct 2026).
   // 57 with the elbow compartment question (elbow cross-check, 6 Oct 2026).
   // 58 with the knee's (general conditions cross-check, 6 Oct 2026).
-  check('911 split: 58 region flags send the person to emergency now',
-    em.filter((f) => !f.call911).length === 58, em.filter((f) => !f.call911).map((f) => f.id))
+  // 59 with the low back's sexual-function question (rf-sexual), the fifth
+  // cauda equina red flag of the GIRFT 2023 Pathway (CaudaEquina document,
+  // signed 5 Oct 2026).
+  check('911 split: 59 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 59, em.filter((f) => !f.call911).map((f) => f.id))
   check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
   // A shared group must lead to the same place in every area that asks it.
   const byGroup = {}

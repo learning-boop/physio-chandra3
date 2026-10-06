@@ -489,6 +489,33 @@ const TESTS = {
       lines: [['lowerback']],
       answers: { age: '30-49', onset: 'twist', duration: 'o3m', L1: ['back'], L4: ['roll'], L6: ['wide'], L7: ['catch', 'thighs', 'flares'] },
       expect: { top: 'lowback/instability', route: 'results' } },
+    // "Spondylolisthesis.docx" (v1.0, approved in session 6 Oct 2026): the
+    // adult slip. Max 19 on the site; the document's "likely" is 10+.
+    { name: '12. 62, ache across the low back, worse standing, eased leaning on a trolley, slip seen on a scan',
+      lines: [['lowerback']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', L1: ['back'], L4: ['arch'], L6: ['centre'], L7: ['slipknown'], L10: ['uphill'] },
+      expect: { top: 'lowback/spondylolisthesis', route: 'results' } },
+    { name: '13. 26, gymnastics history, arching hurts, but no scan: the slip is NOT claimed from symptoms alone',
+      lines: [['lowerback']],
+      answers: { age: '18-29', onset: 'gradual', duration: 'o3m', L1: ['back'], L4: ['arch'], L6: ['centre'], L8: ['arching'] },
+      expect: { not: ['lowback/spondylolisthesis'], route: 'results' } },
+    // With claudication answers the five scored questions go to the stenosis
+    // ones, so L7 (the "a scan showed a slip" answer) is never asked and the
+    // slip card cannot score. Stenosis leads, which is the same management.
+    // OPEN FOR CHANDRA: force the slip card alongside when a slip is known?
+    { name: '14. 70, legs heavy on walking with a known slip: stenosis leads (the slip card needs its question to be asked)',
+      lines: [['lowerback', 'hipL', 'kneeL']],
+      focus: 'lowback',
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', L1: ['buttock', 'thigh'], L2: ['leg'], L4: ['arch'],
+        L5: ['claud'], L7: ['slipknown'], L10: ['both', 'uphill', 'shorter'] },
+      expect: { top: 'lowback/stenosis', route: 'results' } },
+    // "CaudaEquina.docx" (signed 5 Oct 2026): the fifth Pathway red flag.
+    { name: '15. New loss of feeling during sex with the back pain: emergency, no booking',
+      lines: [['lowerback']],
+      focus: 'lowback',
+      answers: { age: '30-49', onset: 'lift', duration: 'd2w' },
+      flags: ['rf-sexual'],
+      expect: { route: 'emergency' } },
   ],
   sij: [
     { name: '1. Sacroiliac joint after a jarring landing',
@@ -1404,6 +1431,7 @@ for (const [rk, tests] of Object.entries(TESTS)) {
     // A pattern two areas share (neck and head "Neck-related headache") may come from either.
     if (e.top && ![].concat(e.top).includes((r.shown || [])[0])) why.push(`top ${(r.shown || [])[0] || 'nothing'}, expected ${[].concat(e.top).join(' or ')}`)
     for (const c of e.not || []) if ((r.shown || []).includes(c)) why.push(`shows ${c}`)
+    for (const c of e.shows || []) if (!(r.shown || []).includes(c)) why.push(`does not show ${c}`)
     for (const c of e.notTop || []) if ((r.shown || [])[0] === c) why.push(`${c} is on top`)
     for (const g of e.notRegion || []) if ((r.shown || []).some((c) => c.startsWith(g + '/'))) why.push(`shows a ${g} condition`)
     for (const q of e.notAsked || []) if (r.asked.includes(q)) why.push(`asked ${q}`)

@@ -18,7 +18,7 @@
 
 const NARROW = [
   { id: 'em-nerve', title: 'Signs of pressure on the nerves of the back or the spinal cord',
-    members: ['rf-saddle', 'rf-bladder', 'rf-legs', 'kf-cauda', 'nrf-cord', 'nrf-cord-legs', 'crf-cord', 'crf-cord-legs', 'trf-cord', 'trf-cord-legs',
+    members: ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'kf-cauda', 'nrf-cord', 'nrf-cord-legs', 'crf-cord', 'crf-cord-legs', 'trf-cord', 'trf-cord-legs',
       'jrf-conus', 'jrf-conus-legs', 'prf-cauda', 'xrf-saddle', 'xrf-bladder', 'hpf-cauda', 'tgf-cauda', 'lgf-cauda', 'pg-cauda', 'oi-cord', 'pc-gbs', 'pc-paralysis'] },
   { id: 'em-heart', title: 'Signs from the heart, the lungs or a main blood vessel',
     members: ['rf-aaa', 'rf-cardiac1', 'srf-lung', 'kf-pe', 'nrf-cardiac', 'crf-aorta', 'crf-cardiac', 'crf-lung', 'trf-aorta', 'trf-cardiac', 'trf-lung',
@@ -81,6 +81,7 @@ export const EM_SHORT = {
   // Nerves of the back and the spinal cord
   'rf-saddle': 'new numbness between your legs or around your bottom',
   'rf-bladder': 'new trouble passing urine, or losing control of your bladder or bowels',
+  'rf-sexual': 'new loss of feeling or function during sex',
   'rf-legs': 'leg pain spreading to both legs, or leg weakness getting quickly worse',
   'kf-cauda': 'new numbness between your legs, or new bladder or bowel trouble',
   'nrf-cord': 'losing control of your bladder or bowels',

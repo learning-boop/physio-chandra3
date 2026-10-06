@@ -1,4 +1,5 @@
 ---
+# APPROVAL: under-20 line from "Lumbar Condition List.docx" §4 item 6 — approved by Chandra in session, 6 Oct 2026 (the Word document's own sign-off box was left unticked; Chandra confirmed approval in writing).
 region: lowback
 id: facet
 name: Facet joint irritation
@@ -6,7 +7,7 @@ clin: Lumbar facet (zygapophyseal) joint pain; referred pain above the knee
 # Patient text moved unchanged from the site's original low back region.
 # Pointers from content/regions/lowback.md, 24 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-06 (approved in session)
 pointers:
   "After a twist or sudden movement": 1
   "Low back only": 1
@@ -34,6 +35,7 @@ The small joints at the back of the spine can become irritated, typically causin
 - Short regular walks
 
 ## seePhysioIf
+- Under 20, with pain on arching your back in sport that has lasted more than 2 to 3 weeks: see your doctor for an X-ray before training through it, as a stress fracture of the spine is checked for first
 - It lingers beyond ~2 weeks
 - It recurs with particular activities
 - You'd like specific mobility and strength work for it

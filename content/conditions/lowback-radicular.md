@@ -1,4 +1,5 @@
 ---
+# APPROVAL: "Nerve related leg pain.docx" v0.1 — approved by Chandra in session, 6 Oct 2026 (the Word document's own sign-off box was left unticked; Chandra confirmed approval in writing).
 region: lowback
 id: radicular
 name: Nerve-related leg pain
@@ -6,7 +7,7 @@ clin: Low back pain with radiating pain (sciatica / radiculopathy; JOSPT 2012 cl
 # Patient text moved unchanged from the site's original low back region.
 # Pointers from content/regions/lowback.md, 24 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-06 (approved in session)
 pointers:
   "After lifting or bending": 1
   "Below the knee, into the leg or foot": 3
@@ -32,9 +33,14 @@ Irritation of a nerve as it leaves the lower spine — commonly related to a dis
 - Keep the leg gently moving within comfort
 
 ## seePhysioIf
-- Leg symptoms persist beyond ~1–2 weeks
-- Numbness or tingling isn't settling
-- You want a plan to stay active safely while it recovers
+- Numbness around your saddle area or genitals, new trouble starting or controlling urine, a new bowel accident, or new loss of feeling during sex: go to the emergency department now
+- Leg pain that has started in both legs at once, has spread from one leg to both, or has swapped sides: go to the emergency department now
+- A leg or foot that is getting weaker day by day, or a foot that has started to slap or drag: see a doctor the same day
+- Leg pain after a fall, a crash or a heavy knock, or after even a minor fall if you are over 70, have thin bones or take steroid tablets: see a doctor today
+- A fever or chills, a recent infection, spinal injection or surgery, a past cancer, unexplained weight loss, or pain that is constant and the same whatever you do: see your doctor this week, the same day with a fever
+- Calf swelling, warmth or redness, especially after travel, surgery or time off your feet: see a doctor the same day; the emergency department if you are also breathless or have chest pain
+- Leg pain that is not easing at all by about 6 weeks, or is still limiting your daily life at about 12 weeks: see your doctor to discuss a review and whether a specialist opinion would help
+- Leg symptoms are limiting your work, sleep or walking, or have not started to ease after two to three weeks: a physiotherapy assessment can check the nerve, work out which positions help, and give you a plan
 
 ## clinicNotes
 - Classification (JOSPT 2012, B): low back pain with radiating pain. Acute: narrow-band lancinating leg pain, possible paraesthesia, numbness or weakness, reproduced at initial to mid range, with SLR or slump; subacute, mid range worse at end range; chronic, sustained end-range SLR or slump. Full neurological exam and UMN screen (tone, clonus).

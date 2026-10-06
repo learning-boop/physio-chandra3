@@ -1,4 +1,5 @@
 ---
+# APPROVAL: "Stenosis lumbar.docx" v1.0 — the source document is signed "Chandra Matla 05 Oct 2026".
 region: lowback
 id: stenosis
 name: Spinal stenosis pattern
@@ -17,7 +18,7 @@ ages: 50-64, o64
 # (standing still is enough, or the flat is easier than uphill) shows the
 # circulation doctor card (calfDoctor).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed:
+reviewed: Chandra Matla, 2026-10-06 (approved in session)
 pointers:
   "Walking brings on leg pain, heaviness, or tingling that eases when I sit or bend forward": 6
   "Both legs (or both buttocks), not just one": 3

@@ -26,3 +26,7 @@ cases/
 
 # OCR text of manuals and scanned CPGs (scripts/ocr-pdf.mjs): personal use, not committed
 evidence-text/
+
+# A clone of this repository made inside it (office-sync test, Oct 2026).
+# Never part of the project: ignored so it cannot be committed by accident.
+physio-chandra3/

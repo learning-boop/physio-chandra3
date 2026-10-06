@@ -35,6 +35,7 @@ import { THYROID_CAUTION, thyroidPanel, HYPOTHYROID_CAUTION, hypothyroidPanel } 
 import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
 import { PAGET_CAUTION, pagetPanel } from '../data/paget'
 import { BONE_TUMOUR_CAUTION, boneTumourPanel, TUMOUR_IDS, BONE_WHY_YOUNG, BONE_WATCH, boneWatch } from '../data/boneTumour'
+import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -1262,6 +1263,7 @@ export default function PainAssessment() {
     boneTumour: btPanel,
     paget: pgtPanel,
     boneWatch: boneWatch(zones, answers) ? BONE_WATCH : null,
+    cesWarning: cesWarning(zones, keys) ? cesWarningText() : null,
     alsoConsider: alsoConsider.map(({ c }) => c.name),
     thyroid: thPanel,
     hypothyroid: hypoPanel,
@@ -2790,6 +2792,21 @@ export default function PainAssessment() {
                   <p style={{ fontSize: 14.5, lineHeight: 1.55, color: '#fcd34d', margin: '0 0 24px', padding: '10px 12px', border: '1px solid rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', borderRadius: 10, maxWidth: 520 }}>
                     {BONE_WATCH}
                   </p>
+                )}
+
+                {/* The cauda equina warning-signs card: shown on every low
+                    back, pelvis or leg-referral result, whatever the result
+                    was, because these signs can begin after the person has
+                    read their results ("CaudaEquina.docx", signed 5 Oct 2026;
+                    GIRFT 2023 asks that every back-pain patient be given it). */}
+                {cesWarning(zones, keys) && (
+                  <div style={{ maxWidth: 520, margin: '0 0 24px', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(239,68,68,0.5)', background: 'rgba(239,68,68,0.07)' }}>
+                    <p style={{ fontSize: 15.5, color: '#fca5a5', margin: 0, fontWeight: 600, lineHeight: 1.4 }}>{CES_WARNING.title}</p>
+                    <ul style={{ margin: '10px 0 0', paddingLeft: 18, fontSize: 14.5, lineHeight: 1.65, color: 'rgba(255,255,255,0.85)' }}>
+                      {CES_WARNING.signs.map((s, i) => <li key={i} style={{ marginBottom: 4 }}>{s}</li>)}
+                    </ul>
+                    <p style={{ fontSize: 13.5, lineHeight: 1.65, color: 'rgba(255,255,255,0.6)', margin: '10px 0 0' }}>{CES_WARNING.text}</p>
+                  </div>
                 )}
 
                 {/* AI overview of the whole traced path. It is given the matched

@@ -37,7 +37,7 @@ const AMBER = [180, 110, 0]
  * @param {object} d
  *  code, dateText, images { views: [{ src, width, height, label }] } | null,
  *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
- *  conditions [{name, blurb}], noMatch string | null, alsoConsider [string], boneWatch string | null, painType string | null,
+ *  conditions [{name, blurb}], noMatch string | null, alsoConsider [string], boneWatch string | null, cesWarning string | null, painType string | null,
  *  cautions [string], diabetes, steroids, calcium, thyroid, hypothyroid, acromegaly, pregnancy, oi, osteomalacia, bone, boneTumour and paget {title, text, notes [string]} | null,
  *  behaviour [string], answers [{question, answer}], notes string
  * @returns jsPDF document
@@ -170,6 +170,9 @@ export function buildResultsPdf(d) {
   if (d.alsoConsider && d.alsoConsider.length) text(`${d.conditions.length ? 'Also worth considering' : 'Worth considering'}: ${d.alsoConsider.join('; ')}. These match some of your answers less closely; your physiotherapist can check them.`, { size: 9.5, color: MUTED })
   // One bone, young or 65 and over ("Osteosarcoma" document): the watch line.
   if (d.boneWatch) text(d.boneWatch, { bold: true })
+  // The cauda equina warning-signs card travels with the PDF: the person may
+  // read it days later (CaudaEquina.docx, signed 5 Oct 2026).
+  if (d.cesWarning) text(d.cesWarning, { bold: true })
 
   // Straight after the results (Chandra, 2 Oct 2026). Kept true to the site:
   // only the opt-in anonymous copy is ever stored (api/anon-share.js); the

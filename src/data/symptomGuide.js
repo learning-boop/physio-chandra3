@@ -18,10 +18,18 @@ export const REGIONS = {
   lowback: {
     name:"Low back & pelvis",
     redFlags:[
+      // Cauda equina: the emergency questions of the National Suspected CES
+      // Pathway (GIRFT 2023), worded as in the CaudaEquina condition document
+      // (signed 5 Oct 2026). Trouble starting and the flow itself come first —
+      // retention is the earliest sign; incontinence is the later one.
       {id:"rf-saddle", tier:"emergency", group:"saddle", why:"Possible cauda equina syndrome",
-        text:"Do you have new numbness or tingling between your legs, around your bottom, or in your genitals (the area you would sit on a saddle)?"},
+        text:"Do you have new numbness or tingling between your legs, around your bottom, or in your genitals — for example not feeling the toilet paper (the area you would sit on a saddle)?"},
       {id:"rf-bladder", tier:"emergency", group:"cauda", why:"Possible cauda equina syndrome",
-        text:"Have you had new trouble starting to pass urine, not being able to feel when your bladder is full, leaking urine, or losing control of your bowels?"},
+        text:"Have you had new trouble starting to pass urine, a weak or slow stream, not being able to feel when your bladder is full or has emptied, leaking urine, or losing control of your bowels?"},
+      // Sexual function is under-reported, and is one of the Pathway's five red
+      // flags. Someone who would rather not answer can still tick it.
+      {id:"rf-sexual", tier:"emergency", group:"cauda", why:"Possible cauda equina syndrome",
+        text:"Have you had new difficulty with erections or ejaculation, or new loss of feeling during sex?"},
       {id:"rf-legs", tier:"emergency", why:"Possible cauda equina syndrome or severe nerve compression",
         text:"In the last few days, has your leg pain spread to both legs, or has weakness in your leg or foot been getting quickly worse?"},
       {id:"rf-aaa", tier:"emergency", call911: true, group:"aaa", why:"Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
@@ -157,6 +165,10 @@ export const REGIONS = {
         {id:"thighs", label:"I push on my thighs to stand up straight after bending"},
         {id:"flares", label:"I get frequent flare-ups from small movements"},
         {id:"stiff", label:"It feels stiff rather than weak"},
+        // Imaging already done is the strongest single pointer to a slip
+        // ("Spondylolisthesis.docx", signed; section 4 Q6): the diagnosis
+        // needs a standing X-ray, so anyone who has had one knows.
+        {id:"slipknown", label:"A scan or X-ray has shown one back bone sitting forward on the one below (a slip, or a 'pars defect')"},
         {id:"none", label:"None of these"}
       ]},
       {id:"L8", text:"Which of these do you do regularly? Tick all that apply.", options:[
