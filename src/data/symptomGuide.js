@@ -39,6 +39,10 @@ export const REGIONS = {
         text:"Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?"},
       {id:"rf-infection", tier:"urgent", group:"infection", why:"Possible spinal infection",
         text:"Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs, or had a recent urine or skin infection, or a recent spine procedure or injection?"},
+      // "Stenosis lumbar" document (v1.0, signed 5 Oct 2026), red flag 5: leg
+      // symptoms can come from the spinal cord higher up (neck or mid back).
+      {id:"rf-myelo", tier:"urgent", group:"myelo", why:"Possible pressure on the spinal cord higher up (neck or mid back); a doctor should check promptly",
+        text:"Along with the leg symptoms, have your hands become clumsy (buttons, writing), your walking unsteady or your legs stiff, or do you have neck pain as well?"},
       {id:"rf-footdrop", tier:"urgent", why:"Nerve weakness (foot drop) needs medical review",
         text:"Is your foot slapping down or your toes catching when you walk, even if it is not getting worse?"},
       {id:"rf-kidney", tier:"urgent", group:"kidney", why:"Possible kidney stone or kidney infection",
@@ -805,6 +809,7 @@ import { EXTRA_REGIONS, EXTRA_SPECIAL_CARDS } from './symptomGuideExtra.js'
    itself AND the question-option weights that let it be reached, so the two
    halves are applied together and cannot drift apart. */
 import { AUTHORED } from './symptomGuideAuthored.js'
+import { QUESTION_GATES } from './questionGates.js'
 Object.assign(REGIONS, EXTRA_REGIONS)
 Object.assign(SPECIAL_CARDS, EXTRA_SPECIAL_CARDS)
 
@@ -817,6 +822,12 @@ Object.assign(SPECIAL_CARDS, EXTRA_SPECIAL_CARDS)
    questions stay single-answer — nobody has two ages. */
 for (const r of Object.values(REGIONS)) {
   for (const q of r.questions) q.multi = true
+}
+
+/* A yes/no in front of a long list where most people tick nothing
+   (./questionGates.js, 6 Oct 2026): the UI asks it first. */
+for (const [rk, r] of Object.entries(REGIONS)) {
+  for (const q of r.questions) if (QUESTION_GATES[`${rk}/${q.id}`]) q.gate = QUESTION_GATES[`${rk}/${q.id}`]
 }
 
 for (const entry of AUTHORED) {

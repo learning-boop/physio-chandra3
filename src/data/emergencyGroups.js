@@ -1,0 +1,258 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Gateway groups for the emergency page and the final check (Chandra,
+   6 Oct 2026: "sub-group the questions; if the patient says yes, open the
+   follow-up questions, rather than showing them all on one screen").
+
+   They work like the doctor page's groups (./safetyGates.js, GATES): related
+   questions sit behind one plain question that NAMES every key sign (from
+   EM_SHORT below), so nothing is hidden; a tick opens the specific
+   questions, and "Not sure which" still counts, as urgently as the most
+   urgent question in the group (911 if any of them is). A group with only
+   one question on the page is shown as that question.
+
+   Groups are by theme, not by area, so one drawing's emergency page has at
+   most one "nerves" group, one "heart and lungs" group, and so on. Every
+   emergency question on the site belongs to a group (a check confirms it);
+   each needs a short sign in EM_SHORT.
+   ───────────────────────────────────────────────────────────────────────── */
+
+const NARROW = [
+  { id: 'em-nerve', title: 'Signs of pressure on the nerves of the back or the spinal cord',
+    members: ['rf-saddle', 'rf-bladder', 'rf-legs', 'kf-cauda', 'nrf-cord', 'nrf-cord-legs', 'crf-cord', 'crf-cord-legs', 'trf-cord', 'trf-cord-legs',
+      'jrf-conus', 'jrf-conus-legs', 'prf-cauda', 'xrf-saddle', 'xrf-bladder', 'hpf-cauda', 'tgf-cauda', 'lgf-cauda', 'pg-cauda', 'oi-cord', 'pc-gbs', 'pc-paralysis'] },
+  { id: 'em-heart', title: 'Signs from the heart, the lungs or a main blood vessel',
+    members: ['rf-aaa', 'rf-cardiac1', 'srf-lung', 'kf-pe', 'nrf-cardiac', 'crf-aorta', 'crf-cardiac', 'crf-lung', 'trf-aorta', 'trf-cardiac', 'trf-lung',
+      'jrf-aaa', 'jrf-aorta', 'mrf-cardiac', 'arf-cardiac', 'arf-clotlung', 'frf-cardiac', 'hpf-aaa', 'tgf-pe', 'lgf-pe', 'af-pe', 'pg-pe', 'dm-cardiac',
+      'pc-cardiac', 'pc-dizzy-heart', 'pc-muscle-crisis'] },
+  { id: 'em-brain', title: 'Signs of a stroke, or a problem in the brain or the eyes',
+    members: ['nrf-stroke', 'nrf-mening', 'mrf-droop', 'hrf-thunderclap', 'hrf-stroke', 'hrf-mening', 'hrf-glaucoma', 'arf-stroke', 'frf-stroke',
+      'wrf-stroke', 'hnd-stroke', 'pc-stroke', 'oi-skullbase'] },
+  { id: 'em-injury', title: 'Signs of a serious injury',
+    members: ['rf-fracture', 'nrf-after', 'crf-trauma5d', 'trf-fracture', 'jrf-fracture', 'prf-fracture', 'hrf-headinjury', 'hrf-trauma5d', 'hrf-cad-severe',
+      'hpf-dislocation', 'oi-break', 'oi-head', 'pc-as-fracture', 'hnd-inject', 'mrf-stuckopen'] },
+  { id: 'em-infection', title: 'Signs of a serious infection',
+    members: ['rf-hotjoint', 'kf-septic', 'erf-hot', 'wrf-hot', 'wrf-bite', 'hnd-bite', 'hnd-hot', 'hpf-septic', 'frf-necfasc', 'tgf-necfasc', 'lgf-necfasc',
+      'af-septic', 'af-necfasc', 'ft-necfasc', 'ft-diabeticinfection', 'dm-foot-black'] },
+  { id: 'em-limb', title: 'Signs of pressure or blocked blood flow in an arm or leg',
+    members: ['kf-compartment', 'erf-compartment', 'frf-compartment', 'wrf-compartment', 'hnd-compartment', 'tgf-compartment', 'lgf-compartment',
+      'af-compartment', 'ft-compartment', 'lgf-ischaemia', 'af-ischaemia', 'ft-ischaemia', 'srf-rhabdo', 'arf-rhabdo', 'hpf-rhabdo', 'tgf-rhabdo', 'lgf-rhabdo'] },
+  { id: 'em-belly', title: 'Sudden, severe pain in the tummy, the groin or the pelvis',
+    members: ['srf-kehr', 'nrf-kehr', 'srf-ectopic', 'trf-pancreas', 'jrf-pancreas', 'jrf-testis', 'hpf-ectopic', 'hpf-torsion', 'hpf-strangulated'] },
+  { id: 'em-pregnancy', title: 'Warning signs in pregnancy or after a birth',
+    members: ['prf-pregnancy-bleed', 'prf-pregnancy', 'pg-bleed', 'pg-abdo', 'pg-earlybleed', 'pg-labour', 'pg-preeclampsia', 'pg-movements', 'pg-pph'] },
+  { id: 'em-mind', title: 'Sudden changes in thinking or mood',
+    members: ['pg-mind', 'st-mind'] },
+  { id: 'em-body', title: 'Signs of a blood-sugar or hormone emergency',
+    members: ['dm-dka', 'dm-hhs', 'st-adrenal'] },
+]
+
+/* Broader groups (6 Oct 2026, after looking at a real page: with narrow
+   themes a hip page went from 8 questions to 7, as each question was the only
+   one of its theme). The group line still names every sign present. */
+const pick = (...ids) => NARROW.filter((g) => ids.includes(g.id)).flatMap((g) => g.members)
+export const EM_GROUPS = [
+  { id: 'em-nerve', title: 'Signs of pressure on the nerves of the back or the spinal cord', members: pick('em-nerve') },
+  { id: 'em-illness', title: 'Signs of a sudden, serious illness (heart, lungs, brain, tummy or blood sugar)',
+    members: pick('em-heart', 'em-brain', 'em-belly', 'em-body') },
+  { id: 'em-limb', title: 'Signs of a serious injury, infection or circulation problem',
+    members: pick('em-injury', 'em-infection', 'em-limb') },
+  { id: 'em-pregnancy', title: 'Warning signs in pregnancy or after a birth', members: pick('em-pregnancy') },
+  { id: 'em-mind', title: 'Sudden changes in thinking or mood', members: pick('em-mind') },
+]
+
+/* The final check ("Before your results"): the questions only the answers
+   can raise. Its emergency questions (weakness spreading, a muscle crisis)
+   use the emergency groups above. */
+export const FINAL_GROUPS = [
+  { id: 'fin-muscle', title: 'Changes in your muscles or energy',
+    members: ['pc-myositis', 'pc-muscle', 'pc-pmr', 'pc-hormone', 'pc-lowhormone', 'pc-child-muscle', 'pc-over50stiff'] },
+  { id: 'fin-hormone', title: 'Signs of a hormone, thyroid or calcium problem',
+    members: ['pc-thyroid', 'pc-hypothyroid', 'pc-acromegaly', 'pc-calcium'] },
+  { id: 'fin-bone', title: 'Pain deep in a bone',
+    members: ['pc-bone', 'pc-bone-young', 'pc-paget', 'pc-rickets', 'grf-night'] },
+  { id: 'fin-nerve', title: 'Changes in feeling, vision, balance or headaches',
+    members: ['pc-neuro', 'pc-optic', 'pc-polyneuropathy', 'pc-dizzy-doctor', 'pc-headache', 'pc-trauma5d', 'pc-upperinstab'] },
+  { id: 'fin-medical', title: 'Signs that need a medical check',
+    members: ['pc-inflammatory', 'pc-uveitis', 'pc-visceral', 'pc-urinary', 'pc-dvt', 'pc-limb', 'pc-hand-procedure', 'pc-crps-infection'] },
+]
+
+/* Short signs for the group line (plain words, a few each). */
+export const EM_SHORT = {
+  // Nerves of the back and the spinal cord
+  'rf-saddle': 'new numbness between your legs or around your bottom',
+  'rf-bladder': 'new trouble passing urine, or losing control of your bladder or bowels',
+  'rf-legs': 'leg pain spreading to both legs, or leg weakness getting quickly worse',
+  'kf-cauda': 'new numbness between your legs, or new bladder or bowel trouble',
+  'nrf-cord': 'losing control of your bladder or bowels',
+  'nrf-cord-legs': 'new weakness or numbness in both legs, or spreading in hands and feet',
+  'crf-cord': 'losing control of your bladder or bowels',
+  'crf-cord-legs': 'sudden weakness, numbness or unsteadiness in both legs',
+  'trf-cord': 'losing control of your bladder or bowels',
+  'trf-cord-legs': 'sudden weakness or numbness in both legs',
+  'jrf-conus': 'losing control of your bladder or bowels, or numbness between your legs',
+  'jrf-conus-legs': 'sudden weakness or numbness in both legs',
+  'prf-cauda': 'new numbness between your legs, or new bladder or bowel trouble',
+  'xrf-saddle': 'new numbness between your legs or around your bottom',
+  'xrf-bladder': 'new trouble passing urine, or losing control of your bowels',
+  'hpf-cauda': 'new numbness between your legs, or new bladder or bowel trouble',
+  'tgf-cauda': 'new numbness between your legs, or new bladder or bowel trouble',
+  'lgf-cauda': 'new numbness between your legs, or new bladder or bowel trouble',
+  'pg-cauda': 'numbness around the genitals, bladder or bowel trouble, or weak legs',
+  'oi-cord': 'numbness or weakness spreading, or a change in bladder or bowel control',
+  'pc-gbs': 'weakness spreading up from your feet over hours to days',
+  'pc-paralysis': 'sudden weakness of both legs',
+  // Heart, lungs and main blood vessels
+  'rf-aaa': 'sudden severe back or tummy pain with a pulsing tummy or feeling faint',
+  'rf-cardiac1': 'chest tightness, breathlessness or sweating, or pain brought on by effort',
+  'srf-lung': 'sudden sharp pain on breathing, with breathlessness',
+  'kf-pe': 'a swollen, tender calf with breathlessness or chest pain',
+  'nrf-cardiac': 'chest pain or pressure, breathlessness or sweating, or pain brought on by effort',
+  'crf-aorta': 'sudden tearing pain between the shoulder blades',
+  'crf-cardiac': 'chest tightness, breathlessness or sweating, or pain brought on by effort',
+  'crf-lung': 'sudden sharp pain on breathing, with breathlessness',
+  'trf-aorta': 'sudden tearing pain in the back or between the shoulder blades',
+  'trf-cardiac': 'chest tightness, breathlessness or sweating, or pain brought on by effort',
+  'trf-lung': 'sudden sharp pain on breathing, with breathlessness',
+  'jrf-aaa': 'sudden severe back or tummy pain with a pulsing tummy or feeling faint',
+  'jrf-aorta': 'sudden tearing pain in the back, spreading to the chest or tummy',
+  'mrf-cardiac': 'jaw pain brought on by effort, or with chest tightness',
+  'arf-cardiac': 'arm pain brought on by effort, or with chest tightness or breathlessness',
+  'arf-clotlung': 'a suddenly swollen, bluish arm with breathlessness or chest pain',
+  'frf-cardiac': 'arm pain brought on by effort, or with chest tightness',
+  'hpf-aaa': 'sudden severe back, tummy or groin pain with a pulsing tummy or feeling faint',
+  'tgf-pe': 'a swollen, tender leg with breathlessness or chest pain',
+  'lgf-pe': 'a swollen, tender calf with breathlessness or chest pain',
+  'af-pe': 'a swollen, tender calf or ankle with breathlessness or chest pain',
+  'pg-pe': 'sudden breathlessness, chest pain or coughing up blood',
+  'dm-cardiac': 'chest, jaw or arm pressure, or breathlessness, at rest or lasting',
+  'pc-cardiac': 'chest, left arm or jaw pain with sweating, sickness or breathlessness',
+  'pc-dizzy-heart': 'with dizziness: fainting, chest pain or a racing heartbeat',
+  'pc-muscle-crisis': 'with weakness: new trouble breathing, coughing or swallowing, or fainting',
+  // Stroke, brain and eyes
+  'nrf-stroke': 'the worst headache of your life, a drooping face, one-sided weakness or slurred speech',
+  'nrf-mening': 'a fever with a stiff neck, a rash or bright light hurting',
+  'mrf-droop': 'one side of your face suddenly drooping',
+  'hrf-thunderclap': 'a sudden headache, the worst of your life, within a minute',
+  'hrf-stroke': 'one-sided weakness, a drooping face, trouble speaking or loss of vision',
+  'hrf-mening': 'a fever with a stiff neck, a new rash, or very drowsy',
+  'hrf-glaucoma': 'a painful red eye with blurred vision or halos',
+  'arf-stroke': 'a drooping face, one-sided weakness or trouble speaking',
+  'frf-stroke': 'a drooping face, one-sided weakness or trouble speaking',
+  'wrf-stroke': 'a drooping face, one-sided weakness or trouble speaking',
+  'hnd-stroke': 'a drooping face, one-sided weakness or trouble speaking',
+  'pc-stroke': 'sudden loss of sight in one eye, a drooping face, one-sided weakness or slurred speech',
+  'oi-skullbase': 'a headache worse on coughing, with dizziness, trouble swallowing or numb limbs',
+  // Serious injury
+  'rf-fracture': 'a car crash, a fall from a height or a hard landing in the last few days',
+  'nrf-after': 'after a neck manipulation, accident or knock: severe pain or worsening nerve signs',
+  'crf-trauma5d': 'after an accident or knock: dizziness, double vision or slurred speech getting worse',
+  'trf-fracture': 'a car crash, a fall from a height or a hard blow in the last few days',
+  'jrf-fracture': 'a car crash, a fall from a height or a hard landing in the last few days',
+  'prf-fracture': 'unable to stand or put weight on the leg after a fall',
+  'hrf-headinjury': 'after a blow to the head: repeated vomiting, drowsiness or a worsening headache',
+  'hrf-trauma5d': 'after an accident or knock: dizziness, double vision or slurred speech getting worse',
+  'hrf-cad-severe': 'after a neck manipulation or jerk: a severe, unusual headache or neck pain',
+  'hpf-dislocation': 'after a hip operation: a clunk, unable to stand, or the leg shorter or turned',
+  'oi-break': 'a limb out of shape, unusable, or numb, pale or cold after a fall',
+  'oi-head': 'a knock to the head or neck in the last few days, not checked by a doctor',
+  'pc-as-fracture': 'new, severe neck or back pain after even a minor fall or jolt',
+  'hnd-inject': 'paint, grease or fluid injected into the hand under pressure',
+  'mrf-stuckopen': 'your jaw stuck open',
+  // Serious infection
+  'rf-hotjoint': 'a hot, red, swollen joint with a fever or feeling very unwell',
+  'kf-septic': 'a hot, red, swollen knee with a fever or feeling unwell',
+  'erf-hot': 'a hot, red, swollen joint with a fever or feeling very unwell',
+  'wrf-hot': 'a hot, red, swollen joint with a fever or feeling very unwell',
+  'wrf-bite': 'a cut or bite on the hand, now swollen, red and very painful',
+  'hnd-bite': 'a whole finger swollen, held bent and very painful to straighten',
+  'hnd-hot': 'a hot, red, swollen joint with a fever or feeling very unwell',
+  'hpf-septic': 'a very painful hip with a fever, unable to take weight',
+  'frf-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',
+  'tgf-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',
+  'lgf-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',
+  'af-septic': 'a hot, red, swollen ankle with a fever',
+  'af-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',
+  'ft-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',
+  'ft-diabeticinfection': 'with diabetes, a foot wound with spreading redness, pus or a fever',
+  'dm-foot-black': 'with diabetes, a black or cold toe, or a spreading foot infection',
+  // Pressure or blocked blood flow in a limb
+  'kf-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'erf-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'frf-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'wrf-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'hnd-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'tgf-compartment': 'thigh pain far worse than expected and climbing, with a tense, swollen thigh',
+  'lgf-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'af-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'ft-compartment': 'pain far worse than expected and climbing, with a tight, swollen muscle',
+  'lgf-ischaemia': 'a foot or leg that is suddenly cold, pale, numb or painful at rest',
+  'af-ischaemia': 'a foot that is suddenly cold, pale, numb or painful at rest',
+  'ft-ischaemia': 'a foot or toes suddenly cold, pale, blue or numb',
+  'srf-rhabdo': 'severe muscle pain or weakness with urine dark like cola',
+  'arf-rhabdo': 'severe muscle pain or weakness with urine dark like cola',
+  'hpf-rhabdo': 'severe muscle pain or weakness with urine dark like cola',
+  'tgf-rhabdo': 'severe muscle pain or weakness with urine dark like cola',
+  'lgf-rhabdo': 'severe muscle pain or weakness with urine dark like cola',
+  // Tummy, groin and pelvis
+  'srf-kehr': 'left shoulder-tip pain after a blow to the tummy, or feeling faint',
+  'nrf-kehr': 'left shoulder-tip pain after a blow to the tummy, or feeling faint',
+  'srf-ectopic': 'could be pregnant, with low tummy pain and shoulder-tip pain',
+  'trf-pancreas': 'severe upper tummy pain going through to the back, with vomiting',
+  'jrf-pancreas': 'severe upper tummy pain going through to the back, with vomiting',
+  'jrf-testis': 'sudden, severe pain in a testicle',
+  'hpf-ectopic': 'could be pregnant, with sudden one-sided low tummy pain or feeling faint',
+  'hpf-torsion': 'sudden, severe pain in a testicle',
+  'hpf-strangulated': 'a painful groin lump that will not go back in',
+  // Pregnancy and after a birth
+  'prf-pregnancy-bleed': 'pregnant, with heavy bleeding or feeling faint',
+  'prf-pregnancy': 'pregnant, with fluid leaking or regular tightenings',
+  'pg-bleed': 'heavy bleeding, or bleeding with feeling faint or severe pain',
+  'pg-abdo': 'severe constant tummy pain, or a hard, tender bump',
+  'pg-earlybleed': 'bleeding, or pain low on one side of the tummy',
+  'pg-labour': 'bleeding, waters breaking early, or regular painful tightenings',
+  'pg-preeclampsia': 'a severe headache, vision changes, upper tummy pain or sudden swelling',
+  'pg-movements': 'the baby moving less than usual',
+  'pg-pph': 'heavy bleeding or large clots since the birth',
+  // Thinking and mood
+  'pg-mind': 'thoughts of harming yourself or your baby, or seeing or hearing things',
+  'st-mind': 'confusion, seeing or hearing things, or thoughts of harming yourself',
+  // Blood sugar and hormones
+  'dm-dka': 'vomiting with deep fast breathing, fruity breath or drowsiness',
+  'dm-hhs': 'very high sugars with extreme thirst and drowsiness',
+  'st-adrenal': 'very weak or faint with vomiting, a fever or confusion, on steroids',
+}
+
+/* Short signs for the final check's questions that have none yet. */
+export const FINAL_SHORT = {
+  'pc-myositis': 'weak thighs or shoulders on both sides building over weeks',
+  'pc-muscle': 'muscles that tire with use, a drooping eyelid, or a slow-to-let-go grip',
+  'pc-pmr': 'new aching and stiffness in both shoulders or hips each morning',
+  'pc-hormone': 'weak thighs or shoulders with steroid medicine or body changes',
+  'pc-lowhormone': 'exhaustion or muscle loss for months after a head injury, pituitary problem or heavy bleeding at a birth',
+  'pc-child-muscle': 'for a young child: trouble getting up from the floor, walking late or toe walking',
+  'pc-over50stiff': 'new stiff shoulders and neck in the mornings, or a tender scalp or jaw pain',
+  'pc-thyroid': 'weak muscles with weight loss, a racing heart or feeling hot',
+  'pc-hypothyroid': 'stiff, slow-to-recover muscles with feeling cold, tired or numb hands at night',
+  'pc-acromegaly': 'hands, feet or face that have grown, with joint pain',
+  'pc-calcium': 'deep aching bones on both sides with stones, easy fractures or thirst',
+  'pc-bone': 'deep pain in one bone, getting worse and there at rest or at night',
+  'pc-bone-young': 'deep pain in one bone for weeks, at night or with a lump or limp',
+  'pc-paget': 'a deep, constant ache in one bone, warmth or a bowed leg',
+  'pc-rickets': 'for a child: bowed legs, thick wrists or ankles, or aching legs',
+  'grf-night': 'constant pain that nothing eases, or wakes you at night',
+  'pc-neuro': 'blurred or double vision, an electric feeling on bending the head, or numbness worse in heat',
+  'pc-optic': 'blurred or dim vision in one eye that hurts to move',
+  'pc-polyneuropathy': 'numbness or burning in both hands or both feet',
+  'pc-dizzy-doctor': 'sudden hearing loss, or constant worsening dizziness with vomiting',
+  'pc-headache': 'a new or changing headache with warning signs',
+  'pc-trauma5d': 'since the accident: dizziness, double vision, slurred speech or falls',
+  'pc-upperinstab': 'rheumatoid arthritis or steroids with a heavy head or tingling lips',
+  'pc-inflammatory': 'the same joints swollen on both sides with long morning stiffness',
+  'pc-uveitis': 'a painful red eye with blurred vision',
+  'pc-visceral': 'pain that never changes with movement, or with nausea or fever',
+  'pc-urinary': 'pain spreading to the groin, a fever, blood in the urine or burning',
+  'pc-dvt': 'swelling, warmth or redness in the calf',
+  'pc-limb': 'skin colour, temperature or sweating changes in the limb',
+  'pc-hand-procedure': 'after the hand procedure: a hot, red, swollen hand or a fever',
+  'pc-crps-infection': 'since the injury or operation: a red, leaking wound or a fever',
+}

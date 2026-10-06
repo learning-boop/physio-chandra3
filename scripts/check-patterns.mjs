@@ -1555,7 +1555,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Severity: dynamic, from the questions that apply (OI on: the emergency ones above the doctor-today ones)',
     oi.findIndex((f) => f.tier !== 'emergency') > oi.map((f) => f.tier).lastIndexOf('emergency'))
   check('Severity: applied to the emergency page, the doctor page, the final check and the Symptom Guide',
-    /emergency: bySeverity\(/.test(src) && /byMechanism\(bySeverity\(\[\.\.\.all/.test(src) && /return bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
+    /const em = bySeverity\(all\.filter/.test(src) && /byMechanism\(bySeverity\(\[\.\.\.all/.test(src) && /const fin = bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
 }
 
 // ── 49. Smarter safety flow: knee, foot, hip, ankle (Chandra, 4 Oct 2026) ──
@@ -1663,7 +1663,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     G.gateRows([...UNI, ...G.gateUnsureFlags(UNI, 'knee')]).every((r) => r.flag))
   check('Smart flow: one of these areas drawn alone runs the injury screen before the doctor page; emergencies stay first; a group opened but not answered blocks Continue; other drawings unchanged',
     /const smartFirst = injuryApplies && !!smartArea\(flowZ\)/.test(src) && /if \(emergency\) \{ if \(smartFirst\) startInjury\(\); else setStage\('physician'\) \}/.test(src) &&
-    /else if \(smartFirst\) setStage\('physician'\)/.test(src) && /if \(gateOpenEmpty\) return/.test(src) &&
+    /else if \(smartFirst\) setStage\('physician'\)/.test(src) && /if \(openEmpty\) return/.test(src) &&
     G.smartArea([{ type: 'hip' }]) === 'hip' && G.smartArea([{ type: 'foot' }, { type: 'foot' }]) === 'foot' &&
     G.smartArea([{ type: 'knee' }, { type: 'thigh' }]) === null && G.smartArea([{ type: 'stomach' }]) === null && G.smartArea([{ type: 'elbow' }]) === 'elbow' && G.smartArea([{ type: 'lowerback' }]) === 'lowerback')
 }
@@ -2091,6 +2091,45 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     PT.classifyPainMechanism({ zones: Z(['kneeL']), answers: { duration: 'years', easing: ['none'], yfFear: 'agree', yfOutlook: 'agree', yfMood: 'agree', sinSettle: 'constant' } })?.primary !== 'nociplastic')
   check('New cautions: ME/CFS (energy management), hypermobility, rheumatoid arthritis; the widespread self-care names post-exertional malaise',
     /ca-mecfs/.test(src) && /ca-hypermobility/.test(src) && /ca-ra'/.test(src) && WP.WIDESPREAD.selfCare.some((l) => /a day or two later/.test(l)))
+}
+
+// ── 63. Grouped emergency page, final check and area questions (Chandra, 6 Oct 2026) ──
+{
+  const { REGIONS } = await imp('src/data/symptomGuide.js')
+  const G = await imp('src/data/safetyGates.js')
+  const EG = await imp('src/data/emergencyGroups.js')
+  const { QUESTION_GATES } = await imp('src/data/questionGates.js')
+  const PG = await imp('src/data/pregnancy.js'), DM = await imp('src/data/diabetes.js'), ST = await imp('src/data/steroids.js'), OI = await imp('src/data/oi.js')
+  const PCsrc = (await import('node:fs')).readFileSync(new URL('../src/data/patternChecks.js', import.meta.url), 'utf8')
+  const pcEm = [...PCsrc.matchAll(/id: '(pc-[a-z0-9-]+)', tier: 'emergency'/g)].map((m) => m[1])
+  const emIds = new Set([...Object.values(REGIONS).flatMap((r) => r.redFlags.filter((f) => f.tier === 'emergency').map((f) => f.id)),
+    ...[...PG.PREG_RED_FLAGS, ...DM.DM_RED_FLAGS, ...ST.STEROID_RED_FLAGS, ...OI.OI_RED_FLAGS].filter((f) => f.tier === 'emergency').map((f) => f.id), ...pcEm])
+  const inGroups = (id) => EG.EM_GROUPS.filter((g) => g.members.includes(id)).length
+  const bad = [...emIds].filter((id) => inGroups(id) !== 1 || !G.SHORT[id])
+  check('Every emergency question on the site is in exactly one emergency group, with a short sign for the group line', !bad.length, bad)
+  const finBad = EG.FINAL_GROUPS.flatMap((g) => g.members).filter((id) => !G.SHORT[id] && !G.SIGNS[id])
+  check('Every final-check group question has a short sign', !finBad.length, finBad)
+  // A real page: the low back's emergency questions, grouped.
+  const lb = REGIONS.lowback.redFlags.filter((f) => f.tier === 'emergency')
+  const page = [...lb, ...G.gateUnsureFlags(lb, null, 'emergency')]
+  const rows = G.gateRows(page)
+  const shown = rows.flatMap((r) => (r.flag ? [r.flag.id] : r.members.map((m) => m.id)))
+  check('Low back emergency page: fewer rows than questions, and every question still asked inside its row',
+    rows.length < lb.length && lb.every((f) => shown.includes(f.id)), { rows: rows.length, flags: lb.length })
+  const heart = page.find((f) => f.id === 'gate:em-illness')
+  const nerve = page.find((f) => f.id === 'gate:em-nerve')
+  check('An emergency group\'s "not sure which" is an emergency, 911 when any of its questions is (sudden illness), going now otherwise (nerves)',
+    (!heart || (heart.tier === 'emergency' && heart.call911)) && nerve && nerve.tier === 'emergency' && !nerve.call911)
+  const qBad = Object.entries(QUESTION_GATES).filter(([key, g]) => {
+    const [rk, qid] = key.split('/')
+    const q = REGIONS[rk] && REGIONS[rk].questions.find((x) => x.id === qid)
+    return !q || !q.gate || !q.options.some((o) => o.id === g.no)
+  }).map(([k]) => k)
+  check('Area questions with a yes/no first: each list exists, carries its gate, and its "No" answer is one of its own answers', !qBad.length, qBad)
+  const src = (await import('node:fs')).readFileSync(new URL('../src/components/PainAssessment.jsx', import.meta.url), 'utf8')
+  check('The emergency page, the doctor page and the final check all draw groups the same way; a gated list asks its yes/no first',
+    /gateUnsureFlags\(em, null, 'emergency'\)/.test(src) && /gateUnsureFlags\(fin, null, 'final'\)/.test(src) && /\{gateList\(finalChecks\)\}/.test(src) &&
+    /\{gateList\(list\)\}/.test(src) && /const gateClosed = !q\.group && !listOpen\(q\)/.test(src))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

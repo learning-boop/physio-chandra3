@@ -34,6 +34,8 @@
    fragile bones break without a remembered injury.
    ───────────────────────────────────────────────────────────────────────── */
 
+import { EM_GROUPS, FINAL_GROUPS, EM_SHORT, FINAL_SHORT } from './emergencyGroups.js'
+
 /* The areas it runs for: the drawn zone type → its injury screen and groups. */
 export const AREAS = ['knee', 'foot', 'hip', 'ankle', 'lowerback', 'upperback', 'tlj', 'neck', 'shoulder',
   'ctj', 'sij', 'coccyx', 'jaw', 'head', 'upperarm', 'elbow', 'forearm', 'wrist', 'hand', 'thigh', 'lowerleg']
@@ -63,7 +65,7 @@ export const GATES = {
     { id: 'lowback-bone', title: 'Signs of a problem in the bone', members: ['rf-osteo', 'sc-trauma', 'rf-cancer', 'rf-spondy'] },
     { id: 'lowback-infection', title: 'Signs of infection or another medical cause', members: ['rf-infection', 'sc-systemic'] },
     { id: 'lowback-organ', title: 'Signs coming from inside the body', members: ['rf-kidney', 'pc-urinary', 'rf-pelvic', 'rf-aaa-slow'] },
-    { id: 'lowback-nerve', title: 'Changes in feeling or strength', members: ['rf-footdrop', 'sc-neuro'] },
+    { id: 'lowback-nerve', title: 'Changes in feeling or strength', members: ['rf-footdrop', 'rf-myelo', 'sc-neuro'] },
   ],
   // Mid back and front of the chest (zone type upperback).
   upperback: [
@@ -228,6 +230,7 @@ export const SIGNS = {
   'rf-pelvic': 'pain linked to your periods, unusual vaginal bleeding, or (for men) new trouble passing urine',
   'rf-aaa-slow': 'over 50 with smoking, high blood pressure, diabetes or artery disease, and a deep, constant ache that does not change with movement, or a pulsing in your tummy',
   'rf-footdrop': 'your foot slapping down or your toes catching when you walk',
+  'rf-myelo': 'clumsy hands, unsteady walking or stiff legs, or neck pain with the leg symptoms',
   // Mid back
   'trf-osteo': 'pain that started suddenly after a minor strain, cough, lift or a fall from standing height, if you are over 50, have low bone density or take long-term steroid tablets',
   'trf-cancer': 'a past cancer, with this new mid-back pain',
@@ -402,6 +405,7 @@ export const SHORT = {
   'rf-pelvic': 'pain linked to periods or bladder',
   'rf-aaa-slow': 'a constant deep ache or a pulsing tummy (over 50)',
   'rf-footdrop': 'the foot slapping down',
+  'rf-myelo': 'clumsy hands or unsteady walking',
   'trf-osteo': 'sudden pain after a small strain (low bone density, steroids or over 50)',
   'trf-cancer': 'a past cancer',
   'trf-infection': 'a fever or a weak immune system',
@@ -522,6 +526,8 @@ export const SHORT = {
   'sc-systemic': 'fever or weight loss',
   'sc-neuro': 'new weakness or numbness',
 }
+// The emergency page and final check groups (./emergencyGroups.js, 6 Oct 2026).
+for (const [k, v] of Object.entries({ ...EM_SHORT, ...FINAL_SHORT })) if (!(k in SHORT)) SHORT[k] = v
 
 /** "Title: a; b; or c", from the short signs of the members present
     (the same short sign is shown once). */
@@ -598,7 +604,10 @@ export const kneeOnly = (zones = []) => smartArea(zones) === 'knee'
 
 /** One area's groups, or, for several areas, their groups merged by theme
     (a question already in an earlier theme stays there). */
-function groupsFor(area) {
+function groupsFor(area, kind = 'doctor') {
+  // The emergency page and the final check use theme groups (6 Oct 2026).
+  if (kind === 'emergency') return EM_GROUPS
+  if (kind === 'final') return [...FINAL_GROUPS, ...EM_GROUPS]
   if (!Array.isArray(area)) return GATES[area] || []
   const byTheme = new Map(), seen = new Set()
   for (const a of area) {
@@ -614,12 +623,26 @@ function groupsFor(area) {
 /** "Not sure which" flags for the groups that will show as a gateway (two or
     more members on the page). They join the doctor-page list so they count
     like any other flag; the page shows them only inside their group. */
-export function gateUnsureFlags(list = [], area = 'knee') {
+export function gateUnsureFlags(list = [], area = 'knee', kind = 'doctor') {
   const ids = new Set(list.map((f) => f.id))
-  return groupsFor(area).filter((g) => g.members.filter((id) => ids.has(id)).length >= 2).map((g) => {
+  return groupsFor(area, kind).filter((g) => g.members.filter((id) => ids.has(id)).length >= 2).map((g) => {
     const members = list.filter((f) => g.members.includes(f.id))
+    // An emergency group's "not sure" is an emergency, 911 if any of its
+    // questions is; a group of questions that all go to labour and delivery goes there too.
+    const em = members.some((f) => f.tier === 'emergency')
+    if (em) {
+      const call911 = members.some((f) => f.call911)
+      const goTo = !call911 && members.every((f) => f.goTo && f.goTo === members[0].goTo) ? members[0].goTo : undefined
+      return {
+        id: `gate:${g.id}`, tier: 'emergency', gate: g.id, area, kind, unsure: true,
+        ...(call911 ? { call911: true } : {}), ...(goTo ? { goTo } : {}), ...(members.some((f) => f.keepNeckStill) ? { keepNeckStill: true } : {}),
+        text: `${gateText(g, members)} (not sure which)`,
+        why: { title: call911 ? 'Please call 911 now' : 'Please get emergency help now',
+          text: 'You told us one of these signs applies but were not sure which. Any of them can need emergency care, so please get help now rather than waiting.' },
+      }
+    }
     return {
-      id: `gate:${g.id}`, tier: 'urgent', gate: g.id, area, unsure: true,
+      id: `gate:${g.id}`, tier: 'urgent', gate: g.id, area, kind, unsure: true,
       // As urgent as the most urgent question it stands for; booking is still offered.
       sameDay: members.some((f) => f.sameDay),
       text: `${gateText(g, members)} (not sure which)`,
@@ -633,8 +656,8 @@ export function gateUnsureFlags(list = [], area = 'knee') {
     member was. The area comes from the "not sure" flags on the list. */
 export function gateRows(list = []) {
   const unsureFlags = list.filter((f) => f.unsure)
-  const area = unsureFlags.length ? unsureFlags[0].area : null
-  const groups = groupsFor(area)
+  // Every kind of group on the page (the final check can hold both kinds).
+  const groups = [...new Map(unsureFlags.flatMap((f) => groupsFor(f.area, f.kind)).map((g) => [g.id, g])).values()]
   const gateOf = Object.fromEntries(groups.flatMap((g) => g.members.map((id) => [id, g.id])))
   const unsure = Object.fromEntries(unsureFlags.map((f) => [f.gate, f]))
   const shown = list.filter((f) => !f.unsure)

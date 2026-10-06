@@ -795,6 +795,10 @@ export default function PainAssessment() {
   const smartFirst = injuryApplies && !!smartArea(flowZ)
   // Gateway groups the person has opened on the doctor page.
   const [openGates, setOpenGates] = useState([])
+  // Area questions with a yes/no in front (../data/questionGates.js): the ids opened with "Yes".
+  const [openLists, setOpenLists] = useState([])
+  const listOpen = (q) => !q.gate || openLists.includes(q.id) ||
+    (Array.isArray(answers[q.id]) && answers[q.id].some((x) => x !== q.gate.no))
   // Organ-referral and systemic maps the drawing alone matches; the ones that
   // need answers (the inflammatory pattern) are left for the final check.
   const earlyPatterns = useMemo(() => patternChecks(zones, {}, 12), [zones])
@@ -881,7 +885,8 @@ export default function PainAssessment() {
     const all = [...obstetric, ...oiFlags, ...diabetic, ...steroid, ...list, ...pattern]
     return {
       // Most severe first on each page (../data/emergencyAdvice.js, bySeverity).
-      emergency: bySeverity(all.filter((f) => f.tier === 'emergency')),
+      // Grouped by theme behind one question each (../data/emergencyGroups.js, 6 Oct 2026).
+      emergency: (() => { const em = bySeverity(all.filter((f) => f.tier === 'emergency')); return [...em, ...gateUnsureFlags(em, null, 'emergency')] })(),
       physician: (() => {
         // Smarter safety flow: the mechanism filter, then the gateway groups.
         const doc = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
@@ -919,7 +924,9 @@ export default function PainAssessment() {
       .map((p) => (isNerveFlag(p) ? { ...p, why: NERVE_WHY } : p))
       .filter((p) => !(answers.dm === 'yes' && isNerveFlag(p))).forEach((p) => out.push(p))
     // Most severe first, as on the earlier pages.
-    return bySeverity(out)
+    // Grouped like the doctor page (../data/emergencyGroups.js, 6 Oct 2026).
+    const fin = bySeverity(out)
+    return [...fin, ...gateUnsureFlags(fin, null, 'final')]
   }, [zones, answers, behaviour.nightConcern, earlyPatterns, screening.deferred])
 
   const safetyChecks = useMemo(
@@ -927,6 +934,52 @@ export default function PainAssessment() {
     [screening, finalChecks],
   )
   const flaggedIn = (list) => list.some((f) => flags.includes(f.id))
+  /* Safety questions as rows: a question on its own, or a gateway group that
+     opens its questions when ticked (../data/safetyGates.js, gateRows). Used
+     by the emergency page, the doctor page and the final check (6 Oct 2026). */
+  const flagChip = (f, letter) => {
+    const sel = flags.includes(f.id)
+    return (
+      <button key={f.id} style={chip(sel)}
+        onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
+        <span style={letterStyle(sel)}>{letter}</span>
+        <span>{f.text}</span>
+      </button>
+    )
+  }
+  // A group opened but nothing in it chosen yet.
+  const gateOpenEmpty = (list) => gateRows(list).some((r) => r.gate && openGates.includes(r.gate.id) &&
+    ![...r.members, r.unsure].some((m) => flags.includes(m.id)))
+  const gateList = (list) => gateRows(list).map((r, i) => {
+    if (r.flag) return flagChip(r.flag, LETTERS[i] || '·')
+    const open = openGates.includes(r.gate.id)
+    const toggle = () => {
+      setOpenGates((cur) => (open ? cur.filter((x) => x !== r.gate.id) : [...cur, r.gate.id]))
+      if (open) setFlags((cur) => cur.filter((x) => ![...r.members, r.unsure].some((m) => m.id === x)))
+    }
+    const cut = r.gate.text.indexOf(': ')
+    return (
+      <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
+        <button style={chip(open)} onClick={toggle} aria-expanded={open}>
+          <span style={letterStyle(open)}>{LETTERS[i] || '·'}</span>
+          {/* Title in bold, the short signs beneath, for a quick scan. */}
+          {cut < 0 ? <span>{r.gate.text}</span> : (
+            <span>
+              <strong style={{ display: 'block', color: '#fff', fontWeight: 600 }}>{r.gate.text.slice(0, cut)}</strong>
+              <span style={{ display: 'block', marginTop: 3, fontSize: '0.93em', color: 'rgba(255,255,255,0.78)' }}>{r.gate.text.slice(cut + 2)}</span>
+            </span>
+          )}
+        </button>
+        {open && (
+          <div className="pa-gate-body">
+            <p className="pa-gate-ask">Which of these? Tick any that apply.</p>
+            {r.members.map((m) => flagChip(m, '·'))}
+            {flagChip({ ...r.unsure, text: 'Not sure which, but one of these signs applies' }, '?')}
+          </div>
+        )}
+      </div>
+    )
+  })
   // The page a red flag was ticked on, so Back from the urgent screen returns there.
   const [flaggedAt, setFlaggedAt] = useState(null)
   const routeUrgent = (from) => { setFlaggedAt(from); setStage('urgent') }
@@ -1752,7 +1805,9 @@ export default function PainAssessment() {
               // A grouped screen needs every one of its questions answered.
               const otherPicked = Array.isArray(a) && a.includes(OTHER_ID)
               const otherText = (answers[q.id + '_other'] || '').trim()
-              const canNext = q.group
+              // A list behind a yes/no needs the yes/no answered first.
+              const gateClosed = !q.group && !listOpen(q)
+              const canNext = gateClosed ? a !== undefined : q.group
                 ? groupOf(q).every((sub) => (sub.multi
                   ? Array.isArray(answers[sub.id]) && answers[sub.id].length > 0
                   : answers[sub.id] !== undefined))
@@ -1808,9 +1863,14 @@ export default function PainAssessment() {
                     <>
                       <h2 style={{ ...h2, fontSize: 'clamp(24px,5.6vw,34px)', margin: '0 0 8px', display: 'flex', gap: 12 }}>
                         <span aria-hidden="true" style={{ ...qMark, width: 5 }} />
-                        <span>{q.text}</span>
+                        <span>{gateClosed ? q.gate.ask : q.text}</span>
                       </h2>
-                      {!q.textarea && (
+                      {gateClosed && q.gate.signs && (
+                        <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.62)', margin: '0 0 16px' }}>
+                          For example: {q.gate.signs}.
+                        </p>
+                      )}
+                      {!q.textarea && !gateClosed && (
                         <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.62)', margin: '0 0 16px' }}>
                           {q.multi ? 'Select all that apply — or continue if none do.' : 'Choose one.'}
                         </p>
@@ -1841,6 +1901,27 @@ export default function PainAssessment() {
                           </div>
                         </div>
                       ))}
+                    </div>
+                  ) : gateClosed ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxWidth: 520 }}>
+                      {/* Yes opens the list; No answers it with its "none" answer. */}
+                      <button style={chip(false)} onClick={() => {
+                        setOpenLists((cur) => [...cur, q.id])
+                        if (Array.isArray(a) && a.length === 1 && a[0] === q.gate.no) setAnswer(q.id, undefined)
+                      }}>
+                        <span style={letterStyle(false)}>A</span>
+                        <span>Yes, show me the list</span>
+                      </button>
+                      {(() => {
+                        const sel = Array.isArray(a) && a.length === 1 && a[0] === q.gate.no
+                        return (
+                          <button style={chip(sel)} onClick={() => setAnswer(q.id, sel ? undefined : [q.gate.no])}>
+                            <span style={letterStyle(sel)}>B</span>
+                            <span>No</span>
+                            <Tick on={sel} />
+                          </button>
+                        )
+                      })()}
                     </div>
                   ) : q.textarea ? (
                     <textarea
@@ -2130,26 +2211,13 @@ export default function PainAssessment() {
               const emergency = stage === 'emergency'
               const list = emergency ? screening.emergency : screening.physician
               const ticked = flaggedIn(list)
-              const rows = gateRows(list)
-              // A group opened but nothing in it chosen yet.
-              const gateOpenEmpty = rows.some((r) => r.gate && openGates.includes(r.gate.id) &&
-                ![...r.members, r.unsure].some((m) => flags.includes(m.id)))
+              const openEmpty = gateOpenEmpty(list)
               const next = () => {
-                if (gateOpenEmpty) return
+                if (openEmpty) return
                 if (ticked) { routeUrgent(stage); return }
                 if (emergency) { if (smartFirst) startInjury(); else setStage('physician') }
                 else if (injuryApplies && !smartFirst) startInjury()
                 else startQuestions()
-              }
-              const flagChip = (f, letter) => {
-                const sel = flags.includes(f.id)
-                return (
-                  <button key={f.id} style={chip(sel)}
-                    onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
-                    <span style={letterStyle(sel)}>{letter}</span>
-                    <span>{f.text}</span>
-                  </button>
-                )
               }
               return (
                 <Fade k={stage}>
@@ -2168,40 +2236,8 @@ export default function PainAssessment() {
                   </div>
                   {list.length > 0 ? (
                     <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
-                      {rows.map((r, i) => {
-                        if (r.flag) return flagChip(r.flag, LETTERS[i] || '·')
-                        // A gateway group (../data/safetyGates.js): tick to see its questions.
-                        const open = openGates.includes(r.gate.id)
-                        const toggle = () => {
-                          setOpenGates((cur) => (open ? cur.filter((x) => x !== r.gate.id) : [...cur, r.gate.id]))
-                          if (open) setFlags((cur) => cur.filter((x) => ![...r.members, r.unsure].some((m) => m.id === x)))
-                        }
-                        return (
-                          <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
-                            <button style={chip(open)} onClick={toggle} aria-expanded={open}>
-                              <span style={letterStyle(open)}>{LETTERS[i] || '·'}</span>
-                              {/* Title in bold, the short signs beneath, for a quick scan. */}
-                              {(() => {
-                                const i = r.gate.text.indexOf(': ')
-                                return i < 0 ? <span>{r.gate.text}</span> : (
-                                  <span>
-                                    <strong style={{ display: 'block', color: '#fff', fontWeight: 600 }}>{r.gate.text.slice(0, i)}</strong>
-                                    <span style={{ display: 'block', marginTop: 3, fontSize: '0.93em', color: 'rgba(255,255,255,0.78)' }}>{r.gate.text.slice(i + 2)}</span>
-                                  </span>
-                                )
-                              })()}
-                            </button>
-                            {open && (
-                              <div className="pa-gate-body">
-                                <p className="pa-gate-ask">Which of these? Tick any that apply.</p>
-                                {r.members.map((m) => flagChip(m, '·'))}
-                                {flagChip({ ...r.unsure, text: 'Not sure which, but one of these signs applies' }, '?')}
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
-                      {gateOpenEmpty && (
+                      {gateList(list)}
+                      {openEmpty && (
                         <p className="pa-gate-hint" role="status">Please tick which one applies, or "Not sure which", or untick the group.</p>
                       )}
                     </div>
@@ -2209,9 +2245,9 @@ export default function PainAssessment() {
                     <p style={{ ...body, fontSize: 15, maxWidth: 520 }}>Nothing on this page applies to the area you marked.</p>
                   )}
                   <div className="pa-actions" style={{ marginTop: 20 }}>
-                    <button className="pa-primary" style={{ ...goldBtn, opacity: gateOpenEmpty ? 0.45 : 1, cursor: gateOpenEmpty ? 'not-allowed' : 'pointer' }}
-                      onClick={next} aria-disabled={gateOpenEmpty}>
-                      {ticked || gateOpenEmpty ? 'Continue' : 'None of These Apply — Continue'}
+                    <button className="pa-primary" style={{ ...goldBtn, opacity: openEmpty ? 0.45 : 1, cursor: openEmpty ? 'not-allowed' : 'pointer' }}
+                      onClick={next} aria-disabled={openEmpty}>
+                      {ticked || openEmpty ? 'Continue' : 'None of These Apply — Continue'}
                     </button>
                     <button style={ghostBtn} onClick={() => {
                       // Knee prototype: the doctor page comes after the injury screen.
@@ -2243,23 +2279,18 @@ export default function PainAssessment() {
                 </div>
 
                 <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
-                  {finalChecks.map((f, i) => {
-                    const sel = flags.includes(f.id)
-                    return (
-                      <button key={f.id} style={chip(sel)}
-                        onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== f.id) : [...cur, f.id])}>
-                        <span style={letterStyle(sel)}>{LETTERS[i] || '·'}</span>
-                        <span>{f.text}</span>
-                      </button>
-                    )
-                  })}
+                  {/* Grouped like the doctor page (6 Oct 2026). */}
+                  {gateList(finalChecks)}
+                  {gateOpenEmpty(finalChecks) && (
+                    <p className="pa-gate-hint" role="status">Please tick which one applies, or "Not sure which", or untick the group.</p>
+                  )}
                   {(() => {
                     const sel = flags.includes('__other')
                     return (
                       <>
                         <button style={chip(sel)}
                           onClick={() => setFlags((cur) => sel ? cur.filter((x) => x !== '__other') : [...cur, '__other'])}>
-                          <span style={letterStyle(sel)}>{LETTERS[finalChecks.length] || '·'}</span>
+                          <span style={letterStyle(sel)}>{LETTERS[gateRows(finalChecks).length] || '·'}</span>
                           <span>Other — enter your own answer</span>
                         </button>
                         {sel && (
@@ -2411,8 +2442,10 @@ export default function PainAssessment() {
                 )}
 
                 <div className="pa-actions" style={{ marginTop: 20 }}>
-                  <button className="pa-primary" style={goldBtn}
+                  <button className="pa-primary" style={{ ...goldBtn, opacity: gateOpenEmpty(finalChecks) ? 0.45 : 1 }}
+                    aria-disabled={gateOpenEmpty(finalChecks)}
                     onClick={() => {
+                      if (gateOpenEmpty(finalChecks)) return
                       if (flaggedIn(finalChecks) || otherFlagged) routeUrgent('safety')
                       else setStage('ok')
                     }}>
