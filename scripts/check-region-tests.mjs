@@ -517,6 +517,12 @@ const TESTS = {
       expect: { flagOffered: ['rf-spondy'], route: 'results' } },
     { name: '17. 16, same gymnast, already diagnosed and cleared: no second X-ray, physiotherapy route',
       lines: [['lowerback']],
+      // Answered on "A little about you", before the safety questions — the
+      // cautions list comes after them, too late to stop this one.
+      answers: { age: 'u18', spondy: 'yes', onset: 'gradual', duration: 'd6w', L1: ['back'], L4: ['arch'], L6: ['centre'], L8: ['arching'] },
+      expect: { noFlag: ['rf-spondy'], route: 'results' } },
+    { name: '17b. The same answer from the cautions list also stops the second X-ray',
+      lines: [['lowerback']],
       cautions: ['ca-spondy'],
       answers: { age: 'u18', onset: 'gradual', duration: 'd6w', L1: ['back'], L4: ['arch'], L6: ['centre'], L8: ['arching'] },
       expect: { noFlag: ['rf-spondy'], route: 'results' } },
@@ -1356,7 +1362,7 @@ function run(rk, t) {
   const focus = needsAreaChoice(flowZ, null) ? (t.focus || rk) : null
   const keys = questionRegions(flowZ, focus)
   const seen = { asked: [], flagsOffered: regionRedFlags(flowZ, zones)
-    .filter((f) => !(spondyDiagnosed(t.cautions || []) && f.id === 'rf-spondy'))
+    .filter((f) => !(spondyDiagnosed(t.cautions || [], t.answers || {}) && f.id === 'rf-spondy'))
     .map((f) => f.id), keys }
 
   // Safety check: the ticked flags must be on the screen; their tier routes.
@@ -1367,7 +1373,7 @@ function run(rk, t) {
   // (PainAssessment.jsx does the same filtering).
   const cautions = t.cautions || []
   const offered = regionRedFlags(flowZ, zones)
-    .filter((f) => !(spondyDiagnosed(cautions) && f.id === 'rf-spondy'))
+    .filter((f) => !(spondyDiagnosed(cautions, t.answers || {}) && f.id === 'rf-spondy'))
   const allFlags = Object.values(REGIONS).flatMap((r) => r.redFlags)
   const onScreen = (id) => {
     const f = allFlags.find((x) => x.id === id)

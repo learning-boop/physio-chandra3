@@ -34,8 +34,29 @@ export const SPONDY_CAUTION = {
   },
 }
 
-/** True when this person has told us the diagnosis is already made. */
-export const spondyDiagnosed = (flags = []) => flags.includes('ca-spondy')
+/* Asked on "A little about you", before the safety questions — the cautions
+   list is shown after them, which would be too late to stop the X-ray
+   question. Only asked when it could matter: a low back drawing, under 30
+   (pars stress injuries are a growing-bone problem; 20–30 is kept because
+   many are diagnosed late). */
+export const SPONDY_STATUS = {
+  id: 'spondy',
+  text: 'Has a doctor confirmed a stress injury in your lower back (spondylolysis or a small slip) and cleared you for rehabilitation?',
+  options: [
+    { id: 'yes', label: 'Yes, it has been scanned and I have been cleared' },
+    { id: 'no', label: 'No, or it has not been checked yet' },
+  ],
+}
+
+const SPONDY_ZONES = ['lowerback', 'sij']
+const SPONDY_AGES = ['u18', '18-29']
+export const spondyAsked = (zones = [], age) =>
+  SPONDY_AGES.includes(age) && zones.some((z) => SPONDY_ZONES.includes(z.type))
+
+/** True when this person has told us the diagnosis is already made — on the
+    early question, or on the cautions list if they got there first. */
+export const spondyDiagnosed = (flags = [], answers = {}) =>
+  flags.includes('ca-spondy') || answers.spondy === 'yes'
 
 /** The results panel: what rehabilitation looks like once it is confirmed. */
 export function spondylolysisPanel(ticked = false) {

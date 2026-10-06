@@ -36,7 +36,7 @@ import { ACROMEGALY_CAUTION, acromegalyPanel } from '../data/acromegaly'
 import { PAGET_CAUTION, pagetPanel } from '../data/paget'
 import { BONE_TUMOUR_CAUTION, boneTumourPanel, TUMOUR_IDS, BONE_WHY_YOUNG, BONE_WATCH, boneWatch } from '../data/boneTumour'
 import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
-import { SPONDY_CAUTION, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
+import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -829,7 +829,7 @@ export default function PainAssessment() {
     const established = answers.preg === 'p2' || answers.preg === 'p3'
     const regional = regionRedFlagsFor(flowZ, zones, leftOutZ).filter((f) => forPerson(f, who) && !(dmKnown && isNerveFlag(f)) &&
       // Already imaged and cleared: do not send them back for the same X-ray.
-      !(spondyDiagnosed(flags) && f.id === 'rf-spondy') &&
+      !(spondyDiagnosed(flags, answers) && f.id === 'rf-spondy') &&
       !(notPregnant && PREG_ASKED_IDS.includes(f.id)) && !(established && ECTOPIC_IDS.includes(f.id)))
     const tierWhy = (f) => TIER_WHY[f.tier] || TIER_WHY.urgent
     const list = regional.map((f) => nerve({
@@ -905,7 +905,7 @@ export default function PainAssessment() {
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
+  }, [flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers.spondy, flags, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -1083,7 +1083,7 @@ export default function PainAssessment() {
   const omPanel = useMemo(() => osteomalaciaPanel(flags.includes('ca-osteomalacia')), [flags])
   // Paget's disease of bone, diagnosed (../data/paget.js).
   const pgtPanel = useMemo(() => pagetPanel(flags.includes('ca-paget')), [flags])
-  const spondyPanel = useMemo(() => spondylolysisPanel(spondyDiagnosed(flags)), [flags])
+  const spondyPanel = useMemo(() => spondylolysisPanel(spondyDiagnosed(flags, answers)), [flags, answers.spondy])
   // A bone tumour, treated (../data/boneTumour.js).
   const btPanel = useMemo(() => boneTumourPanel(flags.includes('ca-bonetumour')), [flags])
   // Osteopenia, low bone density (../data/osteopenia.js).
@@ -2181,6 +2181,22 @@ export default function PainAssessment() {
                     )
                   })}
                 </div>
+                {/* A pars stress injury already diagnosed (../data/spondylolysis.js):
+                    asked here, before the safety questions, so someone who has
+                    had the X-ray is not asked to go and have it again. */}
+                {spondyAsked(zones, answers.age) && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{SPONDY_STATUS.text}</span></p>
+                    {SPONDY_STATUS.options.map((o, i) => {
+                      const sel = answers.spondy === o.id
+                      return (
+                        <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, spondy: o.id }))}>
+                          <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
                 {/* Steroid medicine (../data/steroids.js), same handling. */}
                 <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
                   <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{STEROID_STATUS.text}</span></p>
