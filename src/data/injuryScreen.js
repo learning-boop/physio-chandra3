@@ -318,7 +318,18 @@ export const WRIST_INJURY = [
   { id: 'I5', text: 'Is there pain in the hollow at the base of your thumb, or when you pinch your thumb and index finger together or grip?',
     sameDay: true, options: yesNo('urgent', 'Possible scaphoid fracture: often normal on the first X-ray, and a missed one can fail to heal') },
   { id: 'I6', text: 'On the little-finger side: did you feel a clunk, and is it now swollen, painful to turn your palm up and down, or does the wrist give way?',
-    sameDay: true, options: yesNo('urgent', 'Possible TFCC tear, joint instability, or fracture on the little-finger side') },
+    sameDay: true, options: yesNo('urgent', 'Possible TFCC tear, a torn ligament at the joint, or a fracture on the little-finger side') },
+  // 6 Oct 2026 (wrist and hand cross-check S7, approved by Chandra): a broken
+  // wrist bone without a deformity, children, and the hook of the hamate.
+  { id: 'I7', text: 'Since the fall, is the wrist swollen, or very sore when you press on the bone just above the wrist, or can you not use the hand?',
+    askIf: (a) => a.I1 === 'fall', sameDay: true,
+    options: yesNo('urgent', 'Possible broken wrist bone: an X-ray is needed today') },
+  { id: 'I8', text: 'Is the wrist swollen or sore over the bone, or is your child not using the hand?',
+    askIf: (a, age) => age === 'u5' || age === 'u18', sameDay: true,
+    options: yesNo('urgent', 'In children, buckle and growth-plate fractures of the wrist are common: an X-ray is needed today') },
+  { id: 'I9', text: 'Is there pain in the heel of the hand on the little-finger side when you grip?',
+    askIf: (a) => a.I1 === 'twist' || a.I1 === 'blow', sameDay: true,
+    options: yesNo('urgent', 'Possible fracture of the hamate bone (a club or bat hitting the ground): an X-ray or scan is needed') },
 ]
 
 /* ── Hand and fingers: jammed, bent back, caught, crushed or cut ──
@@ -331,6 +342,11 @@ export const HAND_INJURY = [
     { id: 'bentback', label: 'Yes, my thumb was bent back (ski pole, fall)' },
     { id: 'caught', label: 'Yes, a finger caught in clothing, a door, or a jersey' },
     { id: 'crushcut', label: 'Yes, it was crushed or cut' },
+    // 6 Oct 2026 (S4, S5): a fall on the hand opens the skier's thumb question; a bite
+    // or a punch on teeth goes to emergency even before it swells (fight bite).
+    { id: 'fall', label: 'Yes, I fell onto my hand' },
+    { id: 'bite', label: 'Yes, a bite (animal or human), or I punched someone\'s teeth', route: 'emergency',
+      why: 'A bite or a punch on teeth can carry infection deep into a joint or tendon: it needs cleaning at an emergency department today' },
   ]},
   { id: 'I2', text: 'Is a finger still out of place, or is bone showing through the skin?',
     options: yesNo('emergency', 'A dislocation that has not been put back, or an open fracture') },
@@ -340,17 +356,24 @@ export const HAND_INJURY = [
     askIf: (a) => a.I1 === 'crushcut',
     options: yesNo('emergency', 'Possible cut tendon or nerve: repair is time-sensitive') },
   { id: 'I4', text: 'Does the tip of the finger droop, and it will not straighten on its own?',
-    options: yesNo('urgent', 'Possible mallet finger: it needs a splint within about a week') },
+    options: yesNo('urgent', 'Possible mallet finger: it needs a splint within about a week. Keep the tip straight, and do not bend it to test it') },
   // A torn tendon that needs surgery within days: same day, as for the biceps.
   { id: 'I5', text: 'After grabbing or catching a finger (often the ring finger), can you not bend the tip of that finger?',
-    askIf: (a) => a.I1 === 'caught', sameDay: true,
+    askIf: (a) => a.I1 === 'caught' || a.I1 === 'jammed', sameDay: true,
     options: yesNo('urgent', 'Possible "jersey finger" (a torn flexor tendon): surgery works best within days') },
   { id: 'I6', text: 'After your thumb was bent back, is there pain on the index-finger side of the thumb knuckle, or is pinching weak?',
-    askIf: (a) => a.I1 === 'bentback',
+    askIf: (a) => a.I1 === 'bentback' || a.I1 === 'fall',
     options: yesNo('urgent', "Possible thumb ligament tear (skier's thumb): some need surgery") },
   // A possible fracture: same day.
   { id: 'I7', text: 'When you make a fist, does one finger cross over or point towards another, or is the middle finger joint swollen and will not straighten?',
     sameDay: true, options: yesNo('urgent', 'Possible finger fracture with rotation, or a central slip (boutonnière) injury') },
+  // 6 Oct 2026 (S5, approved by Chandra).
+  { id: 'I8', text: 'Did a finger joint go out of place and get put back?',
+    askIf: (a) => ['jammed', 'caught', 'fall'].includes(a.I1),
+    options: yesNo('urgent', 'A finger that was out of place can have a small fracture or a torn plate at the joint: see a doctor within a few days for an X-ray') },
+  { id: 'I9', text: 'Is there blood under the nail or at its base, or is the nail lifted?',
+    askIf: (a, age) => a.I1 === 'crushcut' && (age === 'u5' || age === 'u18'), sameDay: true,
+    options: yesNo('urgent', 'In children, a crushed fingertip can hide a nail bed injury or an open growth-plate fracture: it needs checking today') },
 ]
 
 /* ── Hip and groin: fall, twist or sudden pull ── */
@@ -714,10 +737,11 @@ const LIMB_WEEKS = { shoulder: 6, arm: 2, elbow: 2, forearm: 2, wrist: 6, hand: 
 // Each merged answer, as each screen's own I1 answer.
 const LIMB_OPTIONS = [
   { id: 'no', label: 'No', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'no' } },
-  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall', forearm: 'fall', wrist: 'fall', hand: 'jammed' } },
+  { id: 'fall', label: 'Yes, I fell onto my arm, hand, or elbow', map: { shoulder: 'fall', arm: 'fall', elbow: 'fall', forearm: 'fall', wrist: 'fall', hand: 'fall' } },
   { id: 'blow', label: 'Yes, a blow to the arm', map: { shoulder: 'fall', arm: 'blow', elbow: 'blow', forearm: 'blow', wrist: 'blow', hand: 'jammed' } },
   { id: 'crush', label: 'Yes, it was crushed, trapped, or cut', onlyAny: ['forearm', 'wrist', 'hand'], map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'crush', wrist: 'blow', hand: 'crushcut' } },
   { id: 'twist', label: 'Yes, my wrist was twisted (racquet, golf, a drill that caught)', only: 'wrist', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'twist', hand: 'no' } },
+  { id: 'bite', label: 'Yes, a bite (animal or human), or I punched someone\'s teeth', only: 'hand', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'bite' } },
   { id: 'jammed', label: 'Yes, a finger was jammed (ball, wall)', only: 'hand', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'jammed' } },
   { id: 'bentback', label: 'Yes, my thumb was bent back (ski pole, fall)', only: 'hand', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'bentback' } },
   { id: 'caught', label: 'Yes, a finger caught in clothing, a door, or a jersey', only: 'hand', map: { shoulder: 'no', arm: 'no', elbow: 'no', forearm: 'no', wrist: 'no', hand: 'caught' } },

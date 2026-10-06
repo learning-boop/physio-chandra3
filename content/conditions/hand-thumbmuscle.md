@@ -4,16 +4,18 @@ id: thumbmuscle
 name: Thumb muscle overuse (texting, pinching)
 clin: Thenar and first dorsal interosseous muscle overload, with trigger point referral
 # DRAFT patient text written 25 Sep 2026 from content/regions/hand.md — not yet reviewed.
+# 6 Oct 2026: wrist and hand cross-check, approved by Chandra (review/wrist-hand-crosscheck.html).
+# C6, W5, W6: stretch wording, negatives, clinic notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed: Chandra Matla, 2026-10-04
+reviewed:
 pointers:
   "Typing, texting, or gaming with the thumbs": 3
   "After a lot of gripping, pinching, typing, or phone use": 2
   "Pinching (turning a key, opening a jar, doing up buttons)": 1
   "Base of the thumb, where it meets the wrist": 1
   "Palm, at the base of a finger or thumb": 1
-  "Hard, bony swelling of the finger joints": -2
-  "Hard bony bumps on the finger joints": -2
+  "Hard, bony swelling of the finger joints": -1
+  "Hard bony bumps on the finger joints": -1
   "65 or over": -1
   "Moving my neck": -2
 ---
@@ -28,10 +30,13 @@ The small muscles that move the thumb and index finger work hard with texting, g
 
 ## homeCare
 - Take regular breaks from texting and gaming, and switch hands or use voice input
-- Gently stretch the thumb away from the palm
+- Gently stretch the thumb away from the palm, keeping the thumb knuckle slightly bent
 - Massage the fleshy part of the thumb, and use warmth
 
 ## seePhysioIf
 - The ache has not settled after 2 to 3 weeks of changes
 - Pinching or gripping is getting weaker
 - You want advice on how you hold your phone, tools, or controller
+
+## clinicNotes
+- Adductor pollicis, opponens and first dorsal interosseous trigger points (Travell & Simons 2019; expert opinion). Avoid hyperextension pressure on the thumb MCP during web-space stretching (AIM manual). Differentials: de Quervain's (texting thumb is often this), thumb base OA from 45 (grind test), trigger thumb, C6 radiculopathy.

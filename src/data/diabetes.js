@@ -230,7 +230,7 @@ const PANELS = {
   },
   hand: {
     title: 'Diabetes and the hands',
-    text: 'Diabetes can make the tendon sheaths and the tissue under the skin of the hand thicker, which is why catching fingers, numb hands at night and stiff, "waxy" fingers are more common, often in both hands and more than one finger. These are treatable: splints, gliding exercises, hand mobility work and, when needed, an injection or small release that your doctor can arrange. Results are good; they are sometimes a little slower with diabetes, which is a reason to start sooner.',
+    text: 'Diabetes can make the tendon sheaths and the tissue under the skin of the hand thicker, which is why catching fingers, numb hands at night and stiff, "waxy" fingers are more common, often in both hands and more than one finger. These are treatable: splints, gliding exercises, hand mobility work and, when needed, a procedure that your doctor can arrange. Results are good; they are sometimes a little slower with diabetes, which is a reason to start sooner.',
   },
   feet: {
     title: 'Diabetes and the feet',

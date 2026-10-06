@@ -1081,7 +1081,7 @@ export const EXTRA_REGIONS = {
         { id: "yawning", label: "Yawning or opening wide" },
         { id: "rest", label: "It hurts even when I am not using my jaw" },
         // Jaw movement does not change it: consider the neck (test patient 5).
-        { id: "nothing", label: "Nothing, it does not hurt", special: "neckSource" }
+        { id: "nothing", label: "Nothing, it does not hurt", special: "neckSourceJaw" }
       ]},
       { id: "M3", text: "What noises does your jaw make?", options: [
         { id: "none", label: "No noises" },
@@ -1117,7 +1117,7 @@ export const EXTRA_REGIONS = {
       { id: "M8", text: "Do any of these come with it? Tick all that apply.", options: [
         { id: "temples", label: "Headache at the temples" },
         { id: "ear", label: "A full feeling or ringing in the ear, with no ear infection" },
-        { id: "neck", label: "Neck pain", special: "neckSource" },
+        { id: "neck", label: "Neck pain", special: "neckSourceJaw" },
         { id: "teeth", label: "Teeth feel sore, but my dentist found nothing" },
         { id: "none", label: "None of these" }
       ]}
@@ -1724,16 +1724,23 @@ export const EXTRA_REGIONS = {
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "wrf-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS); early treatment matters",
         text: "Since a wrist injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that even light touch hurts?" },
-      { id: "wrf-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
-        text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
+      // 6 Oct 2026: wrist and hand cross-check, approved by Chandra (S8): a first attack too (pseudogout often affects older wrists).
+      { id: "wrf-gout", tier: "urgent", sameDay: true, group: "gout", why: "Possible gout, pseudogout or other crystal arthritis; same-day review",
+        text: "Did a joint become suddenly hot, red, swollen and very painful over a day or so (gout or pseudogout, even a first attack)?" },
       { id: "wrf-inflam", tier: "urgent", group: "handinflam", why: "Possible inflammatory arthritis (for example rheumatoid arthritis)",
         text: "Are both wrists or several finger joints swollen and stiff for more than an hour in the morning?" },
       { id: "wrf-numb", tier: "urgent", group: "handweak", why: "Severe nerve compression (carpal tunnel) may need a specialist opinion",
         text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
+      // W9: both-sided carpal tunnel (night numbness) is common, so "most of the day".
       { id: "wrf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
-        text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+        text: "Do both hands feel numb or clumsy most of the day (not only at night), or has your walking become unsteady?" },
       { id: "wrf-raynaud", tier: "urgent", group: "raynaud", why: "Possible circulation problem (Raynaud's, or damage to the artery in the palm)",
         text: "Do your fingers or hand go white, blue, or cold in attacks, or is there a painful cold finger that does not recover?" },
+      // 6 Oct 2026: wrist and hand cross-check, approved by Chandra (S8).
+      { id: "wrf-oldscaphoid", tier: "urgent", why: "Possible scaphoid fracture that was missed or has not healed: it needs an X-ray",
+        text: "Since a fall onto the hand some weeks or months ago, is there still pain in the hollow at the base of the thumb, and has it never been X-rayed?" },
+      { id: "wrf-stress", ages: ["u18", "18-29"], tier: "urgent", why: "Possible stress injury of the growth plate at the wrist (gymnast's wrist); needs an X-ray",
+        text: "Do you take weight on your hands in gymnastics or sport, with a deep ache at the end of the forearm bone just above the wrist, worse with handstands or tumbling?" },
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1750,7 +1757,9 @@ export const EXTRA_REGIONS = {
         { id: "baby", label: "Since having a baby, or lifting a baby a lot" },
         { id: "pregnancy", label: "During pregnancy" },
         { id: "fall", label: "After a fall onto the hand" },
-        { id: "twist", label: "After a twist (racquet, golf, a drill that caught)" }
+        { id: "twist", label: "After a twist (racquet, golf, a drill that caught)" },
+        // 6 Oct 2026 (wrist and hand cross-check N1): the fracture rehabilitation card.
+        { id: "surgery", label: "After a broken wrist, in a cast or after surgery" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -1772,7 +1781,9 @@ export const EXTRA_REGIONS = {
         { id: "baby", label: "Lifting a baby, or lifting with the thumb up" },
         { id: "weight", label: "Putting weight through my hand (push-ups, getting up from a chair)" },
         { id: "rotate", label: "Turning my palm up and down (key, door handle)" },
-        { id: "typing", label: "Typing, or using a mouse or phone" }
+        { id: "typing", label: "Typing, or using a mouse or phone" },
+        // 6 Oct 2026 (C1): the key aggravator for thumb base arthritis.
+        { id: "pinch", label: "Pinching (turning a key, doing up buttons)" }
       ]},
       { id: "W3", text: "Which of these do you notice in your hand? Tick all that apply.",
         askIf: ({ draw, all }) => !draw || draw.has("hand") || [].concat(all.painQuality || []).includes("tingling"),
@@ -1786,7 +1797,9 @@ export const EXTRA_REGIONS = {
           { id: "none", label: "None of these" }
         ]},
       { id: "W4", text: "When does the tingling come on? Tick all that apply.",
-        askIf: ({ ra }) => [].concat(ra.W3 || []).includes("thumb"),
+        // 6 Oct 2026 (C2): also whole-hand tingling (Katz "probable") and the
+        // little fingers (the back-of-hand answer separates Guyon's from the elbow).
+        askIf: ({ ra }) => [].concat(ra.W3 || []).some((o) => o === "thumb" || o === "whole" || o === "little"),
         priority: () => true,
         options: [
           { id: "night", label: "It wakes me at night, and shaking my hand helps" },
@@ -1814,8 +1827,9 @@ export const EXTRA_REGIONS = {
           { id: "none", label: "None of these" }
         ]},
       { id: "W7", text: "Is there a lump at your wrist?", options: [
-        { id: "soft", label: "A soft, round lump on the back of the wrist that changes size" },
-        { id: "palmlump", label: "A lump on the palm side, near the thumb" },
+        // 6 Oct 2026 (C4): the two lumps count once.
+        { id: "soft", label: "A soft, round lump on the back of the wrist that changes size", excl: "lump" },
+        { id: "palmlump", label: "A lump on the palm side, near the thumb", excl: "lump" },
         { id: "hard", label: "A hard lump that is growing", special: "lumpDoctor" },
         { id: "none", label: "No lump" }
       ]},
@@ -1833,8 +1847,8 @@ export const EXTRA_REGIONS = {
       // `same: "crps"`: a glove or sock drawing across two areas asks it once.
       { id: "W9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
         // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
-        askIf: ({ ra }) => (!ra.onset || ["fall", "twist"].includes(ra.onset)) && ra.duration !== "d2w",
-        priority: ({ ra }) => ["fall", "twist"].includes(ra.onset),
+        askIf: ({ ra }) => (!ra.onset || ["fall", "twist", "surgery"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["fall", "twist", "surgery"].includes(ra.onset),
         options: [
           { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
           { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },
@@ -1869,7 +1883,8 @@ export const EXTRA_REGIONS = {
       { id: "hnd-cast", tier: "urgent", sameDay: true, group: "casttight-arm", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this hand feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "hnd-bite", tier: "emergency", group: "handbite", why: "Possible tendon sheath or joint infection; needs urgent surgical review",
-        text: "Did you have a cut, bite, or puncture on your hand or finger (including hitting someone's teeth), and is it now swollen, red, and very painful to straighten the finger?" },
+        // 6 Oct 2026 (S2): widened to a whole swollen finger without a remembered wound (Kanavel signs).
+        text: "Is one whole finger swollen, held slightly bent, and very painful when you try to straighten it (often after a cut, bite, splinter or prick, including hitting someone's teeth)?" },
       { id: "hnd-inject", tier: "emergency", why: "High-pressure injection injury: serious damage hides under a small wound",
         text: "Was paint, grease, oil, or fluid injected into your hand under pressure (spray gun, grease gun), even if the wound looks tiny?" },
       { id: "hnd-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
@@ -1884,12 +1899,17 @@ export const EXTRA_REGIONS = {
         text: "Are the knuckles in both hands swollen and stiff for more than an hour in the morning, or is a whole finger swollen like a sausage (especially with psoriasis)?" },
       { id: "hnd-raynaud", tier: "urgent", group: "raynaud", why: "Possible Raynaud's or another circulation problem",
         text: "Do your fingers go white, then blue, in the cold, or is there a sore or ulcer on a fingertip?" },
+      // 6 Oct 2026: wrist and hand cross-check, approved by Chandra (S6).
+      { id: "hnd-coldfinger", tier: "urgent", sameDay: true, why: "A finger whose blood supply is not recovering needs checking today",
+        text: "Is one finger cold, white or blue and painful, and not recovering when it is warmed?" },
+      { id: "hnd-ring", tier: "urgent", sameDay: true, why: "A ring stuck on a swelling finger can cut off its blood supply: have it removed today",
+        text: "Is a ring stuck on a finger that is swelling?" },
       { id: "hnd-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS)",
         text: "Since a hand injury, surgery, or cast, is your hand burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts?" },
       { id: "hnd-numb", tier: "urgent", group: "handweak", why: "Severe nerve compression needs a specialist opinion",
         text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
       { id: "hnd-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
-        text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
+        text: "Do both hands feel numb or clumsy most of the day (not only at night), or has your walking become unsteady?" },
       // Widened with the Dupuytren's document's red flag (2 Oct 2026).
       { id: "hnd-lump", tier: "urgent", why: "A growing lump or nail streak needs medical review",
         text: "Is there a hard lump that is growing quickly over weeks, is painful, or is deep and larger than a few centimetres, or a new dark streak under a nail?" }
@@ -1919,7 +1939,9 @@ export const EXTRA_REGIONS = {
       ]}
     ],
     questions: [
-      { id: "H1", text: "Where is the pain mainly?", options: [
+      // 6 Oct 2026 (wrist and hand cross-check): early when the drawing has not
+      // answered it, so the hand's own questions are not crowded out by the wrist's.
+      { id: "H1", text: "Where is the pain mainly?", priority: () => true, options: [
         { id: "thumbbase", label: "Base of the thumb, where it meets the wrist" },
         { id: "knuckles", label: "Knuckles at the base of the fingers" },
         { id: "fingerjoints", label: "Middle or end joints of the fingers" },
@@ -1939,7 +1961,11 @@ export const EXTRA_REGIONS = {
         { id: "nodes", label: "Hard bony bumps on the finger joints" },
         { id: "none", label: "None of these" }
       ]},
-      { id: "H3", text: "Which of these bring it on? Tick all that apply.", options: [
+      { id: "H3", text: "Which of these bring it on? Tick all that apply.",
+        // 6 Oct 2026: early for thumb-base pain (texting, pinching and gripping
+        // separate the thumb muscles, de Quervain's and thumb arthritis).
+        priority: ({ ra }) => [].concat(ra.H1 || []).includes("thumbbase"),
+        options: [
         { id: "pinch", label: "Pinching (turning a key, opening a jar, doing up buttons)" },
         { id: "grip", label: "Gripping firmly" },
         { id: "thumbs", label: "Typing, texting, or gaming with the thumbs" },
@@ -1963,7 +1989,9 @@ export const EXTRA_REGIONS = {
           { id: "night", label: "It wakes me at night, and shaking my hand helps", special: "medianhand" },
           { id: "use", label: "When I use my hand, or hold a phone" },
           { id: "constant", label: "It is there all the time", special: "nerveDoctor" },
-          { id: "back", label: "The back of my hand is numb too" }
+          { id: "back", label: "The back of my hand is numb too" },
+          // 6 Oct 2026 (C2): as the wrist's W4.
+          { id: "weakthumb", label: "My thumb feels weak or clumsy", special: "nerveDoctor" }
         ]},
       { id: "H6", text: "What does any swelling look like?", options: [
         { id: "sausage", label: "One whole finger swollen like a sausage", special: "handDoctor" },
@@ -2849,7 +2877,7 @@ export const EXTRA_SPECIAL_CARDS = {
   medianhand: { title: "Tingling in the thumb-side fingers",
     body: "Tingling in the thumb, index or middle fingers usually points to the <strong>median nerve</strong> — most often compressed at the wrist rather than the elbow. Consider running the <strong>Wrist</strong> guide too." },
   ulnarhand: { title: "Tingling in the ring & little fingers",
-    body: "Tingling in the ring and little fingers usually points to the <strong>ulnar nerve</strong>, which is most often irritated at the <strong>elbow</strong> (cubital tunnel). Consider running the <strong>Elbow</strong> guide too." },
+    body: "Tingling in the ring and little fingers usually points to the <strong>ulnar nerve</strong>, which is most often irritated at the <strong>elbow</strong> (cubital tunnel), or at the wrist (Guyon's canal), especially in cyclists, when the back of the hand feels normal. Consider running the <strong>Elbow</strong> guide too." },
   backref: { title: "Pain travelling below the knee",
     body: "Buttock pain that travels <strong>below the knee</strong> often comes from the <strong>low back</strong> rather than the hip itself. It's worth running the <strong>Low back &amp; pelvis</strong> guide as well." },
   tarsal: { title: "Burning on the inner ankle or sole",
@@ -2888,7 +2916,11 @@ export const EXTRA_SPECIAL_CARDS = {
     body: "Pain deep in the pelvis or back passage, or pain with bowel movements or sex, often involves the <strong>pelvic floor muscles</strong>. A <strong>pelvic health physiotherapist</strong> assesses and treats these muscles, often with an internal examination if you are comfortable with it. It is worth mentioning to your doctor too, so bowel and gynaecological causes can be checked." },
   pilonidal: { title: "A pit or lump in the buttock crease: see your doctor",
     body: "A small pit or a tender lump at the top of the buttock crease can be a <strong>pilonidal sinus</strong>, a skin problem that can become infected. It is treated by a doctor rather than physiotherapy, so please have it checked, sooner if it becomes red, swollen or starts to leak." },
+  // 6 Oct 2026 (wrist and hand cross-check S1): the arm areas' message; the jaw's
+  // own wording is neckSourceJaw (it had replaced this one for every arm area).
   neckSource: { title: "This may be coming from your neck",
+    body: "Arm, wrist or hand pain or tingling that changes when you move your neck often comes from a nerve in the neck. Consider running the <strong>Neck</strong> guide too. Your assessment will check both." },
+  neckSourceJaw: { title: "This may be coming from your neck",
     body: "Pain around the jaw that does not change when you chew, talk or open wide, especially with neck pain, is often felt in the jaw but comes from the <strong>upper neck</strong> or the neck muscles. Consider running the <strong>Neck</strong> guide too. Your assessment will check both." },
   // Whiplash (the neck's N5), from the "Whiplash WAD" document.
   wadNerve: { title: "Nerve symptoms after an injury: see your doctor as well",

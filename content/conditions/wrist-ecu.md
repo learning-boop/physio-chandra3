@@ -4,8 +4,10 @@ id: ecu
 name: Tendon irritation on the little-finger side (ECU)
 clin: Extensor carpi ulnaris tendinopathy or subluxation
 # DRAFT patient text written 25 Sep 2026 from content/regions/wrist.md — not yet reviewed.
+# 6 Oct 2026: wrist and hand cross-check, approved by Chandra (review/wrist-hand-crosscheck.html).
+# S9, C6, W6: snapped-out line, leaning -1, clinic notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
-reviewed: Chandra Matla, 2026-10-04
+reviewed:
 pointers:
   "A tendon that snaps or flicks over the back of the wrist": 3
   "Little-finger side of the wrist": 2
@@ -14,6 +16,7 @@ pointers:
   "After a lot of gripping, typing, or tool use": 1
   "Pain when I press the soft spot just beyond the bony bump": -1
   "Moving my neck": -2
+  "Pain leaning on my hand, or the wrist gives way": -1
 ---
 
 ## blurb
@@ -30,6 +33,10 @@ A tendon runs in a groove on the back of the wrist, on the little-finger side. R
 - Keep the wrist and fingers moving gently within comfort
 
 ## seePhysioIf
+- It snapped out of place suddenly during a swing or a lift, and the wrist is now swollen and painful: see a doctor the same day, as early splinting works best
 - It has not settled after 2 to 3 weeks
 - The tendon keeps snapping out of place
 - You want a plan to return to racquet sports, golf, or tool work
+
+## clinicNotes
+- ECU synergy test (resisted thumb abduction with the wrist neutral and the forearm supinated); dynamic ultrasound for subluxation. Acute subluxation under 3 weeks: above-elbow cast or Muenster splint in pronation and slight radial deviation; chronic: refer. Differentials: TFCC tear, ulnar impaction, DRUJ problems (PMC10167632).

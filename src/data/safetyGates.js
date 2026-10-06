@@ -138,10 +138,11 @@ export const GATES = {
     { id: 'wrist-circulation', title: 'Signs of a tight cast or a circulation problem', members: ['wrf-cast', 'wrf-raynaud'] },
     { id: 'wrist-flare', title: 'Signs of a flare-up', members: ['wrf-gout', 'wrf-inflam'] },
     { id: 'wrist-nerve', title: 'Changes in feeling or strength', members: ['wrf-numb', 'wrf-myelo', 'wrf-crps', 'sc-neuro'] },
+    { id: 'wrist-medical', title: 'Signs that need a medical check', members: ['wrf-oldscaphoid', 'wrf-stress', 'sc-systemic'] },
   ],
   // Hand and fingers.
   hand: [
-    { id: 'hand-circulation', title: 'Signs of a tight cast or a circulation problem', members: ['hnd-cast', 'hnd-raynaud'] },
+    { id: 'hand-circulation', title: 'Signs of a tight cast or a circulation problem', members: ['hnd-cast', 'hnd-raynaud', 'hnd-coldfinger', 'hnd-ring'] },
     { id: 'hand-infection', title: 'Signs of infection or a flare-up', members: ['hnd-felon', 'hnd-gout', 'hnd-inflam'] },
     { id: 'hand-nerve', title: 'Changes in feeling or strength', members: ['hnd-numb', 'hnd-myelo', 'hnd-crps', 'sc-neuro'] },
     { id: 'hand-medical', title: 'Signs that need a medical check', members: ['hnd-lump', 'sc-systemic'] },
@@ -310,10 +311,12 @@ export const SIGNS = {
   // Wrist
   'wrf-cast': 'a cast, splint or bandage on the arm that feels more and more tight and painful',
   'wrf-raynaud': 'fingers or a hand that go white, blue or cold in attacks, or a painful cold finger that does not recover',
-  'wrf-gout': 'a joint that became suddenly hot, swollen and very painful overnight, with gout or pseudogout before',
+  'wrf-gout': 'a joint that became suddenly hot, red, swollen and very painful over a day or so',
+  'wrf-oldscaphoid': 'pain still in the hollow at the base of the thumb since a fall, never X-rayed',
+  'wrf-stress': 'a deep ache just above the wrist in a young gymnast or athlete who takes weight on the hands',
   'wrf-inflam': 'both wrists or several finger joints swollen and stiff for more than an hour in the morning',
   'wrf-numb': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist you cannot lift',
-  'wrf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
+  'wrf-myelo': 'both hands numb or clumsy most of the day, or walking that has become unsteady',
   'wrf-crps': 'since an injury, surgery or cast, a hand that burns, swells, changes colour or is so sensitive that light touch hurts',
   // Hand
   'hnd-cast': 'a cast, splint or bandage on the hand that feels more and more tight and painful',
@@ -322,7 +325,9 @@ export const SIGNS = {
   'hnd-gout': 'a joint that became suddenly hot, swollen and very painful overnight, with gout or pseudogout before',
   'hnd-inflam': 'knuckles in both hands swollen and stiff for more than an hour in the morning, or a whole finger swollen like a sausage',
   'hnd-numb': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist you cannot lift',
-  'hnd-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
+  'hnd-myelo': 'both hands numb or clumsy most of the day, or walking that has become unsteady',
+  'hnd-coldfinger': 'one finger cold, white or blue and painful, not recovering when warmed',
+  'hnd-ring': 'a ring stuck on a swelling finger',
   'hnd-crps': 'since an injury, surgery or cast, a hand that burns, swells, changes colour or is so sensitive that light touch hurts',
   'hnd-lump': 'a hard lump growing quickly over weeks, painful or larger than a few centimetres, or a new dark streak under a nail',
   // Thigh
@@ -469,12 +474,16 @@ export const SHORT = {
   'wrf-cast': 'a tight cast',
   'wrf-raynaud': 'fingers turning white or blue',
   'wrf-gout': 'a joint suddenly hot and swollen',
+  'wrf-oldscaphoid': 'thumb-base pain since a fall, no X-ray',
+  'wrf-stress': 'a deep ache above the wrist in a gymnast',
   'wrf-inflam': 'both wrists swollen and stiff in the morning',
   'wrf-numb': 'a weaker or thinner hand',
   'wrf-myelo': 'both hands numb or clumsy',
   'wrf-crps': 'burning or colour change after an injury',
   'hnd-cast': 'a tight cast',
   'hnd-raynaud': 'fingers turning white or blue',
+  'hnd-coldfinger': 'a cold, white finger that does not recover',
+  'hnd-ring': 'a ring stuck on a swelling finger',
   'hnd-felon': 'a throbbing fingertip or pus by the nail',
   'hnd-gout': 'a joint suddenly hot and swollen',
   'hnd-inflam': 'knuckles swollen and stiff in the morning',
@@ -530,7 +539,7 @@ export function gateText(gate, members = []) {
    skipped after a recent injury to that area. */
 export const MECHANISM = {
   'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'af-stress': 'ankle', 'hpf-stress': 'hip', 'srf-pta': 'shoulder',
-  'frf-stress': 'forearm', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
+  'frf-stress': 'forearm', 'wrf-stress': 'wrist', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
 }
 export const injuredIn = (screen, a = {}) => a[`${screen}:I1`] !== undefined && a[`${screen}:I1`] !== 'no'
 /** Kept for the knee prototype's wording. */

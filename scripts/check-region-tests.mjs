@@ -566,7 +566,7 @@ const TESTS = {
     { name: '5. Neck look-alike: angle of the jaw and the neck',
       lines: [['jawR', 'neck']],
       answers: { age: '30-49', onset: 'gradual', duration: 'o3m', M1: ['muscles'], M2: ['nothing'], M3: ['none'], M4: ['fullfree'], M8: ['neck'] },
-      expect: { notRegion: ['jaw'], special: 'neckSource', route: 'results' } },
+      expect: { notRegion: ['jaw'], special: 'neckSourceJaw', route: 'results' } },
   ],
   head: [
     { name: '1. Cervicogenic headache: back of the head and upper neck',
@@ -851,6 +851,31 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
         W3: ['thumb'], W4: ['posture'], W8: ['neck'] },
       expect: { notRegion: ['wrist'], areas: ['neck'], route: 'results' } },
+    // 6 Oct 2026: wrist and hand cross-check (all 29 approved by Chandra).
+    { name: '8. Carpal tunnel, minimal: thumb-side tingling that wakes them at night (C2)',
+      lines: [['wristR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'], I1: 'no', W3: ['thumb'], W4: ['night'] },
+      expect: { top: 'wrist/median', route: 'results' } },
+    { name: '9. Older adult, whole wrist, gripping: not thumb base arthritis without a thumb answer (C1)',
+      lines: [['wristL']],
+      answers: { age: 'o64', onset: 'gradual', duration: 'o3m', I1: 'no', W1: ['whole'], W2: ['grip'] },
+      expect: { not: ['wrist/thumboa'], route: 'results' } },
+    { name: '10. Fell on the hand, sore over the bone above the wrist (S7)',
+      lines: [['wristR']],
+      answers: { age: '50-64', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'no', I6: 'no', I7: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '11. A child not using the hand after a fall (S7)',
+      lines: [['wristL']],
+      answers: { age: 'u18', onset: 'fall', duration: 'd2w', I1: 'fall', I2: 'no', I3: 'no', I4: 'no', I5: 'no', I6: 'no', I7: 'no', I8: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: "12. Texting teenager with thumb-side wrist pain, test skipped (de Quervain's, C3)",
+      lines: [['wristR']],
+      answers: { age: '18-29', onset: 'grip', duration: 'd6w', I1: 'no', W1: ['thumb'], W2: ['typing', 'grip'], W5: ['skip'] },
+      expect: { top: 'wrist/dq', route: 'results' } },
+    { name: '13. Stiff after a broken wrist (fracture rehabilitation, N1)',
+      lines: [['wristR']],
+      answers: { age: 'o64', onset: 'surgery', duration: 'd3m', I1: 'no', W1: ['whole'], W2: ['grip'] },
+      expect: { top: 'wrist/fracture', route: 'results' } },
   ],  hand: [
     // "Dupuytrens contractures.docx" (signed by Chandra, 2 Oct 2026): max 12, shown from 5.
     { name: "Dupuytren's 1. Painless cord in the palm, ring finger slowly bending, hand will not lie flat",
@@ -889,6 +914,27 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'],
         H4: ['thumb'], H5: ['use'], H8: ['neck'] },
       expect: { notRegion: ['hand'], areas: ['neck'], route: 'results' } },
+    // 6 Oct 2026: wrist and hand cross-check (all 29 approved by Chandra).
+    { name: '9. Punched someone in the mouth: fight bite (S5)',
+      lines: [['handR']],
+      answers: { age: '18-29', onset: 'crush', duration: 'd2w', I1: 'bite' },
+      expect: { route: 'emergency' } },
+    { name: "10. Fell on the hand, thumb knuckle sore and pinch weak (skier's thumb after a fall, S4)",
+      lines: [['handL']],
+      answers: { age: '30-49', onset: 'injury', duration: 'd2w', I1: 'fall', I2: 'no', I4: 'no', I6: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '11. Jammed finger, cannot bend the tip (jersey finger after a jam, S4)',
+      lines: [['handR']],
+      answers: { age: '18-29', onset: 'injury', duration: 'd2w', I1: 'jammed', I2: 'no', I4: 'no', I5: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: '12. Finger-joint arthritis with pinching: hand arthritis on top, not the thumb base (C1)',
+      lines: [['handL']],
+      answers: { age: '50-64', onset: 'gradual', duration: 'o3m', I1: 'no', H1: ['fingerjoints'], H2: ['nodes'], H3: ['grip', 'pinch'] },
+      expect: { top: 'hand/handoa', notTop: ['hand/thumboa'], route: 'results' } },
+    { name: '13. Daytime-only carpal tunnel in the hand (C2)',
+      lines: [['handR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['tingling'], I1: 'no', H1: ['whole'], H4: ['thumb'], H5: ['use'], H8: ['fingers'] },
+      expect: { top: 'hand/median', route: 'results' } },
   ],  hip: [
     { name: '7. Clunk and cannot stand, 3 weeks after a hip replacement (911)',
       lines: [['hipL']],
@@ -1281,15 +1327,16 @@ function run(rk, t) {
   const all = toScreen(keys, rk, t.answers)
   // Injury screens: a test's plain I1… answers belong to its own region's
   // screen; any other screen's gate is answered "No" (not injured there).
-  // They come before the age question on the site, so no age is passed; the
-  // neck's "65 or older?" is answered from the patient's age. The shared
+  // The site asks the age ("A little about you") before the injury screens, so
+  // the patient's age is passed, as PainAssessment.jsx does (6 Oct 2026: the
+  // child-only injury questions depend on it). The shared
   // arm question (limb:I1) is answered as the region's own I1 would be; a
   // follow-up from another area's screen gets the answer that does not route.
   {
     const own = SCREEN_OF[rk]
     const ia = {}
     let s
-    while ((s = injuryFlow(flowZ, ia, undefined)).next) {
+    while ((s = injuryFlow(flowZ, ia, t.answers.age)).next) {
       seen.asked.push(s.next)
       const [sid, qid] = s.next.split(':')
       ia[s.next] = sid === own ? t.answers[qid] : undefined

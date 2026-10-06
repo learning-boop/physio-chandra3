@@ -1990,5 +1990,45 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     card('fracture').gates.requiresOnset.join() === 'surgery')
 }
 
+// ── 61. Wrist and hand cross-check: JOSPT CTS 2019, AAOS 2024, EULAR 2018, AIM manual, protocols (all 29 approved, 6 Oct 2026) ──
+{
+  const { REGIONS, computeRaw } = await imp('src/data/symptomGuide.js')
+  const { EXTRA_SPECIAL_CARDS: SC } = await imp('src/data/symptomGuideExtra.js')
+  const { WRIST_INJURY, HAND_INJURY, limbAnswerFor } = await imp('src/data/injuryScreen.js')
+  const { GATES, SIGNS, SHORT, MECHANISM } = await imp('src/data/safetyGates.js')
+  const W = REGIONS.wrist, H = REGIONS.hand
+  const card = (R, id) => R.conditions.find((c) => c.id === id)
+  const flag = (R, id) => R.redFlags.find((f) => f.id === id)
+  const text = (c) => [c.name, c.blurb, ...(c.noticed || []), ...(c.homeCare || []), ...(c.seePhysioIf || [])].join(' ')
+  const iq = (L, id) => L.find((x) => x.id === id)
+  check('The arm areas\' "coming from your neck" message is about the arm, not the jaw; the jaw keeps its own',
+    !/jaw/i.test(SC.neckSource.body) && /Arm, wrist or hand/.test(SC.neckSource.body) && /jaw/.test(SC.neckSourceJaw.body) &&
+    computeRaw(W, { W8: ['neck'] }).specials.includes('neckSource') && computeRaw(REGIONS.jaw, { M8: ['neck'] }).specials.includes('neckSourceJaw'))
+  check('Hand: a swollen finger that hurts to straighten is an emergency on the trigger card too; a cut is an emergency on the finger nerve card; a bite or punch on teeth goes straight to emergency',
+    flag(H, 'hnd-bite').tier === 'emergency' && /whole finger swollen/.test(flag(H, 'hnd-bite').text) &&
+    card(H, 'trigger').seePhysioIf.some((l) => /emergency department now/.test(l)) && card(H, 'digital').seePhysioIf.some((l) => /cut: go to an emergency/.test(l)) &&
+    iq(HAND_INJURY, 'I1').options.find((o) => o.id === 'bite').route === 'emergency')
+  check("Hand injury screen: jersey finger after a jam too, skier's thumb after a fall too (the shared arm question's fall reaches it); a finger put back; a child's crushed fingertip",
+    iq(HAND_INJURY, 'I5').askIf({ I1: 'jammed' }) && iq(HAND_INJURY, 'I6').askIf({ I1: 'fall' }) && limbAnswerFor('fall', 'hand') === 'fall' &&
+    !!iq(HAND_INJURY, 'I8') && iq(HAND_INJURY, 'I9').askIf({ I1: 'crushcut' }, 'u18') && !iq(HAND_INJURY, 'I9').askIf({ I1: 'crushcut' }, '30-49'))
+  check('Wrist injury screen: a broken wrist bone without a deformity, a child, the hook of the hamate; the TFCC reason without "instability"',
+    iq(WRIST_INJURY, 'I7').askIf({ I1: 'fall' }) && iq(WRIST_INJURY, 'I8').askIf({}, 'u18') && iq(WRIST_INJURY, 'I9').askIf({ I1: 'twist' }) &&
+    !/instability/.test(JSON.stringify(WRIST_INJURY)))
+  check('Wrist safety: an old fall never X-rayed, gymnast\'s wrist (gated, skipped after a wrist injury), a first gout or pseudogout attack the same day; hand: a cold finger and a stuck ring the same day',
+    !!flag(W, 'wrf-oldscaphoid') && flag(W, 'wrf-stress').ages.join() === 'u18,18-29' && MECHANISM['wrf-stress'] === 'wrist' &&
+    GATES.wrist.some((g) => g.members.includes('wrf-oldscaphoid') && g.members.includes('wrf-stress')) && !!SIGNS['wrf-stress'] && !!SHORT['wrf-oldscaphoid'] &&
+    flag(W, 'wrf-gout').sameDay && !/before\?/.test(flag(W, 'wrf-gout').text) &&
+    flag(H, 'hnd-coldfinger').sameDay && flag(H, 'hnd-ring').sameDay && GATES.hand.some((g) => g.members.includes('hnd-ring')))
+  check('Thumb base and finger arthritis cards are 30 and over (as every OA card); twins keep the same patient text',
+    ['thumboa'].every((id) => card(W, id).gates.ages.join() === '30-49,50-64,o64' && card(H, id).gates.ages.join() === '30-49,50-64,o64') && card(H, 'handoa').gates.ages.join() === '30-49,50-64,o64' &&
+    text(card(W, 'thumboa')) === text(card(H, 'thumboa')) && text(card(W, 'median')) === text(card(H, 'median')))
+  check('No "unstable" or "instability" in wrist or hand patient wording; carpal tunnel cards have an acute-numbness emergency line; no injection wording on the diabetes hand panel',
+    ![...W.conditions, ...H.conditions].some((c) => /unstable|instability/i.test(text(c))) &&
+    card(W, 'median').seePhysioIf.some((l) => /emergency department now/.test(l)) &&
+    !/injection/.test((await import('node:fs')).readFileSync(new URL('../src/data/diabetes.js', import.meta.url), 'utf8').match(/catching fingers[^']*/)[0]))
+  check('New cards: recovery after a broken wrist (after a fracture only), deep back-of-wrist pain, finger and thumb injury aftercare',
+    card(W, 'fracture').gates.requiresOnset.join() === 'surgery' && !!card(W, 'dorsal') && !!card(H, 'fingerinjury'))
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
