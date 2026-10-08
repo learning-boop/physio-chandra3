@@ -208,9 +208,10 @@ export function buildClinicianSummary(ctx = {}) {
   if (reportedFlags.length) {
     // "See a doctor" flags no longer end the visit: the patient was advised to
     // see their doctor (today for the same-day ones) and may have booked.
-    push('  RED FLAGS REPORTED — medical review advised before treatment:')
-    push(...listOf(reportedFlags.map((r) => `${r.sameDay ? '[SAME DAY] ' : ''}${r.text}${r.why ? ` — ${r.why}` : ''}`), '      · '))
-    push('  Confirm at the first contact that a doctor has seen this.')
+    // Each flag carries what physio can do meanwhile (../data/physioPlan.js).
+    push('  RED FLAGS REPORTED — medical review advised:')
+    push(...listOf(reportedFlags.map((r) => `${r.sameDay ? '[SAME DAY] ' : ''}${r.text}${r.why ? ` — ${r.why}` : ''}${r.physio ? ` [Physio: ${r.physio}]` : ''}`), '      · '))
+    push('  Confirm at the first contact whether a doctor has seen this; treat only as each flag\'s physio line allows.')
   } else {
     push('  Red flags: none reported (an emergency flag would have sent the patient to 911 or an emergency department).')
   }

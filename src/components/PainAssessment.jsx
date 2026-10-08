@@ -38,6 +38,7 @@ import { BONE_TUMOUR_CAUTION, boneTumourPanel, TUMOUR_IDS, BONE_WHY_YOUNG, BONE_
 import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { cautionRows, tickedIn } from '../data/cautionGroups'
+import { physioPlan, strictestPlan, PLAN_LABEL, PLAN_TEXT } from '../data/physioPlan'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -1080,14 +1081,17 @@ export default function PainAssessment() {
   const doctorFlags = pickedFlags.filter((f) => f.tier !== 'emergency')
   const doctorFlagged = doctorFlags.length > 0 || otherFlagged
   const sameDayFlagged = doctorFlags.some((f) => f.sameDay)
-  // No booking until a doctor has seen them: a recent head injury no doctor
-  // has seen (today), or a nervous-system pattern (pc-neuro, in a few days).
-  const holdBooking = doctorFlags.some((f) => f.noBooking)
+  // What physio can do while they wait for the doctor (../data/physioPlan.js):
+  // alongside, book now with treatment after the doctor's check (clearFirst),
+  // or no booking until a doctor has seen them (doctorFirst: a recent head
+  // injury, a nervous-system pattern, a possible clot).
+  const physioWait = strictestPlan(doctorFlags)
+  const holdBooking = physioWait === 'doctorFirst'
   // Chandra does not treat children under 5 (2 Oct 2026): no booking, a
   // referral to the family doctor or a paediatric physiotherapist instead.
   const underFive = answers.age === 'u5'
   const UNDER_FIVE = 'Chandra sees children from 5 years old. For a younger child, please talk to your family doctor, who can refer you to a children\'s physiotherapist (for example through BC Children\'s Hospital or your local child development centre).'
-  const holdToday = doctorFlags.some((f) => f.noBooking && f.sameDay)
+  const holdToday = doctorFlags.some((f) => physioPlan(f) === 'doctorFirst' && f.sameDay)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
     if (flaggedAt === 'physician') { if (injuryApplies && !smartFirst) startInjury(); else startQuestions() }
@@ -1252,7 +1256,7 @@ export default function PainAssessment() {
       bone: boneSummary(flags, answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
       flagIds: flags,
-      reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay })),
+      reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay, physio: PLAN_LABEL[physioPlan(f)] })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
       review,
     })
@@ -1294,6 +1298,7 @@ export default function PainAssessment() {
     doctor: doctorFlagged ? {
       title: sameDayFlagged ? 'Please see a doctor today' : 'Please see your doctor',
       items: [...doctorFlags.map((f) => (f.why && f.why.title ? f.why.title : f.text)), ...(otherFlagged ? [`Other: ${flagOther.trim()}`] : [])],
+      physio: underFive ? null : PLAN_TEXT[physioWait],
     } : null,
     referral: referral.map((r) => referralSummary(r, referralMechanism(r, answers))),
     conditions: shown.map(({ c }) => ({ name: c.name, blurb: c.blurb })),
@@ -2700,11 +2705,7 @@ export default function PainAssessment() {
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
                       {underFive
                         ? UNDER_FIVE
-                        : holdBooking
-                        ? 'Please see a doctor or nurse practitioner first. Once they have checked you, physiotherapy can help with your recovery, and you can book with Chandra then.'
-                        : sameDayFlagged
-                        ? 'You can still book your physiotherapy assessment now. Chandra will check that a doctor has looked at this before treatment starts.'
-                        : 'Physiotherapy can go ahead alongside that, and you can book with Chandra now: your assessment will look at these symptoms in detail, and Chandra can work with your doctor on the next steps.'}
+                        : PLAN_TEXT[physioWait]}
                     </p>
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
                       <strong style={{ color: '#fff' }}>If your symptoms are severe or getting worse quickly, call 911.</strong>
@@ -2808,6 +2809,9 @@ export default function PainAssessment() {
                       {doctorFlags.map((f) => <li key={f.id}>{f.why && f.why.title ? f.why.title : f.text}</li>)}
                       {otherFlagged && <li>Other: {flagOther.trim()}</li>}
                     </ul>
+                    {!holdBooking && !underFive && (
+                      <p style={{ ...body, fontSize: 14, margin: '8px 0 0', color: 'rgba(255,255,255,0.85)' }}>{PLAN_TEXT[physioWait]}</p>
+                    )}
                     <p style={{ ...body, fontSize: 14, margin: '8px 0 0' }}>
                       The information below is general education and does not replace that check.
                     </p>
@@ -3281,10 +3285,9 @@ export default function PainAssessment() {
                   <>
                     <span style={{ ...label, marginBottom: 12 }}>Your Next Step · Book an Assessment</span>
                     <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
-                      Based on what you have shared, a physiotherapy assessment is an appropriate
-                      next step. An appointment with Chandra lets your symptoms be examined
-                      individually and a suitable plan of care discussed with you. Choose the
-                      clinic that suits you, then call or book online.
+                      {doctorFlagged
+                        ? `${PLAN_TEXT[physioWait]} Choose the clinic that suits you, then call or book online.`
+                        : 'Based on what you have shared, a physiotherapy assessment is an appropriate next step. An appointment with Chandra lets your symptoms be examined individually and a suitable plan of care discussed with you. Choose the clinic that suits you, then call or book online.'}
                     </p>
 
                     <ClinicPicker picked={clinicId} onPick={setClinicId} />

@@ -36,7 +36,7 @@ const AMBER = [180, 110, 0]
 /**
  * @param {object} d
  *  code, dateText, images { views: [{ src, width, height, label }] } | null,
- *  areas [string], doctor {title, items[]} | null, referral [{title, text}],
+ *  areas [string], doctor {title, items[], physio} | null, referral [{title, text}],
  *  conditions [{name, blurb}], noMatch string | null, alsoConsider [string], boneWatch string | null, cesWarning string | null, painType string | null,
  *  cautions [string], diabetes, steroids, calcium, thyroid, hypothyroid, acromegaly, pregnancy, oi, osteomalacia, bone, boneTumour, spondylolysis and paget {title, text, notes [string]} | null,
  *  behaviour [string], answers [{question, answer}], notes string
@@ -154,6 +154,7 @@ export function buildResultsPdf(d) {
   if (d.doctor) {
     heading(d.doctor.title, AMBER)
     bullets(d.doctor.items)
+    if (d.doctor.physio) text(d.doctor.physio)
     text('The information below is general education and does not replace that check.', { size: 9.5, color: MUTED })
   }
 

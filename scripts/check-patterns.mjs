@@ -2300,5 +2300,18 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('the opener counts how many are ticked', tickedIn(CAUTION_GROUPS[0], ['ca-bone', 'ca-paget', 'ca-ms']) === 2)
 }
 
+// ── Physio while waiting for the doctor (../src/data/physioPlan.js) ──
+{
+  const { physioPlan, strictestPlan } = await imp('src/data/physioPlan.js')
+  check('a plain see-a-doctor flag: physio alongside', physioPlan({ id: 'x', tier: 'urgent' }) === 'alongside')
+  check('a same-day flag: book now, treatment after the doctor\'s check', physioPlan({ id: 'x', sameDay: true }) === 'clearFirst')
+  check('a no-booking flag: doctor first', physioPlan({ id: 'x', noBooking: true, sameDay: true }) === 'doctorFirst')
+  check('fever, weight loss or cancer history: book, treat after the check', physioPlan({ id: 'sc-systemic', tier: 'urgent' }) === 'clearFirst')
+  const clots = ['pc-dvt', 'pg-dvt', 'kf-dvt', 'arf-clot', 'hpf-dvt', 'tgf-dvt', 'lgf-dvt', 'af-dvt']
+  check('every possible clot: doctor first, no booking', clots.every((id) => physioPlan({ id, sameDay: true }) === 'doctorFirst'), clots.map((id) => physioPlan({ id, sameDay: true })))
+  check('the strictest ticked option wins', strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }, { id: 'kf-dvt', sameDay: true }]) === 'doctorFirst'
+    && strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }]) === 'clearFirst' && strictestPlan([]) === 'alongside')
+}
+
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
