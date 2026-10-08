@@ -1,36 +1,49 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Lower back prototype of the new question design (Chandra, 8 Oct 2026:
-   "keep the questions to the patient level, but the reasoning and analysis
-   at senior expert level").
+   Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
+   patient level, but the reasoning and analysis at senior expert level").
+   Lower back first (prototype), then the neck.
 
-   Runs when the lower back is the only area drawn (smartArea 'lowerback').
+   Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
    - each group as a plain question with up to five short bullets that name
      every key sign behind it (so "No" is safe);
-   - inside a group, one sign per tick, in everyday words.
+   - inside a group, one sign per tick, in everyday words; where a time
+     limit applies to all of a question's ticks ("came on suddenly"), a short
+     sub-heading carries it (SUBHEAD).
    The reasoning underneath does not change: every tick sets its original
    red flag (TICKS key), so the tiers, 911 routes, booking rules, groups and
    checks all work exactly as before. A tick that needs two things together
    to count (sudden pain AND weak bones) keeps both on one line ("combo"),
    because splitting it would send people to a doctor for an ordinary strain.
 
-   Also: "When did this start?" after a nerve sign (for the doctor and the
-   "Tell them" line, not to change the route), and a "Tell them" sentence on
-   the see-a-doctor and emergency screens, built from the ticks.
+   Also: "When did this start?" after a nerve or spinal-cord sign (for the
+   doctor and the "Tell them" line, not to change the route), and a "Tell
+   them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const lbPrototype = (area) => area === 'lowerback'
+export const PLAIN_AREAS = ['lowerback', 'neck']
+/** The area the plain design runs for, or null. */
+export const plainArea = (area) => (PLAIN_AREAS.includes(area) ? area : null)
 
-/* Groups: a plain question, and one short bullet per question in the group. */
+/* Groups: a plain question (per area where it differs), and one short
+   bullet per question in the group. */
 export const PLAIN_GATES = {
-  'em-nerve': 'Since your back pain started, have you noticed any of these?',
+  'em-nerve': { lowerback: 'Since your back pain started, have you noticed any of these?', neck: 'Along with your neck pain, have you noticed any of these?' },
   'em-illness': 'Do you have any of these right now?',
   'em-limb': 'Did this start after an accident in the last few days?',
   'lowback-bone': 'Could the bone be hurt or weak?',
   'lowback-infection': 'Do you feel unwell, not just sore?',
   'lowback-organ': 'Could the pain be coming from inside your body?',
   'lowback-nerve': 'Have your legs, feet or hands changed?',
+  'neck-cord': 'Have your arms, legs or neck changed in a worrying way?',
 }
+/** A group's plain question for this area. */
+export const gateQ = (gid, area) => {
+  const q = PLAIN_GATES[gid]
+  return typeof q === 'string' || !q ? q : q[area] || Object.values(q)[0]
+}
+/* "I have … pain" in the Tell them line. */
+export const PAIN_WORD = { lowerback: 'low back pain', neck: 'neck pain' }
 
 export const PLAIN_SHORT = {
   // Emergency: nerves at the bottom of the back
@@ -53,7 +66,7 @@ export const PLAIN_SHORT = {
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
-  'sc-systemic': 'Weight loss, a growing lump, or bad night pain',
+  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, or burning pee',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
@@ -63,12 +76,22 @@ export const PLAIN_SHORT = {
   'sc-neuro': 'New weakness or numbness in an arm or leg',
   'jrf-legs': 'Legs slowly getting stiff or heavy',
   'jrf-shingles': 'A band of burning pain with a rash',
+  // Neck
+  'nrf-stroke': 'A sudden bad headache, drooping face, or one weak side',
+  'nrf-cord': 'You cannot hold your pee or poo',
+  'nrf-cord-legs': 'Both legs numb or weak, or trouble breathing',
+  'nrf-mening': 'A fever with a stiff neck or a rash',
+  'nrf-cardiac': 'Pain that comes with effort, or with chest pain',
+  'nrf-after': 'Bad signs after a neck crack, crash or knock',
+  'nrf-after-doc': 'Dizziness or a new headache since an injury',
+  'nrf-myelo': 'An arm, hand or leg quickly getting weak or clumsy',
+  'nrf-upperinstab': 'A head too heavy to hold, or tingling lips',
 }
 
-/** A bullet, for this person's birth sex where it differs. */
-export const shortFor = (qid, sex) => {
+/** A bullet, for this area or birth sex where it differs. */
+export const shortFor = (qid, sex, area) => {
   const s = PLAIN_SHORT[qid]
-  return typeof s === 'string' || !s ? s : s[sex] || s.any
+  return typeof s === 'string' || !s ? s : s[area] || s[sex] || s.any
 }
 
 /* A short plain heading for a question shown on its own (no group) whose
@@ -89,6 +112,22 @@ export const PLAIN_Q = {
   'rf-legs': 'Have you noticed any of these?',
   'rf-aaa-slow': 'Do any of these fit you?',
   'pc-visceral': 'Do any of these fit you?',
+  'nrf-stroke': 'Has one of these come on suddenly since this started?',
+  'nrf-cord': 'Along with the neck pain, have you noticed any of these?',
+  'nrf-cord-legs': 'Along with the neck pain, have you noticed any of these?',
+  'nrf-cardiac': 'Do any of these fit you?',
+  'nrf-after': 'After a neck "crack", a crash, a sudden jerk or a knock to the head or neck: is one of these new in the last few days, or getting worse fast?',
+  'nrf-after-doc': 'Do any of these fit you?',
+  'nrf-myelo': 'Over the last few days or weeks, has one of these happened quickly?',
+  'nrf-upperinstab': 'Do any of these fit you?',
+}
+
+/* Inside a group: a sub-heading over a question's ticks, where a limit
+   applies to all of them. */
+export const SUBHEAD = {
+  'nrf-stroke': 'Came on suddenly since this started:',
+  'nrf-after': 'After a neck "crack", a crash, a jerk or a knock to the head, new in the last few days or getting worse fast:',
+  'nrf-myelo': 'Happening quickly, over days or weeks:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -160,6 +199,8 @@ export const TICKS = {
     { key: 'spine', text: 'A recent injection or operation on your spine', tell: 'I had an injection or operation on my spine recently' },
   ],
   'sc-systemic': [
+    { key: 'fever', text: 'A fever or chills with the pain', tell: 'I have a fever or chills' },
+    { key: 'cancer', combo: true, text: 'You have had cancer before, and this pain is new or changing', tell: 'I have had cancer before, and this pain is new' },
     { key: 'weight', text: 'Losing weight without trying', tell: 'I am losing weight without trying' },
     { key: 'lump', text: 'A new lump, or one that is growing', tell: 'I have a new or growing lump' },
     { key: 'night', text: 'Pain at night that does not change however you lie', tell: 'the pain at night does not change however I lie' },
@@ -197,6 +238,60 @@ export const TICKS = {
     { key: 'still', text: 'Pain that does not change at all when you move or change position', tell: 'the pain does not change at all when I move' },
     { key: 'unwell', text: 'Pain with feeling sick, a fever, or feeling unwell', tell: 'I feel sick or unwell with the pain' },
   ],
+  // ── Neck ──
+  'nrf-stroke': [
+    { key: 'headache', text: 'The worst headache of your life', tell: 'I suddenly have the worst headache of my life' },
+    { key: 'face', text: 'A drooping or numb face', tell: 'my face is drooping or numb' },
+    { key: 'side', text: 'Weakness or numbness in an arm or leg on one side', tell: 'one side of my body is weak or numb' },
+    { key: 'speech', text: 'Slurred speech, or trouble finding or understanding words', tell: 'my speech is slurred' },
+    { key: 'sight', text: 'Loss of sight, or seeing double', tell: 'I have lost sight or I am seeing double' },
+    { key: 'swallow', text: 'Trouble swallowing', tell: 'I have trouble swallowing' },
+    { key: 'confused', text: 'Confusion, falls or blackouts', tell: 'I have had confusion, falls or blackouts' },
+    { key: 'dizzy', combo: true, text: 'New dizziness or spinning, with vomiting, or you cannot stand or walk', tell: 'I have new dizziness and cannot stand or walk' },
+  ],
+  'nrf-cord': [
+    { key: 'hold', text: 'You cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
+    { key: 'cannot', text: 'You cannot pee at all', tell: 'I cannot pee' },
+  ],
+  'nrf-cord-legs': [
+    { key: 'legs', text: 'New numbness or weakness in both legs', tell: 'both my legs are numb or weak' },
+    { key: 'spread', text: 'Numbness or weakness spreading fast in both hands and feet', tell: 'numbness is spreading in my hands and feet' },
+    { key: 'breath', text: 'Any trouble breathing or swallowing', tell: 'I have trouble breathing or swallowing' },
+  ],
+  'nrf-mening': [
+    { key: 'fever', combo: true, text: 'A fever, and a stiff neck, a bad headache, a rash, or light hurting your eyes', tell: 'I have a fever with a stiff neck' },
+    { key: 'unwell', combo: true, text: 'A fever, and you feel very unwell', tell: 'I have a fever and feel very unwell' },
+  ],
+  'nrf-cardiac': [
+    { key: 'effort', text: 'Neck, jaw or arm pain when you walk fast or climb stairs', tell: 'the pain comes on when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: chest pain, pressure or tightness', tell: 'I have chest pain or tightness with it' },
+    { key: 'breath', text: 'With the pain: short of breath, sweaty or feeling sick', tell: 'I feel short of breath, sweaty or sick with it' },
+  ],
+  'nrf-after': [
+    { key: 'severe', text: 'Very bad neck pain, unlike any you have had before', tell: 'I have very bad neck pain, unlike any before' },
+    { key: 'limbs', text: 'Numbness or weakness in your arms or legs', tell: 'my arms or legs are numb or weak' },
+    { key: 'dizzy', text: 'Dizziness, seeing double, or slurred speech', tell: 'I am dizzy or seeing double' },
+    { key: 'swallow', text: 'Trouble swallowing, feeling sick or vomiting', tell: 'I have trouble swallowing or I am vomiting' },
+    { key: 'head', text: 'A very bad headache, or one getting worse', tell: 'I have a bad headache that is getting worse' },
+    { key: 'mind', text: 'Confusion, drowsiness or memory loss', tell: 'I am confused or drowsy' },
+    { key: 'lips', text: 'Numb lips, or eyes that flicker or jump', tell: 'my lips are numb or my eyes flicker' },
+  ],
+  'nrf-after-doc': [
+    { key: 'dizzy', combo: true, text: 'Since a crash, a neck crack, a jerk or a knock: dizziness that keeps coming back', tell: 'since the injury, dizziness keeps coming back' },
+    { key: 'signs', combo: true, text: 'Since that injury: numbness, seeing double, slurred speech or trouble swallowing, even if not getting worse', tell: 'since the injury I have had numbness, double vision or trouble swallowing' },
+    { key: 'newpain', combo: true, text: 'Since that injury: a new neck pain or headache, different from any before', tell: 'since the injury I have a new kind of neck pain or headache' },
+    { key: 'sudden', combo: true, text: 'Without an injury: a sudden, very bad new neck pain or headache, unlike any before', tell: 'I suddenly have a very bad new neck pain or headache, unlike any before' },
+  ],
+  'nrf-myelo': [
+    { key: 'limb', text: 'An arm, hand or leg getting weaker, number or clumsier', tell: 'an arm, hand or leg is quickly getting weaker or clumsier' },
+    { key: 'walk', text: 'Your walking getting more unsteady', tell: 'my walking is quickly getting more unsteady' },
+  ],
+  'nrf-upperinstab': [
+    { key: 'heavy', text: 'Your head feels too heavy to hold up without your hands', tell: 'my head feels too heavy to hold up' },
+    { key: 'lips', text: 'Moving your neck brings a lump in your throat, or tingling lips or mouth', tell: 'moving my neck makes my lips tingle' },
+    { key: 'slow', combo: true, text: 'Over weeks or months, with no injury: a hoarse voice, trouble swallowing, a numb or weak face, a drooping eyelid, or double vision', tell: 'over weeks I have had a hoarse voice, trouble swallowing or double vision' },
+    { key: 'risk', text: 'Rheumatoid or another inflammatory arthritis, Down syndrome, or long-term steroid tablets', tell: 'I have inflammatory arthritis, Down syndrome or take steroid tablets' },
+  ],
   'jrf-shingles': [
     { key: 'band', text: 'A band of burning pain on one side, with a rash or blisters', tell: 'I have a band of burning pain with a rash' },
   ],
@@ -207,9 +302,13 @@ export const TICKS = {
    leads to the same see-a-doctor advice. */
 export const COVERED = { 'pc-urinary': 'rf-kidney' }
 
+/* Ticks another question on the same area's page already asks: left out
+   there (the lower back asks fever in rf-infection and cancer in rf-cancer). */
+export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'] }
+
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`
-export const ticksFor = (qid, sex) => (TICKS[qid] || []).filter((t) => !t.sex || !sex || t.sex === sex)
+export const ticksFor = (qid, sex, area) => (TICKS[qid] || []).filter((t) => (!t.sex || !sex || t.sex === sex) && !(TICK_SKIP[area] || []).includes(tickId(qid, t.key)))
 // Only while the question itself is still ticked (a stale tick never counts).
 export const tickedOf = (qid, flags = []) => (flags.includes(qid) ? (TICKS[qid] || []).filter((t) => flags.includes(tickId(qid, t.key))) : [])
 
@@ -231,16 +330,16 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs']
+export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
-export function tellThem(flags = [], answers = {}) {
+export function tellThem(flags = [], answers = {}, area = 'lowerback') {
   const tells = Object.keys(TICKS).flatMap((qid) => tickedOf(qid, flags).map((t) => t.tell))
   if (!tells.length) return null
   const list = tells.length === 1 ? tells[0] : `${tells.slice(0, -1).join(', ')} and ${tells[tells.length - 1]}`
   // "When" belongs to the nerve signs: told only while one of them is ticked.
   const when = WHEN_FOR.some((q) => flags.includes(q)) && WHEN_Q.options.find((o) => o.id === answers[WHEN_Q.id])
-  return `I have low back pain, and ${list}.${when ? ` ${when.tell}` : ''}`
+  return `I have ${PAIN_WORD[area] || 'pain'}, and ${list}.${when ? ` ${when.tell}` : ''}`
 }
 
 /** The ticked signs, for Chandra's summary. */

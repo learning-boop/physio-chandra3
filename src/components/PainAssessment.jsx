@@ -39,7 +39,7 @@ import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { cautionRows, tickedIn } from '../data/cautionGroups'
 import { physioPlan, strictestPlan, PLAN_LABEL, PLAN_TEXT } from '../data/physioPlan'
-import { lbPrototype, PLAIN_GATES, shortFor, PLAIN_Q, COVERED, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/lowbackPlain'
+import { plainArea, gateQ, SUBHEAD, shortFor, PLAIN_Q, COVERED, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/plainQuestions'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -329,7 +329,7 @@ const TIER_WHY = {
   },
   urgent: {
     title: 'This should be checked before starting physiotherapy',
-    text: 'Symptoms like this are checked by a doctor to rule out a fracture, an infection, or a circulation problem.',
+    text: 'A doctor should check this to find the cause.',
   },
 }
 
@@ -832,9 +832,10 @@ export default function PainAssessment() {
   // foot, hip or ankle only, the injury screen runs before the doctor page
   // and its answer filters it; the doctor page is grouped.
   const smartFirst = injuryApplies && !!smartArea(flowZ)
-  // Lower back prototype of the new question design (../data/lowbackPlain.js):
+  // Plain question design (../data/plainQuestions.js), lower back and neck:
   // plain group questions with bullets, one sign per tick.
-  const lbProto = !widespreadPath && lbPrototype(smartArea(flowZ))
+  const plainA = !widespreadPath ? plainArea(smartArea(flowZ)) : null
+  const lbProto = !!plainA
   // Gateway groups the person has opened on the doctor page.
   const [openGates, setOpenGates] = useState([])
   // Area questions with a yes/no in front (../data/questionGates.js): the ids opened with "Yes".
@@ -1000,9 +1001,9 @@ export default function PainAssessment() {
   // A group opened but nothing in it chosen yet.
   const gateOpenEmpty = (list) => gateRows(list).some((r) => r.gate && openGates.includes(r.gate.id) &&
     ![...r.members, r.unsure].some((m) => flags.includes(m.id)))
-  /* Lower back prototype (../data/lowbackPlain.js): one sign per tick; each
+  /* Lower back prototype (../data/plainQuestions.js): one sign per tick; each
      tick sets its question, so the routes are unchanged. */
-  const plainTicks = (m) => (lbProto ? ticksFor(m.id, who.sex) : [])
+  const plainTicks = (m) => (lbProto ? ticksFor(m.id, who.sex, plainA) : [])
   const tickChip = (m, t) => {
     const sel = flags.includes(tickId(m.id, t.key))
     return (
@@ -1046,8 +1047,8 @@ export default function PainAssessment() {
     }
     const cut = r.gate.text.indexOf(': ')
     // Prototype: a plain question with one short bullet per question in the group.
-    const plain = lbProto && PLAIN_GATES[r.gate.id]
-    const bullets = plain ? [...new Set(r.members.map((m) => shortFor(m.id, who.sex)).filter(Boolean))] : []
+    const plain = lbProto && gateQ(r.gate.id, plainA)
+    const bullets = plain ? [...new Set(r.members.map((m) => shortFor(m.id, who.sex, plainA)).filter(Boolean))] : []
     return (
       <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
         <button style={chip(open)} onClick={toggle} aria-expanded={open}>
@@ -1070,7 +1071,16 @@ export default function PainAssessment() {
         {open && (
           <div className="pa-gate-body">
             <p className="pa-gate-ask">Which of these? Tick any that apply.</p>
-            {r.members.map((m) => (plainTicks(m).length ? plainTicks(m).map((t) => tickChip(m, t)) : flagChip(m, '·')))}
+            {r.members.map((m) => (plainTicks(m).length ? (
+              /* A sub-heading's limit covers only its own ticks: they sit in a
+                 box of their own, so the next question's ticks are clearly outside it. */
+              <div key={m.id} style={SUBHEAD[m.id]
+                ? { display: 'flex', flexDirection: 'column', gap: 8, padding: '8px 10px', border: '1px solid rgba(255,255,255,0.16)', borderRadius: 12 }
+                : { display: 'contents' }}>
+                {SUBHEAD[m.id] && <p className="pa-gate-ask" style={{ margin: 0 }}>{SUBHEAD[m.id]}</p>}
+                {plainTicks(m).map((t) => tickChip(m, t))}
+              </div>
+            ) : flagChip(m, '·')))}
             {flagChip({ ...r.unsure, text: plain ? 'Not sure which, but one of these fits' : 'Not sure which, but one of these signs applies' }, '?')}
             {whenAsk(r.members)}
           </div>
@@ -2773,10 +2783,10 @@ export default function PainAssessment() {
                 )}
 
                 {/* Lower back prototype: the patient's own words for the doctor or 911. */}
-                {lbProto && tellThem(flags, answers) && (
+                {lbProto && tellThem(flags, answers, plainA) && (
                   <div style={{ ...card, maxWidth: 520, margin: '12px 0 0' }}>
                     <span style={{ ...label, fontSize: 11.5 }}>Tell them</span>
-                    <p style={{ fontSize: 16, color: '#fff', margin: '8px 0 0', lineHeight: 1.5 }}>“{tellThem(flags, answers)}”</p>
+                    <p style={{ fontSize: 16, color: '#fff', margin: '8px 0 0', lineHeight: 1.5 }}>“{tellThem(flags, answers, plainA)}”</p>
                   </div>
                 )}
 
