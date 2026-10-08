@@ -606,10 +606,14 @@ export default function PainAssessment() {
   // In the draw step the person can switch between marking and turning the
   // model, so they can follow pain that radiates from front to back.
   // Turn is selected when the step opens; the person picks Draw to mark.
-  const [drawMode, setDrawMode] = useState(false)
+  const [drawMode, setDrawMode] = useState('turn')   // 'turn' | 'draw' | 'erase'
   // The review screen shows the answers folded: most people check nothing.
   const [showAnswers, setShowAnswers] = useState(false)
-  const drawOn = stage === 'draw' && drawMode
+  const drawOn = stage === 'draw' && drawMode === 'draw'
+  const eraseOn = stage === 'draw' && drawMode === 'erase'
+  // Once the last line is rubbed out there is nothing left to erase: go back
+  // to Draw, so the next touch marks the body.
+  useEffect(() => { if (drawMode === 'erase' && !history.lines) setDrawMode('draw') }, [drawMode, history.lines])
   // "Drag to turn" on the body until it has been turned: on the How it works
   // page, and on the Draw page while Turn is selected and nothing is marked.
   // The picture is moved back to the middle as the Draw page opens (a slide on
@@ -617,7 +621,7 @@ export default function PainAssessment() {
   const [recentre, setRecentre] = useState(0)
   useEffect(() => { if (stage === 'draw') setRecentre((n) => n + 1) }, [stage])
   // The How it works page has no 3D body (pictures instead, 6 Oct 2026).
-  const swipeHint = !hasTurned && stage === 'draw' && !drawMode && !zones.length
+  const swipeHint = !hasTurned && stage === 'draw' && drawMode === 'turn' && !zones.length
 
   /* ── Every crossed area counts, in at most 8 screens ──────────────────
      A line along one chain (shoulder → elbow, low back → knee) draws on EACH
@@ -1453,7 +1457,7 @@ export default function PainAssessment() {
   const restart = () => {
     setFlaggedAt(null)
     setStage('landing'); setQIndex(0); setZones([]); setLines([]); setTravel({}); setPathPick(null); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
-    setClearSignal((n) => n + 1); setFromReview(false); setDrawMode(false); setShowAnswers(false); setReview(null)
+    setClearSignal((n) => n + 1); setFromReview(false); setDrawMode('turn'); setShowAnswers(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined); setOpenCautions([])
     setVisitCode(null); codeAsked.current = false
   }
@@ -1510,6 +1514,7 @@ export default function PainAssessment() {
              them where there is room; on a phone they keep 70px. */
           .pa-ob-turn { top: 9%;  right: calc(50% + clamp(88px, 20%, 130px)); }
           .pa-ob-draw { top: 9%;  left:  calc(50% + clamp(88px, 20%, 130px)); }
+          .pa-ob-erase { top: calc(9% + 56px); left: calc(50% + clamp(88px, 20%, 130px)); }
           .pa-ob-undo { bottom: 9%; right: calc(50% + clamp(70px, 20%, 130px)); }
           .pa-ob-redo { bottom: 9%; left:  calc(50% + clamp(70px, 20%, 130px)); }
           @media (max-width: 380px) {
@@ -3338,10 +3343,20 @@ export default function PainAssessment() {
                 the same drag, so the person chooses which one a drag does. */}
             {stage === 'draw' && (
               <div className="pa-onbody">
-                <button className={'pa-ob pa-ob-turn' + (!drawMode ? ' on' : '')}
-                  aria-pressed={!drawMode} onClick={() => setDrawMode(false)}>Turn</button>
-                <button className={'pa-ob pa-ob-draw' + (drawMode ? ' on' : '')}
-                  aria-pressed={drawMode} onClick={() => setDrawMode(true)}>Draw</button>
+                <button className={'pa-ob pa-ob-turn' + (drawMode === 'turn' ? ' on' : '')}
+                  aria-pressed={drawMode === 'turn'} onClick={() => setDrawMode('turn')}>Turn</button>
+                <button className={'pa-ob pa-ob-draw' + (drawMode === 'draw' ? ' on' : '')}
+                  aria-pressed={drawMode === 'draw'} onClick={() => setDrawMode('draw')}>Draw</button>
+                {/* Under Draw: rubbing over a line removes that whole line
+                    (Chandra, 7 Oct 2026). Undo brings it back. */}
+                <button className={'pa-ob pa-ob-erase' + (drawMode === 'erase' ? ' on' : '')}
+                  aria-pressed={drawMode === 'erase'} disabled={!history.lines && drawMode !== 'erase'}
+                  onClick={() => setDrawMode('erase')} aria-label="Eraser: rub over a line to remove it">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="m7 21-4.3-4.3a1 1 0 0 1 0-1.4l10-10a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L11 21" /><path d="M22 21H7" /><path d="m5 11 9 9" />
+                  </svg>
+                  Erase
+                </button>
                 <button className="pa-ob pa-ob-undo" disabled={!history.canUndo}
                   onClick={() => setUndoSignal((n) => n + 1)} aria-label="Undo the last line">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -3364,6 +3379,7 @@ export default function PainAssessment() {
               showGestureHint={!swipeHint}
               controlled
               drawOn={drawOn}
+              eraseOn={eraseOn}
               clearSignal={clearSignal}
               undoSignal={undoSignal}
               redoSignal={redoSignal}

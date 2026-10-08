@@ -817,7 +817,9 @@ function snapToBody(body, worldPoint) {
 
 // Active only in Highlight mode: trace over the body to draw pain lines.
 // Supports MULTIPLE lines — each completed drag becomes its own line.
-function DrawSurface({ active, onPathUpdate, onPathComplete }) {
+// With `erasing` on, the same touch rubs lines out instead: every point the
+// finger passes over goes to onErase, which removes the lines it touches.
+function DrawSurface({ active, erasing, onPathUpdate, onPathComplete, onErase, onEraseStart }) {
   const { camera, gl, scene } = useThree()
   // firstHitOnly lets the BVH stop at the nearest hit instead of collecting all.
   const raycaster = useMemo(() => { const r = new THREE.Raycaster(); r.firstHitOnly = true; return r }, [])
@@ -867,11 +869,21 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
     if (!p) return
     gl.domElement.setPointerCapture?.(e.pointerId)
     drawing.current = true
+    if (erasing) { onEraseStart(); onErase(p); return }
     pathRef.current = [p]
     onPathUpdate([p])
   }
   const move = (e) => {
     if (!active || !drawing.current) return
+    if (erasing) {
+      const ne = e.nativeEvent
+      const coalesced = ne && typeof ne.getCoalescedEvents === 'function' ? ne.getCoalescedEvents() : null
+      for (const sample of (coalesced && coalesced.length ? coalesced : [e])) {
+        const p = cast(sample.clientX, sample.clientY)
+        if (p) onErase(p)
+      }
+      return
+    }
     // The browser batches pointermove events, so a quick drag delivers only a
     // handful of positions and the stroke comes out as long straight chords.
     // getCoalescedEvents() returns every sample the device actually recorded.
@@ -895,6 +907,7 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
   const up = () => {
     if (!drawing.current) return
     drawing.current = false
+    if (erasing) return
     onPathComplete(pathRef.current)
     pathRef.current = []
   }
@@ -947,6 +960,29 @@ function DrawSurface({ active, onPathUpdate, onPathComplete }) {
 // and unlike the previous black it stays legible against every surface the line
 // can cross — skin, the dark shorts, hair, and the navy backdrop.
 const PAIN_RED = '#ff2f2f'
+
+// How close the eraser has to come to a line to remove it: about a
+// fingertip's width on the figure (8 units tall).
+const ERASE_R = 0.14
+
+// Does the line `pts` pass within `r` of point `p`? Measured to each segment,
+// not just each point, so a fast stroke with spaced-out samples still erases.
+function lineNear(pts, p, r) {
+  const r2 = r * r
+  const ab = new THREE.Vector3(), ap = new THREE.Vector3()
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i]
+    if (a.distanceToSquared(p) <= r2) return true
+    const b = pts[i + 1]
+    if (!b) break
+    ab.subVectors(b, a); ap.subVectors(p, a)
+    const len2 = ab.lengthSq()
+    if (!len2) continue
+    const t = Math.min(1, Math.max(0, ap.dot(ab) / len2))
+    if (ap.addScaledVector(ab, -t).lengthSq() <= r2) return true
+  }
+  return false
+}
 const PAIN_HALO = '#4a0000'
 
 // Each drawn point is a raycast hit on a 218k-triangle surface, so consecutive
@@ -1012,7 +1048,7 @@ function PainLine({ points }) {
   )
 }
 
-function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete, recentreSignal, apiRef, pathsRef }) {
+function Scene({ highlight, erasing, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete, onErase, onEraseStart, recentreSignal, apiRef, pathsRef }) {
   return (
     <>
       <ambientLight intensity={0.9} />
@@ -1037,7 +1073,8 @@ function Scene({ highlight, highlightRef, paths, livePath, controlsRef, interact
       <InteractionGuard controlsRef={controlsRef} highlightRef={highlightRef} interactedRef={interactedRef} />
       <Suspense fallback={<Loader />}><BodyFigure /></Suspense>
       <CollisionHull />
-      <DrawSurface active={highlight} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete} />
+      <DrawSurface active={highlight} erasing={erasing} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
+        onErase={onErase} onEraseStart={onEraseStart} />
 
       {/* ALL completed pain lines stay on the body */}
       {paths.map((pts, i) => pts.length > 1 && <PainLine key={i} points={pts} />)}
@@ -1111,6 +1148,8 @@ class CanvasErrorBoundary extends Component {
 
 export default function Body3D({
   onSelectionChange, onLinesChange, onDoneDrawing, controlled = false, drawOn = false,
+  // Instead of drawing, a touch on the body rubs out the lines it passes over.
+  eraseOn = false,
   // The parent can suppress this one-line hint when it is showing its own
   // guidance in the same corner — two hints in one slot is worse than none.
   showGestureHint = true,
@@ -1140,7 +1179,10 @@ export default function Body3D({
   // be dropped. The ref lets the handler build the next list itself and emit
   // once, outside render.
   const pathsRef = useRef([])
-  const [undone, setUndone] = useState([])            // lines removed by Undo, awaiting Redo
+  // Undo / Redo step through whole snapshots of the lines, so Undo puts back
+  // a line the eraser removed as well as taking off the newest line.
+  const [past, setPast] = useState([])                // earlier line lists, for Undo
+  const [undone, setUndone] = useState([])            // line lists left by Undo, for Redo
   const [livePath, setLivePath] = useState([])        // line being drawn now
   const controlsRef = useRef()
   const interactedRef = useRef(false)
@@ -1149,42 +1191,46 @@ export default function Body3D({
 
   // Guided-assessment mode: the parent decides when drawing is on/off and
   // when to clear, and the internal button bar is hidden.
-  useEffect(() => { if (controlled) setHighlight(drawOn) }, [controlled, drawOn])
+  useEffect(() => { if (controlled) setHighlight(drawOn || eraseOn) }, [controlled, drawOn, eraseOn])
+  const erasing = controlled && eraseOn
   useEffect(() => {
-    if (controlled && clearSignal > 0) { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onLinesChange?.([]); onSelectionChange?.([]) }
+    if (controlled && clearSignal > 0) { pathsRef.current = []; setPaths([]); setPast([]); setUndone([]); setLivePath([]); onLinesChange?.([]); onSelectionChange?.([]) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearSignal])
 
-  // Undo lifts the most recent line onto the redo stack; Redo puts it back.
-  // Drawing a new line after an undo clears the redo stack, which is the
-  // behaviour people already expect from every other drawing tool.
-  useEffect(() => {
-    if (!undoSignal || !paths.length) return
-    const next = paths.slice(0, -1)
-    setUndone((u) => [...u, paths[paths.length - 1]])
+  // Undo steps back to the lines before the last change (a new line, or one
+  // rub of the eraser); Redo steps forward again. Drawing or erasing after an
+  // undo clears the redo stack, which is the behaviour people already expect
+  // from every other drawing tool.
+  const showLines = (next) => {
     pathsRef.current = next
     setPaths(next)
     setLivePath([])
     emitZones(next)
+  }
+  const remember = () => { setPast((h) => [...h, pathsRef.current]); setUndone([]) }
+
+  useEffect(() => {
+    if (!undoSignal || !past.length) return
+    setUndone((u) => [...u, pathsRef.current])
+    setPast((h) => h.slice(0, -1))
+    showLines(past[past.length - 1])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [undoSignal])
 
   useEffect(() => {
     if (!redoSignal || !undone.length) return
-    const next = [...paths, undone[undone.length - 1]]
+    setPast((h) => [...h, pathsRef.current])
     setUndone((u) => u.slice(0, -1))
-    pathsRef.current = next
-    setPaths(next)
-    setLivePath([])
-    emitZones(next)
+    showLines(undone[undone.length - 1])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [redoSignal])
 
   // Let the parent enable/disable its Undo and Redo controls.
   useEffect(() => {
-    onHistoryChange?.({ canUndo: paths.length > 0, canRedo: undone.length > 0, lines: paths.length })
+    onHistoryChange?.({ canUndo: past.length > 0, canRedo: undone.length > 0, lines: paths.length })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paths.length, undone.length])
+  }, [past.length, paths.length, undone.length])
 
   // Keep a ref in sync so canvas-level listeners always see the current mode,
   // and control page scrolling: highlight mode captures all touches, normal
@@ -1304,14 +1350,25 @@ export default function Body3D({
   const onPathComplete = (pts) => {
     setLivePath([])
     if (pts.length < 2) return
-    const next = [...pathsRef.current, pts]
-    pathsRef.current = next
-    setUndone([])
-    setPaths(next)
-    emitZones(next)
+    remember()
+    showLines([...pathsRef.current, pts])
   }
 
-  const reset = () => { pathsRef.current = []; setPaths([]); setUndone([]); setLivePath([]); onLinesChange?.([]); onSelectionChange?.([]) }
+  // The eraser removes WHOLE lines: any line passing within ERASE_R of the
+  // finger goes. Rubbing out part of a line would split one travelling pain
+  // into two, which changes how the drawing is read (../data/referral.js).
+  // One rub (finger down to finger up) is one step for Undo.
+  const rubStarted = useRef(false)
+  const onEraseStart = () => { rubStarted.current = false }
+  const onErase = (p) => {
+    const cur = pathsRef.current
+    const next = cur.filter((pts) => !lineNear(pts, p, ERASE_R))
+    if (next.length === cur.length) return
+    if (!rubStarted.current) { rubStarted.current = true; remember() }
+    showLines(next)
+  }
+
+  const reset = () => { pathsRef.current = []; setPaths([]); setPast([]); setUndone([]); setLivePath([]); onLinesChange?.([]); onSelectionChange?.([]) }
 
   // Turning highlight OFF now KEEPS the drawn lines (so users can rotate and
   // keep adding lines from another angle). Only Reset clears.
@@ -1375,10 +1432,11 @@ export default function Body3D({
           style={{ width: '100%', height: '100%', touchAction: 'none' }}
         >
           <Scene
-            highlight={highlight} highlightRef={highlightRef}
+            highlight={highlight} erasing={erasing} highlightRef={highlightRef}
             paths={paths} livePath={livePath}
             controlsRef={controlsRef} interactedRef={interactedRef}
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
+            onErase={onErase} onEraseStart={onEraseStart}
             recentreSignal={recentreSignal}
             apiRef={apiRef} pathsRef={pathsRef}
           />
@@ -1393,7 +1451,7 @@ export default function Body3D({
             fontFamily: "'DM Sans', sans-serif", fontSize: 10.5, letterSpacing: '0.1em',
             textTransform: 'uppercase', color: 'rgba(255,255,255,0.78)', textAlign: 'center',
           }}>
-            {highlight ? 'On the body — draw · Beside it — move' : 'On the body — turn · Beside it — move'}
+            {erasing ? 'On a line — erase · Beside it — move' : highlight ? 'On the body — draw · Beside it — move' : 'On the body — turn · Beside it — move'}
           </div>
         )}
       </div>
