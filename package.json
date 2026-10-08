@@ -18,7 +18,8 @@
     "import:conditions": "node scripts/import-conditions.mjs",
     "signoff": "node scripts/make-signoff.mjs",
     "review:nerves": "node scripts/make-nerve-review.mjs",
-    "review:physio": "node scripts/make-physio-review.mjs"
+    "review:physio": "node scripts/make-physio-review.mjs",
+    "review:lowback": "node scripts/make-lowback-review.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",

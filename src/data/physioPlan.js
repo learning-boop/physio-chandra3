@@ -26,15 +26,23 @@ export const OVERRIDES = {
   'sc-systemic': 'clearFirst',
 }
 
+// A possible infection of the spine or a joint (rf-infection, trf-infection,
+// jrf-infection, prf-infection): book now, but treatment waits for the
+// doctor's check, as for sc-systemic (8 Oct 2026, lower back prototype).
+const INFECTION = /-infection$/
+
 // A possible clot in the leg or arm: hands-on treatment or loading of the
 // limb is not safe until a clot is excluded, so no booking until then.
 const CLOT = /-(dvt|clot)$/
 
 /** The physio option for one doctor-tier flag. */
 export function physioPlan(f) {
+  // A "not sure which" group carries the strictest option of its questions.
+  if (f.physio) return f.physio
   if (OVERRIDES[f.id]) return OVERRIDES[f.id]
   if (CLOT.test(f.id)) return 'doctorFirst'
   if (f.noBooking) return 'doctorFirst'
+  if (INFECTION.test(f.id)) return 'clearFirst'
   if (f.sameDay) return 'clearFirst'
   return 'alongside'
 }

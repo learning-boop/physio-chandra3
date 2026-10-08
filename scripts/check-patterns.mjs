@@ -2308,9 +2308,69 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('a no-booking flag: doctor first', physioPlan({ id: 'x', noBooking: true, sameDay: true }) === 'doctorFirst')
   check('fever, weight loss or cancer history: book, treat after the check', physioPlan({ id: 'sc-systemic', tier: 'urgent' }) === 'clearFirst')
   const clots = ['pc-dvt', 'pg-dvt', 'kf-dvt', 'arf-clot', 'hpf-dvt', 'tgf-dvt', 'lgf-dvt', 'af-dvt']
+  check('a possible spine infection: book, treat after the check', physioPlan({ id: 'rf-infection', tier: 'urgent' }) === 'clearFirst')
   check('every possible clot: doctor first, no booking', clots.every((id) => physioPlan({ id, sameDay: true }) === 'doctorFirst'), clots.map((id) => physioPlan({ id, sameDay: true })))
   check('the strictest ticked option wins', strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }, { id: 'kf-dvt', sameDay: true }]) === 'doctorFirst'
     && strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }]) === 'clearFirst' && strictestPlan([]) === 'alongside')
+}
+
+// ── Lower back prototype of the new question design (../src/data/lowbackPlain.js) ──
+{
+  const nodeFs = await import('node:fs')
+  const LB = await imp('src/data/lowbackPlain.js')
+  const { regionRedFlags } = await imp('src/data/assessmentFlow.js')
+  const { flowZones } = await imp('src/data/referral.js')
+  const { patternChecks } = await imp('src/data/patternChecks.js')
+  const { GATES } = await imp('src/data/safetyGates.js')
+  const { EM_GROUPS } = await imp('src/data/emergencyGroups.js')
+  const z = [{ id: 'lowerback', type: 'lowerback', label: 'Lower back', side: 'c' }]
+  const regional = regionRedFlags(flowZones(z), z)
+  const pattern = patternChecks(z, {}, 12)
+  // What a lower-back-only drawing asks (sc-* are the universal three).
+  const page = [...regional, ...pattern].map((f) => f.id)// pc-visceral: the drawing's own pattern question (needs drawn points to match).
+    .concat(['sc-neuro', 'sc-systemic', 'sc-trauma', 'pc-visceral']).filter((id) => !LB.COVERED[id])
+  check('the cauda equina sex question is asked on a lower back drawing (it was dropped by the group filter)', regional.some((f) => f.id === 'rf-sexual'))
+  const noTicks = page.filter((id) => !LB.TICKS[id] || !LB.PLAIN_SHORT[id])
+  check('every lower back safety question has plain ticks and a short bullet', !noTicks.length, noTicks)
+  const src = ['src/components/PainAssessment.jsx', ...nodeFs.readdirSync(root + '/src/data').filter((f) => f.endsWith('.js')).map((f) => 'src/data/' + f)]
+    .map((f) => nodeFs.readFileSync(root + '/' + f, 'utf8')).join('\n')
+  const unknown = Object.keys(LB.TICKS).filter((id) => !new RegExp(`id: ?['"]${id}['"]`).test(src))
+  check('every tick belongs to a real safety question', !unknown.length, unknown)
+  // Patient-level wording: short, one sign per tick, no clinical words.
+  const words = (s) => s.split(/\s+/).filter(Boolean).length
+  const ticks = Object.entries(LB.TICKS).flatMap(([q, ts]) => ts.map((t) => ({ q, ...t })))
+  const long = ticks.filter((t) => words(t.text) > (t.combo ? 26 : 14)).map((t) => `${t.q}~${t.key} (${words(t.text)})`)
+  check('ticks: 14 words or fewer (26 for a sign that only counts with another)', !long.length, long)
+  const shorts = Object.entries(LB.PLAIN_SHORT).flatMap(([k, s]) => (typeof s === 'string' ? [[k, s]] : Object.values(s).map((v) => [k, v])))
+  const longShort = shorts.filter(([, s]) => words(s) > 10).map(([k]) => k)
+  check('group bullets: 10 words or fewer', !longShort.length, longShort)
+  const BANNED = /\b(bilateral|radiat\w*|sensation|function|episode|persistent|onset|bowels?|genitals?|urine|abdom\w*|saddle|incontinen\w*|retention|progressive|unremitting|acute|ejaculation|erections)\b/i
+  const plainText = [...ticks.map((t) => t.text), ...shorts.map(([, s]) => s), ...Object.values(LB.PLAIN_GATES), ...Object.values(LB.PLAIN_Q)]
+  const banned = plainText.filter((s) => BANNED.test(s))
+  check('no clinical words in what the patient reads', !banned.length, banned)
+  const keys = ticks.map((t) => `${t.q}~${t.key}`)
+  check('tick ids are unique', keys.length === new Set(keys).size)
+  // Every group on the lower back pages: a plain question and five bullets at most.
+  const groups = [...GATES.lowerback, ...EM_GROUPS].map((g) => ({ id: g.id, members: g.members.filter((m) => page.includes(m)) })).filter((g) => g.members.length >= 2)
+  const noPlain = groups.filter((g) => !LB.PLAIN_GATES[g.id]).map((g) => g.id)
+  check('every lower back group has a plain question', !noPlain.length, noPlain)
+  const tooMany = groups.filter((g) => new Set(g.members.map((m) => LB.shortFor(m))).size > 5).map((g) => g.id)
+  check('every lower back group shows five bullets at most', !tooMany.length, tooMany)
+  // A tick sets its question; the last one off clears it; a stale tick never counts.
+  let f = LB.toggleTick([], 'rf-saddle', 'paper')
+  check('ticking "cannot feel the toilet paper" sets the cauda equina question (emergency)', f.includes('rf-saddle') && regional.find((x) => x.id === 'rf-saddle').tier === 'emergency')
+  f = LB.toggleTick(f, 'rf-saddle', 'numb'); f = LB.toggleTick(f, 'rf-saddle', 'paper')
+  check('the question stays ticked while another of its ticks is', f.includes('rf-saddle'))
+  f = LB.toggleTick(f, 'rf-saddle', 'numb')
+  check('unticking the last tick clears the question', !f.includes('rf-saddle') && !f.length)
+  const vignettes = [['rf-bladder', 'leak', 'emergency'], ['rf-fracture', 'crash', 'emergency'], ['rf-infection', 'immune', 'urgent'], ['rf-myelo', 'hands', 'urgent']]
+  check('test patients: each tick leads to its question\'s tier', vignettes.every(([q, k, tier]) => LB.toggleTick([], q, k).includes(q) && regional.find((x) => x.id === q).tier === tier))
+  const tell = LB.tellThem(LB.toggleTick(LB.toggleTick([], 'rf-saddle', 'paper'), 'rf-bladder', 'start'), { 'lb:when': 'today' })
+  check('"Tell them" puts the ticks in the patient\'s words', tell === 'I have low back pain, and I cannot feel the toilet paper when I wipe and it is hard to start peeing. It started today.', tell)
+  check('"when it started" is told only with a nerve sign ticked', !/started/.test(LB.tellThem(LB.toggleTick([], 'rf-infection', 'immune'), { 'lb:when': 'today' })))
+  check('a tick whose question was unticked another way is not told', LB.tellThem(['rf-saddle~paper'], {}) === null)
+  check('a group bullet follows birth sex where it differs', LB.shortFor('rf-pelvic', 'male') === 'New trouble peeing' && /periods/.test(LB.shortFor('rf-pelvic', 'female')) && /periods/.test(LB.shortFor('rf-pelvic')))
+  check('sex-specific ticks are left out for the other sex', !LB.ticksFor('rf-pelvic', 'male').some((t) => t.key === 'periods') && LB.ticksFor('rf-pelvic', 'female').every((t) => t.sex !== 'male'))
 }
 
 console.log(`\n${pass} passed, ${fail} failed`)

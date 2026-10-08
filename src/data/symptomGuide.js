@@ -28,7 +28,9 @@ export const REGIONS = {
         text:"Have you had new trouble starting to pass urine, a weak or slow stream, not being able to feel when your bladder is full or has emptied, leaking urine, or losing control of your bowels?"},
       // Sexual function is under-reported, and is one of the Pathway's five red
       // flags. Someone who would rather not answer can still tick it.
-      {id:"rf-sexual", tier:"emergency", group:"cauda", why:"Possible cauda equina syndrome",
+      // No group (8 Oct 2026): sharing "cauda" with rf-bladder meant the
+      // duplicate filter dropped it, so it was never asked.
+      {id:"rf-sexual", tier:"emergency", why:"Possible cauda equina syndrome",
         text:"Have you had new difficulty with erections or ejaculation, or new loss of feeling during sex?"},
       {id:"rf-legs", tier:"emergency", why:"Possible cauda equina syndrome or severe nerve compression",
         text:"In the last few days, has your leg pain spread to both legs, or has weakness in your leg or foot been getting quickly worse?"},

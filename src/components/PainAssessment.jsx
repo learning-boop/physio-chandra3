@@ -39,6 +39,7 @@ import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { cautionRows, tickedIn } from '../data/cautionGroups'
 import { physioPlan, strictestPlan, PLAN_LABEL, PLAN_TEXT } from '../data/physioPlan'
+import { lbPrototype, PLAIN_GATES, shortFor, PLAIN_Q, COVERED, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/lowbackPlain'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -328,7 +329,7 @@ const TIER_WHY = {
   },
   urgent: {
     title: 'This should be checked before starting physiotherapy',
-    text: 'Symptoms in this group are usually examined first to rule out a fracture, an infection, or a circulation problem. Once that has been done, physiotherapy can go ahead safely.',
+    text: 'Symptoms like this are checked by a doctor to rule out a fracture, an infection, or a circulation problem.',
   },
 }
 
@@ -831,6 +832,9 @@ export default function PainAssessment() {
   // foot, hip or ankle only, the injury screen runs before the doctor page
   // and its answer filters it; the doctor page is grouped.
   const smartFirst = injuryApplies && !!smartArea(flowZ)
+  // Lower back prototype of the new question design (../data/lowbackPlain.js):
+  // plain group questions with bullets, one sign per tick.
+  const lbProto = !widespreadPath && lbPrototype(smartArea(flowZ))
   // Gateway groups the person has opened on the doctor page.
   const [openGates, setOpenGates] = useState([])
   // Area questions with a yes/no in front (../data/questionGates.js): the ids opened with "Yes".
@@ -933,7 +937,9 @@ export default function PainAssessment() {
       emergency: (() => { const em = bySeverity(all.filter((f) => f.tier === 'emergency')); return [...em, ...gateUnsureFlags(em, null, 'emergency')] })(),
       physician: (() => {
         // Smarter safety flow: the mechanism filter, then the gateway groups.
-        const doc = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
+        const doc0 = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
+        // Lower back prototype: a question another one on the page already asks is left out.
+        const doc = lbProto ? doc0.filter((f) => !(COVERED[f.id] && doc0.some((x) => x.id === COVERED[f.id]))) : doc0
         // One area, or several merged by theme (../data/safetyGates.js).
         const area = widespreadPath ? null : smartArea(flowZ) || smartAreas(flowZ)
         return area ? [...doc, ...gateUnsureFlags(doc, area)] : doc
@@ -941,7 +947,7 @@ export default function PainAssessment() {
       deferred,
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [widespreadPath, flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers.spondy, flags, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
+  }, [lbProto, widespreadPath, flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers.spondy, flags, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
 
   // The final check, after the questions: what only the answers can raise.
   const finalChecks = useMemo(() => {
@@ -994,20 +1000,67 @@ export default function PainAssessment() {
   // A group opened but nothing in it chosen yet.
   const gateOpenEmpty = (list) => gateRows(list).some((r) => r.gate && openGates.includes(r.gate.id) &&
     ![...r.members, r.unsure].some((m) => flags.includes(m.id)))
+  /* Lower back prototype (../data/lowbackPlain.js): one sign per tick; each
+     tick sets its question, so the routes are unchanged. */
+  const plainTicks = (m) => (lbProto ? ticksFor(m.id, who.sex) : [])
+  const tickChip = (m, t) => {
+    const sel = flags.includes(tickId(m.id, t.key))
+    return (
+      <button key={tickId(m.id, t.key)} style={chip(sel)} onClick={() => setFlags((cur) => toggleTick(cur, m.id, t.key))}>
+        <span style={letterStyle(sel)}>·</span>
+        <span>{t.text}</span>
+      </button>
+    )
+  }
+  // A question as ticks: one tick in place of the question, several under a short heading.
+  const plainQuestion = (m, letter) => {
+    const ticks = plainTicks(m)
+    if (ticks.length === 1) return tickChip(m, ticks[0])
+    return (
+      <div key={m.id} className="pa-gate pa-gate-open">
+        <p className="pa-gate-ask">{letter ? <span style={{ ...letterStyle(flags.includes(m.id)), marginRight: 10 }}>{letter}</span> : null}{PLAIN_Q[m.id] || 'Do any of these fit you?'}</p>
+        <div className="pa-gate-body">{ticks.map((t) => tickChip(m, t))}</div>
+      </div>
+    )
+  }
+  // "When did this start?" once a nerve sign at the bottom of the back is ticked.
+  const whenAsk = (members) => lbProto && members.some((m) => WHEN_FOR.includes(m.id) && flags.includes(m.id)) && (
+    <div style={{ marginTop: 10 }}>
+      <p className="pa-gate-ask">{WHEN_Q.text}</p>
+      {WHEN_Q.options.map((o) => {
+        const sel = answers[WHEN_Q.id] === o.id
+        return (
+          <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, [WHEN_Q.id]: sel ? undefined : o.id }))}>
+            <span style={letterStyle(sel)}>·</span><span>{o.label}</span>
+          </button>
+        )
+      })}
+    </div>
+  )
   const gateList = (list) => gateRows(list).map((r, i) => {
-    if (r.flag) return flagChip(r.flag, LETTERS[i] || '·')
+    if (r.flag) return plainTicks(r.flag).length ? <div key={r.flag.id}>{plainQuestion(r.flag, plainTicks(r.flag).length > 1 ? LETTERS[i] || '·' : null)}{whenAsk([r.flag])}</div> : flagChip(r.flag, LETTERS[i] || '·')
     const open = openGates.includes(r.gate.id)
     const toggle = () => {
       setOpenGates((cur) => (open ? cur.filter((x) => x !== r.gate.id) : [...cur, r.gate.id]))
-      if (open) setFlags((cur) => cur.filter((x) => ![...r.members, r.unsure].some((m) => m.id === x)))
+      if (open) setFlags((cur) => [...r.members, r.unsure].reduce((acc, m) => clearQuestion(acc, m.id), cur))
     }
     const cut = r.gate.text.indexOf(': ')
+    // Prototype: a plain question with one short bullet per question in the group.
+    const plain = lbProto && PLAIN_GATES[r.gate.id]
+    const bullets = plain ? [...new Set(r.members.map((m) => shortFor(m.id, who.sex)).filter(Boolean))] : []
     return (
       <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
         <button style={chip(open)} onClick={toggle} aria-expanded={open}>
           <span style={letterStyle(open)}>{LETTERS[i] || '·'}</span>
-          {/* Title in bold, the short signs beneath, for a quick scan. */}
-          {cut < 0 ? <span>{r.gate.text}</span> : (
+          {plain ? (
+            <span>
+              <strong style={{ display: 'block', color: '#fff', fontWeight: 600 }}>{plain}</strong>
+              <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: '0.95em', color: 'rgba(255,255,255,0.82)', lineHeight: 1.5 }}>
+                {bullets.map((b) => <li key={b}>{b}</li>)}
+              </ul>
+            </span>
+          ) : cut < 0 ? <span>{r.gate.text}</span> : (
+            /* Title in bold, the short signs beneath, for a quick scan. */
             <span>
               <strong style={{ display: 'block', color: '#fff', fontWeight: 600 }}>{r.gate.text.slice(0, cut)}</strong>
               <span style={{ display: 'block', marginTop: 3, fontSize: '0.93em', color: 'rgba(255,255,255,0.78)' }}>{r.gate.text.slice(cut + 2)}</span>
@@ -1017,8 +1070,9 @@ export default function PainAssessment() {
         {open && (
           <div className="pa-gate-body">
             <p className="pa-gate-ask">Which of these? Tick any that apply.</p>
-            {r.members.map((m) => flagChip(m, '·'))}
-            {flagChip({ ...r.unsure, text: 'Not sure which, but one of these signs applies' }, '?')}
+            {r.members.map((m) => (plainTicks(m).length ? plainTicks(m).map((t) => tickChip(m, t)) : flagChip(m, '·')))}
+            {flagChip({ ...r.unsure, text: plain ? 'Not sure which, but one of these fits' : 'Not sure which, but one of these signs applies' }, '?')}
+            {whenAsk(r.members)}
           </div>
         )}
       </div>
@@ -1256,7 +1310,7 @@ export default function PainAssessment() {
       bone: boneSummary(flags, answers),
       declinedFlags: safetyChecks.filter((f) => !flags.includes(f.id)).map((f) => f.text),
       flagIds: flags,
-      reportedFlags: [...doctorFlags.map((f) => ({ text: f.text, why: f.why && f.why.title, sameDay: !!f.sameDay, physio: PLAN_LABEL[physioPlan(f)] })),
+      reportedFlags: [...doctorFlags.map((f) => ({ text: tickedText(f.id, flags).length ? `${f.text} (ticked: ${tickedText(f.id, flags).join('; ')})` : f.text, why: f.why && f.why.title, sameDay: !!f.sameDay, physio: PLAN_LABEL[physioPlan(f)] })),
         ...(otherFlagged ? [{ text: `Other: ${flagOther.trim()}`, why: '', sameDay: false }] : [])],
       review,
     })
@@ -2347,8 +2401,12 @@ export default function PainAssessment() {
                   </h2>
                   <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
                     {emergency
-                      ? 'These questions check for anything that needs urgent medical care right now. Most people answer no to all of them. If any applies to you now, select it and we will tell you what to do.'
-                      : 'These can point to a problem your doctor should check before physiotherapy begins. You can still book with Chandra. Select any that apply to you now.'}
+                      ? (lbProto
+                        ? 'These check for anything that needs help right now. Most people answer no to all of them. If one fits you now, tick it and we will tell you what to do.'
+                        : 'These questions check for anything that needs urgent medical care right now. Most people answer no to all of them. If any applies to you now, select it and we will tell you what to do.')
+                      : lbProto
+                        ? 'Some signs mean a doctor should check you. Tick any that fit you now.'
+                        : 'These can point to a problem your doctor should check. Select any that apply to you now.'}
                   </p>
                   </div>
                   {list.length > 0 ? (
@@ -2648,7 +2706,8 @@ export default function PainAssessment() {
                   <div style={{ ...card, maxWidth: 520, margin: '12px 0 12px' }}>
                     <span style={{ ...label, fontSize: 11.5 }}>You selected</span>
                     <ul style={{ margin: '10px 0 0', paddingLeft: 20, fontSize: 15, lineHeight: 1.75, color: 'rgba(255,255,255,0.82)' }}>
-                      {pickedFlags.map((f) => <li key={f.id}>{f.text}</li>)}
+                      {/* Lower back prototype: the signs ticked, in the patient's words. */}
+                      {pickedFlags.flatMap((f) => (tickedText(f.id, flags).length ? tickedText(f.id, flags).map((t) => <li key={t}>{t}</li>) : [<li key={f.id}>{f.text}</li>]))}
                       {otherFlagged && <li>Other: {flagOther.trim()}</li>}
                     </ul>
                   </div>
@@ -2682,7 +2741,7 @@ export default function PainAssessment() {
                       {pickedFlags.filter((f) => f.tier === 'emergency').map((f) => (
                         <div key={f.id}>
                           <p style={{ fontSize: 16, color: '#fff', margin: 0, lineHeight: 1.45, fontWeight: 600 }}>{f.why.title}</p>
-                          <p style={{ ...body, fontSize: 14, margin: '4px 0 0', color: 'rgba(255,255,255,0.72)' }}>You told us: {f.text}</p>
+                          <p style={{ ...body, fontSize: 14, margin: '4px 0 0', color: 'rgba(255,255,255,0.72)' }}>You told us: {tickedText(f.id, flags).length ? tickedText(f.id, flags).join('; ') : f.text}</p>
                         </div>
                       ))}
                     </div>
@@ -2710,6 +2769,14 @@ export default function PainAssessment() {
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
                       <strong style={{ color: '#fff' }}>If your symptoms are severe or getting worse quickly, call 911.</strong>
                     </p>
+                  </div>
+                )}
+
+                {/* Lower back prototype: the patient's own words for the doctor or 911. */}
+                {lbProto && tellThem(flags, answers) && (
+                  <div style={{ ...card, maxWidth: 520, margin: '12px 0 0' }}>
+                    <span style={{ ...label, fontSize: 11.5 }}>Tell them</span>
+                    <p style={{ fontSize: 16, color: '#fff', margin: '8px 0 0', lineHeight: 1.5 }}>“{tellThem(flags, answers)}”</p>
                   </div>
                 )}
 

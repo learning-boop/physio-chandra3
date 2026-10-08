@@ -35,6 +35,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 import { EM_GROUPS, FINAL_GROUPS, EM_SHORT, FINAL_SHORT } from './emergencyGroups.js'
+import { strictestPlan } from './physioPlan.js'
 
 /* The areas it runs for: the drawn zone type → its injury screen and groups. */
 export const AREAS = ['knee', 'foot', 'hip', 'ankle', 'lowerback', 'upperback', 'tlj', 'neck', 'shoulder',
@@ -643,10 +644,12 @@ export function gateUnsureFlags(list = [], area = 'knee', kind = 'doctor') {
     }
     return {
       id: `gate:${g.id}`, tier: 'urgent', gate: g.id, area, kind, unsure: true,
-      // As urgent as the most urgent question it stands for; booking is still offered.
+      // As urgent as the most urgent question it stands for, and as strict on
+      // physio meanwhile (../data/physioPlan.js).
       sameDay: members.some((f) => f.sameDay),
+      physio: strictestPlan(members),
       text: `${gateText(g, members)} (not sure which)`,
-      why: { title: 'Please see your doctor', text: 'You told us one of these signs applies but were not sure which. A doctor should check it before physiotherapy begins; you can still book with Chandra, who will make sure it has been looked at.' },
+      why: { title: 'Please see your doctor', text: 'You told us one of these signs applies but were not sure which. A doctor should check it.' },
     }
   })
 }
