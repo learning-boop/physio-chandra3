@@ -20,7 +20,8 @@
     "review:nerves": "node scripts/make-nerve-review.mjs",
     "review:physio": "node scripts/make-physio-review.mjs",
     "review:lowback": "node scripts/make-plain-review.mjs lowerback",
-    "review:neck": "node scripts/make-plain-review.mjs neck"
+    "review:neck": "node scripts/make-plain-review.mjs neck",
+    "review:shoulder": "node scripts/make-plain-review.mjs shoulder"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",

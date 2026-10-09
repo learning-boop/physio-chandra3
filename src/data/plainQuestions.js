@@ -1,7 +1,7 @@
 /* ─────────────────────────────────────────────────────────────────────────
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
-   Lower back first (prototype), then the neck.
+   Lower back first (prototype), then the neck and the shoulder.
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -21,7 +21,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder']
 /** The area the plain design runs for, or null. */
 export const plainArea = (area) => (PLAIN_AREAS.includes(area) ? area : null)
 
@@ -30,12 +30,14 @@ export const plainArea = (area) => (PLAIN_AREAS.includes(area) ? area : null)
 export const PLAIN_GATES = {
   'em-nerve': { lowerback: 'Since your back pain started, have you noticed any of these?', neck: 'Along with your neck pain, have you noticed any of these?' },
   'em-illness': 'Do you have any of these right now?',
-  'em-limb': 'Did this start after an accident in the last few days?',
+  'em-limb': { lowerback: 'Did this start after an accident in the last few days?', shoulder: 'Do you have any of these with the pain?' },
   'lowback-bone': 'Could the bone be hurt or weak?',
   'lowback-infection': 'Do you feel unwell, not just sore?',
   'lowback-organ': 'Could the pain be coming from inside your body?',
   'lowback-nerve': 'Have your legs, feet or hands changed?',
   'neck-cord': 'Have your arms, legs or neck changed in a worrying way?',
+  'shoulder-medical': 'Could the pain be coming from somewhere else in your body?',
+  'shoulder-nerve': 'Has your arm become weak or numb?',
 }
 /** A group's plain question for this area. */
 export const gateQ = (gid, area) => {
@@ -43,7 +45,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : q[area] || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const PAIN_WORD = { lowerback: 'low back pain', neck: 'neck pain' }
+export const PAIN_WORD = { lowerback: 'low back pain', neck: 'neck pain', shoulder: 'shoulder pain' }
 
 export const PLAIN_SHORT = {
   // Emergency: nerves at the bottom of the back
@@ -57,7 +59,7 @@ export const PLAIN_SHORT = {
   'jrf-aorta': 'Sudden tearing pain in your back',
   'jrf-pancreas': 'Very bad upper tummy pain, and being sick',
   'jrf-testis': 'Sudden, very bad pain in a testicle',
-  'pc-stroke': 'A drooping face, one weak side, or slurred speech',
+  'pc-stroke': 'A drooping face, one weak side, slurred speech, or sight loss',
   // Emergency: accident
   'rf-fracture': 'A crash or bad fall in the last few days',
   // See a doctor
@@ -67,25 +69,36 @@ export const PLAIN_SHORT = {
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
   'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
-  'rf-kidney': 'Pain in waves to the groin, or burning pee',
+  'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
   'rf-aaa-slow': 'A deep ache that never changes, or a pulsing tummy',
   'rf-footdrop': 'Your foot slaps down or your toes catch',
-  'rf-myelo': 'Clumsy hands or unsteady walking',
+  'rf-myelo': 'Clumsy hands, unsteady walking, or neck pain too',
   'sc-neuro': 'New weakness or numbness in an arm or leg',
   'jrf-legs': 'Legs slowly getting stiff or heavy',
   'jrf-shingles': 'A band of burning pain with a rash',
   // Neck
-  'nrf-stroke': 'A sudden bad headache, drooping face, or one weak side',
+  'nrf-stroke': 'A sudden bad headache, drooping face, weak side, or trouble speaking or seeing',
   'nrf-cord': 'You cannot hold your pee or poo',
-  'nrf-cord-legs': 'Both legs numb or weak, or trouble breathing',
+  'nrf-cord-legs': 'Both legs, or hands and feet, numb or weak, or trouble breathing',
   'nrf-mening': 'A fever with a stiff neck or a rash',
   'nrf-cardiac': 'Pain that comes with effort, or with chest pain',
   'nrf-after': 'Bad signs after a neck crack, crash or knock',
   'nrf-after-doc': 'Dizziness or a new headache since an injury',
   'nrf-myelo': 'An arm, hand or leg quickly getting weak or clumsy',
   'nrf-upperinstab': 'A head too heavy to hold, or tingling lips',
+  // Shoulder
+  'rf-cardiac1': 'Pain that comes with effort, or chest tightness',
+  'srf-kehr': 'Shoulder-tip pain after a blow, or feeling faint',
+  'srf-ectopic': 'Could be pregnant, with low tummy pain',
+  'srf-lung': 'Sudden sharp pain on breathing, and breathless',
+  'srf-rhabdo': 'Very sore or weak muscles, and dark pee',
+  'rf-hotjoint': 'A hot, swollen joint with a fever, or after an injection',
+  'srf-pmr': 'Both shoulders stiff each morning, and feeling unwell',
+  'srf-pancoast': 'A smoker with a lasting cough, coughed-up blood, droopy eyelid or weak hand',
+  'srf-organ': 'Pain with meals, breathing, sickness, yellow skin, or that never changes',
+  'srf-pta': 'Sudden bad pain, then a weak or thin arm',
 }
 
 /** A bullet, for this area or birth sex where it differs. */
@@ -120,6 +133,9 @@ export const PLAIN_Q = {
   'nrf-after-doc': 'Do any of these fit you?',
   'nrf-myelo': 'Over the last few days or weeks, has one of these happened quickly?',
   'nrf-upperinstab': 'Do any of these fit you?',
+  'rf-cardiac1': 'Do any of these fit you?',
+  'rf-hotjoint': 'Do any of these fit you?',
+  'srf-organ': 'Do any of these fit you?',
 }
 
 /* Inside a group: a sub-heading over a question's ticks, where a limit
@@ -128,6 +144,7 @@ export const SUBHEAD = {
   'nrf-stroke': 'Came on suddenly since this started:',
   'nrf-after': 'After a neck "crack", a crash, a jerk or a knock to the head, new in the last few days or getting worse fast:',
   'nrf-myelo': 'Happening quickly, over days or weeks:',
+  'pc-stroke': 'Started in the last few hours:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -291,6 +308,45 @@ export const TICKS = {
     { key: 'lips', text: 'Moving your neck brings a lump in your throat, or tingling lips or mouth', tell: 'moving my neck makes my lips tingle' },
     { key: 'slow', combo: true, text: 'Over weeks or months, with no injury: a hoarse voice, trouble swallowing, a numb or weak face, a drooping eyelid, or double vision', tell: 'over weeks I have had a hoarse voice, trouble swallowing or double vision' },
     { key: 'risk', text: 'Rheumatoid or another inflammatory arthritis, Down syndrome, or long-term steroid tablets', tell: 'I have inflammatory arthritis, Down syndrome or take steroid tablets' },
+  ],
+  // ── Shoulder ──
+  'rf-cardiac1': [
+    { key: 'effort', text: 'Shoulder, jaw or left arm pain when you walk fast or climb stairs', tell: 'the pain comes on when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: chest tightness', tell: 'I have chest tightness with it' },
+    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+  ],
+  'srf-kehr': [
+    { key: 'blow', combo: true, text: 'Pain at the tip of your left shoulder that started after a blow to your tummy or ribs', tell: 'pain at the tip of my left shoulder started after a blow to my tummy' },
+    { key: 'faint', combo: true, text: 'Pain at the tip of your shoulder, with feeling faint or dizzy', tell: 'I have pain at the tip of my shoulder and feel faint' },
+  ],
+  'srf-ectopic': [
+    { key: 'preg', combo: true, sex: 'female', text: 'You could be pregnant, and you have pain low in your tummy and at the tip of your shoulder', tell: 'I could be pregnant, and I have low tummy pain and shoulder-tip pain' },
+  ],
+  'srf-lung': [
+    { key: 'breath', combo: true, text: 'Sudden, sharp pain when you breathe in, and you are short of breath', tell: 'I have sudden, sharp pain when I breathe in and I am short of breath' },
+  ],
+  'srf-rhabdo': [
+    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, and pee that is dark like cola', tell: 'I have very bad muscle pain and my pee is dark like cola' },
+  ],
+  'rf-hotjoint': [
+    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
+    { key: 'injection', combo: true, text: 'A hot, red or swollen joint after a recent injection', tell: 'my joint is hot and swollen after an injection' },
+  ],
+  'srf-pmr': [
+    { key: 'stiff', combo: true, text: 'Both shoulders (often the hips too) stiff and aching for over 45 minutes each morning, and you feel unwell', tell: 'both my shoulders are stiff every morning and I feel unwell' },
+  ],
+  'srf-pancoast': [
+    { key: 'smoker', combo: true, text: 'You smoke (or did), and have a cough that will not go away, coughed up blood, a drooping eyelid, or a weak hand', tell: 'I smoke or did, and I have a lasting cough, coughed up blood, a drooping eyelid or a weak hand' },
+  ],
+  'srf-organ': [
+    { key: 'fatty', text: 'Pain worse after fatty meals', tell: 'the pain is worse after fatty meals' },
+    { key: 'breath', text: 'Pain worse when you breathe in deeply', tell: 'the pain is worse when I breathe in deeply' },
+    { key: 'sick', text: 'Feeling sick, or a fever, with the pain', tell: 'I feel sick or have a fever with it' },
+    { key: 'yellow', text: 'Yellow skin or eyes', tell: 'my skin or eyes look yellow' },
+    { key: 'still', text: 'Pain that does not change at all when you move', tell: 'the pain does not change when I move' },
+  ],
+  'srf-pta': [
+    { key: 'weak', combo: true, text: 'Sudden, very bad shoulder pain with no injury for several days, and then your shoulder or arm became weak or thin', tell: 'I had sudden, very bad shoulder pain for days, and now my arm is weak' },
   ],
   'jrf-shingles': [
     { key: 'band', text: 'A band of burning pain on one side, with a rash or blisters', tell: 'I have a band of burning pain with a rash' },

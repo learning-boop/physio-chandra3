@@ -2,7 +2,8 @@
    question a one-area drawing asks, before (as on the other areas) and after
    (plain group question, short bullets, one sign per tick), for sign-off.
    Run: npm run review:lowback   →   review/lowback-plain.html (+ -link.html for the phone)
-        npm run review:neck      →   review/neck-plain.html    (+ -link.html) */
+        npm run review:neck      →   review/neck-plain.html    (+ -link.html)
+        npm run review:shoulder  →   review/shoulder-plain.html (+ -link.html) */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
 import { GATES, SHORT } from '../src/data/safetyGates.js'
@@ -38,6 +39,19 @@ const AREAS = {
       '<strong>For you to decide:</strong> the upper-neck question\'s first item (inflammatory arthritis, Down syndrome or long-term steroids) counts on its own, as the current question reads. If it should only count with one of the symptoms, it becomes a "both together" line.',
     ],
   },
+}
+AREAS.shoulder = {
+  out: 'shoulder-plain', title: 'Shoulder Questions', name: 'Shoulder',
+  em: ['rf-cardiac1', 'srf-lung', 'srf-kehr', 'srf-ectopic', 'pc-stroke', 'rf-hotjoint', 'srf-rhabdo'],
+  emAlone: [],
+  docAlone: ['srf-pmr'],
+  sample: () => tellThem(toggleTick([], 'rf-hotjoint', 'injection'), {}, 'shoulder'),
+  own: [
+    '<strong>Shared group, new question:</strong> on the shoulder the "injury, infection or circulation" emergency group holds the hot joint and the muscle breakdown questions, so it asks "Do you have any of these with the pain?" rather than the lower back\'s accident question.',
+    '<strong>Stroke signs inside a group</strong> now sit in a box headed "Started in the last few hours:" (this also fixes the lower back, where the limit was lost inside the group).',
+    '<strong>Signs that only count together</strong> stay on one line: shoulder-tip pain with a blow or feeling faint; sharp pain on breathing with breathlessness; a hot joint with a fever or a recent injection; a smoker with a lasting cough, blood, a drooping eyelid or a weak hand.',
+    '<strong>The shoulder injury screen</strong> is unchanged in this step.',
+  ],
 }
 const AREA = process.argv[2] || 'lowerback'
 const A = AREAS[AREA]

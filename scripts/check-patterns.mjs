@@ -2335,10 +2335,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   }
   const lb = pageOf('lowerback', ['sc-neuro', 'sc-systemic', 'sc-trauma', 'pc-visceral'])
   const nk = pageOf('neck', ['sc-systemic'], ['pc-stroke'])
+  const sh = pageOf('shoulder', ['sc-neuro', 'sc-systemic'])
   const regional = lb.reg
   const page = lb.ids
   check('the cauda equina sex question is asked on a lower back drawing (it was dropped by the group filter)', regional.some((f) => f.id === 'rf-sexual'))
-  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids]]) {
+  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids]]) {
     const noTicks = pg.filter((id) => !LB.TICKS[id] || !LB.PLAIN_SHORT[id])
     check(`every ${name} safety question has plain ticks and a short bullet`, !noTicks.length, noTicks)
   }
@@ -2352,8 +2353,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const long = ticks.filter((t) => words(t.text) > (t.combo ? 26 : 14)).map((t) => `${t.q}~${t.key} (${words(t.text)})`)
   check('ticks: 14 words or fewer (26 for a sign that only counts with another)', !long.length, long)
   const shorts = Object.entries(LB.PLAIN_SHORT).flatMap(([k, s]) => (typeof s === 'string' ? [[k, s]] : Object.values(s).map((v) => [k, v])))
-  const longShort = shorts.filter(([, s]) => words(s) > 10).map(([k]) => k)
-  check('group bullets: 10 words or fewer', !longShort.length, longShort)
+  // 14: a bullet must still name every sign behind it, so "No" is safe.
+  const longShort = shorts.filter(([, s]) => words(s) > 14).map(([k]) => k)
+  check('group bullets: 14 words or fewer', !longShort.length, longShort)
   const BANNED = /\b(bilateral|radiat\w*|sensation|function|episode|persistent|onset|bowels?|genitals?|urine|abdom\w*|saddle|incontinen\w*|retention|progressive|unremitting|acute|ejaculation|erections)\b/i
   const plainText = [...ticks.map((t) => t.text), ...shorts.map(([, s]) => s), ...Object.values(LB.PLAIN_GATES).flatMap((q) => (typeof q === 'string' ? [q] : Object.values(q))), ...Object.values(LB.PLAIN_Q), ...Object.values(LB.SUBHEAD)]
   const banned = plainText.filter((s) => BANNED.test(s))
@@ -2361,12 +2363,12 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const keys = ticks.map((t) => `${t.q}~${t.key}`)
   check('tick ids are unique', keys.length === new Set(keys).size)
   // Every group on the lower back pages: a plain question and five bullets at most.
-  const groups = [['lowerback', lb.ids], ['neck', nk.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
+  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
     .map((g) => ({ id: g.id, area: a, members: g.members.filter((m) => pg.includes(m)) })).filter((g) => g.members.length >= 2))
   const noPlain = groups.filter((g) => !LB.gateQ(g.id, g.area)).map((g) => `${g.area}:${g.id}`)
-  check('every lower back and neck group has a plain question', !noPlain.length, noPlain)
+  check('every lower back, neck and shoulder group has a plain question', !noPlain.length, noPlain)
   const tooMany = groups.filter((g) => new Set(g.members.map((m) => LB.shortFor(m))).size > 5).map((g) => g.id)
-  check('every lower back and neck group shows five bullets at most', !tooMany.length, tooMany)
+  check('every lower back, neck and shoulder group shows five bullets at most', !tooMany.length, tooMany)
   // A tick sets its question; the last one off clears it; a stale tick never counts.
   let f = LB.toggleTick([], 'rf-saddle', 'paper')
   check('ticking "cannot feel the toilet paper" sets the cauda equina question (emergency)', f.includes('rf-saddle') && regional.find((x) => x.id === 'rf-saddle').tier === 'emergency')
@@ -2385,6 +2387,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('the neck keeps fever and past cancer in the general medical question (the lower back asks them elsewhere)',
     ['fever', 'cancer'].every((k) => LB.ticksFor('sc-systemic', null, 'neck').some((t) => t.key === k)) && !LB.ticksFor('sc-systemic', null, 'lowerback').some((t) => t.key === 'fever')
     && lb.ids.includes('rf-infection') && lb.ids.includes('rf-cancer'))
+  check('the shoulder: a sudden, sharp pain on breathing with breathlessness sets the 911 lung clot question', LB.toggleTick([], 'srf-lung', 'breath').includes('srf-lung') && sh.reg.find((f) => f.id === 'srf-lung').call911)
+  check('the shoulder: a hot joint needs a fever or a recent injection too (one line each)', LB.TICKS['rf-hotjoint'].every((t) => t.combo))
+  check('the shoulder: the accident group question is not used for the hot joint and muscle group', !/accident/.test(LB.gateQ('em-limb', 'shoulder')))
+  check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
   check('the neck group questions are its own', /neck pain/.test(LB.gateQ('em-nerve', 'neck')) && /back pain/.test(LB.gateQ('em-nerve', 'lowerback')))
   check('a tick whose question was unticked another way is not told', LB.tellThem(['rf-saddle~paper'], {}) === null)
   check('a group bullet follows birth sex where it differs', LB.shortFor('rf-pelvic', 'male') === 'New trouble peeing' && /periods/.test(LB.shortFor('rf-pelvic', 'female')) && /periods/.test(LB.shortFor('rf-pelvic')))
