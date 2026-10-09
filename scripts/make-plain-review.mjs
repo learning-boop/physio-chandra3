@@ -8,6 +8,7 @@
         npm run review:shoulder   →  review/shoulder-plain.html
         npm run review:knee       →  review/knee-plain.html
         npm run review:hip        →  review/hip-plain.html
+        npm run review:ankle      →  review/ankle-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -71,6 +72,17 @@ const AREAS = {
       '<strong>After a hip operation:</strong> the dislocation signs sit under a boxed heading "After a hip replacement or a hip fracture operation:".',
       '<strong>Signs that only count together</strong> stay on one line, e.g. 65 or over or weak bones AND sudden hip pain with no fall; a runner AND a deep groin ache; steroids, heavy drinking, sickle cell, lupus, a transplant or an old hip injury AND a deep groin ache.',
       '<strong>The hip injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  ankle: {
+    out: 'ankle-plain', title: 'Ankle Questions', name: 'Ankle', zones: [Z('ankleR', 'ankle', 'R')],
+    sample: () => tellThem(toggleTick([], 'af-ischaemia', 'foot'), {}, 'ankle'),
+    own: [
+      '<strong>Compartment syndrome</strong> keeps its causes and time limit as a boxed heading, and each tick needs both the climbing pain and a muscle sign, as on the knee.',
+      '<strong>Past cancer, a growing lump and night pain</strong> are asked once, in the ankle cancer question; the general medical question keeps only fever and weight loss here.',
+      '<strong>A tight cast</strong> keeps the safety line "do not cut it off" in the tick itself.',
+      '<strong>Signs that only count together</strong> stay on one line, e.g. heel or Achilles pain AND a stiff back, psoriasis, sore eyes, other swollen joints or a recent infection; diabetes AND a hot, swollen foot or a wound not healing; Achilles pain AND a recent ciprofloxacin-type antibiotic or steroids.',
+      '<strong>The ankle injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {

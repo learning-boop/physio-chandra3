@@ -2337,10 +2337,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const nk = pageOf('neck', ['sc-systemic'], ['pc-stroke'])
   const sh = pageOf('shoulder', ['sc-neuro', 'sc-systemic'])
   const kn = pageOf('knee', ['sc-neuro', 'sc-systemic'])
+  const an = pageOf('ankle', ['sc-neuro', 'sc-systemic'])
   const regional = lb.reg
   const page = lb.ids
   check('the cauda equina sex question is asked on a lower back drawing (it was dropped by the group filter)', regional.some((f) => f.id === 'rf-sexual'))
-  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids]]) {
+  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids]]) {
     const noTicks = pg.filter((id) => !LB.TICKS[id] || !LB.PLAIN_SHORT[id])
     check(`every ${name} safety question has plain ticks and a short bullet`, !noTicks.length, noTicks)
   }
@@ -2364,7 +2365,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const keys = ticks.map((t) => `${t.q}~${t.key}`)
   check('tick ids are unique', keys.length === new Set(keys).size)
   // Every group on the lower back pages: a plain question and five bullets at most.
-  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
+  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
     .map((g) => ({ id: g.id, area: a, members: g.members.filter((m) => pg.includes(m)) })).filter((g) => g.members.length >= 2))
   const noPlain = groups.filter((g) => !LB.gateQ(g.id, g.area)).map((g) => `${g.area}:${g.id}`)
   check('every lower back, neck, shoulder and knee group has a plain question', !noPlain.length, noPlain)
@@ -2401,6 +2402,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const GENERIC_Q = /^(Do any of these fit you\?|Have you noticed any of these\?|Have any of these changed\?|Has one of these happened\?|Along with the neck pain, have you noticed any of these\?)$/
   const leans = Object.entries(LB.PLAIN_Q).filter(([q, h]) => !GENERIC_Q.test(h) && !LB.SUBHEAD[q]).map(([q]) => q)
   check('every question whose ticks lean on its heading keeps it inside a group', !leans.length, leans)
+  check('the ankle: blocked blood flow and fast-spreading infection are one tick away from the emergency', ['af-ischaemia', 'af-necfasc'].every((q) => an.reg.find((f) => f.id === q).tier === 'emergency' && LB.TICKS[q].length))
+  check('the ankle: the cancer question asks past cancer, a growing lump and night pain, so the general question does not repeat them',
+    ['past', 'lump', 'night'].every((k) => LB.TICKS['af-cancer'].some((t) => t.key === k)) && LB.ticksFor('sc-systemic', null, 'ankle').map((t) => t.key).join() === 'fever,weight')
+  check('the ankle: a tight cast says not to cut it off yourself', /do not cut it off/.test(LB.TICKS['af-cast'][0].text))
   check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
   // ── Several areas (and the implied mid-to-low back behind a low-back mark) ──
   {
@@ -2414,7 +2419,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
       JSON.stringify(LB.plainAreas(flowZones(zLB))) === '["lowerback"]' && smartArea(flowZones(zLB)) === null)
     check('lower back + hip gets the plain design', JSON.stringify(LB.plainAreas(flowZones([...zLB, ...zHip]))) === '["lowerback","hip"]')
     check('an area without plain questions yet keeps the usual wording for the whole drawing',
-      LB.plainAreas(flowZones([...zLB, { id: 'ankleR', type: 'ankle', label: 'Ankle', side: 'R' }])) === null)
+      LB.plainAreas(flowZones([...zLB, { id: 'footR', type: 'foot', label: 'Foot', side: 'R' }])) === null)
     check('"Tell them" names both areas', /^I have low back and hip pain, and /.test(LB.tellThem(LB.toggleTick([], 'hpf-dvt', 'leg'), {}, ['lowerback', 'hip'])))
     // Every drawing × every age and birth sex: every question shown has plain
     // ticks, and every merged group has a plain question and few enough bullets.
