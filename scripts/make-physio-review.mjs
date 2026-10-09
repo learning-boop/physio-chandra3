@@ -37,7 +37,7 @@ const all = [...flags.values()].map((f) => ({ ...f, plan: physioPlan(f) }))
 
 const why = (f) => OVERRIDES[f.id] ? 'clinical override'
   : /-(dvt|clot)$/.test(f.id) ? 'possible clot'
-  : /-infection$/.test(f.id) && !f.noBooking && !f.sameDay ? 'possible infection'
+  : ['rf-infection', 'trf-infection', 'jrf-infection', 'prf-infection', 'mrf-infection'].includes(f.id) ? 'possible spine or joint infection (doctor first)'
   : f.noBooking ? 'no-booking flag' : f.sameDay ? 'same-day flag' : 'default'
 const table = (rows) => `<table class="opts"><tr><th>Question</th><th>Why this option</th></tr>${rows.map((f) =>
   `<tr><td><code>${esc(f.id)}</code>${f.sameDay ? ' <span class="tag">today</span>' : ''}<br><span class="muted">${esc(f.text)}</span></td><td class="w">${esc(why(f))}</td></tr>`).join('')}</table>`
@@ -49,7 +49,7 @@ const decide = (key) => `<div class="decide">
 const card = (key, area, title, intro, rows) => `<section class="card" data-key="${esc(key)}" data-area="${area}">
   <h2>${esc(title)}</h2><p class="meta">${intro}</p>${rows ? table(rows) : ''}${decide(key)}</section>`
 
-const changed = all.filter((f) => ['clinical override', 'possible clot', 'possible infection'].includes(why(f)))
+const changed = all.filter((f) => ['clinical override', 'possible clot', 'possible spine or joint infection (doctor first)'].includes(why(f)))
 const wording = `<section class="card" data-key="wording" data-area="wording">
   <h2>What the patient reads</h2><p class="meta">Shown on the see-a-doctor screen, at the top of the results, next to "Book an assessment", and in the patient's PDF. The strictest option among the ticked questions is used. The clinician summary lists each question's option.</p>
   ${['alongside', 'clearFirst', 'doctorFirst'].map((p) => `<h4>${esc(PLAN_LABEL[p])}</h4><p>${esc(PLAN_TEXT[p])}</p>`).join('')}
@@ -61,7 +61,7 @@ const page = (bare) => renderPage({
   cards: [],
   title: 'Physio While Waiting',
   heading: 'Physio while waiting for the doctor',
-  lede: `Every see-a-doctor question on the site (${all.length}), sorted by what physio can do while the patient waits. Changed from before: ${changed.length} questions (the clot questions now hold booking until a doctor has seen them; "fever, weight loss, a lump or cancer history" and the possible infection questions now let the patient book, with treatment after the doctor's check).`,
+  lede: `Every see-a-doctor question on the site (${all.length}), sorted by what physio can do while the patient waits. Changed from before: ${changed.length} questions (the clot questions now hold booking until a doctor has seen them; "fever, weight loss, a lump or cancer history" now lets the patient book, with treatment after the doctor's check; the spine and joint infection questions are doctor first, signed off 9 Oct 2026).`,
   extra: [
     { area: 'wording', title: 'Patient wording', html: wording },
     { area: 'changed', title: 'What changed', html: card('changed', 'changed', 'Questions whose option changed', 'Your recommended calls from 8 Oct 2026.', changed) },

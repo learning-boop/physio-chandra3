@@ -2308,7 +2308,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('a no-booking flag: doctor first', physioPlan({ id: 'x', noBooking: true, sameDay: true }) === 'doctorFirst')
   check('fever, weight loss or cancer history: book, treat after the check', physioPlan({ id: 'sc-systemic', tier: 'urgent' }) === 'clearFirst')
   const clots = ['pc-dvt', 'pg-dvt', 'kf-dvt', 'arf-clot', 'hpf-dvt', 'tgf-dvt', 'lgf-dvt', 'af-dvt']
-  check('a possible spine infection: book, treat after the check', physioPlan({ id: 'rf-infection', tier: 'urgent' }) === 'clearFirst')
+  check('a possible spine or joint infection: doctor first, no booking (sign-off 9 Oct 2026)', ['rf-infection', 'trf-infection', 'jrf-infection', 'prf-infection', 'mrf-infection'].every((id) => physioPlan({ id, tier: 'urgent' }) === 'doctorFirst'))
+  check('other infection questions keep their own rule (pregnancy and steroid ones: same day, book with treatment after the check)', physioPlan({ id: 'pg-infection', sameDay: true }) === 'clearFirst' && physioPlan({ id: 'st-infection', sameDay: true }) === 'clearFirst')
   check('every possible clot: doctor first, no booking', clots.every((id) => physioPlan({ id, sameDay: true }) === 'doctorFirst'), clots.map((id) => physioPlan({ id, sameDay: true })))
   check('the strictest ticked option wins', strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }, { id: 'kf-dvt', sameDay: true }]) === 'doctorFirst'
     && strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }]) === 'clearFirst' && strictestPlan([]) === 'alongside')
@@ -2393,7 +2394,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     ['fever', 'cancer'].every((k) => LB.ticksFor('sc-systemic', null, 'neck').some((t) => t.key === k)) && !LB.ticksFor('sc-systemic', null, 'lowerback').some((t) => t.key === 'fever')
     && lb.ids.includes('rf-infection') && lb.ids.includes('rf-cancer'))
   check('the shoulder: a sudden, sharp pain on breathing with breathlessness sets the 911 lung clot question', LB.toggleTick([], 'srf-lung', 'breath').includes('srf-lung') && sh.reg.find((f) => f.id === 'srf-lung').call911)
-  check('the shoulder: a hot joint needs a fever or a recent injection too (one line each)', LB.TICKS['rf-hotjoint'].every((t) => t.combo))
+  check('a hot joint needs a fever or feeling unwell everywhere; a recent injection alone does not count (sign-off 9 Oct 2026)', LB.TICKS['rf-hotjoint'].length === 1 && !/injection/.test(LB.TICKS['rf-hotjoint'][0].text) && LB.TICKS['rf-hotjoint'].every((t) => t.combo))
   check('the injury, infection or muscle emergency group asks a neutral question on every area (it can hold a crash, a hot joint and a hip operation together)',
     ['lowerback', 'shoulder', 'knee', 'hip', ['lowerback', 'hip']].every((a) => !/accident/.test(LB.gateQ('em-limb', a))))
   check('the knee: compartment syndrome needs the pain AND a muscle sign on one line, under its time and cause heading', LB.TICKS['kf-compartment'].every((t) => t.combo) && /last day or two/.test(LB.SUBHEAD['kf-compartment']))

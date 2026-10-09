@@ -34,7 +34,7 @@ const AREAS = {
     own: [
       '<strong>Fixed:</strong> the cauda equina sex question (<code>rf-sexual</code>) was never asked on a lower back drawing; it shared a group label with the bladder question, so the duplicate filter dropped it. It is now asked.',
       '<strong>Fixed:</strong> a lower-back-only drawing also asks the mid-to-low back\'s questions (the area it implies), and the plain design was switched off by that second area. It now runs, and the two areas\' groups are merged as on the site.',
-      '<strong>Physio while waiting:</strong> the possible infection questions (spine, joint) now let the patient book, with treatment after the doctor\'s check (was: physio alongside).',
+      '<strong>Physio while waiting (signed off 9 Oct 2026):</strong> the possible spine and joint infection questions are doctor first, with no booking until a doctor has checked (was: physio alongside).',
     ],
   },
   neck: {
@@ -44,16 +44,16 @@ const AREAS = {
       '<strong>Sub-headings inside a group:</strong> the stroke signs sit in a box headed "Came on suddenly since this started:", so the time limit covers only them and not the fever or heart signs below.',
       '<strong>The general medical question</strong> (<code>sc-systemic</code>) keeps fever and past cancer on the neck; the lower back leaves them out only because its own infection and cancer questions ask them.',
       '<strong>The neck injury screen</strong> ("Have you injured your neck in the last 7 days…") is unchanged in this step.',
-      '<strong>For you to decide:</strong> the upper-neck question\'s first item (inflammatory arthritis, Down syndrome or long-term steroids) counts on its own, as the current question reads. If it should only count with one of the symptoms, it becomes a "both together" line.',
+      '<strong>Upper-neck risks (signed off 9 Oct 2026):</strong> inflammatory arthritis, Down syndrome or long-term steroids count on their own, as the current question reads.',
     ],
   },
   shoulder: {
     out: 'shoulder-plain', title: 'Shoulder Questions', name: 'Shoulder', zones: [Z('shoulderR', 'shoulder', 'R')],
-    sample: () => tellThem(toggleTick([], 'rf-hotjoint', 'injection'), {}, 'shoulder'),
+    sample: () => tellThem(toggleTick([], 'rf-hotjoint', 'fever'), {}, 'shoulder'),
     own: [
       '<strong>The injury, infection or muscle emergency group</strong> asks "Do you have any of these with the pain?" on every area, as it can hold a crash, a hot joint, a hip operation and dark pee together.',
       '<strong>Stroke signs inside a group</strong> sit in a box headed "Started in the last few hours:".',
-      '<strong>Signs that only count together</strong> stay on one line: shoulder-tip pain with a blow or feeling faint; sharp pain on breathing with breathlessness; a hot joint with a fever or a recent injection; a smoker with a lasting cough, blood, a drooping eyelid or a weak hand.',
+      '<strong>Signs that only count together</strong> stay on one line: shoulder-tip pain with a blow or feeling faint; sharp pain on breathing with breathlessness; a hot joint with a fever or feeling unwell (a recent injection alone no longer counts, signed off 9 Oct 2026); a smoker with a lasting cough, blood, a drooping eyelid or a weak hand.',
       '<strong>The shoulder injury screen</strong> is unchanged in this step.',
     ],
   },
@@ -64,7 +64,7 @@ const AREAS = {
       '<strong>Compartment syndrome</strong> keeps its causes and time limit as a boxed heading ("In the last day or two, after a broken bone, a crush, an operation…"), and each tick needs both the climbing pain and a muscle sign, as the current question does.',
       '<strong>Past cancer</strong> is asked once, in the knee cancer question; the general medical question leaves it out on the knee.',
       '<strong>The two limping-child questions</strong> (about 9 to 17, and about 4 to 10) share one group bullet, so a child\'s group shows five bullets at most; inside, each keeps its own age and "no injury" line.',
-      '<strong>For you to decide, septic knee:</strong> one line, a hot, red, swollen knee with a fever or feeling unwell, as the current question reads ("especially after an injection, surgery or a cut" was a risk note, not a sign on its own). The shoulder\'s hot-joint question does count a recent injection on its own; say if the knee should match.',
+      '<strong>Septic joint (signed off 9 Oct 2026):</strong> a hot, red, swollen joint counts with a fever or feeling unwell everywhere; a recent injection is a risk note, not a sign on its own (the shoulder, elbow, wrist and hand questions now read the same way).',
       '<strong>The knee injury screen</strong> is unchanged in this step.',
     ],
   },

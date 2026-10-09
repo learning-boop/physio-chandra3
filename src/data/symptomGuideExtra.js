@@ -1552,7 +1552,7 @@ export const EXTRA_REGIONS = {
     name: "Elbow",
     redFlags: [
       { id: "erf-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
-        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, or after a recent injection?" },
+        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, especially after a recent injection?" },
       // 6 Oct 2026: elbow cross-check, approved by Chandra (S1, S12): worded as the forearm's, so asked once.
       { id: "erf-compartment", tier: "emergency", group: "compartment-arm", why: "Possible acute compartment syndrome: pressure building up inside the muscles needs an emergency department now",
         text: "Since a broken bone, a crush, an operation on the limb, a tight cast or bandage, lying on the limb for a long time, a knock while on blood thinners, or very hard exercise in the last day or two: is the pain in your forearm or hand far worse than expected and still climbing, no longer helped by pain relief, and is the muscle tight and swollen, or much worse when your fingers are gently moved?" },
@@ -1839,7 +1839,7 @@ export const EXTRA_REGIONS = {
       { id: "wrf-cast", tier: "urgent", sameDay: true, group: "casttight-arm", why: "A cast, splint or bandage that keeps getting tighter needs checking today, at the emergency department or the fracture clinic that put it on; go now if the pain is climbing",
         text: "Is a cast, splint or bandage on this arm feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "wrf-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
-        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, or after a recent injection?" },
+        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, especially after a recent injection?" },
       { id: "wrf-bite", tier: "emergency", group: "handbite", why: "Possible tendon sheath or deep hand infection; needs urgent surgical review",
         text: "Did you have a cut, bite, or puncture on the wrist or hand, and is it now swollen, red, and very painful to move the fingers?" },
       { id: "wrf-stroke", tier: "emergency", call911: true, group: "stroke", why: "Possible stroke",
@@ -2010,7 +2010,7 @@ export const EXTRA_REGIONS = {
       { id: "hnd-inject", tier: "emergency", why: "High-pressure injection injury: serious damage hides under a small wound",
         text: "Was paint, grease, oil, or fluid injected into your hand under pressure (spray gun, grease gun), even if the wound looks tiny?" },
       { id: "hnd-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
-        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, or after a recent injection?" },
+        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, especially after a recent injection?" },
       { id: "hnd-stroke", tier: "emergency", call911: true, group: "stroke", why: "Possible stroke",
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "hnd-felon", sameDay: true, tier: "urgent", why: "Possible fingertip or nail-fold infection (felon or paronychia); same-day review",

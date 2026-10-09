@@ -293,7 +293,7 @@ export const REGIONS = {
       // "red or swollen", and after an injection (shoulder cross-check S8, Chandra
       // 5 Oct 2026): a deep joint infection may not look red or swollen.
       {id:"rf-hotjoint", tier:"emergency", group: "hotjoint", why:"Possible joint infection (septic arthritis)",
-        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, or after a recent injection?"},
+        text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, especially after a recent injection?"},
       {id:"srf-pmr", ages:["50-64", "o64"], tier:"urgent", why:"Possible polymyalgia rheumatica; needs blood tests and medical care",
         text:"If you are over 50: are both shoulders (and often both hips) stiff and aching, worst in the morning for more than 45 minutes, and do you feel generally unwell?"},
       {id:"srf-pancoast", tier:"urgent", group:"pancoast", why:"Possible tumour at the top of the lung (Pancoast), felt in the shoulder and inner arm",

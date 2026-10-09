@@ -138,7 +138,7 @@ export const PLAIN_SHORT = {
   'srf-ectopic': 'Could be pregnant, with low tummy pain',
   'srf-lung': 'Sudden sharp pain on breathing, and breathless',
   'srf-rhabdo': 'Very sore or weak muscles, and dark pee',
-  'rf-hotjoint': 'A hot, swollen joint with a fever, or after an injection',
+  'rf-hotjoint': 'A hot, red, swollen joint with a fever or feeling unwell',
   'srf-pmr': 'Both shoulders stiff each morning, and feeling unwell',
   'srf-pancoast': 'A smoker with a lasting cough, coughed-up blood, droopy eyelid or weak hand',
   'srf-organ': 'Pain with meals, breathing, sickness, yellow skin, or that never changes',
@@ -555,7 +555,6 @@ export const TICKS = {
   ],
   'rf-hotjoint': [
     { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
-    { key: 'injection', combo: true, text: 'A hot, red or swollen joint after a recent injection', tell: 'my joint is hot and swollen after an injection' },
   ],
   'srf-pmr': [
     { key: 'stiff', combo: true, text: 'Both shoulders (often the hips too) stiff and aching for over 45 minutes each morning, and you feel unwell', tell: 'both my shoulders are stiff every morning and I feel unwell' },
