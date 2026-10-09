@@ -2,7 +2,7 @@
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
    Lower back first (prototype), then the neck, the shoulder, the knee, the
-   hip, the ankle, the foot, the thigh, the lower leg and the elbow; and drawings of several of these areas together (plainAreas).
+   hip, the ankle, the foot, the thigh, the lower leg, the elbow and the wrist; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -22,7 +22,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -73,6 +73,10 @@ export const PLAIN_GATES = {
   'elbow-infection': 'Could the elbow be infected or inflamed?',
   'elbow-skin': 'Could it be a skin infection, or a cast that is too tight?',
   'elbow-nerve': 'Has your arm or hand changed in feeling or strength?',
+  'wrist-circulation': 'Could it be a tight cast, or your blood flow?',
+  'wrist-flare': 'Could the joints be inflamed?',
+  'wrist-nerve': 'Has your hand changed in feeling or strength?',
+  'wrist-medical': 'Could something else be going on?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -87,7 +91,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -263,6 +267,22 @@ export const PLAIN_SHORT = {
   'erf-myelo': 'Both hands numb or clumsy, or unsteady walking',
   'erf-child': 'Under 16, with elbow pain from throwing, or catching or locking',
   'erf-pta': 'Sudden bad pain, then a weak arm',
+  // Wrist
+  'wrf-stroke': 'A drooping face, one weak or numb side, or trouble speaking',
+  'wrf-hot': 'A hot, red, swollen joint with a fever or feeling unwell',
+  'wrf-bite': 'A cut or bite on the hand, now swollen, red and very painful',
+  'wrf-compartment': 'Arm pain still climbing after an injury, cast, operation, lying still, or hard exercise',
+  'wrf-cast': 'A cast, splint or bandage getting tighter and more painful',
+  'wrf-raynaud': 'Fingers turning white or blue in attacks, or a cold painful finger',
+  'wrf-gout': 'A joint suddenly hot, red, swollen and very painful',
+  'wrf-inflam': 'Both wrists or several finger joints swollen and stiff each morning',
+  'wrf-numb': 'A weaker hand, a thinning thumb muscle, constant numbness, or a dropped wrist',
+  'wrf-myelo': 'Both hands numb or clumsy most of the day, or unsteady walking',
+  'wrf-crps': 'Since an injury or cast: burning, swelling, colour change, or touch hurts',
+  'wrf-oldscaphoid': 'Thumb-base pain since an old fall, never X-rayed',
+  'wrf-stress': 'A gymnast with a deep ache just above the wrist',
+  // A whole painful limb (pattern question, ../data/patternChecks.js)
+  'pc-limb': 'The painful arm or leg changing colour, temperature, sweating or swelling',
 }
 
 /* Several areas drawn: the same question from each area (the knee's,
@@ -270,11 +290,11 @@ export const PLAIN_SHORT = {
    merged group names each sign once. The ticks inside keep their own area. */
 const fam = (ids, text) => Object.fromEntries(ids.map((id) => [id, text]))
 export const MULTI_SHORT = {
-  ...fam(['kf-septic', 'af-septic', 'rf-hotjoint', 'erf-hot'], 'A hot, red, swollen joint with a fever or feeling unwell'),
+  ...fam(['kf-septic', 'af-septic', 'rf-hotjoint', 'erf-hot', 'wrf-hot'], 'A hot, red, swollen joint with a fever or feeling unwell'),
   ...fam(['kf-compartment', 'af-compartment', 'ft-compartment', 'lgf-compartment', 'tgf-compartment'], 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise'),
   ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress'], 'More running or training, and a deep ache or sore spot on a bone'),
   ...fam(['kf-tumour', 'lgf-tumour', 'tgf-tumour'], 'Under 25 with a deep night ache, or a growing lump'),
-  ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
+  ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, a sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
@@ -367,6 +387,11 @@ export const PLAIN_Q = {
   'erf-nerve': 'Do any of these fit you?',
   'erf-myelo': 'Do any of these fit you?',
   'erf-child': 'Do any of these fit you?',
+  'wrf-stroke': 'Along with the hand symptoms, has one of these happened suddenly?',
+  'wrf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the arm for a long time, a knock while on blood thinners, or very hard exercise: does one of these fit?',
+  'wrf-raynaud': 'Do any of these fit you?',
+  'wrf-numb': 'Do any of these fit you?',
+  'wrf-myelo': 'Do any of these fit you?',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
@@ -390,6 +415,8 @@ export const SUBHEAD = {
   'pc-hypothyroid': 'Not explained by something a doctor has already found. "These signs" are: feeling cold when others are not, tiredness, weight gain without eating more, dry skin or hair loss, constipation, heavier periods, low mood or slow thinking, a hoarse voice, or puffy eyes.',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
   'erf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the arm a long time, a knock on blood thinners, or very hard exercise:',
+  'wrf-stroke': 'Along with the hand symptoms, suddenly:',
+  'wrf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the arm a long time, a knock on blood thinners, or very hard exercise:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -990,6 +1017,58 @@ export const TICKS = {
   'erf-pta': [
     { key: 'weak', combo: true, text: 'Sudden, very bad arm pain with no injury for several days, and then your arm or hand muscles became weak', tell: 'I had sudden, very bad arm pain for days, and now my arm is weak' },
   ],
+  // ── Wrist ──
+  'wrf-stroke': [
+    { key: 'face', text: 'One side of your face drooping', tell: 'one side of my face is drooping' },
+    { key: 'side', text: 'Weakness or numbness down one whole side', tell: 'one whole side of my body is weak or numb' },
+    { key: 'speech', text: 'Trouble speaking', tell: 'I have trouble speaking' },
+  ],
+  'wrf-hot': [
+    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
+  ],
+  'wrf-bite': [
+    { key: 'cut', combo: true, text: 'A cut, bite or puncture on the wrist or hand, now swollen, red and very painful to move the fingers', tell: 'a cut or bite on my hand is now swollen, red and very painful' },
+  ],
+  'wrf-compartment': [
+    { key: 'tight', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'my forearm pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'fingers', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and much worse when your fingers are moved', tell: 'my forearm pain is far worse than expected and still climbing, and much worse when my fingers move' },
+  ],
+  'wrf-cast': [
+    { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
+  ],
+  'wrf-raynaud': [
+    { key: 'attacks', text: 'Fingers or hand turning white, blue or cold in attacks', tell: 'my fingers turn white, blue or cold in attacks' },
+    { key: 'cold', text: 'A painful cold finger that does not warm up again', tell: 'I have a painful cold finger that does not warm up' },
+  ],
+  'wrf-gout': [
+    { key: 'sudden', text: 'A joint suddenly hot, red, swollen and very painful over a day or so', tell: 'a joint became suddenly hot, red, swollen and very painful' },
+  ],
+  'wrf-inflam': [
+    { key: 'morning', text: 'Both wrists or several finger joints swollen and stiff over an hour each morning', tell: 'my wrists or finger joints are swollen and stiff for over an hour each morning' },
+  ],
+  'wrf-numb': [
+    { key: 'weaker', text: 'Your hand getting weaker', tell: 'my hand is getting weaker' },
+    { key: 'thin', text: 'The muscle at the base of your thumb, or beside it, getting thinner', tell: 'the muscle at the base of my thumb is getting thinner' },
+    { key: 'numb', text: 'Finger numbness that is there all the time', tell: 'my fingers are numb all the time' },
+    { key: 'wrist', text: 'You cannot lift your wrist', tell: 'I cannot lift my wrist' },
+  ],
+  'wrf-myelo': [
+    { key: 'hands', text: 'Both hands numb or clumsy most of the day, not only at night', tell: 'both my hands are numb or clumsy most of the day' },
+    { key: 'walk', text: 'Your walking has become unsteady', tell: 'my walking has become unsteady' },
+  ],
+  'wrf-crps': [
+    { key: 'since', combo: true, text: 'Since a wrist injury, operation or cast: burning, swelling, shiny skin, colour or temperature changes, or light touch hurts', tell: 'since the injury my hand burns, swells or changes colour' },
+  ],
+  'wrf-oldscaphoid': [
+    { key: 'thumb', combo: true, text: 'Since a fall onto the hand weeks or months ago: pain still in the hollow at the base of the thumb, never X-rayed', tell: 'since a fall weeks ago I still have pain at the base of my thumb, and it was never X-rayed' },
+  ],
+  'wrf-stress': [
+    { key: 'gym', combo: true, text: 'You take weight on your hands in gymnastics or sport, with a deep ache just above the wrist, worse with handstands or tumbling', tell: 'I take weight on my hands in sport and have a deep ache above my wrist' },
+  ],
+  'pc-limb': [
+    { key: 'skin', text: 'The painful arm or leg changing colour or temperature', tell: 'my painful limb is changing colour or temperature' },
+    { key: 'sweat', text: 'The painful arm or leg sweating or swelling more than the other', tell: 'my painful limb is sweating or swelling' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -1071,7 +1150,7 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['erf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
+export const WHEN_FOR = ['erf-myelo', 'wrf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {

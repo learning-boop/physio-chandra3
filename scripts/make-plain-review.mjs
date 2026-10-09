@@ -13,6 +13,7 @@
         npm run review:thigh      →  review/thigh-plain.html
         npm run review:lowerleg   →  review/lowerleg-plain.html
         npm run review:elbow      →  review/elbow-plain.html
+        npm run review:wrist      →  review/wrist-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -131,6 +132,17 @@ const AREAS = {
       '<strong>Signs that only count together</strong> stay on one line, e.g. a swelling at the point of the elbow AND red, warm or a cut over it; under 16 AND pain with throwing, or catching or locking.',
       '<strong>Nerve signs</strong> are one per tick: a weaker hand, a thinning thumb muscle, constant finger numbness, a wrist or fingers that will not lift.',
       '<strong>The elbow injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  wrist: {
+    out: 'wrist-plain', title: 'Wrist Questions', name: 'Wrist', zones: [Z('wristR', 'wrist', 'R')],
+    sample: () => tellThem(toggleTick([], 'wrf-bite', 'cut'), {}, 'wrist'),
+    own: [
+      '<strong>Emergency group:</strong> a septic joint (fever or feeling unwell, as signed off), an infected cut, bite or puncture (the wound AND swelling, redness and pain on one line), and forearm compartment syndrome (boxed causes and time limit). The wrist\'s own stroke question stands in for the general one.',
+      '<strong>Gout on the wrist</strong> counts a first attack, as its question reads (the elbow, knee and ankle ones need past gout).',
+      '<strong>Nerve signs</strong> are one per tick, as on the elbow; both-hands numbness counts when it is there most of the day, not only at night.',
+      '<strong>Signs that only count together</strong> stay on one line, e.g. an old fall AND thumb-base pain never X-rayed; gymnastics AND a deep ache just above the wrist.',
+      '<strong>The wrist injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {
