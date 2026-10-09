@@ -9,6 +9,7 @@
         npm run review:knee       →  review/knee-plain.html
         npm run review:hip        →  review/hip-plain.html
         npm run review:ankle      →  review/ankle-plain.html
+        npm run review:foot       →  review/foot-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -83,6 +84,17 @@ const AREAS = {
       '<strong>A tight cast</strong> keeps the safety line "do not cut it off" in the tick itself.',
       '<strong>Signs that only count together</strong> stay on one line, e.g. heel or Achilles pain AND a stiff back, psoriasis, sore eyes, other swollen joints or a recent infection; diabetes AND a hot, swollen foot or a wound not healing; Achilles pain AND a recent ciprofloxacin-type antibiotic or steroids.',
       '<strong>The ankle injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  foot: {
+    out: 'foot-plain', title: 'Foot Questions', name: 'Foot', zones: [Z('footR', 'foot', 'R')],
+    sample: () => tellThem(toggleTick([], 'ft-diabeticinfection', 'wound'), {}, 'foot'),
+    own: [
+      '<strong>Emergency group:</strong> compartment syndrome (boxed causes and time limit), a foot suddenly cold, pale, blue or numb, or suddenly very painful at rest, a hot red area spreading fast, and an infected diabetic wound.',
+      '<strong>The foot\'s lump question</strong> asks a growing lump, a new dark mark under a toenail and night pain; the general medical question keeps fever, weight loss and past cancer here.',
+      '<strong>A tight cast</strong> keeps the safety line "do not cut it off" in the tick itself.',
+      '<strong>Signs that only count together</strong> stay on one line, e.g. something through the shoe AND the foot now swollen, red or painful to walk on; diabetes AND a hot, swollen foot or a wound not healing; heel pain AND a stiff back, psoriasis, sore eyes or a recent infection.',
+      '<strong>The foot injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {

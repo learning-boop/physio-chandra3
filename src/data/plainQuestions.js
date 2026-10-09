@@ -2,7 +2,7 @@
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
    Lower back first (prototype), then the neck, the shoulder, the knee, the
-   hip and the ankle; and drawings of several of these areas together (plainAreas).
+   hip, the ankle and the foot; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -22,7 +22,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -60,6 +60,10 @@ export const PLAIN_GATES = {
   'ankle-infection': 'Could the ankle be infected or inflamed?',
   'ankle-nerve': 'Have your feet or legs changed in feeling or strength?',
   'ankle-medical': 'Could something else be going on?',
+  'foot-infection': 'Could the foot be infected or inflamed?',
+  'foot-circulation': 'Could it be your blood flow, or a cast that is too tight?',
+  'foot-nerve': 'Have your feet or legs changed in feeling or strength?',
+  'foot-medical': 'Could something else be going on?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -74,7 +78,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -102,7 +106,7 @@ export const PLAIN_SHORT = {
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
-  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
+  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
@@ -188,6 +192,22 @@ export const PLAIN_SHORT = {
   'af-stress': 'More running or walking, and pain on one spot of bone',
   'af-cancer': 'Past cancer, a growing lump, or night pain',
   'af-crps': 'Since an injury or cast: burning, swelling, colour change, or touch hurts',
+  // Foot
+  'ft-compartment': 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise',
+  'ft-ischaemia': 'Foot or toes suddenly cold, pale, blue, numb, or painful at rest',
+  'ft-necfasc': 'A hot red area spreading fast, with bad pain or feeling unwell',
+  'ft-diabeticinfection': 'Diabetes, and an infected foot wound or a fever',
+  'ft-cast': 'A cast, splint or bandage getting tighter and more painful',
+  'ft-puncture': 'Something went through your shoe, and the foot is now swollen or red',
+  'ft-charcot': 'Diabetes, with a hot, swollen foot or a wound not healing',
+  'ft-gout': 'A big toe or joint suddenly hot, red, swollen and too sore to touch',
+  'ft-inflam': 'A sausage toe, or heel pain with stiff back, psoriasis, sore eyes or infection',
+  'ft-claudication': 'Foot or calf cramps when walking, or cold, shiny toes',
+  'ft-neuropathy': 'Both feet numb or burning, like wearing socks',
+  'ft-crps': 'Since an injury or cast: burning, swelling, colour change, or touch hurts',
+  'ft-stress': 'More running or walking, and pain on one foot bone',
+  'ft-footdrop': 'Your foot slaps down or your toes catch',
+  'ft-lump': 'A growing lump, a dark mark under a nail, or night pain',
 }
 
 /** A bullet, for this area or birth sex where it differs; when it carries
@@ -246,6 +266,13 @@ export const PLAIN_Q = {
   'af-necfasc': 'Do any of these fit you?',
   'af-inflam': 'Do any of these fit you?',
   'af-cancer': 'Do any of these fit you?',
+  'ft-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg for a long time, a knock while on blood thinners, or very hard exercise: does one of these fit?',
+  'ft-ischaemia': 'Do any of these fit you?',
+  'ft-necfasc': 'Do any of these fit you?',
+  'ft-charcot': 'Do any of these fit you?',
+  'ft-inflam': 'Do any of these fit you?',
+  'ft-claudication': 'Do any of these fit you?',
+  'ft-lump': 'Do any of these fit you?',
 }
 
 /* Inside a group: a sub-heading over a question's ticks, where a limit
@@ -260,6 +287,7 @@ export const SUBHEAD = {
   'rf-fracture': 'In the last few days:',
   'jrf-fracture': 'In the last few days:',
   'af-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
+  'ft-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -641,6 +669,62 @@ export const TICKS = {
   'af-crps': [
     { key: 'since', combo: true, text: 'Since an ankle injury, operation or cast: burning, swelling, shiny skin, colour or temperature changes, or light touch hurts', tell: 'since the injury my ankle burns, swells or changes colour' },
   ],
+  // ── Foot ──
+  'ft-compartment': [
+    { key: 'tight', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'toes', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
+  ],
+  'ft-ischaemia': [
+    { key: 'cold', text: 'Your foot or toes suddenly cold, pale, blue or numb', tell: 'my foot or toes suddenly became cold, pale or numb' },
+    { key: 'rest', text: 'Sudden, very bad foot pain at rest', tell: 'I suddenly have very bad foot pain at rest' },
+  ],
+  'ft-necfasc': [
+    { key: 'pain', combo: true, text: 'A hot, red area on your foot spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area on your foot spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+  ],
+  'ft-diabeticinfection': [
+    { key: 'wound', combo: true, text: 'You have diabetes, and a foot wound with spreading redness, pus, a bad smell, or a fever', tell: 'I have diabetes and an infected foot wound' },
+  ],
+  'ft-cast': [
+    { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
+  ],
+  'ft-puncture': [
+    { key: 'shoe', combo: true, text: 'Something went through your shoe into your foot (a nail or glass), and it is now swollen, red or painful to walk on', tell: 'something went through my shoe into my foot, and it is now swollen and red' },
+  ],
+  'ft-charcot': [
+    { key: 'hot', combo: true, text: 'You have diabetes, and your foot is hot, red or swollen, even if it does not hurt much', tell: 'I have diabetes and my foot is hot, red and swollen' },
+    { key: 'wound', combo: true, text: 'You have diabetes, and a wound or ulcer on your foot is not healing', tell: 'I have diabetes and a wound on my foot is not healing' },
+  ],
+  'ft-gout': [
+    { key: 'toe', text: 'Big toe or another joint suddenly hot, swollen, red, and too sore to touch', tell: 'my big toe became suddenly hot, swollen and too painful to touch' },
+  ],
+  'ft-inflam': [
+    { key: 'sausage', text: 'A whole toe swollen like a sausage', tell: 'a whole toe is swollen like a sausage' },
+    { key: 'back', combo: true, text: 'Heel pain, and a stiff back in the morning', tell: 'I have heel pain and a stiff back in the morning' },
+    { key: 'skin', combo: true, text: 'Heel pain, and psoriasis or sore, red eyes', tell: 'I have heel pain and psoriasis or sore eyes' },
+    { key: 'bug', combo: true, text: 'Heel pain after a stomach bug or a sexually transmitted infection', tell: 'my heel pain started after a stomach bug or an infection' },
+  ],
+  'ft-claudication': [
+    { key: 'cramp', text: 'Foot or calf cramps when you walk that ease within minutes of standing still', tell: 'my foot or calf cramps when I walk and eases when I stand still' },
+    { key: 'toes', text: 'Toes that are cold, shiny and slow to heal', tell: 'my toes are cold, shiny and slow to heal' },
+  ],
+  'ft-neuropathy': [
+    { key: 'socks', text: 'Both feet numb, burning or tingling, like wearing socks', tell: 'both my feet are numb or burning' },
+  ],
+  'ft-crps': [
+    { key: 'since', combo: true, text: 'Since a foot injury, operation or cast: burning, swelling, shiny skin, colour or temperature changes, or light touch hurts', tell: 'since the injury my foot burns, swells or changes colour' },
+  ],
+  'ft-stress': [
+    { key: 'bone', combo: true, text: 'After more running, walking or training: pain on one foot bone, worse with each step, hopping or at night', tell: 'after more running or walking I have pain on one foot bone' },
+  ],
+  'ft-footdrop': [
+    { key: 'slap', text: 'Your foot slaps down or your toes catch when you walk', tell: 'my foot slaps down when I walk' },
+  ],
+  'ft-lump': [
+    { key: 'lump', text: 'A lump in the foot that is growing', tell: 'I have a growing lump in my foot' },
+    { key: 'nail', text: 'A new dark mark under a toenail', tell: 'I have a new dark mark under a toenail' },
+    { key: 'night', text: 'Deep pain at night that does not change however you lie', tell: 'I have deep pain at night that does not change' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -676,7 +760,9 @@ export function coverOut(list = []) {
    there (the lower back asks fever in rf-infection and cancer in rf-cancer). */
 export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'], knee: ['sc-systemic~cancer'],
   // The ankle's own cancer question asks past cancer, a growing lump and night pain.
-  ankle: ['sc-systemic~cancer', 'sc-systemic~lump', 'sc-systemic~night'] }
+  ankle: ['sc-systemic~cancer', 'sc-systemic~lump', 'sc-systemic~night'],
+  // The foot's lump question asks a growing lump and night pain.
+  foot: ['sc-systemic~lump', 'sc-systemic~night'] }
 
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`
