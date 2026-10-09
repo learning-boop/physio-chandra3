@@ -12,6 +12,7 @@
         npm run review:foot       →  review/foot-plain.html
         npm run review:thigh      →  review/thigh-plain.html
         npm run review:lowerleg   →  review/lowerleg-plain.html
+        npm run review:elbow      →  review/elbow-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -119,6 +120,17 @@ const AREAS = {
       '<strong>Past cancer</strong> is asked once, in the lower leg cancer question.',
       '<strong>The whole leg now runs together:</strong> with the lower leg done, every drawing of the thigh, knee, lower leg, ankle and foot (alone or together, and with the back or hip) gets the plain questions.',
       '<strong>The lower leg injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  elbow: {
+    out: 'elbow-plain', title: 'Elbow Questions', name: 'Elbow', zones: [Z('elbowR', 'elbow', 'R')],
+    sample: () => tellThem(toggleTick([], 'erf-nerve', 'wrist'), {}, 'elbow'),
+    own: [
+      '<strong>Septic joint:</strong> one line, a hot, red or swollen joint with a fever or feeling very unwell, as signed off on 9 Oct 2026.',
+      '<strong>Compartment syndrome of the forearm</strong> keeps its causes and time limit as a boxed heading, and each tick needs both the climbing pain and a muscle sign.',
+      '<strong>Signs that only count together</strong> stay on one line, e.g. a swelling at the point of the elbow AND red, warm or a cut over it; under 16 AND pain with throwing, or catching or locking.',
+      '<strong>Nerve signs</strong> are one per tick: a weaker hand, a thinning thumb muscle, constant finger numbness, a wrist or fingers that will not lift.',
+      '<strong>The elbow injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {

@@ -2,7 +2,7 @@
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
    Lower back first (prototype), then the neck, the shoulder, the knee, the
-   hip, the ankle, the foot, the thigh and the lower leg; and drawings of several of these areas together (plainAreas).
+   hip, the ankle, the foot, the thigh, the lower leg and the elbow; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -22,7 +22,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -70,6 +70,9 @@ export const PLAIN_GATES = {
   'leg-circulation': 'Could it be a clot, an infection, a tight cast or your blood flow?',
   'leg-nerve': 'Have your feet or legs changed in feeling or strength?',
   'leg-medical': 'Could something else be going on?',
+  'elbow-infection': 'Could the elbow be infected or inflamed?',
+  'elbow-skin': 'Could it be a skin infection, or a cast that is too tight?',
+  'elbow-nerve': 'Has your arm or hand changed in feeling or strength?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -84,7 +87,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -249,6 +252,17 @@ export const PLAIN_SHORT = {
   'pc-calcium': 'A deep bone ache on both sides, at rest and on your feet',
   'pc-hypothyroid': 'Months of stiff, slow muscles or numb hands at night, with cold or tiredness',
   'pc-acromegaly': 'Hands, feet or face grown bigger over the years',
+  // Elbow
+  'erf-hot': 'A hot, red, swollen joint with a fever or feeling unwell',
+  'erf-compartment': 'Arm pain still climbing after an injury, cast, operation, lying still, or hard exercise',
+  'erf-cast': 'A cast, splint or bandage getting tighter and more painful',
+  'erf-cellulitis': 'Spreading redness, a red streak or a hot swollen area, with a fever',
+  'erf-bursa': 'A red or warm swelling on the elbow point, or a cut over it',
+  'erf-gout': 'A joint suddenly hot and swollen overnight, with past gout',
+  'erf-nerve': 'A weaker hand, a thinning thumb muscle, constant numbness, or a dropped wrist',
+  'erf-myelo': 'Both hands numb or clumsy, or unsteady walking',
+  'erf-child': 'Under 16, with elbow pain from throwing, or catching or locking',
+  'erf-pta': 'Sudden bad pain, then a weak arm',
 }
 
 /* Several areas drawn: the same question from each area (the knee's,
@@ -256,11 +270,11 @@ export const PLAIN_SHORT = {
    merged group names each sign once. The ticks inside keep their own area. */
 const fam = (ids, text) => Object.fromEntries(ids.map((id) => [id, text]))
 export const MULTI_SHORT = {
-  ...fam(['kf-septic', 'af-septic', 'rf-hotjoint'], 'A hot, red, swollen joint with a fever or feeling unwell'),
+  ...fam(['kf-septic', 'af-septic', 'rf-hotjoint', 'erf-hot'], 'A hot, red, swollen joint with a fever or feeling unwell'),
   ...fam(['kf-compartment', 'af-compartment', 'ft-compartment', 'lgf-compartment', 'tgf-compartment'], 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise'),
   ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress'], 'More running or training, and a deep ache or sore spot on a bone'),
   ...fam(['kf-tumour', 'lgf-tumour', 'tgf-tumour'], 'Under 25 with a deep night ache, or a growing lump'),
-  ...fam(['kf-gout', 'af-gout', 'ft-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
+  ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, a sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
@@ -348,6 +362,11 @@ export const PLAIN_Q = {
   'pc-lowhormone': 'Not explained by something a doctor has already found: for a few months, tiredness most days that sleep does not fix, or muscles smaller or weaker on both sides, and one of these:',
   'pc-calcium': 'Not explained by something a doctor has already found: a deep ache in the bones on both sides (shins, thighs, hips, pelvis, back or ribs), there at rest and worse on your feet, and one of these:',
   'pc-hypothyroid': 'Not explained by something a doctor has already found. "These signs" are: feeling cold when others are not, tiredness, weight gain without eating more, dry skin or hair loss, constipation, heavier periods, low mood or slow thinking, a hoarse voice, or puffy eyes.',
+  'erf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the arm for a long time, a knock while on blood thinners, or very hard exercise: does one of these fit?',
+  'erf-cellulitis': 'Do any of these fit you?',
+  'erf-nerve': 'Do any of these fit you?',
+  'erf-myelo': 'Do any of these fit you?',
+  'erf-child': 'Do any of these fit you?',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
@@ -370,6 +389,7 @@ export const SUBHEAD = {
   'pc-calcium': 'Not explained by something a doctor has already found: a deep ache in the bones on both sides (shins, thighs, hips, pelvis, back or ribs), there at rest and worse on your feet, and one of these:',
   'pc-hypothyroid': 'Not explained by something a doctor has already found. "These signs" are: feeling cold when others are not, tiredness, weight gain without eating more, dry skin or hair loss, constipation, heavier periods, low mood or slow thinking, a hoarse voice, or puffy eyes.',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
+  'erf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the arm a long time, a knock on blood thinners, or very hard exercise:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -932,6 +952,44 @@ export const TICKS = {
     { key: 'hands', text: 'Both hands tingling or numb at night, or thick, clumsy hands', tell: 'my hands or feet have grown, and my hands go numb at night' },
     { key: 'others', combo: true, text: 'Two or more of: heavy snoring, sleepiness, headaches, oily or sweaty skin, new high blood pressure or sugar, skin tags, irregular periods or low sex drive', tell: 'my hands or feet have grown, and I snore, have headaches or new high blood pressure' },
   ],
+  // ── Elbow ──
+  'erf-hot': [
+    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
+  ],
+  'erf-compartment': [
+    { key: 'tight', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'my forearm pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'fingers', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and much worse when your fingers are moved', tell: 'my forearm pain is far worse than expected and still climbing, and much worse when my fingers move' },
+  ],
+  'erf-cast': [
+    { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
+  ],
+  'erf-cellulitis': [
+    { key: 'streak', combo: true, text: 'Spreading redness, or a red streak up the arm, with a fever', tell: 'redness is spreading up my arm and I have a fever' },
+    { key: 'hot', combo: true, text: 'A hot, swollen area on the arm, with a fever', tell: 'I have a hot, swollen area on my arm and a fever' },
+  ],
+  'erf-bursa': [
+    { key: 'swelling', combo: true, text: 'A swelling at the point of your elbow that is red or warm, or has a cut or graze over it', tell: 'the swelling at the point of my elbow is red and warm' },
+  ],
+  'erf-gout': [
+    { key: 'overnight', combo: true, text: 'A joint became hot, swollen and very painful overnight, and you have had gout or pseudogout before', tell: 'a joint became hot and swollen overnight, and I have had gout before' },
+  ],
+  'erf-nerve': [
+    { key: 'weaker', text: 'Your hand getting weaker', tell: 'my hand is getting weaker' },
+    { key: 'thin', text: 'The muscle at the base of your thumb, or beside it, getting thinner', tell: 'the muscle at the base of my thumb is getting thinner' },
+    { key: 'numb', text: 'Finger numbness that is there all the time', tell: 'my fingers are numb all the time' },
+    { key: 'wrist', text: 'You cannot lift your wrist or straighten your fingers', tell: 'I cannot lift my wrist or straighten my fingers' },
+  ],
+  'erf-myelo': [
+    { key: 'hands', text: 'Both hands numb or clumsy, like with buttons or writing', tell: 'both my hands are numb or clumsy' },
+    { key: 'walk', text: 'Your walking has become unsteady', tell: 'my walking has become unsteady' },
+  ],
+  'erf-child': [
+    { key: 'throw', combo: true, text: 'You are under 16, and your elbow hurts with throwing or gymnastics', tell: 'I am under 16 and my elbow hurts with throwing or gymnastics' },
+    { key: 'lock', combo: true, text: 'You are under 16, and your elbow has started to catch or lock', tell: 'I am under 16 and my elbow catches or locks' },
+  ],
+  'erf-pta': [
+    { key: 'weak', combo: true, text: 'Sudden, very bad arm pain with no injury for several days, and then your arm or hand muscles became weak', tell: 'I had sudden, very bad arm pain for days, and now my arm is weak' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -941,6 +999,13 @@ export const TICKS = {
   ],
 }
 
+/* Questions worded exactly like another area's: the same ticks, bullet and heading. */
+for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ']]) {
+  TICKS[copy] = TICKS[from]
+  PLAIN_SHORT[copy] = PLAIN_SHORT[from]
+  if (PLAIN_Q[from]) PLAIN_Q[copy] = PLAIN_Q[from]
+}
+
 /* A question whose signs another question on the same page already asks
    (by): not shown, as its ticks would repeat. The other question leads to
    the same tier. A sign only the hidden question asks is carried over as an
@@ -948,6 +1013,8 @@ export const TICKS = {
 export const COVERED = {
   'pc-urinary': { by: ['rf-kidney', 'hpf-kidney'] },
   'rf-aaa': { by: ['hpf-aaa', 'jrf-aaa'] },
+  // An area's own stroke question asks these signs (the page leaves pc-stroke out too).
+  'pc-stroke': { by: ['nrf-stroke', 'hrf-stroke', 'arf-stroke', 'frf-stroke', 'wrf-stroke', 'hnd-stroke'] },
   'jrf-aaa': { by: ['hpf-aaa'] },
   'hpf-kidney': { by: ['rf-kidney'] },
   'hpf-torsion': { by: ['jrf-testis'] },
@@ -1004,7 +1071,7 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
+export const WHEN_FOR = ['erf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {
