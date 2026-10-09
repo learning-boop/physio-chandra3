@@ -3,7 +3,8 @@
    (plain group question, short bullets, one sign per tick), for sign-off.
    Run: npm run review:lowback   →   review/lowback-plain.html (+ -link.html for the phone)
         npm run review:neck      →   review/neck-plain.html    (+ -link.html)
-        npm run review:shoulder  →   review/shoulder-plain.html (+ -link.html) */
+        npm run review:shoulder  →   review/shoulder-plain.html (+ -link.html)
+        npm run review:knee      →   review/knee-plain.html    (+ -link.html) */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
 import { GATES, SHORT } from '../src/data/safetyGates.js'
@@ -51,6 +52,20 @@ AREAS.shoulder = {
     '<strong>Stroke signs inside a group</strong> now sit in a box headed "Started in the last few hours:" (this also fixes the lower back, where the limit was lost inside the group).',
     '<strong>Signs that only count together</strong> stay on one line: shoulder-tip pain with a blow or feeling faint; sharp pain on breathing with breathlessness; a hot joint with a fever or a recent injection; a smoker with a lasting cough, blood, a drooping eyelid or a weak hand.',
     '<strong>The shoulder injury screen</strong> is unchanged in this step.',
+  ],
+}
+AREAS.knee = {
+  out: 'knee-plain', title: 'Knee Questions', name: 'Knee',
+  em: ['kf-septic', 'kf-compartment', 'kf-pe', 'pc-stroke', 'kf-cauda'],
+  emAlone: ['kf-cauda'],
+  docAlone: ['sc-neuro'],
+  sample: () => tellThem(toggleTick([], 'kf-dvt', 'calf'), {}, 'knee'),
+  own: [
+    '<strong>Compartment syndrome</strong> keeps its causes and time limit as a boxed heading ("In the last day or two, after a broken bone, a crush, an operation…"), and each tick needs both the climbing pain and a muscle sign, as the current question does.',
+    '<strong>Past cancer</strong> is asked once, in the knee cancer question; the general medical question leaves it out on the knee.',
+    '<strong>The two limping-child questions</strong> (about 9 to 17, and about 4 to 10) share one group bullet, so a child\'s group shows five bullets at most; inside, each keeps its own age and "no injury" line.',
+    '<strong>Septic knee:</strong> one line, a hot, red, swollen knee with a fever or feeling unwell, as the current question reads ("especially after an injection, surgery or a cut" was a risk note, not a sign on its own). The shoulder\'s hot-joint question does count a recent injection on its own; say if the knee should match.',
+    '<strong>The knee injury screen</strong> is unchanged in this step.',
   ],
 }
 const AREA = process.argv[2] || 'lowerback'

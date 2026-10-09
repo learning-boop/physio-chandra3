@@ -1,7 +1,7 @@
 /* ─────────────────────────────────────────────────────────────────────────
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
-   Lower back first (prototype), then the neck and the shoulder.
+   Lower back first (prototype), then the neck, the shoulder and the knee.
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -21,7 +21,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee']
 /** The area the plain design runs for, or null. */
 export const plainArea = (area) => (PLAIN_AREAS.includes(area) ? area : null)
 
@@ -30,7 +30,7 @@ export const plainArea = (area) => (PLAIN_AREAS.includes(area) ? area : null)
 export const PLAIN_GATES = {
   'em-nerve': { lowerback: 'Since your back pain started, have you noticed any of these?', neck: 'Along with your neck pain, have you noticed any of these?' },
   'em-illness': 'Do you have any of these right now?',
-  'em-limb': { lowerback: 'Did this start after an accident in the last few days?', shoulder: 'Do you have any of these with the pain?' },
+  'em-limb': { lowerback: 'Did this start after an accident in the last few days?', shoulder: 'Do you have any of these with the pain?', knee: 'Do you have any of these with the pain?' },
   'lowback-bone': 'Could the bone be hurt or weak?',
   'lowback-infection': 'Do you feel unwell, not just sore?',
   'lowback-organ': 'Could the pain be coming from inside your body?',
@@ -38,6 +38,9 @@ export const PLAIN_GATES = {
   'neck-cord': 'Have your arms, legs or neck changed in a worrying way?',
   'shoulder-medical': 'Could the pain be coming from somewhere else in your body?',
   'shoulder-nerve': 'Has your arm become weak or numb?',
+  'knee-infection': 'Could the knee be infected or inflamed?',
+  'knee-circulation': 'Could there be a problem with the blood flow in your leg?',
+  'knee-medical': 'Could something else be going on?',
 }
 /** A group's plain question for this area. */
 export const gateQ = (gid, area) => {
@@ -45,7 +48,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : q[area] || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const PAIN_WORD = { lowerback: 'low back pain', neck: 'neck pain', shoulder: 'shoulder pain' }
+export const PAIN_WORD = { lowerback: 'low back pain', neck: 'neck pain', shoulder: 'shoulder pain', knee: 'knee pain' }
 
 export const PLAIN_SHORT = {
   // Emergency: nerves at the bottom of the back
@@ -68,7 +71,7 @@ export const PLAIN_SHORT = {
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
-  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
+  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
@@ -99,6 +102,21 @@ export const PLAIN_SHORT = {
   'srf-pancoast': 'A smoker with a lasting cough, coughed-up blood, droopy eyelid or weak hand',
   'srf-organ': 'Pain with meals, breathing, sickness, yellow skin, or that never changes',
   'srf-pta': 'Sudden bad pain, then a weak or thin arm',
+  // Knee
+  'kf-compartment': 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise',
+  'kf-septic': 'A hot, red, swollen knee with a fever or feeling unwell',
+  'kf-pe': 'A swollen calf, with breathlessness, chest pain or coughing blood',
+  'kf-cauda': 'Numb between your legs, or new trouble with pee or poo',
+  'kf-dvt': 'A swollen, warm or tender calf',
+  'kf-artery': 'A pulsing lump behind the knee, or calf cramps when walking',
+  'kf-replacement': 'A knee replacement newly sore, warm, swollen or leaking',
+  'kf-gout': 'A knee suddenly hot and swollen overnight, with past gout',
+  'kf-inflam': 'Other swollen joints, a rash, sore eyes, or a recent infection',
+  'kf-cancer': 'Past cancer, or night pain with weight loss',
+  'kf-tumour': 'Under 25 with a night ache, or a growing lump',
+  'kf-stress': 'A runner with a deep ache above the knee',
+  'kf-sufe': 'A child or teenager limping, with knee or hip pain',
+  'kf-perthes': 'A child or teenager limping, with knee or hip pain',
 }
 
 /** A bullet, for this area or birth sex where it differs. */
@@ -136,6 +154,12 @@ export const PLAIN_Q = {
   'rf-cardiac1': 'Do any of these fit you?',
   'rf-hotjoint': 'Do any of these fit you?',
   'srf-organ': 'Do any of these fit you?',
+  'kf-cauda': 'Have you noticed any of these?',
+  'kf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg for a long time, a knock while on blood thinners, or very hard exercise: does one of these fit?',
+  'kf-artery': 'Do any of these fit you?',
+  'kf-inflam': 'Do any of these fit you?',
+  'kf-cancer': 'Do any of these fit you?',
+  'kf-tumour': 'Do any of these fit you?',
 }
 
 /* Inside a group: a sub-heading over a question's ticks, where a limit
@@ -145,6 +169,7 @@ export const SUBHEAD = {
   'nrf-after': 'After a neck "crack", a crash, a jerk or a knock to the head, new in the last few days or getting worse fast:',
   'nrf-myelo': 'Happening quickly, over days or weeks:',
   'pc-stroke': 'Started in the last few hours:',
+  'kf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -348,6 +373,57 @@ export const TICKS = {
   'srf-pta': [
     { key: 'weak', combo: true, text: 'Sudden, very bad shoulder pain with no injury for several days, and then your shoulder or arm became weak or thin', tell: 'I had sudden, very bad shoulder pain for days, and now my arm is weak' },
   ],
+  // ── Knee ──
+  'kf-compartment': [
+    { key: 'tight', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'toes', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
+  ],
+  'kf-septic': [
+    { key: 'fever', combo: true, text: 'A hot, red, swollen knee, with a fever or feeling unwell', tell: 'my knee is hot, red and swollen, and I have a fever' },
+  ],
+  'kf-pe': [
+    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf or thigh, and you are short of breath, have chest pain or cough blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
+  ],
+  'kf-cauda': [
+    { key: 'numb', text: 'New numbness between your legs or around your bottom', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+  ],
+  'kf-dvt': [
+    { key: 'calf', text: 'A calf that is swollen, warm or tender', tell: 'my calf is swollen, warm or tender' },
+  ],
+  'kf-artery': [
+    { key: 'lump', text: 'A pulsing lump behind your knee', tell: 'I have a pulsing lump behind my knee' },
+    { key: 'cramp', text: 'Calf cramps when you walk that ease within minutes of standing still', tell: 'my calf cramps when I walk and eases when I stand still' },
+  ],
+  'kf-replacement': [
+    { key: 'sore', combo: true, text: 'A knee replacement that is newly painful, warm or swollen, or a red or leaking wound', tell: 'my knee replacement is newly painful, warm or swollen' },
+  ],
+  'kf-gout': [
+    { key: 'overnight', combo: true, text: 'Your knee became hot, swollen and very painful overnight, and you have had gout (or pseudogout) before', tell: 'my knee became hot and swollen overnight, and I have had gout before' },
+  ],
+  'kf-inflam': [
+    { key: 'others', text: 'Other joints swollen too', tell: 'other joints are swollen too' },
+    { key: 'skin', text: 'A swollen knee with a rash or psoriasis', tell: 'my knee is swollen and I have a rash or psoriasis' },
+    { key: 'eyes', text: 'A swollen knee with sore, red eyes', tell: 'my knee is swollen and my eyes are sore and red' },
+    { key: 'bug', text: 'A swollen knee after a stomach bug or a sexually transmitted infection', tell: 'my knee swelled after a stomach bug or an infection' },
+  ],
+  'kf-cancer': [
+    { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
+    { key: 'night', combo: true, text: 'Deep knee pain at night that does not change however you lie, with weight loss', tell: 'I have deep knee pain at night and I am losing weight' },
+  ],
+  'kf-tumour': [
+    { key: 'ache', combo: true, text: 'You are under 25, with a deep ache around the knee that wakes you at night', tell: 'I am under 25 and a deep ache around my knee wakes me at night' },
+    { key: 'lump', text: 'A lump near the knee that is growing', tell: 'I have a growing lump near my knee' },
+  ],
+  'kf-stress': [
+    { key: 'run', combo: true, text: 'You run or train hard, and have a deep ache above the knee that is worse with hopping, each run, or at night', tell: 'I run or train hard, and I have a deep ache above the knee that is getting worse' },
+  ],
+  'kf-sufe': [
+    { key: 'limp', combo: true, text: 'A child or teenager (about 9 to 17) limping with knee or thigh pain, or moving the hip hurts', tell: 'my child is limping with knee or thigh pain' },
+  ],
+  'kf-perthes': [
+    { key: 'limp', combo: true, text: 'A child (about 4 to 10) limping, with knee or hip pain, and no injury', tell: 'my child is limping with knee or hip pain and no injury' },
+  ],
   'jrf-shingles': [
     { key: 'band', text: 'A band of burning pain on one side, with a rash or blisters', tell: 'I have a band of burning pain with a rash' },
   ],
@@ -360,7 +436,7 @@ export const COVERED = { 'pc-urinary': 'rf-kidney' }
 
 /* Ticks another question on the same area's page already asks: left out
    there (the lower back asks fever in rf-infection and cancer in rf-cancer). */
-export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'] }
+export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'], knee: ['sc-systemic~cancer'] }
 
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`
@@ -386,7 +462,7 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo']
+export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {

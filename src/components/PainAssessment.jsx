@@ -832,8 +832,8 @@ export default function PainAssessment() {
   // foot, hip or ankle only, the injury screen runs before the doctor page
   // and its answer filters it; the doctor page is grouped.
   const smartFirst = injuryApplies && !!smartArea(flowZ)
-  // Plain question design (../data/plainQuestions.js), lower back and neck:
-  // plain group questions with bullets, one sign per tick.
+  // Plain question design (../data/plainQuestions.js), for the areas in
+  // PLAIN_AREAS: plain group questions with bullets, one sign per tick.
   const plainA = !widespreadPath ? plainArea(smartArea(flowZ)) : null
   const lbProto = !!plainA
   // Gateway groups the person has opened on the doctor page.
@@ -939,7 +939,7 @@ export default function PainAssessment() {
       physician: (() => {
         // Smarter safety flow: the mechanism filter, then the gateway groups.
         const doc0 = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
-        // Lower back prototype: a question another one on the page already asks is left out.
+        // Plain questions: a question another one on the page already asks is left out.
         const doc = lbProto ? doc0.filter((f) => !(COVERED[f.id] && doc0.some((x) => x.id === COVERED[f.id]))) : doc0
         // One area, or several merged by theme (../data/safetyGates.js).
         const area = widespreadPath ? null : smartArea(flowZ) || smartAreas(flowZ)
@@ -1001,7 +1001,7 @@ export default function PainAssessment() {
   // A group opened but nothing in it chosen yet.
   const gateOpenEmpty = (list) => gateRows(list).some((r) => r.gate && openGates.includes(r.gate.id) &&
     ![...r.members, r.unsure].some((m) => flags.includes(m.id)))
-  /* Lower back prototype (../data/plainQuestions.js): one sign per tick; each
+  /* Plain questions (../data/plainQuestions.js): one sign per tick; each
      tick sets its question, so the routes are unchanged. */
   const plainTicks = (m) => (lbProto ? ticksFor(m.id, who.sex, plainA) : [])
   const tickChip = (m, t) => {
@@ -1024,7 +1024,7 @@ export default function PainAssessment() {
       </div>
     )
   }
-  // "When did this start?" once a nerve sign at the bottom of the back is ticked.
+  // "When did this start?" once a nerve or spinal cord sign is ticked.
   const whenAsk = (members) => lbProto && members.some((m) => WHEN_FOR.includes(m.id) && flags.includes(m.id)) && (
     <div style={{ marginTop: 10 }}>
       <p className="pa-gate-ask">{WHEN_Q.text}</p>
@@ -1046,7 +1046,7 @@ export default function PainAssessment() {
       if (open) setFlags((cur) => [...r.members, r.unsure].reduce((acc, m) => clearQuestion(acc, m.id), cur))
     }
     const cut = r.gate.text.indexOf(': ')
-    // Prototype: a plain question with one short bullet per question in the group.
+    // Plain questions: a plain group question with one short bullet per question in it.
     const plain = lbProto && gateQ(r.gate.id, plainA)
     const bullets = plain ? [...new Set(r.members.map((m) => shortFor(m.id, who.sex, plainA)).filter(Boolean))] : []
     return (
@@ -1156,6 +1156,9 @@ export default function PainAssessment() {
   const underFive = answers.age === 'u5'
   const UNDER_FIVE = 'Chandra sees children from 5 years old. For a younger child, please talk to your family doctor, who can refer you to a children\'s physiotherapist (for example through BC Children\'s Hospital or your local child development centre).'
   const holdToday = doctorFlags.some((f) => physioPlan(f) === 'doctorFirst' && f.sameDay)
+  // "Tell them" (plain questions): only the ticks of questions on this result,
+  // so a tick kept from an earlier drawing never counts.
+  const tellLine = tellThem(flags.filter((x) => pickedFlags.some((f) => f.id === x.split('~')[0])), answers, plainA)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
     if (flaggedAt === 'physician') { if (injuryApplies && !smartFirst) startInjury(); else startQuestions() }
@@ -2716,7 +2719,7 @@ export default function PainAssessment() {
                   <div style={{ ...card, maxWidth: 520, margin: '12px 0 12px' }}>
                     <span style={{ ...label, fontSize: 11.5 }}>You selected</span>
                     <ul style={{ margin: '10px 0 0', paddingLeft: 20, fontSize: 15, lineHeight: 1.75, color: 'rgba(255,255,255,0.82)' }}>
-                      {/* Lower back prototype: the signs ticked, in the patient's words. */}
+                      {/* Plain questions: the signs ticked, in the patient's words. */}
                       {pickedFlags.flatMap((f) => (tickedText(f.id, flags).length ? tickedText(f.id, flags).map((t) => <li key={t}>{t}</li>) : [<li key={f.id}>{f.text}</li>]))}
                       {otherFlagged && <li>Other: {flagOther.trim()}</li>}
                     </ul>
@@ -2782,11 +2785,11 @@ export default function PainAssessment() {
                   </div>
                 )}
 
-                {/* Lower back prototype: the patient's own words for the doctor or 911. */}
-                {lbProto && tellThem(flags, answers, plainA) && (
+                {/* Plain questions: the patient's own words for the doctor or 911. */}
+                {lbProto && tellLine && (
                   <div style={{ ...card, maxWidth: 520, margin: '12px 0 0' }}>
                     <span style={{ ...label, fontSize: 11.5 }}>Tell them</span>
-                    <p style={{ fontSize: 16, color: '#fff', margin: '8px 0 0', lineHeight: 1.5 }}>“{tellThem(flags, answers, plainA)}”</p>
+                    <p style={{ fontSize: 16, color: '#fff', margin: '8px 0 0', lineHeight: 1.5 }}>“{tellLine}”</p>
                   </div>
                 )}
 
