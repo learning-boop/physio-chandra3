@@ -22,7 +22,9 @@
     "review:lowback": "node scripts/make-plain-review.mjs lowerback",
     "review:neck": "node scripts/make-plain-review.mjs neck",
     "review:shoulder": "node scripts/make-plain-review.mjs shoulder",
-    "review:knee": "node scripts/make-plain-review.mjs knee"
+    "review:knee": "node scripts/make-plain-review.mjs knee",
+    "review:hip": "node scripts/make-plain-review.mjs hip",
+    "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",

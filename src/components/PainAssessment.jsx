@@ -39,7 +39,7 @@ import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { cautionRows, tickedIn } from '../data/cautionGroups'
 import { physioPlan, strictestPlan, PLAN_LABEL, PLAN_TEXT } from '../data/physioPlan'
-import { plainArea, gateQ, SUBHEAD, shortFor, PLAIN_Q, COVERED, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/plainQuestions'
+import { plainAreas, coverOut, gateQ, SUBHEAD, shortFor, PLAIN_Q, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/plainQuestions'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -832,9 +832,10 @@ export default function PainAssessment() {
   // foot, hip or ankle only, the injury screen runs before the doctor page
   // and its answer filters it; the doctor page is grouped.
   const smartFirst = injuryApplies && !!smartArea(flowZ)
-  // Plain question design (../data/plainQuestions.js), for the areas in
-  // PLAIN_AREAS: plain group questions with bullets, one sign per tick.
-  const plainA = !widespreadPath ? plainArea(smartArea(flowZ)) : null
+  // Plain question design (../data/plainQuestions.js), when every drawn area
+  // is in PLAIN_AREAS (one area or several; an area a mark only implies does
+  // not decide it): plain group questions with bullets, one sign per tick.
+  const plainA = !widespreadPath ? plainAreas(flowZ) : null
   const lbProto = !!plainA
   // Gateway groups the person has opened on the doctor page.
   const [openGates, setOpenGates] = useState([])
@@ -935,17 +936,20 @@ export default function PainAssessment() {
     return {
       // Most severe first on each page (../data/emergencyAdvice.js, bySeverity).
       // Grouped by theme behind one question each (../data/emergencyGroups.js, 6 Oct 2026).
-      emergency: (() => { const em = bySeverity(all.filter((f) => f.tier === 'emergency')); return [...em, ...gateUnsureFlags(em, null, 'emergency')] })(),
+      // Plain questions: a question another one on the page already asks is left out (coverOut).
+      emergency: (() => { const em0 = bySeverity(all.filter((f) => f.tier === 'emergency')); const em = lbProto ? coverOut(em0).kept : em0; return [...em, ...gateUnsureFlags(em, null, 'emergency')] })(),
       physician: (() => {
         // Smarter safety flow: the mechanism filter, then the gateway groups.
         const doc0 = byMechanism(bySeverity([...all.filter((f) => f.tier !== 'emergency'), ...universal]), answers)
-        // Plain questions: a question another one on the page already asks is left out.
-        const doc = lbProto ? doc0.filter((f) => !(COVERED[f.id] && doc0.some((x) => x.id === COVERED[f.id]))) : doc0
+        const doc = lbProto ? coverOut(doc0).kept : doc0
         // One area, or several merged by theme (../data/safetyGates.js).
         const area = widespreadPath ? null : smartArea(flowZ) || smartAreas(flowZ)
         return area ? [...doc, ...gateUnsureFlags(doc, area)] : doc
       })(),
       deferred,
+      // The questions left out as covered: their only-their-own signs show as extra ticks.
+      covered: lbProto ? [...coverOut(all.filter((f) => f.tier === 'emergency')).covered,
+        ...coverOut(byMechanism([...all.filter((f) => f.tier !== 'emergency'), ...universal], answers)).covered] : [],
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lbProto, widespreadPath, flowZ, leftOutZ, zones, injuryApplies, earlyPatterns, who, answers.dm, answers.steroid, answers.preg, answers.oi, answers.spondy, flags, answers['knee:I1'], answers['foot:I1'], answers['hip:I1'], answers['ankle:I1']])
@@ -1003,7 +1007,7 @@ export default function PainAssessment() {
     ![...r.members, r.unsure].some((m) => flags.includes(m.id)))
   /* Plain questions (../data/plainQuestions.js): one sign per tick; each
      tick sets its question, so the routes are unchanged. */
-  const plainTicks = (m) => (lbProto ? ticksFor(m.id, who.sex, plainA) : [])
+  const plainTicks = (m) => (lbProto ? ticksFor(m.id, who.sex, plainA, screening.covered) : [])
   const tickChip = (m, t) => {
     const sel = flags.includes(tickId(m.id, t.key))
     return (
@@ -1047,8 +1051,10 @@ export default function PainAssessment() {
     }
     const cut = r.gate.text.indexOf(': ')
     // Plain questions: a plain group question with one short bullet per question in it.
-    const plain = lbProto && gateQ(r.gate.id, plainA)
-    const bullets = plain ? [...new Set(r.members.map((m) => shortFor(m.id, who.sex, plainA)).filter(Boolean))] : []
+    // Only when every question in the group has its plain bullet and ticks, so
+    // the bullets name every sign behind the group; otherwise the usual line.
+    const plain = lbProto && r.members.every((m) => shortFor(m.id, who.sex, plainA, screening.covered) && plainTicks(m).length) && gateQ(r.gate.id, plainA)
+    const bullets = plain ? [...new Set(r.members.map((m) => shortFor(m.id, who.sex, plainA, screening.covered)).filter(Boolean))] : []
     return (
       <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
         <button style={chip(open)} onClick={toggle} aria-expanded={open}>

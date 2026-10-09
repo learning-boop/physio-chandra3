@@ -1,7 +1,8 @@
 /* ─────────────────────────────────────────────────────────────────────────
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
-   Lower back first (prototype), then the neck, the shoulder and the knee.
+   Lower back first (prototype), then the neck, the shoulder, the knee and
+   the hip; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -21,16 +22,26 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee']
-/** The area the plain design runs for, or null. */
-export const plainArea = (area) => (PLAIN_AREAS.includes(area) ? area : null)
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip']
+const ALIAS = { chest: 'upperback', flank: 'tlj' }
+/** The drawn areas the plain design runs for (one or several), or null.
+    Areas a mark only implies (the mid-to-low back behind a low-back mark)
+    do not decide it: their questions show as ticks where they have them. */
+export function plainAreas(zones = []) {
+  const drawn = [...new Set(zones.filter((z) => !z.implied).map((z) => ALIAS[z.type] || z.type))]
+  return drawn.length && drawn.every((a) => PLAIN_AREAS.includes(a)) ? drawn : null
+}
+/** One area's value from a map keyed by area, for one area or several (the first that has one). */
+const pick = (obj, area) => [].concat(area || []).map((a) => obj[a]).find((v) => v !== undefined)
 
 /* Groups: a plain question (per area where it differs), and one short
    bullet per question in the group. */
 export const PLAIN_GATES = {
-  'em-nerve': { lowerback: 'Since your back pain started, have you noticed any of these?', neck: 'Along with your neck pain, have you noticed any of these?' },
+  'em-nerve': { lowerback: 'Since your back pain started, have you noticed any of these?', neck: 'Along with your neck pain, have you noticed any of these?', any: 'Since this pain started, have you noticed any of these?' },
   'em-illness': 'Do you have any of these right now?',
-  'em-limb': { lowerback: 'Did this start after an accident in the last few days?', shoulder: 'Do you have any of these with the pain?', knee: 'Do you have any of these with the pain?' },
+  // Injury, infection or muscle signs: one neutral question, as the group can
+  // hold a crash, a hot joint, a hip operation and dark pee together.
+  'em-limb': 'Do you have any of these with the pain?',
   'lowback-bone': 'Could the bone be hurt or weak?',
   'lowback-infection': 'Do you feel unwell, not just sore?',
   'lowback-organ': 'Could the pain be coming from inside your body?',
@@ -41,14 +52,30 @@ export const PLAIN_GATES = {
   'knee-infection': 'Could the knee be infected or inflamed?',
   'knee-circulation': 'Could there be a problem with the blood flow in your leg?',
   'knee-medical': 'Could something else be going on?',
+  'hip-surgery': 'Could there be a problem after hip surgery, or a clot?',
+  'hip-bone': 'Could the bone be hurt or weak?',
+  'hip-organ': 'Could the pain be coming from your tummy or pelvis?',
+  'hip-medical': 'Could something else be going on?',
+  // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
+  'multi-bone': 'Could the bone be hurt or weak?',
+  'multi-infection': 'Do you feel unwell, not just sore?',
+  'multi-organ': 'Could the pain be coming from inside your body?',
+  'multi-nerve': 'Have your arms, legs, feet or hands changed?',
+  'multi-medical': 'Could something else be going on?',
+  'multi-circulation': 'Could there be a clot, a blood flow problem, or a problem after surgery?',
 }
 /** A group's plain question for this area. */
 export const gateQ = (gid, area) => {
   const q = PLAIN_GATES[gid]
-  return typeof q === 'string' || !q ? q : q[area] || Object.values(q)[0]
+  return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const PAIN_WORD = { lowerback: 'low back pain', neck: 'neck pain', shoulder: 'shoulder pain', knee: 'knee pain' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip' }
+/** "low back pain", or "low back and hip pain" for several areas. */
+export const painWord = (area) => {
+  const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
+  return w.length ? `${w.length === 1 ? w[0] : `${w.slice(0, -1).join(', ')} and ${w[w.length - 1]}`} pain` : 'pain'
+}
 
 export const PLAIN_SHORT = {
   // Emergency: nerves at the bottom of the back
@@ -66,7 +93,7 @@ export const PLAIN_SHORT = {
   // Emergency: accident
   'rf-fracture': 'A crash or bad fall in the last few days',
   // See a doctor
-  'rf-osteo': 'Sudden pain after a small strain, with weak bones',
+  'rf-osteo': 'Sudden pain after a small strain or slip, with weak bones or older age',
   'sc-trauma': 'A bad fall or accident',
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
@@ -117,12 +144,37 @@ export const PLAIN_SHORT = {
   'kf-stress': 'A runner with a deep ache above the knee',
   'kf-sufe': 'A child or teenager limping, with knee or hip pain',
   'kf-perthes': 'A child or teenager limping, with knee or hip pain',
+  // Hip
+  'hpf-aaa': 'Sudden, very bad back, tummy or groin pain, and feeling faint',
+  'hpf-septic': 'A very painful hip with a fever, or a feverish child not walking',
+  'hpf-ectopic': 'Could be pregnant, with sudden one-sided low pain or bleeding',
+  'hpf-torsion': 'Sudden, very bad pain in a testicle',
+  'hpf-strangulated': 'A groin lump that will not go back in, or with vomiting',
+  'hpf-dislocation': 'After a hip operation: a clunk, or cannot stand on the leg',
+  'hpf-rhabdo': 'Very sore or weak muscles, and dark pee',
+  'hpf-replacement': 'After a hip operation: newly sore, warm, leaking, or a fever',
+  'hpf-nofall': 'Sudden pain after a small strain or slip, with weak bones or older age',
+  'hpf-sufe': 'A child or teenager limping, with hip, thigh or knee pain',
+  'hpf-stress': 'A runner with a deep groin ache',
+  'hpf-avn': 'Deep groin ache with steroids, alcohol, sickle cell, lupus, transplant or old hip injury',
+  'hpf-dvt': 'A swollen, warm or tender calf or thigh',
+  'hpf-hernia': 'A soft groin lump when you cough or strain',
+  'hpf-kidney': 'Pain in waves to the groin, or burning or bloody pee',
+  'hpf-pelvic': 'Groin pain with periods, or unusual bleeding or discharge',
+  'hpf-cancer': 'Past cancer, or night pain with weight loss',
+  'hpf-cauda': 'Numb between your legs, or new trouble with pee or poo',
+  // The mid-to-low back's emergency questions (asked with a low-back mark)
+  'jrf-aaa': 'Sudden, very bad back, tummy or side pain, and feeling faint',
+  'jrf-conus': 'Cannot hold your pee or poo, or numb between your legs',
+  'jrf-fracture': 'A crash or bad fall in the last few days',
 }
 
-/** A bullet, for this area or birth sex where it differs. */
-export const shortFor = (qid, sex, area) => {
-  const s = PLAIN_SHORT[qid]
-  return typeof s === 'string' || !s ? s : s[area] || s[sex] || s.any
+/** A bullet, for this area or birth sex where it differs; when it carries
+    over a covered question's sign, the bullet that names it too. */
+export const shortFor = (qid, sex, area, covered = []) => {
+  const c = covered.find((x) => COVERED[x] && COVERED[x].short && [].concat(COVERED[x].by).includes(qid))
+  const s = c ? COVERED[c].short : PLAIN_SHORT[qid]
+  return typeof s === 'string' || !s ? s : pick(s, area) || s[sex] || s.any
 }
 
 /* A short plain heading for a question shown on its own (no group) whose
@@ -160,6 +212,15 @@ export const PLAIN_Q = {
   'kf-inflam': 'Do any of these fit you?',
   'kf-cancer': 'Do any of these fit you?',
   'kf-tumour': 'Do any of these fit you?',
+  'hpf-septic': 'Do any of these fit you?',
+  'hpf-strangulated': 'Do any of these fit you?',
+  'hpf-dislocation': 'After a hip replacement or a hip fracture operation, has one of these happened?',
+  'hpf-kidney': 'Do any of these fit you?',
+  'hpf-pelvic': 'Do any of these fit you?',
+  'hpf-cancer': 'Do any of these fit you?',
+  'hpf-cauda': 'Have you noticed any of these?',
+  'jrf-conus': 'Have you noticed any of these?',
+  'jrf-fracture': 'Did this start in the last few days after one of these?',
 }
 
 /* Inside a group: a sub-heading over a question's ticks, where a limit
@@ -170,6 +231,9 @@ export const SUBHEAD = {
   'nrf-myelo': 'Happening quickly, over days or weeks:',
   'pc-stroke': 'Started in the last few hours:',
   'kf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
+  'hpf-dislocation': 'After a hip replacement or a hip fracture operation:',
+  'rf-fracture': 'In the last few days:',
+  'jrf-fracture': 'In the last few days:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -424,15 +488,106 @@ export const TICKS = {
   'kf-perthes': [
     { key: 'limp', combo: true, text: 'A child (about 4 to 10) limping, with knee or hip pain, and no injury', tell: 'my child is limping with knee or hip pain and no injury' },
   ],
+  // ── Hip ──
+  'hpf-aaa': [
+    { key: 'faint', combo: true, text: 'Sudden, very bad pain in your back, tummy or groin, and you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
+  ],
+  'hpf-septic': [
+    { key: 'fever', combo: true, text: 'A very painful hip with a fever, and you cannot put weight on the leg', tell: 'my hip is very painful, I have a fever and cannot put weight on the leg' },
+    { key: 'child', combo: true, text: 'A child with a fever who suddenly will not walk', tell: 'my child has a fever and suddenly will not walk' },
+  ],
+  'hpf-ectopic': [
+    { key: 'preg', combo: true, sex: 'female', text: 'You could be pregnant, and have sudden pain low on one side of your tummy or groin, bleeding, or feeling faint', tell: 'I could be pregnant, and I have sudden low pain on one side' },
+  ],
+  'hpf-torsion': [
+    { key: 'pain', sex: 'male', text: 'Sudden, very bad pain in a testicle (ball)', tell: 'I have sudden, very bad pain in a testicle' },
+  ],
+  'hpf-strangulated': [
+    { key: 'stuck', text: 'A painful or firm lump in your groin that will not go back in', tell: 'I have a painful groin lump that will not go back in' },
+    { key: 'sick', combo: true, text: 'A lump in your groin, and you are vomiting or not passing wind', tell: 'I have a groin lump and I am vomiting' },
+  ],
+  'hpf-dislocation': [
+    { key: 'clunk', text: 'Sudden, very bad hip pain, or you felt a clunk', tell: 'after my hip operation I have sudden, very bad pain or felt a clunk' },
+    { key: 'stand', text: 'You cannot stand on the leg, or it looks shorter or turned', tell: 'after my hip operation I cannot stand on the leg' },
+  ],
+  'hpf-rhabdo': [
+    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, and pee that is dark like cola', tell: 'I have very bad muscle pain and my pee is dark like cola' },
+  ],
+  'hpf-replacement': [
+    { key: 'sore', combo: true, text: 'After a hip replacement or hip operation: the hip newly painful, warm or swollen, a red or leaking wound, or a fever', tell: 'my operated hip is newly painful, warm or swollen' },
+  ],
+  'hpf-nofall': [
+    { key: 'sudden', combo: true, text: '65 or over, or weak bones, and sudden groin or hip pain with no fall or a small slip, so standing or walking hurts', tell: 'I am over 65 or have weak bones, and sudden hip pain makes it hard to stand' },
+  ],
+  'hpf-sufe': [
+    { key: 'limp', combo: true, text: 'A child or teenager (about 5 to 17) limping or not wanting to put weight on the leg, with hip, groin, thigh or knee pain', tell: 'my child is limping with hip or knee pain' },
+  ],
+  'hpf-stress': [
+    { key: 'run', combo: true, text: 'You run or train hard, and have a deep groin ache that is worse with running or hopping, or aches at night', tell: 'I run or train hard and have a deep groin ache' },
+  ],
+  'hpf-avn': [
+    { key: 'risk', combo: true, text: 'Long-term steroid tablets, heavy drinking, sickle cell, lupus, an organ transplant, or a past hip fracture or dislocation, and a deep groin ache', tell: 'I have a deep groin ache and a risk such as steroids or heavy drinking' },
+  ],
+  'hpf-dvt': [
+    { key: 'leg', text: 'A calf or thigh that is swollen, warm or tender', tell: 'my calf or thigh is swollen, warm or tender' },
+  ],
+  'hpf-hernia': [
+    { key: 'lump', text: 'A soft lump in your groin that appears when you cough, strain or stand', tell: 'I have a soft groin lump when I cough or strain' },
+  ],
+  'hpf-kidney': [
+    { key: 'waves', text: 'Pain in waves from your side to your groin', tell: 'the pain comes in waves from my side to my groin' },
+    { key: 'pee', text: 'Burning when you pee, or blood in your pee', tell: 'it burns when I pee, or there is blood in my pee' },
+  ],
+  'hpf-pelvic': [
+    { key: 'periods', sex: 'female', text: 'Groin pain that comes and goes with your periods', tell: 'the groin pain comes with my periods' },
+    { key: 'bleed', sex: 'female', text: 'Unusual bleeding or discharge from your vagina', tell: 'I have unusual bleeding or discharge' },
+  ],
+  'hpf-cauda': [
+    { key: 'numb', text: 'New numbness between your legs or around your bottom', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+  ],
+  'jrf-aaa': [
+    { key: 'faint', combo: true, text: 'Sudden, very bad pain in your back, tummy or side, and you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
+  ],
+  'jrf-conus': [
+    { key: 'hold', text: 'You cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
+    { key: 'numb', text: 'No feeling between your legs or around your bottom', tell: 'I have lost feeling between my legs' },
+  ],
+  'jrf-fracture': [
+    { key: 'crash', text: 'A car crash', tell: 'I was in a car crash in the last few days' },
+    { key: 'height', text: 'A fall from a height, like a ladder, stairs or a roof', tell: 'I fell from a height in the last few days' },
+    { key: 'landing', text: 'Landing hard on your feet or bottom', tell: 'I landed hard on my feet or bottom in the last few days' },
+  ],
+  'hpf-cancer': [
+    { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
+    { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
+  ],
   'jrf-shingles': [
     { key: 'band', text: 'A band of burning pain on one side, with a rash or blisters', tell: 'I have a band of burning pain with a rash' },
   ],
 }
 
-/* A question whose signs another question on the same page already asks:
-   not shown in the prototype (its tick would repeat). The other question
-   leads to the same see-a-doctor advice. */
-export const COVERED = { 'pc-urinary': 'rf-kidney' }
+/* A question whose signs another question on the same page already asks
+   (by): not shown, as its ticks would repeat. The other question leads to
+   the same tier. A sign only the hidden question asks is carried over as an
+   extra tick on the one shown (adopt), so nothing is lost. */
+export const COVERED = {
+  'pc-urinary': { by: ['rf-kidney', 'hpf-kidney'] },
+  'rf-aaa': { by: ['hpf-aaa', 'jrf-aaa'] },
+  'jrf-aaa': { by: ['hpf-aaa'] },
+  'hpf-kidney': { by: ['rf-kidney'] },
+  'hpf-torsion': { by: ['jrf-testis'] },
+  'hpf-pelvic': { by: ['rf-pelvic'], adopt: [{ key: 'discharge', sex: 'female', text: 'Unusual discharge from your vagina', tell: 'I have unusual discharge' }],
+    // The bullet of the question shown, naming the sign carried over too.
+    short: { female: 'Pain with your periods, or unusual bleeding or discharge', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding or discharge, or trouble peeing' } },
+}
+const byOf = (id) => [].concat((COVERED[id] && COVERED[id].by) || [])
+/** The list without the questions another one on it covers, and their ids. */
+export function coverOut(list = []) {
+  const ids = new Set(list.map((f) => f.id))
+  const covered = list.filter((f) => byOf(f.id).some((b) => ids.has(b))).map((f) => f.id)
+  return { kept: list.filter((f) => !covered.includes(f.id)), covered }
+}
 
 /* Ticks another question on the same area's page already asks: left out
    there (the lower back asks fever in rf-infection and cancer in rf-cancer). */
@@ -440,9 +595,14 @@ export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'
 
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`
-export const ticksFor = (qid, sex, area) => (TICKS[qid] || []).filter((t) => (!t.sex || !sex || t.sex === sex) && !(TICK_SKIP[area] || []).includes(tickId(qid, t.key)))
+export const ticksFor = (qid, sex, area, covered = []) => {
+  const skip = [].concat(area || []).flatMap((a) => TICK_SKIP[a] || [])
+  const adopted = covered.filter((c) => byOf(c).includes(qid)).flatMap((c) => COVERED[c].adopt || [])
+  return [...(TICKS[qid] || []), ...adopted].filter((t) => (!t.sex || !sex || t.sex === sex) && !skip.includes(tickId(qid, t.key)))
+}
 // Only while the question itself is still ticked (a stale tick never counts).
-export const tickedOf = (qid, flags = []) => (flags.includes(qid) ? (TICKS[qid] || []).filter((t) => flags.includes(tickId(qid, t.key))) : [])
+const allTicks = (qid) => [...(TICKS[qid] || []), ...Object.values(COVERED).filter((c) => c.by.includes(qid)).flatMap((c) => c.adopt || [])]
+export const tickedOf = (qid, flags = []) => (flags.includes(qid) ? allTicks(qid).filter((t) => flags.includes(tickId(qid, t.key))) : [])
 
 /** Toggle one tick, and keep its question ticked while any of its ticks is. */
 export function toggleTick(flags, qid, key) {
@@ -462,16 +622,16 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda']
+export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {
-  const tells = Object.keys(TICKS).flatMap((qid) => tickedOf(qid, flags).map((t) => t.tell))
+  const tells = [...new Set(flags.filter((x) => !x.includes('~')))].flatMap((qid) => tickedOf(qid, flags).map((t) => t.tell))
   if (!tells.length) return null
   const list = tells.length === 1 ? tells[0] : `${tells.slice(0, -1).join(', ')} and ${tells[tells.length - 1]}`
   // "When" belongs to the nerve signs: told only while one of them is ticked.
   const when = WHEN_FOR.some((q) => flags.includes(q)) && WHEN_Q.options.find((o) => o.id === answers[WHEN_Q.id])
-  return `I have ${PAIN_WORD[area] || 'pain'}, and ${list}.${when ? ` ${when.tell}` : ''}`
+  return `I have ${painWord(area)}, and ${list}.${when ? ` ${when.tell}` : ''}`
 }
 
 /** The ticked signs, for Chandra's summary. */

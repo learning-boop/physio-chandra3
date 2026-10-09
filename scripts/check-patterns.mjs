@@ -1698,7 +1698,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('Severity: dynamic, from the questions that apply (OI on: the emergency ones above the doctor-today ones)',
     oi.findIndex((f) => f.tier !== 'emergency') > oi.map((f) => f.tier).lastIndexOf('emergency'))
   check('Severity: applied to the emergency page, the doctor page, the final check and the Symptom Guide',
-    /const em = bySeverity\(all\.filter/.test(src) && /byMechanism\(bySeverity\(\[\.\.\.all/.test(src) && /const fin = bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
+    /const em0 = bySeverity\(all\.filter/.test(src) && /byMechanism\(bySeverity\(\[\.\.\.all/.test(src) && /const fin = bySeverity\(out\)/.test(src) && /const all = bySeverity\(/.test(sg))
 }
 
 // ── 49. Smarter safety flow: knee, foot, hip, ankle (Chandra, 4 Oct 2026) ──
@@ -2390,12 +2390,73 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     && lb.ids.includes('rf-infection') && lb.ids.includes('rf-cancer'))
   check('the shoulder: a sudden, sharp pain on breathing with breathlessness sets the 911 lung clot question', LB.toggleTick([], 'srf-lung', 'breath').includes('srf-lung') && sh.reg.find((f) => f.id === 'srf-lung').call911)
   check('the shoulder: a hot joint needs a fever or a recent injection too (one line each)', LB.TICKS['rf-hotjoint'].every((t) => t.combo))
-  check('the shoulder: the accident group question is not used for the hot joint and muscle group', !/accident/.test(LB.gateQ('em-limb', 'shoulder')))
+  check('the injury, infection or muscle emergency group asks a neutral question on every area (it can hold a crash, a hot joint and a hip operation together)',
+    ['lowerback', 'shoulder', 'knee', 'hip', ['lowerback', 'hip']].every((a) => !/accident/.test(LB.gateQ('em-limb', a))))
   check('the knee: compartment syndrome needs the pain AND a muscle sign on one line, under its time and cause heading', LB.TICKS['kf-compartment'].every((t) => t.combo) && /last day or two/.test(LB.SUBHEAD['kf-compartment']))
   check('the knee: one cauda equina tick is still the emergency', LB.toggleTick([], 'kf-cauda', 'numb').includes('kf-cauda') && kn.reg.find((f) => f.id === 'kf-cauda').tier === 'emergency')
   check('the knee: past cancer is asked once (in the knee cancer question, not again in the general one)', !LB.ticksFor('sc-systemic', null, 'knee').some((t) => t.key === 'cancer') && LB.TICKS['kf-cancer'].some((t) => t.key === 'past'))
   check('the knee: the two limping-child questions share one bullet, so a child sees five at most', LB.shortFor('kf-sufe') === LB.shortFor('kf-perthes'))
+  // A question whose ticks lean on its own heading (a time limit, an operation)
+  // keeps that heading inside a group, where its own heading is not shown.
+  const GENERIC_Q = /^(Do any of these fit you\?|Have you noticed any of these\?|Have any of these changed\?|Has one of these happened\?|Along with the neck pain, have you noticed any of these\?)$/
+  const leans = Object.entries(LB.PLAIN_Q).filter(([q, h]) => !GENERIC_Q.test(h) && !LB.SUBHEAD[q]).map(([q]) => q)
+  check('every question whose ticks lean on its heading keeps it inside a group', !leans.length, leans)
   check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
+  // ── Several areas (and the implied mid-to-low back behind a low-back mark) ──
+  {
+    const { forPerson } = await imp('src/data/assessmentFlow.js')
+    const { bySeverity } = await imp('src/data/emergencyAdvice.js')
+    const { gateUnsureFlags, gateRows, smartAreas, smartArea } = await imp('src/data/safetyGates.js')
+    const UNI = [{ id: 'sc-neuro', tier: 'urgent' }, { id: 'sc-systemic', tier: 'urgent' }, { id: 'sc-trauma', tier: 'urgent' }]
+    const zLB = [{ id: 'lowerback', type: 'lowerback', label: 'Low back', side: 'c' }]
+    const zHip = [{ id: 'hipR', type: 'hip', label: 'Hip', side: 'R' }]
+    check('a lower-back-only drawing gets the plain design (its implied mid-to-low back does not switch it off)',
+      JSON.stringify(LB.plainAreas(flowZones(zLB))) === '["lowerback"]' && smartArea(flowZones(zLB)) === null)
+    check('lower back + hip gets the plain design', JSON.stringify(LB.plainAreas(flowZones([...zLB, ...zHip]))) === '["lowerback","hip"]')
+    check('an area without plain questions yet keeps the usual wording for the whole drawing',
+      LB.plainAreas(flowZones([...zLB, { id: 'ankleR', type: 'ankle', label: 'Ankle', side: 'R' }])) === null)
+    check('"Tell them" names both areas', /^I have low back and hip pain, and /.test(LB.tellThem(LB.toggleTick([], 'hpf-dvt', 'leg'), {}, ['lowerback', 'hip'])))
+    // Every drawing × every age and birth sex: every question shown has plain
+    // ticks, and every merged group has a plain question and few enough bullets.
+    const people = ['u18', '18-29', '30-49', '50-64', 'o64'].flatMap((age) => ['male', 'female'].map((sex) => ({ age, sex })))
+    const bad = [], noTick = new Set(), many = []
+    for (const zz of [zLB, zHip, [...zLB, ...zHip]]) {
+      const fz = flowZones(zz), areas = LB.plainAreas(fz)
+      const pattern = patternChecks(zz, {}, 12).filter((f) => !(f.id === 'pc-urinary' && false))
+      for (const who of people) {
+        const all = [...regionRedFlags(fz, zz), ...pattern, ...UNI.filter((u) => !(u.id === 'sc-trauma' && zz.some((z) => z.type === 'hip')))].filter((f) => forPerson(f, who))
+        const em = LB.coverOut(bySeverity(all.filter((f) => f.tier === 'emergency')))
+        const doc = LB.coverOut(bySeverity(all.filter((f) => f.tier !== 'emergency')))
+        const covered = [...em.covered, ...doc.covered]
+        const area = smartArea(fz) || smartAreas(fz)
+        for (const [list, kind, grp] of [[em.kept, 'emergency', null], [doc.kept, 'doctor', area]]) {
+          for (const f of list) if (!LB.ticksFor(f.id, who.sex, areas, covered).length) noTick.add(f.id)
+          const rows = gateRows([...list, ...gateUnsureFlags(list, grp, kind)])
+          for (const r of rows.filter((x) => x.gate)) {
+            if (!LB.gateQ(r.gate.id, areas)) bad.push(`${areas}:${r.gate.id}`)
+            const n = new Set(r.members.map((m) => LB.shortFor(m.id, who.sex, areas))).size
+            if (n > 6) many.push(`${areas} ${who.age}/${who.sex} ${r.gate.id}: ${n}`)
+          }
+        }
+      }
+    }
+    check('lower back, hip, and both together: every question shown has plain ticks, for every age and sex', !noTick.size, [...noTick])
+    // An area left unticked on the Draw page still asks its emergency questions,
+    // so every emergency question of the back, the mid-to-low back and the hip has ticks.
+    const { REGIONS } = await imp('src/data/symptomGuide.js')
+    const emNo = ['lowback', 'tlj', 'hip'].flatMap((k) => REGIONS[k].redFlags.filter((f) => f.tier === 'emergency' && !LB.TICKS[f.id]).map((f) => f.id))
+    check('every emergency question of the back, mid-to-low back and hip has plain ticks (unticked areas still ask theirs)', !emNo.length, emNo)
+    check('the nerve emergency group asks about "this pain" when no back or neck is drawn', /this pain/.test(LB.gateQ('em-nerve', ['hip'])) && /back pain/.test(LB.gateQ('em-nerve', ['lowerback', 'hip'])))
+    check('lower back, hip, and both together: every group has a plain question', !bad.length, [...new Set(bad)])
+    check('lower back, hip, and both together: no group shows more than six bullets, for any age or sex', !many.length, many)
+    const both = (ids) => LB.coverOut(ids.map((id) => ({ id })))
+    check('a repeated question shows once: the hip\'s aorta question covers the back\'s, the back\'s kidney question covers the hip\'s',
+      both(['rf-aaa', 'hpf-aaa']).covered.join() === 'rf-aaa' && both(['rf-kidney', 'hpf-kidney', 'pc-urinary']).covered.join() === 'hpf-kidney,pc-urinary')
+    check('a sign only the hidden question asked carries over: vaginal discharge joins the back\'s pelvic question',
+      LB.ticksFor('rf-pelvic', 'female', ['lowerback', 'hip'], ['hpf-pelvic']).some((t) => t.key === 'discharge') && !LB.ticksFor('rf-pelvic', 'female', ['lowerback'], []).some((t) => t.key === 'discharge')
+      && LB.tellThem(LB.toggleTick([], 'rf-pelvic', 'discharge'), {}, 'lowerback') === 'I have low back pain, and I have unusual discharge.'
+      && /discharge/.test(LB.shortFor('rf-pelvic', 'female', ['lowerback', 'hip'], ['hpf-pelvic'])) && !/discharge/.test(LB.shortFor('rf-pelvic', 'female', ['lowerback'], [])))
+  }
   check('the neck group questions are its own', /neck pain/.test(LB.gateQ('em-nerve', 'neck')) && /back pain/.test(LB.gateQ('em-nerve', 'lowerback')))
   check('a tick whose question was unticked another way is not told', LB.tellThem(['rf-saddle~paper'], {}) === null)
   check('a group bullet follows birth sex where it differs', LB.shortFor('rf-pelvic', 'male') === 'New trouble peeing' && /periods/.test(LB.shortFor('rf-pelvic', 'female')) && /periods/.test(LB.shortFor('rf-pelvic')))
