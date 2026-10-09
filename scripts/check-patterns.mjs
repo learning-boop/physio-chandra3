@@ -2340,10 +2340,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const an = pageOf('ankle', ['sc-neuro', 'sc-systemic'])
   const ft = pageOf('foot', ['sc-neuro', 'sc-systemic'])
   const th = pageOf('thigh', ['sc-neuro', 'sc-systemic'])
+  const lg = pageOf('lowerleg', ['sc-neuro', 'sc-systemic'])
   const regional = lb.reg
   const page = lb.ids
   check('the cauda equina sex question is asked on a lower back drawing (it was dropped by the group filter)', regional.some((f) => f.id === 'rf-sexual'))
-  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids]]) {
+  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lower leg', lg.ids]]) {
     const noTicks = pg.filter((id) => !LB.TICKS[id] || !LB.PLAIN_SHORT[id])
     check(`every ${name} safety question has plain ticks and a short bullet`, !noTicks.length, noTicks)
   }
@@ -2367,7 +2368,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const keys = ticks.map((t) => `${t.q}~${t.key}`)
   check('tick ids are unique', keys.length === new Set(keys).size)
   // Every group on the lower back pages: a plain question and five bullets at most.
-  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
+  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lowerleg', lg.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
     .map((g) => ({ id: g.id, area: a, members: g.members.filter((m) => pg.includes(m)) })).filter((g) => g.members.length >= 2))
   const noPlain = groups.filter((g) => !LB.gateQ(g.id, g.area)).map((g) => `${g.area}:${g.id}`)
   check('every lower back, neck, shoulder and knee group has a plain question', !noPlain.length, noPlain)
@@ -2416,6 +2417,15 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     LB.TICKS['tgf-compartment'].length === 1 && LB.TICKS['tgf-compartment'][0].combo && /hard/.test(LB.TICKS['tgf-compartment'][0].text) && /last day or two/.test(LB.SUBHEAD['tgf-compartment']))
   check('the thigh: cramps when walking count only with smoking or diabetes, as the current question reads', LB.TICKS['tgf-claudication'].every((t) => t.combo && /smoke or have diabetes/.test(t.text)))
   check('the thigh: past cancer is asked once', !LB.ticksFor('sc-systemic', null, 'thigh').some((t) => t.key === 'cancer') && LB.TICKS['tgf-cancer'].some((t) => t.key === 'past'))
+  check('the lower leg: spreading redness, a red streak and a non-healing ulcer each count on their own; only the hot area needs a fever, as the current question reads',
+    ['redness', 'streak', 'ulcer'].every((k) => !LB.TICKS['lgf-cellulitis'].find((t) => t.key === k).combo) && LB.TICKS['lgf-cellulitis'].find((t) => t.key === 'hot').combo)
+  check('the lower leg: compartment syndrome keeps its causes and time limit inside a group', /last day or two/.test(LB.SUBHEAD['lgf-compartment']))
+  check('the whole leg now runs together: knee + lower leg + ankle gets the plain design',
+    JSON.stringify(LB.plainAreas(flowZones([{ id: 'kneeR', type: 'knee', label: 'k', side: 'R' }, { id: 'lowerlegR', type: 'lowerleg', label: 'l', side: 'R' }, { id: 'ankleR', type: 'ankle', label: 'a', side: 'R' }]))) === '["knee","lowerleg","ankle"]')
+  check('several areas: the same question from each area shares one bullet (gout from the knee, ankle and foot)',
+    LB.shortFor('kf-gout', null, ['knee', 'ankle']) === LB.shortFor('af-gout', null, ['knee', 'ankle']) && LB.shortFor('kf-gout', null, ['knee']) !== LB.shortFor('af-gout', null, ['ankle']))
+  check('the long pattern questions keep "together with" as their heading ("and one of these")',
+    ['pc-lowhormone', 'pc-calcium', 'pc-acromegaly'].every((q) => /and one of these:$/.test(LB.SUBHEAD[q])) && /These signs/.test(LB.SUBHEAD['pc-hypothyroid']))
   check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
   // ── Several areas (and the implied mid-to-low back behind a low-back mark) ──
   {
@@ -2435,7 +2445,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     // ticks, and every merged group has a plain question and few enough bullets.
     const people = ['u18', '18-29', '30-49', '50-64', 'o64'].flatMap((age) => ['male', 'female'].map((sex) => ({ age, sex })))
     const bad = [], noTick = new Set(), many = []
-    for (const zz of [zLB, zHip, [...zLB, ...zHip]]) {
+    const L = (t) => ({ id: `${t}R`, type: t, label: t, side: 'R' })
+    const LEG = [[L('knee'), L('lowerleg')], [L('lowerleg'), L('ankle')], [L('ankle'), L('foot')], [L('thigh'), L('knee')],
+      [L('knee'), L('lowerleg'), L('ankle'), L('foot')], [L('hip'), L('thigh'), L('knee')], [...zLB, L('thigh'), L('knee'), L('lowerleg')]]
+    for (const zz of [zLB, zHip, [...zLB, ...zHip], ...LEG]) {
       const fz = flowZones(zz), areas = LB.plainAreas(fz)
       const pattern = patternChecks(zz, {}, 12).filter((f) => !(f.id === 'pc-urinary' && false))
       for (const who of people) {
@@ -2455,15 +2468,15 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
         }
       }
     }
-    check('lower back, hip, and both together: every question shown has plain ticks, for every age and sex', !noTick.size, [...noTick])
+    check('lower back, hip, the leg areas and their combinations: every question shown has plain ticks, for every age and sex', !noTick.size, [...noTick])
     // An area left unticked on the Draw page still asks its emergency questions,
     // so every emergency question of the back, the mid-to-low back and the hip has ticks.
     const { REGIONS } = await imp('src/data/symptomGuide.js')
     const emNo = ['lowback', 'tlj', 'hip'].flatMap((k) => REGIONS[k].redFlags.filter((f) => f.tier === 'emergency' && !LB.TICKS[f.id]).map((f) => f.id))
     check('every emergency question of the back, mid-to-low back and hip has plain ticks (unticked areas still ask theirs)', !emNo.length, emNo)
     check('the nerve emergency group asks about "this pain" when no back or neck is drawn', /this pain/.test(LB.gateQ('em-nerve', ['hip'])) && /back pain/.test(LB.gateQ('em-nerve', ['lowerback', 'hip'])))
-    check('lower back, hip, and both together: every group has a plain question', !bad.length, [...new Set(bad)])
-    check('lower back, hip, and both together: no group shows more than six bullets, for any age or sex', !many.length, many)
+    check('lower back, hip, the leg areas and their combinations: every group has a plain question', !bad.length, [...new Set(bad)])
+    check('lower back, hip, the leg areas and their combinations: no group shows more than six bullets, for any age or sex', !many.length, many)
     const both = (ids) => LB.coverOut(ids.map((id) => ({ id })))
     check('a repeated question shows once: the hip\'s aorta question covers the back\'s, the back\'s kidney question covers the hip\'s',
       both(['rf-aaa', 'hpf-aaa']).covered.join() === 'rf-aaa' && both(['rf-kidney', 'hpf-kidney', 'pc-urinary']).covered.join() === 'hpf-kidney,pc-urinary')

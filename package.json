@@ -27,6 +27,7 @@
     "review:ankle": "node scripts/make-plain-review.mjs ankle",
     "review:foot": "node scripts/make-plain-review.mjs foot",
     "review:thigh": "node scripts/make-plain-review.mjs thigh",
+    "review:lowerleg": "node scripts/make-plain-review.mjs lowerleg",
     "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
   },
   "dependencies": {

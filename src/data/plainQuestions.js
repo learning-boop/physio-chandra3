@@ -2,7 +2,7 @@
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
    Lower back first (prototype), then the neck, the shoulder, the knee, the
-   hip, the ankle, the foot and the thigh; and drawings of several of these areas together (plainAreas).
+   hip, the ankle, the foot, the thigh and the lower leg; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -22,7 +22,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -67,6 +67,9 @@ export const PLAIN_GATES = {
   'thigh-circulation': 'Could it be a clot, an infection or your blood flow?',
   'thigh-nerve': 'Has your leg changed in feeling or strength?',
   'thigh-medical': 'Could something else be going on?',
+  'leg-circulation': 'Could it be a clot, an infection, a tight cast or your blood flow?',
+  'leg-nerve': 'Have your feet or legs changed in feeling or strength?',
+  'leg-medical': 'Could something else be going on?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -81,7 +84,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -109,7 +112,7 @@ export const PLAIN_SHORT = {
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
-  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', thigh: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
+  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
@@ -225,6 +228,42 @@ export const PLAIN_SHORT = {
   'tgf-tumour': 'Under 25 with a night ache, or a growing thigh lump',
   'tgf-sufe': 'A child or teenager limping, with thigh or knee pain',
   'tgf-cancer': 'Past cancer, or night pain with weight loss',
+  // Lower leg
+  'lgf-pe': 'A swollen calf, with breathlessness, chest pain or coughing blood',
+  'lgf-compartment': 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise',
+  'lgf-rhabdo': 'Very sore or weak muscles, and dark pee',
+  'lgf-ischaemia': 'Foot or lower leg suddenly cold, pale, numb, or painful at rest',
+  'lgf-necfasc': 'A hot red area spreading fast, with bad pain or feeling unwell',
+  'lgf-cauda': 'Numb between your legs, or new trouble with pee or poo',
+  'lgf-cast': 'A cast, splint or bandage getting tighter and more painful',
+  'lgf-dvt': 'A swollen, warm or tender calf',
+  'lgf-cellulitis': 'Spreading redness, a red streak, a hot area with fever, or an ulcer',
+  'lgf-claudication': 'Calf cramps when walking, if you smoke, have diabetes or are over 50',
+  'lgf-stress': 'A runner with a sore spot on the shin bone',
+  'lgf-footdrop': 'Your foot slaps down or your toes catch',
+  'lgf-neuropathy': 'Both feet numb or burning, like wearing socks',
+  'lgf-tumour': 'Under 25 with a night ache, or a growing shin lump',
+  'lgf-cancer': 'Past cancer, or night pain with weight loss',
+  // Pattern questions the drawing raises (../data/patternChecks.js)
+  'pc-lowhormone': 'Months of tiredness or weaker muscles, after a head injury, brain tumour or similar',
+  'pc-calcium': 'A deep bone ache on both sides, at rest and on your feet',
+  'pc-hypothyroid': 'Months of stiff, slow muscles or numb hands at night, with cold or tiredness',
+  'pc-acromegaly': 'Hands, feet or face grown bigger over the years',
+}
+
+/* Several areas drawn: the same question from each area (the knee's,
+   ankle's and foot's gout questions) shares one area-neutral bullet, so a
+   merged group names each sign once. The ticks inside keep their own area. */
+const fam = (ids, text) => Object.fromEntries(ids.map((id) => [id, text]))
+export const MULTI_SHORT = {
+  ...fam(['kf-septic', 'af-septic', 'rf-hotjoint'], 'A hot, red, swollen joint with a fever or feeling unwell'),
+  ...fam(['kf-compartment', 'af-compartment', 'ft-compartment', 'lgf-compartment', 'tgf-compartment'], 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise'),
+  ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress'], 'More running or training, and a deep ache or sore spot on a bone'),
+  ...fam(['kf-tumour', 'lgf-tumour', 'tgf-tumour'], 'Under 25 with a deep night ache, or a growing lump'),
+  ...fam(['kf-gout', 'af-gout', 'ft-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
+  ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, a sausage toe, heel pain, a rash, sore eyes or recent infection'),
+  ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
+  ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
 }
 
 /** A bullet, for this area or birth sex where it differs; when it carries
@@ -232,6 +271,8 @@ export const PLAIN_SHORT = {
 export const shortFor = (qid, sex, area, covered = []) => {
   const c = covered.find((x) => COVERED[x] && COVERED[x].short && [].concat(COVERED[x].by).includes(qid))
   const s = c ? COVERED[c].short : PLAIN_SHORT[qid]
+  // Several areas drawn: one area-neutral bullet for a family of questions.
+  if (!c && Array.isArray(area) && area.length > 1 && MULTI_SHORT[qid]) return MULTI_SHORT[qid]
   return typeof s === 'string' || !s ? s : pick(s, area) || s[sex] || s.any
 }
 
@@ -297,6 +338,17 @@ export const PLAIN_Q = {
   'tgf-femoral': 'Do any of these fit you?',
   'tgf-tumour': 'Do any of these fit you?',
   'tgf-cancer': 'Do any of these fit you?',
+  'lgf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg for a long time, a knock while on blood thinners, or very hard exercise: does one of these fit?',
+  'lgf-ischaemia': 'Do any of these fit you?',
+  'lgf-necfasc': 'Do any of these fit you?',
+  'lgf-cauda': 'Have you noticed any of these?',
+  'lgf-cellulitis': 'Do any of these fit you?',
+  'lgf-tumour': 'Do any of these fit you?',
+  'lgf-cancer': 'Do any of these fit you?',
+  'pc-lowhormone': 'Not explained by something a doctor has already found: for a few months, tiredness most days that sleep does not fix, or muscles smaller or weaker on both sides, and one of these:',
+  'pc-calcium': 'Not explained by something a doctor has already found: a deep ache in the bones on both sides (shins, thighs, hips, pelvis, back or ribs), there at rest and worse on your feet, and one of these:',
+  'pc-hypothyroid': 'Not explained by something a doctor has already found. "These signs" are: feeling cold when others are not, tiredness, weight gain without eating more, dry skin or hair loss, constipation, heavier periods, low mood or slow thinking, a hoarse voice, or puffy eyes.',
+  'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
 /* Inside a group: a sub-heading over a question's ticks, where a limit
@@ -313,6 +365,11 @@ export const SUBHEAD = {
   'af-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
   'ft-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
   'tgf-compartment': 'In the last day or two, after a heavy knock, a crush, a broken bone, an operation, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
+  'lgf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
+  'pc-lowhormone': 'Not explained by something a doctor has already found: for a few months, tiredness most days that sleep does not fix, or muscles smaller or weaker on both sides, and one of these:',
+  'pc-calcium': 'Not explained by something a doctor has already found: a deep ache in the bones on both sides (shins, thighs, hips, pelvis, back or ribs), there at rest and worse on your feet, and one of these:',
+  'pc-hypothyroid': 'Not explained by something a doctor has already found. "These signs" are: feeling cold when others are not, tiredness, weight gain without eating more, dry skin or hair loss, constipation, heavier periods, low mood or slow thinking, a hoarse voice, or puffy eyes.',
+  'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -796,6 +853,86 @@ export const TICKS = {
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep thigh pain at night that does not change however you lie, with weight loss', tell: 'I have deep thigh pain at night and I am losing weight' },
   ],
+  // ── Lower leg ──
+  'lgf-pe': [
+    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf, and you are short of breath, have chest pain or cough blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
+  ],
+  'lgf-compartment': [
+    { key: 'tight', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'toes', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
+  ],
+  'lgf-rhabdo': [
+    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, and pee that is dark like cola', tell: 'I have very bad muscle pain and my pee is dark like cola' },
+  ],
+  'lgf-ischaemia': [
+    { key: 'cold', text: 'Your foot or lower leg suddenly cold, pale or numb', tell: 'my foot or lower leg suddenly became cold, pale or numb' },
+    { key: 'rest', text: 'Sudden, very bad pain in the foot or lower leg at rest', tell: 'I suddenly have very bad pain in my leg at rest' },
+  ],
+  'lgf-necfasc': [
+    { key: 'pain', combo: true, text: 'A hot, red area on your leg spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area on your leg spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+  ],
+  'lgf-cauda': [
+    { key: 'numb', text: 'New numbness between your legs or around your bottom', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+  ],
+  'lgf-cast': [
+    { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
+  ],
+  'lgf-dvt': [
+    { key: 'calf', text: 'A calf that is swollen, warm or tender', tell: 'my calf is swollen, warm or tender' },
+  ],
+  'lgf-cellulitis': [
+    { key: 'redness', text: 'Redness on the leg that is spreading', tell: 'redness is spreading on my leg' },
+    { key: 'streak', text: 'A red streak up the leg', tell: 'I have a red streak up my leg' },
+    { key: 'hot', combo: true, text: 'A hot, swollen area on the leg, with a fever', tell: 'I have a hot, swollen area on my leg and a fever' },
+    { key: 'ulcer', text: 'A leg ulcer that is not healing', tell: 'I have a leg ulcer that is not healing' },
+  ],
+  'lgf-claudication': [
+    { key: 'cramp', combo: true, text: 'Calf cramps when walking that ease within minutes of standing still, and you smoke, have diabetes, or are over 50', tell: 'my calf cramps when I walk and eases when I stand still' },
+  ],
+  'lgf-stress': [
+    { key: 'shin', combo: true, text: 'You run or train hard, and have a shin sore spot you can point to with one finger, or pain hopping or at night', tell: 'I run or train hard and have a sore spot on my shin bone' },
+  ],
+  'lgf-footdrop': [
+    { key: 'slap', text: 'Your foot slaps down or your toes catch when you walk', tell: 'my foot slaps down when I walk' },
+  ],
+  'lgf-neuropathy': [
+    { key: 'socks', text: 'Both feet numb, burning or tingling, like wearing socks', tell: 'both my feet are numb or burning' },
+  ],
+  'lgf-tumour': [
+    { key: 'ache', combo: true, text: 'You are under 25, with a deep shin ache that wakes you at night', tell: 'I am under 25 and a deep shin ache wakes me at night' },
+    { key: 'lump', text: 'A lump on the shin that is growing', tell: 'I have a growing lump on my shin' },
+  ],
+  'lgf-cancer': [
+    { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
+    { key: 'night', combo: true, text: 'Deep leg pain at night that does not change however you lie, with weight loss', tell: 'I have deep leg pain at night and I am losing weight' },
+  ],
+  // ── Pattern questions (the main pattern is the heading: "and one of these") ──
+  'pc-lowhormone': [
+    { key: 'tumour', text: 'A pituitary or brain tumour, brain surgery, or radiotherapy to the head', tell: 'for months I have been exhausted, and I have had a brain or pituitary problem' },
+    { key: 'head', text: 'A bad head injury, or bleeding in the brain', tell: 'for months I have been exhausted, since a bad head injury' },
+    { key: 'birth', text: 'Heavy bleeding at a birth, then no periods or breastfeeding failed', tell: 'for months I have been exhausted, since heavy bleeding at a birth' },
+    { key: 'immuno', text: 'Cancer immunotherapy', tell: 'for months I have been exhausted, since cancer immunotherapy' },
+  ],
+  'pc-calcium': [
+    { key: 'press', text: 'Bones that hurt when pressed firmly: shin, breastbone or front of the pelvis', tell: 'my bones ache on both sides and hurt when pressed' },
+    { key: 'weak', text: 'Weak hips and thighs (hard to rise from a low chair), or a waddle', tell: 'my bones ache and my hips and thighs are weak' },
+    { key: 'fracture', text: 'A bone cracked without heavy sport, broken in a small fall, or thin bones', tell: 'my bones ache and a bone broke easily' },
+    { key: 'stone', text: 'A kidney stone, now or in the past', tell: 'my bones ache and I have had a kidney stone' },
+    { key: 'symptoms', combo: true, text: 'Two or more of: thirst or peeing more, constipation, feeling sick, low mood, brain fog, poor sleep', tell: 'my bones ache and I have thirst, constipation or brain fog' },
+    { key: 'risks', combo: true, text: 'Two or more of: darker skin, little sun, little dairy or vegan, a gut condition or weight-loss surgery, kidney or liver disease, anti-seizure medicine', tell: 'my bones ache and I may be low in vitamin D' },
+    { key: 'blood', text: 'A high calcium or low vitamin D blood result never followed up', tell: 'my bones ache and I had a calcium or vitamin D result never followed up' },
+  ],
+  'pc-hypothyroid': [
+    { key: 'muscles', combo: true, text: 'Muscles stiff, achy or crampy on both sides for months, slow to recover, with two or more of these signs', tell: 'my muscles have been stiff and slow for months, and I feel cold and tired' },
+    { key: 'hands', combo: true, text: 'Both hands tingle or go numb at night, with one or more of these signs', tell: 'both my hands go numb at night, and I feel cold and tired' },
+  ],
+  'pc-acromegaly': [
+    { key: 'joints', text: 'Aching, stiff or crunchy joints, or a stooping back, early for your age', tell: 'my hands or feet have grown, and my joints ache early for my age' },
+    { key: 'hands', text: 'Both hands tingling or numb at night, or thick, clumsy hands', tell: 'my hands or feet have grown, and my hands go numb at night' },
+    { key: 'others', combo: true, text: 'Two or more of: heavy snoring, sleepiness, headaches, oily or sweaty skin, new high blood pressure or sugar, skin tags, irregular periods or low sex drive', tell: 'my hands or feet have grown, and I snore, have headaches or new high blood pressure' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -835,7 +972,9 @@ export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'
   // The foot's lump question asks a growing lump and night pain.
   foot: ['sc-systemic~lump', 'sc-systemic~night'],
   // The thigh's own cancer question asks past cancer.
-  thigh: ['sc-systemic~cancer'] }
+  thigh: ['sc-systemic~cancer'],
+  // The lower leg's own cancer question asks past cancer.
+  lowerleg: ['sc-systemic~cancer'] }
 
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`
@@ -866,7 +1005,7 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda']
+export const WHEN_FOR = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {

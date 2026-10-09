@@ -11,6 +11,7 @@
         npm run review:ankle      →  review/ankle-plain.html
         npm run review:foot       →  review/foot-plain.html
         npm run review:thigh      →  review/thigh-plain.html
+        npm run review:lowerleg   →  review/lowerleg-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -106,6 +107,18 @@ const AREAS = {
       '<strong>Signs that only count together</strong> stay on one line, e.g. thigh or buttock cramps on walking AND smoking or diabetes; spreading redness, a red streak or a hot swollen area AND a fever; a runner AND a deep thigh ache.',
       '<strong>Past cancer</strong> is asked once, in the thigh cancer question; the general medical question leaves it out here.',
       '<strong>The thigh injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  lowerleg: {
+    out: 'lowerleg-plain', title: 'Lower Leg Questions', name: 'Lower leg', zones: [Z('lowerlegR', 'lowerleg', 'R')],
+    sample: () => tellThem(toggleTick([], 'lgf-cellulitis', 'streak'), {}, 'lowerleg'),
+    own: [
+      '<strong>Cellulitis on the lower leg</strong> reads differently from the thigh: spreading redness, a red streak up the leg and a leg ulcer that is not healing each count on their own; only a hot, swollen area needs a fever too, as the current question reads.',
+      '<strong>Compartment syndrome</strong> keeps its causes and time limit as a boxed heading, and each tick needs both the climbing pain and a muscle sign.',
+      '<strong>Blocked blood flow:</strong> both ticks say "suddenly" themselves, so they read right on the result and in the summary.',
+      '<strong>Past cancer</strong> is asked once, in the lower leg cancer question.',
+      '<strong>The whole leg now runs together:</strong> with the lower leg done, every drawing of the thigh, knee, lower leg, ankle and foot (alone or together, and with the back or hip) gets the plain questions.',
+      '<strong>The lower leg injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {
