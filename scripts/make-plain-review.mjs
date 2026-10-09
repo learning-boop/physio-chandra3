@@ -10,6 +10,7 @@
         npm run review:hip        →  review/hip-plain.html
         npm run review:ankle      →  review/ankle-plain.html
         npm run review:foot       →  review/foot-plain.html
+        npm run review:thigh      →  review/thigh-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -95,6 +96,16 @@ const AREAS = {
       '<strong>A tight cast</strong> keeps the safety line "do not cut it off" in the tick itself.',
       '<strong>Signs that only count together</strong> stay on one line, e.g. something through the shoe AND the foot now swollen, red or painful to walk on; diabetes AND a hot, swollen foot or a wound not healing; heel pain AND a stiff back, psoriasis, sore eyes or a recent infection.',
       '<strong>The foot injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  thigh: {
+    out: 'thigh-plain', title: 'Thigh Questions', name: 'Thigh', zones: [Z('thighR', 'thigh', 'R')],
+    sample: () => tellThem(toggleTick([], 'tgf-cellulitis', 'streak'), {}, 'thigh'),
+    own: [
+      '<strong>Compartment syndrome on the thigh</strong> keeps its own causes and time limit as a boxed heading ("In the last day or two, after a heavy knock, a crush…"), and its one tick needs both the climbing pain and a tense, hard, swollen thigh, as the current question does.',
+      '<strong>Signs that only count together</strong> stay on one line, e.g. thigh or buttock cramps on walking AND smoking or diabetes; spreading redness, a red streak or a hot swollen area AND a fever; a runner AND a deep thigh ache.',
+      '<strong>Past cancer</strong> is asked once, in the thigh cancer question; the general medical question leaves it out here.',
+      '<strong>The thigh injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {

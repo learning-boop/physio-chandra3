@@ -2339,10 +2339,11 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const kn = pageOf('knee', ['sc-neuro', 'sc-systemic'])
   const an = pageOf('ankle', ['sc-neuro', 'sc-systemic'])
   const ft = pageOf('foot', ['sc-neuro', 'sc-systemic'])
+  const th = pageOf('thigh', ['sc-neuro', 'sc-systemic'])
   const regional = lb.reg
   const page = lb.ids
   check('the cauda equina sex question is asked on a lower back drawing (it was dropped by the group filter)', regional.some((f) => f.id === 'rf-sexual'))
-  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids]]) {
+  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids]]) {
     const noTicks = pg.filter((id) => !LB.TICKS[id] || !LB.PLAIN_SHORT[id])
     check(`every ${name} safety question has plain ticks and a short bullet`, !noTicks.length, noTicks)
   }
@@ -2366,7 +2367,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const keys = ticks.map((t) => `${t.q}~${t.key}`)
   check('tick ids are unique', keys.length === new Set(keys).size)
   // Every group on the lower back pages: a plain question and five bullets at most.
-  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
+  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
     .map((g) => ({ id: g.id, area: a, members: g.members.filter((m) => pg.includes(m)) })).filter((g) => g.members.length >= 2))
   const noPlain = groups.filter((g) => !LB.gateQ(g.id, g.area)).map((g) => `${g.area}:${g.id}`)
   check('every lower back, neck, shoulder and knee group has a plain question', !noPlain.length, noPlain)
@@ -2411,6 +2412,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('the foot: each blocked-blood-flow tick says "suddenly" itself, so it reads right anywhere', LB.TICKS['ft-ischaemia'].every((t) => /^sudden|suddenly/i.test(t.text)))
   check('the foot: the general medical question keeps fever, weight loss and past cancer (the lump question asks the rest)',
     LB.ticksFor('sc-systemic', null, 'foot').map((t) => t.key).join() === 'fever,cancer,weight')
+  check('the thigh: compartment syndrome needs the climbing pain AND a tense, hard thigh on one line, under its causes and time limit',
+    LB.TICKS['tgf-compartment'].length === 1 && LB.TICKS['tgf-compartment'][0].combo && /hard/.test(LB.TICKS['tgf-compartment'][0].text) && /last day or two/.test(LB.SUBHEAD['tgf-compartment']))
+  check('the thigh: cramps when walking count only with smoking or diabetes, as the current question reads', LB.TICKS['tgf-claudication'].every((t) => t.combo && /smoke or have diabetes/.test(t.text)))
+  check('the thigh: past cancer is asked once', !LB.ticksFor('sc-systemic', null, 'thigh').some((t) => t.key === 'cancer') && LB.TICKS['tgf-cancer'].some((t) => t.key === 'past'))
   check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
   // ── Several areas (and the implied mid-to-low back behind a low-back mark) ──
   {
