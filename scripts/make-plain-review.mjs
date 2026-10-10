@@ -21,6 +21,7 @@
         npm run review:baseofneck →  review/baseofneck-plain.html
         npm run review:midlowback →  review/midlowback-plain.html
         npm run review:sij        →  review/sij-plain.html
+        npm run review:tailbone   →  review/tailbone-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -224,6 +225,16 @@ const AREAS = {
       '<strong>Signs that only count together</strong> stay on one line, e.g. under 45 AND months of pain that wakes you late at night AND eases with exercise.',
       '<strong>New, for every plain page:</strong> a question none of whose signs can apply to the patient\'s birth sex is left off (the pelvic question about periods and vaginal bleeding is not shown to a male patient; it still shows when birth sex was not given).',
       '<strong>"Tell them"</strong> names the area as buttock and pelvis pain.',
+    ],
+  },
+  coccyx: {
+    out: 'tailbone-plain', title: 'Tailbone Questions', name: 'Tailbone', zones: [Z('coccyx', 'coccyx')],
+    sample: () => tellThem(toggleTick([], 'xrf-saddle', 'paper'), { [WHEN_Q.id]: 'today' }, 'coccyx'),
+    own: [
+      '<strong>Emergency:</strong> cauda equina signs one per tick (numbness, the toilet-paper test, trouble peeing, leaking, cannot hold poo), under "Since your tailbone pain started".',
+      '<strong>Signs that only count together</strong> stay on one line: pain there all the time AND worse at night AND not affected by sitting.',
+      '<strong>Bowel control since giving birth</strong> is shown to women only.',
+      '<strong>Past cancer, a lump and constant night pain</strong> are asked in the tailbone\'s own questions, so the general medical question keeps fever and weight loss.',
     ],
   },
   'lowback-hip': {
