@@ -4,7 +4,7 @@
    Lower back first (prototype), then the neck, the shoulder, the knee, the
    hip, the ankle, the foot, the thigh, the lower leg, the elbow, the wrist,
    the hand, the forearm, the upper arm, the mid back (and front of the chest)
-   and the base of the neck; and drawings of several of these areas together (plainAreas).
+   the base of the neck and the mid-to-low back (and the flank); and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -24,7 +24,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -39,7 +39,7 @@ const pick = (obj, area) => [].concat(area || []).map((a) => obj[a]).find((v) =>
 /* Groups: a plain question (per area where it differs), and one short
    bullet per question in the group. */
 export const PLAIN_GATES = {
-  'em-nerve': { lowerback: 'Since your back pain started, have you noticed any of these?', neck: 'Along with your neck pain, have you noticed any of these?', upperback: 'Along with your back pain, have you noticed any of these?', ctj: 'Along with your neck or back pain, have you noticed any of these?', any: 'Since this pain started, have you noticed any of these?' },
+  'em-nerve': { lowerback: 'Since your back pain started, have you noticed any of these?', neck: 'Along with your neck pain, have you noticed any of these?', upperback: 'Along with your back pain, have you noticed any of these?', ctj: 'Along with your neck or back pain, have you noticed any of these?', tlj: 'Since your back pain started, have you noticed any of these?', any: 'Since this pain started, have you noticed any of these?' },
   'em-illness': 'Do you have any of these right now?',
   // Injury, infection or muscle signs: one neutral question, as the group can
   // hold a crash, a hot joint, a hip operation and dark pee together.
@@ -96,6 +96,10 @@ export const PLAIN_GATES = {
   'ctj-arm': 'Has your arm or hand changed?',
   'ctj-organ': 'Could the pain be coming from your chest or tummy?',
   'ctj-medical': 'Could something else be going on?',
+  'tlj-bone': 'Could the bone be hurt or weak?',
+  'tlj-infection': 'Do you feel unwell, not just sore?',
+  'tlj-organ': 'Could the pain be coming from inside your body?',
+  'tlj-nerve': 'Have your legs changed in feeling or strength?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -110,7 +114,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -138,7 +142,7 @@ export const PLAIN_SHORT = {
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
-  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
+  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', tlj: 'Weight loss, a growing lump, or bad night pain', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
@@ -369,7 +373,7 @@ export const MULTI_SHORT = {
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['rf-aaa', 'hpf-aaa', 'jrf-aaa', 'trf-aorta', 'jrf-aorta', 'crf-aorta'], 'Sudden tearing or very bad back or tummy pain, or feeling faint'),
   ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung'], 'Chest tightness, breathlessness, sweating, effort or jaw pain, or sharp pain on breathing'),
-  ...fam(['rf-osteo', 'hpf-nofall', 'trf-osteo', 'crf-osteo'], 'Sudden pain after a small strain or slip, with weak bones or older age'),
+  ...fam(['rf-osteo', 'hpf-nofall', 'trf-osteo', 'crf-osteo', 'jrf-osteo'], 'Sudden pain after a small strain or slip, with weak bones or older age'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
   ...fam(['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve'], 'A weaker hand, thinning thumb muscle, constant numbness, dropped wrist, or no OK sign'),
@@ -1374,7 +1378,8 @@ for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], 
   ['frf-compartment', 'wrf-compartment'], ['frf-cast', 'erf-cast'], ['frf-cellulitis', 'erf-cellulitis'], ['frf-myelo', 'erf-myelo'],
   ['arf-stroke', 'frf-stroke'], ['arf-rhabdo', 'srf-rhabdo'], ['arf-cellulitis', 'erf-cellulitis'], ['arf-myelo', 'erf-myelo'],
   ['trf-lung', 'srf-lung'], ['trf-pancreas', 'jrf-pancreas'], ['trf-cord-legs', 'jrf-conus-legs'], ['trf-myelo', 'jrf-legs'], ['trf-shingles', 'jrf-shingles'],
-  ['crf-lung', 'srf-lung'], ['crf-cord', 'trf-cord'], ['crf-gallbladder', 'srf-organ'], ['crf-shingles', 'jrf-shingles']]) {
+  ['crf-lung', 'srf-lung'], ['crf-cord', 'trf-cord'], ['crf-gallbladder', 'srf-organ'], ['crf-shingles', 'jrf-shingles'],
+  ['jrf-kidney', 'rf-kidney'], ['jrf-cancer', 'rf-cancer'], ['jrf-osteo', 'rf-osteo'], ['jrf-infection', 'trf-infection']]) {
   TICKS[copy] = TICKS[from]
   PLAIN_SHORT[copy] = PLAIN_SHORT[from]
   if (PLAIN_Q[from]) PLAIN_Q[copy] = PLAIN_Q[from]
@@ -1421,7 +1426,9 @@ export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'
   // The hand's lump question asks a growing lump.
   hand: ['sc-systemic~lump'],
   // The mid back asks fever in trf-infection and cancer in trf-cancer.
-  upperback: ['sc-systemic~fever', 'sc-systemic~cancer'] }
+  upperback: ['sc-systemic~fever', 'sc-systemic~cancer'],
+  // The mid-to-low back asks fever in jrf-infection and cancer in jrf-cancer.
+  tlj: ['sc-systemic~fever', 'sc-systemic~cancer'] }
 
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`

@@ -2348,12 +2348,14 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const ua = pageOf('upperarm', ['sc-neuro', 'sc-systemic'], ['pc-stroke'])
   const ub = pageOf('upperback', ['sc-neuro', 'sc-systemic', 'sc-trauma'])
   const cj = pageOf('ctj', ['sc-neuro', 'sc-systemic', 'sc-trauma'])
+  const tj = pageOf('tlj', ['sc-neuro', 'sc-systemic', 'sc-trauma', 'pc-visceral'])
+  const fl = pageOf('flank', ['sc-neuro', 'sc-systemic', 'sc-trauma'])
   const ch = pageOf('chest', ['sc-neuro', 'sc-systemic', 'sc-trauma'], ['pc-cardiac'])
   const hd = pageOf('hand', ['sc-neuro', 'sc-systemic', 'pc-hand-procedure'], ['pc-stroke'])
   const regional = lb.reg
   const page = lb.ids
   check('the cauda equina sex question is asked on a lower back drawing (it was dropped by the group filter)', regional.some((f) => f.id === 'rf-sexual'))
-  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lower leg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upper arm', ua.ids], ['mid back', ub.ids], ['chest', ch.ids], ['base of the neck', cj.ids]]) {
+  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lower leg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upper arm', ua.ids], ['mid back', ub.ids], ['chest', ch.ids], ['base of the neck', cj.ids], ['mid-to-low back', tj.ids], ['flank', fl.ids]]) {
     const noTicks = pg.filter((id) => !LB.TICKS[id] || !LB.PLAIN_SHORT[id])
     check(`every ${name} safety question has plain ticks and a short bullet`, !noTicks.length, noTicks)
   }
@@ -2378,7 +2380,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const keys = ticks.map((t) => `${t.q}~${t.key}`)
   check('tick ids are unique', keys.length === new Set(keys).size)
   // Every group on the lower back pages: a plain question and five bullets at most.
-  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lowerleg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upperarm', ua.ids], ['upperback', ub.ids], ['ctj', cj.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
+  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lowerleg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upperarm', ua.ids], ['upperback', ub.ids], ['ctj', cj.ids], ['tlj', tj.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
     .map((g) => ({ id: g.id, area: a, members: g.members.filter((m) => pg.includes(m)) })).filter((g) => g.members.length >= 2))
   const noPlain = groups.filter((g) => !LB.gateQ(g.id, g.area)).map((g) => `${g.area}:${g.id}`)
   check('every lower back, neck, shoulder and knee group has a plain question', !noPlain.length, noPlain)
@@ -2460,6 +2462,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     /getting quickly worse/.test(LB.SUBHEAD['crf-trauma5d']) && /even if not getting worse/.test(LB.SUBHEAD['crf-trauma5d-doc']) && cj.reg.find((f) => f.id === 'crf-trauma5d').call911 && cj.reg.find((f) => f.id === 'crf-trauma5d-doc').sameDay)
   check('the base of the neck: questions worded like another area\'s share their ticks', LB.TICKS['crf-lung'] === LB.TICKS['srf-lung'] && LB.TICKS['crf-gallbladder'] === LB.TICKS['srf-organ'])
   check('the base of the neck: "Tell them" says neck and upper back pain', /^I have neck and upper back pain, and /.test(LB.tellThem(LB.toggleTick([], 'crf-wasting', 'grip'), {}, 'ctj')))
+  check('the mid-to-low back: a flank mark runs as the mid-to-low back', JSON.stringify(LB.plainAreas(flowZones([{ id: 'flank', type: 'flank', label: 'f', side: 'c' }]))) === '["tlj"]')
+  check('the mid-to-low back: its kidney, cancer, fragile-bone and infection questions share the lower or mid back\'s ticks', LB.TICKS['jrf-kidney'] === LB.TICKS['rf-kidney'] && LB.TICKS['jrf-osteo'] === LB.TICKS['rf-osteo'] && LB.TICKS['jrf-infection'] === LB.TICKS['trf-infection'])
   check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
   // ── Several areas (and the implied mid-to-low back behind a low-back mark) ──
   {

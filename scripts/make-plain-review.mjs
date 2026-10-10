@@ -19,6 +19,7 @@
         npm run review:upperarm   →  review/upperarm-plain.html
         npm run review:midback    →  review/midback-plain.html
         npm run review:baseofneck →  review/baseofneck-plain.html
+        npm run review:midlowback →  review/midlowback-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -202,6 +203,16 @@ const AREAS = {
       '<strong>Heart signs:</strong> chest tightness, breathlessness or sweating on its own; effort pain AND spreading to the left arm or jaw on one line.',
       '<strong>Questions worded like another area\'s</strong> (lung clot, bladder or bowel control, organ pain, shingles) share their ticks.',
       '<strong>"Tell them"</strong> names the area as neck and upper back pain.',
+    ],
+  },
+  tlj: {
+    out: 'midlowback-plain', title: 'Mid-to-Low Back Questions', name: 'Mid-to-low back', zones: [Z('tlj', 'tlj')],
+    sample: () => tellThem(toggleTick([], 'jrf-kidney', 'waves'), {}, 'tlj'),
+    own: [
+      '<strong>Already asked in plain words</strong> with every lower-back drawing: its emergency questions (aorta, cauda equina, both legs, a crash or fall, pancreas, testicle) used the plain ticks from the lower back work.',
+      '<strong>New here:</strong> its four doctor groups (bone, infection or other medical cause, inside the body, legs). Its kidney, past cancer, fragile-bone and infection questions are worded exactly like the lower or mid back\'s and share their ticks.',
+      '<strong>A flank mark</strong> runs as the mid-to-low back (the site treats them as one area).',
+      '<strong>Fever and past cancer</strong> are asked in its own infection and cancer questions, so the general medical question leaves them out here.',
     ],
   },
   'lowback-hip': {
