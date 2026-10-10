@@ -31,6 +31,11 @@ export const OVERRIDES = {
 // 8 Oct prototype had "book now, treatment after the check").
 const INFECTION = ['rf-infection', 'trf-infection', 'jrf-infection', 'prf-infection', 'mrf-infection']
 
+// A hand getting weaker, a thinning thumb muscle, constant finger numbness or
+// a wrist or fingers that will not lift (elbow, wrist, hand, forearm): doctor
+// first, no booking until then (Chandra's sign-off, round 2, 10 Oct 2026).
+const NERVE_WEAKNESS = ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve']
+
 // A possible clot in the leg or arm: hands-on treatment or loading of the
 // limb is not safe until a clot is excluded, so no booking until then.
 const CLOT = /-(dvt|clot)$/
@@ -42,6 +47,7 @@ export function physioPlan(f) {
   if (OVERRIDES[f.id]) return OVERRIDES[f.id]
   if (CLOT.test(f.id)) return 'doctorFirst'
   if (INFECTION.includes(f.id)) return 'doctorFirst'
+  if (NERVE_WEAKNESS.includes(f.id)) return 'doctorFirst'
   if (f.noBooking) return 'doctorFirst'
   if (f.sameDay) return 'clearFirst'
   return 'alongside'

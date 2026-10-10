@@ -1465,7 +1465,8 @@ export const TICKS = {
   ],
   'prf-infection': [
     { key: 'fever', text: 'A fever or chills with the pain', tell: 'I have a fever or chills' },
-    { key: 'recent', text: 'You recently gave birth or had an operation', tell: 'I recently gave birth or had an operation' },
+    { key: 'birth', sex: 'female', text: 'You recently gave birth', tell: 'I recently gave birth' },
+    { key: 'surgery', text: 'You recently had an operation', tell: 'I recently had an operation' },
     { key: 'drugs', text: 'You have injected drugs', tell: 'I have injected drugs' },
   ],
   'prf-cancer': [

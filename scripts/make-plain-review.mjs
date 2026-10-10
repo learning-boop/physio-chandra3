@@ -225,7 +225,8 @@ const AREAS = {
     own: [
       '<strong>Emergency:</strong> cauda equina (one sign per tick); cannot stand or take weight on the leg after a fall or accident (911, one line); and for pregnant women, severe pain with heavy bleeding or feeling faint (911), or with fluid leaking or regular tightenings (labour and delivery), under "If you are pregnant: do you have any of these right now?".',
       '<strong>Signs that only count together</strong> stay on one line, e.g. under 45 AND months of pain that wakes you late at night AND eases with exercise.',
-      '<strong>New, for every plain page:</strong> a question none of whose signs can apply to the patient\'s birth sex is left off (the pelvic question about periods and vaginal bleeding is not shown to a male patient; it still shows when birth sex was not given).',
+      '<strong>Signed off 10 Oct 2026:</strong> questions only about women go to women only, and questions only about men to men only. The pelvic question (periods, vaginal bleeding or discharge) is now women-only at its source, and "recently gave birth" is its own women-only tick.',
+      '<strong>For every plain page:</strong> a question none of whose signs can apply to the patient\'s birth sex is left off (the pelvic question about periods and vaginal bleeding is not shown to a male patient; it still shows when birth sex was not given).',
       '<strong>"Tell them"</strong> names the area as buttock and pelvis pain.',
     ],
   },

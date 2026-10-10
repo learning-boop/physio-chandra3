@@ -833,7 +833,8 @@ export const EXTRA_REGIONS = {
         text: "Have you ever had cancer, and is this a new pain?" },
       { id: "prf-axspa", ages: ["u18", "18-29", "30-49"], tier: "urgent", why: "Possible inflammatory back pain (axial spondyloarthritis)",
         text: "Are you under 45, and has the pain lasted more than 3 months, woken you in the second half of the night, and eased with exercise rather than rest?" },
-      { id: "prf-pelvic", tier: "urgent", group: "pelvic", why: "Pelvic organ causes can be felt at the back of the pelvis",
+      // Women only: periods and vaginal bleeding or discharge (sign-off round 2, 10 Oct 2026).
+      { id: "prf-pelvic", sex: "female", tier: "urgent", group: "pelvic", why: "Pelvic organ causes can be felt at the back of the pelvis",
         text: "Is the pain linked to your periods, or do you have unusual vaginal bleeding or discharge?" },
       { id: "prf-kidney", tier: "urgent", group: "kidney", why: "Possible kidney stone or infection",
         text: "Does the pain come in waves from your side to your groin, or come with burning when you pass urine or blood in your urine?" }

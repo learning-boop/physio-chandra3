@@ -2309,6 +2309,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('fever, weight loss or cancer history: book, treat after the check', physioPlan({ id: 'sc-systemic', tier: 'urgent' }) === 'clearFirst')
   const clots = ['pc-dvt', 'pg-dvt', 'kf-dvt', 'arf-clot', 'hpf-dvt', 'tgf-dvt', 'lgf-dvt', 'af-dvt']
   check('a possible spine or joint infection: doctor first, no booking (sign-off 9 Oct 2026)', ['rf-infection', 'trf-infection', 'jrf-infection', 'prf-infection', 'mrf-infection'].every((id) => physioPlan({ id, tier: 'urgent' }) === 'doctorFirst'))
+  check('wrist drop or a weakening hand (elbow, wrist, hand, forearm): doctor first, no booking (sign-off round 2)', ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve'].every((id) => physioPlan({ id, tier: 'urgent' }) === 'doctorFirst'))
   check('other infection questions keep their own rule (pregnancy and steroid ones: same day, book with treatment after the check)', physioPlan({ id: 'pg-infection', sameDay: true }) === 'clearFirst' && physioPlan({ id: 'st-infection', sameDay: true }) === 'clearFirst')
   check('every possible clot: doctor first, no booking', clots.every((id) => physioPlan({ id, sameDay: true }) === 'doctorFirst'), clots.map((id) => physioPlan({ id, sameDay: true })))
   check('the strictest ticked option wins', strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }, { id: 'kf-dvt', sameDay: true }]) === 'doctorFirst'
@@ -2482,6 +2483,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('the head: a blow to the head and a neck jerk keep their cause as the heading inside a group', /blow to the head/.test(LB.SUBHEAD['hrf-headinjury']) && /neck manipulation/.test(LB.SUBHEAD['hrf-cad-severe']))
   check('the head: its crash and over-50 questions share the base of the neck\'s and the jaw\'s ticks', LB.TICKS['hrf-trauma5d'] === LB.TICKS['crf-trauma5d'] && LB.TICKS['hrf-gca'] === LB.TICKS['mrf-gca'])
   check('every area of the body now has plain questions', ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj', 'sij', 'coccyx', 'jaw', 'head'].every((a) => LB.PLAIN_AREAS.includes(a)))
+  check('questions only about women go to women only (sign-off round 2): the sacroiliac pelvic question, and the recent-birth tick', sj.reg.find((f) => f.id === 'prf-pelvic').sex === 'female' && LB.TICKS['prf-infection'].find((t) => t.key === 'birth').sex === 'female' && !LB.TICKS['prf-infection'].find((t) => t.key === 'surgery').sex)
   check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
   // ── Several areas (and the implied mid-to-low back behind a low-back mark) ──
   {
