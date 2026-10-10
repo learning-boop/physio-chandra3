@@ -14,6 +14,7 @@
         npm run review:lowerleg   →  review/lowerleg-plain.html
         npm run review:elbow      →  review/elbow-plain.html
         npm run review:wrist      →  review/wrist-plain.html
+        npm run review:hand       →  review/hand-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -143,6 +144,17 @@ const AREAS = {
       '<strong>Nerve signs</strong> are one per tick, as on the elbow; both-hands numbness counts when it is there most of the day, not only at night.',
       '<strong>Signs that only count together</strong> stay on one line, e.g. an old fall AND thumb-base pain never X-rayed; gymnastics AND a deep ache just above the wrist.',
       '<strong>The wrist injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  hand: {
+    out: 'hand-plain', title: 'Hand Questions', name: 'Hand', zones: [Z('handR', 'hand', 'R')],
+    sample: () => tellThem(toggleTick([], 'hnd-inject', 'gun'), {}, 'hand'),
+    own: [
+      '<strong>Emergency group:</strong> a high-pressure injection (paint, grease or oil from a spray or grease gun) counts on its own, even with a tiny wound; a whole finger swollen, held bent and very painful to straighten (tendon sheath infection); a septic joint (fever or feeling unwell, as signed off); forearm or hand compartment syndrome. The hand\'s own stroke question stands in for the general one.',
+      '<strong>Questions worded like the wrist\'s</strong> (stroke, nerve signs, both hands numb) share the wrist\'s ticks.',
+      '<strong>Lumps:</strong> one sign per tick (growing quickly, painful, deep and large, a dark streak under a nail); the general medical question leaves the lump out here.',
+      '<strong>After a hand procedure</strong> (asked when the patient says they had one): a boxed heading "Since the procedure on your hand:" over infection signs, a numb fingertip, or a finger that suddenly will not bend.',
+      '<strong>The hand has no injury screen.</strong>',
     ],
   },
   'lowback-hip': {

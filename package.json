@@ -30,6 +30,7 @@
     "review:lowerleg": "node scripts/make-plain-review.mjs lowerleg",
     "review:elbow": "node scripts/make-plain-review.mjs elbow",
     "review:wrist": "node scripts/make-plain-review.mjs wrist",
+    "review:hand": "node scripts/make-plain-review.mjs hand",
     "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
   },
   "dependencies": {
