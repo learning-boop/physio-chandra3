@@ -36,6 +36,7 @@
     "review:midback": "node scripts/make-plain-review.mjs upperback",
     "review:baseofneck": "node scripts/make-plain-review.mjs ctj",
     "review:midlowback": "node scripts/make-plain-review.mjs tlj",
+    "review:sij": "node scripts/make-plain-review.mjs sij",
     "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
   },
   "dependencies": {

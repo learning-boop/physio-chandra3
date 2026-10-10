@@ -39,7 +39,7 @@ import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { cautionRows, tickedIn } from '../data/cautionGroups'
 import { physioPlan, strictestPlan, PLAN_LABEL, PLAN_TEXT } from '../data/physioPlan'
-import { plainAreas, coverOut, gateQ, SUBHEAD, shortFor, PLAIN_Q, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/plainQuestions'
+import { plainAreas, coverOut, gateQ, SUBHEAD, shortFor, PLAIN_Q, TICKS, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/plainQuestions'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -1008,11 +1008,14 @@ export default function PainAssessment() {
   /* Plain questions (../data/plainQuestions.js): one sign per tick; each
      tick sets its question, so the routes are unchanged. */
   const plainTicks = (m) => (lbProto ? ticksFor(m.id, who.sex, plainA, screening.covered) : [])
-  const tickChip = (m, t) => {
+  // A question none of whose signs can apply to this birth sex (periods or
+  // vaginal bleeding, for a male patient): not shown on plain pages.
+  const notForThem = (m) => lbProto && !!TICKS[m.id] && !plainTicks(m).length
+  const tickChip = (m, t, letter = '·') => {
     const sel = flags.includes(tickId(m.id, t.key))
     return (
       <button key={tickId(m.id, t.key)} style={chip(sel)} onClick={() => setFlags((cur) => toggleTick(cur, m.id, t.key))}>
-        <span style={letterStyle(sel)}>·</span>
+        <span style={letterStyle(sel)}>{letter}</span>
         <span>{t.text}</span>
       </button>
     )
@@ -1020,7 +1023,8 @@ export default function PainAssessment() {
   // A question as ticks: one tick in place of the question, several under a short heading.
   const plainQuestion = (m, letter) => {
     const ticks = plainTicks(m)
-    if (ticks.length === 1) return tickChip(m, ticks[0])
+    // One tick in place of the question keeps the row's letter.
+    if (ticks.length === 1) return tickChip(m, ticks[0], letter || '·')
     return (
       <div key={m.id} className="pa-gate pa-gate-open">
         <p className="pa-gate-ask">{letter ? <span style={{ ...letterStyle(flags.includes(m.id)), marginRight: 10 }}>{letter}</span> : null}{PLAIN_Q[m.id] || 'Do any of these fit you?'}</p>
@@ -1043,7 +1047,8 @@ export default function PainAssessment() {
     </div>
   )
   const gateList = (list) => gateRows(list).map((r, i) => {
-    if (r.flag) return plainTicks(r.flag).length ? <div key={r.flag.id}>{plainQuestion(r.flag, plainTicks(r.flag).length > 1 ? LETTERS[i] || '·' : null)}{whenAsk([r.flag])}</div> : flagChip(r.flag, LETTERS[i] || '·')
+    if (r.flag && notForThem(r.flag)) return null
+    if (r.flag) return plainTicks(r.flag).length ? <div key={r.flag.id}>{plainQuestion(r.flag, LETTERS[i] || '·')}{whenAsk([r.flag])}</div> : flagChip(r.flag, LETTERS[i] || '·')
     const open = openGates.includes(r.gate.id)
     const toggle = () => {
       setOpenGates((cur) => (open ? cur.filter((x) => x !== r.gate.id) : [...cur, r.gate.id]))
@@ -1053,8 +1058,9 @@ export default function PainAssessment() {
     // Plain questions: a plain group question with one short bullet per question in it.
     // Only when every question in the group has its plain bullet and ticks, so
     // the bullets name every sign behind the group; otherwise the usual line.
-    const plain = lbProto && r.members.every((m) => shortFor(m.id, who.sex, plainA, screening.covered) && plainTicks(m).length) && gateQ(r.gate.id, plainA)
-    const bullets = plain ? [...new Set(r.members.map((m) => shortFor(m.id, who.sex, plainA, screening.covered)).filter(Boolean))] : []
+    const shownMembers = r.members.filter((m) => !notForThem(m))
+    const plain = lbProto && shownMembers.length > 0 && shownMembers.every((m) => shortFor(m.id, who.sex, plainA, screening.covered) && plainTicks(m).length) && gateQ(r.gate.id, plainA)
+    const bullets = plain ? [...new Set(shownMembers.map((m) => shortFor(m.id, who.sex, plainA, screening.covered)).filter(Boolean))] : []
     return (
       <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
         <button style={chip(open)} onClick={toggle} aria-expanded={open}>
@@ -1077,7 +1083,7 @@ export default function PainAssessment() {
         {open && (
           <div className="pa-gate-body">
             <p className="pa-gate-ask">Which of these? Tick any that apply.</p>
-            {r.members.map((m) => (plainTicks(m).length ? (
+            {(plain ? shownMembers : r.members).map((m) => (plainTicks(m).length ? (
               /* A sub-heading's limit covers only its own ticks: they sit in a
                  box of their own, so the next question's ticks are clearly outside it. */
               <div key={m.id} style={SUBHEAD[m.id]

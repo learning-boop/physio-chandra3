@@ -20,6 +20,7 @@
         npm run review:midback    →  review/midback-plain.html
         npm run review:baseofneck →  review/baseofneck-plain.html
         npm run review:midlowback →  review/midlowback-plain.html
+        npm run review:sij        →  review/sij-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -213,6 +214,16 @@ const AREAS = {
       '<strong>New here:</strong> its four doctor groups (bone, infection or other medical cause, inside the body, legs). Its kidney, past cancer, fragile-bone and infection questions are worded exactly like the lower or mid back\'s and share their ticks.',
       '<strong>A flank mark</strong> runs as the mid-to-low back (the site treats them as one area).',
       '<strong>Fever and past cancer</strong> are asked in its own infection and cancer questions, so the general medical question leaves them out here.',
+    ],
+  },
+  sij: {
+    out: 'sij-plain', title: 'Sacroiliac Joint Questions', name: 'Sacroiliac joint', zones: [Z('sijR', 'sij', 'R')],
+    sample: () => tellThem(toggleTick([], 'prf-fracture', 'stand'), {}, 'sij'),
+    own: [
+      '<strong>Emergency:</strong> cauda equina (one sign per tick); cannot stand or take weight on the leg after a fall or accident (911, one line); and for pregnant women, severe pain with heavy bleeding or feeling faint (911), or with fluid leaking or regular tightenings (labour and delivery), under "If you are pregnant: do you have any of these right now?".',
+      '<strong>Signs that only count together</strong> stay on one line, e.g. under 45 AND months of pain that wakes you late at night AND eases with exercise.',
+      '<strong>New, for every plain page:</strong> a question none of whose signs can apply to the patient\'s birth sex is left off (the pelvic question about periods and vaginal bleeding is not shown to a male patient; it still shows when birth sex was not given).',
+      '<strong>"Tell them"</strong> names the area as buttock and pelvis pain.',
     ],
   },
   'lowback-hip': {

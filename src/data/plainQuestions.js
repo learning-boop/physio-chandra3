@@ -4,7 +4,8 @@
    Lower back first (prototype), then the neck, the shoulder, the knee, the
    hip, the ankle, the foot, the thigh, the lower leg, the elbow, the wrist,
    the hand, the forearm, the upper arm, the mid back (and front of the chest)
-   the base of the neck and the mid-to-low back (and the flank); and drawings of several of these areas together (plainAreas).
+   the base of the neck, the mid-to-low back (and the flank) and the
+   sacroiliac joint; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -24,7 +25,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj', 'sij']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -100,6 +101,10 @@ export const PLAIN_GATES = {
   'tlj-infection': 'Do you feel unwell, not just sore?',
   'tlj-organ': 'Could the pain be coming from inside your body?',
   'tlj-nerve': 'Have your legs changed in feeling or strength?',
+  'sij-bone': 'Could the bone be hurt or weak?',
+  'sij-infection': 'Do you feel unwell, not just sore?',
+  'sij-organ': 'Could the pain be coming from inside your body?',
+  'em-pregnancy': 'If you are pregnant: do you have any of these right now?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -114,7 +119,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back', sij: 'buttock and pelvis' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -142,7 +147,7 @@ export const PLAIN_SHORT = {
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
-  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', tlj: 'Weight loss, a growing lump, or bad night pain', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
+  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', tlj: 'Weight loss, a growing lump, or bad night pain', sij: 'Weight loss, a growing lump, or bad night pain', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
@@ -358,6 +363,16 @@ export const PLAIN_SHORT = {
   'crf-wasting': 'Thinning hand muscles, or a weak grip',
   'crf-vascular': 'An arm turning pale, blue, cold or swollen, especially when raised',
   'crf-oesophagus': 'Pain when swallowing, or food sticking',
+  // Sacroiliac joint (back of the pelvis)
+  'prf-cauda': 'Numb between your legs, or new trouble with pee or poo',
+  'prf-fracture': 'Cannot stand or take weight on the leg after a fall',
+  'prf-pregnancy-bleed': 'Pregnant, with severe pain and heavy bleeding or feeling faint',
+  'prf-pregnancy': 'Pregnant, with severe pain and fluid leaking or regular tightenings',
+  'prf-osteo': 'Sudden pain after a small fall or none, with weak bones or older age',
+  'prf-infection': 'Fever, a recent birth or operation, or injected drugs',
+  'prf-cancer': 'Cancer in the past, and this pain is new',
+  'prf-axspa': 'Under 45, with months of night pain that eases with exercise',
+  'prf-pelvic': 'Pain with your periods, or unusual bleeding or discharge',
 }
 
 /* Several areas drawn: the same question from each area (the knee's,
@@ -373,7 +388,7 @@ export const MULTI_SHORT = {
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['rf-aaa', 'hpf-aaa', 'jrf-aaa', 'trf-aorta', 'jrf-aorta', 'crf-aorta'], 'Sudden tearing or very bad back or tummy pain, or feeling faint'),
   ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung'], 'Chest tightness, breathlessness, sweating, effort or jaw pain, or sharp pain on breathing'),
-  ...fam(['rf-osteo', 'hpf-nofall', 'trf-osteo', 'crf-osteo', 'jrf-osteo'], 'Sudden pain after a small strain or slip, with weak bones or older age'),
+  ...fam(['rf-osteo', 'hpf-nofall', 'trf-osteo', 'crf-osteo', 'jrf-osteo', 'prf-osteo'], 'Sudden pain after a small strain or slip, with weak bones or older age'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
   ...fam(['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve'], 'A weaker hand, thinning thumb muscle, constant numbness, dropped wrist, or no OK sign'),
@@ -494,6 +509,10 @@ export const PLAIN_Q = {
   'crf-wasting': 'Do any of these fit you?',
   'crf-vascular': 'Do any of these fit you?',
   'crf-oesophagus': 'Do any of these fit you?',
+  'prf-cauda': 'Have you noticed any of these?',
+  'prf-pregnancy': 'Do any of these fit you?',
+  'prf-infection': 'Do any of these fit you?',
+  'prf-pelvic': 'Do any of these fit you?',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
@@ -1364,6 +1383,39 @@ export const TICKS = {
     { key: 'swallow', text: 'Pain when you swallow', tell: 'it hurts when I swallow' },
     { key: 'stick', text: 'Food feels like it sticks on the way down', tell: 'food feels like it sticks on the way down' },
   ],
+  // ── Sacroiliac joint ──
+  'prf-cauda': [
+    { key: 'numb', text: 'New numbness or tingling between your legs, around your bottom or private parts', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+  ],
+  'prf-fracture': [
+    { key: 'stand', combo: true, text: 'After a fall or accident, you cannot stand or put weight on your leg', tell: 'after a fall I cannot stand or put weight on my leg' },
+  ],
+  'prf-pregnancy-bleed': [
+    { key: 'bleed', combo: true, sex: 'female', text: 'You are pregnant, with severe pelvic or back pain, and heavy bleeding or feeling faint', tell: 'I am pregnant, with severe pain and heavy bleeding' },
+  ],
+  'prf-pregnancy': [
+    { key: 'fluid', combo: true, sex: 'female', text: 'You are pregnant, with severe pelvic or back pain, and fluid leaking', tell: 'I am pregnant, with severe pain and fluid leaking' },
+    { key: 'tightening', combo: true, sex: 'female', text: 'You are pregnant, with severe pelvic or back pain, and regular tightenings', tell: 'I am pregnant, with severe pain and regular tightenings' },
+  ],
+  'prf-osteo': [
+    { key: 'nofall', combo: true, text: 'Pain started after a small fall or with no injury, and you have weak bones, take steroid tablets, or are over 70', tell: 'the pain started after a small fall, and I have weak bones or take steroids' },
+  ],
+  'prf-infection': [
+    { key: 'fever', text: 'A fever or chills with the pain', tell: 'I have a fever or chills' },
+    { key: 'recent', text: 'You recently gave birth or had an operation', tell: 'I recently gave birth or had an operation' },
+    { key: 'drugs', text: 'You have injected drugs', tell: 'I have injected drugs' },
+  ],
+  'prf-cancer': [
+    { key: 'past', combo: true, text: 'You have had cancer before, and this pain is new', tell: 'I have had cancer before, and this pain is new' },
+  ],
+  'prf-axspa': [
+    { key: 'pattern', combo: true, text: 'You are under 45, and the pain has lasted over 3 months, wakes you late at night, and eases with exercise', tell: 'I am under 45 and the pain has lasted months, wakes me at night and eases with exercise' },
+  ],
+  'prf-pelvic': [
+    { key: 'periods', sex: 'female', text: 'The pain comes and goes with your periods', tell: 'the pain comes with my periods' },
+    { key: 'bleed', sex: 'female', text: 'Unusual bleeding or discharge from your vagina', tell: 'I have unusual bleeding or discharge' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -1379,7 +1431,8 @@ for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], 
   ['arf-stroke', 'frf-stroke'], ['arf-rhabdo', 'srf-rhabdo'], ['arf-cellulitis', 'erf-cellulitis'], ['arf-myelo', 'erf-myelo'],
   ['trf-lung', 'srf-lung'], ['trf-pancreas', 'jrf-pancreas'], ['trf-cord-legs', 'jrf-conus-legs'], ['trf-myelo', 'jrf-legs'], ['trf-shingles', 'jrf-shingles'],
   ['crf-lung', 'srf-lung'], ['crf-cord', 'trf-cord'], ['crf-gallbladder', 'srf-organ'], ['crf-shingles', 'jrf-shingles'],
-  ['jrf-kidney', 'rf-kidney'], ['jrf-cancer', 'rf-cancer'], ['jrf-osteo', 'rf-osteo'], ['jrf-infection', 'trf-infection']]) {
+  ['jrf-kidney', 'rf-kidney'], ['jrf-cancer', 'rf-cancer'], ['jrf-osteo', 'rf-osteo'], ['jrf-infection', 'trf-infection'],
+  ['prf-kidney', 'hpf-kidney']]) {
   TICKS[copy] = TICKS[from]
   PLAIN_SHORT[copy] = PLAIN_SHORT[from]
   if (PLAIN_Q[from]) PLAIN_Q[copy] = PLAIN_Q[from]
@@ -1391,7 +1444,7 @@ for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], 
    the same tier. A sign only the hidden question asks is carried over as an
    extra tick on the one shown (adopt), so nothing is lost. */
 export const COVERED = {
-  'pc-urinary': { by: ['rf-kidney', 'hpf-kidney', 'trf-kidney', 'jrf-kidney'] },
+  'pc-urinary': { by: ['rf-kidney', 'hpf-kidney', 'trf-kidney', 'jrf-kidney', 'prf-kidney'] },
   'rf-aaa': { by: ['hpf-aaa', 'jrf-aaa'] },
   // An area's own heart question asks these signs (the page leaves pc-cardiac out too).
   'pc-cardiac': { by: ['trf-cardiac', 'nrf-cardiac', 'rf-cardiac1', 'arf-cardiac', 'frf-cardiac', 'crf-cardiac', 'mrf-cardiac'] },
@@ -1428,7 +1481,9 @@ export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'
   // The mid back asks fever in trf-infection and cancer in trf-cancer.
   upperback: ['sc-systemic~fever', 'sc-systemic~cancer'],
   // The mid-to-low back asks fever in jrf-infection and cancer in jrf-cancer.
-  tlj: ['sc-systemic~fever', 'sc-systemic~cancer'] }
+  tlj: ['sc-systemic~fever', 'sc-systemic~cancer'],
+  // The sacroiliac joint asks fever in prf-infection and cancer in prf-cancer.
+  sij: ['sc-systemic~fever', 'sc-systemic~cancer'] }
 
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`
@@ -1459,7 +1514,7 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['erf-myelo', 'wrf-myelo', 'hnd-myelo', 'frf-myelo', 'arf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'trf-cord', 'trf-cord-legs', 'crf-cord', 'crf-cord-legs', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
+export const WHEN_FOR = ['erf-myelo', 'wrf-myelo', 'hnd-myelo', 'frf-myelo', 'arf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'trf-cord', 'trf-cord-legs', 'crf-cord', 'crf-cord-legs', 'prf-cauda', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {
