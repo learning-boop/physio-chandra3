@@ -2,8 +2,8 @@
    Plain question design (Chandra, 8 Oct 2026: "keep the questions to the
    patient level, but the reasoning and analysis at senior expert level").
    Lower back first (prototype), then the neck, the shoulder, the knee, the
-   hip, the ankle, the foot, the thigh, the lower leg, the elbow, the wrist and
-   the hand; and drawings of several of these areas together (plainAreas).
+   hip, the ankle, the foot, the thigh, the lower leg, the elbow, the wrist,
+   the hand and the forearm; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -23,7 +23,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -82,6 +82,9 @@ export const PLAIN_GATES = {
   'hand-infection': 'Could the hand be infected or inflamed?',
   'hand-nerve': 'Has your hand changed in feeling or strength?',
   'hand-medical': 'Could something else be going on?',
+  'forearm-skin': 'Could it be a skin infection, or a cast that is too tight?',
+  'forearm-nerve': 'Has your arm or hand changed in feeling or strength?',
+  'forearm-medical': 'Could something else be going on?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -96,7 +99,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -303,6 +306,14 @@ export const PLAIN_SHORT = {
   'hnd-ring': 'A ring stuck on a swelling finger',
   'hnd-crps': 'Since an injury or cast: burning, swelling, colour change, or touch hurts',
   'hnd-lump': 'A growing, painful or large lump, or a dark streak under a nail',
+  // Forearm
+  'frf-necfasc': 'A hot red area spreading fast, with bad pain or feeling unwell',
+  'frf-cardiac': 'Left arm pain with effort, or with chest tightness or breathlessness',
+  'frf-stroke': 'A drooping face, one weak or numb side, or trouble speaking',
+  'frf-nerve': 'A weaker hand, a dropped wrist, or cannot make an OK sign',
+  'frf-pancoast': 'A smoker with little-finger-side arm pain and a cough or droopy eyelid',
+  'frf-stress': 'A young gymnast with pinpoint forearm bone pain',
+  'frf-shingles': 'A band of burning pain with a rash',
 }
 
 /* Several areas drawn: the same question from each area (the knee's,
@@ -315,9 +326,11 @@ export const MULTI_SHORT = {
   ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress'], 'More running or training, and a deep ache or sore spot on a bone'),
   ...fam(['kf-tumour', 'lgf-tumour', 'tgf-tumour'], 'Under 25 with a deep night ache, or a growing lump'),
   ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout', 'hnd-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
-  ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, a sausage toe, heel pain, a rash, sore eyes or recent infection'),
+  ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
+  ...fam(['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve'], 'A weaker hand, thinning thumb muscle, constant numbness, dropped wrist, or no OK sign'),
+  ...fam(['erf-myelo', 'wrf-myelo', 'hnd-myelo', 'frf-myelo'], 'Both hands numb or clumsy, or unsteady walking'),
 }
 
 /** A bullet, for this area or birth sex where it differs; when it carries
@@ -418,6 +431,10 @@ export const PLAIN_Q = {
   'hnd-felon': 'Do any of these fit you?',
   'hnd-inflam': 'Do any of these fit you?',
   'hnd-lump': 'Do any of these fit you?',
+  'frf-necfasc': 'Do any of these fit you?',
+  'frf-cardiac': 'Do any of these fit you?',
+  'frf-stroke': 'Along with the arm symptoms, has one of these happened suddenly?',
+  'frf-nerve': 'Do any of these fit you?',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
@@ -445,6 +462,7 @@ export const SUBHEAD = {
   'wrf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the arm a long time, a knock on blood thinners, or very hard exercise:',
   'pc-hand-procedure': 'Since the procedure on your hand:',
   'hnd-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the arm a long time, a knock on blood thinners, or very hard exercise:',
+  'frf-stroke': 'Along with the arm symptoms, suddenly:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -1149,6 +1167,35 @@ export const TICKS = {
     { key: 'big', text: 'A deep lump larger than a few centimetres', tell: 'I have a deep lump larger than a few centimetres' },
     { key: 'nail', text: 'A new dark streak under a nail', tell: 'I have a new dark streak under a nail' },
   ],
+  // ── Forearm ──
+  'frf-necfasc': [
+    { key: 'pain', combo: true, text: 'A hot, red area on your forearm spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area on your forearm spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+  ],
+  'frf-cardiac': [
+    { key: 'effort', text: 'Pain inside your left forearm or arm when you walk fast or climb stairs', tell: 'my left arm hurts when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: chest tightness', tell: 'I have chest tightness with it' },
+    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+  ],
+  'frf-stroke': [
+    { key: 'face', text: 'One side of your face drooping', tell: 'one side of my face is drooping' },
+    { key: 'side', text: 'Weakness or numbness down one whole side', tell: 'one whole side of my body is weak or numb' },
+    { key: 'speech', text: 'Trouble speaking', tell: 'I have trouble speaking' },
+  ],
+  'frf-nerve': [
+    { key: 'weaker', text: 'Your hand getting weaker', tell: 'my hand is getting weaker' },
+    { key: 'wrist', text: 'You cannot lift your wrist', tell: 'I cannot lift my wrist' },
+    { key: 'ok', text: 'You cannot make an "OK" sign with your thumb and first finger', tell: 'I cannot make an OK sign with my thumb and finger' },
+  ],
+  'frf-pancoast': [
+    { key: 'smoker', combo: true, text: 'You smoke (or did), and pain runs down the little-finger side of your forearm, with a lasting cough or a drooping eyelid', tell: 'I smoke or did, and pain runs down my forearm with a lasting cough or a drooping eyelid' },
+  ],
+  'frf-stress': [
+    { key: 'gym', combo: true, text: 'You are a young gymnast or weight-bearing athlete, with deep, pinpoint bone pain in the forearm, worse with loading', tell: 'I am a young gymnast with pinpoint bone pain in my forearm' },
+  ],
+  'frf-shingles': [
+    { key: 'band', text: 'A band of burning pain down the forearm, with a rash or blisters', tell: 'I have a band of burning pain down my forearm with a rash' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -1159,7 +1206,8 @@ export const TICKS = {
 }
 
 /* Questions worded exactly like another area's: the same ticks, bullet and heading. */
-for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], ['hnd-stroke', 'wrf-stroke'], ['hnd-numb', 'wrf-numb'], ['hnd-myelo', 'wrf-myelo']]) {
+for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], ['hnd-stroke', 'wrf-stroke'], ['hnd-numb', 'wrf-numb'], ['hnd-myelo', 'wrf-myelo'],
+  ['frf-compartment', 'wrf-compartment'], ['frf-cast', 'erf-cast'], ['frf-cellulitis', 'erf-cellulitis'], ['frf-myelo', 'erf-myelo']]) {
   TICKS[copy] = TICKS[from]
   PLAIN_SHORT[copy] = PLAIN_SHORT[from]
   if (PLAIN_Q[from]) PLAIN_Q[copy] = PLAIN_Q[from]
@@ -1233,7 +1281,7 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['erf-myelo', 'wrf-myelo', 'hnd-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
+export const WHEN_FOR = ['erf-myelo', 'wrf-myelo', 'hnd-myelo', 'frf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {

@@ -15,6 +15,7 @@
         npm run review:elbow      →  review/elbow-plain.html
         npm run review:wrist      →  review/wrist-plain.html
         npm run review:hand       →  review/hand-plain.html
+        npm run review:forearm    →  review/forearm-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -155,6 +156,17 @@ const AREAS = {
       '<strong>Lumps:</strong> one sign per tick (growing quickly, painful, deep and large, a dark streak under a nail); the general medical question leaves the lump out here.',
       '<strong>After a hand procedure</strong> (asked when the patient says they had one): a boxed heading "Since the procedure on your hand:" over infection signs, a numb fingertip, or a finger that suddenly will not bend.',
       '<strong>The hand has no injury screen.</strong>',
+    ],
+  },
+  forearm: {
+    out: 'forearm-plain', title: 'Forearm Questions', name: 'Forearm', zones: [Z('forearmR', 'forearm', 'R')],
+    sample: () => tellThem(toggleTick([], 'frf-cardiac', 'effort'), {}, 'forearm'),
+    own: [
+      '<strong>Emergency groups:</strong> heart pain felt in the left forearm (with effort, or with chest tightness, breathlessness or sweating; 911) and the forearm\'s own stroke question; compartment syndrome (boxed causes and time limit) and a hot red area spreading fast.',
+      '<strong>Questions worded like the elbow\'s or wrist\'s</strong> (compartment syndrome, a tight cast, cellulitis, both hands numb) share their ticks.',
+      '<strong>Nerve signs</strong> one per tick, including "you cannot make an OK sign with your thumb and first finger".',
+      '<strong>Signs that only count together</strong> stay on one line: a smoker AND little-finger-side arm pain with a lasting cough or a drooping eyelid; a young gymnast AND pinpoint forearm bone pain.',
+      '<strong>The forearm injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {

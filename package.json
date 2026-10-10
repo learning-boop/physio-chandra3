@@ -31,6 +31,7 @@
     "review:elbow": "node scripts/make-plain-review.mjs elbow",
     "review:wrist": "node scripts/make-plain-review.mjs wrist",
     "review:hand": "node scripts/make-plain-review.mjs hand",
+    "review:forearm": "node scripts/make-plain-review.mjs forearm",
     "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
   },
   "dependencies": {
