@@ -23,6 +23,7 @@
         npm run review:sij        →  review/sij-plain.html
         npm run review:tailbone   →  review/tailbone-plain.html
         npm run review:jaw        →  review/jaw-plain.html
+        npm run review:head       →  review/head-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -247,6 +248,17 @@ const AREAS = {
       '<strong>Signs that only count together</strong> stay on one line: a blow to the jaw AND teeth no longer meeting; a swollen face AND a fever; ear or jaw pain AND a sore throat, hoarse voice or trouble swallowing for over 3 weeks.',
       '<strong>A possible jaw infection</strong> is doctor first, no booking, as signed off for spine and joint infections.',
       '<strong>The jaw has no injury screen.</strong>',
+    ],
+  },
+  head: {
+    out: 'head-plain', title: 'Head Questions', name: 'Head', zones: [Z('head', 'head')],
+    sample: () => tellThem(toggleTick([], 'hrf-thunderclap', 'sudden'), {}, 'head'),
+    own: [
+      '<strong>Emergency, "right now":</strong> a sudden headache at its worst within a minute (911); stroke signs with the headache, one per tick under "With the headache:" (911); meningitis (a fever with a stiff neck or rash; or very drowsy, confused or very unwell; 911); a painful red eye with blurred vision or halos.',
+      '<strong>Emergency, after an injury:</strong> since a blow to the head (vomiting more than once, very drowsy or confused, a worsening headache; 911); the crash or knock signs, worse or new in the last few days (911); since a neck manipulation, jerk or minor knock, a severe new pain or quickly worsening signs (911). Each cause is the boxed heading over its own ticks.',
+      '<strong>"Is this headache new or changing?"</strong> groups a new headache after 50, a headache with coughing or straining or posture or waking with vomiting, one after a new medicine, one in pregnancy or soon after a birth (women only), and one after a neck jolt.',
+      '<strong>Shared ticks:</strong> the crash questions are worded like the base of the neck\'s, and the over-50 giant cell arteritis question like the jaw\'s.',
+      '<strong>With the head done, every area of the body has plain questions.</strong>',
     ],
   },
   'lowback-hip': {

@@ -5,7 +5,7 @@
    hip, the ankle, the foot, the thigh, the lower leg, the elbow, the wrist,
    the hand, the forearm, the upper arm, the mid back (and front of the chest)
    the base of the neck, the mid-to-low back (and the flank), the sacroiliac
-   joint, the tailbone and the jaw; and drawings of several of these areas together (plainAreas).
+   joint, the tailbone, the jaw and the head: every area; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -25,7 +25,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj', 'sij', 'coccyx', 'jaw']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj', 'sij', 'coccyx', 'jaw', 'head']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -112,6 +112,9 @@ export const PLAIN_GATES = {
   'jaw-injury': 'Did this start after a blow or a fall?',
   'jaw-infection': 'Could it be an infection, or coming from your ear or throat?',
   'jaw-medical': 'Could something else be going on?',
+  'head-pattern': 'Is this headache new or changing?',
+  'head-medical': 'Could something else be going on?',
+  'multi-headache': 'Is this headache new or changing?',
   'em-pregnancy': 'If you are pregnant: do you have any of these right now?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
@@ -127,7 +130,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back', sij: 'buttock and pelvis', coccyx: 'tailbone', jaw: 'jaw' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back', sij: 'buttock and pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -400,6 +403,18 @@ export const PLAIN_SHORT = {
   'mrf-throat': 'A sore throat, hoarse voice or trouble swallowing for over 3 weeks',
   'mrf-numb': 'A numb chin, lip or face',
   'mrf-lump': 'A growing lump near the ear or jaw, or a changed bite',
+  // Head
+  'hrf-thunderclap': 'A sudden, worst-ever headache, at its worst within a minute',
+  'hrf-stroke': 'With it: one weak side, drooping face, speech, vision or walking trouble',
+  'hrf-mening': 'A fever with a stiff neck or rash, or very drowsy or unwell',
+  'hrf-glaucoma': 'A painful red eye with blurred vision or halos',
+  'hrf-headinjury': 'After a blow to the head: vomiting, drowsiness, or a worsening headache',
+  'hrf-cad-severe': 'After a neck crack, jerk or knock: severe new pain or worsening signs',
+  'hrf-new50': 'A new headache after 50, or headaches steadily getting worse',
+  'hrf-pressure': 'Headache with coughing or straining, lying or standing, or waking with vomiting',
+  'hrf-medication': 'A new headache since starting a new medicine',
+  'hrf-pregnancy': 'Pregnant or a recent birth, with a new kind of headache',
+  'hrf-cad': 'A new headache with neck pain after a neck crack or jolt',
 }
 
 /* Several areas drawn: the same question from each area (the knee's,
@@ -550,6 +565,12 @@ export const PLAIN_Q = {
   'mrf-infection': 'Do any of these fit you?',
   'mrf-ear': 'Do any of these fit you?',
   'mrf-lump': 'Do any of these fit you?',
+  'hrf-stroke': 'With the headache, have you had any of these?',
+  'hrf-mening': 'Do any of these fit you?',
+  'hrf-headinjury': 'Since a blow to the head, has one of these happened?',
+  'hrf-cad-severe': 'Since a neck manipulation, a sudden jerk or a minor knock, has one of these happened?',
+  'hrf-new50': 'Do any of these fit you?',
+  'hrf-pressure': 'Do any of these fit you?',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
@@ -582,6 +603,9 @@ export const SUBHEAD = {
   'crf-trauma5d': 'Since a car accident or a hard knock to your head or neck, getting quickly worse or new in the last few days:',
   'crf-trauma5d-doc': 'Since a car accident or a hard knock to your head or neck, even if not getting worse:',
   'mrf-gca': 'If you are over 50:',
+  'hrf-stroke': 'With the headache:',
+  'hrf-headinjury': 'Since a blow to the head:',
+  'hrf-cad-severe': 'Since a neck manipulation, a sudden jerk or a minor knock:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -1521,6 +1545,52 @@ export const TICKS = {
     { key: 'lump', text: 'A growing lump or swelling in front of your ear or under your jaw', tell: 'I have a growing lump near my ear or jaw' },
     { key: 'bite', text: 'Your bite has changed without an injury', tell: 'my bite has changed without an injury' },
   ],
+  // ── Head ──
+  'hrf-thunderclap': [
+    { key: 'sudden', text: 'A sudden headache that reached its worst within a minute', tell: 'I suddenly have the worst headache of my life' },
+  ],
+  'hrf-stroke': [
+    { key: 'side', text: 'Weakness or numbness on one side', tell: 'one side of my body is weak or numb' },
+    { key: 'face', text: 'A drooping face', tell: 'my face is drooping' },
+    { key: 'speech', text: 'Trouble speaking or understanding', tell: 'I have trouble speaking or understanding' },
+    { key: 'confused', text: 'Confusion', tell: 'I am confused' },
+    { key: 'vision', text: 'Loss of vision, or seeing double', tell: 'I have lost vision or I am seeing double' },
+    { key: 'walk', text: 'Trouble walking', tell: 'I have trouble walking' },
+  ],
+  'hrf-mening': [
+    { key: 'fever', combo: true, text: 'A fever, and a stiff neck or a new rash', tell: 'I have a fever with a stiff neck or a rash' },
+    { key: 'unwell', text: 'Very drowsy, confused, or feeling very unwell', tell: 'I am very drowsy or feel very unwell' },
+  ],
+  'hrf-glaucoma': [
+    { key: 'eye', combo: true, text: 'One eye painful and red, with blurred vision or halos around lights', tell: 'one eye is painful and red, with blurred vision or halos' },
+  ],
+  'hrf-headinjury': [
+    { key: 'vomit', text: 'Vomiting more than once', tell: 'since a blow to my head I have vomited more than once' },
+    { key: 'drowsy', text: 'Very drowsy or confused', tell: 'since a blow to my head I am very drowsy or confused' },
+    { key: 'worse', text: 'A headache that is getting worse', tell: 'since a blow to my head the headache is getting worse' },
+  ],
+  'hrf-cad-severe': [
+    { key: 'severe', text: 'Neck pain or a headache that is severe and unlike any before', tell: 'since a neck jerk I have a severe headache unlike any before' },
+    { key: 'changing', text: 'Symptoms that are changing or getting worse quickly', tell: 'since a neck jerk my symptoms are getting worse quickly' },
+  ],
+  'hrf-new50': [
+    { key: 'after50', text: 'A new kind of headache that started after age 50', tell: 'I have a new kind of headache that started after 50' },
+    { key: 'worse', text: 'Headaches getting steadily worse, or changing, over weeks', tell: 'my headaches are getting steadily worse' },
+  ],
+  'hrf-pressure': [
+    { key: 'cough', text: 'A headache brought on by coughing, sneezing, straining or exercise', tell: 'the headache comes on when I cough, strain or exercise' },
+    { key: 'posture', text: 'Much worse when you lie down or stand up', tell: 'the headache is much worse when I lie down or stand up' },
+    { key: 'morning', combo: true, text: 'There when you wake, with vomiting', tell: 'the headache is there when I wake, with vomiting' },
+  ],
+  'hrf-medication': [
+    { key: 'new', text: 'A new headache since starting a new medicine', tell: 'this new headache started after a new medicine' },
+  ],
+  'hrf-pregnancy': [
+    { key: 'preg', combo: true, sex: 'female', text: 'You are pregnant or had a baby in the last 6 weeks, and this headache is new or different', tell: 'I am pregnant or recently had a baby, and this headache is new' },
+  ],
+  'hrf-cad': [
+    { key: 'jolt', combo: true, text: 'A new headache with neck pain, unlike any before but not severe, after a neck manipulation or jolt', tell: 'I have a new headache with neck pain since a neck jolt' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -1537,7 +1607,8 @@ for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], 
   ['trf-lung', 'srf-lung'], ['trf-pancreas', 'jrf-pancreas'], ['trf-cord-legs', 'jrf-conus-legs'], ['trf-myelo', 'jrf-legs'], ['trf-shingles', 'jrf-shingles'],
   ['crf-lung', 'srf-lung'], ['crf-cord', 'trf-cord'], ['crf-gallbladder', 'srf-organ'], ['crf-shingles', 'jrf-shingles'],
   ['jrf-kidney', 'rf-kidney'], ['jrf-cancer', 'rf-cancer'], ['jrf-osteo', 'rf-osteo'], ['jrf-infection', 'trf-infection'],
-  ['prf-kidney', 'hpf-kidney'], ['xrf-osteo', 'prf-osteo']]) {
+  ['prf-kidney', 'hpf-kidney'], ['xrf-osteo', 'prf-osteo'],
+  ['hrf-trauma5d', 'crf-trauma5d'], ['hrf-trauma5d-doc', 'crf-trauma5d-doc'], ['hrf-gca', 'mrf-gca']]) {
   TICKS[copy] = TICKS[from]
   PLAIN_SHORT[copy] = PLAIN_SHORT[from]
   if (PLAIN_Q[from]) PLAIN_Q[copy] = PLAIN_Q[from]

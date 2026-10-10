@@ -2351,6 +2351,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const sj = pageOf('sij', ['sc-neuro', 'sc-systemic', 'sc-trauma'])
   const cx = pageOf('coccyx', ['sc-neuro', 'sc-systemic', 'sc-trauma'])
   const jw = pageOf('jaw', ['sc-neuro', 'sc-systemic', 'sc-trauma'])
+  const hd2 = pageOf('head', ['sc-neuro', 'sc-systemic'], ['pc-stroke'])
   const tj = pageOf('tlj', ['sc-neuro', 'sc-systemic', 'sc-trauma', 'pc-visceral'])
   const fl = pageOf('flank', ['sc-neuro', 'sc-systemic', 'sc-trauma'])
   const ch = pageOf('chest', ['sc-neuro', 'sc-systemic', 'sc-trauma'], ['pc-cardiac'])
@@ -2358,7 +2359,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const regional = lb.reg
   const page = lb.ids
   check('the cauda equina sex question is asked on a lower back drawing (it was dropped by the group filter)', regional.some((f) => f.id === 'rf-sexual'))
-  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lower leg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upper arm', ua.ids], ['mid back', ub.ids], ['chest', ch.ids], ['base of the neck', cj.ids], ['mid-to-low back', tj.ids], ['flank', fl.ids], ['sacroiliac joint', sj.ids], ['tailbone', cx.ids], ['jaw', jw.ids]]) {
+  for (const [name, pg] of [['lower back', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lower leg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upper arm', ua.ids], ['mid back', ub.ids], ['chest', ch.ids], ['base of the neck', cj.ids], ['mid-to-low back', tj.ids], ['flank', fl.ids], ['sacroiliac joint', sj.ids], ['tailbone', cx.ids], ['jaw', jw.ids], ['head', hd2.ids]]) {
     const noTicks = pg.filter((id) => !LB.TICKS[id] || !LB.PLAIN_SHORT[id])
     check(`every ${name} safety question has plain ticks and a short bullet`, !noTicks.length, noTicks)
   }
@@ -2383,7 +2384,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const keys = ticks.map((t) => `${t.q}~${t.key}`)
   check('tick ids are unique', keys.length === new Set(keys).size)
   // Every group on the lower back pages: a plain question and five bullets at most.
-  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lowerleg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upperarm', ua.ids], ['upperback', ub.ids], ['ctj', cj.ids], ['tlj', tj.ids], ['sij', sj.ids], ['coccyx', cx.ids], ['jaw', jw.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
+  const groups = [['lowerback', lb.ids], ['neck', nk.ids], ['shoulder', sh.ids], ['knee', kn.ids], ['ankle', an.ids], ['foot', ft.ids], ['thigh', th.ids], ['lowerleg', lg.ids], ['elbow', eb.ids], ['wrist', wr.ids], ['hand', hd.ids], ['forearm', fa.ids], ['upperarm', ua.ids], ['upperback', ub.ids], ['ctj', cj.ids], ['tlj', tj.ids], ['sij', sj.ids], ['coccyx', cx.ids], ['jaw', jw.ids], ['head', hd2.ids]].flatMap(([a, pg]) => [...GATES[a], ...EM_GROUPS]
     .map((g) => ({ id: g.id, area: a, members: g.members.filter((m) => pg.includes(m)) })).filter((g) => g.members.length >= 2))
   const noPlain = groups.filter((g) => !LB.gateQ(g.id, g.area)).map((g) => `${g.area}:${g.id}`)
   check('every lower back, neck, shoulder and knee group has a plain question', !noPlain.length, noPlain)
@@ -2477,6 +2478,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('the jaw: a jaw stuck open and a suddenly drooping face are each one tick from the emergency', ['mrf-stuckopen', 'mrf-droop'].every((q) => jw.reg.find((f) => f.id === q).tier === 'emergency' && LB.TICKS[q].length === 1))
   check('the jaw: a changed bite counts after a blow, on one line', LB.TICKS['mrf-fracture'][0].combo && /blow/.test(LB.TICKS['mrf-fracture'][0].text))
   check('the jaw: a possible jaw infection is doctor first, no booking (sign-off 9 Oct 2026)', (await imp('src/data/physioPlan.js')).physioPlan({ id: 'mrf-infection', tier: 'urgent' }) === 'doctorFirst')
+  check('the head: a sudden worst-ever headache, stroke signs and meningitis each lead to 911 from one tick', ['hrf-thunderclap', 'hrf-stroke', 'hrf-mening'].every((q) => hd2.reg.find((f) => f.id === q).call911 && LB.toggleTick([], q, LB.TICKS[q][0].key).includes(q)))
+  check('the head: a blow to the head and a neck jerk keep their cause as the heading inside a group', /blow to the head/.test(LB.SUBHEAD['hrf-headinjury']) && /neck manipulation/.test(LB.SUBHEAD['hrf-cad-severe']))
+  check('the head: its crash and over-50 questions share the base of the neck\'s and the jaw\'s ticks', LB.TICKS['hrf-trauma5d'] === LB.TICKS['crf-trauma5d'] && LB.TICKS['hrf-gca'] === LB.TICKS['mrf-gca'])
+  check('every area of the body now has plain questions', ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj', 'sij', 'coccyx', 'jaw', 'head'].every((a) => LB.PLAIN_AREAS.includes(a)))
   check('stroke signs inside a group keep "in the last few hours"', /last few hours/.test(LB.SUBHEAD['pc-stroke']))
   // ── Several areas (and the implied mid-to-low back behind a low-back mark) ──
   {
@@ -2489,8 +2494,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     check('a lower-back-only drawing gets the plain design (its implied mid-to-low back does not switch it off)',
       JSON.stringify(LB.plainAreas(flowZones(zLB))) === '["lowerback"]' && smartArea(flowZones(zLB)) === null)
     check('lower back + hip gets the plain design', JSON.stringify(LB.plainAreas(flowZones([...zLB, ...zHip]))) === '["lowerback","hip"]')
-    check('an area without plain questions yet keeps the usual wording for the whole drawing',
-      LB.plainAreas(flowZones([...zLB, { id: 'head', type: 'head', label: 'Head', side: 'c' }])) === null)
+    check('an area outside the safety flow (the tummy) keeps the usual wording for the whole drawing',
+      LB.plainAreas(flowZones([...zLB, { id: 'abdomen', type: 'abdomen', label: 'Tummy', side: 'c' }])) === null)
     check('"Tell them" names both areas', /^I have low back and hip pain, and /.test(LB.tellThem(LB.toggleTick([], 'hpf-dvt', 'leg'), {}, ['lowerback', 'hip'])))
     // Every drawing × every age and birth sex: every question shown has plain
     // ticks, and every merged group has a plain question and few enough bullets.
@@ -2498,7 +2503,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     const bad = [], noTick = new Set(), many = []
     const L = (t, side = 'R') => ({ id: `${t}${side}`, type: t, label: t, side: side || 'c' })
     const LEG = [[L('knee'), L('lowerleg')], [L('lowerleg'), L('ankle')], [L('ankle'), L('foot')], [L('thigh'), L('knee')],
-      [L('knee'), L('lowerleg'), L('ankle'), L('foot')], [L('hip'), L('thigh'), L('knee')], [...zLB, L('thigh'), L('knee'), L('lowerleg')], [L('shoulder'), L('elbow')], [L('neck'), L('shoulder'), L('elbow')], [L('elbow'), L('wrist')], [L('shoulder'), L('elbow'), L('wrist')], [L('wrist'), L('hand')], [L('elbow'), L('wrist'), L('hand')], [L('elbow'), L('forearm'), L('wrist')], [L('forearm'), L('hand')], [L('upperarm')], [L('shoulder'), L('upperarm'), L('elbow')], [{ id: 'upperback', type: 'upperback', label: 'm', side: 'c' }, ...zLB], [{ id: 'chest', type: 'chest', label: 'c', side: 'c' }, L('shoulder')], [L('neck', ''), L('ctj', '')], [L('ctj', ''), L('shoulder')], [L('sij'), ...zLB], [L('sij'), L('hip')], [L('coccyx', ''), ...zLB], [L('jaw'), L('neck', '')]]
+      [L('knee'), L('lowerleg'), L('ankle'), L('foot')], [L('hip'), L('thigh'), L('knee')], [...zLB, L('thigh'), L('knee'), L('lowerleg')], [L('shoulder'), L('elbow')], [L('neck'), L('shoulder'), L('elbow')], [L('elbow'), L('wrist')], [L('shoulder'), L('elbow'), L('wrist')], [L('wrist'), L('hand')], [L('elbow'), L('wrist'), L('hand')], [L('elbow'), L('forearm'), L('wrist')], [L('forearm'), L('hand')], [L('upperarm')], [L('shoulder'), L('upperarm'), L('elbow')], [{ id: 'upperback', type: 'upperback', label: 'm', side: 'c' }, ...zLB], [{ id: 'chest', type: 'chest', label: 'c', side: 'c' }, L('shoulder')], [L('neck', ''), L('ctj', '')], [L('ctj', ''), L('shoulder')], [L('sij'), ...zLB], [L('sij'), L('hip')], [L('coccyx', ''), ...zLB], [L('jaw'), L('neck', '')], [L('head', ''), L('neck', '')], [L('head', ''), L('jaw')]]
     for (const zz of [zLB, zHip, [...zLB, ...zHip], ...LEG]) {
       const fz = flowZones(zz), areas = LB.plainAreas(fz)
       const pattern = patternChecks(zz, {}, 12).filter((f) => !(f.id === 'pc-urinary' && false))

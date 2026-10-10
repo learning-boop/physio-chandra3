@@ -39,6 +39,7 @@
     "review:sij": "node scripts/make-plain-review.mjs sij",
     "review:tailbone": "node scripts/make-plain-review.mjs coccyx",
     "review:jaw": "node scripts/make-plain-review.mjs jaw",
+    "review:head": "node scripts/make-plain-review.mjs head",
     "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
   },
   "dependencies": {
