@@ -5,7 +5,7 @@
    hip, the ankle, the foot, the thigh, the lower leg, the elbow, the wrist,
    the hand, the forearm, the upper arm, the mid back (and front of the chest)
    the base of the neck, the mid-to-low back (and the flank), the sacroiliac
-   joint and the tailbone; and drawings of several of these areas together (plainAreas).
+   joint, the tailbone and the jaw; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -25,7 +25,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj', 'sij', 'coccyx']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm', 'upperback', 'ctj', 'tlj', 'sij', 'coccyx', 'jaw']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -106,8 +106,12 @@ export const PLAIN_GATES = {
   'sij-organ': 'Could the pain be coming from inside your body?',
   'coccyx-bowel': 'Could it be coming from your gut or bottom?',
   'multi-bowel': 'Could it be coming from your gut or bottom?',
+  'multi-injury': 'Did this start after a blow, a fall or an accident?',
   'coccyx-bone': 'Could the bone be hurt or weak?',
   'coccyx-medical': 'Could something else be going on?',
+  'jaw-injury': 'Did this start after a blow or a fall?',
+  'jaw-infection': 'Could it be an infection, or coming from your ear or throat?',
+  'jaw-medical': 'Could something else be going on?',
   'em-pregnancy': 'If you are pregnant: do you have any of these right now?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
@@ -123,7 +127,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back', sij: 'buttock and pelvis', coccyx: 'tailbone' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back', sij: 'buttock and pelvis', coccyx: 'tailbone', jaw: 'jaw' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -151,7 +155,7 @@ export const PLAIN_SHORT = {
   'rf-cancer': 'Cancer in the past, and this back pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
-  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', tlj: 'Weight loss, a growing lump, or bad night pain', sij: 'Weight loss, a growing lump, or bad night pain', coccyx: 'Fever, or weight loss without trying', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
+  'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', tlj: 'Weight loss, a growing lump, or bad night pain', sij: 'Weight loss, a growing lump, or bad night pain', coccyx: 'Fever, or weight loss without trying', jaw: 'Fever, weight loss, night pain, or past cancer', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
   'rf-pelvic': { female: 'Pain with your periods, or unusual bleeding', male: 'New trouble peeing', any: 'Pain with periods, unusual bleeding, or trouble peeing' },
   'pc-visceral': 'Pain that never changes, or feeling sick',
@@ -385,6 +389,17 @@ export const PLAIN_SHORT = {
   'xrf-constant': 'Constant pain, worse at night, not changed by sitting',
   'xrf-cancer': 'Past cancer, or a lump near your tailbone',
   'xrf-sphincter': 'Trouble holding in wind or poo since giving birth',
+  // Jaw
+  'mrf-stuckopen': 'Your jaw stuck open',
+  'mrf-cardiac': 'Jaw pain with effort, or with chest tightness or breathlessness',
+  'mrf-droop': 'One side of your face suddenly drooping',
+  'mrf-fracture': 'Teeth not meeting properly after a blow to the face',
+  'mrf-gca': 'Over 50: jaw ache when chewing, tender scalp, or vision change',
+  'mrf-infection': 'A swollen face with fever, or a bad taste or discharge',
+  'mrf-ear': 'Hearing loss or ear discharge on the painful side',
+  'mrf-throat': 'A sore throat, hoarse voice or trouble swallowing for over 3 weeks',
+  'mrf-numb': 'A numb chin, lip or face',
+  'mrf-lump': 'A growing lump near the ear or jaw, or a changed bite',
 }
 
 /* Several areas drawn: the same question from each area (the knee's,
@@ -399,7 +414,7 @@ export const MULTI_SHORT = {
   ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout', 'hnd-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['rf-aaa', 'hpf-aaa', 'jrf-aaa', 'trf-aorta', 'jrf-aorta', 'crf-aorta'], 'Sudden tearing or very bad back or tummy pain, or feeling faint'),
-  ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung'], 'Chest tightness, breathlessness, sweating, effort or jaw pain, or sharp pain on breathing'),
+  ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung', 'mrf-cardiac'], 'Chest tightness, breathlessness, sweating, effort or jaw pain, or sharp pain on breathing'),
   ...fam(['rf-osteo', 'hpf-nofall', 'trf-osteo', 'crf-osteo', 'jrf-osteo', 'prf-osteo', 'xrf-osteo'], 'Sudden pain after a small strain or slip, with weak bones or older age'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
@@ -530,6 +545,11 @@ export const PLAIN_Q = {
   'xrf-bowel': 'Do any of these fit you?',
   'xrf-pilonidal': 'Do any of these fit you?',
   'xrf-cancer': 'Do any of these fit you?',
+  'mrf-cardiac': 'Do any of these fit you?',
+  'mrf-gca': 'If you are over 50: do any of these fit you?',
+  'mrf-infection': 'Do any of these fit you?',
+  'mrf-ear': 'Do any of these fit you?',
+  'mrf-lump': 'Do any of these fit you?',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
@@ -561,6 +581,7 @@ export const SUBHEAD = {
   'trf-fracture': 'In the last few days:',
   'crf-trauma5d': 'Since a car accident or a hard knock to your head or neck, getting quickly worse or new in the last few days:',
   'crf-trauma5d-doc': 'Since a car accident or a hard knock to your head or neck, even if not getting worse:',
+  'mrf-gca': 'If you are over 50:',
 }
 
 /* One sign per tick. `tell` is the patient's own sentence for the doctor
@@ -1462,6 +1483,44 @@ export const TICKS = {
   'xrf-sphincter': [
     { key: 'birth', sex: 'female', text: 'Since giving birth, trouble holding in wind or poo', tell: 'since giving birth I have trouble holding in wind or poo' },
   ],
+  // ── Jaw ──
+  'mrf-stuckopen': [
+    { key: 'open', text: 'Your jaw is stuck open and you cannot close your mouth', tell: 'my jaw is stuck open and I cannot close my mouth' },
+  ],
+  'mrf-cardiac': [
+    { key: 'effort', text: 'Jaw pain when you walk fast or climb stairs', tell: 'my jaw hurts when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: chest tightness', tell: 'I have chest tightness with it' },
+    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+  ],
+  'mrf-droop': [
+    { key: 'droop', text: 'One side of your face suddenly drooping or weak', tell: 'one side of my face suddenly drooped' },
+  ],
+  'mrf-fracture': [
+    { key: 'bite', combo: true, text: 'After a blow to the jaw or face, your teeth no longer meet the way they used to', tell: 'after a blow to my face my teeth no longer meet properly' },
+  ],
+  'mrf-gca': [
+    { key: 'chew', text: 'Jaw muscles that ache when chewing and ease when you stop', tell: 'my jaw muscles ache when I chew' },
+    { key: 'scalp', text: 'A tender scalp or temple', tell: 'my scalp or temple is tender' },
+    { key: 'vision', text: 'A change in your vision', tell: 'my vision has changed' },
+  ],
+  'mrf-infection': [
+    { key: 'fever', combo: true, text: 'Swelling of your face or jaw, with a fever', tell: 'my face or jaw is swollen and I have a fever' },
+    { key: 'taste', text: 'A bad taste or discharge in your mouth', tell: 'I have a bad taste or discharge in my mouth' },
+  ],
+  'mrf-ear': [
+    { key: 'hearing', text: 'Hearing loss on the painful side', tell: 'I have hearing loss on the painful side' },
+    { key: 'discharge', text: 'Discharge from the ear on the painful side', tell: 'I have discharge from my ear' },
+  ],
+  'mrf-throat': [
+    { key: 'weeks', combo: true, text: 'Ear or jaw pain with a sore throat, hoarse voice or trouble swallowing for over 3 weeks', tell: 'I have had a sore throat, hoarse voice or trouble swallowing for over 3 weeks' },
+  ],
+  'mrf-numb': [
+    { key: 'numb', text: 'Part of your chin, lip or face numb', tell: 'part of my chin, lip or face is numb' },
+  ],
+  'mrf-lump': [
+    { key: 'lump', text: 'A growing lump or swelling in front of your ear or under your jaw', tell: 'I have a growing lump near my ear or jaw' },
+    { key: 'bite', text: 'Your bite has changed without an injury', tell: 'my bite has changed without an injury' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -1531,7 +1590,9 @@ export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'
   // The sacroiliac joint asks fever in prf-infection and cancer in prf-cancer.
   sij: ['sc-systemic~fever', 'sc-systemic~cancer'],
   // The tailbone asks past cancer and a lump in xrf-cancer, and constant night pain in xrf-constant.
-  coccyx: ['sc-systemic~cancer', 'sc-systemic~lump', 'sc-systemic~night'] }
+  coccyx: ['sc-systemic~cancer', 'sc-systemic~lump', 'sc-systemic~night'],
+  // The jaw's lump question asks a growing lump.
+  jaw: ['sc-systemic~lump'] }
 
 /* Ticks are kept in the flags list as "<question>~<tick>". */
 export const tickId = (qid, key) => `${qid}~${key}`

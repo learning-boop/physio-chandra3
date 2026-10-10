@@ -22,6 +22,7 @@
         npm run review:midlowback →  review/midlowback-plain.html
         npm run review:sij        →  review/sij-plain.html
         npm run review:tailbone   →  review/tailbone-plain.html
+        npm run review:jaw        →  review/jaw-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -235,6 +236,17 @@ const AREAS = {
       '<strong>Signs that only count together</strong> stay on one line: pain there all the time AND worse at night AND not affected by sitting.',
       '<strong>Bowel control since giving birth</strong> is shown to women only.',
       '<strong>Past cancer, a lump and constant night pain</strong> are asked in the tailbone\'s own questions, so the general medical question keeps fever and weight loss.',
+    ],
+  },
+  jaw: {
+    out: 'jaw-plain', title: 'Jaw Questions', name: 'Jaw', zones: [Z('jawR', 'jaw', 'R')],
+    sample: () => tellThem(toggleTick([], 'mrf-stuckopen', 'open'), {}, 'jaw'),
+    own: [
+      '<strong>Emergency:</strong> heart pain felt in the jaw (with effort, or with chest tightness, breathlessness or sweating; 911) and one side of the face suddenly drooping (911); a jaw stuck open.',
+      '<strong>Giant cell arteritis signs</strong> (over 50 only): jaw ache when chewing, a tender scalp or temple, a change in vision, each its own tick.',
+      '<strong>Signs that only count together</strong> stay on one line: a blow to the jaw AND teeth no longer meeting; a swollen face AND a fever; ear or jaw pain AND a sore throat, hoarse voice or trouble swallowing for over 3 weeks.',
+      '<strong>A possible jaw infection</strong> is doctor first, no booking, as signed off for spine and joint infections.',
+      '<strong>The jaw has no injury screen.</strong>',
     ],
   },
   'lowback-hip': {
