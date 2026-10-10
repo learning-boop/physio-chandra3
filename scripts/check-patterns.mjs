@@ -2309,7 +2309,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('fever, weight loss or cancer history: book, treat after the check', physioPlan({ id: 'sc-systemic', tier: 'urgent' }) === 'clearFirst')
   const clots = ['pc-dvt', 'pg-dvt', 'kf-dvt', 'arf-clot', 'hpf-dvt', 'tgf-dvt', 'lgf-dvt', 'af-dvt']
   check('a possible spine or joint infection: doctor first, no booking (sign-off 9 Oct 2026)', ['rf-infection', 'trf-infection', 'jrf-infection', 'prf-infection', 'mrf-infection'].every((id) => physioPlan({ id, tier: 'urgent' }) === 'doctorFirst'))
-  check('wrist drop or a weakening hand (elbow, wrist, hand, forearm): doctor first, no booking (sign-off round 2)', ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve'].every((id) => physioPlan({ id, tier: 'urgent' }) === 'doctorFirst'))
+  check('wrist drop or a weakening hand (elbow, wrist, hand, forearm, base of the neck): doctor first, no booking (sign-off round 2)', ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve', 'crf-wasting'].every((id) => physioPlan({ id, tier: 'urgent' }) === 'doctorFirst'))
   check('other infection questions keep their own rule (pregnancy and steroid ones: same day, book with treatment after the check)', physioPlan({ id: 'pg-infection', sameDay: true }) === 'clearFirst' && physioPlan({ id: 'st-infection', sameDay: true }) === 'clearFirst')
   check('every possible clot: doctor first, no booking', clots.every((id) => physioPlan({ id, sameDay: true }) === 'doctorFirst'), clots.map((id) => physioPlan({ id, sameDay: true })))
   check('the strictest ticked option wins', strictestPlan([{ id: 'a' }, { id: 'sc-systemic' }, { id: 'kf-dvt', sameDay: true }]) === 'doctorFirst'

@@ -32,9 +32,9 @@ export const OVERRIDES = {
 const INFECTION = ['rf-infection', 'trf-infection', 'jrf-infection', 'prf-infection', 'mrf-infection']
 
 // A hand getting weaker, a thinning thumb muscle, constant finger numbness or
-// a wrist or fingers that will not lift (elbow, wrist, hand, forearm): doctor
+// a wrist or fingers that will not lift (elbow, wrist, hand, forearm; base of the neck added 10 Oct 2026): doctor
 // first, no booking until then (Chandra's sign-off, round 2, 10 Oct 2026).
-const NERVE_WEAKNESS = ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve']
+const NERVE_WEAKNESS = ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve', 'crf-wasting']
 
 // A possible clot in the leg or arm: hands-on treatment or loading of the
 // limb is not safe until a clot is excluded, so no booking until then.

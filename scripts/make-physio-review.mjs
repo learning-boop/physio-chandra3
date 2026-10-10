@@ -38,7 +38,7 @@ const all = [...flags.values()].map((f) => ({ ...f, plan: physioPlan(f) }))
 const why = (f) => OVERRIDES[f.id] ? 'clinical override'
   : /-(dvt|clot)$/.test(f.id) ? 'possible clot'
   : ['rf-infection', 'trf-infection', 'jrf-infection', 'prf-infection', 'mrf-infection'].includes(f.id) ? 'possible spine or joint infection (doctor first)'
-  : ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve'].includes(f.id) ? 'wrist drop or a weakening hand (doctor first)'
+  : ['erf-nerve', 'wrf-numb', 'hnd-numb', 'frf-nerve', 'crf-wasting'].includes(f.id) ? 'wrist drop or a weakening hand (doctor first)'
   : f.noBooking ? 'no-booking flag' : f.sameDay ? 'same-day flag' : 'default'
 const table = (rows) => `<table class="opts"><tr><th>Question</th><th>Why this option</th></tr>${rows.map((f) =>
   `<tr><td><code>${esc(f.id)}</code>${f.sameDay ? ' <span class="tag">today</span>' : ''}<br><span class="muted">${esc(f.text)}</span></td><td class="w">${esc(why(f))}</td></tr>`).join('')}</table>`
