@@ -48,6 +48,7 @@ import {
 } from '../data/pregnancy'
 import { emergencyLevel, EMERGENCY_ADVICE, bySeverity } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
+import { setGuideStage, setGuided, useGuided, useGuideDemo, setGuideScreen, unlockSpeech } from '../data/guideStage'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -485,6 +486,9 @@ export default function PainAssessment() {
   const [hasTurned, setHasTurned] = useState(false)
 
   const [stage, setStage] = useState('landing')
+  // The talking guide in the corner follows the step on screen.
+  useEffect(() => { setGuideStage(stage) }, [stage])
+  useEffect(() => () => setGuideStage(null), [])
   // "A little about you" (Chandra, 2 Oct 2026): birth sex is used ONLY to
   // leave out safety questions that cannot apply (pregnancy, testicle). It is
   // kept apart from `answers` on purpose, so it never reaches the summary,
@@ -1533,18 +1537,129 @@ export default function PainAssessment() {
   useEffect(() => () => clearTimeout(advanceTimer.current), [])
   const tapInjury = (q, oid) => {
     pickInjury(q, oid)
-    if (q.multi) return
+    // With the voice guide, the guide reads the answer back first.
+    if (q.multi || guided) return
     clearTimeout(advanceTimer.current)
     advanceTimer.current = setTimeout(() => continueInjury(oid), 280)
   }
 
   const restart = () => {
+    setGuided(false)
     setFlaggedAt(null)
     setStage('landing'); setQIndex(0); setZones([]); setLines([]); setTravel({}); setPathPick(null); setAnswers({}); setFlags([]); setFlagOther(''); setFocusKey(null); setBirthSex(null)
     setClearSignal((n) => n + 1); setFromReview(false); setDrawMode('turn'); setShowAnswers(false); setReview(null)
     setInjuryPath([]); setInjuryQ(null); setInjuryDraft(undefined); setOpenCautions([])
     setVisitCode(null); codeAsked.current = false
   }
+
+  // Whether a question screen can go on (Continue enabled).
+  function questionReady(q) {
+    const a = answers[q.id]
+    const otherPicked = Array.isArray(a) && a.includes(OTHER_ID)
+    const otherText = (answers[q.id + '_other'] || '').trim()
+    const gateClosed = !q.group && !listOpen(q)
+    return gateClosed ? a !== undefined : q.group
+      ? groupOf(q).every((sub) => (sub.multi
+        ? Array.isArray(answers[sub.id]) && answers[sub.id].length > 0
+        : answers[sub.id] !== undefined))
+      : q.textarea
+        ? true
+        : q.multi
+          ? (!otherPicked || otherText.length > 0)
+          : a !== undefined
+  }
+  // Continue on the emergency and doctor pages.
+  function safetyNext(st) {
+    const emergency = st === 'emergency'
+    const list = emergency ? screening.emergency : screening.physician
+    if (gateOpenEmpty(list)) return
+    if (flaggedIn(list)) { routeUrgent(st); return }
+    if (emergency) { if (smartFirst) startInjury(); else setStage('physician') }
+    else if (injuryApplies && !smartFirst) startInjury()
+    else startQuestions()
+  }
+
+  /* ── Voice guide (Chandra, 10 Oct 2026) ──────────────────────────────────
+     With "Start with voice guide" the talking guide in the corner reads each
+     screen out, shows how to turn and draw, and reads back what was chosen
+     for a Yes / Change before moving on (src/components/TalkingGuide.jsx).
+     This says, for the screen on show: what to read (say), what to read back
+     (readBack), whether it can go on (ready), whether to ask as soon as an
+     answer is picked (auto), and how to go on (proceed: its own Continue).
+     Answers are only read back on this device. */
+  const guided = useGuided()
+  const guideDemo = useGuideDemo()
+  const words = (xs) => (xs.length <= 1 ? (xs[0] || '') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`)
+  const spoken = (t) => String(t || '').replace(/\s*[·—–]\s*/g, ', ').replace(/[“”"]/g, '').trim()
+  const guideScreen = (() => {
+    if (stage === 'draw') {
+      const on = areaChips.filter((c) => c.on).map((c) => c.name.toLowerCase())
+      return {
+        key: 'draw', ready: !drawBlocked, sig: `${history.lines}|${on.join(',')}`, auto: 'idle',
+        readBack: on.length ? `You marked your ${words(on)}. Is that everything?` : '',
+        changeLabel: 'Keep drawing', proceed: () => setStage('about'),
+      }
+    }
+    if (stage === 'about') {
+      const age = (ABOUT_AGES.find((o) => o.id === answers.age) || {}).label
+      const sex = (ABOUT_SEX.find((o) => o.id === birthSex) || {}).label
+      return {
+        key: 'about', ready: aboutDone, sig: `${answers.age}|${birthSex}`,
+        readBack: age && sex ? `Your age is ${age.toLowerCase()}, and your sex at birth is ${sex.toLowerCase()}. Is that right?` : 'Is everything on this page right?',
+        proceed: () => setStage(screening.emergency.length ? 'emergency' : 'physician'),
+      }
+    }
+    if (stage === 'emergency' || stage === 'physician') {
+      const list = stage === 'emergency' ? screening.emergency : screening.physician
+      if (!list.length) return null
+      const picked = list.filter((f) => flags.includes(f.id)).map((f) => spoken(f.text))
+      return {
+        key: stage, ready: !gateOpenEmpty(list), sig: picked.join('|'),
+        say: stage === 'emergency'
+          ? 'First, some safety questions. Tick anything that is happening to you now. If none of them apply, tap None of these apply.'
+          : 'Next, some signs a doctor may need to check. Tick any that fit you now. If none apply, tap None of these apply.',
+        readBack: picked.length ? `You ticked: ${words(picked)}. Is that right?` : 'You said none of these apply to you right now. Is that right?',
+        proceed: () => safetyNext(stage),
+      }
+    }
+    if (stage === 'injury') {
+      const found = injuryQuestion(injuryQ, flowZ)
+      if (!found) return null
+      const { q } = found
+      const ids = q.multi ? (Array.isArray(injuryDraft) ? injuryDraft : []) : (injuryDraft === undefined ? [] : [injuryDraft])
+      const labels = ids.map((id) => spoken((q.options.find((o) => o.id === id) || {}).label)).filter(Boolean)
+      return {
+        key: `injury:${injuryQ}`, ready: labels.length > 0, sig: labels.join('|'), say: spoken(q.text), auto: !q.multi,
+        readBack: `You chose: ${words(labels)}. Is that right?`, proceed: () => continueInjury(),
+      }
+    }
+    if (stage === 'questions' && !fromReview) {
+      const q = activeQuestions[qIndex]
+      if (!q) return null
+      const gateClosed = !q.group && !listOpen(q)
+      let back
+      if (q.group) back = `You chose: ${[...new Set(groupOf(q).map((sub) => spoken(answerText(sub))))].join('; ')}. Is that right?`
+      else if (q.textarea) back = (answers[q.id] || '').trim() ? 'Thank you, that is noted. Shall we go on?' : 'You left this blank, which is fine. Shall we go on?'
+      else {
+        const t = answerText(q)
+        back = gateClosed ? 'You answered no. Is that right?' : `You chose: ${t === '—' ? 'none of these' : spoken(t)}. Is that right?`
+      }
+      const sig = q.group ? groupOf(q).map((sub) => JSON.stringify(answers[sub.id] ?? null)).join('|') : JSON.stringify(answers[q.id] ?? null) + (gateClosed ? 'g' : '')
+      return {
+        key: `q:${qIndex}`, ready: questionReady(q), sig, readBack: back,
+        say: spoken(q.group ? q.text : gateClosed ? q.gate.ask : q.text),
+        auto: !q.group && !q.multi && !q.textarea,
+        proceed: nextFromQuestion,
+      }
+    }
+    return null
+  })()
+  // Published after every render, so "proceed" is always the current Continue.
+  useEffect(() => { setGuideScreen(guided ? guideScreen : null) })
+  useEffect(() => () => setGuideScreen(null), [])
+  // The drawing-page demo turns the body on its own while the guide says how.
+  const [demoTurn, setDemoTurn] = useState(0)
+  useEffect(() => { if (guideDemo === 'turn') setDemoTurn((n) => n + 1) }, [guideDemo])
 
   return (
     <section ref={sectionRef} className="pa-section" style={{
@@ -1590,6 +1705,38 @@ export default function PainAssessment() {
             transition: background 0.15s, color 0.15s, opacity 0.15s;
           }
           .pa-ob.on { background: ${GOLD}; color: #081527; font-weight: 700; border-color: ${GOLD}; }
+          /* Voice guide demo (Chandra, 10 Oct 2026). */
+          .pa-demo-glow { animation: pa-demo-glow 1s ease-in-out infinite; border-color: ${GOLD_LIGHT} !important; opacity: 1 !important; }
+          @keyframes pa-demo-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(232,213,176,0.0); transform: scale(1); }
+            50% { box-shadow: 0 0 0 8px rgba(232,213,176,0.35); transform: scale(1.08); }
+          }
+          .pa-demo-hand { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+          .pa-demo-turn .pa-demo-finger { animation: pa-demo-swipe 1.8s ease-in-out infinite; }
+          @keyframes pa-demo-swipe {
+            0% { transform: translate(60px, 210px); opacity: 0; }
+            15% { opacity: 1; }
+            70% { transform: translate(140px, 210px); opacity: 1; }
+            100% { transform: translate(140px, 210px); opacity: 0; }
+          }
+          .pa-demo-draw .pa-demo-finger { animation: pa-demo-trace 2.4s ease-in-out infinite; offset-path: path('M112 178 q8 12 0 24 q-8 12 2 26'); }
+          @keyframes pa-demo-trace { 0% { offset-distance: 0%; } 75%, 100% { offset-distance: 100%; } }
+          .pa-demo-line { stroke-dasharray: 60; stroke-dashoffset: 60; animation: pa-demo-ink 2.4s ease-in-out infinite; }
+          @keyframes pa-demo-ink { 0% { stroke-dashoffset: 60; } 75%, 100% { stroke-dashoffset: 0; } }
+          .pa-demo-ripple { animation: pa-demo-ripple 1.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+          @keyframes pa-demo-ripple { from { transform: scale(0.6); opacity: 1; } to { transform: scale(1.3); opacity: 0; } }
+          .pa-voice-start {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+            min-height: 52px; margin-top: 12px; padding: 10px 22px; border-radius: 999px; cursor: pointer;
+            border: 1.5px solid #5CC8C2; background: rgba(92,200,194,0.12); color: #fff;
+            font: 500 16px var(--font-body); letter-spacing: 0.02em;
+          }
+          .pa-voice-start:hover { background: rgba(92,200,194,0.24); }
+          .pa-voice-start svg { color: #7DD8D3; }
+          @media (prefers-reduced-motion: reduce) {
+            .pa-demo-glow, .pa-demo-finger, .pa-demo-line, .pa-demo-ripple { animation: none; }
+            .pa-demo-line { stroke-dashoffset: 0; }
+          }
           .pa-ob:disabled { opacity: 0.35; cursor: not-allowed; }
           /* Turn and Draw sit at head height, out above the hands rather than
              tight beside the head (Chandra, 28 Sep 2026: too close). The
@@ -1775,8 +1922,17 @@ export default function PainAssessment() {
                       What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
                     </h1>
                     <div className="pa-actions" style={{ margin: '0 auto' }}>
-                      <button className="pa-primary" style={goldBtn} onClick={() => setStage('guide')}>start</button>
+                      <button className="pa-primary" style={goldBtn} onClick={() => { setGuided(false); setStage('guide') }}>start</button>
                     </div>
+                    {/* Voice guide (Chandra, 10 Oct 2026): the assistant in the
+                        corner reads each step out, shows how to turn and draw,
+                        and reads back each answer before moving on. */}
+                    <button className="pa-voice-start" style={{ maxWidth: 520, display: 'flex', margin: '12px auto 0' }} onClick={() => { unlockSpeech(); setGuided(true); setStage('guide') }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" />
+                      </svg>
+                      Start with voice guide
+                    </button>
                     {/* How long it takes, set apart in a soft gold panel. */}
                     <p style={{
                       fontSize: 'clamp(17px, 4.4vw, 19px)', lineHeight: 1.55, color: '#fff', fontWeight: 500,
@@ -1987,15 +2143,7 @@ export default function PainAssessment() {
               const otherText = (answers[q.id + '_other'] || '').trim()
               // A list behind a yes/no needs the yes/no answered first.
               const gateClosed = !q.group && !listOpen(q)
-              const canNext = gateClosed ? a !== undefined : q.group
-                ? groupOf(q).every((sub) => (sub.multi
-                  ? Array.isArray(answers[sub.id]) && answers[sub.id].length > 0
-                  : answers[sub.id] !== undefined))
-                : q.textarea
-                  ? true
-                  : q.multi
-                    ? (!otherPicked || otherText.length > 0)
-                    : a !== undefined
+              const canNext = questionReady(q)
               return (
                 <Fade k={'q' + qIndex}>
                   {/* On the first question only: the move from the safety
@@ -2408,13 +2556,7 @@ export default function PainAssessment() {
               const list = emergency ? screening.emergency : screening.physician
               const ticked = flaggedIn(list)
               const openEmpty = gateOpenEmpty(list)
-              const next = () => {
-                if (openEmpty) return
-                if (ticked) { routeUrgent(stage); return }
-                if (emergency) { if (smartFirst) startInjury(); else setStage('physician') }
-                else if (injuryApplies && !smartFirst) startInjury()
-                else startQuestions()
-              }
+              const next = () => safetyNext(stage)
               return (
                 <Fade k={stage}>
                   <div style={headBand(emergency ? 'coral' : 'amber')}>
@@ -3424,7 +3566,20 @@ export default function PainAssessment() {
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
           className={'pa-model' + (modelSmall ? ' small' : '')}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
-            {swipeHint && (
+            {/* Voice guide demo: a hand shows the swipe that turns the body
+                (the body turns with it), then a finger traces a line. */}
+            {stage === 'draw' && (guideDemo === 'turn' || guideDemo === 'draw') && (
+              <svg className={'pa-demo-hand pa-demo-' + guideDemo} viewBox="0 0 200 300" aria-hidden="true">
+                {guideDemo === 'draw' && (
+                  <path className="pa-demo-line" d="M112 178 q8 12 0 24 q-8 12 2 26" fill="none" stroke="#f0806c" strokeWidth="5" strokeLinecap="round" />
+                )}
+                <g className="pa-demo-finger">
+                  <circle r="13" fill="rgba(232,213,176,0.95)" stroke="#c9a96e" strokeWidth="3" />
+                  <circle r="22" fill="none" stroke="rgba(232,213,176,0.6)" strokeWidth="2" className="pa-demo-ripple" />
+                </g>
+              </svg>
+            )}
+            {swipeHint && !guideDemo && (
               <div className="pa-swipe" aria-hidden="true">
                 <span className="pa-swipe__track">
                   <span className="pa-swipe__chev">‹</span>
@@ -3441,7 +3596,7 @@ export default function PainAssessment() {
               <div className="pa-onbody">
                 <button className={'pa-ob pa-ob-turn' + (drawMode === 'turn' ? ' on' : '')}
                   aria-pressed={drawMode === 'turn'} onClick={() => setDrawMode('turn')}>Turn</button>
-                <button className={'pa-ob pa-ob-draw' + (drawMode === 'draw' ? ' on' : '')}
+                <button className={'pa-ob pa-ob-draw' + (drawMode === 'draw' ? ' on' : '') + (guideDemo === 'draw' ? ' pa-demo-glow' : '')}
                   aria-pressed={drawMode === 'draw'} onClick={() => setDrawMode('draw')}>Draw</button>
                 {/* Under Draw: rubbing over a line removes that whole line
                     (Chandra, 7 Oct 2026). Undo brings it back. */}
@@ -3453,7 +3608,7 @@ export default function PainAssessment() {
                   </svg>
                   Erase
                 </button>
-                <button className="pa-ob pa-ob-undo" disabled={!history.canUndo}
+                <button className={'pa-ob pa-ob-undo' + (guideDemo === 'undo' ? ' pa-demo-glow' : '')} disabled={!history.canUndo}
                   onClick={() => setUndoSignal((n) => n + 1)} aria-label="Undo the last line">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M9 14 4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 0 12h-3" />
@@ -3480,6 +3635,7 @@ export default function PainAssessment() {
               undoSignal={undoSignal}
               redoSignal={redoSignal}
               recentreSignal={recentre}
+              demoTurnSignal={demoTurn}
               onHistoryChange={setHistory}
               apiRef={bodyApi}
             />

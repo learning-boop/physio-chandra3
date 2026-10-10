@@ -40,7 +40,8 @@
     "review:tailbone": "node scripts/make-plain-review.mjs coccyx",
     "review:jaw": "node scripts/make-plain-review.mjs jaw",
     "review:head": "node scripts/make-plain-review.mjs head",
-    "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
+    "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip",
+    "guide:audio": "node scripts/make-guide-audio.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",

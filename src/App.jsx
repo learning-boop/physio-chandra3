@@ -7,6 +7,7 @@ import PainMapperPage from './pages/PainMapperPage'
 import PrivacyPage from './pages/PrivacyPage'
 import DataReviewPage from './pages/DataReviewPage'
 import ScrollToTop from './components/ScrollToTop'
+import TalkingGuide from './components/TalkingGuide'
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/privacy"    element={<PrivacyPage />} />
         <Route path="/data-review" element={<DataReviewPage />} />
       </Routes>
+      <TalkingGuide />
     </>
   )
 }

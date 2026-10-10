@@ -399,6 +399,42 @@ function Recentre({ controlsRef, signal }) {
   return null
 }
 
+// The voice guide's demo (Chandra, 10 Oct 2026): on each new signal the
+// body turns about 80 degrees one way and back, over about four seconds,
+// while the guide says how to turn it. A touch on the body stops it at once.
+function DemoTurn({ controlsRef, signal }) {
+  const { camera, gl, invalidate } = useThree()
+  useEffect(() => {
+    const c = controlsRef.current
+    if (!signal || !c) return
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) return
+    const axis = new THREE.Vector3(0, 1, 0)
+    const T = 4200
+    const SWING = THREE.MathUtils.degToRad(80)
+    let raf = 0
+    let prev = 0
+    let start = 0
+    const stop = () => cancelAnimationFrame(raf)
+    const step = (now) => {
+      if (!start) start = now
+      const k = Math.min(1, (now - start) / T)
+      const angle = Math.sin(k * Math.PI) * SWING
+      const off = camera.position.clone().sub(c.target)
+      off.applyAxisAngle(axis, angle - prev)
+      camera.position.copy(c.target).add(off)
+      prev = angle
+      c.update()
+      invalidate()
+      if (k < 1) raf = requestAnimationFrame(step)
+    }
+    raf = requestAnimationFrame(step)
+    gl.domElement.addEventListener('pointerdown', stop)
+    return () => { stop(); gl.domElement.removeEventListener('pointerdown', stop) }
+  }, [signal, camera, gl, invalidate, controlsRef])
+  return null
+}
+
 // What the results page can ask of the figure, through Body3D's `apiRef`:
 //   capture() → { views }: a close-up of each body part drawn on, from the
 //               side it was drawn on ({ src: JPEG data URL, width, height,
@@ -1048,7 +1084,7 @@ function PainLine({ points }) {
   )
 }
 
-function Scene({ highlight, erasing, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete, onErase, onEraseStart, recentreSignal, apiRef, pathsRef }) {
+function Scene({ highlight, erasing, highlightRef, paths, livePath, controlsRef, interactedRef, onInteract, onPathUpdate, onPathComplete, onErase, onEraseStart, recentreSignal, demoTurnSignal, apiRef, pathsRef }) {
   return (
     <>
       <ambientLight intensity={0.9} />
@@ -1069,6 +1105,7 @@ function Scene({ highlight, erasing, highlightRef, paths, livePath, controlsRef,
 
       <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />
       <Recentre controlsRef={controlsRef} signal={recentreSignal} />
+      <DemoTurn controlsRef={controlsRef} signal={demoTurnSignal} />
       <Snapshot apiRef={apiRef} pathsRef={pathsRef} />
       <InteractionGuard controlsRef={controlsRef} highlightRef={highlightRef} interactedRef={interactedRef} />
       <Suspense fallback={<Loader />}><BodyFigure /></Suspense>
@@ -1156,6 +1193,8 @@ export default function Body3D({
   clearSignal = 0, undoSignal = 0, redoSignal = 0, onHistoryChange,
   // Bump to move the picture back to the middle, keeping the turn and zoom.
   recentreSignal = 0,
+  // Bump to play the voice guide's turning demo.
+  demoTurnSignal = 0,
   // Filled with { capture(), strokes() } for the results page (see Snapshot).
   apiRef,
 }) {
@@ -1438,6 +1477,7 @@ export default function Body3D({
             onInteract={onInteract} onPathUpdate={onPathUpdate} onPathComplete={onPathComplete}
             onErase={onErase} onEraseStart={onEraseStart}
             recentreSignal={recentreSignal}
+            demoTurnSignal={demoTurnSignal}
             apiRef={apiRef} pathsRef={pathsRef}
           />
         </Canvas>
