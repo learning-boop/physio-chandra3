@@ -3,7 +3,7 @@
    patient level, but the reasoning and analysis at senior expert level").
    Lower back first (prototype), then the neck, the shoulder, the knee, the
    hip, the ankle, the foot, the thigh, the lower leg, the elbow, the wrist,
-   the hand and the forearm; and drawings of several of these areas together (plainAreas).
+   the hand, the forearm and the upper arm; and drawings of several of these areas together (plainAreas).
 
    Runs when one of PLAIN_AREAS is the only area drawn (smartArea).
    The patient sees:
@@ -23,7 +23,7 @@
    them" sentence on the see-a-doctor and emergency screens.
    ───────────────────────────────────────────────────────────────────────── */
 
-export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm']
+export const PLAIN_AREAS = ['lowerback', 'neck', 'shoulder', 'knee', 'hip', 'ankle', 'foot', 'thigh', 'lowerleg', 'elbow', 'wrist', 'hand', 'forearm', 'upperarm']
 const ALIAS = { chest: 'upperback', flank: 'tlj' }
 /** The drawn areas the plain design runs for (one or several), or null.
     Areas a mark only implies (the mid-to-low back behind a low-back mark)
@@ -85,6 +85,9 @@ export const PLAIN_GATES = {
   'forearm-skin': 'Could it be a skin infection, or a cast that is too tight?',
   'forearm-nerve': 'Has your arm or hand changed in feeling or strength?',
   'forearm-medical': 'Could something else be going on?',
+  'arm-skin': 'Could it be a skin infection or a clot?',
+  'arm-nerve': 'Has your arm or hand changed in feeling or strength?',
+  'arm-medical': 'Could something else be going on?',
   // Several areas drawn: their groups are merged by theme (../data/safetyGates.js).
   'multi-bone': 'Could the bone be hurt or weak?',
   'multi-infection': 'Do you feel unwell, not just sore?',
@@ -99,7 +102,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -314,6 +317,13 @@ export const PLAIN_SHORT = {
   'frf-pancoast': 'A smoker with little-finger-side arm pain and a cough or droopy eyelid',
   'frf-stress': 'A young gymnast with pinpoint forearm bone pain',
   'frf-shingles': 'A band of burning pain with a rash',
+  // Upper arm
+  'arf-cardiac': 'Arm pain with effort, or with chest tightness, breathlessness or jaw pain',
+  'arf-clotlung': 'A suddenly swollen, bluish arm, with breathlessness or chest pain',
+  'arf-clot': 'A whole arm swollen, heavy or bluish over a day or two',
+  'arf-pancoast': 'A smoker with arm pain to the little finger, and cough or droopy eyelid',
+  'arf-pta': 'Sudden bad pain, then a weak or thin arm',
+  'arf-shingles': 'A band of burning pain with a rash',
 }
 
 /* Several areas drawn: the same question from each area (the knee's,
@@ -435,6 +445,7 @@ export const PLAIN_Q = {
   'frf-cardiac': 'Do any of these fit you?',
   'frf-stroke': 'Along with the arm symptoms, has one of these happened suddenly?',
   'frf-nerve': 'Do any of these fit you?',
+  'arf-cardiac': 'Do any of these fit you?',
   'pc-acromegaly': 'Not explained by something a doctor has already found: over the past few years, your hands or feet have grown (rings, gloves or shoes no longer fit) or your jaw, brow or nose has become heavier, and one of these:',
 }
 
@@ -1196,6 +1207,27 @@ export const TICKS = {
   'frf-shingles': [
     { key: 'band', text: 'A band of burning pain down the forearm, with a rash or blisters', tell: 'I have a band of burning pain down my forearm with a rash' },
   ],
+  // ── Upper arm ──
+  'arf-cardiac': [
+    { key: 'effort', text: 'Arm pain, especially inside the left arm, when you walk fast or climb stairs', tell: 'my arm hurts when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: chest tightness or jaw pain', tell: 'I have chest tightness or jaw pain with it' },
+    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+  ],
+  'arf-clotlung': [
+    { key: 'arm', combo: true, text: 'Your whole arm suddenly swollen, heavy or bluish, and you are short of breath or have chest pain', tell: 'my arm suddenly swelled and turned bluish, and I am short of breath or have chest pain' },
+  ],
+  'arf-clot': [
+    { key: 'arm', text: 'Your whole arm swollen, heavy or bluish over a day or two', tell: 'my whole arm has become swollen, heavy or bluish' },
+  ],
+  'arf-pancoast': [
+    { key: 'smoker', combo: true, text: 'You smoke (or did), and pain runs down the inside of your arm to your little finger, with a lasting cough or a drooping eyelid', tell: 'I smoke or did, and pain runs down my arm with a lasting cough or a drooping eyelid' },
+  ],
+  'arf-pta': [
+    { key: 'weak', combo: true, text: 'Sudden, very bad arm or shoulder pain with no injury for several days, and then your arm muscles became weak or thin', tell: 'I had sudden, very bad arm pain for days, and now my arm is weak' },
+  ],
+  'arf-shingles': [
+    { key: 'band', text: 'A band of burning pain down the arm, with a rash or blisters', tell: 'I have a band of burning pain down my arm with a rash' },
+  ],
   'hpf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep pain at night that does not change however you lie, with weight loss', tell: 'I have deep pain at night and I am losing weight' },
@@ -1207,7 +1239,8 @@ export const TICKS = {
 
 /* Questions worded exactly like another area's: the same ticks, bullet and heading. */
 for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], ['hnd-stroke', 'wrf-stroke'], ['hnd-numb', 'wrf-numb'], ['hnd-myelo', 'wrf-myelo'],
-  ['frf-compartment', 'wrf-compartment'], ['frf-cast', 'erf-cast'], ['frf-cellulitis', 'erf-cellulitis'], ['frf-myelo', 'erf-myelo']]) {
+  ['frf-compartment', 'wrf-compartment'], ['frf-cast', 'erf-cast'], ['frf-cellulitis', 'erf-cellulitis'], ['frf-myelo', 'erf-myelo'],
+  ['arf-stroke', 'frf-stroke'], ['arf-rhabdo', 'srf-rhabdo'], ['arf-cellulitis', 'erf-cellulitis'], ['arf-myelo', 'erf-myelo']]) {
   TICKS[copy] = TICKS[from]
   PLAIN_SHORT[copy] = PLAIN_SHORT[from]
   if (PLAIN_Q[from]) PLAIN_Q[copy] = PLAIN_Q[from]
@@ -1281,7 +1314,7 @@ export const WHEN_Q = { id: 'lb:when', text: 'When did this start?', options: [
   { id: 'days', label: 'In the last few days', tell: 'It started in the last few days.' },
   { id: 'weeks', label: 'Weeks ago, or longer', tell: 'It started weeks ago.' },
 ] }
-export const WHEN_FOR = ['erf-myelo', 'wrf-myelo', 'hnd-myelo', 'frf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
+export const WHEN_FOR = ['erf-myelo', 'wrf-myelo', 'hnd-myelo', 'frf-myelo', 'arf-myelo', 'rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'jrf-conus-legs', 'nrf-cord', 'nrf-cord-legs', 'nrf-myelo', 'kf-cauda', 'hpf-cauda', 'jrf-conus', 'tgf-cauda', 'lgf-cauda']
 
 /** The "Tell them" sentence, from the ticks (null when nothing was ticked). */
 export function tellThem(flags = [], answers = {}, area = 'lowerback') {

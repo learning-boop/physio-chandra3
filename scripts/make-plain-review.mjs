@@ -16,6 +16,7 @@
         npm run review:wrist      →  review/wrist-plain.html
         npm run review:hand       →  review/hand-plain.html
         npm run review:forearm    →  review/forearm-plain.html
+        npm run review:upperarm   →  review/upperarm-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -167,6 +168,17 @@ const AREAS = {
       '<strong>Nerve signs</strong> one per tick, including "you cannot make an OK sign with your thumb and first finger".',
       '<strong>Signs that only count together</strong> stay on one line: a smoker AND little-finger-side arm pain with a lasting cough or a drooping eyelid; a young gymnast AND pinpoint forearm bone pain.',
       '<strong>The forearm injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  upperarm: {
+    out: 'upperarm-plain', title: 'Upper Arm Questions', name: 'Upper arm', zones: [Z('upperarmR', 'upperarm', 'R')],
+    sample: () => tellThem(toggleTick([], 'arf-clot', 'arm'), {}, 'upperarm'),
+    own: [
+      '<strong>An upper-arm mark also asks the shoulder\'s questions</strong> (the shoulder is implied), so the groups are merged as on the site; the shoulder\'s plain wording is the one already signed off.',
+      '<strong>Emergency:</strong> heart pain in the arm (with effort, or with chest tightness, breathlessness, sweating or jaw pain; 911); a whole arm suddenly swollen, heavy or bluish AND breathlessness or chest pain (911, one line); the arm\'s own stroke question; muscle breakdown with dark pee.',
+      '<strong>An arm clot</strong> (the whole arm swollen, heavy or bluish over a day or two) is doctor first, no booking, like every other possible clot.',
+      '<strong>Questions worded like another area\'s</strong> (stroke, muscle breakdown, cellulitis, both hands numb) share their ticks.',
+      '<strong>The upper arm injury screen</strong> is unchanged in this step.',
     ],
   },
   'lowback-hip': {
