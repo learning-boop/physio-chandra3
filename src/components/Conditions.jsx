@@ -8,7 +8,7 @@ const conditions = [
   { name: 'Headaches', desc: 'Cervicogenic headaches and tension-type presentations. Cervical spine assessment and targeted physical therapy to address contributing musculoskeletal factors.', img: 'images/Headaches.png'},
   { name: 'Post-Surgery',  desc: 'Joint replacements, ACL reconstruction, and rotator cuff repair. Structured, phase-based rehabilitation guided by surgical protocols and clinical progress.', img: 'images/Post-Surgery.png' },
   { name: 'Chronic Pain', desc: 'Fibromyalgia and long-term musculoskeletal conditions. A multi-modal approach combining manual therapy with patient education and graded activity.', img: 'images/Chronic Pain.png' },
-  { name: 'Workplace Injuries', desc: 'Repetitive strain and occupational overuse conditions. Rehabilitation designed to support safe and durable return to work, in collaboration with relevant stakeholders.', img: 'images/workplace2.png' },
+  { name: 'Workplace Injuries', desc: 'Repetitive strain and occupational overuse conditions. Rehabilitation that aims to support a safe return to work, working with your employer or insurer when you agree.', img: 'images/workplace2.png' },
   // { name: 'Mobility & Movement', num: '08', desc: 'Age-related stiffness, joint restriction, and movement limitations. Progressive therapeutic exercise to support functional independence and quality of life.', img: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=900&q=80&auto=format&fit=crop' },
 ]
 

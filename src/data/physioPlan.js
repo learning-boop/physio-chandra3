@@ -65,9 +65,11 @@ export const PLAN_LABEL = {
   doctorFirst: 'Doctor first; booking after that visit',
 }
 
-/* Patient wording (plain words; no medication advice). */
+/* Patient wording (plain words; no medication advice). The doctor's check
+   always comes first in the sentence; physio is offered, never promised to
+   work (CHCPBC Marketing, Advertising and Promotion standard, 1.6 and 4.2). */
 export const PLAN_TEXT = {
-  alongside: 'You do not have to wait to start physio. Chandra can help with your pain and movement now, keep an eye on what you ticked, and work with your doctor on the next steps.',
-  clearFirst: 'You can book your physio visit now. Chandra will look at everything first, and treatment starts once a doctor has checked this.',
-  doctorFirst: 'This needs a doctor\'s check before physio. Once they have seen you, physio can help your recovery, and you can book with Chandra then.',
+  alongside: 'You do not have to wait to start physio. Chandra can work on your pain and movement while you wait, watch for any change in what you ticked, and, with your permission, keep your doctor informed.',
+  clearFirst: 'Please see the doctor first. You can book your physio visit now if you like: Chandra will go through everything with you, and treatment starts once a doctor has checked this.',
+  doctorFirst: 'This needs a doctor\'s check before physio. Once they have seen you, you are welcome to book with Chandra, and physio can be part of your recovery.',
 }

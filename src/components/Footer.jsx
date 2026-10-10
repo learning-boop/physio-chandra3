@@ -10,6 +10,10 @@ export default function Footer() {
           <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 200, lineHeight: 1.85, color: 'rgba(255,255,255,0.3)', maxWidth: '280px' }}>
             Registered physiotherapist practising in Surrey and Burnaby. Evidence-informed rehabilitation with an individualized approach.
           </p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 200, lineHeight: 1.85, color: 'rgba(255,255,255,0.3)', maxWidth: '280px', marginTop: '12px' }}>
+            Registered with the College of Health and Care Professionals of BC.{' '}
+            <a href="https://chcpbc.org" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(201,169,110,0.7)' }}>Check the register</a>
+          </p>
         </div>
         {[
           ['Navigation', [['Home', '/'], ['About', '/about'], ['Conditions', '/conditions'], ['Education', '/education'], ['Privacy', '/privacy']]],

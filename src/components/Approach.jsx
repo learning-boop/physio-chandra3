@@ -2,8 +2,8 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
 const steps = [
-  { n: '01', title: 'Assessment', body: 'A thorough biomechanical evaluation, movement screening, and clinical history. Time is taken to understand your presentation and what matters most to you.' },
-  { n: '02', title: 'Diagnosis', body: 'Clinical reasoning to identify the contributing factors to your pain or limitation. The aim is to understand what is driving your symptoms, not only to address them at the surface level.' },
+  { n: '01', title: 'Assessment', body: 'A detailed movement assessment, movement screening, and clinical history. Time is taken to understand your presentation and what matters most to you.' },
+  { n: '02', title: 'Diagnosis', body: 'Clinical reasoning to identify the contributing factors to your pain or limitation. The aim is to understand what is driving your symptoms, and to explain it to you in plain words.' },
   { n: '03', title: 'Treatment', body: 'A treatment plan informed by your assessment findings — which may include manual therapy, dry needling, exercise prescription, and other modalities as clinically appropriate.' },
   { n: '04', title: 'Rehabilitation', body: 'Graduated rehabilitation with clear milestones so you understand where you are in your recovery and what to expect at each stage.' },
   { n: '05', title: 'Return to Activity', body: 'Support for return to your desired activities, with education and strategies to help maintain your progress going forward.' },

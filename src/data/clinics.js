@@ -29,7 +29,7 @@ export const CLINICS = [
     email: '',
     janeUrl: '',
     img: 'images/clinic1.png',
-    tagline: 'Comprehensive physiotherapy in the heart of South Surrey.',
+    tagline: 'Physiotherapy and rehabilitation services in South Surrey.',
   },
   {
     id: 'bcice',

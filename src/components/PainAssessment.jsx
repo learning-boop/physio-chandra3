@@ -256,7 +256,7 @@ const CAUTION_CHECKS = [
   SPONDY_CAUTION,
   { id: 'ca-fibro', tier: 'caution', text: 'Fibromyalgia, diagnosed by a doctor',
     why: { title: 'Worth knowing before your first assessment',
-      text: 'Fibromyalgia does not stop physiotherapy: regular exercise built up slowly is the treatment with the strongest evidence, alongside understanding the pain, sleep and pacing. Your programme starts below what you can manage now and builds in small planned steps, so flares become shorter and less worrying.' } },
+      text: 'Fibromyalgia does not stop physiotherapy: regular exercise built up slowly is the treatment with the strongest evidence, alongside understanding the pain, sleep and pacing. Your programme starts below what you can manage now and builds in small planned steps, with the aim of making flares easier to manage.' } },
   { id: 'ca-ms', tier: 'caution', text: 'Multiple sclerosis, diagnosed by a neurologist',
     why: { title: 'Worth knowing before your first assessment',
       text: 'Exercise is safe with MS and recommended by current guidelines: it does not bring on relapses, and it can help fatigue, strength, balance and mood. Your programme is built around your energy and how heat affects you, alongside your MS team. A new or clearly worse symptom lasting more than a day without a fever or infection is worth a call to your MS nurse or neurology team first.' } },
@@ -2832,10 +2832,11 @@ export default function PainAssessment() {
                     flagged symptom — but never for an emergency-tier flag. */}
                 {!emergencyFlagged && !holdBooking && !underFive && (
                   <>
-                    <span style={{ ...label, display: 'block', margin: '26px 0 0' }}>Book With Chandra</span>
+                    <span style={{ ...label, display: 'block', margin: '26px 0 0' }}>Booking With Chandra</span>
                     <p style={{ ...body, fontSize: 15, margin: '10px 0 14px', maxWidth: 520 }}>
-                      Choose a clinic to book your assessment, or carry on to finish the
-                      questions and see what your answers can be associated with.
+                      {sameDayFlagged
+                        ? 'Your doctor\'s visit today comes first. If you would like, you can also choose a clinic now to book your physio visit, or carry on to finish the questions.'
+                        : 'If you would like, choose a clinic now to book your physio visit, or carry on to finish the questions and see what your answers may be linked with.'}
                     </p>
                     <ClinicPicker picked={clinicId} onPick={setClinicId} />
                   </>
@@ -3369,8 +3370,8 @@ export default function PainAssessment() {
                     <span style={{ ...label, marginBottom: 12 }}>Your Next Step · See a Doctor First</span>
                     <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
                       {holdToday
-                        ? 'Please see a doctor or nurse practitioner today: your family doctor, a walk-in clinic or an urgent care centre, or call HealthLink BC on 8-1-1 if you are not sure where to go. Once they have checked you, physiotherapy can help with your recovery, and you are welcome to book with Chandra then.'
-                        : 'Please see your family doctor in the next few days, or a walk-in clinic if you do not have one; HealthLink BC on 8-1-1 can help if you are not sure where to go. Once the cause is known, physiotherapy can help, and you are welcome to book with Chandra then.'}
+                        ? 'Please see a doctor or nurse practitioner today: your family doctor, a walk-in clinic or an urgent care centre, or call HealthLink BC on 8-1-1 if you are not sure where to go. Once they have checked you, you are welcome to book with Chandra, and physiotherapy can be part of your recovery.'
+                        : 'Please see your family doctor in the next few days, or a walk-in clinic if you do not have one; HealthLink BC on 8-1-1 can help if you are not sure where to go. Once the cause is known, you are welcome to book with Chandra, and physiotherapy can be part of your recovery.'}
                     </p>
                   </>
                 ) : (
@@ -3379,7 +3380,7 @@ export default function PainAssessment() {
                     <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>
                       {doctorFlagged
                         ? `${PLAN_TEXT[physioWait]} Choose the clinic that suits you, then call or book online.`
-                        : 'Based on what you have shared, a physiotherapy assessment is an appropriate next step. An appointment with Chandra lets your symptoms be examined individually and a suitable plan of care discussed with you. Choose the clinic that suits you, then call or book online.'}
+                        : 'Based on what you have shared, a physiotherapy assessment is a reasonable next step. At your first visit, Chandra goes through your answers with you, checks how you move, explains in plain words what is likely going on, and agrees a plan with you, including what you can do at home. Bring your reference code or PDF so the visit starts from your answers. Choose the clinic that suits you, then call or book online; the clinic can tell you about fees and direct billing.'}
                     </p>
 
                     <ClinicPicker picked={clinicId} onPick={setClinicId} />

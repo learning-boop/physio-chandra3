@@ -67,7 +67,7 @@ export default function CTA() {
             color: 'rgba(255,255,255,0.5)', marginBottom: 'clamp(32px, 8vw, 56px)',
           }}>
           Serving South Surrey, Burnaby, and Guildford.<br />
-          Three clinic locations. Registered Physiotherapist. Assessment-guided care.
+          Practising at three clinics. Registered Physiotherapist. Assessment-guided care.
         </motion.p>
 
         <div className="cta-actions" style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
