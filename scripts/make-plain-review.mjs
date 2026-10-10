@@ -17,6 +17,7 @@
         npm run review:hand       →  review/hand-plain.html
         npm run review:forearm    →  review/forearm-plain.html
         npm run review:upperarm   →  review/upperarm-plain.html
+        npm run review:midback    →  review/midback-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -179,6 +180,17 @@ const AREAS = {
       '<strong>An arm clot</strong> (the whole arm swollen, heavy or bluish over a day or two) is doctor first, no booking, like every other possible clot.',
       '<strong>Questions worded like another area\'s</strong> (stroke, muscle breakdown, cellulitis, both hands numb) share their ticks.',
       '<strong>The upper arm injury screen</strong> is unchanged in this step.',
+    ],
+  },
+  upperback: {
+    out: 'midback-plain', title: 'Mid Back Questions', name: 'Mid back', zones: [Z('upperback', 'upperback')],
+    sample: () => tellThem(toggleTick([], 'trf-cardiac', 'chest'), {}, 'upperback'),
+    own: [
+      '<strong>A front-of-chest mark</strong> runs as the mid back (the site treats them as one area); a chest drawing\'s general heart question gives way to the mid back\'s own.',
+      '<strong>Emergency:</strong> a sudden tearing back pain, heart signs (chest tightness, breathlessness or sweating on its own; effort pain AND spreading to the arm or jaw on one line), a lung clot, pancreas pain, two spinal cord questions, and a crash, fall or hard blow in the last few days (boxed heading).',
+      '<strong>Questions worded like another area\'s</strong> (lung clot, pancreas, both legs, stiff legs, shingles) share their ticks.',
+      '<strong>Fever and past cancer</strong> are asked in the mid back\'s own infection and cancer questions, so the general medical question leaves them out here.',
+      '<strong>The mid back has no injury screen.</strong>',
     ],
   },
   'lowback-hip': {
