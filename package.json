@@ -34,6 +34,7 @@
     "review:forearm": "node scripts/make-plain-review.mjs forearm",
     "review:upperarm": "node scripts/make-plain-review.mjs upperarm",
     "review:midback": "node scripts/make-plain-review.mjs upperback",
+    "review:baseofneck": "node scripts/make-plain-review.mjs ctj",
     "review:lowback-hip": "node scripts/make-plain-review.mjs lowback-hip"
   },
   "dependencies": {

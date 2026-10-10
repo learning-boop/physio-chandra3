@@ -18,6 +18,7 @@
         npm run review:forearm    →  review/forearm-plain.html
         npm run review:upperarm   →  review/upperarm-plain.html
         npm run review:midback    →  review/midback-plain.html
+        npm run review:baseofneck →  review/baseofneck-plain.html
         npm run review:lowback-hip → review/lowback-hip-plain.html */
 import fs from 'node:fs'
 import { renderPage } from './make-signoff.mjs'
@@ -191,6 +192,16 @@ const AREAS = {
       '<strong>Questions worded like another area\'s</strong> (lung clot, pancreas, both legs, stiff legs, shingles) share their ticks.',
       '<strong>Fever and past cancer</strong> are asked in the mid back\'s own infection and cancer questions, so the general medical question leaves them out here.',
       '<strong>The mid back has no injury screen.</strong>',
+    ],
+  },
+  ctj: {
+    out: 'baseofneck-plain', title: 'Base of Neck Questions', name: 'Base of the neck', zones: [Z('ctj', 'ctj')],
+    sample: () => tellThem(toggleTick([], 'crf-trauma5d', 'vision'), {}, 'ctj'),
+    own: [
+      '<strong>After a crash or a knock to the head or neck</strong> there are two questions with the same signs: one boxed "getting quickly worse or new in the last few days" (911), the other boxed "even if not getting worse" (doctor today). Each sign is its own tick.',
+      '<strong>Heart signs:</strong> chest tightness, breathlessness or sweating on its own; effort pain AND spreading to the left arm or jaw on one line.',
+      '<strong>Questions worded like another area\'s</strong> (lung clot, bladder or bowel control, organ pain, shingles) share their ticks.',
+      '<strong>"Tell them"</strong> names the area as neck and upper back pain.',
     ],
   },
   'lowback-hip': {
