@@ -3,6 +3,9 @@
    changed without touching the component (src/components/TalkingGuide.jsx).
 
    Rules for this text (same as the rest of the site):
+   - Friendly, everyday Canadian (BC) English in the casual lines ("Hey
+     there", "No worries", "Sounds good", the odd "eh"; Chandra, 10 Oct
+     2026). Never in medical, safety or emergency wording, which stays plain.
    - Plain words, short sentences, one idea per sentence.
    - CHCPBC marketing standard: truthful and verifiable, no promised results,
      no "best", no comparisons, no testimonials. Facts not yet confirmed
@@ -32,14 +35,14 @@ import { GUIDE_AUDIO } from './guideAudio.js'
 export const PAGE_MESSAGES = {
   'guide:landing': {
     open: true,
-    text: "Hello, I'm the virtual assistant of Physio Chandra. Welcome! Chandra is a registered physiotherapist in Surrey and Burnaby. This guide helps you describe your pain before your visit, in about five minutes. You mark where it hurts on a 3D body and answer a few short questions. At the end you'll see general information, not a diagnosis, and you can book an assessment if you'd like. Tap Start when you're ready, or Start with voice guide if you'd like me to talk you through each step.",
+    text: "Hey there! I'm the virtual assistant of Physio Chandra. Welcome! Chandra is a registered physiotherapist in Surrey and Burnaby. This guide helps you describe your pain before your visit, in about five minutes. You mark where it hurts on a 3D body and answer a few short questions. At the end you'll see general information, not a diagnosis, and you can book an assessment if you'd like. Tap Start when you're ready, or Start with voice guide if you'd like me to talk you through each step.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
   'guide:guide': {
     open: true,
     text: {
-      phone: "Here's how to use the guide. First, turn the body: swipe left or right until the sore side faces you. Swipe up or down to tilt it, and pinch to zoom in. Next, tap Draw, then trace every painful area with your finger, including where the pain spreads. Made a mistake? Tap Undo. Then answer the questions: tap the answer that fits best, and tap Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can tap the face in the corner at any time to ask me a question.",
-      computer: "Here's how to use the guide. First, turn the body: click and drag left or right until the sore side faces you. Drag up or down to tilt it, and scroll to zoom in. Next, click Draw, then trace every painful area, including where the pain spreads. Made a mistake? Click Undo. Then answer the questions: click the answer that fits best, and click Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can click the face in the corner at any time to ask me a question.",
+      phone: "Okay, here's how it works. First, turn the body: swipe left or right until the sore side faces you. Swipe up or down to tilt it, and pinch to zoom in. Next, tap Draw, then trace every painful area with your finger, including where the pain spreads. Made a mistake? No worries, just tap Undo. Then answer the questions: tap the answer that fits best, and tap Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can tap the face in the corner at any time to ask me a question.",
+      computer: "Okay, here's how it works. First, turn the body: click and drag left or right until the sore side faces you. Drag up or down to tilt it, and scroll to zoom in. Next, click Draw, then trace every painful area, including where the pain spreads. Made a mistake? No worries, just click Undo. Then answer the questions: click the answer that fits best, and click Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can click the face in the corner at any time to ask me a question.",
     },
     chips: ['turn-body', 'draw', 'answer', 'change-answer'],
   },
@@ -109,8 +112,8 @@ export const PAGE_MESSAGES = {
    hand shows the gestures. DEMO_STEPS says what is shown during each
    sentence ('turn', 'draw', 'undo' or null), so keep one sentence per step. */
 export const DEMO = {
-  phone: "Let me show you how. To turn the body, swipe across it with one finger, like this. Then tap Draw, and trace over every place that hurts, like this. If you make a mistake, tap Undo. Now it's your turn. When you've finished, I'll read back what you marked.",
-  computer: "Let me show you how. To turn the body, click and drag across it, like this. Then click Draw, and trace over every place that hurts, like this. If you make a mistake, click Undo. Now it's your turn. When you've finished, I'll read back what you marked.",
+  phone: "Alright, let me show you how. To turn the body, swipe across it with one finger, like this. Then tap Draw, and trace over every place that hurts, like this. If you make a mistake, tap Undo. Now it's your turn. Take your time, eh. When you've finished, I'll read back what you marked.",
+  computer: "Alright, let me show you how. To turn the body, click and drag across it, like this. Then click Draw, and trace over every place that hurts, like this. If you make a mistake, click Undo. Now it's your turn. Take your time, eh. When you've finished, I'll read back what you marked.",
 }
 export const DEMO_STEPS = [null, 'turn', 'draw', 'undo', null, null]
 /* ── Answering by voice (Chandra, 10 Oct 2026) ─────────────────────────────
@@ -120,11 +123,11 @@ export const DEMO_STEPS = [null, 'turn', 'draw', 'undo', null, null]
 export const MIC_ASK = "Would you like to answer by speaking instead of tapping? I'll listen after each question, and you can say yes or no when I check your answer."
 export const MIC_NOTE = 'To do this, your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. This website does not record or keep your voice. You can switch the microphone off at any time, or just tap instead.'
 export const VOICE = {
-  on: "Thank you. When the microphone glows, I'm listening. You can say your answer, or its letter.",
+  on: "Awesome, thanks! When the microphone glows, I'm listening. You can say your answer, or its letter.",
   denied: "I can't use the microphone, so please tap your answers instead.",
-  off: "Okay, the microphone is off. You can tap your answers.",
-  again: "Sorry, I didn't catch that. Please say it again, or tap your answer.",
-  giveUp: "That's okay. Please tap your answer on the screen.",
+  off: "Sounds good, the microphone is off. You can tap your answers.",
+  again: "Sorry, I missed that one. Mind saying it again? Or just tap your answer.",
+  giveUp: "No worries. Just tap your answer on the screen.",
   yesNo: 'Please say yes or no, or tap a button.',
   safetyTap: 'If one of these applies to you, please tap it on the screen. If none of them apply, say none.',
   tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
@@ -132,7 +135,7 @@ export const VOICE = {
 }
 
 /* Said when the visitor taps "Change it" after a read-back. */
-export const CHANGE_REPLY = 'Okay. Change your answer, and I will check it again.'
+export const CHANGE_REPLY = 'No worries. Change your answer, and I’ll check it again.'
 
 /* Pain guide stages where the guide stays out of the way completely: a page
    telling the visitor to get medical care must not have anything competing
@@ -339,14 +342,14 @@ export const SPECIAL_REPLIES = [
   {
     id: 'hello',
     keys: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'namaste'],
-    a: 'Hello! I’m the virtual assistant of Physio Chandra. I can help you find your way around this site. What would you like to know?',
+    a: 'Hey there! I’m the virtual assistant of Physio Chandra. I can help you find your way around the site. What can I help you with?',
     next: ['what-is-this', 'turn-body', 'booking'],
     whole: true,
   },
   {
     id: 'thanks',
     keys: ['thanks', 'thank you', 'thx', 'great', 'ok', 'okay', 'cool', 'got it', 'bye'],
-    a: "You're welcome. I'm here in the corner if you need me.",
+    a: "No worries! I'm right here in the corner if you need me.",
     next: [],
     whole: true,
   },
@@ -361,7 +364,8 @@ export const FALLBACK = {
 export const DEFAULT_CHIPS = ['what-is-this', 'booking', 'privacy', 'about-chandra']
 
 /* The browser voice used until Chandra's own recordings are added: a soft,
-   natural male voice. Each browser offers different voices, so they are
+   gentle, natural male voice (Chandra, 10 Oct 2026: "soft", at a natural
+   pace, with a Canadian accent where the browser has one). Each browser offers different voices, so they are
    ranked (src/components/TalkingGuide.jsx, pickVoice):
    1. "natural" voices first (Edge: "… Online (Natural)", Apple: "(Enhanced)"
       or "(Premium)"); these sound close to a person,
@@ -371,9 +375,11 @@ export const DEFAULT_CHIPS = ['what-is-this', 'booking', 'privacy', 'about-chand
    Only the guide's own pre-written words are read out; what a visitor
    types is never spoken. */
 export const PREFERRED_VOICES = [
-  'Prabhat',                     // Edge: English (India), natural, soft
-  'Liam',                        // Edge: English (Canada), natural
-  'Andrew', 'Brian', 'Christopher', 'Guy', 'Ryan', 'Thomas', 'William', // Edge natural
+  'Liam',                        // Edge: English (Canada), natural: the BC accent Chandra asked for
+  'Andrew',                      // Edge: warm and gentle, natural
+  'Brian',                       // Edge: calm, friendly, natural
+  'Prabhat',                     // Edge: English (India), natural
+  'Christopher', 'Guy', 'Ryan', 'Thomas', 'William',                    // Edge natural
   'Rishi', 'Daniel', 'Evan', 'Aaron', 'Nathan', 'Tom',                   // Apple
   'Google UK English Male',      // Chrome
   'Ravi', 'Male',
@@ -382,8 +388,9 @@ export const NATURAL_MARKS = ['Natural', 'Neural', 'Enhanced', 'Premium', 'Siri'
 export const ROBOTIC_VOICES = ['Microsoft David', 'Microsoft Mark', 'Microsoft Zira', 'Microsoft Hazel', 'Microsoft George',
   'eSpeak', 'Fred', 'Albert', 'Zarvox', 'Bad News', 'Bells', 'Boing', 'Bubbles', 'Cellos', 'Jester', 'Junior', 'Organ',
   'Ralph', 'Superstar', 'Trinoids', 'Whisper', 'Wobble', 'Grandpa', 'Grandma', 'Rocko', 'Eddy', 'Flo', 'Kathy']
-/* A little slower and lower than the default: calm, not rushed. */
-export const VOICE_STYLE = { rate: 0.9, pitch: 0.95 }
+/* Natural speed (Chandra found 0.9 a little slow), the voice's own pitch,
+   and a little quieter, so it sounds soft rather than announced. */
+export const VOICE_STYLE = { rate: 1, pitch: 1, volume: 0.85 }
 
 /* ── Matching a typed question ─────────────────────────────────────────────
    Done on this device. Lower case, punctuation dropped, then each topic's
@@ -412,7 +419,7 @@ export function findReply(input) {
 }
 
 /* Shown when the chat opens before anything has been said. */
-export const GREETING = 'Hello! I can help you find your way around this site. What would you like to know?'
+export const GREETING = 'Hey there! I can help you find your way around the site. What can I help you with?'
 
 /* ── Recordings in Chandra's (cloned) voice ───────────────────────────────
    scripts/make-guide-audio.mjs turns every text below into an MP3 in

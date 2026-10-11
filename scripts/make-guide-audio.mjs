@@ -31,7 +31,7 @@ const VOICE = process.env.ELEVENLABS_VOICE_ID
 // Calm and steady, close to the recording; tweak here if it sounds flat
 // (lower stability) or drifts from Chandra's voice (raise similarity).
 const MODEL = process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2'
-const SETTINGS = { stability: 0.6, similarity_boost: 0.85, style: 0.1, use_speaker_boost: true, speed: 0.95 }
+const SETTINGS = { stability: 0.6, similarity_boost: 0.85, style: 0.1, use_speaker_boost: true, speed: 1.0 }
 
 const texts = allSpokenTexts().map((t) => ({ ...t, key: textKey(t.text) }))
 const fileOf = (t) => `${t.name}-${t.key}.mp3`

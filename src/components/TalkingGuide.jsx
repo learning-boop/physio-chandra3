@@ -12,6 +12,10 @@ import { command, yesNo, saysNone, matchOptions } from '../data/voiceMatch'
    while it speaks and eyes that blink, drawn over the picture in the same
    coordinates (836 x 1134).
 
+   - In the bottom-RIGHT corner (moved from the left, Chandra, 10 Oct 2026).
+   - What it says is heard, not shown: a message shows only "Speaking…" and
+     its buttons, and "Show text" brings the words up (remembered on this
+     device). Without a voice to hear, the words always show.
    - Welcome on the pain guide's first page and how-to on the second open by
      themselves (once per visit); other pages and steps wait for a tap on the
      face, so the guide never covers a question. A gold dot says there is a
@@ -89,7 +93,9 @@ function pickVoice() {
     if (NATURAL_MARKS.some((m) => v.name.includes(m))) n += 100
     const i = PREFERRED_VOICES.findIndex((p) => v.name.includes(p))
     if (i >= 0) n += 50 - i
-    if (/en[-_](IN|CA)/i.test(v.lang)) n += 5
+    // A Canadian (BC) accent where the browser has one (Chandra, 10 Oct 2026).
+    if (/en[-_]CA/i.test(v.lang)) n += 20
+    else if (/en[-_]IN/i.test(v.lang)) n += 5
     if (ROBOTIC_VOICES.some((r) => v.name.includes(r))) n -= 200
     return n
   }
@@ -157,6 +163,7 @@ function useVoice(level) {
       if (v) { u.voice = v; u.lang = v.lang } else u.lang = 'en-CA'
       u.rate = VOICE_STYLE.rate
       u.pitch = VOICE_STYLE.pitch
+      u.volume = VOICE_STYLE.volume
       u.onstart = () => { if (t !== token.current) return; level.current.speaking = true; setNow({ id, idx: i }) }
       u.onboundary = () => { level.current.pulse = 1 }
       u.onend = () => {
@@ -339,6 +346,9 @@ export default function TalkingGuide() {
   micOnRef.current = micOn
   const [hearing, setHearing] = useState(null)      // { text } while the microphone listens
   const [heardLast, setHeardLast] = useState('')    // what was last understood, shown under the message
+  // The words of a message are shown only when asked for ("Show text").
+  const [showText, setShowText] = useState(() => store.get('localStorage', 'tg-text') === 'on')
+  const toggleText = () => { const on = !showText; setShowText(on); store.set('localStorage', 'tg-text', on ? 'on' : 'off') }
   const micAsked = useRef(store.get('sessionStorage', 'tg-mic') !== null)
   const afterConsent = useRef(null)
 
@@ -794,13 +804,27 @@ export default function TalkingGuide() {
 
   if (hidden) return null
   const speaking = voice.now.id !== null
+  // A message's words, or (until "Show text") just what the assistant is doing.
+  const wordsShown = showText || !canSpeak
+  const Words = ({ msg, idle }) => (wordsShown ? (
+    <p className="tg-bubble-text" aria-live="polite"><Spoken text={msg.text} active={voice.now.id === msg.id ? voice.now.idx : -1} /></p>
+  ) : (
+    <p className="tg-status" aria-live="polite">
+      {hearing ? <><span className="tg-dots tg-dots-teal" aria-hidden="true"><i /><i /><i /></span> Listening…</>
+        : voice.now.id === msg.id ? <><span className="tg-dots" aria-hidden="true"><i /><i /><i /></span> Speaking…</>
+          : idle}
+    </p>
+  ))
+  const TextToggle = () => (canSpeak ? (
+    <button className="tg-textbtn" onClick={toggleText} aria-pressed={showText}>{showText ? 'Hide text' : 'Show text'}</button>
+  ) : null)
 
   return (
     <div ref={rootRef} className={'tg-root' + (mode === 'chat' ? ' tg-open' : '')}>
       {mode === 'mic' && lastGuide && (
         <div className="tg-bubble tg-confirm" role="dialog" aria-label="Answer by speaking?">
-          <p className="tg-bubble-name">Virtual assistant</p>
-          <p className="tg-bubble-text" aria-live="polite"><Spoken text={lastGuide.text} active={voice.now.id === lastGuide.id ? voice.now.idx : -1} /></p>
+          <p className="tg-bubble-name">Virtual assistant <TextToggle /></p>
+          <Words msg={lastGuide} idle="Would you like to answer by speaking?" />
           <p className="tg-note">{MIC_NOTE} <Link to="/privacy" className="tg-link">Privacy notice</Link></p>
           <div className="tg-bubble-actions">
             <button className="tg-btn tg-btn-gold tg-btn-big" onClick={micYes}><Mic /> Use my microphone</button>
@@ -811,22 +835,22 @@ export default function TalkingGuide() {
 
       {mode === 'confirm' && confirm && lastGuide && (
         <div className="tg-bubble tg-confirm" role="dialog" aria-label="Please check your answer">
-          <p className="tg-bubble-name">Virtual assistant</p>
-          <p className="tg-bubble-text" aria-live="polite"><Spoken text={lastGuide.text} active={voice.now.id === lastGuide.id ? voice.now.idx : -1} /></p>
+          <p className="tg-bubble-name">Virtual assistant <TextToggle /></p>
+          <Words msg={lastGuide} idle="Is that right?" />
           <div className="tg-bubble-actions">
             <button className="tg-btn tg-btn-gold tg-btn-big" onClick={confirmYes}>✓ Yes, continue</button>
             <button className="tg-btn tg-btn-big" onClick={confirmChange}>{confirm.changeLabel}</button>
             {Recognition && guided && <MicButton on={micOn} hearing={hearing} onClick={micButton} />}
           </div>
-          <Hearing hearing={hearing} heard={heardLast} />
+          {wordsShown && <Hearing hearing={hearing} heard={heardLast} />}
         </div>
       )}
 
       {mode === 'bubble' && lastGuide && (
         <div className="tg-bubble" role="dialog" aria-label="Message from Physio Chandra's virtual assistant">
           <button className="tg-icon tg-bubble-x" onClick={tuckAway} aria-label="Close message"><Close /></button>
-          <p className="tg-bubble-name">Virtual assistant</p>
-          <p className="tg-bubble-text" aria-live="polite"><Spoken text={lastGuide.text} active={voice.now.id === lastGuide.id ? voice.now.idx : -1} /></p>
+          <p className="tg-bubble-name">Virtual assistant <TextToggle /></p>
+          <Words msg={lastGuide} idle="Tap Listen to hear me." />
           <div className="tg-bubble-actions">
             {canSpeak && (
               <button className="tg-btn tg-btn-gold" onClick={() => listen(lastGuide)} aria-pressed={voice.now.id === lastGuide.id}>
@@ -839,7 +863,7 @@ export default function TalkingGuide() {
             <button className="tg-btn" onClick={openChat}>Ask a question</button>
             {Recognition && guided && <MicButton on={micOn} hearing={hearing} onClick={micButton} />}
           </div>
-          {guided && <Hearing hearing={hearing} heard={heardLast} />}
+          {guided && wordsShown && <Hearing hearing={hearing} heard={heardLast} />}
         </div>
       )}
 
@@ -923,7 +947,7 @@ export default function TalkingGuide() {
       <style>{`
         .tg-root {
           position: fixed; z-index: 400;
-          left: max(16px, env(safe-area-inset-left));
+          right: max(16px, env(safe-area-inset-right));
           bottom: max(16px, env(safe-area-inset-bottom));
           font-family: var(--font-body); color: #fff;
         }
@@ -955,7 +979,7 @@ export default function TalkingGuide() {
         }
 
         .tg-bubble, .tg-chat {
-          position: absolute; left: 0; bottom: calc(100% + 14px);
+          position: absolute; right: 0; bottom: calc(100% + 14px);
           background: ${PANEL}; border: 1px solid rgba(201,169,110,0.45); border-radius: 18px;
           box-shadow: 0 18px 50px rgba(0,0,0,0.55);
           animation: tg-in 0.35s var(--ease);
@@ -963,11 +987,26 @@ export default function TalkingGuide() {
         @keyframes tg-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
         .tg-bubble { width: min(350px, calc(100vw - 32px)); padding: 16px 18px 16px; }
         .tg-bubble::after {
-          content: ''; position: absolute; left: 26px; bottom: -8px; width: 14px; height: 14px;
+          content: ''; position: absolute; right: 26px; bottom: -8px; width: 14px; height: 14px;
           background: ${PANEL}; border-right: 1px solid rgba(201,169,110,0.45); border-bottom: 1px solid rgba(201,169,110,0.45);
           transform: rotate(45deg);
         }
         .tg-bubble-x { position: absolute; top: 8px; right: 8px; }
+        .tg-bubble-name { display: flex; align-items: center; gap: 10px; padding-right: 30px; }
+        .tg-textbtn {
+          margin-left: auto; padding: 3px 10px; border-radius: 999px; cursor: pointer;
+          font: 500 11px var(--font-body); letter-spacing: 0.06em; text-transform: none;
+          color: rgba(255,255,255,0.75); background: transparent; border: 1px solid rgba(255,255,255,0.25);
+        }
+        .tg-textbtn:hover { color: #fff; border-color: ${GOLD_LIGHT}; }
+        .tg-confirm .tg-bubble-name { padding-right: 0; }
+        .tg-status { display: flex; align-items: center; gap: 10px; font-size: 15px; color: rgba(255,255,255,0.9); margin: 2px 0 14px; min-height: 24px; }
+        .tg-dots { display: inline-flex; gap: 4px; }
+        .tg-dots i { width: 6px; height: 6px; border-radius: 50%; background: ${GOLD}; animation: tg-dot 1s ease-in-out infinite; }
+        .tg-dots i:nth-child(2) { animation-delay: 0.15s; }
+        .tg-dots i:nth-child(3) { animation-delay: 0.3s; }
+        .tg-dots-teal i { background: #5CC8C2; }
+        @keyframes tg-dot { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-4px); opacity: 1; } }
         .tg-bubble-name { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: ${GOLD}; margin: 0 0 6px; }
         .tg-bubble-text { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.92); margin: 0 26px 14px 0; max-height: max(90px, min(300px, calc(100dvh - 330px))); overflow-y: auto; }
         .tg-bubble-actions { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -1063,7 +1102,7 @@ export default function TalkingGuide() {
           .tg-chat { height: min(70dvh, calc(100dvh - 190px)); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .tg-hearing, .tg-face-listen { animation: none; }
+          .tg-hearing, .tg-face-listen, .tg-dots i { animation: none; }
           .tg-lids, .tg-talk .tg-head, .tg-dot, .tg-bubble, .tg-chat { animation: none; }
           .tg-face, .tg-face-talk { transition: none; }
         }
