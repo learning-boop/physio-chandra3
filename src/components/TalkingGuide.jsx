@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo } from '../data/guideStage'
+import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech } from '../data/guideStage'
 import {
-  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, MIC_ASK, MIC_NOTE, VOICE, audioFor, hasRecordings, findReply, forDevice,
+  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, MIC_ASK, MIC_NOTE, VOICE, audioFor, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
 import { command, yesNo, saysNone, matchOptions } from '../data/voiceMatch'
 
@@ -20,9 +20,12 @@ import { command, yesNo, saysNone, matchOptions } from '../data/voiceMatch'
      themselves (once per visit); other pages and steps wait for a tap on the
      face, so the guide never covers a question. A gold dot says there is a
      new tip.
-   - It never makes a sound by itself. "Listen" (or the speaker button) turns
-     the voice on; then each new message is read out until it is turned off.
-     The text is always shown, so it works without sound.
+   - Sound is on unless the visitor mutes it (Chandra, 10 Oct 2026): the
+     welcome opens 1 second after landing and is read out. Browsers allow a
+     page to speak only after the visitor's first tap or key press, so where
+     that is blocked the bubble says "Tap anywhere to hear me" and the
+     welcome starts on the first tap. Mute (remembered on the device) and a
+     volume control sit in every message and in the chat.
    - Conversation: suggested questions plus a box to type one. Answers are
      written in advance (src/data/talkingGuide.js) and matched on this device;
      nothing typed is sent anywhere.
@@ -82,6 +85,22 @@ const useMedia = (query) => {
 
 /* ── Voice ─────────────────────────────────────────────────────────────── */
 let chosenVoice = null
+/* Edge loads its natural voices a moment after the page (Chrome its Google
+   ones): until then only the old built-in ones are listed. The first message
+   waits for them (voicesReady), and a choice made before they came is not
+   kept. */
+let voicesSettled = false
+function voicesReady() {
+  if (voicesSettled) return Promise.resolve()
+  return new Promise((resolve) => {
+    const done = () => { voicesSettled = true; chosenVoice = null; resolve() }
+    const ss = window.speechSynthesis
+    if ((ss.getVoices() || []).some((v) => NATURAL_MARKS.some((m) => v.name.includes(m)) || /^Google/.test(v.name))) { done(); return }
+    const t = setTimeout(done, 1500)
+    ss.addEventListener?.('voiceschanged', () => { clearTimeout(t); setTimeout(done, 50) }, { once: true })
+  })
+}
+const isFemale = (v) => FEMALE_VOICES.some((f) => v.name.includes(f))
 function pickVoice() {
   if (chosenVoice) return chosenVoice
   const voices = window.speechSynthesis.getVoices() || []
@@ -93,13 +112,17 @@ function pickVoice() {
     if (NATURAL_MARKS.some((m) => v.name.includes(m))) n += 100
     const i = PREFERRED_VOICES.findIndex((p) => v.name.includes(p))
     if (i >= 0) n += 50 - i
-    // A Canadian (BC) accent where the browser has one (Chandra, 10 Oct 2026).
-    if (/en[-_]CA/i.test(v.lang)) n += 20
+    // A Canadian (BC) accent where the browser has one: a small bonus only.
+    if (/en[-_]CA/i.test(v.lang)) n += 3
     else if (/en[-_]IN/i.test(v.lang)) n += 5
     if (ROBOTIC_VOICES.some((r) => v.name.includes(r))) n -= 200
+    // Always a male voice (Chandra): a female one only if nothing else exists.
+    if (isFemale(v)) n -= 1000
     return n
   }
-  return (chosenVoice = pool.reduce((best, v) => (score(v) > score(best) ? v : best), pool[0]))
+  const best = pool.reduce((b, v) => (score(v) > score(b) ? v : b), pool[0])
+  if (voicesSettled) chosenVoice = best
+  return best
 }
 
 /* ── Listening ─────────────────────────────────────────────────────────────
@@ -119,12 +142,13 @@ async function canRecogniseOnDevice() {
 }
 
 /* level: a ref the face reads every frame ({ speaking, pulse, analyser }). */
-function useVoice(level) {
+function useVoice(level, volume, onBlocked) {
   const supported = typeof window !== 'undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
   const [now, setNow] = useState({ id: null, idx: -1 })   // which message, which sentence (-2: all of it)
   const token = useRef(0)
   const audio = useRef(null)
   const audioCtx = useRef(null)
+  const cur = useRef(null)   // { id, text, idx } of the message being read
 
   useEffect(() => {
     if (!supported) return
@@ -151,27 +175,34 @@ function useVoice(level) {
     finish()
   }, [supported, finish])
 
-  const sayText = useCallback((id, text, t) => {
+  const sayText = useCallback((id, text, t, from = 0) => {
     if (!supported) return
+    if (!voicesSettled) { voicesReady().then(() => { if (t === token.current) sayText(id, text, t, from) }); return }
     const wait = 150 - (Date.now() - cutAt.current)
-    if (wait > 0) { setTimeout(() => { if (t === token.current) sayText(id, text, t) }, wait); return }
+    if (wait > 0) { setTimeout(() => { if (t === token.current) sayText(id, text, t, from) }, wait); return }
     const parts = splitSentences(text)
+    cur.current = { id, text, idx: from }
     window.speechSynthesis.resume?.()
     parts.forEach((part, i) => {
+      if (i < from) return
       const u = new SpeechSynthesisUtterance(part)
       const v = pickVoice()
       if (v) { u.voice = v; u.lang = v.lang } else u.lang = 'en-CA'
       u.rate = VOICE_STYLE.rate
       u.pitch = VOICE_STYLE.pitch
-      u.volume = VOICE_STYLE.volume
-      u.onstart = () => { if (t !== token.current) return; level.current.speaking = true; setNow({ id, idx: i }) }
+      u.volume = VOICE_STYLE.volume * volume.current
+      u.onstart = () => { if (t !== token.current) return; level.current.speaking = true; cur.current = { id, text, idx: i }; setNow({ id, idx: i }) }
       u.onboundary = () => { level.current.pulse = 1 }
       u.onend = () => {
         if (t !== token.current) return
         level.current.speaking = false
         if (i === parts.length - 1) finish()
       }
-      u.onerror = u.onend
+      u.onerror = (e) => {
+        // Not allowed to speak yet (no tap on the page so far).
+        if (e && e.error === 'not-allowed' && t === token.current) { token.current += 1; finish(); onBlocked.current && onBlocked.current(id); return }
+        u.onend()
+      }
       window.speechSynthesis.speak(u)
     })
   }, [supported, level, finish])
@@ -194,10 +225,29 @@ function useVoice(level) {
       an.connect(audioCtx.current.destination)
       level.current.analyser = an
     } catch { /* no level: the mouth uses its own rhythm */ }
+    a.volume = Math.min(1, volume.current)
     a.onplay = () => { if (t === token.current) { level.current.speaking = true; setNow({ id, idx: -2 }) } }
     a.onended = () => { if (t === token.current) finish() }
-    a.play().catch(() => { if (t === token.current) { audio.current = null; level.current.analyser = null; sayText(id, text, t) } })
-  }, [stop, sayText, level, finish])
+    a.play().catch((err) => {
+      if (t !== token.current) return
+      audio.current = null
+      level.current.analyser = null
+      if (err && err.name === 'NotAllowedError') { finish(); onBlocked.current && onBlocked.current(id); return }
+      sayText(id, text, t)
+    })
+  }, [stop, sayText, level, finish, volume, onBlocked])
+
+  // A new volume, straight away: a recording just changes; the computer
+  // voice picks up again from the sentence it was on.
+  const applyVolume = useCallback(() => {
+    if (audio.current) { audio.current.volume = Math.min(1, volume.current); return }
+    if (!supported || !cur.current || !(window.speechSynthesis.speaking || window.speechSynthesis.pending)) return
+    const { id, text, idx } = cur.current
+    token.current += 1
+    cutAt.current = Date.now()
+    window.speechSynthesis.cancel()
+    sayText(id, text, token.current, Math.max(0, idx))
+  }, [supported, sayText, volume])
 
   useEffect(() => stop, [stop])
   // Any video or sound on the page (such as the how-it-works video) starts:
@@ -207,21 +257,47 @@ function useVoice(level) {
     document.addEventListener('play', onPlay, true)
     return () => document.removeEventListener('play', onPlay, true)
   }, [stop])
-  return { supported, speak, stop, now }
+  return { supported, speak, stop, now, applyVolume }
 }
 
 /* ── The face ──────────────────────────────────────────────────────────────
-   The open mouth is a dark shape between the upper teeth and a lower curve
-   that drops as the mouth opens; at rest it is flat and the logo's own smile
-   shows. Points are in the logo's pixels. */
-const mouth = (d) => `M312 733 Q450 766 588 726 Q450 ${(766 + 2.2 * d).toFixed(1)} 312 733 Z`
+   While it speaks, the logo's own toothy smile is covered with skin and a
+   drawn mouth takes its place (Chandra, 10 Oct 2026: move the lips, not the
+   teeth): the upper lip stays put and lifts a little, the lower lip drops
+   with each syllable as the jaw opens, the opening between them is dark
+   with a row of upper teeth only when it is wide, and the width changes a
+   little (rounder or wider sounds). When it stops, it fades back to the
+   logo's smile. Points are in the logo's pixels (836 x 1134); the corners
+   of the logo's mouth are at about (312, 733) and (588, 726). */
+const MOUTH = { cx: 450, ly: 733, ry: 726, half: 138 }
+function mouthShapes(o, w) {
+  const { cx, ly, ry, half } = MOUTH
+  const hw = half * w
+  const lx = cx - hw
+  const rx = cx + hw
+  const upY = 742 - 8 * o                  // upper lip's inner edge: a smile curve that lifts a little
+  const lowY = 746 + 118 * o               // lower lip's inner edge: drops with the jaw
+  const teeth = Math.max(0, Math.min(1, (o - 0.2) * 1.6)) * 30
+  const f = (n) => n.toFixed(1)
+  return {
+    opening: `M${f(lx)} ${ly} Q${cx} ${f(upY)} ${f(rx)} ${ry} Q${cx} ${f(lowY)} ${f(lx)} ${ly} Z`,
+    teeth: teeth > 0.5
+      ? `M${f(lx + 26)} ${ly - 3} Q${cx} ${f(upY + 1)} ${f(rx - 26)} ${ry - 3} L${f(rx - 32)} ${ry + 2} Q${cx} ${f(upY + teeth)} ${f(lx + 32)} ${ly + 2} Z`
+      : 'M0 0',
+    // The upper lip, plus the logo's upturned smile creases at the corners.
+    upperLip: `M${f(lx - 4)} ${ly + 3} Q${f(lx - 16)} ${ly - 4} ${f(lx - 20)} ${ly - 14} M${f(rx + 4)} ${ry + 3} Q${f(rx + 16)} ${ry - 4} ${f(rx + 20)} ${ry - 14} M${f(lx - 10)} ${ly + 1} C${f(cx - hw * 0.55)} ${f(704 - 6 * o)} ${f(cx - 26)} ${f(694 - 6 * o)} ${cx} ${f(703 - 6 * o)} C${f(cx + 26)} ${f(694 - 6 * o)} ${f(cx + hw * 0.55)} ${f(700 - 6 * o)} ${f(rx + 10)} ${ry + 1}`,
+    lowerLip: `M${f(lx + 18)} ${f(ly + 12 + 44 * o)} Q${cx} ${f(800 + 112 * o)} ${f(rx - 18)} ${f(ry + 12 + 44 * o)}`,
+  }
+}
 
 function Face({ level, speaking }) {
-  const mouthRef = useRef(null)
+  const parts = useRef({})
   useEffect(() => {
     let raf = 0
     let open = 0
+    let width = 1
     let wobble = 0.7
+    let shape = 1
     let nextWobble = 0
     const frame = (t) => {
       const L = level.current
@@ -233,22 +309,39 @@ function Face({ level, speaking }) {
           let sum = 0
           for (let i = 0; i < buf.length; i++) { const x = (buf[i] - 128) / 128; sum += x * x }
           target = Math.min(1, Math.sqrt(sum / buf.length) * 5)
+          if (t > nextWobble) { shape = 0.84 + Math.random() * 0.16; nextWobble = t + 160 + Math.random() * 120 }
         } else {
-          // About four syllables a second, each a slightly different size.
-          if (t > nextWobble) { wobble = 0.45 + Math.random() * 0.55; nextWobble = t + 110 + Math.random() * 90 }
+          // About four syllables a second, each a slightly different size
+          // and shape.
+          if (t > nextWobble) {
+            wobble = 0.4 + Math.random() * 0.6
+            shape = 0.84 + Math.random() * 0.16
+            nextWobble = t + 120 + Math.random() * 110
+          }
           target = Math.abs(Math.sin(t / 1000 * Math.PI * 4.2)) * wobble
         }
       }
-      if (L.pulse > 0.02) { target = Math.max(target, L.pulse * 0.9); L.pulse *= 0.82 }
-      open += (target - open) * 0.4
-      if (open < 0.01) open = 0
-      if (mouthRef.current) mouthRef.current.setAttribute('d', mouth(open * 36))
+      if (L.pulse > 0.02) { target = Math.max(target, L.pulse * 0.85); L.pulse *= 0.82 }
+      open += (target - open) * 0.35
+      width += ((L.speaking ? shape : 1) - width) * 0.25
+      if (open < 0.005) open = 0
+      const m = mouthShapes(open, width)
+      const p = parts.current
+      if (p.opening) {
+        p.opening.setAttribute('d', m.opening)
+        p.outline.setAttribute('d', m.opening)
+        p.teeth.setAttribute('d', m.teeth)
+        p.upperLip.setAttribute('d', m.upperLip)
+        p.lowerLip.setAttribute('d', m.lowerLip)
+      }
       raf = requestAnimationFrame(frame)
     }
     raf = requestAnimationFrame(frame)
     return () => cancelAnimationFrame(raf)
   }, [level])
 
+  const rest = mouthShapes(0, 1)
+  const set = (k) => (el) => { parts.current[k] = el }
   return (
     <svg viewBox="-10 70 860 860" className={'tg-svg' + (speaking ? ' tg-talk' : '')} aria-hidden="true" focusable="false">
       <defs>
@@ -258,7 +351,15 @@ function Face({ level, speaking }) {
         <rect x="-10" y="70" width="860" height="860" fill={SKIN} />
         <g className="tg-head">
           <image href="/images/logo2.png" x="0" y="0" width="836" height="1134" />
-          <path ref={mouthRef} d={mouth(0)} fill="#2b1a17" />
+          {/* The talking mouth: skin over the logo's smile, then the lips. */}
+          <g className="tg-mouth">
+            <path d="M286 738 C 340 668, 560 668, 614 722 C 600 856, 320 866, 286 738 Z" fill={SKIN} />
+            <path ref={set('opening')} d={rest.opening} fill="#2b1714" />
+            <path ref={set('teeth')} d={rest.teeth} fill="#fbf6ee" />
+            <path ref={set('outline')} d={rest.opening} fill="none" stroke={INK} strokeWidth="7" strokeLinejoin="round" />
+            <path ref={set('upperLip')} d={rest.upperLip} fill="none" stroke={INK} strokeWidth="8" strokeLinecap="round" />
+            <path ref={set('lowerLip')} d={rest.lowerLip} fill="none" stroke={INK} strokeWidth="8" strokeLinecap="round" />
+          </g>
           {/* Eyelids for the blink: skin over the eye and a closed lid line. */}
           <g className="tg-lids">
             <ellipse cx="300" cy="507" rx="76" ry="27" fill={SKIN} />
@@ -277,6 +378,53 @@ const Speaker = ({ on }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" />
     {on ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" /></> : <path d="M17 9l5 6M22 9l-5 6" />}
+  </svg>
+)
+/* Just the volume (the chat header has its own mute icon). */
+function SoundControlsVolumeOnly({ vol, onVol }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button className="tg-icon tg-volbtn" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-label="Volume" title="Volume">
+        <Volume level={vol} />
+      </button>
+      {open && (
+        <span className="tg-volpop">
+          <input type="range" min="0" max="100" step="5" value={Math.round(vol * 100)} aria-label="Volume"
+            onChange={(e) => onVol(Number(e.target.value) / 100)} />
+          <span className="tg-volnum">{Math.round(vol * 100)}%</span>
+        </span>
+      )}
+    </>
+  )
+}
+/* Mute and volume, in every message and in the chat. */
+function SoundControls({ on, onMute, vol, onVol }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <span className="tg-sound">
+      <button className={'tg-btn' + (on ? '' : ' tg-btn-gold')} onClick={onMute} aria-pressed={!on}>
+        <Speaker on={on} /> {on ? 'Mute' : 'Unmute'}
+      </button>
+      <button className="tg-icon tg-volbtn" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-label="Volume" title="Volume">
+        <Volume level={vol} />
+      </button>
+      {open && (
+        <span className="tg-volpop">
+          <input type="range" min="0" max="100" step="5" value={Math.round(vol * 100)} aria-label="Volume"
+            onChange={(e) => onVol(Number(e.target.value) / 100)} />
+          <span className="tg-volnum">{Math.round(vol * 100)}%</span>
+        </span>
+      )}
+    </span>
+  )
+}
+const Volume = ({ level }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <path d="M3 10v4h3l4 3V7L6 10H3z" fill="currentColor" stroke="none" />
+    <path d="M14 9.5a3.5 3.5 0 0 1 0 5" opacity={level > 0 ? 1 : 0.25} />
+    <path d="M16.5 7a7 7 0 0 1 0 10" opacity={level > 0.45 ? 1 : 0.25} />
+    <path d="M19 4.5a10.5 10.5 0 0 1 0 15" opacity={level > 0.8 ? 1 : 0.25} />
   </svg>
 )
 const Play = () => <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor" /></svg>
@@ -321,12 +469,19 @@ export default function TalkingGuide() {
   const hidden = HIDDEN_ROUTES.some((r) => pathname.startsWith(r)) || (assess && SILENT_STAGES.includes(stage))
 
   const level = useRef({ speaking: false, pulse: 0, analyser: null })
-  const voice = useVoice(level)
+  // Volume 0–1 (remembered); the computer voice is a little quieter still.
+  const [vol, setVol] = useState(() => { const v = store.get('localStorage', 'tg-vol'); return v === null ? 1 : Math.min(1, Math.max(0, Number(v) || 0)) })
+  const volRef = useRef(vol)
+  // A message the browser would not let us read yet: read on the first tap.
+  const [waitTap, setWaitTap] = useState(null)
+  const onBlocked = useRef((id) => setWaitTap(id))
+  const voice = useVoice(level, volRef, onBlocked)
   const [mode, setMode] = useState('face')          // 'face' | 'bubble' | 'chat'
   const [log, setLog] = useState([])                // { id, from: 'guide'|'me', text, link?, urgent?, audio? }
   const [chips, setChips] = useState(DEFAULT_CHIPS)
   const [unread, setUnread] = useState(false)
-  const [voiceOn, setVoiceOn] = useState(() => store.get('localStorage', 'tg-voice') === 'on')
+  // Sound is on unless the visitor has muted it.
+  const [voiceOn, setVoiceOn] = useState(() => store.get('localStorage', 'tg-voice') !== 'off')
   const [draft, setDraft] = useState('')
   const nextId = useRef(1)
   const logRef = useRef(null)
@@ -353,6 +508,8 @@ export default function TalkingGuide() {
   const afterConsent = useRef(null)
 
   const lastGuide = [...log].reverse().find((m) => m.from === 'guide')
+  const logRef2 = useRef(log)
+  logRef2.current = log
 
   // Chandra's recorded (cloned) voice when there is a recording of these
   // exact words; otherwise the browser's voice.
@@ -371,6 +528,9 @@ export default function TalkingGuide() {
   // A new page or step: its message joins the conversation (once: the
   // check also stops development's double run adding it twice).
   const handled = useRef(null)
+  // Cleared when the page or step changes (below), not on unmount: React's
+  // development double run would cancel it before it fires.
+  const welcomeTimer = useRef(0)
   useEffect(() => {
     const sig = `${ctxKey}|${hidden}|${phone}`
     if (handled.current === sig) return
@@ -394,15 +554,22 @@ export default function TalkingGuide() {
         return
       }
     }
+    clearTimeout(welcomeTimer.current)
     const text = forDevice(page.text, phone)
     const msg = addGuide(text, { audio: page.audio })
     if (guidedRef.current && stage === 'guide' && Recognition && !micAsked.current) offerMicAfter.current = msg.id
     setChips(page.chips || DEFAULT_CHIPS)
     const seen = seenList().includes(ctxKey)
-    const speakNow = voiceOnRef.current && activated
+    // Read out by itself: the welcome, and every step in voice guide mode
+    // (a browser that blocks it reads it on the first tap instead).
+    const speakNow = voiceOnRef.current && (guidedRef.current || ctxKey === 'guide:landing' || (activated && modeRef.current === 'chat'))
     if (modeRef.current === 'chat') {
       markSeen(ctxKey)
       if (speakNow) say(msg)
+    } else if (!seen && ctxKey === 'guide:landing') {
+      // The welcome: one second after landing.
+      markSeen(ctxKey)
+      welcomeTimer.current = setTimeout(() => { setMode('bubble'); if (voiceOnRef.current) say(msg) }, 1000)
     } else if (!seen && (page.open || speakNow)) {
       markSeen(ctxKey)
       setMode('bubble')
@@ -730,6 +897,28 @@ export default function TalkingGuide() {
     }
   }
 
+  // The browser blocked speech until the visitor does something: on their
+  // first tap or key press, read the message that was waiting (if it is
+  // still the one on show).
+  const lastGuideId = useRef(null)
+  lastGuideId.current = lastGuide ? lastGuide.id : null
+  useEffect(() => {
+    if (waitTap === null) return
+    const go = () => {
+      document.removeEventListener('pointerdown', go, true)
+      document.removeEventListener('keydown', go, true)
+      unlockSpeech()
+      setTimeout(() => {
+        setWaitTap(null)
+        if (voiceOnRef.current && lastGuideId.current === waitTap) { const m = logRef2.current.find((x) => x.id === waitTap); if (m) say(m) }
+      }, 300)
+    }
+    document.addEventListener('pointerdown', go, true)
+    document.addEventListener('keydown', go, true)
+    return () => { document.removeEventListener('pointerdown', go, true); document.removeEventListener('keydown', go, true) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [waitTap])
+
   // Keep the newest message in view.
   useEffect(() => {
     if (mode === 'chat' && logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
@@ -749,11 +938,12 @@ export default function TalkingGuide() {
   const rootRef = useRef(null)
   const speakingNow = voice.now.id !== null
   useEffect(() => {
-    if ((mode !== 'bubble' && mode !== 'confirm') || speakingNow) return
+    // Not while a message waits for the first tap: that tap starts it.
+    if ((mode !== 'bubble' && mode !== 'confirm') || speakingNow || waitTap !== null) return
     const onDown = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) { setConfirm(null); setMode('face') } }
     document.addEventListener('pointerdown', onDown)
     return () => document.removeEventListener('pointerdown', onDown)
-  }, [mode, speakingNow])
+  }, [mode, speakingNow, waitTap])
 
   const openChat = () => {
     setUnread(false)
@@ -773,9 +963,17 @@ export default function TalkingGuide() {
   const setVoice = (on) => {
     setVoiceOn(on)
     store.set('localStorage', 'tg-voice', on ? 'on' : 'off')
-    if (!on) voice.stop()
+    setWaitTap(null)
+    if (!on) { voice.stop(); stopListening() }
     else if (lastGuide) say(lastGuide)
   }
+  const changeVolume = (v) => {
+    setVol(v)
+    volRef.current = v
+    store.set('localStorage', 'tg-vol', String(v))
+    voice.applyVolume()
+  }
+  const sound = <SoundControls on={voiceOn} onMute={() => setVoice(!voiceOn)} vol={vol} onVol={changeVolume} />
 
   const listen = (msg) => {
     if (voice.now.id === msg.id) { voice.stop(); return }
@@ -810,7 +1008,9 @@ export default function TalkingGuide() {
     <p className="tg-bubble-text" aria-live="polite"><Spoken text={msg.text} active={voice.now.id === msg.id ? voice.now.idx : -1} /></p>
   ) : (
     <p className="tg-status" aria-live="polite">
-      {hearing ? <><span className="tg-dots tg-dots-teal" aria-hidden="true"><i /><i /><i /></span> Listening…</>
+      {waitTap === msg.id && voiceOn ? 'Tap anywhere to hear me.'
+        : !voiceOn ? 'Sound is off. Tap Unmute to hear me.'
+        : hearing ? <><span className="tg-dots tg-dots-teal" aria-hidden="true"><i /><i /><i /></span> Listening…</>
         : voice.now.id === msg.id ? <><span className="tg-dots" aria-hidden="true"><i /><i /><i /></span> Speaking…</>
           : idle}
     </p>
@@ -841,6 +1041,7 @@ export default function TalkingGuide() {
             <button className="tg-btn tg-btn-gold tg-btn-big" onClick={confirmYes}>✓ Yes, continue</button>
             <button className="tg-btn tg-btn-big" onClick={confirmChange}>{confirm.changeLabel}</button>
             {Recognition && guided && <MicButton on={micOn} hearing={hearing} onClick={micButton} />}
+            {canSpeak && sound}
           </div>
           {wordsShown && <Hearing hearing={hearing} heard={heardLast} />}
         </div>
@@ -850,13 +1051,9 @@ export default function TalkingGuide() {
         <div className="tg-bubble" role="dialog" aria-label="Message from Physio Chandra's virtual assistant">
           <button className="tg-icon tg-bubble-x" onClick={tuckAway} aria-label="Close message"><Close /></button>
           <p className="tg-bubble-name">Virtual assistant <TextToggle /></p>
-          <Words msg={lastGuide} idle="Tap Listen to hear me." />
+          <Words msg={lastGuide} idle="Here to help whenever you need me." />
           <div className="tg-bubble-actions">
-            {canSpeak && (
-              <button className="tg-btn tg-btn-gold" onClick={() => listen(lastGuide)} aria-pressed={voice.now.id === lastGuide.id}>
-                {voice.now.id === lastGuide.id ? <><StopIcon /> Stop</> : <><Play /> Listen</>}
-              </button>
-            )}
+            {canSpeak && sound}
             {guided && stage === 'draw' && !demoOn && (
               <button className="tg-btn" onClick={startDemo}>Show me again</button>
             )}
@@ -875,10 +1072,15 @@ export default function TalkingGuide() {
               <p className="tg-chat-sub">Ready-made answers · {hasRecordings() ? 'AI copy of Chandra’s voice' : 'computer voice'} · nothing you type is sent</p>
             </div>
             {canSpeak && (
-              <button className="tg-icon" onClick={() => setVoice(!voiceOn)} aria-pressed={voiceOn}
-                aria-label={voiceOn ? 'Turn the voice off' : 'Turn the voice on'} title={voiceOn ? 'Voice on' : 'Voice off'}>
+              <button className="tg-icon" onClick={() => setVoice(!voiceOn)} aria-pressed={!voiceOn}
+                aria-label={voiceOn ? 'Mute' : 'Unmute'} title={voiceOn ? 'Mute' : 'Unmute'}>
                 <Speaker on={voiceOn} />
               </button>
+            )}
+            {canSpeak && (
+              <span className="tg-sound tg-sound-head">
+                <SoundControlsVolumeOnly vol={vol} onVol={changeVolume} />
+              </span>
             )}
             {Recognition && micOn && (
               <button className="tg-icon" onClick={() => micOff(false)} aria-pressed="true"
@@ -969,6 +1171,8 @@ export default function TalkingGuide() {
         @keyframes tg-ping { 0% { box-shadow: 0 0 0 0 rgba(201,169,110,0.7); } 100% { box-shadow: 0 0 0 10px rgba(201,169,110,0); } }
 
         .tg-lids { opacity: 0; animation: tg-blink 5.3s infinite; }
+        .tg-mouth { opacity: 0; transition: opacity 0.18s ease; }
+        .tg-talk .tg-mouth { opacity: 1; }
         @keyframes tg-blink { 0%, 94%, 97.5%, 100% { opacity: 0; } 95%, 96.5% { opacity: 1; } }
         .tg-head { transform-origin: 420px 930px; }
         .tg-talk .tg-head { animation: tg-nod 2.6s ease-in-out infinite; }
@@ -1023,6 +1227,15 @@ export default function TalkingGuide() {
         .tg-btn-gold { background: ${GOLD}; border-color: ${GOLD}; color: ${NAVY}; }
         .tg-btn-big { min-height: 48px; padding: 10px 20px; font-size: 15.5px; flex: 1 1 auto; justify-content: center; }
         .tg-confirm { border-color: ${GOLD}; }
+        .tg-sound { position: relative; display: inline-flex; align-items: center; gap: 4px; }
+        .tg-volpop {
+          position: absolute; bottom: calc(100% + 8px); left: 0; z-index: 2; display: flex; align-items: center; gap: 10px;
+          padding: 10px 14px; border-radius: 12px; background: ${NAVY}; border: 1px solid rgba(201,169,110,0.45);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.5); white-space: nowrap;
+        }
+        .tg-sound-head .tg-volpop { bottom: auto; top: calc(100% + 6px); left: auto; right: 0; }
+        .tg-volpop input { width: 140px; accent-color: ${GOLD}; }
+        .tg-volnum { font-size: 12.5px; color: rgba(255,255,255,0.8); min-width: 36px; text-align: right; }
         .tg-note { font-size: 12.5px; line-height: 1.5; color: rgba(255,255,255,0.65); margin: -4px 0 14px; }
         .tg-mic {
           display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; min-width: 40px;

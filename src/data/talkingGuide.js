@@ -35,7 +35,7 @@ import { GUIDE_AUDIO } from './guideAudio.js'
 export const PAGE_MESSAGES = {
   'guide:landing': {
     open: true,
-    text: "Hey there! I'm the virtual assistant of Physio Chandra. Welcome! Chandra is a registered physiotherapist in Surrey and Burnaby. This guide helps you describe your pain before your visit, in about five minutes. You mark where it hurts on a 3D body and answer a few short questions. At the end you'll see general information, not a diagnosis, and you can book an assessment if you'd like. Tap Start when you're ready, or Start with voice guide if you'd like me to talk you through each step.",
+    text: "Hey there, and welcome! I'm the virtual assistant of Physio Chandra, and it's great to have you here. Chandra is a registered physiotherapist in Surrey and Burnaby. This guide helps you describe your pain before your visit, in about five minutes. You mark where it hurts on a 3D body and answer a few short questions. At the end you'll see general information, not a diagnosis, and you can book an assessment if you'd like. Tap Start when you're ready, or Start with voice guide if you'd like me to talk you through each step.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
   'guide:guide': {
@@ -374,23 +374,35 @@ export const DEFAULT_CHIPS = ['what-is-this', 'booking', 'privacy', 'about-chand
       else exists.
    Only the guide's own pre-written words are read out; what a visitor
    types is never spoken. */
+/* Chandra, 10 Oct 2026: always a MALE voice, soft, with good bass. Deep,
+   warm voices first; a Canadian accent is a bonus, not a must. */
 export const PREFERRED_VOICES = [
-  'Liam',                        // Edge: English (Canada), natural: the BC accent Chandra asked for
-  'Andrew',                      // Edge: warm and gentle, natural
-  'Brian',                       // Edge: calm, friendly, natural
-  'Prabhat',                     // Edge: English (India), natural
-  'Christopher', 'Guy', 'Ryan', 'Thomas', 'William',                    // Edge natural
-  'Rishi', 'Daniel', 'Evan', 'Aaron', 'Nathan', 'Tom',                   // Apple
+  'BrianMultilingual',           // Edge: Chandra's pick, 10 Oct 2026 (after a listening test)
+  'Brian Multilingual',
+  'Christopher',                 // Edge: deep (Chandra found Andrew too high)
+  'Guy',                         // Edge: low and warm
+  'Davis',                       // Edge: calm and deep
+  'Andrew',                      // Edge: warm, but higher
+  'Brian',                       // Edge: calm, friendly
+  'Liam',                        // Edge: English (Canada)
+  'Roger', 'Eric', 'Steffan', 'Ryan', 'Thomas', 'William', 'Prabhat',   // Edge natural, male
+  'Evan', 'Nathan', 'Aaron', 'Daniel', 'Rishi', 'Tom', 'Arthur',         // Apple, male
   'Google UK English Male',      // Chrome
-  'Ravi', 'Male',
+  'Microsoft Mark', 'Microsoft David', 'Ravi', 'Male',                   // last resort: older but male
 ]
+/* Never these (female voices), whatever else is on the device. */
+export const FEMALE_VOICES = ['Female', 'Zira', 'Hazel', 'Susan', 'Heera', 'Aria', 'Jenny', 'Michelle', 'Ana', 'Clara', 'Emma',
+  'Ava', 'Libby', 'Sonia', 'Maisie', 'Natasha', 'Neerja', 'Leah', 'Luna', 'Molly', 'Sara', 'Elizabeth', 'Nancy', 'Amber',
+  'Ashley', 'Cora', 'Jane', 'Monica', 'Emily', 'Abbi', 'Bella', 'Hollie', 'Olivia', 'Mia', 'Yan', 'Rosa', 'Samantha', 'Karen',
+  'Moira', 'Tessa', 'Fiona', 'Victoria', 'Allison', 'Serena', 'Catherine', 'Veena', 'Kate', 'Martha', 'Nicky', 'Zoe',
+  'Google US English', 'Google UK English Female']
 export const NATURAL_MARKS = ['Natural', 'Neural', 'Enhanced', 'Premium', 'Siri']
-export const ROBOTIC_VOICES = ['Microsoft David', 'Microsoft Mark', 'Microsoft Zira', 'Microsoft Hazel', 'Microsoft George',
+export const ROBOTIC_VOICES = ['Microsoft Zira', 'Microsoft Hazel',
   'eSpeak', 'Fred', 'Albert', 'Zarvox', 'Bad News', 'Bells', 'Boing', 'Bubbles', 'Cellos', 'Jester', 'Junior', 'Organ',
   'Ralph', 'Superstar', 'Trinoids', 'Whisper', 'Wobble', 'Grandpa', 'Grandma', 'Rocko', 'Eddy', 'Flo', 'Kathy']
-/* Natural speed (Chandra found 0.9 a little slow), the voice's own pitch,
-   and a little quieter, so it sounds soft rather than announced. */
-export const VOICE_STYLE = { rate: 1, pitch: 1, volume: 0.85 }
+/* Natural speed (Chandra found 0.9 a little slow), a slightly lower pitch
+   for more bass, and a little quieter, so it sounds soft, not announced. */
+export const VOICE_STYLE = { rate: 1, pitch: 0.88, volume: 0.85 }
 
 /* ── Matching a typed question ─────────────────────────────────────────────
    Done on this device. Lower case, punctuation dropped, then each topic's
