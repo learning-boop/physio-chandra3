@@ -7,7 +7,7 @@ import Footer from '../components/Footer'
    Keep it in step with what the site actually does: if the pain guide, the
    AI overview (api/pain-analysis.js) or the hosting changes, update this. */
 
-const UPDATED = 'September 28, 2026'
+const UPDATED = 'October 10, 2026'
 
 const sections = [
   {
@@ -23,6 +23,15 @@ const sections = [
       'Your drawing and answers are worked through on your own device, in your browser. They are not saved by this website and are cleared when you close or restart the guide, unless you choose to share an anonymous copy (see below).',
       'Before the safety questions, the guide asks your age range and your sex assigned at birth, so it can leave out questions that cannot apply to you (for example, pregnancy questions). Your sex assigned at birth is used only for that, on your device: it is not saved, not sent anywhere, and not included in your summary, your PDF, the AI overview or the anonymous copy. You can choose "Intersex, or prefer not to say", and every question is then asked.',
       'It also asks whether you have been told you have diabetes or high blood sugar (and, when it matters for your answers, a few details about it), whether you take steroid medicine, whether you are pregnant or have given birth in the last 12 months (asked only when it could apply, with how the baby was born and, while pregnant, what your maternity team has advised, both optional), and (optionally) whether you have osteogenesis imperfecta (with a few optional details about it before your results). If you tick osteopenia or low bone density before your results, a few optional questions about past fractures, falls and bone risk factors (such as smoking, alcohol and some health conditions) are asked too; no risk score is calculated or shown. These choose which safety questions come first and shape your results. They appear in your summary and PDF (so Chandra can plan around them if you send it), but are not included in the anonymous copy or sent for the AI overview.',
+    ],
+  },
+  {
+    title: 'The virtual assistant',
+    body: [
+      'The face in the corner of each page is a virtual assistant. It is not Chandra and not a live chat: its answers are written in advance. What you type to it is matched to those answers on your own device and is not sent anywhere or saved.',
+      'Its voice is made by your browser, or is a recording made in advance with an AI copy of Chandra’s voice. Reading the words aloud happens on your device; with some browsers (for example Microsoft Edge) the browser maker’s online voice service is used to read the assistant’s own words aloud, but never what you type or answer.',
+      'With the voice guide you can choose to answer by speaking. The microphone is only used if you agree to it on screen and then allow it in your browser’s own permission prompt. While it is on, your browser turns your speech into text. In most browsers this is done by the browser maker’s speech service (Google for Chrome, Microsoft for Edge, Apple for Safari), so what you say while the microphone is listening is sent to that company to be turned into text, under its own privacy terms; some browsers can do this on your device, and the guide asks for that where it is offered. This website does not receive, record or keep your voice. Only the text is used, on your device, to pick your answer, and every answer is read back for you to confirm. On the safety questions, anything that applies to you must be tapped: speech can only say that none of them apply, and that is read back for you to confirm too.',
+      'The microphone listens only right after the assistant asks you something, never while it is talking, and the assistant’s face glows while it listens. Say “stop listening”, tap the microphone button, or block the microphone in your browser settings at any time, and carry on by tapping.',
     ],
   },
   {

@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo } from '../data/guideStage'
 import {
-  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, audioFor, hasRecordings, findReply, forDevice,
+  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, MIC_ASK, MIC_NOTE, VOICE, audioFor, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
+import { command, yesNo, saysNone, matchOptions } from '../data/voiceMatch'
 
 /* ── The talking guide: Chandra's face in the bottom-left corner ──────────
    On every page (Chandra, 10 Oct 2026). The face is the logo itself
@@ -29,6 +30,13 @@ import {
      Undo glow), and each answer is read back with "Yes, continue" /
      "Change it" before the guide moves on. PainAssessment says what each
      screen reads back and how it goes on (src/data/guideStage.js).
+   - Answering by voice: only after the patient agrees (MIC_ASK, with the
+     privacy note) and the browser's own permission prompt. The microphone
+     listens only after the assistant has finished asking something, never
+     while it talks, and the face glows teal while it listens. What was
+     heard is matched on the device (src/data/voiceMatch.js); a safety item
+     is never ticked from speech. "Stop listening", the mic button or the
+     chat's mic switch turn it off.
    - It stays out of the way of medical advice: on the "see a doctor" page it
      is not shown at all, and any message that sounds like an emergency gets
      9-1-1 / 9-8-8 first. */
@@ -86,6 +94,22 @@ function pickVoice() {
     return n
   }
   return (chosenVoice = pool.reduce((best, v) => (score(v) > score(best) ? v : best), pool[0]))
+}
+
+/* ── Listening ─────────────────────────────────────────────────────────────
+   The browser's speech recognition (Chrome, Edge, Safari; not Firefox).
+   Where the browser can do it on the device, it is asked to. */
+const Recognition = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)
+let onDevice = null
+async function canRecogniseOnDevice() {
+  if (onDevice !== null) return onDevice
+  onDevice = false
+  try {
+    if (Recognition && typeof Recognition.available === 'function') {
+      onDevice = (await Recognition.available({ langs: ['en-CA'], processLocally: true })) === 'available'
+    }
+  } catch { /* not offered */ }
+  return onDevice
 }
 
 /* level: a ref the face reads every frame ({ speaking, pulse, analyser }). */
@@ -252,6 +276,7 @@ const Play = () => <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="
 const StopIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /></svg>
 const Down = () => <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
 const Close = () => <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+const Mic = () => <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" stroke="none" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" /></svg>
 const Send = () => <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20.5l18-8.5L3 3.5v6.6l12 1.9-12 1.9z" fill="currentColor" /></svg>
 
 /* A message, with the sentence being read out highlighted. */
@@ -260,6 +285,22 @@ function Spoken({ text, active }) {
   return splitSentences(text).map((s, i) => (
     <span key={i} className={active === -2 || active === i ? 'tg-now' : 'tg-later'}>{s} </span>
   ))
+}
+
+/* The round microphone button in a message: ask, listen, or stop. */
+function MicButton({ on, hearing, onClick }) {
+  return (
+    <button className={'tg-mic' + (on ? ' on' : '') + (hearing ? ' tg-hearing' : '')} onClick={onClick}
+      aria-label={!on ? 'Answer by speaking' : hearing ? 'Stop listening' : 'Speak your answer'}>
+      <Mic />{!on ? ' Speak' : hearing ? ' Listening' : ''}
+    </button>
+  )
+}
+/* While listening: what is being heard; afterwards: what was understood. */
+function Hearing({ hearing, heard }) {
+  if (hearing) return <p className="tg-heard" aria-live="polite"><b>Listening…</b> {hearing.text}</p>
+  if (heard) return <p className="tg-heard">You said: <b>“{heard}”</b></p>
+  return null
 }
 
 /* ── The guide ─────────────────────────────────────────────────────────── */
@@ -292,6 +333,14 @@ export default function TalkingGuide() {
   voiceOnRef.current = voiceOn || guided
   const guidedRef = useRef(guided)
   guidedRef.current = guided
+  // Answering by voice: agreed this visit (kept for the tab only).
+  const [micOn, setMicOn] = useState(() => !!Recognition && store.get('sessionStorage', 'tg-mic') === 'on')
+  const micOnRef = useRef(micOn)
+  micOnRef.current = micOn
+  const [hearing, setHearing] = useState(null)      // { text } while the microphone listens
+  const [heardLast, setHeardLast] = useState('')    // what was last understood, shown under the message
+  const micAsked = useRef(store.get('sessionStorage', 'tg-mic') !== null)
+  const afterConsent = useRef(null)
 
   const lastGuide = [...log].reverse().find((m) => m.from === 'guide')
 
@@ -337,6 +386,7 @@ export default function TalkingGuide() {
     }
     const text = forDevice(page.text, phone)
     const msg = addGuide(text, { audio: page.audio })
+    if (guidedRef.current && stage === 'guide' && Recognition && !micAsked.current) offerMicAfter.current = msg.id
     setChips(page.chips || DEFAULT_CHIPS)
     const seen = seenList().includes(ctxKey)
     const speakNow = voiceOnRef.current && activated
@@ -354,6 +404,154 @@ export default function TalkingGuide() {
     // Only a change of page or step brings a new message.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctxKey, hidden, phone])
+
+  /* ── Answering by voice ──────────────────────────────────────────────────
+     After the assistant asks something, it listens once (expect: 'answer'
+     on a question, 'confirm' on a read-back, 'chat' in the chat). Never
+     while it is talking: listening starts when the speech has finished. */
+  const offerMicAfter = useRef(null)
+  const rec = useRef(null)
+  const recKind = useRef(null)
+  const expectNext = useRef(null)
+  const misses = useRef(0)
+  const stopListening = useCallback(() => {
+    expectNext.current = null
+    if (rec.current) { try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
+    setHearing(null)
+  }, [])
+  const heardRef = useRef(null)   // set below; the handler for what was heard
+  const startListening = useCallback(async (kind) => {
+    if (!Recognition || !micOnRef.current) return
+    if (rec.current) { try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
+    const r = new Recognition()
+    r.lang = 'en-CA'
+    r.interimResults = true
+    r.maxAlternatives = 3
+    r.continuous = false
+    try { if (await canRecogniseOnDevice()) r.processLocally = true } catch { /* not offered */ }
+    let finals = []
+    r.onresult = (e) => {
+      let interim = ''
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const res = e.results[i]
+        if (res.isFinal) finals = Array.from(res).map((alt) => alt.transcript.trim()).filter(Boolean)
+        else interim += res[0].transcript
+      }
+      setHearing({ text: finals[0] || interim })
+    }
+    r.onerror = (e) => {
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        setMicOn(false)
+        store.set('sessionStorage', 'tg-mic', 'off')
+        heardRef.current && heardRef.current(null, 'denied')
+      }
+    }
+    r.onend = () => {
+      if (rec.current === r) rec.current = null
+      setHearing(null)
+      if (finals.length && heardRef.current) heardRef.current(finals, kind)
+    }
+    rec.current = r
+    recKind.current = kind
+    setHearing({ text: '' })
+    try { r.start() } catch { rec.current = null; setHearing(null) }
+  }, [])
+  // Listen once the current speech has finished (or now, if it has).
+  const listenFor = useCallback((kind) => {
+    if (!micOnRef.current || !Recognition) return
+    expectNext.current = kind
+  }, [])
+  useEffect(() => {
+    if (voice.now.id !== null) {
+      // The assistant is talking: never listen to itself (and listen again
+      // for the same thing once it has finished).
+      if (rec.current) {
+        expectNext.current = expectNext.current || recKind.current
+        try { rec.current.abort() } catch { /* already stopped */ }
+        rec.current = null
+        setHearing(null)
+      }
+      return
+    }
+    if (offerMicAfter.current !== null) { offerMicAfter.current = null; askMic(); return }
+    if (!expectNext.current || !micOnRef.current) return
+    // A short pause first: speech that is about to start (see useVoice)
+    // must not be heard, and the expectation stays until it is.
+    const t = setTimeout(() => {
+      const ss = window.speechSynthesis
+      if (ss && (ss.speaking || ss.pending)) return
+      const kind = expectNext.current
+      expectNext.current = null
+      if (kind) startListening(kind)
+    }, 400)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [voice.now.id, micOn, startListening])
+  useEffect(() => () => stopListening(), [stopListening])
+  useEffect(() => { stopListening() }, [pathname, stopListening])
+
+  // Saying something (a fixed message) and then listening for the reply.
+  const sayThen = (text, kind) => {
+    const msg = addGuide(text)
+    if (modeRef.current === 'face') setMode('bubble')
+    say(msg)
+    if (kind) listenFor(kind)
+  }
+
+  // Asking for the microphone. The browser's own prompt follows the tap.
+  const askMic = (then) => {
+    micAsked.current = true
+    afterConsent.current = then || null
+    const msg = addGuide(MIC_ASK)
+    setMode('mic')
+    say(msg)
+  }
+  const micYes = () => {
+    voice.stop()
+    const done = (ok) => {
+      setMicOn(ok)
+      micOnRef.current = ok
+      store.set('sessionStorage', 'tg-mic', ok ? 'on' : 'off')
+      const then = afterConsent.current
+      afterConsent.current = null
+      if (!ok) { sayThen(VOICE.denied); return }
+      if (then) { then(); return }
+      const sc = getGuideScreen()
+      sayThen(VOICE.on, sc && sc.voice ? 'answer' : null)
+    }
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => { stream.getTracks().forEach((t) => t.stop()); done(true) })
+        .catch(() => done(false))
+    } else done(true)
+  }
+  const micNo = () => {
+    voice.stop()
+    store.set('sessionStorage', 'tg-mic', 'off')
+    afterConsent.current = null
+    setMode('face')
+  }
+  const micOff = (sayIt = true) => {
+    stopListening()
+    setMicOn(false)
+    micOnRef.current = false
+    store.set('sessionStorage', 'tg-mic', 'off')
+    if (sayIt) sayThen(VOICE.off)
+  }
+  // The round mic button: ask first; then listen now, or stop listening.
+  const micButton = () => {
+    if (!micOn) {
+      // From the chat, come back to it and listen for the question.
+      askMic(modeRef.current === 'chat' ? () => { setMode('chat'); startListening('chat') } : undefined)
+      return
+    }
+    if (hearing) { stopListening(); return }
+    voice.stop()
+    const sc = guided ? getGuideScreen() : null
+    const kind = modeRef.current === 'confirm' ? 'confirm' : modeRef.current === 'chat' || !sc ? 'chat' : 'answer'
+    if (kind === 'chat' && modeRef.current !== 'chat') setMode('chat')
+    startListening(kind)
+  }
 
   /* ── Voice guide: the drawing demo ── */
   const demo = useRef({ msgId: null, byVoice: false, timers: [] })
@@ -407,8 +605,10 @@ export default function TalkingGuide() {
     setConfirm({ key: sc.key, changeLabel: sc.changeLabel || 'Change it' })
     setMode('confirm')
     say(msg)
+    misses.current = 0
+    listenFor('confirm')
     return true
-  }, [addGuide, say])
+  }, [addGuide, say, listenFor])
   useEffect(() => {
     clearTimeout(askTimer.current)
     const sc = guided ? getGuideScreen() : null
@@ -423,11 +623,14 @@ export default function TalkingGuide() {
         const msg = addGuide(intro + sc.say)
         setMode('bubble')
         say(msg)
+        misses.current = 0
+        if (sc.voice) listenFor('answer')
       } else if (modeRef.current === 'confirm') setMode('face')
       return
     }
     if (sc.sig === screenSeen.current.sig) return
     screenSeen.current.sig = sc.sig
+    if (rec.current) stopListening()
     if (modeRef.current === 'confirm') { voice.stop(); setConfirm(null); setMode('face') }
     if (!sc.ready) return
     if (sc.auto === true) askTimer.current = setTimeout(askBack, 700)
@@ -455,6 +658,7 @@ export default function TalkingGuide() {
   }, [guided, askBack])
 
   const confirmYes = () => {
+    stopListening()
     voice.stop()
     setConfirm(null)
     setMode('face')
@@ -462,10 +666,58 @@ export default function TalkingGuide() {
     if (sc && sc.ready) sc.proceed()
   }
   const confirmChange = () => {
+    stopListening()
     setConfirm(null)
     const msg = addGuide(CHANGE_REPLY)
     setMode('bubble')
     say(msg)
+    if (getGuideScreen()?.voice) listenFor('answer')
+  }
+
+  // What was heard: a command, yes / no, an answer, or a chat question.
+  const retry = (kind) => {
+    misses.current += 1
+    if (misses.current >= 3) { sayThen(VOICE.giveUp); return }
+    sayThen(kind === 'confirm' ? VOICE.yesNo : VOICE.again, kind)
+  }
+  heardRef.current = (alts, kind) => {
+    if (kind === 'denied') { sayThen(VOICE.denied); return }
+    const text = alts[0]
+    setHeardLast(text)
+    const cmd = command(text)
+    if (cmd === 'stop') { micOff(true); return }
+    if (cmd === 'help') { sayThen(VOICE.help, kind); return }
+    if (cmd === 'repeat' && lastGuide) { say(lastGuide); listenFor(kind); return }
+    if (cmd === 'back' && kind !== 'chat') {
+      const back = document.querySelector('.pa-section .pa-actions > button:not(.pa-primary)')
+      if (back) { setConfirm(null); back.click() }
+      return
+    }
+    if (kind === 'chat') { reply(text, findReply(text)); return }
+    if (kind === 'confirm') {
+      const yn = alts.map(yesNo).find(Boolean)
+      if (yn === 'yes') confirmYes()
+      else if (yn === 'no') confirmChange()
+      else retry('confirm')
+      return
+    }
+    const sc = getGuideScreen()
+    if (!sc || !sc.voice) return
+    if (sc.voice === 'answer') {
+      let ids = []
+      for (const a of alts) { ids = matchOptions(a, sc.options, sc.multi); if (ids.length) break }
+      if (!ids.length) { retry('answer'); return }
+      misses.current = 0
+      ids.forEach((id) => sc.pick(id))
+      // One-answer questions read back by themselves; the rest are asked here.
+      if (sc.multi || sc.auto !== true) setTimeout(() => askBack(), 500)
+    } else if (sc.voice === 'none') {
+      if (alts.some(saysNone)) setTimeout(() => askBack(), 100)
+      else sayThen(VOICE.safetyTap, 'answer')
+    } else if (sc.voice === 'confirm') {
+      if (alts.some((a) => yesNo(a) === 'yes')) askBack()
+      else sayThen(VOICE.tapThenDone, 'answer')
+    }
   }
 
   // Keep the newest message in view.
@@ -545,6 +797,18 @@ export default function TalkingGuide() {
 
   return (
     <div ref={rootRef} className={'tg-root' + (mode === 'chat' ? ' tg-open' : '')}>
+      {mode === 'mic' && lastGuide && (
+        <div className="tg-bubble tg-confirm" role="dialog" aria-label="Answer by speaking?">
+          <p className="tg-bubble-name">Virtual assistant</p>
+          <p className="tg-bubble-text" aria-live="polite"><Spoken text={lastGuide.text} active={voice.now.id === lastGuide.id ? voice.now.idx : -1} /></p>
+          <p className="tg-note">{MIC_NOTE} <Link to="/privacy" className="tg-link">Privacy notice</Link></p>
+          <div className="tg-bubble-actions">
+            <button className="tg-btn tg-btn-gold tg-btn-big" onClick={micYes}><Mic /> Use my microphone</button>
+            <button className="tg-btn tg-btn-big" onClick={micNo}>No thanks, I’ll tap</button>
+          </div>
+        </div>
+      )}
+
       {mode === 'confirm' && confirm && lastGuide && (
         <div className="tg-bubble tg-confirm" role="dialog" aria-label="Please check your answer">
           <p className="tg-bubble-name">Virtual assistant</p>
@@ -552,7 +816,9 @@ export default function TalkingGuide() {
           <div className="tg-bubble-actions">
             <button className="tg-btn tg-btn-gold tg-btn-big" onClick={confirmYes}>✓ Yes, continue</button>
             <button className="tg-btn tg-btn-big" onClick={confirmChange}>{confirm.changeLabel}</button>
+            {Recognition && guided && <MicButton on={micOn} hearing={hearing} onClick={micButton} />}
           </div>
+          <Hearing hearing={hearing} heard={heardLast} />
         </div>
       )}
 
@@ -571,7 +837,9 @@ export default function TalkingGuide() {
               <button className="tg-btn" onClick={startDemo}>Show me again</button>
             )}
             <button className="tg-btn" onClick={openChat}>Ask a question</button>
+            {Recognition && guided && <MicButton on={micOn} hearing={hearing} onClick={micButton} />}
           </div>
+          {guided && <Hearing hearing={hearing} heard={heardLast} />}
         </div>
       )}
 
@@ -586,6 +854,12 @@ export default function TalkingGuide() {
               <button className="tg-icon" onClick={() => setVoice(!voiceOn)} aria-pressed={voiceOn}
                 aria-label={voiceOn ? 'Turn the voice off' : 'Turn the voice on'} title={voiceOn ? 'Voice on' : 'Voice off'}>
                 <Speaker on={voiceOn} />
+              </button>
+            )}
+            {Recognition && micOn && (
+              <button className="tg-icon" onClick={() => micOff(false)} aria-pressed="true"
+                aria-label="Switch the microphone off" title="Microphone on">
+                <Mic />
               </button>
             )}
             <button className="tg-icon" onClick={tuckAway} aria-label="Close the guide"><Down /></button>
@@ -630,12 +904,17 @@ export default function TalkingGuide() {
             <label htmlFor="tg-input" className="tg-sr">Ask a question</label>
             <input id="tg-input" ref={inputRef} value={draft} onChange={(e) => setDraft(e.target.value)}
               placeholder="Ask a question…" autoComplete="off" maxLength={200} />
+            {Recognition && (
+              <button type="button" className={'tg-send tg-send-mic' + (hearing ? ' tg-hearing' : '')} onClick={micButton}
+                aria-label={hearing ? 'Stop listening' : 'Ask by speaking'}><Mic /></button>
+            )}
             <button type="submit" className="tg-send" aria-label="Send" disabled={!draft.trim()}><Send /></button>
           </form>
+          {hearing && <p className="tg-listening-line">Listening… {hearing.text}</p>}
         </section>
       )}
 
-      <button className={'tg-face' + (speaking ? ' tg-face-talk' : '')} onClick={toggleFace}
+      <button className={'tg-face' + (speaking ? ' tg-face-talk' : '') + (hearing ? ' tg-face-listen' : '')} onClick={toggleFace}
         aria-label={mode === 'face' ? 'Open the virtual assistant' : 'Close the virtual assistant'} aria-expanded={mode !== 'face'}>
         <Face level={level} speaking={speaking} />
         {unread && mode === 'face' && <span className="tg-dot" aria-hidden="true" />}
@@ -705,6 +984,20 @@ export default function TalkingGuide() {
         .tg-btn-gold { background: ${GOLD}; border-color: ${GOLD}; color: ${NAVY}; }
         .tg-btn-big { min-height: 48px; padding: 10px 20px; font-size: 15.5px; flex: 1 1 auto; justify-content: center; }
         .tg-confirm { border-color: ${GOLD}; }
+        .tg-note { font-size: 12.5px; line-height: 1.5; color: rgba(255,255,255,0.65); margin: -4px 0 14px; }
+        .tg-mic {
+          display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; min-width: 40px;
+          padding: 8px 12px; border-radius: 999px; cursor: pointer; font: 500 13.5px var(--font-body);
+          border: 1px solid rgba(92,200,194,0.7); background: rgba(92,200,194,0.12); color: #7DD8D3;
+        }
+        .tg-mic.on { background: rgba(92,200,194,0.2); }
+        .tg-hearing, .tg-mic.tg-hearing { background: #5CC8C2; color: ${NAVY}; animation: tg-listen 1.2s ease-in-out infinite; }
+        @keyframes tg-listen { 0%, 100% { box-shadow: 0 0 0 0 rgba(92,200,194,0.6); } 50% { box-shadow: 0 0 0 8px rgba(92,200,194,0); } }
+        .tg-face-listen { box-shadow: 0 8px 24px rgba(0,0,0,0.45), 0 0 0 4px #5CC8C2; animation: tg-listen 1.2s ease-in-out infinite; }
+        .tg-heard { font-size: 13px; color: rgba(255,255,255,0.7); margin: 10px 0 0; }
+        .tg-heard b { color: #7DD8D3; font-weight: 500; }
+        .tg-listening-line { font-size: 13px; color: #7DD8D3; margin: -4px 14px 10px; }
+        .tg-send-mic { background: rgba(92,200,194,0.18); color: #7DD8D3; }
         .tg-btn-gold:hover { background: ${GOLD_LIGHT}; }
         .tg-btn:focus-visible, .tg-icon:focus-visible, .tg-chip:focus-visible, .tg-send:focus-visible, .tg-replay:focus-visible, .tg-link:focus-visible {
           outline: 2px solid ${GOLD_LIGHT}; outline-offset: 2px;
@@ -770,6 +1063,7 @@ export default function TalkingGuide() {
           .tg-chat { height: min(70dvh, calc(100dvh - 190px)); }
         }
         @media (prefers-reduced-motion: reduce) {
+          .tg-hearing, .tg-face-listen { animation: none; }
           .tg-lids, .tg-talk .tg-head, .tg-dot, .tg-bubble, .tg-chat { animation: none; }
           .tg-face, .tg-face-talk { transition: none; }
         }

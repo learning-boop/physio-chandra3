@@ -113,6 +113,24 @@ export const DEMO = {
   computer: "Let me show you how. To turn the body, click and drag across it, like this. Then click Draw, and trace over every place that hurts, like this. If you make a mistake, click Undo. Now it's your turn. When you've finished, I'll read back what you marked.",
 }
 export const DEMO_STEPS = [null, 'turn', 'draw', 'undo', null, null]
+/* ── Answering by voice (Chandra, 10 Oct 2026) ─────────────────────────────
+   Only after the patient agrees (MIC_ASK, with MIC_NOTE on screen) and the
+   browser's own permission prompt. Keep MIC_NOTE in step with the privacy
+   notice (src/pages/PrivacyPage.jsx, "The virtual assistant"). */
+export const MIC_ASK = "Would you like to answer by speaking instead of tapping? I'll listen after each question, and you can say yes or no when I check your answer."
+export const MIC_NOTE = 'To do this, your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. This website does not record or keep your voice. You can switch the microphone off at any time, or just tap instead.'
+export const VOICE = {
+  on: "Thank you. When the microphone glows, I'm listening. You can say your answer, or its letter.",
+  denied: "I can't use the microphone, so please tap your answers instead.",
+  off: "Okay, the microphone is off. You can tap your answers.",
+  again: "Sorry, I didn't catch that. Please say it again, or tap your answer.",
+  giveUp: "That's okay. Please tap your answer on the screen.",
+  yesNo: 'Please say yes or no, or tap a button.',
+  safetyTap: 'If one of these applies to you, please tap it on the screen. If none of them apply, say none.',
+  tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
+  help: 'You can say your answer, using the words on the button or its letter. When I check your answer, say yes or no. You can also say repeat, go back, or stop listening.',
+}
+
 /* Said when the visitor taps "Change it" after a read-back. */
 export const CHANGE_REPLY = 'Okay. Change your answer, and I will check it again.'
 
@@ -206,7 +224,7 @@ export const TOPICS = {
   privacy: {
     q: 'Is my information private?',
     keys: ['privacy', 'private', 'data', 'stored', 'store', 'secure', 'who sees', 'confidential', 'information', 'record'],
-    a: 'Your answers stay on this device unless you choose to share them, for example by emailing your summary to Chandra or asking for the optional AI overview. Nothing you type here is sent anywhere. The privacy notice has the details.',
+    a: 'Your answers stay on this device unless you choose to share them, for example by emailing your summary to Chandra or asking for the optional AI overview. Nothing you type here is sent anywhere. If you choose to answer by speaking, your browser’s speech service turns your voice into text; this website does not record or keep your voice. The privacy notice has the details.',
     link: { to: '/privacy', label: 'Read the privacy notice' },
     next: ['save', 'what-is-this'],
   },
@@ -254,6 +272,13 @@ export const TOPICS = {
     keys: ['child', 'children', 'kid', 'kids', 'son', 'daughter', 'baby', 'toddler', 'teen', 'year old', 'years old', 'yr old', 'paediatric', 'pediatric'],
     a: 'Chandra sees children aged 5 and over, with a parent or guardian. For a child under 5, please see your family doctor or a children’s health service.',
     next: ['booking'],
+  },
+  microphone: {
+    q: 'What happens with my voice?',
+    keys: ['microphone', 'mic', 'listening', 'listen to me', 'recording', 'record my', 'my voice', 'speak my answers', 'talk to you', 'voice answers'],
+    a: 'You can answer by speaking only if you agree and allow the microphone. Your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text, and only the text is used, on this device, to pick your answer. This website does not record or keep your voice. Say stop listening, or tap the microphone, to switch it off.',
+    link: { to: '/privacy', label: 'Read the privacy notice' },
+    next: ['privacy'],
   },
   hours: {
     q: 'When are the clinics open?',
@@ -415,6 +440,8 @@ export function allSpokenTexts() {
   for (const r of SPECIAL_REPLIES) add('reply-' + r.id, r.a)
   both('demo', DEMO)
   add('change-reply', CHANGE_REPLY)
+  add('mic-ask', MIC_ASK)
+  for (const [k, t] of Object.entries(VOICE)) add('voice-' + k, t)
   add('fallback', FALLBACK.a)
   add('greeting', GREETING)
   return out

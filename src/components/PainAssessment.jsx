@@ -1586,6 +1586,10 @@ export default function PainAssessment() {
      This says, for the screen on show: what to read (say), what to read back
      (readBack), whether it can go on (ready), whether to ask as soon as an
      answer is picked (auto), and how to go on (proceed: its own Continue).
+     For answering by voice (the patient allowed the microphone): what can be
+     said (voice: 'answer' picks one of `options` with `pick`; 'confirm'
+     only takes "yes, that's all"; 'none' only takes "none of these" — a
+     safety item is never ticked from speech, it must be tapped).
      Answers are only read back on this device. */
   const guided = useGuided()
   const guideDemo = useGuideDemo()
@@ -1597,7 +1601,7 @@ export default function PainAssessment() {
       return {
         key: 'draw', ready: !drawBlocked, sig: `${history.lines}|${on.join(',')}`, auto: 'idle',
         readBack: on.length ? `You marked your ${words(on)}. Is that everything?` : '',
-        changeLabel: 'Keep drawing', proceed: () => setStage('about'),
+        changeLabel: 'Keep drawing', proceed: () => setStage('about'), voice: 'confirm',
       }
     }
     if (stage === 'about') {
@@ -1606,7 +1610,7 @@ export default function PainAssessment() {
       return {
         key: 'about', ready: aboutDone, sig: `${answers.age}|${birthSex}`,
         readBack: age && sex ? `Your age is ${age.toLowerCase()}, and your sex at birth is ${sex.toLowerCase()}. Is that right?` : 'Is everything on this page right?',
-        proceed: () => setStage(screening.emergency.length ? 'emergency' : 'physician'),
+        proceed: () => setStage(screening.emergency.length ? 'emergency' : 'physician'), voice: 'confirm',
       }
     }
     if (stage === 'emergency' || stage === 'physician') {
@@ -1619,7 +1623,7 @@ export default function PainAssessment() {
           ? 'First, some safety questions. Tick anything that is happening to you now. If none of them apply, tap None of these apply.'
           : 'Next, some signs a doctor may need to check. Tick any that fit you now. If none apply, tap None of these apply.',
         readBack: picked.length ? `You ticked: ${words(picked)}. Is that right?` : 'You said none of these apply to you right now. Is that right?',
-        proceed: () => safetyNext(stage),
+        proceed: () => safetyNext(stage), voice: picked.length ? 'confirm' : 'none',
       }
     }
     if (stage === 'injury') {
@@ -1631,6 +1635,9 @@ export default function PainAssessment() {
       return {
         key: `injury:${injuryQ}`, ready: labels.length > 0, sig: labels.join('|'), say: spoken(q.text), auto: !q.multi,
         readBack: `You chose: ${words(labels)}. Is that right?`, proceed: () => continueInjury(),
+        voice: 'answer', multi: !!q.multi,
+        options: arrangeOptions(q.options, q.text).map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
+        pick: (oid) => { if (!(q.multi ? Array.isArray(injuryDraft) && injuryDraft.includes(oid) : injuryDraft === oid)) tapInjury(q, oid) },
       }
     }
     if (stage === 'questions' && !fromReview) {
@@ -1650,6 +1657,22 @@ export default function PainAssessment() {
         say: spoken(q.group ? q.text : gateClosed ? q.gate.ask : q.text),
         auto: !q.group && !q.multi && !q.textarea,
         proceed: nextFromQuestion,
+        ...(q.group || q.textarea ? { voice: 'confirm' } : gateClosed ? {
+          voice: 'answer', multi: false,
+          options: [{ id: '__open', label: 'Yes, show me the list', letter: 'A' }, { id: q.gate.no, label: 'No', letter: 'B' }],
+          pick: (oid) => {
+            if (oid === '__open') setOpenLists((cur) => [...cur, q.id])
+            else setAnswer(q.id, [q.gate.no])
+          },
+        } : (() => {
+          const { head, tail } = arrangeSplit(q.options, q.text)
+          const other = q.multi ? [{ id: OTHER_ID, label: 'Something else', skip: true }] : []
+          const list = [...head, ...other, ...tail].map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i], skip: o.skip }))
+          return {
+            voice: 'answer', multi: !!q.multi, options: list,
+            pick: (oid) => { if (!isPicked(q, oid)) toggleAnswer(q, oid) },
+          }
+        })()),
       }
     }
     return null
