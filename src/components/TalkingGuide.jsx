@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech } from '../data/guideStage'
+import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect } from '../data/guideStage'
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, MIC_ASK, MIC_NOTE, VOICE, audioFor, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
@@ -63,7 +63,7 @@ const INK = '#231f1c'    // the logo's line colour
 const ASSESS_ROUTES = ['/', '/pain-mapper']
 /* In voice guide mode these steps are read out question by question (the
    screen's own words), not with the step's general tip. */
-const SCREEN_STAGES = ['emergency', 'physician', 'injury', 'questions']
+const SCREEN_STAGES = ['about', 'emergency', 'physician', 'injury', 'questions']
 const HIDDEN_ROUTES = ['/data-review']
 
 /* Small, failure-proof storage: private windows and blocked storage throw. */
@@ -520,7 +520,20 @@ export default function TalkingGuide() {
   // Chandra's recorded (cloned) voice when there is a recording of these
   // exact words; otherwise the browser's voice.
   const canSpeak = voice.supported || hasRecordings()
+  // Muted means silent, in every mode (the words still join the chat).
+  const soundRef = useRef(voiceOn)
+  soundRef.current = voiceOn
+  // The render that switches the voice guide on counts as unmuted, so its
+  // first message (said in this same render's effects) is heard.
+  const wasGuided = useRef(guided)
+  const unmuteFor = useRef(false)
+  if (guided && !wasGuided.current) unmuteFor.current = true
+  wasGuided.current = guided
+  // Held until the unmuted state has actually arrived (React can render
+  // the stage change before it).
+  if (unmuteFor.current) { if (voiceOn) unmuteFor.current = false; else soundRef.current = true }
   const say = useCallback((msg) => {
+    if (!soundRef.current) return
     const src = msg.audio || audioFor(msg.text)
     if (src || voice.supported) voice.speak(msg.id, msg.text, src)
   }, [voice])
@@ -804,9 +817,11 @@ export default function TalkingGuide() {
       setConfirm(null)
       if (sc.say) {
         // The step's general tip comes first, the first time (the safety pages' own words already say it).
-        const intro = page && (stage === 'questions' || stage === 'injury') && !seenList().includes(ctxKey) ? forDevice(page.text, phone) + ' ' : ''
+        const intro = page && (stage === 'questions' || stage === 'injury' || stage === 'about') && !seenList().includes(ctxKey) ? forDevice(page.text, phone) + ' ' : ''
         markSeen(ctxKey)
-        const msg = addGuide(intro + sc.say)
+        // Flash cards: say back the answer just given, then the next card.
+        const got = takeGuideReflect().replace(/[.s]+$/, '')
+        const msg = addGuide((got ? `Got it, ${got}. ` : '') + intro + sc.say)
         say(msg)
         misses.current = 0
         if (sc.voice) listenFor('answer')
@@ -887,13 +902,18 @@ export default function TalkingGuide() {
     const sc = getGuideScreen()
     if (!sc || !sc.voice) return
     if (sc.voice === 'answer') {
+      // Tick-all cards: "next" / "that's all" moves on.
+      if (sc.multi && alts.some((a) => /(next|done|that'?s (all|it)|nothing else|no more|finished|continue)/i.test(a))) { sc.proceed(); return }
       let ids = []
       for (const a of alts) { ids = matchOptions(a, sc.options, sc.multi); if (ids.length) break }
       if (!ids.length) { retry('answer'); return }
       misses.current = 0
       ids.forEach((id) => sc.pick(id))
-      // One-answer questions read back by themselves; the rest are asked here.
-      if (sc.multi || sc.auto !== true) setTimeout(() => askBack(), 500)
+      if (!sc.multi) return   // a one-answer card moves on by itself, and says it back
+      const picked = ids.map((id) => (sc.options.find((o) => o.id === id) || {}).label).filter(Boolean)
+      // "None of these" ends a tick-all card.
+      if (picked.some((l) => /^(none|no)/i.test(l))) { setTimeout(() => sc.proceed(), 400); return }
+      sayThen(`Got it, ${picked.join(', ')}. Anything else? Say next when you're done.`, 'answer')
     } else if (sc.voice === 'none') {
       if (alts.some(saysNone)) setTimeout(() => askBack(), 100)
       else sayThen(VOICE.safetyTap, 'answer')
@@ -973,6 +993,7 @@ export default function TalkingGuide() {
   }
 
   const setVoice = (on) => {
+    soundRef.current = on
     setVoiceOn(on)
     store.set('localStorage', 'tg-voice', on ? 'on' : 'off')
     setWaitTap(null)
@@ -989,9 +1010,13 @@ export default function TalkingGuide() {
 
   const listen = (msg) => {
     if (voice.now.id === msg.id) { voice.stop(); return }
-    if (!voiceOn) { setVoiceOn(true); store.set('localStorage', 'tg-voice', 'on') }
+    if (!voiceOn) { soundRef.current = true; setVoiceOn(true); store.set('localStorage', 'tg-voice', 'on') }
     say(msg)
   }
+  // "Start with voice guide" asks for the voice: sound back on if muted.
+  useEffect(() => {
+    if (guided && unmuteFor.current && !voiceOn) { setVoiceOn(true); store.set('localStorage', 'tg-voice', 'on') }
+  }, [guided])
 
   const reply = (question, r) => {
     setLog((l) => [...l.slice(-40), { id: nextId.current++, from: 'me', text: question }])

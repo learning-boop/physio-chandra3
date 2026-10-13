@@ -35,7 +35,7 @@ import { GUIDE_AUDIO } from './guideAudio.js'
 export const PAGE_MESSAGES = {
   'guide:landing': {
     open: true,
-    text: "Hey there, and welcome! I'm the virtual assistant of Physio Chandra, and it's great to have you here. Chandra is a registered physiotherapist in Surrey and Burnaby. This guide helps you describe your pain before your visit, in about five minutes. You mark where it hurts on a 3D body and answer a few short questions. At the end you'll see general information, not a diagnosis, and you can book an assessment if you'd like. Tap Start with voice guide and I'll talk you through each step, or Start without voice if you'd rather just tap through.",
+    text: "Hey there, and welcome! I'm the virtual assistant of Physio Chandra, and it's great to have you here. Chandra is a registered physiotherapist in Surrey and Burnaby. This guide helps you describe your pain before your visit, in about 5 to 15 minutes. You mark where it hurts on a 3D body and answer a few short questions. At the end you'll see general information, not a diagnosis, and you can book an assessment if you'd like. Tap Start with voice guide and I'll talk you through each step, or Start without voice if you'd rather just tap through.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
   'guide:guide': {
@@ -74,7 +74,7 @@ export const PAGE_MESSAGES = {
     chips: ['safety', 'answer'],
   },
   'guide:questions': {
-    text: "Tap the answer that fits best. If you're unsure, pick the closest one. Back takes you to the previous question, and you can check every answer before your results.",
+    text: "One question at a time. Tap the answer that fits best, and the next one comes up. If you're unsure, pick the closest one. Back takes you to the previous question.",
     chips: ['answer', 'change-answer', 'how-long'],
   },
   'guide:review': {
@@ -158,7 +158,7 @@ export const TOPICS = {
   'how-long': {
     q: 'How long does it take?',
     keys: ['how long', 'minutes', 'how much time', 'take long', 'quick'],
-    a: 'About five minutes. Careful answers give the most useful results.',
+    a: 'About 5 to 15 minutes, depending on how many areas you mark. Careful answers give the most useful results.',
     next: ['what-is-this', 'answer'],
   },
   'turn-body': {

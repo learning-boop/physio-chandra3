@@ -54,3 +54,9 @@ export function unlockSpeech() {
     }
   } catch { /* no voice: the text still shows */ }
 }
+
+/* The answer just picked on a flash card, for the voice guide to say back
+   as the next card opens ("Got it, gradually."). Taken once. */
+let reflect = ''
+export const setGuideReflect = (text) => { reflect = text || '' }
+export const takeGuideReflect = () => { const t = reflect; reflect = ''; return t }

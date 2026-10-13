@@ -48,7 +48,7 @@ import {
 } from '../data/pregnancy'
 import { emergencyLevel, EMERGENCY_ADVICE, bySeverity } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
-import { setGuideStage, setGuided, useGuided, useGuideDemo, setGuideScreen, unlockSpeech } from '../data/guideStage'
+import { setGuideStage, setGuided, useGuided, useGuideDemo, setGuideScreen, unlockSpeech, setGuideReflect } from '../data/guideStage'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -1537,10 +1537,11 @@ export default function PainAssessment() {
   useEffect(() => () => clearTimeout(advanceTimer.current), [])
   const tapInjury = (q, oid) => {
     pickInjury(q, oid)
-    // With the voice guide, the guide reads the answer back first.
-    if (q.multi || guided) return
+    if (q.multi) return
+    // Flash cards: the voice guide says the answer back as the next opens.
+    if (guided) { const o = q.options.find((x) => x.id === oid); setGuideReflect(o ? o.label : '') }
     clearTimeout(advanceTimer.current)
-    advanceTimer.current = setTimeout(() => continueInjury(oid), 280)
+    advanceTimer.current = setTimeout(() => continueInjury(oid), guided ? 450 : 280)
   }
 
   const restart = () => {
@@ -1579,6 +1580,108 @@ export default function PainAssessment() {
     else startQuestions()
   }
 
+  /* ── Flash cards (Chandra, 13 Oct 2026) ──────────────────────────────────
+     One question per card. A one-answer question moves to the next card by
+     itself a moment after it is tapped (or said); tick-all questions keep
+     a Next button. A grouped screen shows its questions one card at a
+     time (`sub`), and "A little about you" is a deck of cards too
+     (`aboutCards`). Back always goes to the previous card. The safety pages
+     stay as checklists. */
+  const [sub, setSub] = useState(0)
+  useEffect(() => { setSub(0) }, [qIndex, stage])
+  const [aboutAt, setAboutAt] = useState(0)
+  const aboutCards = ['age', 'sex', ...(pregAsk ? ['preg'] : []), 'dm', ...(spondyAsked(zones, answers.age) ? ['spondy'] : []), 'steroid', 'oi']
+  const aboutIdx = Math.min(aboutAt, aboutCards.length - 1)
+  const aboutCard = aboutCards[aboutIdx]
+  const aboutCardDone = (c) => ({ age: !!answers.age, sex: !!birthSex, preg: !!answers.preg, dm: !!answers.dm, spondy: !!answers.spondy, steroid: !!answers.steroid, oi: true })[c]
+  // Into the deck from the drawing: the first card; back from the safety
+  // pages: the last one.
+  const prevStage = useRef(stage)
+  useEffect(() => {
+    if (stage === 'about' && prevStage.current !== 'about') setAboutAt(prevStage.current === 'draw' ? 0 : 99)
+    prevStage.current = stage
+  }, [stage])
+  const qNow = stage === 'questions' ? activeQuestions[qIndex] : null
+  const subsNow = qNow && qNow.group ? groupOf(qNow) : null
+  const subIdx = subsNow ? Math.min(sub, subsNow.length - 1) : 0
+  const subNow = subsNow ? subsNow[subIdx] : null
+  const subAnswered = (x) => (x.multi ? Array.isArray(answers[x.id]) && answers[x.id].length > 0 : answers[x.id] !== undefined)
+  const cardKey = `${stage}|${qIndex}|${subIdx}|${aboutCard}|${injuryQ}`
+  const cardKeyRef = useRef(cardKey)
+  cardKeyRef.current = cardKey
+  const cardReady = stage === 'about' ? aboutCardDone(aboutCard)
+    : stage === 'questions' && qNow ? (subNow ? subAnswered(subNow) : questionReady(qNow)) : false
+  const cardReadyRef = useRef(cardReady)
+  cardReadyRef.current = cardReady
+  // What was answered on this card, in words (for the voice guide).
+  const cardAnswer = () => {
+    if (stage === 'about') {
+      const pickLabel = (opts, id) => ((opts.find((o) => o.id === id) || {}).label || '')
+      return ({ age: pickLabel(ABOUT_AGES, answers.age), sex: pickLabel(ABOUT_SEX, birthSex), preg: pickLabel(PREG_STATUS.options, answers.preg),
+        dm: pickLabel(DM_STATUS.options, answers.dm), spondy: pickLabel(SPONDY_STATUS.options, answers.spondy),
+        steroid: pickLabel(STEROID_STATUS.options, answers.steroid), oi: oiOn(answers) ? 'yes' : '' })[aboutCard] || ''
+    }
+    if (stage === 'questions' && qNow) { const t = answerText(subNow || qNow); return t === '—' ? '' : t }
+    return ''
+  }
+  // The next card (or the next page after the last one).
+  const goNextRef = useRef(null)
+  goNextRef.current = () => {
+    if (guided) setGuideReflect(cardAnswer().replace(/\s*·\s*/g, ', '))
+    if (stage === 'questions') {
+      if (subsNow && subIdx < subsNow.length - 1) { setSub(subIdx + 1); return }
+      nextFromQuestion()
+    } else if (stage === 'about') {
+      if (aboutIdx < aboutCards.length - 1) setAboutAt(aboutIdx + 1)
+      else setStage(screening.emergency.length ? 'emergency' : 'physician')
+    }
+  }
+  const goNextCard = () => goNextRef.current()
+  const goBackCard = () => {
+    if (stage === 'questions') { if (subsNow && subIdx > 0) setSub(subIdx - 1); else backFromQuestion() }
+    else if (stage === 'about') { if (aboutIdx > 0) setAboutAt(aboutIdx - 1); else setStage('draw') }
+  }
+  // A one-answer tap: move on a moment later, once the answer has landed.
+  const autoNext = useRef(null)
+  const nextTimer = useRef(0)
+  const queueNext = () => { autoNext.current = cardKeyRef.current }
+  useEffect(() => {
+    const key = autoNext.current
+    if (!key) return
+    autoNext.current = null
+    clearTimeout(nextTimer.current)
+    nextTimer.current = setTimeout(() => { if (cardKeyRef.current === key && cardReadyRef.current) goNextRef.current() }, 450)
+  })
+  useEffect(() => () => clearTimeout(nextTimer.current), [])
+  // Tapping (or saying) an answer on a question card.
+  const pickCard = (qq, oid) => {
+    const was = isPicked(qq, oid)
+    toggleAnswer(qq, oid)
+    if (!qq.multi && !was) queueNext()
+  }
+  // Tapping (or saying) an answer on an "about you" card.
+  const aboutPick = (card, oid) => {
+    if (card === 'age') { const keep = pregnancyAsked({ age: oid, sex: birthSex }); setAnswers((a) => (keep ? { ...a, age: oid } : dropPreg({ ...a, age: oid }))) }
+    else if (card === 'sex') { setBirthSex(oid); if (!pregnancyAsked({ age: answers.age, sex: oid })) setAnswers(dropPreg) }
+    else if (card === 'preg') setAnswers((a) => ({ ...a, preg: oid, ...(oid === 'pp6' || oid === 'pp12' ? {} : { pregBirth: undefined }) }))
+    else if (card === 'dm') setAnswers((a) => ({ ...a, dm: oid }))
+    else if (card === 'spondy') setAnswers((a) => ({ ...a, spondy: oid }))
+    else if (card === 'steroid') setAnswers((a) => ({ ...a, steroid: oid }))
+    else if (card === 'oi') { if (oid === '__skip') { goNextCard(); return } setAnswers((a) => (oiOn(a) ? dropOi(a) : { ...a, oi: 'yes' })); return }
+    // After a birth, a follow-up question shows on the same card: no auto move.
+    if (card === 'preg' && (oid === 'pp6' || oid === 'pp12')) return
+    queueNext()
+  }
+  const ABOUT_Q = {
+    age: { text: 'Your age?', options: ABOUT_AGES },
+    sex: { text: 'Your sex assigned at birth?', options: ABOUT_SEX },
+    preg: { text: PREG_STATUS.text, options: arrangeOptions(PREG_STATUS.options, PREG_STATUS.text) },
+    dm: { text: DM_STATUS.text, options: arrangeOptions(DM_STATUS.options, DM_STATUS.text) },
+    spondy: { text: SPONDY_STATUS.text, options: SPONDY_STATUS.options },
+    steroid: { text: STEROID_STATUS.text, options: arrangeOptions(STEROID_STATUS.options, STEROID_STATUS.text) },
+    oi: { text: OI_STATUS.text, options: [{ id: 'yes', label: OI_STATUS.yes }, { id: '__skip', label: 'No' }] },
+  }
+
   /* ── Voice guide (Chandra, 10 Oct 2026) ──────────────────────────────────
      With "Start with voice guide" the talking guide in the corner reads each
      screen out, shows how to turn and draw, and reads back what was chosen
@@ -1605,12 +1708,13 @@ export default function PainAssessment() {
       }
     }
     if (stage === 'about') {
-      const age = (ABOUT_AGES.find((o) => o.id === answers.age) || {}).label
-      const sex = (ABOUT_SEX.find((o) => o.id === birthSex) || {}).label
+      const card = ABOUT_Q[aboutCard]
       return {
-        key: 'about', ready: aboutDone, sig: `${answers.age}|${birthSex}`,
-        readBack: age && sex ? `Your age is ${age.toLowerCase()}, and your sex at birth is ${sex.toLowerCase()}. Is that right?` : 'Is everything on this page right?',
-        proceed: () => setStage(screening.emergency.length ? 'emergency' : 'physician'), voice: 'confirm',
+        key: `about:${aboutCard}`, ready: cardReady, sig: `${answers.age}|${birthSex}|${answers[aboutCard]}`,
+        say: spoken(card.text), proceed: goNextCard,
+        voice: 'answer', multi: false,
+        options: card.options.map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
+        pick: (oid) => aboutPick(aboutCard, oid),
       }
     }
     if (stage === 'emergency' || stage === 'physician') {
@@ -1633,8 +1737,8 @@ export default function PainAssessment() {
       const ids = q.multi ? (Array.isArray(injuryDraft) ? injuryDraft : []) : (injuryDraft === undefined ? [] : [injuryDraft])
       const labels = ids.map((id) => spoken((q.options.find((o) => o.id === id) || {}).label)).filter(Boolean)
       return {
-        key: `injury:${injuryQ}`, ready: labels.length > 0, sig: labels.join('|'), say: spoken(q.text), auto: !q.multi,
-        readBack: `You chose: ${words(labels)}. Is that right?`, proceed: () => continueInjury(),
+        key: `injury:${injuryQ}`, ready: labels.length > 0, sig: labels.join('|'), say: spoken(q.text),
+        proceed: () => continueInjury(),
         voice: 'answer', multi: !!q.multi,
         options: arrangeOptions(q.options, q.text).map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
         pick: (oid) => { if (!(q.multi ? Array.isArray(injuryDraft) && injuryDraft.includes(oid) : injuryDraft === oid)) tapInjury(q, oid) },
@@ -1651,18 +1755,23 @@ export default function PainAssessment() {
         const t = answerText(q)
         back = gateClosed ? 'You answered no. Is that right?' : `You chose: ${t === '—' ? 'none of these' : spoken(t)}. Is that right?`
       }
-      const sig = q.group ? groupOf(q).map((sub) => JSON.stringify(answers[sub.id] ?? null)).join('|') : JSON.stringify(answers[q.id] ?? null) + (gateClosed ? 'g' : '')
+      void back
+      const sig = subNow ? JSON.stringify(answers[subNow.id] ?? null) : JSON.stringify(answers[q.id] ?? null) + (gateClosed ? 'g' : '')
+      const subOptions = subNow && arrangeOptions(subNow.id === 'pattern24' && restWorseKnown ? subNow.options.filter((o) => o.id !== 'restWorse') : subNow.options, subNow.text)
       return {
-        key: `q:${qIndex}`, ready: questionReady(q), sig, readBack: back,
-        say: spoken(q.group ? q.text : gateClosed ? q.gate.ask : q.text),
-        auto: !q.group && !q.multi && !q.textarea,
-        proceed: nextFromQuestion,
-        ...(q.group || q.textarea ? { voice: 'confirm' } : gateClosed ? {
+        key: `q:${qIndex}:${subIdx}`, ready: cardReady, sig,
+        say: spoken(subNow ? (subIdx === 0 ? `${q.text}. ${subNow.text}` : subNow.text) : gateClosed ? q.gate.ask : q.text),
+        proceed: goNextCard,
+        ...(subNow ? {
+          voice: 'answer', multi: !!subNow.multi,
+          options: subOptions.map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
+          pick: (oid) => pickCard(subNow, oid),
+        } : q.textarea ? { voice: 'confirm' } : gateClosed ? {
           voice: 'answer', multi: false,
           options: [{ id: '__open', label: 'Yes, show me the list', letter: 'A' }, { id: q.gate.no, label: 'No', letter: 'B' }],
           pick: (oid) => {
             if (oid === '__open') setOpenLists((cur) => [...cur, q.id])
-            else setAnswer(q.id, [q.gate.no])
+            else { setAnswer(q.id, [q.gate.no]); queueNext() }
           },
         } : (() => {
           const { head, tail } = arrangeSplit(q.options, q.text)
@@ -1670,7 +1779,7 @@ export default function PainAssessment() {
           const list = [...head, ...other, ...tail].map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i], skip: o.skip }))
           return {
             voice: 'answer', multi: !!q.multi, options: list,
-            pick: (oid) => { if (!isPicked(q, oid)) toggleAnswer(q, oid) },
+            pick: (oid) => { if (!isPicked(q, oid)) pickCard(q, oid) },
           }
         })()),
       }
@@ -1967,7 +2076,7 @@ export default function PainAssessment() {
                       margin: '20px auto 0', maxWidth: 520, padding: '14px 20px', borderRadius: 14,
                       background: 'rgba(201,169,110,0.22)', border: '1px solid rgba(201,169,110,0.55)',
                     }}>
-                      It takes about <span style={{ color: GOLD_LIGHT }}>5 minutes</span>.
+                      It takes about <span style={{ color: GOLD_LIGHT }}>5–15 minutes</span>.
                       Careful answers give the most useful results.
                     </p>
                     <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '20px auto 0', maxWidth: 520 }}>
@@ -2173,7 +2282,7 @@ export default function PainAssessment() {
               const gateClosed = !q.group && !listOpen(q)
               const canNext = questionReady(q)
               return (
-                <Fade k={'q' + qIndex}>
+                <Fade k={'q' + qIndex + '.' + subIdx}>
                   {/* On the first question only: the move from the safety
                       checks to the pain questions, and why these areas when
                       the drawing covers more than one. */}
@@ -2187,14 +2296,14 @@ export default function PainAssessment() {
                   {/* Headline band: where they are. A grouped screen's title
                       ("How your pain behaves") sits in it too. */}
                   <div style={headBand()}>
-                  <span style={label}>{q.area ? `${q.area} · ` : ''}Question {step} of {Math.max(plannedScreens, step)}</span>
+                  <span style={label}>{q.area ? `${q.area} · ` : ''}Question {step} of {Math.max(plannedScreens, step)}{subsNow ? ` · part ${subIdx + 1} of ${subsNow.length}` : ''}</span>
                   <div style={{ height: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 2, margin: '12px 0 0', maxWidth: 520 }}>
                     <motion.div animate={{ width: `${(step / Math.max(plannedScreens, step)) * 100}%` }} style={{ height: 4, background: GOLD, borderRadius: 2 }} />
                   </div>
                   {q.group && (
                     <>
                       <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '16px 0 6px' }}>{q.text}</h2>
-                      <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.65)', margin: 0 }}>{q.hint || 'Tap an answer for each.'}</p>
+                      <p style={{ ...body, fontSize: 14.5, color: 'rgba(255,255,255,0.65)', margin: 0 }}>{subNow && subNow.multi ? 'Select all that apply.' : 'Choose one.'}</p>
                     </>
                   )}
                   </div>
@@ -2236,14 +2345,14 @@ export default function PainAssessment() {
 
                   {q.group ? (
                     <div>
-                      {groupOf(q).map((sub, si, subs) => (
-                        <div key={sub.id} style={{ ...qPanel, marginBottom: si === subs.length - 1 ? 0 : 12 }}>
+                      {[subNow].map((sub) => (
+                        <div key={sub.id} style={{ ...qPanel, marginBottom: 0 }}>
                           <div style={qText}><span aria-hidden="true" style={qMark} /><span>{sub.text}</span></div>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                             {arrangeOptions(sub.id === 'pattern24' && restWorseKnown ? sub.options.filter((o) => o.id !== 'restWorse') : sub.options, sub.text).map((opt) => {
                               const sel = isPicked(sub, opt.id)
                               return (
-                                <button key={opt.id} onClick={() => toggleAnswer(sub, opt.id)}
+                                <button key={opt.id} onClick={() => pickCard(sub, opt.id)}
                                   style={{
                                     padding: '12px 16px', borderRadius: 12, cursor: 'pointer', minHeight: 48,
                                     fontSize: 15, lineHeight: 1.35, textAlign: 'left', flex: '0 1 auto',
@@ -2271,7 +2380,7 @@ export default function PainAssessment() {
                       {(() => {
                         const sel = Array.isArray(a) && a.length === 1 && a[0] === q.gate.no
                         return (
-                          <button style={chip(sel)} onClick={() => setAnswer(q.id, sel ? undefined : [q.gate.no])}>
+                          <button style={chip(sel)} onClick={() => { if (sel) setAnswer(q.id, undefined); else { setAnswer(q.id, [q.gate.no]); queueNext() } }}>
                             <span style={letterStyle(sel)}>B</span>
                             <span>No</span>
                             <Tick on={sel} />
@@ -2300,7 +2409,7 @@ export default function PainAssessment() {
                         const chipFor = (opt, oi) => {
                           const sel = isPicked(q, opt.id)
                           return (
-                            <button key={opt.id} style={chip(sel)} onClick={() => toggleAnswer(q, opt.id)}>
+                            <button key={opt.id} style={chip(sel)} onClick={() => pickCard(q, opt.id)}>
                               <span style={letterStyle(sel)}>{LETTERS[oi] || '·'}</span>
                               <span>{opt.label}</span>
                               <Tick on={sel} />
@@ -2350,11 +2459,11 @@ export default function PainAssessment() {
                   <div className="pa-actions" style={{ marginTop: 22 }}>
                     <button
                       className="pa-primary"
-                      style={{ ...goldBtn, opacity: canNext ? 1 : 0.45, cursor: canNext ? 'pointer' : 'not-allowed' }}
-                      disabled={!canNext}
-                      onClick={nextFromQuestion}
-                    >{fromReview ? 'Save' : (step >= plannedScreens || (keys.length && (q.id === TAIL_IDS[TAIL_IDS.length - 1] || (q.id === BEHAV_ID && skipPsych)))) ? 'Review Answers' : 'Continue'}</button>
-                    <button style={ghostBtn} onClick={backFromQuestion}>Back</button>
+                      style={{ ...goldBtn, opacity: cardReady ? 1 : 0.45, cursor: cardReady ? 'pointer' : 'not-allowed' }}
+                      disabled={!cardReady}
+                      onClick={goNextCard}
+                    >{subsNow && subIdx < subsNow.length - 1 ? 'Next' : fromReview ? 'Save' : (step >= plannedScreens || (keys.length && (q.id === TAIL_IDS[TAIL_IDS.length - 1] || (q.id === BEHAV_ID && skipPsych)))) ? 'Review Answers' : 'Continue'}</button>
+                    <button style={ghostBtn} onClick={goBackCard}>Back</button>
                   </div>
                 </Fade>
               )
@@ -2443,9 +2552,9 @@ export default function PainAssessment() {
                 only what can apply (Chandra, 2 Oct 2026). Birth sex stays on
                 this device and in no summary, PDF or shared copy. */}
             {stage === 'about' && (
-              <Fade k="about">
+              <Fade k={'about-' + aboutCard}>
                 <div style={headBand('gold')}>
-                  <span style={bandLabel('gold')}>Before the Safety Questions</span>
+                  <span style={bandLabel('gold')}>Before the Safety Questions · {aboutIdx + 1} of {aboutCards.length}</span>
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 10px', maxWidth: 520 }}>
                     A little <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>about you</em>
                   </h2>
@@ -2453,43 +2562,50 @@ export default function PainAssessment() {
                     These answers let us skip safety questions that cannot apply to you, and ask the ones that do.
                   </p>
                 </div>
-                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
-                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>Your age?</span></p>
-                  {ABOUT_AGES.map((o, i) => {
-                    const sel = answers.age === o.id
-                    return (
-                      <button key={o.id} style={chip(sel)} onClick={() => { const keep = pregnancyAsked({ age: o.id, sex: birthSex }); setAnswers((a) => (keep ? { ...a, age: o.id } : dropPreg({ ...a, age: o.id }))) }}>
-                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
-                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>Your sex assigned at birth?</span></p>
-                  {ABOUT_SEX.map((o, i) => {
-                    const sel = birthSex === o.id
-                    return (
-                      <button key={o.id} style={chip(sel)} onClick={() => { setBirthSex(o.id); if (!pregnancyAsked({ age: answers.age, sex: o.id })) setAnswers(dropPreg) }}>
-                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
-                      </button>
-                    )
-                  })}
-                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
-                    Used only on this device to choose which safety questions to show (for example, pregnancy questions). It is not saved, not sent anywhere, and not included in your summary, PDF, AI overview or any shared copy.
-                  </p>
-                </div>
+                {/* One card at a time (Chandra, 13 Oct 2026): age, sex at birth,
+                    pregnancy (when it can apply), diabetes, a known pars stress
+                    injury (when asked), steroid medicine, brittle bones. */}
+                {aboutCard === 'age' && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>Your age?</span></p>
+                    {ABOUT_AGES.map((o, i) => {
+                      const sel = answers.age === o.id
+                      return (
+                        <button key={o.id} style={chip(sel)} onClick={() => aboutPick('age', o.id)}>
+                          <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+                {aboutCard === 'sex' && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>Your sex assigned at birth?</span></p>
+                    {ABOUT_SEX.map((o, i) => {
+                      const sel = birthSex === o.id
+                      return (
+                        <button key={o.id} style={chip(sel)} onClick={() => aboutPick('sex', o.id)}>
+                          <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                        </button>
+                      )
+                    })}
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
+                      Used only on this device to choose which safety questions to show (for example, pregnancy questions). It is not saved, not sent anywhere, and not included in your summary, PDF, AI overview or any shared copy.
+                    </p>
+                  </div>
+                )}
                 {/* Pregnancy (../data/pregnancy.js): for a birth sex of female
                     or "prefer not to say", aged 16 to 49. Puts the obstetric
                     and postpartum red flags first and shapes the results. In
                     the summary and PDF, never in the anonymous copy or the AI
                     overview. */}
-                {pregAsk && (
-                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                {aboutCard === 'preg' && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
                     <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{PREG_STATUS.text}</span></p>
                     {arrangeOptions(PREG_STATUS.options, PREG_STATUS.text).map((o, i) => {
                       const sel = answers.preg === o.id
                       return (
-                        <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, preg: o.id, ...(o.id === 'pp6' || o.id === 'pp12' ? {} : { pregBirth: undefined }) }))}>
+                        <button key={o.id} style={chip(sel)} onClick={() => aboutPick('preg', o.id)}>
                           <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
                         </button>
                       )
@@ -2515,27 +2631,32 @@ export default function PainAssessment() {
                 {/* Diabetes (../data/diabetes.js): puts its red flags first and
                     shapes the results. In the summary and PDF, never in the
                     anonymous copy or the AI overview. */}
-                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
-                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{DM_STATUS.text}</span></p>
-                  {arrangeOptions(DM_STATUS.options, DM_STATUS.text).map((o, i) => {
-                    const sel = answers.dm === o.id
-                    return (
-                      <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, dm: o.id }))}>
-                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
-                      </button>
-                    )
-                  })}
-                </div>
+                {aboutCard === 'dm' && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{DM_STATUS.text}</span></p>
+                    {arrangeOptions(DM_STATUS.options, DM_STATUS.text).map((o, i) => {
+                      const sel = answers.dm === o.id
+                      return (
+                        <button key={o.id} style={chip(sel)} onClick={() => aboutPick('dm', o.id)}>
+                          <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                        </button>
+                      )
+                    })}
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
+                      Diabetes changes which safety questions matter and how some problems are best treated. This answer goes in your summary and PDF, not in any anonymous copy.
+                    </p>
+                  </div>
+                )}
                 {/* A pars stress injury already diagnosed (../data/spondylolysis.js):
                     asked here, before the safety questions, so someone who has
                     had the X-ray is not asked to go and have it again. */}
-                {spondyAsked(zones, answers.age) && (
-                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
+                {aboutCard === 'spondy' && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
                     <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{SPONDY_STATUS.text}</span></p>
                     {SPONDY_STATUS.options.map((o, i) => {
                       const sel = answers.spondy === o.id
                       return (
-                        <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, spondy: o.id }))}>
+                        <button key={o.id} style={chip(sel)} onClick={() => aboutPick('spondy', o.id)}>
                           <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
                         </button>
                       )
@@ -2543,35 +2664,48 @@ export default function PainAssessment() {
                   </div>
                 )}
                 {/* Steroid medicine (../data/steroids.js), same handling. */}
-                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
-                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{STEROID_STATUS.text}</span></p>
-                  {arrangeOptions(STEROID_STATUS.options, STEROID_STATUS.text).map((o, i) => {
-                    const sel = answers.steroid === o.id
-                    return (
-                      <button key={o.id} style={chip(sel)} onClick={() => setAnswers((a) => ({ ...a, steroid: o.id }))}>
-                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
-                      </button>
-                    )
-                  })}
-                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
-                    Diabetes and steroid medicine change which safety questions matter and how some problems are best treated. These two answers go in your summary and PDF, not in any anonymous copy.
-                  </p>
-                </div>
+                {aboutCard === 'steroid' && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{STEROID_STATUS.text}</span></p>
+                    {arrangeOptions(STEROID_STATUS.options, STEROID_STATUS.text).map((o, i) => {
+                      const sel = answers.steroid === o.id
+                      return (
+                        <button key={o.id} style={chip(sel)} onClick={() => aboutPick('steroid', o.id)}>
+                          <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{o.label}</span>
+                        </button>
+                      )
+                    })}
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
+                      Steroid medicine changes which safety questions matter and how some problems are best treated. This answer goes in your summary and PDF, not in any anonymous copy.
+                    </p>
+                  </div>
+                )}
                 {/* Osteogenesis imperfecta (../data/oi.js): optional, a single
                     tick; leave it blank if it does not apply. */}
-                <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9, marginTop: 18 }}>
-                  <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{OI_STATUS.text} <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13 }}>(optional)</span></span></p>
-                  <button style={chip(oiOn(answers))} aria-pressed={oiOn(answers)}
-                    onClick={() => setAnswers((a) => (oiOn(a) ? dropOi(a) : { ...a, oi: 'yes' }))}>
-                    <span style={letterStyle(oiOn(answers))}>{oiOn(answers) ? '✓' : '·'}</span><span>{OI_STATUS.yes}</span>
-                  </button>
-                </div>
+                {aboutCard === 'oi' && (
+                  <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{OI_STATUS.text} <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13 }}>(optional)</span></span></p>
+                    <button style={chip(oiOn(answers))} aria-pressed={oiOn(answers)} onClick={() => aboutPick('oi', 'yes')}>
+                      <span style={letterStyle(oiOn(answers))}>{oiOn(answers) ? '✓' : '·'}</span><span>{OI_STATUS.yes}</span>
+                    </button>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
+                      If this does not apply to you, just tap Continue.
+                    </p>
+                  </div>
+                )}
                 <div className="pa-actions" style={{ marginTop: 20 }}>
-                  <button className="pa-primary"
-                    style={{ ...goldBtn, opacity: aboutDone ? 1 : 0.45, cursor: aboutDone ? 'pointer' : 'not-allowed' }}
-                    disabled={!aboutDone}
-                    onClick={() => setStage(screening.emergency.length ? 'emergency' : 'physician')}>Continue</button>
-                  <button style={ghostBtn} onClick={() => setStage('draw')}>Back</button>
+                  {aboutCard === 'oi' ? (
+                    <button className="pa-primary"
+                      style={{ ...goldBtn, opacity: aboutDone ? 1 : 0.45, cursor: aboutDone ? 'pointer' : 'not-allowed' }}
+                      disabled={!aboutDone}
+                      onClick={goNextCard}>Continue</button>
+                  ) : (
+                    <button className="pa-primary"
+                      style={{ ...goldBtn, opacity: cardReady ? 1 : 0.45, cursor: cardReady ? 'pointer' : 'not-allowed' }}
+                      disabled={!cardReady}
+                      onClick={goNextCard}>Next</button>
+                  )}
+                  <button style={ghostBtn} onClick={goBackCard}>Back</button>
                 </div>
               </Fade>
             )}

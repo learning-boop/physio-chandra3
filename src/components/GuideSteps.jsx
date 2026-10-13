@@ -184,7 +184,7 @@ export default function GuideSteps({ phone }) {
     { n: '2', title: 'Draw where it hurts', pic: <DrawPic />,
       text: `${phone ? 'Tap' : 'Click'} Draw, then trace every painful area, including where the pain spreads.` },
     { n: '3', title: 'Answer a few questions', pic: <QuestionsPic />,
-      text: 'Safety questions first, then a few about your pain. About 5 minutes.' },
+      text: 'Safety questions first, then a few about your pain. About 5–15 minutes.' },
   ]
   const moves = phone
     ? [['spin', 'Swipe sideways', 'spin the body'], ['tilt', 'Swipe up or down', 'see the soles'], ['zoom', 'Pinch', 'zoom in or out']]
