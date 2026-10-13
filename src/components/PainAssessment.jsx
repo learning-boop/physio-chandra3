@@ -1748,14 +1748,13 @@ export default function PainAssessment() {
           @keyframes pa-demo-ink { 0% { stroke-dashoffset: 60; } 75%, 100% { stroke-dashoffset: 0; } }
           .pa-demo-ripple { animation: pa-demo-ripple 1.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
           @keyframes pa-demo-ripple { from { transform: scale(0.6); opacity: 1; } to { transform: scale(1.3); opacity: 0; } }
-          .pa-voice-start {
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
-            min-height: 52px; margin-top: 12px; padding: 10px 22px; border-radius: 999px; cursor: pointer;
-            border: 1.5px solid #5CC8C2; background: rgba(92,200,194,0.12); color: #fff;
-            font: 500 16px var(--font-body); letter-spacing: 0.02em;
+          .pa-quiet-start {
+            display: inline-flex; align-items: center; justify-content: center; width: 100%;
+            min-height: 52px; padding: 10px 22px; border-radius: 999px; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.35); background: transparent; color: rgba(255,255,255,0.85);
+            font: 500 15px var(--font-body); letter-spacing: 0.08em; text-transform: uppercase;
           }
-          .pa-voice-start:hover { background: rgba(92,200,194,0.24); }
-          .pa-voice-start svg { color: #7DD8D3; }
+          .pa-quiet-start:hover { border-color: ${GOLD_LIGHT}; color: #fff; }
           @media (prefers-reduced-motion: reduce) {
             .pa-demo-glow, .pa-demo-finger, .pa-demo-line, .pa-demo-ripple { animation: none; }
             .pa-demo-line { stroke-dashoffset: 0; }
@@ -1944,17 +1943,23 @@ export default function PainAssessment() {
                     <h1 className="pa-glass-title" style={{ ...h2, fontSize: 'clamp(34px,8.5vw,60px)', margin: isPhone ? '0 0 24px' : '0 0 32px' }}>
                       What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
                     </h1>
-                    <div className="pa-actions" style={{ margin: '0 auto' }}>
-                      <button className="pa-primary" style={goldBtn} onClick={() => { setGuided(false); setStage('guide') }}>start</button>
-                    </div>
                     {/* Voice guide (Chandra, 10 Oct 2026): the assistant in the
                         corner reads each step out, shows how to turn and draw,
-                        and reads back each answer before moving on. */}
-                    <button className="pa-voice-start" style={{ maxWidth: 520, display: 'flex', margin: '12px auto 0' }} onClick={() => { unlockSpeech(); setGuided(true); setStage('guide') }}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" />
-                      </svg>
-                      Start with voice guide
+                        and reads back each answer before moving on. The main
+                        (gold) button since 13 Oct 2026 (Chandra); starting
+                        without voice stays one tap away. */}
+                    <div className="pa-actions" style={{ margin: '0 auto' }}>
+                      <button className="pa-primary" style={{ ...goldBtn, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
+                        onClick={() => { unlockSpeech(); setGuided(true); setStage('guide') }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" />
+                        </svg>
+                        Start with voice guide
+                      </button>
+                    </div>
+                    <button className="pa-quiet-start" style={{ maxWidth: 520, display: 'flex', margin: '12px auto 0' }}
+                      onClick={() => { setGuided(false); setStage('guide') }}>
+                      Start without voice
                     </button>
                     {/* How long it takes, set apart in a soft gold panel. */}
                     <p style={{
