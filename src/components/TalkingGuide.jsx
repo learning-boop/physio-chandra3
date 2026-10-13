@@ -12,7 +12,12 @@ import { command, yesNo, saysNone, matchOptions } from '../data/voiceMatch'
    while it speaks and eyes that blink, drawn over the picture in the same
    coordinates (836 x 1134).
 
-   - In the bottom-RIGHT corner (moved from the left, Chandra, 10 Oct 2026).
+   - Bottom-LEFT corner (Chandra, 13 Oct 2026, after trying the right).
+   - No message box opens by itself (Chandra, 13 Oct 2026: it covered the
+     page). The assistant speaks with the box closed; a small mute button
+     shows on the face while it talks; tapping the face opens the box. In
+     voice guide mode the read-back is spoken and the page's own Continue
+     is the "yes" (or "yes" by voice); changing the answer is the "no".
    - What it says is heard, not shown: a message shows only "Speaking…" and
      its buttons, and "Show text" brings the words up (remembered on this
      device). Without a voice to hear, the words always show.
@@ -474,7 +479,8 @@ export default function TalkingGuide() {
   const volRef = useRef(vol)
   // A message the browser would not let us read yet: read on the first tap.
   const [waitTap, setWaitTap] = useState(null)
-  const onBlocked = useRef((id) => setWaitTap(id))
+  // (the gold dot on the face shows something is waiting)
+  const onBlocked = useRef((id) => { setWaitTap(id); setUnread(true) })
   const voice = useVoice(level, volRef, onBlocked)
   const [mode, setMode] = useState('face')          // 'face' | 'bubble' | 'chat'
   const [log, setLog] = useState([])                // { id, from: 'guide'|'me', text, link?, urgent?, audio? }
@@ -557,7 +563,6 @@ export default function TalkingGuide() {
     clearTimeout(welcomeTimer.current)
     const text = forDevice(page.text, phone)
     const msg = addGuide(text, { audio: page.audio })
-    if (guidedRef.current && stage === 'guide' && Recognition && !micAsked.current) offerMicAfter.current = msg.id
     setChips(page.chips || DEFAULT_CHIPS)
     const seen = seenList().includes(ctxKey)
     // Read out by itself: the welcome, and every step in voice guide mode
@@ -569,11 +574,10 @@ export default function TalkingGuide() {
     } else if (!seen && ctxKey === 'guide:landing') {
       // The welcome: one second after landing.
       markSeen(ctxKey)
-      welcomeTimer.current = setTimeout(() => { setMode('bubble'); if (voiceOnRef.current) say(msg) }, 1000)
-    } else if (!seen && (page.open || speakNow)) {
+      welcomeTimer.current = setTimeout(() => { if (voiceOnRef.current) say(msg); else setUnread(true) }, 1000)
+    } else if (!seen && speakNow) {
       markSeen(ctxKey)
-      setMode('bubble')
-      if (speakNow) say(msg)
+      say(msg)
     } else {
       setMode('face')
       if (!seen) setUnread(true)
@@ -670,7 +674,6 @@ export default function TalkingGuide() {
   // Saying something (a fixed message) and then listening for the reply.
   const sayThen = (text, kind) => {
     const msg = addGuide(text)
-    if (modeRef.current === 'face') setMode('bubble')
     say(msg)
     if (kind) listenFor(kind)
   }
@@ -744,7 +747,6 @@ export default function TalkingGuide() {
     const msg = addGuide(forDevice(DEMO, phone))
     demo.current.msgId = msg.id
     setDemoOn(true)
-    setMode('bubble')
     say(msg)
     // Without sentence-by-sentence timing (a recording, or no voice), the
     // steps follow the clock instead.
@@ -773,14 +775,21 @@ export default function TalkingGuide() {
      The read-back opens by itself once a single answer is picked (or, on
      the drawing page, once the drawing has rested a few seconds), and when
      Continue is tapped. "Yes, continue" runs the screen's own Continue. */
+  const confirmRef = useRef(confirm)
+  confirmRef.current = confirm
   const screenSeen = useRef({ key: null, sig: null })
   const askTimer = useRef(0)
+  const hints = useRef(0)
   const askBack = useCallback(() => {
     const sc = getGuideScreen()
     if (!sc || !sc.ready || !sc.readBack) return false
-    const msg = addGuide(sc.readBack)
+    // With the box closed, say how to answer (the first few times).
+    const boxOpen = modeRef.current === 'bubble' || modeRef.current === 'confirm'
+    const hint = !boxOpen && hints.current < 3 ? (micOnRef.current ? ' Say yes, or tap Continue.' : ' If it is, tap Continue.') : ''
+    if (hint) hints.current += 1
+    const msg = addGuide(sc.readBack + hint)
     setConfirm({ key: sc.key, changeLabel: sc.changeLabel || 'Change it' })
-    setMode('confirm')
+    if (boxOpen) setMode('confirm')
     say(msg)
     misses.current = 0
     listenFor('confirm')
@@ -798,7 +807,6 @@ export default function TalkingGuide() {
         const intro = page && (stage === 'questions' || stage === 'injury') && !seenList().includes(ctxKey) ? forDevice(page.text, phone) + ' ' : ''
         markSeen(ctxKey)
         const msg = addGuide(intro + sc.say)
-        setMode('bubble')
         say(msg)
         misses.current = 0
         if (sc.voice) listenFor('answer')
@@ -808,7 +816,7 @@ export default function TalkingGuide() {
     if (sc.sig === screenSeen.current.sig) return
     screenSeen.current.sig = sc.sig
     if (rec.current) stopListening()
-    if (modeRef.current === 'confirm') { voice.stop(); setConfirm(null); setMode('face') }
+    if (confirmRef.current) { voice.stop(); setConfirm(null); if (modeRef.current === 'confirm') setMode('bubble') }
     if (!sc.ready) return
     if (sc.auto === true) askTimer.current = setTimeout(askBack, 700)
     else if (sc.auto === 'idle') askTimer.current = setTimeout(() => { if (!demo.current.msgId) askBack() }, 4500)
@@ -817,8 +825,6 @@ export default function TalkingGuide() {
   useEffect(() => () => clearTimeout(askTimer.current), [])
 
   // Continue, in voice guide mode, first reads back what was chosen.
-  const confirmRef = useRef(confirm)
-  confirmRef.current = confirm
   useEffect(() => {
     if (!guided) return
     const onClick = (e) => {
@@ -826,7 +832,7 @@ export default function TalkingGuide() {
       if (!btn || btn.disabled) return
       const sc = getGuideScreen()
       if (!sc || !sc.ready || !sc.readBack) return
-      if (confirmRef.current && confirmRef.current.key === sc.key && modeRef.current === 'confirm') return  // asked and showing: Continue says yes
+      if (confirmRef.current && confirmRef.current.key === sc.key) { clearTimeout(askTimer.current); stopListening(); voice.stop(); setConfirm(null); if (modeRef.current === 'confirm') setMode('face'); return }  // read back already: Continue says yes
       clearTimeout(askTimer.current)
       if (askBack()) { e.preventDefault(); e.stopPropagation() }
     }
@@ -846,7 +852,7 @@ export default function TalkingGuide() {
     stopListening()
     setConfirm(null)
     const msg = addGuide(CHANGE_REPLY)
-    setMode('bubble')
+    if (modeRef.current === 'confirm') setMode('bubble')
     say(msg)
     if (getGuideScreen()?.voice) listenFor('answer')
   }
@@ -910,6 +916,7 @@ export default function TalkingGuide() {
       unlockSpeech()
       setTimeout(() => {
         setWaitTap(null)
+        setUnread(false)
         if (voiceOnRef.current && lastGuideId.current === waitTap) { const m = logRef2.current.find((x) => x.id === waitTap); if (m) say(m) }
       }, 300)
     }
@@ -940,7 +947,7 @@ export default function TalkingGuide() {
   useEffect(() => {
     // Not while a message waits for the first tap: that tap starts it.
     if ((mode !== 'bubble' && mode !== 'confirm') || speakingNow || waitTap !== null) return
-    const onDown = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) { setConfirm(null); setMode('face') } }
+    const onDown = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) setMode('face') }
     document.addEventListener('pointerdown', onDown)
     return () => document.removeEventListener('pointerdown', onDown)
   }, [mode, speakingNow, waitTap])
@@ -951,11 +958,16 @@ export default function TalkingGuide() {
     setMode('chat')
     if (!phone) setTimeout(() => inputRef.current?.focus(), 60)
   }
-  const tuckAway = () => { voice.stop(); setMode('face') }
+  // Closing the box leaves the voice talking (Mute stops it).
+  const tuckAway = () => { setMode('face') }
   const toggleFace = () => {
     if (mode === 'face') {
-      // A new tip is shown first; otherwise straight into the conversation.
-      if (unread && page) { setUnread(false); markSeen(ctxKey); setMode('bubble'); if (voiceOn && lastGuide) say(lastGuide) }
+      // The box opens only when the visitor asks for it: the read-back
+      // waiting for a yes, else the latest message, else the chat.
+      setUnread(false)
+      markSeen(ctxKey)
+      if (confirm) setMode('confirm')
+      else if (lastGuide) { setMode('bubble'); if (voiceOn && waitTap === null && !speakingNow && unread) say(lastGuide) }
       else openChat()
     } else tuckAway()
   }
@@ -1140,6 +1152,11 @@ export default function TalkingGuide() {
         </section>
       )}
 
+      {speaking && mode === 'face' && (
+        <button className="tg-mute-badge" onClick={() => setVoice(false)} aria-label="Mute the assistant" title="Mute">
+          <Speaker on={false} />
+        </button>
+      )}
       <button className={'tg-face' + (speaking ? ' tg-face-talk' : '') + (hearing ? ' tg-face-listen' : '')} onClick={toggleFace}
         aria-label={mode === 'face' ? 'Open the virtual assistant' : 'Close the virtual assistant'} aria-expanded={mode !== 'face'}>
         <Face level={level} speaking={speaking} />
@@ -1149,7 +1166,7 @@ export default function TalkingGuide() {
       <style>{`
         .tg-root {
           position: fixed; z-index: 400;
-          right: max(16px, env(safe-area-inset-right));
+          left: max(16px, env(safe-area-inset-left));
           bottom: max(16px, env(safe-area-inset-bottom));
           font-family: var(--font-body); color: #fff;
         }
@@ -1183,7 +1200,7 @@ export default function TalkingGuide() {
         }
 
         .tg-bubble, .tg-chat {
-          position: absolute; right: 0; bottom: calc(100% + 14px);
+          position: absolute; left: 0; bottom: calc(100% + 14px);
           background: ${PANEL}; border: 1px solid rgba(201,169,110,0.45); border-radius: 18px;
           box-shadow: 0 18px 50px rgba(0,0,0,0.55);
           animation: tg-in 0.35s var(--ease);
@@ -1191,7 +1208,7 @@ export default function TalkingGuide() {
         @keyframes tg-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
         .tg-bubble { width: min(350px, calc(100vw - 32px)); padding: 16px 18px 16px; }
         .tg-bubble::after {
-          content: ''; position: absolute; right: 26px; bottom: -8px; width: 14px; height: 14px;
+          content: ''; position: absolute; left: 26px; bottom: -8px; width: 14px; height: 14px;
           background: ${PANEL}; border-right: 1px solid rgba(201,169,110,0.45); border-bottom: 1px solid rgba(201,169,110,0.45);
           transform: rotate(45deg);
         }
@@ -1227,6 +1244,13 @@ export default function TalkingGuide() {
         .tg-btn-gold { background: ${GOLD}; border-color: ${GOLD}; color: ${NAVY}; }
         .tg-btn-big { min-height: 48px; padding: 10px 20px; font-size: 15.5px; flex: 1 1 auto; justify-content: center; }
         .tg-confirm { border-color: ${GOLD}; }
+        .tg-mute-badge {
+          position: absolute; left: 52px; bottom: 50px; z-index: 1; width: 32px; height: 32px; border-radius: 50%;
+          display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+          background: ${NAVY}; color: #fff; border: 1.5px solid ${GOLD}; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .tg-mute-badge:hover { background: ${GOLD}; color: ${NAVY}; }
+        @media (max-width: 600px), (pointer: coarse) and (max-width: 900px) { .tg-mute-badge { left: 38px; bottom: 36px; } }
         .tg-sound { position: relative; display: inline-flex; align-items: center; gap: 4px; }
         .tg-volpop {
           position: absolute; bottom: calc(100% + 8px); left: 0; z-index: 2; display: flex; align-items: center; gap: 10px;
