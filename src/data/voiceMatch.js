@@ -38,8 +38,16 @@ const NONE = ['none', 'none of these', 'none of them', 'nothing', 'neither', 'no
 /* Commands that work whenever the microphone is listening. */
 export function command(text) {
   const t = norm(text)
+  const n = t.trim().split(' ').length
   if (has(t, ['repeat', 'say again', 'say that again', 'pardon', 'what did you say', 'sorry what', 'come again'])) return 'repeat'
-  if (has(t, ['go back', 'previous', 'back'])) return 'back'
+  // Going back: "go back", "previous", or "back" on its own, never "my lower
+  // back" (an answer).
+  if (has(t, ['go back', 'previous question', 'previous one', 'last question', 'take me back', 'go to the previous']) ||
+    /^ (back|previous|back please|go back please) $/.test(t)) return 'back'
+  // Moving on, the way people say it (Chandra, 13 Oct 2026: "go for next").
+  // Short phrases only, so an answer that mentions "next to" is not taken.
+  if (n <= 6 && (has(t, ['next', 'go next', 'go for next', 'next question', 'next one', 'next please', 'continue', 'go on', 'move on',
+    'carry on', 'keep going', 'let s go', "let's go", 'lets go', 'proceed', 'go ahead', 'moving on', 'skip ahead', 'forward']) && !has(t, ['next to']))) return 'next'
   if (has(t, ['stop listening', 'microphone off', 'mic off', 'stop the microphone', 'turn off the microphone', 'be quiet',
     'stop talking', 'quiet', 'shut up', 'i ll tap', "i'll tap", 'tap instead'])) return 'stop'
   if (has(t, ['help', 'what do i say', 'what should i say', 'how does this work'])) return 'help'

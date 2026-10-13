@@ -255,6 +255,20 @@ function useVoice(level, volume, onBlocked) {
   }, [supported, sayText, volume])
 
   useEffect(() => stop, [stop])
+  // Safety net: if the browser drops the speech without saying so, the face
+  // would "talk" for ever and nothing would follow (no listening, no next
+  // question). When nothing has been audible for a moment, finish.
+  useEffect(() => {
+    if (now.id === null || !supported) return
+    let quiet = 0
+    const t = setInterval(() => {
+      const ss = window.speechSynthesis
+      if (audio.current || ss.speaking || ss.pending) { quiet = 0; return }
+      quiet += 1
+      if (quiet >= 3) { clearInterval(t); token.current += 1; finish() }
+    }, 500)
+    return () => clearInterval(t)
+  }, [now.id, supported, finish])
   // Any video or sound on the page (such as the how-it-works video) starts:
   // the guide goes quiet rather than talking over it.
   useEffect(() => {
@@ -482,6 +496,8 @@ export default function TalkingGuide() {
   // (the gold dot on the face shows something is waiting)
   const onBlocked = useRef((id) => { setWaitTap(id); setUnread(true) })
   const voice = useVoice(level, volRef, onBlocked)
+  const speakingNowRef = useRef(false)
+  speakingNowRef.current = voice.now.id !== null
   const [mode, setMode] = useState('face')          // 'face' | 'bubble' | 'chat'
   const [log, setLog] = useState([])                // { id, from: 'guide'|'me', text, link?, urgent?, audio? }
   const [chips, setChips] = useState(DEFAULT_CHIPS)
@@ -591,6 +607,8 @@ export default function TalkingGuide() {
     } else if (!seen && speakNow) {
       markSeen(ctxKey)
       say(msg)
+      // Voice guide: then listen ("next", "go back", or a question).
+      if (guidedRef.current && assess) listenFor('nav')
     } else {
       setMode('face')
       if (!seen) setUnread(true)
@@ -710,7 +728,7 @@ export default function TalkingGuide() {
       if (!ok) { sayThen(VOICE.denied); return }
       if (then) { then(); return }
       const sc = getGuideScreen()
-      sayThen(VOICE.on, sc && sc.voice ? 'answer' : null)
+      sayThen(VOICE.on, sc && sc.voice ? 'answer' : guidedRef.current && assess ? 'nav' : null)
     }
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ audio: true })
@@ -761,6 +779,7 @@ export default function TalkingGuide() {
     demo.current.msgId = msg.id
     setDemoOn(true)
     say(msg)
+    listenFor('nav')
     // Without sentence-by-sentence timing (a recording, or no voice), the
     // steps follow the clock instead.
     const at = [[1500, 'turn'], [5600, 'draw'], [9800, 'undo'], [12400, null]]
@@ -834,7 +853,11 @@ export default function TalkingGuide() {
     if (confirmRef.current) { voice.stop(); setConfirm(null); if (modeRef.current === 'confirm') setMode('bubble') }
     if (!sc.ready) return
     if (sc.auto === true) askTimer.current = setTimeout(askBack, 700)
-    else if (sc.auto === 'idle') askTimer.current = setTimeout(() => { if (!demo.current.msgId) askBack() }, 4500)
+    else if (sc.auto === 'idle') {
+      // The drawing changed: listen again at once, so "next" is heard.
+      if (micOnRef.current && !speakingNowRef.current) setTimeout(() => { if (!rec.current && !speakingNowRef.current) startListening('nav') }, 300)
+      askTimer.current = setTimeout(() => { if (!demo.current.msgId) askBack() }, 4500)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screenSig, guided])
   useEffect(() => () => clearTimeout(askTimer.current), [])
@@ -872,26 +895,55 @@ export default function TalkingGuide() {
     if (getGuideScreen()?.voice) listenFor('answer')
   }
 
+  /* "Next" said aloud (Chandra, 13 Oct 2026: "go for next"), wherever the
+     patient is: a read-back → yes; an answered card → the next card; the
+     drawing and safety pages → their read-back first; any other page → its
+     own Continue. Not answered yet → say so, and listen again. */
+  const voiceNext = (kind) => {
+    if (kind === 'confirm' || confirmRef.current) { confirmYes(); return }
+    const sc = guided ? getGuideScreen() : null
+    if (sc) {
+      if (!sc.ready) { sayThen(sc.key === 'draw' ? VOICE.drawFirst : VOICE.chooseFirst, sc.key === 'draw' ? 'nav' : 'answer'); return }
+      if (sc.readBack) { askBack(); return }
+      sc.proceed()
+      return
+    }
+    const btn = document.querySelector('.pa-section .pa-primary:not([disabled])')
+    if (btn) { btn.click(); return }
+    sayThen(VOICE.noNext, 'nav')
+  }
+
   // What was heard: a command, yes / no, an answer, or a chat question.
   const retry = (kind) => {
     misses.current += 1
     if (misses.current >= 3) { sayThen(VOICE.giveUp); return }
     sayThen(kind === 'confirm' ? VOICE.yesNo : VOICE.again, kind)
   }
+  // After a spoken step: if, a moment later, nothing is being said or
+  // listened for (the new page had nothing to say), listen again.
+  const keepListening = () => setTimeout(() => {
+    if (!micOnRef.current || rec.current || speakingNowRef.current || expectNext.current) return
+    const sc = guidedRef.current ? getGuideScreen() : null
+    startListening(sc && sc.voice ? 'answer' : 'nav')
+  }, 1500)
   heardRef.current = (alts, kind) => {
     if (kind === 'denied') { sayThen(VOICE.denied); return }
+    if (kind !== 'chat') keepListening()
     const text = alts[0]
     setHeardLast(text)
     const cmd = command(text)
     if (cmd === 'stop') { micOff(true); return }
     if (cmd === 'help') { sayThen(VOICE.help, kind); return }
     if (cmd === 'repeat' && lastGuide) { say(lastGuide); listenFor(kind); return }
+    if (cmd === 'next' && kind !== 'chat') { voiceNext(kind); return }
     if (cmd === 'back' && kind !== 'chat') {
       const back = document.querySelector('.pa-section .pa-actions > button:not(.pa-primary)')
       if (back) { setConfirm(null); back.click() }
       return
     }
     if (kind === 'chat') { reply(text, findReply(text)); return }
+    // Between questions, anything else is a question for the assistant.
+    if (kind === 'nav') { reply(text, findReply(text)); listenFor('nav'); return }
     if (kind === 'confirm') {
       const yn = alts.map(yesNo).find(Boolean)
       if (yn === 'yes') confirmYes()
@@ -903,7 +955,7 @@ export default function TalkingGuide() {
     if (!sc || !sc.voice) return
     if (sc.voice === 'answer') {
       // Tick-all cards: "next" / "that's all" moves on.
-      if (sc.multi && alts.some((a) => /(next|done|that'?s (all|it)|nothing else|no more|finished|continue)/i.test(a))) { sc.proceed(); return }
+      if (sc.multi && alts.some((a) => /(done|that'?s (all|it)|nothing else|no more|finished)/i.test(a))) { sc.proceed(); return }
       let ids = []
       for (const a of alts) { ids = matchOptions(a, sc.options, sc.multi); if (ids.length) break }
       if (!ids.length) { retry('answer'); return }

@@ -131,7 +131,10 @@ export const VOICE = {
   yesNo: 'Please say yes or no, or tap a button.',
   safetyTap: 'If one of these applies to you, please tap it on the screen. If none of them apply, say none.',
   tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
-  help: 'You can say your answer, using the words on the button or its letter. When I check your answer, say yes or no. You can also say repeat, go back, or stop listening.',
+  help: 'You can say your answer, using the words on the button or its letter. Say next to move on, or go back. When I check your answer, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
+  chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
+  drawFirst: 'Please draw where it hurts first, then say next.',
+  noNext: "There's nothing to move on to here. You can ask me a question instead.",
 }
 
 /* Said when the visitor taps "Change it" after a read-back. */
