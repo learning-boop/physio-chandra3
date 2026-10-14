@@ -157,30 +157,47 @@ if (sample) {
 const perMin = Number(process.env.AZURE_RATE_PER_MIN || (PROVIDER === 'azure' ? 18 : 60))
 const gap = Math.ceil(60000 / perMin)
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+// Several at once where the plan allows it (ElevenLabs Starter: 3), one at a
+// time on Azure's free tier. The cap is reserved before each request, so
+// together they can never pass it.
+const workers = Number(process.env.GUIDE_CONCURRENCY || (PROVIDER === 'elevenlabs' ? 3 : 1))
 let made = 0
 let failed = 0
-let spent = 0
-for (const s of todo) {
-  if (maxChars && spent + s.text.length > maxChars) { console.log(`Stopped at the cap of ${maxChars} characters; run again later for the rest.`); break }
-  let res
-  for (let attempt = 0; attempt < 4; attempt++) {
-    res = await make(s.text)
-    if (res.status !== 429) break
-    const wait = Number(res.headers.get('retry-after')) * 1000 || 15000
-    console.log(`  busy, waiting ${Math.round(wait / 1000)} s…`)
-    await sleep(wait)
+let reserved = 0
+let next = 0
+let capped = false
+async function worker() {
+  while (next < todo.length && failed < 3) {
+    const s = todo[next++]
+    if (maxChars && reserved + s.text.length > maxChars) { capped = true; return }
+    reserved += s.text.length
+    let res
+    for (let attempt = 0; attempt < 4; attempt++) {
+      res = await make(s.text)
+      if (res.status !== 429) break
+      const wait = Number(res.headers.get('retry-after')) * 1000 || 15000
+      console.log(`  busy, waiting ${Math.round(wait / 1000)} s…`)
+      await sleep(wait)
+    }
+    if (!res.ok) {
+      reserved -= s.text.length
+      console.error(`Failed (${res.status}) on: ${s.text.slice(0, 60)}\n  ${(await res.text()).slice(0, 300)}`)
+      failed += 1
+      continue
+    }
+    // Written to a temporary name first: a stop part-way never leaves a
+    // half-written recording under the real name.
+    const file = path.join(OUT_DIR, fileOf(s))
+    fs.writeFileSync(file + '.part', Buffer.from(await res.arrayBuffer()))
+    fs.renameSync(file + '.part', file)
+    made += 1
+    if (made % 25 === 0) console.log(`  ${made} made (${reserved} characters)…`)
+    await sleep(gap)
   }
-  if (!res.ok) {
-    console.error(`Failed (${res.status}) on: ${s.text.slice(0, 60)}\n  ${(await res.text()).slice(0, 300)}`)
-    if (++failed >= 3) break
-    continue
-  }
-  fs.writeFileSync(path.join(OUT_DIR, fileOf(s)), Buffer.from(await res.arrayBuffer()))
-  made += 1
-  spent += s.text.length
-  if (made % 25 === 0) console.log(`  ${made} of ${todo.length} made…`)
-  await sleep(gap)
 }
+await Promise.all(Array.from({ length: workers }, worker))
+if (capped) console.log(`Stopped at the cap of ${maxChars} characters; run again later for the rest.`)
+for (const f of fs.readdirSync(OUT_DIR)) if (f.endsWith('.part')) fs.unlinkSync(path.join(OUT_DIR, f))
 
 /* ── The list the site reads (only sentences whose recording exists) ── */
 const now = new Set(fs.readdirSync(OUT_DIR))
