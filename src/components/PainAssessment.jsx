@@ -1239,7 +1239,7 @@ export default function PainAssessment() {
   // clear any other pick and are cleared by one — otherwise someone could tick
   // both "No" and "Pain below the knee", whose weights then cancel out.
   const isExclusive = (o) =>
-    /^(no|none|ns|nope)$/i.test(o.id) || /^(no|none of|not sure|no particular)/i.test(o.label)
+    /^(no|none|ns|nope)$/i.test(o.id) || /^(no\b|none of|not sure|no particular)/i.test(o.label)
 
   const toggleAnswer = (q, oid) => setAnswers((a) => {
     if (!q.multi) return { ...a, [q.id]: a[q.id] === oid ? undefined : oid }

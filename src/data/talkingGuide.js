@@ -142,6 +142,7 @@ export const VOICE = {
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
   offer: "You can talk with me as we go: answer by speaking or by tapping, whichever you like. To speak, tap Use my microphone.",
   noMic: "I can't find a microphone, so please tap your answers instead.",
+  noService: "Speech recognition is switched off on this device. On an iPhone, turn on Dictation in Settings, then tap the microphone. Or just tap your answers.",
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
   drawFirst: 'Please draw where it hurts first, then say next.',
   noNext: "There's nothing to move on to here. You can ask me a question instead.",

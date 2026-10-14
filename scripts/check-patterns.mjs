@@ -829,7 +829,7 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     const ZN = (ids) => ids.map((x) => ({ id: x, type: x.replace(/[LR]$/, ''), label: x }))
     const neuro = patternChecks(ZN(['lowerlegR']), { painQuality: ['tingling'] }, 7).find((p) => p.id === 'pc-neuro')
     check('nervous-system screen: pins and needles asks about vision, Lhermitte, heat and past episodes; a yes holds the booking (doctor in a few days)',
-      neuro && neuro.noBooking && !neuro.sameDay && !/multiple sclerosis|MS/i.test(neuro.text + neuro.why.text), neuro)
+      neuro && neuro.noBooking && !neuro.sameDay && !/multiple sclerosis|\bMS\b/i.test(neuro.text + neuro.why.text), neuro)
     check('nervous-system screen: not asked without pins and needles or numbness',
       !patternChecks(ZN(['lowerlegR']), { painQuality: ['dull'] }, 7).some((p) => p.id === 'pc-neuro'))
   }

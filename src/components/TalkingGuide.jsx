@@ -1,3 +1,5 @@
+// Development only: a pretend microphone for testing (?fakemic).
+import '../dev/fakeMic.js'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect, setGuideMic, setGuideConfirmKey, guideEvents } from '../data/guideStage'
@@ -692,7 +694,9 @@ export default function TalkingGuide() {
   const recKind = useRef(null)
   const expectNext = useRef(null)
   const misses = useRef(0)
+  const gen = useRef(0)   // bumped by every stop and start: an older start gives way
   const stopListening = useCallback(() => {
+    gen.current += 1
     expectNext.current = null
     if (rec.current) { rec.current.__cut = true; try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
     setHearing(null)
@@ -703,11 +707,18 @@ export default function TalkingGuide() {
   // The assistant's own voice coming back through the speakers: words that
   // are mostly in what it is saying (or said a moment ago) are not the
   // patient's. Short words just after it stopped ("yes") are the patient's.
-  const isEcho = (said) => {
+  // A short complete phrase (`final`, 4 words or fewer) is the patient's
+  // even when the words are in what it says ("start with voice guide"
+  // while it says "Say start with voice guide"); partial words heard while
+  // it talks are checked, so it does not interrupt itself.
+  const isEcho = (said, final = false) => {
     const w = norm(said).trim().split(' ').filter(Boolean)
     if (!w.length) return true
     const now = speakingNowRef.current
-    if (!now && (w.length < 3 || Date.now() - spoke.current.endedAt > 1500)) return false
+    if (final && w.length <= 4) return false
+    // Just after it stopped: only on computers (phones were not listening
+    // while it talked), only longer phrases, never a command ("go for next").
+    if (!now && (!KEEP_ON || w.length < 4 || command(said) || Date.now() - spoke.current.endedAt > 1500)) return false
     const script = new Set(norm(spoke.current.text).trim().split(' '))
     return w.filter((x) => script.has(x)).length / w.length >= 0.6
   }
@@ -719,6 +730,7 @@ export default function TalkingGuide() {
   // at the first thing said.
   const startListening = useCallback(async (kind, tries = 0) => {
     if (!Recognition || !micOnRef.current) return
+    const g = ++gen.current
     if (rec.current) { rec.current.__cut = true; try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
     const r = new Recognition()
     r.lang = 'en-CA'
@@ -726,7 +738,10 @@ export default function TalkingGuide() {
     r.maxAlternatives = 3
     r.continuous = true
     try { if (await canRecogniseOnDevice()) r.processLocally = true } catch { /* not offered */ }
+    // Stopped, switched off, or started again while waiting: give way.
+    if (g !== gen.current || !micOnRef.current || rec.current) return
     let finals = []
+    let lastHeard = ''   // Safari often ends without a final result: the last words heard count
     r.__kind = kind
     r.onresult = (e) => {
       let interim = ''
@@ -738,9 +753,10 @@ export default function TalkingGuide() {
       }
       const said = fin && fin.length ? fin[0] : interim
       // Called by name ("hey Chandra"), unless those are its own words.
+      // A finished "Chandra" on its own is always a call.
       const wk = wakeWord(said)
-      const called = !!wk && !norm(spoke.current.text).includes(norm(wk.wake).trim())
-      if (!called && isEchoRef.current(said)) return   // its own voice
+      const called = !!wk && ((fin && !wk.rest) || !norm(spoke.current.text).includes(norm(wk.wake).trim()))
+      if (!called && isEchoRef.current(said, !!(fin && fin.length))) return   // its own voice
       // The patient talks over the assistant: it stops and listens.
       if (speakingNowRef.current) {
         if (!called && !fin && said.trim().split(/\s+/).length < 2) return
@@ -748,6 +764,7 @@ export default function TalkingGuide() {
         voiceRef.current.stop()
       }
       if (fin && fin.length) finals = fin
+      else if (interim.trim()) lastHeard = interim.trim()
       setHearing({ text: finals[0] || interim })
       // The first complete answer is enough: stop and act on it.
       if (finals.length) { try { r.stop() } catch { /* already stopping */ } }
@@ -758,7 +775,9 @@ export default function TalkingGuide() {
       if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
         setMicOn(false)
         store.set('sessionStorage', 'tg-mic', 'off')
-        heardRef.current && heardRef.current(null, 'denied')
+        // service-not-allowed: the phone's own speech service is off (on an
+        // iPhone, Dictation), not the visitor saying no.
+        heardRef.current && heardRef.current(null, e.error === 'service-not-allowed' ? 'noservice' : 'denied')
       } else if (e.error === 'audio-capture') {
         setMicOn(false)
         store.set('sessionStorage', 'tg-mic', 'off')
@@ -768,6 +787,7 @@ export default function TalkingGuide() {
     r.onend = () => {
       if (rec.current === r) rec.current = null
       setHearing(null)
+      if (!finals.length && lastHeard && !r.__cut) finals = [lastHeard]
       if (finals.length) { if (heardRef.current) heardRef.current(finals, r.__kind || kind, !!r.__barged); return }
       // Nothing said yet: keep listening (not if stopped on purpose, or the
       // microphone is gone, or after about a minute).
@@ -818,14 +838,19 @@ export default function TalkingGuide() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voice.now.id, micOn, startListening])
   useEffect(() => () => stopListening(), [stopListening])
-  // Computers: listening goes on while the microphone is on (not in a
-  // hidden tab, and only where there is something to listen for).
+  // Listening goes on while the microphone is on (not in a hidden tab,
+  // and only where there is something to listen for), so "hey Chandra"
+  // works at any time. Phones pause while the assistant talks (Chandra,
+  // 14 Oct 2026: phones stopped listening for good after about 40 s of
+  // silence, so the wake word was never heard).
   const kindRef = useRef(null)
   useEffect(() => {
-    if (!KEEP_ON || !micOn || hidden) return
+    if (!Recognition || !micOn || hidden) return
     const t = setInterval(() => {
       if (!micOnRef.current || rec.current || document.hidden) return
-      const k = kindRef.current && kindRef.current()
+      if (!KEEP_ON && (speakingNowRef.current || window.speechSynthesis?.speaking)) return
+      const k = expectNext.current || (kindRef.current && kindRef.current())
+      expectNext.current = null
       if (k) startListening(k)
     }, 1000)
     const onVis = () => { if (document.hidden) stopListening() }
@@ -1010,7 +1035,7 @@ export default function TalkingGuide() {
         const got = takeGuideReflect().replace(/[.\s]+$/, '')
         const ack = acked.current ? ACKS[Math.floor(Math.random() * ACKS.length)] + ' ' : ''
         acked.current = false
-        const msg = addGuide(ack + (got ? `Got it, ${got}. ` : '') + intro + sc.say)
+        const msg = addGuide(ack + (got ? `Got it. ${asSentence(got)} ` : '') + intro + sc.say)
         say(msg)
         misses.current = 0
         if (sc.voice) listenFor('answer')
@@ -1113,9 +1138,11 @@ export default function TalkingGuide() {
     startListening(sc && sc.voice ? 'answer' : 'nav')
   }, 1500)
   heardRef.current = (alts, kind, barged = false) => {
+    if (import.meta.env.DEV && window.__mic) window.__mic.log.push(`heard [${kind}] ${alts ? alts[0] : ''}`)
     if (kind === 'denied') { sayThen(VOICE.denied); return }
     if (kind === 'nomic') { sayThen(VOICE.noMic); return }
     if (kind === 'nonet') { sayThen(VOICE.noNet); return }
+    if (kind === 'noservice') { sayThen(VOICE.noService); return }
     if (kind !== 'chat') keepListening()
     let text = alts[0]
     setHeardLast(text)
@@ -1143,13 +1170,13 @@ export default function TalkingGuide() {
       if (r && r.urgent) { reply(text, r); return }
       if (command(text) === 'stop') { micOff(true); return }
       const all = alts.map(norm).join(' | ')
-      if (/(without|no voice|no guide|not? (the )?voice|tap|tapping|myself|on my own|quiet|silent|mute)/.test(all)) {
+      if (/\b(without|no voice|no guide|not? (the )?voice|tap|tapping|myself|on my own|quiet|silent|mute)\b/.test(all)) {
         micOff(false)
         const btn = document.querySelector('.pa-landing .pa-quiet-start')
         if (btn) btn.click()
         return
       }
-      if (/(voice|guide|start|begin|with|talk|speak|yes|go|next|continue|ready)/.test(all)) {
+      if (/\b(voice|guide|start|begin|with|talk|speak|yes|go|next|continue|ready)\b/.test(all)) {
         const btn = document.querySelector('.pa-landing .pa-primary')
         if (btn) btn.click()
         return
@@ -1190,7 +1217,7 @@ export default function TalkingGuide() {
     if (!sc || !sc.voice) return
     if (sc.voice === 'answer') {
       // Tick-all cards: "next" / "that's all" moves on.
-      if (sc.multi && alts.some((a) => /(done|that'?s (all|it)|nothing else|no more|finished)/i.test(a))) { sc.proceed(); return }
+      if (sc.multi && alts.some((a) => /\b(done|that'?s (all|it)|nothing else|no more|finished)\b/i.test(a))) { sc.proceed(); return }
       let ids = []
       // Just asked "which one did you mean?": first among those two.
       const narrowed = whichOne.current && whichOne.current.key === sc.key ? sc.options.filter((o) => whichOne.current.ids.includes(o.id)) : null
@@ -1214,7 +1241,7 @@ export default function TalkingGuide() {
       if (!sc.multi) return   // a one-answer card moves on by itself, and says it back
       const picked = ids.map((id) => (sc.options.find((o) => o.id === id) || {}).label).filter(Boolean)
       // "None of these" ends a tick-all card.
-      if (picked.some((l) => /^(none|no)/i.test(l))) { setTimeout(() => sc.proceed(), 400); return }
+      if (picked.some((l) => /^(none|no)\b/i.test(l))) { setTimeout(() => sc.proceed(), 400); return }
       sayThen(gotMany(picked), 'answer')
     } else if (sc.voice === 'none') {
       if (alts.some(saysNone)) setTimeout(() => askBack(), 100)
@@ -1485,7 +1512,7 @@ export default function TalkingGuide() {
       )}
 
       {Recognition && (
-        <button className={'tg-micdot' + (hearing ? ' on' : '')} onClick={micDot} aria-pressed={!!hearing}
+        <button className={'tg-micdot' + (hearing ? ' on' : micOn ? ' ready' : '')} onClick={micDot} aria-pressed={micOn}
           aria-label={!micOn ? 'Answer by speaking: turn the microphone on' : KEEP_ON ? 'Microphone is on. Tap to turn it off' : hearing ? 'Microphone is on, listening. Tap to stop' : 'Microphone is off. Tap to speak'}
           title={!micOn ? 'Answer by speaking' : KEEP_ON ? 'Microphone on… tap to turn off' : hearing ? 'Listening… tap to stop' : 'Tap to speak'}>
           <Mic />
@@ -1590,6 +1617,7 @@ export default function TalkingGuide() {
         }
         .tg-micdot:hover { color: rgba(255,255,255,0.7); }
         .tg-micdot:focus-visible { outline: 2px solid ${GOLD_LIGHT}; outline-offset: 2px; }
+        .tg-micdot.ready { color: #9FEAE4; border-color: rgba(92,200,194,0.75); }
         .tg-micdot.on {
           background: #5CC8C2; color: ${NAVY}; border-color: #9FEAE4;
           animation: tg-micglow 1.4s ease-in-out infinite;
