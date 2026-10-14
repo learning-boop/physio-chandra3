@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect } from '../data/guideStage'
+import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect, setGuideMic, setGuideConfirmKey, guideEvents } from '../data/guideStage'
 import {
-  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, MIC_ASK, MIC_NOTE, VOICE, audioFor, hasRecordings, findReply, forDevice,
+  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
 import { command, yesNo, saysNone, matchOptions } from '../data/voiceMatch'
+import { gotMany } from '../data/guideSpeech'
 
 /* ── The talking guide: Chandra's face in the bottom-left corner ──────────
    On every page (Chandra, 10 Oct 2026). The face is the logo itself
@@ -74,7 +75,6 @@ const store = {
 const seenList = () => { try { return JSON.parse(store.get('sessionStorage', 'tg-seen') || '[]') } catch { return [] } }
 const markSeen = (key) => { const s = seenList(); if (!s.includes(key)) store.set('sessionStorage', 'tg-seen', JSON.stringify([...s, key])) }
 
-const splitSentences = (text) => (String(text).match(/[^.!?]+[.!?]+["')’]?\s*|[^.!?]+$/g) || [text]).map((s) => s.trim()).filter(Boolean)
 
 const useMedia = (query) => {
   const get = () => typeof window !== 'undefined' && window.matchMedia(query).matches
@@ -146,14 +146,19 @@ async function canRecogniseOnDevice() {
   return onDevice
 }
 
-/* level: a ref the face reads every frame ({ speaking, pulse, analyser }). */
+/* ── The voice ─────────────────────────────────────────────────────────────
+   A message is spoken sentence by sentence: the recording of a sentence
+   where there is one (public/audio/guide/, the same voice on every phone and
+   computer), otherwise the browser's own voice. `level` is what the face
+   reads every frame ({ speaking, pulse, analyser }). */
 function useVoice(level, volume, onBlocked) {
   const supported = typeof window !== 'undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
-  const [now, setNow] = useState({ id: null, idx: -1 })   // which message, which sentence (-2: all of it)
+  const [now, setNow] = useState({ id: null, idx: -1 })   // which message, which sentence
   const token = useRef(0)
   const audio = useRef(null)
   const audioCtx = useRef(null)
-  const cur = useRef(null)   // { id, text, idx } of the message being read
+  const cur = useRef(null)      // { id, text, idx } of the message being read
+  const startedFor = useRef(0)  // the last speech (token) that really began
 
   useEffect(() => {
     if (!supported) return
@@ -180,44 +185,38 @@ function useVoice(level, volume, onBlocked) {
     finish()
   }, [supported, finish])
 
-  const sayText = useCallback((id, text, t, from = 0) => {
-    if (!supported) return
-    if (!voicesSettled) { voicesReady().then(() => { if (t === token.current) sayText(id, text, t, from) }); return }
-    const wait = 150 - (Date.now() - cutAt.current)
-    if (wait > 0) { setTimeout(() => { if (t === token.current) sayText(id, text, t, from) }, wait); return }
-    const parts = splitSentences(text)
-    cur.current = { id, text, idx: from }
+  // One sentence in the browser's voice.
+  const ttsOne = useCallback((id, i, text, t, onDone, onFail) => {
+    const u = new SpeechSynthesisUtterance(text)
+    const v = pickVoice()
+    if (v) { u.voice = v; u.lang = v.lang } else u.lang = 'en-CA'
+    u.rate = VOICE_STYLE.rate
+    u.pitch = VOICE_STYLE.pitch
+    u.volume = VOICE_STYLE.volume * volume.current
+    let began = false
+    u.onstart = () => { if (t !== token.current) return; began = true; startedFor.current = t; level.current.speaking = true; setNow({ id, idx: i }) }
+    u.onboundary = () => { level.current.pulse = 1 }
+    u.onend = () => { if (t !== token.current) return; level.current.speaking = false; onDone() }
+    u.onerror = (e) => {
+      if (t !== token.current) return
+      // Not allowed to speak yet (no tap on the page so far).
+      if (e && e.error === 'not-allowed') { onFail('blocked'); return }
+      level.current.speaking = false
+      onDone()
+    }
     window.speechSynthesis.resume?.()
-    parts.forEach((part, i) => {
-      if (i < from) return
-      const u = new SpeechSynthesisUtterance(part)
-      const v = pickVoice()
-      if (v) { u.voice = v; u.lang = v.lang } else u.lang = 'en-CA'
-      u.rate = VOICE_STYLE.rate
-      u.pitch = VOICE_STYLE.pitch
-      u.volume = VOICE_STYLE.volume * volume.current
-      u.onstart = () => { if (t !== token.current) return; level.current.speaking = true; cur.current = { id, text, idx: i }; setNow({ id, idx: i }) }
-      u.onboundary = () => { level.current.pulse = 1 }
-      u.onend = () => {
-        if (t !== token.current) return
-        level.current.speaking = false
-        if (i === parts.length - 1) finish()
-      }
-      u.onerror = (e) => {
-        // Not allowed to speak yet (no tap on the page so far).
-        if (e && e.error === 'not-allowed' && t === token.current) { token.current += 1; finish(); onBlocked.current && onBlocked.current(id); return }
-        u.onend()
-      }
-      window.speechSynthesis.speak(u)
-    })
-  }, [supported, level, finish])
+    window.speechSynthesis.speak(u)
+    // Safari on iPhone ignores speech before a tap without any error: if
+    // nothing has started a little later, treat it as blocked.
+    if (startedFor.current !== t) {
+      setTimeout(() => {
+        if (t === token.current && !began && startedFor.current !== t && !window.speechSynthesis.speaking) onFail('blocked')
+      }, 2500)
+    }
+  }, [volume, level])
 
-  // Must be called straight from a tap the first time (phones only allow
-  // sound that starts from a tap).
-  const speak = useCallback((id, text, src) => {
-    stop()
-    const t = token.current
-    if (!src) { sayText(id, text, t); return }
+  // One sentence from its recording.
+  const clipOne = useCallback((id, i, src, t, onDone, onFail) => {
     const a = new Audio(src)
     audio.current = a
     try {
@@ -231,18 +230,54 @@ function useVoice(level, volume, onBlocked) {
       level.current.analyser = an
     } catch { /* no level: the mouth uses its own rhythm */ }
     a.volume = Math.min(1, volume.current)
-    a.onplay = () => { if (t === token.current) { level.current.speaking = true; setNow({ id, idx: -2 }) } }
-    a.onended = () => { if (t === token.current) finish() }
+    a.onplay = () => { if (t !== token.current) return; startedFor.current = t; level.current.speaking = true; setNow({ id, idx: i }) }
+    a.onended = () => { if (t !== token.current) return; audio.current = null; level.current.speaking = false; level.current.analyser = null; onDone() }
     a.play().catch((err) => {
       if (t !== token.current) return
       audio.current = null
       level.current.analyser = null
-      if (err && err.name === 'NotAllowedError') { finish(); onBlocked.current && onBlocked.current(id); return }
-      sayText(id, text, t)
+      onFail(err && err.name === 'NotAllowedError' ? 'blocked' : 'missing')
     })
-  }, [stop, sayText, level, finish, volume, onBlocked])
+  }, [volume, level])
 
-  // A new volume, straight away: a recording just changes; the computer
+  // A message from sentence `i` on.
+  const playFrom = useCallback((id, text, t, i) => {
+    if (t !== token.current) return
+    const parts = splitSentences(text)
+    if (i >= parts.length) { finish(); return }
+    cur.current = { id, text, idx: i }
+    const next = () => playFrom(id, text, t, i + 1)
+    const blocked = () => {
+      token.current += 1
+      if (supported) window.speechSynthesis.cancel()
+      finish()
+      onBlocked.current && onBlocked.current(id)
+    }
+    const viaVoice = () => {
+      if (!supported) { next(); return }
+      if (!voicesSettled) { voicesReady().then(() => { if (t === token.current) viaVoice() }); return }
+      const wait = 150 - (Date.now() - cutAt.current)
+      if (wait > 0) { setTimeout(() => { if (t === token.current) viaVoice() }, wait); return }
+      ttsOne(id, i, parts[i], t, next, (why) => (why === 'blocked' ? blocked() : next()))
+    }
+    const src = audioFor(parts[i])
+    if (src) clipOne(id, i, src, t, next, (why) => (why === 'blocked' ? blocked() : viaVoice()))
+    else viaVoice()
+    // Fetch the next recording while this one plays.
+    const after = parts[i + 1] && audioFor(parts[i + 1])
+    if (after) { const p = new Audio(); p.preload = 'auto'; p.src = after }
+  }, [supported, finish, ttsOne, clipOne, onBlocked])
+
+  // Must be called straight from a tap the first time (phones only allow
+  // sound that starts from a tap). `src`: a recording of the whole message.
+  const speak = useCallback((id, text, src) => {
+    stop()
+    const t = token.current
+    if (src) clipOne(id, 0, src, t, finish, (why) => { if (why === 'blocked') { finish(); onBlocked.current && onBlocked.current(id) } else playFrom(id, text, t, 0) })
+    else playFrom(id, text, t, 0)
+  }, [stop, clipOne, playFrom, finish, onBlocked])
+
+  // A new volume, straight away: a recording just changes; the browser
   // voice picks up again from the sentence it was on.
   const applyVolume = useCallback(() => {
     if (audio.current) { audio.current.volume = Math.min(1, volume.current); return }
@@ -251,21 +286,21 @@ function useVoice(level, volume, onBlocked) {
     token.current += 1
     cutAt.current = Date.now()
     window.speechSynthesis.cancel()
-    sayText(id, text, token.current, Math.max(0, idx))
-  }, [supported, sayText, volume])
+    playFrom(id, text, token.current, Math.max(0, idx))
+  }, [supported, playFrom, volume])
 
   useEffect(() => stop, [stop])
   // Safety net: if the browser drops the speech without saying so, the face
   // would "talk" for ever and nothing would follow (no listening, no next
   // question). When nothing has been audible for a moment, finish.
   useEffect(() => {
-    if (now.id === null || !supported) return
+    if (now.id === null) return
     let quiet = 0
     const t = setInterval(() => {
-      const ss = window.speechSynthesis
-      if (audio.current || ss.speaking || ss.pending) { quiet = 0; return }
+      const ss = supported ? window.speechSynthesis : null
+      if (audio.current || (ss && (ss.speaking || ss.pending))) { quiet = 0; return }
       quiet += 1
-      if (quiet >= 3) { clearInterval(t); token.current += 1; finish() }
+      if (quiet >= 4) { clearInterval(t); token.current += 1; finish() }
     }, 500)
     return () => clearInterval(t)
   }, [now.id, supported, finish])
@@ -527,6 +562,8 @@ export default function TalkingGuide() {
   const [showText, setShowText] = useState(() => store.get('localStorage', 'tg-text') === 'on')
   const toggleText = () => { const on = !showText; setShowText(on); store.set('localStorage', 'tg-text', on ? 'on' : 'off') }
   const micAsked = useRef(store.get('sessionStorage', 'tg-mic') !== null)
+  const [micDecided, setMicDecided] = useState(() => store.get('sessionStorage', 'tg-mic') !== null)
+  useEffect(() => { setGuideMic(micOn ? 'on' : micDecided ? 'off' : null) }, [micOn, micDecided])
   const afterConsent = useRef(null)
 
   const lastGuide = [...log].reverse().find((m) => m.from === 'guide')
@@ -550,8 +587,7 @@ export default function TalkingGuide() {
   if (unmuteFor.current) { if (voiceOn) unmuteFor.current = false; else soundRef.current = true }
   const say = useCallback((msg) => {
     if (!soundRef.current) return
-    const src = msg.audio || audioFor(msg.text)
-    if (src || voice.supported) voice.speak(msg.id, msg.text, src)
+    if (msg.audio || hasRecordings() || voice.supported) voice.speak(msg.id, msg.text, msg.audio)
   }, [voice])
 
   const addGuide = useCallback((text, extra = {}) => {
@@ -590,7 +626,9 @@ export default function TalkingGuide() {
       }
     }
     clearTimeout(welcomeTimer.current)
-    const text = forDevice(page.text, phone)
+    // Voice guide, how-to page, microphone not chosen yet: add how to talk with me.
+    const offerNow = guidedRef.current && assess && stage === 'guide' && !!Recognition && !micOnRef.current && store.get('sessionStorage', 'tg-mic') === null
+    const text = forDevice(page.text, phone) + (offerNow ? ' ' + VOICE.offer : '')
     const msg = addGuide(text, { audio: page.audio })
     setChips(page.chips || DEFAULT_CHIPS)
     const seen = seenList().includes(ctxKey)
@@ -607,8 +645,11 @@ export default function TalkingGuide() {
     } else if (!seen && speakNow) {
       markSeen(ctxKey)
       say(msg)
-      // Voice guide: then listen ("next", "go back", or a question).
-      if (guidedRef.current && assess) listenFor('nav')
+      // Voice guide: then listen ("next", "go back", or a question), or,
+      // before the microphone is chosen, say how to talk with me.
+      if (guidedRef.current && assess) {
+        if (!offerNow) listenFor('nav')
+      }
     } else {
       setMode('face')
       if (!seen) setUnread(true)
@@ -628,18 +669,22 @@ export default function TalkingGuide() {
   const misses = useRef(0)
   const stopListening = useCallback(() => {
     expectNext.current = null
-    if (rec.current) { try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
+    if (rec.current) { rec.current.__cut = true; try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
     setHearing(null)
   }, [])
   const heardRef = useRef(null)   // set below; the handler for what was heard
-  const startListening = useCallback(async (kind) => {
+  // Listening stays on while an answer is awaited (Chandra, 13 Oct 2026:
+  // the back-and-forth stopped when the browser gave up after a few seconds
+  // of silence): it starts again by itself, up to about a minute, and stops
+  // at the first thing said.
+  const startListening = useCallback(async (kind, tries = 0) => {
     if (!Recognition || !micOnRef.current) return
-    if (rec.current) { try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
+    if (rec.current) { rec.current.__cut = true; try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
     const r = new Recognition()
     r.lang = 'en-CA'
     r.interimResults = true
     r.maxAlternatives = 3
-    r.continuous = false
+    r.continuous = true
     try { if (await canRecogniseOnDevice()) r.processLocally = true } catch { /* not offered */ }
     let finals = []
     r.onresult = (e) => {
@@ -650,18 +695,31 @@ export default function TalkingGuide() {
         else interim += res[0].transcript
       }
       setHearing({ text: finals[0] || interim })
+      // The first complete answer is enough: stop and act on it.
+      if (finals.length) { try { r.stop() } catch { /* already stopping */ } }
     }
+    let failed = null
     r.onerror = (e) => {
+      failed = e.error
       if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
         setMicOn(false)
         store.set('sessionStorage', 'tg-mic', 'off')
         heardRef.current && heardRef.current(null, 'denied')
+      } else if (e.error === 'audio-capture') {
+        setMicOn(false)
+        store.set('sessionStorage', 'tg-mic', 'off')
+        heardRef.current && heardRef.current(null, 'nomic')
       }
     }
     r.onend = () => {
       if (rec.current === r) rec.current = null
       setHearing(null)
-      if (finals.length && heardRef.current) heardRef.current(finals, kind)
+      if (finals.length) { if (heardRef.current) heardRef.current(finals, kind); return }
+      // Nothing said yet: keep listening (not if stopped on purpose, or the
+      // microphone is gone, or after about a minute).
+      if (r.__cut || !micOnRef.current || failed === 'not-allowed' || failed === 'service-not-allowed' || failed === 'audio-capture') return
+      if (failed === 'network') { if (tries < 1) setTimeout(() => startListening(kind, tries + 1), 800); else heardRef.current && heardRef.current(null, 'nonet'); return }
+      if (tries < 7) setTimeout(() => { if (!rec.current && micOnRef.current && !window.speechSynthesis?.speaking) startListening(kind, tries + 1) }, 250)
     }
     rec.current = r
     recKind.current = kind
@@ -679,6 +737,7 @@ export default function TalkingGuide() {
       // for the same thing once it has finished).
       if (rec.current) {
         expectNext.current = expectNext.current || recKind.current
+        rec.current.__cut = true
         try { rec.current.abort() } catch { /* already stopped */ }
         rec.current = null
         setHearing(null)
@@ -720,6 +779,7 @@ export default function TalkingGuide() {
   const micYes = () => {
     voice.stop()
     const done = (ok) => {
+      setMicDecided(true)
       setMicOn(ok)
       micOnRef.current = ok
       store.set('sessionStorage', 'tg-mic', ok ? 'on' : 'off')
@@ -738,6 +798,7 @@ export default function TalkingGuide() {
   }
   const micNo = () => {
     voice.stop()
+    setMicDecided(true)
     store.set('sessionStorage', 'tg-mic', 'off')
     afterConsent.current = null
     setMode('face')
@@ -810,6 +871,7 @@ export default function TalkingGuide() {
   const confirmRef = useRef(confirm)
   confirmRef.current = confirm
   const screenSeen = useRef({ key: null, sig: null })
+  const acked = useRef(false)
   const askTimer = useRef(0)
   const hints = useRef(0)
   const askBack = useCallback(() => {
@@ -817,7 +879,7 @@ export default function TalkingGuide() {
     if (!sc || !sc.ready || !sc.readBack) return false
     // With the box closed, say how to answer (the first few times).
     const boxOpen = modeRef.current === 'bubble' || modeRef.current === 'confirm'
-    const hint = !boxOpen && hints.current < 3 ? (micOnRef.current ? ' Say yes, or tap Continue.' : ' If it is, tap Continue.') : ''
+    const hint = !boxOpen && hints.current < 3 ? (micOnRef.current ? ' Say yes, or tap Yes.' : ' If it is, tap Yes.') : ''
     if (hint) hints.current += 1
     const msg = addGuide(sc.readBack + hint)
     setConfirm({ key: sc.key, changeLabel: sc.changeLabel || 'Change it' })
@@ -839,8 +901,10 @@ export default function TalkingGuide() {
         const intro = page && (stage === 'questions' || stage === 'injury' || stage === 'about') && !seenList().includes(ctxKey) ? forDevice(page.text, phone) + ' ' : ''
         markSeen(ctxKey)
         // Flash cards: say back the answer just given, then the next card.
-        const got = takeGuideReflect().replace(/[.s]+$/, '')
-        const msg = addGuide((got ? `Got it, ${got}. ` : '') + intro + sc.say)
+        const got = takeGuideReflect().replace(/[.\s]+$/, '')
+        const ack = acked.current ? ACKS[Math.floor(Math.random() * ACKS.length)] + ' ' : ''
+        acked.current = false
+        const msg = addGuide(ack + (got ? `Got it, ${got}. ` : '') + intro + sc.say)
         say(msg)
         misses.current = 0
         if (sc.voice) listenFor('answer')
@@ -884,7 +948,7 @@ export default function TalkingGuide() {
     setConfirm(null)
     setMode('face')
     const sc = getGuideScreen()
-    if (sc && sc.ready) sc.proceed()
+    if (sc && sc.ready) { acked.current = true; sc.proceed() }
   }
   const confirmChange = () => {
     stopListening()
@@ -913,6 +977,19 @@ export default function TalkingGuide() {
     sayThen(VOICE.noNext, 'nav')
   }
 
+  // Taps on the page for me (src/data/guideStage.js, sendGuide).
+  const handlers = useRef({})
+  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo() }
+  useEffect(() => {
+    if (!guideEvents) return
+    const on = (e) => { const h = handlers.current[e.type]; if (h) h() }
+    const types = ['yes', 'change', 'mic-yes', 'mic-no']
+    types.forEach((t) => guideEvents.addEventListener(t, on))
+    return () => types.forEach((t) => guideEvents.removeEventListener(t, on))
+  }, [])
+  // The page shows "Yes, that's right / Change" on the screen waiting for a yes.
+  useEffect(() => { setGuideConfirmKey(confirm ? confirm.key : null) }, [confirm])
+
   // What was heard: a command, yes / no, an answer, or a chat question.
   const retry = (kind) => {
     misses.current += 1
@@ -928,6 +1005,8 @@ export default function TalkingGuide() {
   }, 1500)
   heardRef.current = (alts, kind) => {
     if (kind === 'denied') { sayThen(VOICE.denied); return }
+    if (kind === 'nomic') { sayThen(VOICE.noMic); return }
+    if (kind === 'nonet') { sayThen(VOICE.noNet); return }
     if (kind !== 'chat') keepListening()
     const text = alts[0]
     setHeardLast(text)
@@ -965,7 +1044,7 @@ export default function TalkingGuide() {
       const picked = ids.map((id) => (sc.options.find((o) => o.id === id) || {}).label).filter(Boolean)
       // "None of these" ends a tick-all card.
       if (picked.some((l) => /^(none|no)/i.test(l))) { setTimeout(() => sc.proceed(), 400); return }
-      sayThen(`Got it, ${picked.join(', ')}. Anything else? Say next when you're done.`, 'answer')
+      sayThen(gotMany(picked), 'answer')
     } else if (sc.voice === 'none') {
       if (alts.some(saysNone)) setTimeout(() => askBack(), 100)
       else sayThen(VOICE.safetyTap, 'answer')
@@ -982,9 +1061,11 @@ export default function TalkingGuide() {
   lastGuideId.current = lastGuide ? lastGuide.id : null
   useEffect(() => {
     if (waitTap === null) return
+    // Phones count a tap only when the finger lifts (click / touchend), not
+    // when it lands, so those are the events that may start speech.
+    const EVENTS = ['click', 'touchend', 'keydown']
     const go = () => {
-      document.removeEventListener('pointerdown', go, true)
-      document.removeEventListener('keydown', go, true)
+      EVENTS.forEach((ev) => document.removeEventListener(ev, go, true))
       unlockSpeech()
       setTimeout(() => {
         setWaitTap(null)
@@ -992,9 +1073,8 @@ export default function TalkingGuide() {
         if (voiceOnRef.current && lastGuideId.current === waitTap) { const m = logRef2.current.find((x) => x.id === waitTap); if (m) say(m) }
       }, 300)
     }
-    document.addEventListener('pointerdown', go, true)
-    document.addEventListener('keydown', go, true)
-    return () => { document.removeEventListener('pointerdown', go, true); document.removeEventListener('keydown', go, true) }
+    EVENTS.forEach((ev) => document.addEventListener(ev, go, true))
+    return () => EVENTS.forEach((ev) => document.removeEventListener(ev, go, true))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [waitTap])
 

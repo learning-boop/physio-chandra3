@@ -48,7 +48,8 @@ import {
 } from '../data/pregnancy'
 import { emergencyLevel, EMERGENCY_ADVICE, bySeverity } from '../data/emergencyAdvice'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
-import { setGuideStage, setGuided, useGuided, useGuideDemo, setGuideScreen, unlockSpeech, setGuideReflect } from '../data/guideStage'
+import { spoken as speakable, readOne, readAge, readMany, readAreas, readTicked } from '../data/guideSpeech'
+import { setGuideStage, setGuided, useGuided, useGuideDemo, setGuideScreen, unlockSpeech, setGuideReflect, useGuideMic, useGuideConfirmKey, sendGuide } from '../data/guideStage'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -1537,11 +1538,10 @@ export default function PainAssessment() {
   useEffect(() => () => clearTimeout(advanceTimer.current), [])
   const tapInjury = (q, oid) => {
     pickInjury(q, oid)
-    if (q.multi) return
-    // Flash cards: the voice guide says the answer back as the next opens.
-    if (guided) { const o = q.options.find((x) => x.id === oid); setGuideReflect(o ? o.label : '') }
+    // Voice guide: confirmed first (yes by voice or tap); otherwise a flash card.
+    if (q.multi || guided) return
     clearTimeout(advanceTimer.current)
-    advanceTimer.current = setTimeout(() => continueInjury(oid), guided ? 450 : 280)
+    advanceTimer.current = setTimeout(() => continueInjury(oid), 280)
   }
 
   const restart = () => {
@@ -1627,7 +1627,7 @@ export default function PainAssessment() {
   // The next card (or the next page after the last one).
   const goNextRef = useRef(null)
   goNextRef.current = () => {
-    if (guided) setGuideReflect(cardAnswer().replace(/\s*·\s*/g, ', '))
+    // (Voice guide: every answer is confirmed before this, so nothing to say back.)
     if (stage === 'questions') {
       if (subsNow && subIdx < subsNow.length - 1) { setSub(subIdx + 1); return }
       nextFromQuestion()
@@ -1657,7 +1657,8 @@ export default function PainAssessment() {
   const pickCard = (qq, oid) => {
     const was = isPicked(qq, oid)
     toggleAnswer(qq, oid)
-    if (!qq.multi && !was) queueNext()
+    // Voice guide: the answer is confirmed (yes by voice or tap) before moving on.
+    if (!qq.multi && !was && !guided) queueNext()
   }
   // Tapping (or saying) an answer on an "about you" card.
   const aboutPick = (card, oid) => {
@@ -1670,8 +1671,39 @@ export default function PainAssessment() {
     else if (card === 'oi') { if (oid === '__skip') { goNextCard(); return } setAnswers((a) => (oiOn(a) ? dropOi(a) : { ...a, oi: 'yes' })); return }
     // After a birth, a follow-up question shows on the same card: no auto move.
     if (card === 'preg' && (oid === 'pp6' || oid === 'pp12')) return
-    queueNext()
+    if (!guided) queueNext()
   }
+  /* Voice guide: on the screen whose answer is waiting for a yes, a row
+     the patient can tap instead of answering aloud (Chandra, 13 Oct 2026:
+     both ways, all the time). */
+  const confirmKey = useGuideConfirmKey()
+  const guideScreenKey = useRef(null)
+  const micChoice = useGuideMic()
+  const canListen = typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition)
+  const confirmRow = () => (guided && confirmKey && guideScreenKey.current === confirmKey ? (
+    <div className="pa-confirm" role="group" aria-label="Is that right?">
+      <span className="pa-confirm-q">Is that right?</span>
+      <button className="pa-confirm-yes" onClick={() => sendGuide('yes')}>✓ Yes, that's right</button>
+      <button className="pa-confirm-no" onClick={() => sendGuide('change')}>Change</button>
+    </div>
+  ) : null)
+  // On the how-it-works page: talk with the assistant? (asked once a visit)
+  const micOffer = () => (guided && canListen && micChoice === null ? (
+    <div className="pa-mic-offer">
+      <p className="pa-mic-offer-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" stroke="none" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" /></svg>
+        Talk with me?
+      </p>
+      <p className="pa-mic-offer-text">Answer each question by speaking or by tapping, whichever you like. I'll check each answer with you.</p>
+      <div className="pa-mic-offer-btns">
+        <button className="pa-confirm-yes" onClick={() => sendGuide('mic-yes')}>Use my microphone</button>
+        <button className="pa-confirm-no" onClick={() => sendGuide('mic-no')}>Just tap</button>
+      </div>
+      <p className="pa-mic-offer-note">
+        Your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. This website does not record or keep your voice. <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>Privacy notice</Link>
+      </p>
+    </div>
+  ) : null)
   const ABOUT_Q = {
     age: { text: 'Your age?', options: ABOUT_AGES },
     sex: { text: 'Your sex assigned at birth?', options: ABOUT_SEX },
@@ -1696,14 +1728,45 @@ export default function PainAssessment() {
      Answers are only read back on this device. */
   const guided = useGuided()
   const guideDemo = useGuideDemo()
+  // When "Is that right?" appears, bring it to the middle of the screen, clear
+  // of the assistant's face in the corner (on a phone it would sit under it).
+  useEffect(() => {
+    if (!guided || !confirmKey) return
+    const id = requestAnimationFrame(() => {
+      const el = document.querySelector('.pa-confirm')
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      if (r.bottom > window.innerHeight - 110 || r.top < 80) {
+        const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        el.scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' })
+      }
+    })
+    return () => cancelAnimationFrame(id)
+  }, [guided, confirmKey])
   const words = (xs) => (xs.length <= 1 ? (xs[0] || '') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`)
-  const spoken = (t) => String(t || '').replace(/\s*[·—–]\s*/g, ', ').replace(/[“”"]/g, '').trim()
+  const spoken = speakable
+  // The answers picked on a question, as labels (for the read-back).
+  const pickedLabels = (qq) => {
+    const a = answers[qq.id]
+    const ids = qq.multi ? (Array.isArray(a) ? a : []) : (a === undefined ? [] : [a])
+    const labels = ids.map((id) => (qq.options.find((o) => o.id === id) || {}).label).filter(Boolean)
+    const other = (answers[qq.id + '_other'] || '').trim()
+    if (ids.includes(OTHER_ID) && other) labels.push('Something else: ' + other)
+    return labels
+  }
+  // Read-backs are made of fixed sentences, so they have recordings
+  // (src/data/guideSpeech.js): one answer, or several as a list.
+  const readPicked = (qq) => {
+    const labels = pickedLabels(qq)
+    if (!qq.multi) return readOne(labels[0] || '')
+    return labels.length === 1 && /^(none|no)\b/i.test(labels[0]) ? readMany([], true) : readMany(labels, !labels.length)
+  }
   const guideScreen = (() => {
     if (stage === 'draw') {
       const on = areaChips.filter((c) => c.on).map((c) => c.name.toLowerCase())
       return {
         key: 'draw', ready: !drawBlocked, sig: `${history.lines}|${on.join(',')}`, auto: 'idle',
-        readBack: on.length ? `You marked your ${words(on)}. Is that everything?` : '',
+        readBack: on.length ? readAreas(areaChips.filter((c) => c.on).map((c) => c.name)) : '',
         changeLabel: 'Keep drawing', proceed: () => setStage('about'), voice: 'confirm',
       }
     }
@@ -1712,6 +1775,10 @@ export default function PainAssessment() {
       return {
         key: `about:${aboutCard}`, ready: cardReady, sig: `${answers.age}|${birthSex}|${answers[aboutCard]}`,
         say: spoken(card.text), proceed: goNextCard,
+        readBack: aboutCard === 'oi'
+          ? (oiOn(answers) ? 'You have brittle bone disease. Is that right?' : 'So brittle bone disease does not apply to you. Is that right?')
+          : aboutCard === 'age' ? readAge(cardAnswer()) : readOne(cardAnswer()),
+        auto: aboutCard !== 'oi' && !(aboutCard === 'preg' && isPostpartum(answers)),
         voice: 'answer', multi: false,
         options: card.options.map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
         pick: (oid) => aboutPick(aboutCard, oid),
@@ -1726,7 +1793,7 @@ export default function PainAssessment() {
         say: stage === 'emergency'
           ? 'First, some safety questions. Tick anything that is happening to you now. If none of them apply, tap None of these apply.'
           : 'Next, some signs a doctor may need to check. Tick any that fit you now. If none apply, tap None of these apply.',
-        readBack: picked.length ? `You ticked: ${words(picked)}. Is that right?` : 'You said none of these apply to you right now. Is that right?',
+        readBack: picked.length ? readTicked(picked) : 'You said none of these apply to you right now. Is that right?',
         proceed: () => safetyNext(stage), voice: picked.length ? 'confirm' : 'none',
       }
     }
@@ -1738,6 +1805,7 @@ export default function PainAssessment() {
       const labels = ids.map((id) => spoken((q.options.find((o) => o.id === id) || {}).label)).filter(Boolean)
       return {
         key: `injury:${injuryQ}`, ready: labels.length > 0, sig: labels.join('|'), say: spoken(q.text),
+        readBack: q.multi ? readMany(labels, !labels.length) : readOne(labels[0] || ''), auto: !q.multi,
         proceed: () => continueInjury(),
         voice: 'answer', multi: !!q.multi,
         options: arrangeOptions(q.options, q.text).map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
@@ -1753,13 +1821,19 @@ export default function PainAssessment() {
       else if (q.textarea) back = (answers[q.id] || '').trim() ? 'Thank you, that is noted. Shall we go on?' : 'You left this blank, which is fine. Shall we go on?'
       else {
         const t = answerText(q)
-        back = gateClosed ? 'You answered no. Is that right?' : `You chose: ${t === '—' ? 'none of these' : spoken(t)}. Is that right?`
+        void t
+        back = gateClosed ? 'You answered no. Is that right?' : readPicked(q)
       }
-      void back
+      const cur = subNow || q
+      const curText = answerText(cur)
+      const readBack = subNow
+        ? readPicked(subNow)
+        : (q.multi && !gateClosed) ? readPicked(q) : back
       const sig = subNow ? JSON.stringify(answers[subNow.id] ?? null) : JSON.stringify(answers[q.id] ?? null) + (gateClosed ? 'g' : '')
       const subOptions = subNow && arrangeOptions(subNow.id === 'pattern24' && restWorseKnown ? subNow.options.filter((o) => o.id !== 'restWorse') : subNow.options, subNow.text)
       return {
-        key: `q:${qIndex}:${subIdx}`, ready: cardReady, sig,
+        key: `q:${qIndex}:${subIdx}`, ready: cardReady, sig, readBack,
+        auto: subNow ? !subNow.multi : !q.multi && !q.textarea,
         say: spoken(subNow ? (subIdx === 0 ? `${q.text}. ${subNow.text}` : subNow.text) : gateClosed ? q.gate.ask : q.text),
         proceed: goNextCard,
         ...(subNow ? {
@@ -1771,7 +1845,7 @@ export default function PainAssessment() {
           options: [{ id: '__open', label: 'Yes, show me the list', letter: 'A' }, { id: q.gate.no, label: 'No', letter: 'B' }],
           pick: (oid) => {
             if (oid === '__open') setOpenLists((cur) => [...cur, q.id])
-            else { setAnswer(q.id, [q.gate.no]); queueNext() }
+            else { setAnswer(q.id, [q.gate.no]); if (!guided) queueNext() }
           },
         } : (() => {
           const { head, tail } = arrangeSplit(q.options, q.text)
@@ -1788,6 +1862,7 @@ export default function PainAssessment() {
   })()
   // Published after every render, so "proceed" is always the current Continue.
   useEffect(() => { setGuideScreen(guided ? guideScreen : null) })
+  guideScreenKey.current = guideScreen ? guideScreen.key : null
   useEffect(() => () => setGuideScreen(null), [])
   // The drawing-page demo turns the body on its own while the guide says how.
   const [demoTurn, setDemoTurn] = useState(0)
@@ -1857,6 +1932,31 @@ export default function PainAssessment() {
           @keyframes pa-demo-ink { 0% { stroke-dashoffset: 60; } 75%, 100% { stroke-dashoffset: 0; } }
           .pa-demo-ripple { animation: pa-demo-ripple 1.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
           @keyframes pa-demo-ripple { from { transform: scale(0.6); opacity: 1; } to { transform: scale(1.3); opacity: 0; } }
+          /* Voice guide: "Is that right?" on the card, and the microphone offer. */
+          .pa-confirm {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 10px; max-width: 520px;
+            margin: 16px 0 0; padding: 12px 14px; border-radius: 14px;
+            background: rgba(92,200,194,0.12); border: 1px solid rgba(92,200,194,0.55);
+            animation: pa-confirm-in 0.25s ease;
+          }
+          @keyframes pa-confirm-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+          .pa-confirm-q { flex: 1 1 100%; font-size: 15px; color: #fff; font-weight: 500; }
+          .pa-confirm-yes, .pa-confirm-no {
+            min-height: 46px; padding: 10px 18px; border-radius: 999px; cursor: pointer; font: 600 15px var(--font-body);
+          }
+          .pa-confirm-yes { flex: 1 1 auto; background: ${GOLD}; color: #081527; border: 1px solid ${GOLD}; }
+          .pa-confirm-no { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+          .pa-confirm-no:hover { border-color: ${GOLD_LIGHT}; }
+          .pa-mic-offer {
+            max-width: 620px; margin: 0 auto 20px; padding: 16px 18px; border-radius: 16px; text-align: left;
+            background: rgba(92,200,194,0.12); border: 1px solid rgba(92,200,194,0.55);
+          }
+          .pa-mic-offer-title { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: 18px; font-weight: 600; color: #fff; }
+          .pa-mic-offer-title svg { color: #7DD8D3; }
+          .pa-mic-offer-text { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.85); }
+          .pa-mic-offer-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+          .pa-mic-offer-note { margin: 12px 0 0; font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,0.6); }
+          @media (prefers-reduced-motion: reduce) { .pa-confirm { animation: none; } }
           .pa-quiet-start {
             display: inline-flex; align-items: center; justify-content: center; width: 100%;
             min-height: 52px; padding: 10px 22px; border-radius: 999px; cursor: pointer;
@@ -2106,6 +2206,7 @@ export default function PainAssessment() {
                       Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
                     </h2>
                   </div>
+                  {micOffer()}
                   <GuideSteps phone={isPhone} />
                   {/* A short video on how the guide works, behind a button
                       (shown once public/videos/guide-intro.mp4 exists). */}
@@ -2201,6 +2302,7 @@ export default function PainAssessment() {
                   </div>
                 )}
 
+                {confirmRow()}
                 <div className="pa-actions">
                   <button
                     className="pa-primary"
@@ -2380,7 +2482,7 @@ export default function PainAssessment() {
                       {(() => {
                         const sel = Array.isArray(a) && a.length === 1 && a[0] === q.gate.no
                         return (
-                          <button style={chip(sel)} onClick={() => { if (sel) setAnswer(q.id, undefined); else { setAnswer(q.id, [q.gate.no]); queueNext() } }}>
+                          <button style={chip(sel)} onClick={() => { if (sel) setAnswer(q.id, undefined); else { setAnswer(q.id, [q.gate.no]); if (!guided) queueNext() } }}>
                             <span style={letterStyle(sel)}>B</span>
                             <span>No</span>
                             <Tick on={sel} />
@@ -2456,6 +2558,7 @@ export default function PainAssessment() {
                   )}
                   </div>
 
+                  {confirmRow()}
                   <div className="pa-actions" style={{ marginTop: 22 }}>
                     <button
                       className="pa-primary"
@@ -2693,6 +2796,7 @@ export default function PainAssessment() {
                     </p>
                   </div>
                 )}
+                {confirmRow()}
                 <div className="pa-actions" style={{ marginTop: 20 }}>
                   {aboutCard === 'oi' ? (
                     <button className="pa-primary"
@@ -2748,6 +2852,7 @@ export default function PainAssessment() {
                   ) : (
                     <p style={{ ...body, fontSize: 15, maxWidth: 520 }}>Nothing on this page applies to the area you marked.</p>
                   )}
+                  {confirmRow()}
                   <div className="pa-actions" style={{ marginTop: 20 }}>
                     <button className="pa-primary" style={{ ...goldBtn, opacity: openEmpty ? 0.45 : 1, cursor: openEmpty ? 'not-allowed' : 'pointer' }}
                       onClick={next} aria-disabled={openEmpty}>
@@ -3017,6 +3122,7 @@ export default function PainAssessment() {
                       </button>
                     ))}
                   </div>
+                  {confirmRow()}
                   <div className="pa-actions" style={{ marginTop: 20 }}>
                     <button className="pa-primary" style={{ ...goldBtn, opacity: ready ? 1 : 0.45, cursor: ready ? 'pointer' : 'not-allowed' }}
                       disabled={!ready} onClick={() => continueInjury()}>Continue</button>

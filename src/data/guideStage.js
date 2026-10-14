@@ -12,8 +12,13 @@ import { useSyncExternalStore } from 'react'
             render: { key, say, readBack, ready, auto, sig, proceed,
             changeLabel }. `proceed` is the screen's own Continue.
    demo     the step of the how-to demo on the drawing page ('turn',
-            'draw', 'undo' or null), set by the talking guide. */
-const state = { stage: null, guided: false, demo: null }
+            'draw', 'undo' or null), set by the talking guide.
+   mic      the microphone choice this visit: 'on', 'off' or null (not asked).
+   confirmKey  the screen whose answer is waiting for a yes (the page shows
+            "Yes, that's right / Change" on it).
+   Taps on the page that the talking guide must act on ("yes", "change",
+   "mic-yes", "mic-no") go through sendGuide. */
+const state = { stage: null, guided: false, demo: null, mic: null, confirmKey: null }
 let screen = null
 const subs = new Set()
 const emit = () => subs.forEach((f) => f())
@@ -60,3 +65,14 @@ export function unlockSpeech() {
 let reflect = ''
 export const setGuideReflect = (text) => { reflect = text || '' }
 export const takeGuideReflect = () => { const t = reflect; reflect = ''; return t }
+
+export const setGuideMic = (v) => set('mic', v)
+export const useGuideMic = () => useSyncExternalStore(subscribe, () => state.mic, () => null)
+export const setGuideConfirmKey = (v) => set('confirmKey', v)
+export const useGuideConfirmKey = () => useSyncExternalStore(subscribe, () => state.confirmKey, () => null)
+
+/* Taps on the page for the talking guide: 'yes', 'change', 'mic-yes',
+   'mic-no'. Sent synchronously, so a microphone request stays inside the
+   tap (browsers only ask for it from a tap). */
+export const guideEvents = typeof window !== 'undefined' ? new EventTarget() : null
+export const sendGuide = (type) => { if (guideEvents) guideEvents.dispatchEvent(new Event(type)) }

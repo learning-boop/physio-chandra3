@@ -133,12 +133,17 @@ export const VOICE = {
   tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
   help: 'You can say your answer, using the words on the button or its letter. Say next to move on, or go back. When I check your answer, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
+  offer: "You can talk with me as we go: answer by speaking or by tapping, whichever you like. To speak, tap Use my microphone.",
+  noMic: "I can't find a microphone, so please tap your answers instead.",
+  noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
   drawFirst: 'Please draw where it hurts first, then say next.',
   noNext: "There's nothing to move on to here. You can ask me a question instead.",
 }
 
 /* Said when the visitor taps "Change it" after a read-back. */
-export const CHANGE_REPLY = 'No worries. Change your answer, and I’ll check it again.'
+export const CHANGE_REPLY = 'No worries. Which one fits better? You can say it, or tap it.'
+/* Said before the next question once an answer is confirmed. */
+export const ACKS = ['Great.', 'Thanks.', 'Okay.', 'Got it.', 'Perfect.']
 
 /* Pain guide stages where the guide stays out of the way completely: a page
    telling the visitor to get medical care must not have anything competing
@@ -447,7 +452,13 @@ export function textKey(text) {
   for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) }
   return (h >>> 0).toString(16).padStart(8, '0')
 }
-export const audioFor = (text) => GUIDE_AUDIO[textKey(text)] || null
+/* Speech is played sentence by sentence (one recording per sentence), so a
+   message built from parts ("Great." + the next question, "You answered:
+   Male." + "Is that right?") still uses recordings. Same splitting here, in
+   the player and in the script that makes the recordings. */
+export const splitSentences = (text) => (String(text).match(/[^.!?]+[.!?]+["')’]?\s*|[^.!?]+$/g) || [String(text)])
+  .map((x) => x.replace(/\s+/g, ' ').trim()).filter(Boolean)
+export const audioFor = (sentence) => GUIDE_AUDIO[textKey(String(sentence).replace(/\s+/g, ' ').trim())] || null
 export const hasRecordings = () => Object.keys(GUIDE_AUDIO).length > 0
 
 /* Every text the guide can read out, with a file name for its recording. */
