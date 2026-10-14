@@ -4,7 +4,7 @@ import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDe
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
-import { command, yesNo, saysNone, matchOptions, norm } from '../data/voiceMatch'
+import { command, yesNo, saysNone, matchOptions, norm, wakeWord } from '../data/voiceMatch'
 import { gotMany } from '../data/guideSpeech'
 
 /* ── The talking guide: Chandra's face in the bottom-left corner ──────────
@@ -134,6 +134,13 @@ function pickVoice() {
    The browser's speech recognition (Chrome, Edge, Safari; not Firefox).
    Where the browser can do it on the device, it is asked to. */
 const Recognition = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)
+/* On computers, once the microphone is on it stays on, also while the
+   assistant talks: when the patient starts speaking, it stops talking and
+   listens (Chandra, 14 Oct 2026). Not on phones: Android beeps at every
+   restart of listening, and iPhones can move the sound to the earpiece
+   while the microphone is open; there it listens after each question. */
+const UA = typeof navigator !== 'undefined' ? navigator.userAgent : ''
+const KEEP_ON = !!Recognition && !(/Android|iPhone|iPad|iPod|Mobile/i.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1))
 let onDevice = null
 async function canRecogniseOnDevice() {
   if (onDevice !== null) return onDevice
@@ -594,8 +601,10 @@ export default function TalkingGuide() {
   // Held until the unmuted state has actually arrived (React can render
   // the stage change before it).
   if (unmuteFor.current) { if (voiceOn) unmuteFor.current = false; else soundRef.current = true }
+  const spoke = useRef({ text: '', endedAt: 0 })
   const say = useCallback((msg) => {
     if (!soundRef.current) return
+    spoke.current = { text: msg.text, endedAt: 0 }
     if (msg.audio || hasRecordings() || voice.supported) voice.speak(msg.id, msg.text, msg.audio)
   }, [voice])
 
@@ -689,6 +698,21 @@ export default function TalkingGuide() {
     setHearing(null)
   }, [])
   const heardRef = useRef(null)   // set below; the handler for what was heard
+  const voiceRef = useRef(voice)
+  voiceRef.current = voice
+  // The assistant's own voice coming back through the speakers: words that
+  // are mostly in what it is saying (or said a moment ago) are not the
+  // patient's. Short words just after it stopped ("yes") are the patient's.
+  const isEcho = (said) => {
+    const w = norm(said).trim().split(' ').filter(Boolean)
+    if (!w.length) return true
+    const now = speakingNowRef.current
+    if (!now && (w.length < 3 || Date.now() - spoke.current.endedAt > 1500)) return false
+    const script = new Set(norm(spoke.current.text).trim().split(' '))
+    return w.filter((x) => script.has(x)).length / w.length >= 0.6
+  }
+  const isEchoRef = useRef(isEcho)
+  isEchoRef.current = isEcho
   // Listening stays on while an answer is awaited (Chandra, 13 Oct 2026:
   // the back-and-forth stopped when the browser gave up after a few seconds
   // of silence): it starts again by itself, up to about a minute, and stops
@@ -703,13 +727,27 @@ export default function TalkingGuide() {
     r.continuous = true
     try { if (await canRecogniseOnDevice()) r.processLocally = true } catch { /* not offered */ }
     let finals = []
+    r.__kind = kind
     r.onresult = (e) => {
       let interim = ''
+      let fin = null
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const res = e.results[i]
-        if (res.isFinal) finals = Array.from(res).map((alt) => alt.transcript.trim()).filter(Boolean)
+        if (res.isFinal) fin = Array.from(res).map((alt) => alt.transcript.trim()).filter(Boolean)
         else interim += res[0].transcript
       }
+      const said = fin && fin.length ? fin[0] : interim
+      // Called by name ("hey Chandra"), unless those are its own words.
+      const wk = wakeWord(said)
+      const called = !!wk && !norm(spoke.current.text).includes(norm(wk.wake).trim())
+      if (!called && isEchoRef.current(said)) return   // its own voice
+      // The patient talks over the assistant: it stops and listens.
+      if (speakingNowRef.current) {
+        if (!called && !fin && said.trim().split(/\s+/).length < 2) return
+        r.__barged = true
+        voiceRef.current.stop()
+      }
+      if (fin && fin.length) finals = fin
       setHearing({ text: finals[0] || interim })
       // The first complete answer is enough: stop and act on it.
       if (finals.length) { try { r.stop() } catch { /* already stopping */ } }
@@ -730,12 +768,12 @@ export default function TalkingGuide() {
     r.onend = () => {
       if (rec.current === r) rec.current = null
       setHearing(null)
-      if (finals.length) { if (heardRef.current) heardRef.current(finals, kind); return }
+      if (finals.length) { if (heardRef.current) heardRef.current(finals, r.__kind || kind, !!r.__barged); return }
       // Nothing said yet: keep listening (not if stopped on purpose, or the
       // microphone is gone, or after about a minute).
       if (r.__cut || !micOnRef.current || failed === 'not-allowed' || failed === 'service-not-allowed' || failed === 'audio-capture') return
       if (failed === 'network') { if (tries < 1) setTimeout(() => startListening(kind, tries + 1), 800); else heardRef.current && heardRef.current(null, 'nonet'); return }
-      if (tries < 7) setTimeout(() => { if (!rec.current && micOnRef.current && !window.speechSynthesis?.speaking) startListening(kind, tries + 1) }, 250)
+      if (tries < 7) setTimeout(() => { if (!rec.current && micOnRef.current && (KEEP_ON || !window.speechSynthesis?.speaking)) startListening(r.__kind || kind, tries + 1) }, 250)
     }
     rec.current = r
     recKind.current = kind
@@ -748,7 +786,10 @@ export default function TalkingGuide() {
     expectNext.current = kind
   }, [])
   useEffect(() => {
+    if (voice.now.id === null && spoke.current.endedAt === 0) spoke.current.endedAt = Date.now()
     if (voice.now.id !== null) {
+      // On computers listening goes on (the patient can talk over it).
+      if (KEEP_ON && micOnRef.current) return
       // The assistant is talking: never listen to itself (and listen again
       // for the same thing once it has finished).
       if (rec.current) {
@@ -762,6 +803,8 @@ export default function TalkingGuide() {
     }
     if (offerMicAfter.current !== null) { offerMicAfter.current = null; askMic(); return }
     if (!expectNext.current || !micOnRef.current) return
+    // Still listening (computers): now for what was just asked.
+    if (rec.current) { rec.current.__kind = expectNext.current; recKind.current = expectNext.current; expectNext.current = null; return }
     // A short pause first: speech that is about to start (see useVoice)
     // must not be heard, and the expectation stays until it is.
     const t = setTimeout(() => {
@@ -775,6 +818,20 @@ export default function TalkingGuide() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voice.now.id, micOn, startListening])
   useEffect(() => () => stopListening(), [stopListening])
+  // Computers: listening goes on while the microphone is on (not in a
+  // hidden tab, and only where there is something to listen for).
+  const kindRef = useRef(null)
+  useEffect(() => {
+    if (!KEEP_ON || !micOn || hidden) return
+    const t = setInterval(() => {
+      if (!micOnRef.current || rec.current || document.hidden) return
+      const k = kindRef.current && kindRef.current()
+      if (k) startListening(k)
+    }, 1000)
+    const onVis = () => { if (document.hidden) stopListening() }
+    document.addEventListener('visibilitychange', onVis)
+    return () => { clearInterval(t); document.removeEventListener('visibilitychange', onVis) }
+  }, [micOn, hidden, startListening, stopListening])
   useEffect(() => { stopListening() }, [pathname, stopListening])
   // Off the landing page, its "how to start" listening ends.
   useEffect(() => { if (!onLanding && (recKind.current === 'start' || expectNext.current === 'start')) { if (expectNext.current === 'start') expectNext.current = null; if (rec.current && recKind.current === 'start') stopListening() } }, [onLanding, stopListening])
@@ -797,10 +854,12 @@ export default function TalkingGuide() {
   const micYes = () => {
     voice.stop()
     const done = (ok) => {
+      if (modeRef.current === 'mic') setMode('face')
       setMicDecided(true)
       setMicOn(ok)
       micOnRef.current = ok
       store.set('sessionStorage', 'tg-mic', ok ? 'on' : 'off')
+      if (ok) store.set('sessionStorage', 'tg-mic-ok', 'yes')
       const then = afterConsent.current
       afterConsent.current = null
       if (!ok) { sayThen(VOICE.denied); return }
@@ -844,11 +903,23 @@ export default function TalkingGuide() {
     startListening(kind)
   }
 
+  // What to listen for right now (null: nothing, e.g. another page with
+  // the chat closed).
+  kindRef.current = () => {
+    if (landingRef.current) return 'start'
+    if (confirmRef.current) return 'confirm'
+    const sc = guidedRef.current ? getGuideScreen() : null
+    if (sc && sc.voice) return 'answer'
+    if (guidedRef.current && assess) return 'nav'
+    return modeRef.current === 'chat' ? 'chat' : null
+  }
   // The light-like microphone beside the face (Chandra, 14 Oct 2026): lit
   // while it listens, off otherwise. A tap asks first (with the privacy
   // note), then starts or stops listening, without opening any box.
   const micDot = () => {
-    if (!micOn) { askMic(); return }
+    // Agreed earlier in this visit: back on without asking again.
+    if (!micOn) { if (store.get('sessionStorage', 'tg-mic-ok') === 'yes') micYes(); else askMic(); return }
+    if (KEEP_ON) { micOff(true); return }
     if (hearing) { stopListening(); return }
     voice.stop()
     const sc = guided ? getGuideScreen() : null
@@ -1040,13 +1111,28 @@ export default function TalkingGuide() {
     const sc = guidedRef.current ? getGuideScreen() : null
     startListening(sc && sc.voice ? 'answer' : 'nav')
   }, 1500)
-  heardRef.current = (alts, kind) => {
+  heardRef.current = (alts, kind, barged = false) => {
     if (kind === 'denied') { sayThen(VOICE.denied); return }
     if (kind === 'nomic') { sayThen(VOICE.noMic); return }
     if (kind === 'nonet') { sayThen(VOICE.noNet); return }
     if (kind !== 'chat') keepListening()
-    const text = alts[0]
+    let text = alts[0]
     setHeardLast(text)
+    // "Hey Chandra" (Chandra, 14 Oct 2026): on its own, it stops and says
+    // it is listening; with more after it ("Chandra, next"), the rest is
+    // taken as said.
+    const wk = wakeWord(text)
+    if (wk) {
+      if (!wk.rest) { voice.stop(); sayThen(VOICE.wake, kindRef.current() || 'chat'); return }
+      alts = alts.map((a) => (wakeWord(a) || { rest: a }).rest || a)
+      text = alts[0]
+    }
+    // "Stop talking", "be quiet": on computers it only stops talking (it
+    // already has); the microphone stays on. "Stop listening" turns it off.
+    if (KEEP_ON && command(text) === 'stop' && !/listen|mic|tap/i.test(text)) { voice.stop(); return }
+    // On computers the microphone hears the room too: a long sentence that
+    // is no answer or question for me is left alone.
+    const chatter = KEEP_ON && text.trim().split(/\s+/).length > 6
     // The landing page: how to start. "Without" is checked first, as it
     // also holds "with".
     if (kind === 'start') {
@@ -1069,6 +1155,7 @@ export default function TalkingGuide() {
       }
       // A question: answer it, then ask again how to start.
       if (r && r.id !== 'fallback') { reply(text, r); listenFor('start'); return }
+      if (chatter) return
       misses.current += 1
       if (misses.current >= 3) { misses.current = 0; sayThen(VOICE.giveUp); return }
       sayThen(VOICE.startAgain, 'start')
@@ -1086,12 +1173,16 @@ export default function TalkingGuide() {
     }
     if (kind === 'chat') { reply(text, findReply(text)); return }
     // Between questions, anything else is a question for the assistant.
-    if (kind === 'nav') { reply(text, findReply(text)); listenFor('nav'); return }
+    if (kind === 'nav') {
+      const r = findReply(text)
+      if (KEEP_ON && (!r || r.id === 'fallback')) return
+      reply(text, r); listenFor('nav'); return
+    }
     if (kind === 'confirm') {
       const yn = alts.map(yesNo).find(Boolean)
       if (yn === 'yes') confirmYes()
       else if (yn === 'no') confirmChange()
-      else retry('confirm')
+      else if (!chatter) retry('confirm')
       return
     }
     const sc = getGuideScreen()
@@ -1101,7 +1192,7 @@ export default function TalkingGuide() {
       if (sc.multi && alts.some((a) => /(done|that'?s (all|it)|nothing else|no more|finished)/i.test(a))) { sc.proceed(); return }
       let ids = []
       for (const a of alts) { ids = matchOptions(a, sc.options, sc.multi); if (ids.length) break }
-      if (!ids.length) { retry('answer'); return }
+      if (!ids.length) { if (!chatter) retry('answer'); return }
       misses.current = 0
       ids.forEach((id) => sc.pick(id))
       if (!sc.multi) return   // a one-answer card moves on by itself, and says it back
@@ -1162,11 +1253,13 @@ export default function TalkingGuide() {
   const speakingNow = voice.now.id !== null
   useEffect(() => {
     // Not while a message waits for the first tap: that tap starts it.
-    if ((mode !== 'bubble' && mode !== 'confirm') || speakingNow || waitTap !== null) return
+    // While it talks too (Chandra, 14 Oct 2026: the box must always be
+    // easy to put away); the voice carries on, Mute stops it.
+    if ((mode !== 'bubble' && mode !== 'confirm' && mode !== 'mic') || waitTap !== null) return
     const onDown = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) setMode('face') }
     document.addEventListener('pointerdown', onDown)
     return () => document.removeEventListener('pointerdown', onDown)
-  }, [mode, speakingNow, waitTap])
+  }, [mode, waitTap])
 
   const openChat = () => {
     setUnread(false)
@@ -1243,8 +1336,8 @@ export default function TalkingGuide() {
     <p className="tg-status" aria-live="polite">
       {waitTap === msg.id && voiceOn ? 'Tap anywhere to hear me.'
         : !voiceOn ? 'Sound is off. Tap Unmute to hear me.'
-        : hearing ? <><span className="tg-dots tg-dots-teal" aria-hidden="true"><i /><i /><i /></span> Listening…</>
         : voice.now.id === msg.id ? <><span className="tg-dots" aria-hidden="true"><i /><i /><i /></span> Speaking…</>
+        : hearing ? <><span className="tg-dots tg-dots-teal" aria-hidden="true"><i /><i /><i /></span> Listening…</>
           : idle}
     </p>
   ))
@@ -1256,6 +1349,7 @@ export default function TalkingGuide() {
     <div ref={rootRef} className={'tg-root' + (mode === 'chat' ? ' tg-open' : '')}>
       {mode === 'mic' && lastGuide && (
         <div className="tg-bubble tg-confirm" role="dialog" aria-label="Answer by speaking?">
+          <button className="tg-icon tg-bubble-x" onClick={() => { voice.stop(); tuckAway() }} aria-label="Close, not now"><Close /></button>
           <p className="tg-bubble-name">Virtual assistant <TextToggle /></p>
           <Words msg={lastGuide} idle="Would you like to answer by speaking?" />
           <p className="tg-note">{MIC_NOTE} <Link to="/privacy" className="tg-link">Privacy notice</Link></p>
@@ -1268,6 +1362,7 @@ export default function TalkingGuide() {
 
       {mode === 'confirm' && confirm && lastGuide && (
         <div className="tg-bubble tg-confirm" role="dialog" aria-label="Please check your answer">
+          <button className="tg-icon tg-bubble-x" onClick={tuckAway} aria-label="Close message"><Close /></button>
           <p className="tg-bubble-name">Virtual assistant <TextToggle /></p>
           <Words msg={lastGuide} idle="Is that right?" />
           <div className="tg-bubble-actions">
@@ -1375,8 +1470,8 @@ export default function TalkingGuide() {
 
       {Recognition && (
         <button className={'tg-micdot' + (hearing ? ' on' : '')} onClick={micDot} aria-pressed={!!hearing}
-          aria-label={!micOn ? 'Answer by speaking: turn the microphone on' : hearing ? 'Microphone is on, listening. Tap to stop' : 'Microphone is off. Tap to speak'}
-          title={!micOn ? 'Answer by speaking' : hearing ? 'Listening… tap to stop' : 'Tap to speak'}>
+          aria-label={!micOn ? 'Answer by speaking: turn the microphone on' : KEEP_ON ? 'Microphone is on. Tap to turn it off' : hearing ? 'Microphone is on, listening. Tap to stop' : 'Microphone is off. Tap to speak'}
+          title={!micOn ? 'Answer by speaking' : KEEP_ON ? 'Microphone on… tap to turn off' : hearing ? 'Listening… tap to stop' : 'Tap to speak'}>
           <Mic />
         </button>
       )}
@@ -1448,7 +1543,6 @@ export default function TalkingGuide() {
           color: rgba(255,255,255,0.75); background: transparent; border: 1px solid rgba(255,255,255,0.25);
         }
         .tg-textbtn:hover { color: #fff; border-color: ${GOLD_LIGHT}; }
-        .tg-confirm .tg-bubble-name { padding-right: 0; }
         .tg-status { display: flex; align-items: center; gap: 10px; font-size: 15px; color: rgba(255,255,255,0.9); margin: 2px 0 14px; min-height: 24px; }
         .tg-dots { display: inline-flex; gap: 4px; }
         .tg-dots i { width: 6px; height: 6px; border-radius: 50%; background: ${GOLD}; animation: tg-dot 1s ease-in-out infinite; }

@@ -54,6 +54,23 @@ export function command(text) {
   return null
 }
 
+/* Calling the assistant (Chandra, 14 Oct 2026): "Chandra", "hey Chandra",
+   "hello Chandra", or just "hey" / "hello" on its own. Speech services
+   often hear the name as Sandra, Shandra or Chandler, so those count too.
+   Returns { wake, rest }: the call itself, and whatever was said after it
+   ("hey Chandra, next" → rest "next"); null when there is no call. */
+const WAKE_NAME = '(?:chandra|chandras|shandra|sandra|chandler|tandra|chanda|chandar)'
+const WAKE_RE = new RegExp(`^\\s*((?:(?:hey|hi|hello|ok|okay|excuse me)\\s+)?${WAKE_NAME})\\b[\\s,.!?]*(.*)$`, 'i')
+const GREET_RE = /^\s*((?:hey|hi|hello)(?: there)?)[\s,.!?]*$/i
+export function wakeWord(text) {
+  const t = String(text || '').trim()
+  const m = t.match(WAKE_RE)
+  if (m) return { wake: m[1], rest: m[2].trim() }
+  const g = t.match(GREET_RE)
+  if (g) return { wake: g[1], rest: '' }
+  return null
+}
+
 /* "Yes" / "no" to a read-back; null when it is neither (or both). */
 export function yesNo(text) {
   const t = norm(text)
