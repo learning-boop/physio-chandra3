@@ -5,7 +5,11 @@
      npm run guide:audio -- --dry-run   count the sentences and characters
      npm run guide:audio -- --sample    make just 3 sentences to listen to
                                         (public/audio/guide-sample/), in each
-                                        model given: --models=a,b
+                                        voice given: --voices=a,b (Azure) or
+                                        model: --models=a,b (ElevenLabs)
+     npm run guide:audio -- --list-voices
+                                        Azure: which English HD voices your
+                                        region offers
      npm run guide:audio -- --max-chars=90000
                                         make the missing recordings, stopping
                                         before this many characters (a cap, so
@@ -13,8 +17,13 @@
      npm run guide:audio                make all the missing recordings
 
    The voice (GUIDE_VOICE in .env, never committed):
-     azure:en-US-BrianMultilingualNeural   the default: the Brian Multilingual
-                                           voice Edge uses (Azure Speech)
+     azure:en-US-Brian:DragonHDLatestNeural   Brian HD (Chandra's choice,
+                                           13 Oct 2026): Azure's newer, more
+                                           expressive voices; paid tier only,
+                                           US$22 per 1M characters (about
+                                           US$3.60 for everything here)
+     azure:en-US-BrianMultilingualNeural   the Brian Multilingual voice Edge
+                                           uses; covered by the free tier
      elevenlabs:<voice id>                 e.g. Chandra's cloned voice
 
    Keys, also in .env:
@@ -48,7 +57,7 @@ const argOf = (name) => { const a = process.argv.find((x) => x.startsWith('--' +
 const maxChars = Number(argOf('max-chars') || 0)
 
 try { process.loadEnvFile(path.join(ROOT, '.env')) } catch { /* no .env: checked below */ }
-const VOICE = process.env.GUIDE_VOICE || 'azure:en-US-BrianMultilingualNeural'
+const VOICE = process.env.GUIDE_VOICE || 'azure:en-US-Brian:DragonHDLatestNeural'
 const [PROVIDER, VOICE_NAME] = [VOICE.slice(0, VOICE.indexOf(':')), VOICE.slice(VOICE.indexOf(':') + 1)]
 const FOLDER = VOICE.replace(/[^A-Za-z0-9-]+/g, '-').toLowerCase()
 const OUT_DIR = path.join(ROOT, 'public', 'audio', 'guide', FOLDER)
@@ -71,12 +80,16 @@ if (dryRun) {
 
 /* ── Providers ── */
 const xml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')
-async function azure(text) {
+async function azure(text, voiceName) {
   const key = process.env.AZURE_SPEECH_KEY
   const region = process.env.AZURE_SPEECH_REGION
   if (!key || !region) throw new Error('Missing AZURE_SPEECH_KEY or AZURE_SPEECH_REGION in .env (see the top of this file).')
-  const pitch = process.env.AZURE_PITCH || '-6%'
-  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US"><voice name="${VOICE_NAME}"><prosody pitch="${pitch}">${xml(text)}</prosody></voice></speak>`
+  const name = voiceName || VOICE_NAME
+  // HD voices set their own tone from the words; a pitch change is only
+  // applied to the standard voices (or when AZURE_PITCH is set).
+  const pitch = process.env.AZURE_PITCH || (/DragonHD/.test(name) ? '' : '-6%')
+  const body = pitch ? `<prosody pitch="${pitch}">${xml(text)}</prosody>` : xml(text)
+  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US"><voice name="${name}">${body}</voice></speak>`
   return fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
     method: 'POST',
     headers: {
@@ -102,6 +115,16 @@ async function elevenlabs(text, model) {
 const make = PROVIDER === 'azure' ? azure : PROVIDER === 'elevenlabs' ? elevenlabs : null
 if (!make) { console.error(`Unknown voice provider "${PROVIDER}" in GUIDE_VOICE.`); process.exit(1) }
 
+/* ── Azure: which English HD voices this region offers ── */
+if (process.argv.includes('--list-voices')) {
+  const res = await fetch(`https://${process.env.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/voices/list`, { headers: { 'Ocp-Apim-Subscription-Key': process.env.AZURE_SPEECH_KEY || '' } })
+  if (!res.ok) { console.error(`Failed (${res.status}): ${(await res.text()).slice(0, 300)}`); process.exit(1) }
+  const voices = (await res.json()).filter((v) => /^en-(US|CA|GB|AU|IN)/.test(v.Locale) && /DragonHD/.test(v.ShortName))
+  voices.forEach((v) => console.log(`  ${v.ShortName.padEnd(48)} ${v.Gender}`))
+  console.log(`${voices.length} English HD voices in ${process.env.AZURE_SPEECH_REGION}.`)
+  process.exit(0)
+}
+
 /* ── A sample to listen to: three sentences, nothing else changes ── */
 if (sample) {
   const lines = [
@@ -109,7 +132,7 @@ if (sample) {
     'How did the knee pain start?',
     "You're 30 to 49. Is that right?",
   ]
-  const models = (argOf('models') || (PROVIDER === 'elevenlabs' ? 'eleven_multilingual_v2,eleven_flash_v2_5' : 'default')).split(',')
+  const models = (PROVIDER === 'azure' ? (argOf('voices') || VOICE_NAME) : (argOf('models') || 'eleven_multilingual_v2,eleven_flash_v2_5')).split(',')
   const dir = path.join(ROOT, 'public', 'audio', 'guide-sample')
   fs.mkdirSync(dir, { recursive: true })
   let used = 0
@@ -117,7 +140,7 @@ if (sample) {
     for (const [i, line] of lines.entries()) {
       const res = await make(line, model === 'default' ? undefined : model)
       if (!res.ok) { console.error(`Failed (${res.status}): ${(await res.text()).slice(0, 300)}`); process.exit(1) }
-      const file = path.join(dir, `${model}-${i + 1}.mp3`)
+      const file = path.join(dir, `${model.replace(/[^A-Za-z0-9-]+/g, '-')}-${i + 1}.mp3`)
       fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()))
       used += line.length
       console.log(`  made ${path.relative(ROOT, file)}`)
