@@ -230,6 +230,10 @@ function useVoice(level, volume, onBlocked) {
       level.current.analyser = an
     } catch { /* no level: the mouth uses its own rhythm */ }
     a.volume = Math.min(1, volume.current)
+    // A natural pace (Chandra, 14 Oct 2026: "slightly slow"): recordings
+    // play a little faster, at the same pitch.
+    a.playbackRate = VOICE_STYLE.clipRate || 1
+    a.preservesPitch = true
     a.onplay = () => { if (t !== token.current) return; startedFor.current = t; level.current.speaking = true; setNow({ id, idx: i }) }
     a.onended = () => { if (t !== token.current) return; audio.current = null; level.current.speaking = false; level.current.analyser = null; onDone() }
     a.play().catch((err) => {
@@ -894,6 +898,9 @@ export default function TalkingGuide() {
     const sc = guided ? getGuideScreen() : null
     if (!sc) { screenSeen.current = { key: null, sig: null }; setConfirm(null); if (modeRef.current === 'confirm') setMode('face'); return }
     if (sc.key !== screenSeen.current.key) {
+      // One answer card to the next: a calm "Thank you." or "Okay." first.
+      const flow = /^(q:|about:|injury:)/
+      if (flow.test(screenSeen.current.key || '') && flow.test(sc.key)) acked.current = true
       screenSeen.current = { key: sc.key, sig: sc.sig }
       setConfirm(null)
       if (sc.say) {

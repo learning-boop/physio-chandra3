@@ -1539,7 +1539,7 @@ export default function PainAssessment() {
   const tapInjury = (q, oid) => {
     pickInjury(q, oid)
     // Voice guide: confirmed first (yes by voice or tap); otherwise a flash card.
-    if (q.multi || guided) return
+    if (q.multi) return
     clearTimeout(advanceTimer.current)
     advanceTimer.current = setTimeout(() => continueInjury(oid), 280)
   }
@@ -1658,7 +1658,7 @@ export default function PainAssessment() {
     const was = isPicked(qq, oid)
     toggleAnswer(qq, oid)
     // Voice guide: the answer is confirmed (yes by voice or tap) before moving on.
-    if (!qq.multi && !was && !guided) queueNext()
+    if (!qq.multi && !was) queueNext()
   }
   // Tapping (or saying) an answer on an "about you" card.
   const aboutPick = (card, oid) => {
@@ -1671,7 +1671,7 @@ export default function PainAssessment() {
     else if (card === 'oi') { if (oid === '__skip') { goNextCard(); return } setAnswers((a) => (oiOn(a) ? dropOi(a) : { ...a, oi: 'yes' })); return }
     // After a birth, a follow-up question shows on the same card: no auto move.
     if (card === 'preg' && (oid === 'pp6' || oid === 'pp12')) return
-    if (!guided) queueNext()
+    queueNext()
   }
   /* Voice guide: on the screen whose answer is waiting for a yes, a row
      the patient can tap instead of answering aloud (Chandra, 13 Oct 2026:
@@ -1694,7 +1694,7 @@ export default function PainAssessment() {
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" stroke="none" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" /></svg>
         Talk with me?
       </p>
-      <p className="pa-mic-offer-text">Answer each question by speaking or by tapping, whichever you like. I'll check each answer with you.</p>
+      <p className="pa-mic-offer-text">Answer each question by speaking or by tapping, whichever you like. Each answer moves you on to the next question.</p>
       <div className="pa-mic-offer-btns">
         <button className="pa-confirm-yes" onClick={() => sendGuide('mic-yes')}>Use my microphone</button>
         <button className="pa-confirm-no" onClick={() => sendGuide('mic-no')}>Just tap</button>
@@ -1775,10 +1775,7 @@ export default function PainAssessment() {
       return {
         key: `about:${aboutCard}`, ready: cardReady, sig: `${answers.age}|${birthSex}|${answers[aboutCard]}`,
         say: spoken(card.text), proceed: goNextCard,
-        readBack: aboutCard === 'oi'
-          ? (oiOn(answers) ? 'You have brittle bone disease. Is that right?' : 'So brittle bone disease does not apply to you. Is that right?')
-          : aboutCard === 'age' ? readAge(cardAnswer()) : readOne(cardAnswer()),
-        auto: aboutCard !== 'oi' && !(aboutCard === 'preg' && isPostpartum(answers)),
+        // No read-back on answers (Chandra, 14 Oct 2026): a choice moves on.
         voice: 'answer', multi: false,
         options: card.options.map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
         pick: (oid) => aboutPick(aboutCard, oid),
@@ -1805,7 +1802,6 @@ export default function PainAssessment() {
       const labels = ids.map((id) => spoken((q.options.find((o) => o.id === id) || {}).label)).filter(Boolean)
       return {
         key: `injury:${injuryQ}`, ready: labels.length > 0, sig: labels.join('|'), say: spoken(q.text),
-        readBack: q.multi ? readMany(labels, !labels.length) : readOne(labels[0] || ''), auto: !q.multi,
         proceed: () => continueInjury(),
         voice: 'answer', multi: !!q.multi,
         options: arrangeOptions(q.options, q.text).map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
@@ -1832,8 +1828,7 @@ export default function PainAssessment() {
       const sig = subNow ? JSON.stringify(answers[subNow.id] ?? null) : JSON.stringify(answers[q.id] ?? null) + (gateClosed ? 'g' : '')
       const subOptions = subNow && arrangeOptions(subNow.id === 'pattern24' && restWorseKnown ? subNow.options.filter((o) => o.id !== 'restWorse') : subNow.options, subNow.text)
       return {
-        key: `q:${qIndex}:${subIdx}`, ready: cardReady, sig, readBack,
-        auto: subNow ? !subNow.multi : !q.multi && !q.textarea,
+        key: `q:${qIndex}:${subIdx}`, ready: cardReady, sig,
         say: spoken(subNow ? (subIdx === 0 ? `${q.text}. ${subNow.text}` : subNow.text) : gateClosed ? q.gate.ask : q.text),
         proceed: goNextCard,
         ...(subNow ? {
@@ -1845,7 +1840,7 @@ export default function PainAssessment() {
           options: [{ id: '__open', label: 'Yes, show me the list', letter: 'A' }, { id: q.gate.no, label: 'No', letter: 'B' }],
           pick: (oid) => {
             if (oid === '__open') setOpenLists((cur) => [...cur, q.id])
-            else { setAnswer(q.id, [q.gate.no]); if (!guided) queueNext() }
+            else { setAnswer(q.id, [q.gate.no]); queueNext() }
           },
         } : (() => {
           const { head, tail } = arrangeSplit(q.options, q.text)
@@ -2482,7 +2477,7 @@ export default function PainAssessment() {
                       {(() => {
                         const sel = Array.isArray(a) && a.length === 1 && a[0] === q.gate.no
                         return (
-                          <button style={chip(sel)} onClick={() => { if (sel) setAnswer(q.id, undefined); else { setAnswer(q.id, [q.gate.no]); if (!guided) queueNext() } }}>
+                          <button style={chip(sel)} onClick={() => { if (sel) setAnswer(q.id, undefined); else { setAnswer(q.id, [q.gate.no]); queueNext() } }}>
                             <span style={letterStyle(sel)}>B</span>
                             <span>No</span>
                             <Tick on={sel} />

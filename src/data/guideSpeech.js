@@ -11,7 +11,7 @@
 
    Anything not listed (a few combined or rare lines) is spoken by the
    browser's own voice instead. Plain .js on purpose: Node imports it. */
-import { allSpokenTexts, splitSentences } from './talkingGuide.js'
+import { allSpokenTexts, splitSentences, ACKS } from './talkingGuide.js'
 import * as SG from './symptomGuide.js'
 import * as AF from './assessmentFlow.js'
 import * as PT from './painType.js'
@@ -51,8 +51,6 @@ const ABOUT = {
     'You answered no. Is that right?',
     'Thank you, that is noted. Shall we go on?',
     'You left this blank, which is fine. Shall we go on?',
-    'You have brittle bone disease. Is that right?',
-    'So brittle bone disease does not apply to you. Is that right?',
     'Yes, show me the list.', 'No.',
     'Say yes, or tap Yes.', 'If it is, tap Yes.',
   ],
@@ -69,7 +67,10 @@ export function allGuideLines() {
     if (!q) return
     add(spoken(q.text))
     if (q.gate) { add(spoken(q.gate.ask)) }
-    for (const l of labelsOf(q)) { add(readOne(l)); add(asSentence(l)) }
+    // Each answer as a sentence of its own (tick-all read-outs, "Got it.
+    // Jumping or landing."). Single answers are not read back any more
+    // (Chandra, 14 Oct 2026: a choice just moves on).
+    for (const l of labelsOf(q)) add(asSentence(l))
     for (const g of arr(q.group)) question(g)
   }
 
@@ -82,14 +83,15 @@ export function allGuideLines() {
   for (const t of spokenAll) if (!chatty(t)) add(t.text)
   ABOUT.fixed.forEach(add)
   ABOUT.titles.forEach(add)
+  ACKS.forEach(add)
   ;['You chose these.', 'You ticked these.', 'You marked these areas.', 'Is that right?', 'Is that everything?', 'Got it.',
     "Anything else? Say next when you're done.", 'You chose: none of these. Is that right?'].forEach(add)
 
   // About you.
-  ABOUT.ages.forEach((a) => { add(readAge(a)); add(asSentence(a)) })
-  ABOUT.sex.forEach((x) => { add(readOne(x)); add(asSentence(x)) })
+  ABOUT.ages.forEach((a) => add(asSentence(a)))
+  ABOUT.sex.forEach((x) => add(asSentence(x)))
   for (const q of [DM.DM_STATUS, ST.STEROID_STATUS, PG.PREG_STATUS, PG.PREG_BIRTH, SP.SPONDY_STATUS]) question(q)
-  if (OI.OI_STATUS) { add(spoken(OI.OI_STATUS.text)); add(readOne(OI.OI_STATUS.yes)) }
+  if (OI.OI_STATUS) { add(spoken(OI.OI_STATUS.text)); add(asSentence(OI.OI_STATUS.yes)) }
 
   // Pain questions, every area: its own questions, the opening details and
   // the closing screens, and its area name (for the drawing read-back).

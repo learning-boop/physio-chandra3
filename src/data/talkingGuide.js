@@ -125,7 +125,7 @@ export const DEMO_STEPS = [null, 'turn', 'draw', 'undo', null, null]
 export const MIC_ASK = "Would you like to answer by speaking instead of tapping? I'll listen after each question, and you can say yes or no when I check your answer."
 export const MIC_NOTE = 'To do this, your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. This website does not record or keep your voice. You can switch the microphone off at any time, or just tap instead.'
 export const VOICE = {
-  on: "Awesome, thanks! When the microphone glows, I'm listening. You can say your answer, or its letter.",
+  on: "Thank you. When the microphone glows, I'm listening. You can say your answer, or its letter.",
   denied: "I can't use the microphone, so please tap your answers instead.",
   off: "Sounds good, the microphone is off. You can tap your answers.",
   again: "Sorry, I missed that one. Mind saying it again? Or just tap your answer.",
@@ -133,7 +133,7 @@ export const VOICE = {
   yesNo: 'Please say yes or no, or tap a button.',
   safetyTap: 'If one of these applies to you, please tap it on the screen. If none of them apply, say none.',
   tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
-  help: 'You can say your answer, using the words on the button or its letter. Say next to move on, or go back. When I check your answer, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
+  help: 'You can say your answer, using the words on the button or its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
   offer: "You can talk with me as we go: answer by speaking or by tapping, whichever you like. To speak, tap Use my microphone.",
   noMic: "I can't find a microphone, so please tap your answers instead.",
@@ -145,7 +145,9 @@ export const VOICE = {
 /* Said when the visitor taps "Change it" after a read-back. */
 export const CHANGE_REPLY = 'No worries. Which one fits better? You can say it, or tap it.'
 /* Said before the next question once an answer is confirmed. */
-export const ACKS = ['Great.', 'Thanks.', 'Okay.', 'Got it.', 'Perfect.']
+/* Calm, never cheerful (Chandra, 14 Oct 2026): the patient has just told us
+   about their pain, so no "Great!" or "Perfect!" after an answer. */
+export const ACKS = ['Thank you.', 'Okay.', 'Got it.', 'Thanks.']
 
 /* Pain guide stages where the guide stays out of the way completely: a page
    telling the visitor to get medical care must not have anything competing
@@ -412,7 +414,7 @@ export const ROBOTIC_VOICES = ['Microsoft Zira', 'Microsoft Hazel',
   'Ralph', 'Superstar', 'Trinoids', 'Whisper', 'Wobble', 'Grandpa', 'Grandma', 'Rocko', 'Eddy', 'Flo', 'Kathy']
 /* Natural speed (Chandra found 0.9 a little slow), a slightly lower pitch
    for more bass, and a little quieter, so it sounds soft, not announced. */
-export const VOICE_STYLE = { rate: 1, pitch: 0.88, volume: 0.85 }
+export const VOICE_STYLE = { rate: 1.1, pitch: 0.88, volume: 0.85, clipRate: 1.1 }
 
 /* ── Matching a typed question ─────────────────────────────────────────────
    Done on this device. Lower case, punctuation dropped, then each topic's
@@ -455,7 +457,7 @@ export function textKey(text) {
   return (h >>> 0).toString(16).padStart(8, '0')
 }
 /* Speech is played sentence by sentence (one recording per sentence), so a
-   message built from parts ("Great." + the next question, "You answered:
+   message built from parts ("Thank you." + the next question, "You answered:
    Male." + "Is that right?") still uses recordings. Same splitting here, in
    the player and in the script that makes the recordings. */
 export const splitSentences = (text) => (String(text).match(/[^.!?]+[.!?]+["')’]?\s*|[^.!?]+$/g) || [String(text)])
