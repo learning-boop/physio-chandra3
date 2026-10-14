@@ -2165,6 +2165,14 @@ export default function PainAssessment() {
                       onClick={() => { sendGuide('mic-off'); setGuided(false); setStage('guide') }}>
                       Start without voice
                     </button>
+                    {/* Agreeing by starting (Chandra, 14 Oct 2026): the line
+                        sits right under the buttons, the terms below it. The
+                        assistant only says one short sentence about it. */}
+                    <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.82)', margin: '14px auto 0', maxWidth: 520 }}>
+                      By pressing <strong style={{ color: '#fff' }}>Start with voice guide</strong> or{' '}
+                      <strong style={{ color: '#fff' }}>Start without voice</strong>, you agree to the{' '}
+                      <a href="#pa-terms" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>terms below</a>.
+                    </p>
                     {/* How long it takes, set apart in a soft gold panel. */}
                     <p style={{
                       fontSize: 'clamp(17px, 4.4vw, 19px)', lineHeight: 1.55, color: '#fff', fontWeight: 500,
@@ -2174,14 +2182,18 @@ export default function PainAssessment() {
                       It takes about <span style={{ color: GOLD_LIGHT }}>5–15 minutes</span>.
                       Careful answers give the most useful results.
                     </p>
-                    <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: '20px auto 0', maxWidth: 520 }}>
-                      This guide offers general information to help you describe your symptoms.
-                      It is not a diagnosis and does not replace an assessment by a qualified
-                      health professional. Your answers stay on this device unless you choose to
-                      share them: the optional AI overview, emailing your summary to Chandra, or
-                      an optional anonymous copy to help improve this guide
-                      (<Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>).
-                    </p>
+                    <div id="pa-terms" style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.68)', margin: '20px auto 0', maxWidth: 520, textAlign: 'left' }}>
+                      <p style={{ margin: 0, fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: GOLD_LIGHT, textAlign: 'center' }}>Terms of use</p>
+                      <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
+                        <li>This guide offers general information to help you describe your symptoms. It is not a diagnosis and does not replace an assessment by a qualified health professional.</li>
+                        <li>It is not for emergencies. If you think you need urgent help, call 9-1-1, or HealthLink BC on 8-1-1.</li>
+                        <li>The voice guide is a virtual assistant, not Chandra: its answers are written in advance, and its voice is an AI copy of Chandra’s voice. If you turn the microphone on, your browser’s speech service turns what you say into text.</li>
+                        <li>Your answers stay on this device unless you choose to share them: the optional AI overview, emailing your summary to Chandra, or an optional anonymous copy to help improve this guide.</li>
+                      </ul>
+                      <p style={{ margin: '8px 0 0' }}>
+                        Full details: <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </Fade>

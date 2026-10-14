@@ -8,11 +8,13 @@ import PrivacyPage from './pages/PrivacyPage'
 import DataReviewPage from './pages/DataReviewPage'
 import ScrollToTop from './components/ScrollToTop'
 import TalkingGuide from './components/TalkingGuide'
+import KeepAwake from './components/KeepAwake'
 
 export default function App() {
   return (
     <>
       <ScrollToTop />
+      <KeepAwake />
       <Routes>
         <Route path="/"           element={<Home />} />
         <Route path="/about"      element={<AboutPage />} />

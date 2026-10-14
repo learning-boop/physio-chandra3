@@ -35,14 +35,11 @@ import { GUIDE_AUDIO } from './guideAudio.js'
 export const PAGE_MESSAGES = {
   'guide:landing': {
     open: true,
-    // Under 10 seconds (Chandra, 14 Oct 2026): no clinic details here; the
-    // page itself says it takes 5 to 15 minutes and is not a diagnosis.
-    // With a microphone (Chandra, 14 Oct 2026): one tap on the microphone
-    // light (consent first), then "start with voice guide" or "start
-    // without voice" can be said. Browsers with no speech recognition
-    // (Firefox) keep the tap-only welcome (textNoMic).
-    text: "Hey there, welcome! I'm your virtual assistant. Tap Start with voice guide, or tap the microphone and tell me how to start.",
-    textNoMic: "Hey there, welcome! I'm your virtual assistant. Tap Start with voice guide, and I'll walk you through it, step by step.",
+    // Under 5 seconds (Chandra, 14 Oct 2026): no clinic details, straight
+    // to the action, and one sentence about agreeing by starting; the terms
+    // are on screen and never read out. With the microphone on, "start with
+    // voice guide" or "start without voice" can also be said.
+    text: "Hi, tap Start to begin. Starting means you agree to the terms below.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
   'guide:guide': {
