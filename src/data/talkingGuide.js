@@ -35,7 +35,9 @@ import { GUIDE_AUDIO } from './guideAudio.js'
 export const PAGE_MESSAGES = {
   'guide:landing': {
     open: true,
-    text: "Hey there, and welcome! I'm the virtual assistant of Physio Chandra, and it's great to have you here. Chandra is a registered physiotherapist in Surrey and Burnaby. This guide helps you describe your pain before your visit, in about 5 to 15 minutes. You mark where it hurts on a 3D body and answer a few short questions. At the end you'll see general information, not a diagnosis, and you can book an assessment if you'd like. Tap Start with voice guide and I'll talk you through each step, or Start without voice if you'd rather just tap through.",
+    // Under 10 seconds (Chandra, 14 Oct 2026): no clinic details here; the
+    // page itself says it takes 5 to 15 minutes and is not a diagnosis.
+    text: "Hey there, welcome! I'm your virtual assistant. Tap Start with voice guide, and I'll walk you through it, step by step.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
   'guide:guide': {

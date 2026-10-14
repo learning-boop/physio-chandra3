@@ -2,13 +2,9 @@
    says which sentence, keyed by a short code of the exact words. Voice:
    elevenlabs:Dj4pAqS2i4VeLFjPpqsx. Do not edit by hand. Sentences not listed use the browser's voice. */
 export const GUIDE_AUDIO = {
-  'ad4e2193': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/ad4e2193.mp3',
-  '71a812c5': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/71a812c5.mp3',
-  '2ec13ac0': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/2ec13ac0.mp3',
-  'd010fc90': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/d010fc90.mp3',
-  '11d046db': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/11d046db.mp3',
-  'e7961498': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/e7961498.mp3',
-  'c64fdfa8': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/c64fdfa8.mp3',
+  'cf073f98': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/cf073f98.mp3',
+  '417825b6': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/417825b6.mp3',
+  '4fae08d6': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/4fae08d6.mp3',
   '5bd2e6d8': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/5bd2e6d8.mp3',
   'ed768869': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/ed768869.mp3',
   'bc42ca20': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/bc42ca20.mp3',
@@ -561,4 +557,5 @@ export const GUIDE_AUDIO = {
   '46b6d477': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/46b6d477.mp3',
   '0e66997a': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/0e66997a.mp3',
   'e981313a': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/e981313a.mp3',
+  '11d046db': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/11d046db.mp3',
 }
