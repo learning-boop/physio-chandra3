@@ -3180,6 +3180,20 @@ export default function PainAssessment() {
                         {EMERGENCY_ADVICE[emergencyCare].button}
                       </a>
                     )}
+                    {/* Thoughts of self-harm ticked together with another
+                        emergency: the 911 or hospital advice leads, and the
+                        9-8-8 line is always shown as well (14 Oct 2026). */}
+                    {emergencyCare !== 'crisis' && pickedFlags.some((f) => f.goTo === 'crisis') && (
+                      <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(239,68,68,0.35)' }}>
+                        <strong style={{ color: '#fca5a5', fontSize: 17, lineHeight: 1.4 }}>{EMERGENCY_ADVICE.crisis.title}</strong>
+                        <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
+                          {EMERGENCY_ADVICE.crisis.text}
+                        </p>
+                        <a href={`tel:${EMERGENCY_ADVICE.crisis.tel}`} style={{ ...goldBtn, background: '#ef4444', color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', marginTop: 14 }}>
+                          {EMERGENCY_ADVICE.crisis.button}
+                        </a>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div style={{ ...card, borderColor: 'rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', maxWidth: 520 }}>
@@ -3190,6 +3204,7 @@ export default function PainAssessment() {
                       {sameDayFlagged
                         ? 'Something you ticked should be checked by a doctor today: your family doctor, a walk-in clinic, or an urgent care centre.'
                         : 'What you ticked should be checked by your doctor. Please book a visit with your family doctor, or a walk-in clinic if you do not have one.'}
+                      {' '}If you are not sure where to go, call HealthLink BC on 8-1-1 to speak with a nurse, any time of day or night.
                     </p>
                     <p style={{ ...body, fontSize: 15.5, color: 'rgba(255,255,255,0.85)', margin: '10px 0 0' }}>
                       {underFive
@@ -3763,9 +3778,18 @@ export default function PainAssessment() {
                   <PainAIPanel zones={zones} answers={aiAnswers.core} privateAnswers={aiAnswers.wellbeing} notes={notesText} matched={matched} onReview={setReview} aiOnly />
                 </div>
 
-                {underFive && !holdBooking ? (
+                {underFive ? (
+                  /* Under 5 first (clinic rule: Chandra sees children from 5),
+                     also when a doctor must see them first (14 Oct 2026). */
                   <>
-                    <span style={{ ...label, marginBottom: 12 }}>Your Next Step · A Children's Physiotherapist</span>
+                    <span style={{ ...label, marginBottom: 12 }}>{holdBooking ? 'Your Next Step · See a Doctor First' : "Your Next Step · A Children's Physiotherapist"}</span>
+                    {holdBooking && (
+                      <p style={{ ...body, margin: '12px 0 0', maxWidth: 520 }}>
+                        {holdToday
+                          ? 'Please have your child seen by a doctor or nurse practitioner today: your family doctor, a walk-in clinic or an urgent care centre, or call HealthLink BC on 8-1-1 if you are not sure where to go.'
+                          : 'Please have your child seen by your family doctor in the next few days, or a walk-in clinic if you do not have one; HealthLink BC on 8-1-1 can help if you are not sure where to go.'}
+                      </p>
+                    )}
                     <p style={{ ...body, margin: '12px 0 18px', maxWidth: 520 }}>{UNDER_FIVE}</p>
                   </>
                 ) : holdBooking ? (

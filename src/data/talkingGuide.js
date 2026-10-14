@@ -93,8 +93,11 @@ export const PAGE_MESSAGES = {
     chips: ['safety'],
   },
   'guide:ok': {
-    text: "These are your results. They are general information about what your answers can be associated with. They are not a diagnosis. You can save them as a PDF, and book an assessment at the end of the page. Please bring your reference code or PDF to the visit.",
-    chips: ['results', 'booking', 'first-visit', 'save'],
+    // Said to everyone, so no booking here (14 Oct 2026): under-5 and
+    // doctor-first results must not be told to book; the page's own next
+    // step says what fits.
+    text: "These are your results. They are general information about what your answers can be associated with. They are not a diagnosis. Your next step is at the end of the page. You can save your results as a PDF.",
+    chips: ['results', 'save', 'privacy'],
   },
   '/about': {
     text: 'This page is about Chandra and how Chandra works. You can also check Chandra’s registration with the College of Health and Care Professionals of BC.',
