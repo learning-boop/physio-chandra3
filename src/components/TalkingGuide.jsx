@@ -829,6 +829,19 @@ export default function TalkingGuide() {
     startListening(kind)
   }
 
+  // The light-like microphone beside the face (Chandra, 14 Oct 2026): lit
+  // while it listens, off otherwise. A tap asks first (with the privacy
+  // note), then starts or stops listening, without opening any box.
+  const micDot = () => {
+    if (!micOn) { askMic(); return }
+    if (hearing) { stopListening(); return }
+    voice.stop()
+    const sc = guided ? getGuideScreen() : null
+    const kind = confirm ? 'confirm' : sc && sc.voice ? 'answer' : guided && assess ? 'nav' : 'chat'
+    if (kind === 'chat') setMode('chat')
+    startListening(kind)
+  }
+
   /* ── Voice guide: the drawing demo ── */
   const demo = useRef({ msgId: null, byVoice: false, timers: [] })
   const [demoOn, setDemoOn] = useState(false)
@@ -1316,6 +1329,13 @@ export default function TalkingGuide() {
         </section>
       )}
 
+      {Recognition && (
+        <button className={'tg-micdot' + (hearing ? ' on' : '')} onClick={micDot} aria-pressed={!!hearing}
+          aria-label={!micOn ? 'Answer by speaking: turn the microphone on' : hearing ? 'Microphone is on, listening. Tap to stop' : 'Microphone is off. Tap to speak'}
+          title={!micOn ? 'Answer by speaking' : hearing ? 'Listening… tap to stop' : 'Tap to speak'}>
+          <Mic />
+        </button>
+      )}
       {speaking && mode === 'face' && (
         <button className="tg-mute-badge" onClick={() => setVoice(false)} aria-label="Mute the assistant" title="Mute">
           <Speaker on={false} />
@@ -1408,6 +1428,23 @@ export default function TalkingGuide() {
         .tg-btn-gold { background: ${GOLD}; border-color: ${GOLD}; color: ${NAVY}; }
         .tg-btn-big { min-height: 48px; padding: 10px 20px; font-size: 15.5px; flex: 1 1 auto; justify-content: center; }
         .tg-confirm { border-color: ${GOLD}; }
+        .tg-micdot {
+          position: absolute; left: 84px; bottom: 18px; width: 38px; height: 38px; border-radius: 50%; padding: 0;
+          display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+          background: rgba(10,26,47,0.85); color: rgba(255,255,255,0.38); border: 1.5px solid rgba(255,255,255,0.22);
+          transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .tg-micdot:hover { color: rgba(255,255,255,0.7); }
+        .tg-micdot:focus-visible { outline: 2px solid ${GOLD_LIGHT}; outline-offset: 2px; }
+        .tg-micdot.on {
+          background: #5CC8C2; color: ${NAVY}; border-color: #9FEAE4;
+          animation: tg-micglow 1.4s ease-in-out infinite;
+        }
+        @keyframes tg-micglow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(92,200,194,0.75), 0 0 10px 2px rgba(92,200,194,0.5); }
+          50% { box-shadow: 0 0 0 9px rgba(92,200,194,0), 0 0 18px 6px rgba(92,200,194,0.35); }
+        }
+        @media (max-width: 600px), (pointer: coarse) and (max-width: 900px) { .tg-micdot { left: 64px; bottom: 11px; width: 34px; height: 34px; } }
         .tg-mute-badge {
           position: absolute; left: 52px; bottom: 50px; z-index: 1; width: 32px; height: 32px; border-radius: 50%;
           display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
@@ -1503,7 +1540,7 @@ export default function TalkingGuide() {
           .tg-chat { height: min(70dvh, calc(100dvh - 190px)); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .tg-hearing, .tg-face-listen, .tg-dots i { animation: none; }
+          .tg-hearing, .tg-face-listen, .tg-dots i, .tg-micdot.on { animation: none; }
           .tg-lids, .tg-talk .tg-head, .tg-dot, .tg-bubble, .tg-chat { animation: none; }
           .tg-face, .tg-face-talk { transition: none; }
         }
