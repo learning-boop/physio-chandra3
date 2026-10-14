@@ -46,10 +46,13 @@
    recordings of each fixed answer. */
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { textKey } from '../src/data/talkingGuide.js'
 import { allGuideSentences } from '../src/data/guideSpeech.js'
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..')
+// fileURLToPath, not URL.pathname: the folder has spaces ("Physio Chandra"),
+// which pathname keeps as %20, pointing at a folder that isn't there.
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const MANIFEST = path.join(ROOT, 'src', 'data', 'guideAudio.js')
 const dryRun = process.argv.includes('--dry-run')
 const sample = process.argv.includes('--sample')
