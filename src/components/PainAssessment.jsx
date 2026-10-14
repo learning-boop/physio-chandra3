@@ -2162,7 +2162,7 @@ export default function PainAssessment() {
                       </button>
                     </div>
                     <button className="pa-quiet-start" style={{ maxWidth: 520, display: 'flex', margin: '12px auto 0' }}
-                      onClick={() => { setGuided(false); setStage('guide') }}>
+                      onClick={() => { sendGuide('mic-off'); setGuided(false); setStage('guide') }}>
                       Start without voice
                     </button>
                     {/* How long it takes, set apart in a soft gold panel. */}

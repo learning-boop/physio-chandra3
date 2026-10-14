@@ -7,7 +7,7 @@ import Footer from '../components/Footer'
    Keep it in step with what the site actually does: if the pain guide, the
    AI overview (api/pain-analysis.js) or the hosting changes, update this. */
 
-const UPDATED = 'October 10, 2026'
+const UPDATED = 'October 14, 2026'
 
 const sections = [
   {
@@ -30,8 +30,8 @@ const sections = [
     body: [
       'The face in the corner of each page is a virtual assistant. It is not Chandra and not a live chat: its answers are written in advance. What you type to it is matched to those answers on your own device and is not sent anywhere or saved.',
       'Its voice is made by your browser, or is a recording made in advance with an AI copy of Chandra’s voice. Reading the words aloud happens on your device; with some browsers (for example Microsoft Edge) the browser maker’s online voice service is used to read the assistant’s own words aloud, but never what you type or answer.',
-      'With the voice guide you can choose to answer by speaking. The microphone is only used if you agree to it on screen and then allow it in your browser’s own permission prompt. While it is on, your browser turns your speech into text. In most browsers this is done by the browser maker’s speech service (Google for Chrome, Microsoft for Edge, Apple for Safari), so what you say while the microphone is listening is sent to that company to be turned into text, under its own privacy terms; some browsers can do this on your device, and the guide asks for that where it is offered. This website does not receive, record or keep your voice. Only the text is used, on your device, to pick your answer, and every answer is read back for you to confirm. On the safety questions, anything that applies to you must be tapped: speech can only say that none of them apply, and that is read back for you to confirm too.',
-      'The microphone listens only right after the assistant asks you something, never while it is talking, and the assistant’s face glows while it listens. Say “stop listening”, tap the microphone button, or block the microphone in your browser settings at any time, and carry on by tapping.',
+      'You can choose to talk to the assistant: to start the guide (“start with voice guide” or “start without voice”) and to answer its questions by speaking. The microphone is only used if you agree to it on screen and then allow it in your browser’s own permission prompt. While it is on, your browser turns your speech into text. In most browsers this is done by the browser maker’s speech service (Google for Chrome, Microsoft for Edge, Apple for Safari), so what you say while the microphone is listening is sent to that company to be turned into text, under its own privacy terms; some browsers can do this on your device, and the guide asks for that where it is offered. This website does not receive, record or keep your voice. Only the text is used, on your device, to pick your answer, which you see selected on screen and can change. What you marked on the body, and your safety answers, are read back for you to confirm. On the safety questions, anything that applies to you must be tapped: speech can only say that none of them apply, and that is read back for you to confirm too.',
+      'The microphone never listens before you have agreed, and never while the assistant is talking. It listens only when the assistant is waiting for you (for example, for how you would like to start, or for an answer), and the small microphone light beside the assistant’s face glows while it listens and is dark when it does not. Your choice lasts only for this visit (until the browser tab is closed). Say “stop listening”, tap the microphone light, choose Start without voice, or block the microphone in your browser settings at any time, and carry on by tapping.',
     ],
   },
   {

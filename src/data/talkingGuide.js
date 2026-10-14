@@ -37,7 +37,12 @@ export const PAGE_MESSAGES = {
     open: true,
     // Under 10 seconds (Chandra, 14 Oct 2026): no clinic details here; the
     // page itself says it takes 5 to 15 minutes and is not a diagnosis.
-    text: "Hey there, welcome! I'm your virtual assistant. Tap Start with voice guide, and I'll walk you through it, step by step.",
+    // With a microphone (Chandra, 14 Oct 2026): one tap on the microphone
+    // light (consent first), then "start with voice guide" or "start
+    // without voice" can be said. Browsers with no speech recognition
+    // (Firefox) keep the tap-only welcome (textNoMic).
+    text: "Hey there, welcome! I'm your virtual assistant. Tap Start with voice guide, or tap the microphone and tell me how to start.",
+    textNoMic: "Hey there, welcome! I'm your virtual assistant. Tap Start with voice guide, and I'll walk you through it, step by step.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
   'guide:guide': {
@@ -140,6 +145,9 @@ export const VOICE = {
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
   drawFirst: 'Please draw where it hurts first, then say next.',
   noNext: "There's nothing to move on to here. You can ask me a question instead.",
+  // The landing page, once the microphone is on.
+  startAsk: 'How would you like to start? Say start with voice guide, or start without voice.',
+  startAgain: 'Sorry, I missed that. Say start with voice guide, or start without voice. Or just tap a button.',
 }
 
 /* Said when the visitor taps "Change it" after a read-back. */
@@ -473,6 +481,7 @@ export function allSpokenTexts() {
     if (t && typeof t === 'object') { add(name + '-phone', t.phone); add(name + '-computer', t.computer) } else add(name, t)
   }
   for (const [key, m] of Object.entries(PAGE_MESSAGES)) both(key.startsWith('guide:') ? 'step-' + key.slice(6) : 'page-' + key.slice(1), m.text)
+  for (const [key, m] of Object.entries(PAGE_MESSAGES)) if (m.textNoMic) add('step-' + key.slice(6) + '-nomic', m.textNoMic)
   for (const [id, t] of Object.entries(TOPICS)) both('topic-' + id, t.a)
   for (const r of SPECIAL_REPLIES) add('reply-' + r.id, r.a)
   both('demo', DEMO)

@@ -4,7 +4,7 @@ import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDe
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
-import { command, yesNo, saysNone, matchOptions } from '../data/voiceMatch'
+import { command, yesNo, saysNone, matchOptions, norm } from '../data/voiceMatch'
 import { gotMany } from '../data/guideSpeech'
 
 /* ── The talking guide: Chandra's face in the bottom-left corner ──────────
@@ -524,6 +524,11 @@ export default function TalkingGuide() {
   const assess = ASSESS_ROUTES.includes(pathname)
   const ctxKey = assess ? `guide:${stage || 'landing'}` : pathname
   const page = PAGE_MESSAGES[ctxKey]
+  // The landing page: once the microphone is on, "start with voice guide"
+  // or "start without voice" can be said (Chandra, 14 Oct 2026).
+  const onLanding = assess && ctxKey === 'guide:landing'
+  const landingRef = useRef(onLanding)
+  landingRef.current = onLanding
   const hidden = HIDDEN_ROUTES.some((r) => pathname.startsWith(r)) || (assess && SILENT_STAGES.includes(stage))
 
   const level = useRef({ speaking: false, pulse: 0, analyser: null })
@@ -632,7 +637,8 @@ export default function TalkingGuide() {
     clearTimeout(welcomeTimer.current)
     // Voice guide, how-to page, microphone not chosen yet: add how to talk with me.
     const offerNow = guidedRef.current && assess && stage === 'guide' && !!Recognition && !micOnRef.current && store.get('sessionStorage', 'tg-mic') === null
-    const text = forDevice(page.text, phone) + (offerNow ? ' ' + VOICE.offer : '')
+    const base = !Recognition && page.textNoMic ? page.textNoMic : page.text
+    const text = forDevice(base, phone) + (offerNow ? ' ' + VOICE.offer : '')
     const msg = addGuide(text, { audio: page.audio })
     setChips(page.chips || DEFAULT_CHIPS)
     const seen = seenList().includes(ctxKey)
@@ -657,6 +663,12 @@ export default function TalkingGuide() {
     } else {
       setMode('face')
       if (!seen) setUnread(true)
+    }
+    // Back on the landing page with the microphone already on (this visit):
+    // listen for how to start, after the welcome if it is being read.
+    if (ctxKey === 'guide:landing' && micOnRef.current) {
+      listenFor('start')
+      setTimeout(() => { if (expectNext.current === 'start' && !rec.current && !speakingNowRef.current && landingRef.current) { expectNext.current = null; startListening('start') } }, 1600)
     }
     // Only a change of page or step brings a new message.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -764,6 +776,8 @@ export default function TalkingGuide() {
   }, [voice.now.id, micOn, startListening])
   useEffect(() => () => stopListening(), [stopListening])
   useEffect(() => { stopListening() }, [pathname, stopListening])
+  // Off the landing page, its "how to start" listening ends.
+  useEffect(() => { if (!onLanding && (recKind.current === 'start' || expectNext.current === 'start')) { if (expectNext.current === 'start') expectNext.current = null; if (rec.current && recKind.current === 'start') stopListening() } }, [onLanding, stopListening])
 
   // Saying something (a fixed message) and then listening for the reply.
   const sayThen = (text, kind) => {
@@ -791,6 +805,7 @@ export default function TalkingGuide() {
       afterConsent.current = null
       if (!ok) { sayThen(VOICE.denied); return }
       if (then) { then(); return }
+      if (landingRef.current) { sayThen(VOICE.startAsk, 'start'); return }
       const sc = getGuideScreen()
       sayThen(VOICE.on, sc && sc.voice ? 'answer' : guidedRef.current && assess ? 'nav' : null)
     }
@@ -837,7 +852,7 @@ export default function TalkingGuide() {
     if (hearing) { stopListening(); return }
     voice.stop()
     const sc = guided ? getGuideScreen() : null
-    const kind = confirm ? 'confirm' : sc && sc.voice ? 'answer' : guided && assess ? 'nav' : 'chat'
+    const kind = landingRef.current ? 'start' : confirm ? 'confirm' : sc && sc.voice ? 'answer' : guided && assess ? 'nav' : 'chat'
     if (kind === 'chat') setMode('chat')
     startListening(kind)
   }
@@ -999,11 +1014,12 @@ export default function TalkingGuide() {
 
   // Taps on the page for me (src/data/guideStage.js, sendGuide).
   const handlers = useRef({})
-  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo() }
+  // 'mic-off': "Start without voice" was tapped, so the microphone goes off.
+  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo(), 'mic-off': () => { if (micOnRef.current || rec.current) micOff(false) } }
   useEffect(() => {
     if (!guideEvents) return
     const on = (e) => { const h = handlers.current[e.type]; if (h) h() }
-    const types = ['yes', 'change', 'mic-yes', 'mic-no']
+    const types = ['yes', 'change', 'mic-yes', 'mic-no', 'mic-off']
     types.forEach((t) => guideEvents.addEventListener(t, on))
     return () => types.forEach((t) => guideEvents.removeEventListener(t, on))
   }, [])
@@ -1020,6 +1036,7 @@ export default function TalkingGuide() {
   // listened for (the new page had nothing to say), listen again.
   const keepListening = () => setTimeout(() => {
     if (!micOnRef.current || rec.current || speakingNowRef.current || expectNext.current) return
+    if (landingRef.current) { startListening('start'); return }
     const sc = guidedRef.current ? getGuideScreen() : null
     startListening(sc && sc.voice ? 'answer' : 'nav')
   }, 1500)
@@ -1030,6 +1047,33 @@ export default function TalkingGuide() {
     if (kind !== 'chat') keepListening()
     const text = alts[0]
     setHeardLast(text)
+    // The landing page: how to start. "Without" is checked first, as it
+    // also holds "with".
+    if (kind === 'start') {
+      if (!landingRef.current) return
+      // Anything urgent ("chest pain") is answered first, as everywhere.
+      const r = findReply(text)
+      if (r && r.urgent) { reply(text, r); return }
+      if (command(text) === 'stop') { micOff(true); return }
+      const all = alts.map(norm).join(' | ')
+      if (/(without|no voice|no guide|not? (the )?voice|tap|tapping|myself|on my own|quiet|silent|mute)/.test(all)) {
+        micOff(false)
+        const btn = document.querySelector('.pa-landing .pa-quiet-start')
+        if (btn) btn.click()
+        return
+      }
+      if (/(voice|guide|start|begin|with|talk|speak|yes|go|next|continue|ready)/.test(all)) {
+        const btn = document.querySelector('.pa-landing .pa-primary')
+        if (btn) btn.click()
+        return
+      }
+      // A question: answer it, then ask again how to start.
+      if (r && r.id !== 'fallback') { reply(text, r); listenFor('start'); return }
+      misses.current += 1
+      if (misses.current >= 3) { misses.current = 0; sayThen(VOICE.giveUp); return }
+      sayThen(VOICE.startAgain, 'start')
+      return
+    }
     const cmd = command(text)
     if (cmd === 'stop') { micOff(true); return }
     if (cmd === 'help') { sayThen(VOICE.help, kind); return }
