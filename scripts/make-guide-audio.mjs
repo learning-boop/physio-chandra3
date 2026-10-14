@@ -107,7 +107,7 @@ async function azure(text, voiceName) {
 async function elevenlabs(text, model) {
   const key = process.env.ELEVENLABS_API_KEY
   if (!key) throw new Error('Missing ELEVENLABS_API_KEY in .env (see the top of this file).')
-  return fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_NAME}?output_format=mp3_44100_128`, {
+  return fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_NAME}?output_format=${process.env.ELEVENLABS_FORMAT || 'mp3_44100_32'}`, {
     method: 'POST',
     headers: { 'xi-api-key': key, 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
     // Calm and steady; lower stability if flat, raise similarity if it drifts.
