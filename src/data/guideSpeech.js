@@ -73,8 +73,13 @@ export function allGuideLines() {
     for (const g of arr(q.group)) question(g)
   }
 
-  // The assistant's own messages (welcome, tips, answers, demo, prompts).
-  for (const t of allSpokenTexts()) add(t.text)
+  // In order of how often they are heard, so a partial run (a plan's
+  // monthly credits) records what every visitor hears first: the
+  // assistant's page messages, demo and prompts now; its chat answers
+  // (long, asked less often) at the very end.
+  const spokenAll = allSpokenTexts()
+  const chatty = (t) => /^(topic|reply)-|^fallback$|^greeting$/.test(t.name)
+  for (const t of spokenAll) if (!chatty(t)) add(t.text)
   ABOUT.fixed.forEach(add)
   ABOUT.titles.forEach(add)
   ;['You chose these.', 'You ticked these.', 'You marked these areas.', 'Is that right?', 'Is that everything?', 'Got it.',
@@ -105,6 +110,8 @@ export function allGuideLines() {
 
   // Injury questions.
   for (const sc of arr(INJ.SCREENS)) arr(sc.questions).forEach(question)
+  // Last: the chat answers.
+  for (const t of spokenAll) if (chatty(t)) add(t.text)
   return out
 }
 
