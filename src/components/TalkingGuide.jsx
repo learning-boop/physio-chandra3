@@ -4,8 +4,8 @@ import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDe
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
-import { command, yesNo, saysNone, matchOptions, norm, wakeWord } from '../data/voiceMatch'
-import { gotMany } from '../data/guideSpeech'
+import { command, yesNo, saysNone, matchDetail, norm, wakeWord } from '../data/voiceMatch'
+import { gotMany, asSentence } from '../data/guideSpeech'
 
 /* ── The talking guide: Chandra's face in the bottom-left corner ──────────
    On every page (Chandra, 10 Oct 2026). The face is the logo itself
@@ -1105,6 +1105,7 @@ export default function TalkingGuide() {
   }
   // After a spoken step: if, a moment later, nothing is being said or
   // listened for (the new page had nothing to say), listen again.
+  const whichOne = useRef(null)   // { key, ids }: the two answers just asked about
   const keepListening = () => setTimeout(() => {
     if (!micOnRef.current || rec.current || speakingNowRef.current || expectNext.current) return
     if (landingRef.current) { startListening('start'); return }
@@ -1191,8 +1192,23 @@ export default function TalkingGuide() {
       // Tick-all cards: "next" / "that's all" moves on.
       if (sc.multi && alts.some((a) => /(done|that'?s (all|it)|nothing else|no more|finished)/i.test(a))) { sc.proceed(); return }
       let ids = []
-      for (const a of alts) { ids = matchOptions(a, sc.options, sc.multi); if (ids.length) break }
-      if (!ids.length) { if (!chatter) retry('answer'); return }
+      // Just asked "which one did you mean?": first among those two.
+      const narrowed = whichOne.current && whichOne.current.key === sc.key ? sc.options.filter((o) => whichOne.current.ids.includes(o.id)) : null
+      whichOne.current = null
+      if (narrowed) for (const a of alts) { ids = matchDetail(a, narrowed, false).ids; if (ids.length) break }
+      let close = null
+      if (!ids.length) for (const a of alts) { const r = matchDetail(a, sc.options, sc.multi); ids = r.ids; if (ids.length) break; close = close || r.close }
+      if (!ids.length) {
+        // Two answers fit about equally: ask, rather than guess.
+        if (close) {
+          whichOne.current = { key: sc.key, ids: close }
+          const labels = close.map((id) => (sc.options.find((o) => o.id === id) || {}).label).filter(Boolean)
+          sayThen(`${VOICE.whichOne} ${labels.map(asSentence).join(' ')}`, 'answer')
+          return
+        }
+        if (!chatter) retry('answer')
+        return
+      }
       misses.current = 0
       ids.forEach((id) => sc.pick(id))
       if (!sc.multi) return   // a one-answer card moves on by itself, and says it back

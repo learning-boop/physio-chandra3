@@ -145,6 +145,8 @@ export const VOICE = {
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
   drawFirst: 'Please draw where it hurts first, then say next.',
   noNext: "There's nothing to move on to here. You can ask me a question instead.",
+  // Two answers fit what was said about equally; their labels follow.
+  whichOne: 'Which one did you mean?',
   // Called by name ("hey Chandra") with nothing after it.
   wake: "Yes? I'm listening.",
   // The landing page, once the microphone is on.
