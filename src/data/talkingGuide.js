@@ -148,6 +148,16 @@ export const VOICE = {
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
   drawFirst: 'Please draw where it hurts first, then say next.',
   noNext: "There's nothing to move on to here. You can ask me a question instead.",
+  // The drawing page (15 Oct 2026): what was picked up, no yes/no question.
+  areasFirst: "Here's what I picked up from your drawing.",
+  areasNow: 'Here is what I have now.',
+  areasHow: "If one of these isn't right, tap it to take it off, or say remove, and the body part. When it looks right, say next, or tap Continue.",
+  areaRemoved: 'Okay, I took this one off.',
+  areaAdded: 'Okay, I put this one back.',
+  areaNotFound: "I couldn't find that one in your list. You can tap it on the screen instead.",
+  areaLast: "That's the only area left, so I'll keep it. You can draw again if you need to.",
+  // A safety page answered "none" by voice: said as the next page opens.
+  noneNoted: 'Okay, none of these apply.',
   // "Turn it that way", with no direction yet (the drawing page).
   whichWay: 'Left or right?',
   // Two answers fit what was said about equally; their labels follow.

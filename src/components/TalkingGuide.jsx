@@ -6,7 +6,7 @@ import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDe
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
-import { command, yesNo, saysNone, matchDetail, norm, wakeWord, bodyMove } from '../data/voiceMatch'
+import { command, yesNo, saysNone, matchDetail, norm, wakeWord, bodyMove, areaEdit } from '../data/voiceMatch'
 import { gotMany, asSentence } from '../data/guideSpeech'
 import { OnDeviceRecognition, prepareOnDevice, onDeviceReady, releaseOnDevice } from './onDeviceSpeech'
 
@@ -1073,7 +1073,9 @@ export default function TalkingGuide() {
         const got = takeGuideReflect().replace(/[.\s]+$/, '')
         const ack = acked.current ? ACKS[Math.floor(Math.random() * ACKS.length)] + ' ' : ''
         acked.current = false
-        const msg = addGuide(ack + (got ? `Got it. ${asSentence(got)} ` : '') + intro + sc.say)
+        const pre = pendingAck.current ? pendingAck.current + ' ' : ''
+        pendingAck.current = ''
+        const msg = addGuide(pre + ack + (got ? `Got it. ${asSentence(got)} ` : '') + intro + sc.say)
         say(msg)
         misses.current = 0
         if (sc.voice) listenFor('answer')
@@ -1089,7 +1091,14 @@ export default function TalkingGuide() {
     else if (sc.auto === 'idle') {
       // The drawing changed: listen again at once, so "next" is heard.
       if (micOnRef.current && !speakingNowRef.current) setTimeout(() => { if (!rec.current && !speakingNowRef.current) startListening('nav') }, 300)
-      askTimer.current = setTimeout(() => { if (!demo.current.msgId) askBack() }, 4500)
+      askTimer.current = setTimeout(() => {
+        if (demo.current.msgId) return
+        const s2 = getGuideScreen()
+        if (!s2 || !s2.areasOn || !s2.areasOn.length) return
+        const first = !areasTold.current
+        areasTold.current = true
+        sayThen(`${first ? VOICE.areasFirst : VOICE.areasNow} ${s2.areasOn.map(asSentence).join(' ')}${first ? ' ' + VOICE.areasHow : ''}`, 'answer')
+      }, 4500)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screenSig, guided])
@@ -1169,6 +1178,8 @@ export default function TalkingGuide() {
   // After a spoken step: if, a moment later, nothing is being said or
   // listened for (the new page had nothing to say), listen again.
   const whichOne = useRef(null)   // { key, ids }: the two answers just asked about
+  const areasTold = useRef(false) // the drawing's areas said once with how to change them
+  const pendingAck = useRef('')   // said before the next screen ("Okay, none of these apply.")
   const lastMove = useRef(null)   // the last way the body was turned by voice ("a bit more")
   const keepListening = () => setTimeout(() => {
     if (!micOnRef.current || rec.current || speakingNowRef.current || expectNext.current) return
@@ -1197,6 +1208,26 @@ export default function TalkingGuide() {
     // The drawing page: "turn left", "show the back", "zoom in"... turn the
     // 3D body (Chandra, 15 Oct 2026). A yes or no to the read-back
     // ("right", "that's right") stays an answer.
+    // The drawing page: "remove the knee", "take off my left shoulder",
+    // "put the hip back" change the areas picked up (Chandra, 15 Oct 2026).
+    if (stage === 'draw' && assess) {
+      const ed = areaEdit(text)
+      const sc = getGuideScreen()
+      if (ed && sc && sc.areas) {
+        const pool = sc.areas.filter((a) => (ed.op === 'remove' ? a.on : !a.on))
+        const r = ed.what ? matchDetail(ed.what, pool.map((a) => ({ id: a.id, label: a.label }))) : { ids: [], close: null }
+        // Two names fit ("lower back": "Low back & pelvis" or "Where the mid
+        // back meets the low back"): the shorter, plainer one.
+        const words = (id) => (pool.find((a) => a.id === id) || { label: '' }).label.split(/\s+/).length
+        const ids = r.ids.length ? r.ids : r.close ? [r.close.slice().sort((x, y) => words(x) - words(y))[0]] : []
+        const hit = ids.length === 1 ? pool.find((a) => a.id === ids[0]) : null
+        if (!hit) { sayThen(VOICE.areaNotFound, kind); return }
+        if (ed.op === 'remove' && sc.areas.filter((a) => a.on).length === 1) { sayThen(VOICE.areaLast, kind); return }
+        sc.toggleArea(hit.id)
+        sayThen(`${ed.op === 'remove' ? VOICE.areaRemoved : VOICE.areaAdded} ${asSentence(hit.label)}`, kind)
+        return
+      }
+    }
     if (stage === 'draw' && assess && !(kind === 'confirm' && yesNo(text))) {
       const mv = bodyMove(text)
       if (mv) {
@@ -1302,11 +1333,11 @@ export default function TalkingGuide() {
       if (picked.some((l) => /^(none|no)\b/i.test(l))) { setTimeout(() => sc.proceed(), 400); return }
       sayThen(gotMany(picked), 'answer')
     } else if (sc.voice === 'none') {
-      if (alts.some(saysNone)) setTimeout(() => askBack(), 100)
+      if (alts.some(saysNone)) { pendingAck.current = VOICE.noneNoted; sc.proceed() }
       else sayThen(VOICE.safetyTap, 'answer')
     } else if (sc.voice === 'confirm') {
-      if (alts.some((a) => yesNo(a) === 'yes')) askBack()
-      else sayThen(VOICE.tapThenDone, 'answer')
+      if (alts.some((a) => yesNo(a) === 'yes') && sc.ready) { acked.current = true; sc.proceed() }
+      else sayThen(sc.key === 'draw' ? VOICE.drawFirst : VOICE.tapThenDone, 'answer')
     }
   }
 

@@ -47,7 +47,7 @@ const SYN = {
   carry: ['lift'], turn: ['twist'], easier: ['eas', 'better'], relief: ['eas'], reliev: ['eas'], help: ['eas'], same: ['both', 'sam'],
   equal: ['both', 'sam'], equally: ['both', 'sam'], both: ['sam'], scan: ['scan', 'x'], xray: ['x', 'ray'], injection: ['injection'], shot: ['injection'], pop: ['pop'],
   give: ['way'], buckl: ['give', 'way'], lock: ['lock'], stuck: ['lock', 'catch'], click: ['click'], weak: ['weak'],
-  gym: ['sport', 'exercis'], play: ['sport'], game: ['sport'],
+  gym: ['sport', 'exercis'], lower: ['low'], lumbar: ['low', 'back'], tummy: ['stomach'], belly: ['stomach'], play: ['sport'], game: ['sport'],
 }
 const words = (s) => norm(s).trim().split(' ').filter((w) => w && !STOP.has(w)).map(stem)
 const saidWords = (s) => { const out = new Set(); for (const w of words(s)) { out.add(w); for (const x of SYN[w] || []) out.add(x) } return out }
@@ -91,6 +91,20 @@ export function wakeWord(text) {
   if (m) return { wake: m[1], rest: m[2].trim() }
   const g = t.match(GREET_RE)
   if (g) return { wake: g[1], rest: '' }
+  return null
+}
+
+/* Changing the areas picked up from the drawing, by voice (Chandra, 15 Oct
+   2026): "remove the knee", "take off my left shoulder", "not the hip",
+   "delete neck" → { op: 'remove', what }; "add the hip back", "put back the
+   knee", "keep the knee" → { op: 'add', what }. null otherwise. */
+export function areaEdit(text) {
+  const t = norm(text)
+  let m = t.match(/^ (?:please )?(?:remove|delete|untick|drop|take (?:off|out|away)|get rid of|that s not|that's not|not|no(?: not)?|it s not|it's not|it isn t|it isn't|forget)(?: about)? (?:the |my |his |her |that )?(.+?) ?(?:please )?$/)
+  const notArea = (w) => /^(right|it|that|this|correct|sure|really|quite|yet|now|true|so|good)$/.test(w)
+  if (m && m[1].trim() && !notArea(m[1].trim())) return { op: 'remove', what: m[1].trim() }
+  m = t.match(/^ (?:please )?(?:add|put|bring|keep)(?: back)? (?:the |my |his |her )?(.+?)(?: back| in| again)? ?(?:please )?$/)
+  if (m && m[1].trim() && !notArea(m[1].trim())) return { op: 'add', what: m[1].trim() }
   return null
 }
 

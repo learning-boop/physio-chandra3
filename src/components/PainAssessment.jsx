@@ -1665,10 +1665,15 @@ export default function PainAssessment() {
   const guideScreen = (() => {
     if (stage === 'draw') {
       const on = areaChips.filter((c) => c.on).map((c) => c.name.toLowerCase())
+      // No "Is that everything?" (Chandra, 15 Oct 2026: confirming every
+      // step was annoying). The guide says which areas it picked up and how
+      // to take one off (a tap, or "remove the knee"); "next" moves on.
       return {
         key: 'draw', ready: !drawBlocked, sig: `${history.lines}|${on.join(',')}`, auto: 'idle',
-        readBack: on.length ? readAreas(areaChips.filter((c) => c.on).map((c) => c.name)) : '',
-        changeLabel: 'Keep drawing', proceed: () => setStage('about'), voice: 'confirm',
+        areasOn: areaChips.filter((c) => c.on).map((c) => c.name),
+        areas: areaChips.map((c) => ({ id: c.key, label: c.name, on: c.on })),
+        toggleArea: (k) => toggleArea(k),
+        proceed: () => setStage('about'), voice: 'confirm',
       }
     }
     if (stage === 'about') {
@@ -1691,7 +1696,8 @@ export default function PainAssessment() {
         say: stage === 'emergency'
           ? 'First, some safety questions. Tick anything that is happening to you now. If none of them apply, tap None of these apply.'
           : 'Next, some signs a doctor may need to check. Tick any that fit you now. If none apply, tap None of these apply.',
-        readBack: picked.length ? readTicked(picked) : 'You said none of these apply to you right now. Is that right?',
+        // No read-back question (15 Oct 2026): the ticks are on screen, and
+        // a spoken "none" is said back as the page moves on.
         proceed: () => safetyNext(stage), voice: picked.length ? 'confirm' : 'none',
       }
     }
