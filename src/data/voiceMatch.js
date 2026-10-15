@@ -92,6 +92,30 @@ export function wakeWord(text) {
   return null
 }
 
+/* Turning the 3D body by voice, on the drawing page only (Chandra, 15 Oct
+   2026). Returns 'left' | 'right' | 'back' | 'front' | 'leftSide' |
+   'rightSide' | 'up' | 'down' | 'in' | 'out' | 'more' (the last move
+   again) | 'other' (the last turn the other way) | 'which' ("this way",
+   with no direction) | null. "Go back" stays a command (the page before). */
+export function bodyMove(text) {
+  const t = norm(text)
+  const has1 = (re) => re.test(t)
+  if (has1(/ (zoom|zooming) out | (further|farther) away | smaller | (whole|full) body | see (all|everything) /)) return 'out'
+  if (has1(/ zoom | closer | bigger | enlarge | magnify /)) return 'in'
+  if (has1(/ (turn|spin|swing|rotate) (it |him |the body )?(right )?a?round | (show|see|look at|view) (me )?(the |his |its )?back | back (view|side) | from (behind|the back) | behind | rear /)) return 'back'
+  if (has1(/ (his|its|their|the body s|body s|patient s|my) left (side)? | left side | from the left /)) return 'leftSide'
+  if (has1(/ (his|its|their|the body s|body s|patient s|my) right (side)? | right side | from the right /)) return 'rightSide'
+  if (has1(/ (show|see|turn to|back to|face) (me )?(the )?front | front (view|side)? | face me | facing me | reset | start over | normal view /)) return 'front'
+  if (has1(/ left /)) return 'left'
+  if (has1(/ right /) && !has1(/ (that's|that s|thats|that is|all|yeah|yes) right | right (now|there) /)) return 'right'
+  if (has1(/ (tilt|turn|look|move|rotate|go)? ?(it )?up(wards)? | from above | top of /)) return 'up'
+  if (has1(/ (tilt|turn|look|move|rotate)? ?(it )?down(wards)? | from below | underneath | the bottom | soles? /)) return 'down'
+  if (has1(/ (other way|opposite way|the other direction|back the other) /)) return 'other'
+  if (has1(/^ (a (bit|little) )?more( please)? $|^ again $|^ (a )?bit more $/)) return 'more'
+  if (has1(/ (this|that) way | turn (it|him|the body)? ?$| (turn|spin|rotate) (it|him|the body) $/)) return 'which'
+  return null
+}
+
 /* Yes, no or not sure, the way people say it: "nah", "absolutely not",
    "I don't think so", "not at all" (no); "yeah", "of course", "I do",
    "it does" (yes); "no idea", "hard to say" (not sure). null otherwise. */

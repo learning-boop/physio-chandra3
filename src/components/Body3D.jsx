@@ -3,6 +3,7 @@ import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Lightformer, Line, useGLTF, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { summarizeZone } from '../data/drawnLocation'
+import { guideEvents } from '../data/guideStage'
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh'
 
 // Raycasting drives every drawn point, and this mesh has ~218k triangles.
@@ -396,6 +397,72 @@ function Recentre({ controlsRef, signal }) {
     camera.position.add(d)
     c.update()
   }, [signal, camera, controlsRef])
+  return null
+}
+
+/* Turning the body by voice (Chandra, 15 Oct 2026): "turn left", "show the
+   back", "left side", "up", "zoom in"... The talking guide sends the move
+   (guideStage.js, sendBodyMove); the camera glides there in about 0.6 s,
+   within the same tilt and zoom limits as touch. "Left" turns the way a
+   swipe to the left does. The body faces +X: its right side is +Z, its left
+   side -Z (as classify() reads them). */
+const VOICE_STEP = Math.PI / 4
+const FRONT_THETA = Math.atan2(FRONT_SIGN, 0)
+const SIDE_THETA = { rightSide: Math.atan2(0, FRONT_SIGN), leftSide: Math.atan2(0, -FRONT_SIGN) }
+function VoiceMove({ controlsRef, interactedRef }) {
+  const { camera, invalidate } = useThree()
+  const home = useRef(null)
+  useEffect(() => {
+    if (!guideEvents) return
+    let raf = 0
+    const near = (a) => Math.atan2(Math.sin(a), Math.cos(a))   // -π..π
+    const onMove = (e) => {
+      const c = controlsRef.current
+      if (!c) return
+      const cmd = e.detail
+      cancelAnimationFrame(raf)
+      const off = camera.position.clone().sub(c.target)
+      const from = new THREE.Spherical().setFromVector3(off)
+      if (!home.current) home.current = { phi: new THREE.Spherical().setFromVector3(new THREE.Vector3(...CAM_POS).sub(new THREE.Vector3(CAM_TARGET[0], BODY_CENTRE, CAM_TARGET[2]))).phi, radius: from.radius }
+      const to = from.clone()
+      const turnTo = (theta) => { to.theta = from.theta + near(theta - from.theta) }
+      if (cmd === 'left') to.theta = from.theta + VOICE_STEP
+      else if (cmd === 'right') to.theta = from.theta - VOICE_STEP
+      else if (cmd === 'back') turnTo(FRONT_THETA + Math.PI)
+      else if (cmd === 'front') { turnTo(FRONT_THETA); to.phi = home.current.phi; to.radius = home.current.radius }
+      else if (cmd === 'leftSide' || cmd === 'rightSide') turnTo(SIDE_THETA[cmd])
+      else if (cmd === 'up') to.phi = from.phi - Math.PI / 6
+      else if (cmd === 'down') to.phi = from.phi + Math.PI / 6
+      else if (cmd === 'in') to.radius = from.radius * 0.7
+      else if (cmd === 'out') to.radius = from.radius / 0.7
+      else return
+      to.phi = Math.min(POLAR_MAX, Math.max(POLAR_MIN, to.phi))
+      to.radius = Math.min(c.maxDistance || 16, Math.max(c.minDistance || 2.2, to.radius))
+      if (interactedRef) interactedRef.current = true
+      const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const T = calm ? 1 : 650
+      let start = 0
+      const step = (now) => {
+        if (!start) start = now
+        const k = Math.min(1, (now - start) / T)
+        const ease = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2
+        const sph = new THREE.Spherical(
+          from.radius + (to.radius - from.radius) * ease,
+          from.phi + (to.phi - from.phi) * ease,
+          from.theta + (to.theta - from.theta) * ease,
+        )
+        sph.makeSafe()
+        camera.position.copy(c.target).add(new THREE.Vector3().setFromSpherical(sph))
+        camera.lookAt(c.target)
+        c.update()
+        invalidate()
+        if (k < 1) raf = requestAnimationFrame(step)
+      }
+      raf = requestAnimationFrame(step)
+    }
+    guideEvents.addEventListener('body-move', onMove)
+    return () => { cancelAnimationFrame(raf); guideEvents.removeEventListener('body-move', onMove) }
+  }, [camera, controlsRef, interactedRef, invalidate])
   return null
 }
 
@@ -1106,6 +1173,7 @@ function Scene({ highlight, erasing, highlightRef, paths, livePath, controlsRef,
       <FitCamera controlsRef={controlsRef} interactedRef={interactedRef} />
       <Recentre controlsRef={controlsRef} signal={recentreSignal} />
       <DemoTurn controlsRef={controlsRef} signal={demoTurnSignal} />
+      <VoiceMove controlsRef={controlsRef} interactedRef={interactedRef} />
       <Snapshot apiRef={apiRef} pathsRef={pathsRef} />
       <InteractionGuard controlsRef={controlsRef} highlightRef={highlightRef} interactedRef={interactedRef} />
       <Suspense fallback={<Loader />}><BodyFigure /></Suspense>

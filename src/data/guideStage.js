@@ -76,3 +76,6 @@ export const useGuideConfirmKey = () => useSyncExternalStore(subscribe, () => st
    tap (browsers only ask for it from a tap). */
 export const guideEvents = typeof window !== 'undefined' ? new EventTarget() : null
 export const sendGuide = (type) => { if (guideEvents) guideEvents.dispatchEvent(new Event(type)) }
+/* Turning the 3D body by voice ('left', 'right', 'back', 'front',
+   'leftSide', 'rightSide', 'up', 'down', 'in', 'out'): Body3D.jsx moves. */
+export const sendBodyMove = (move) => { if (guideEvents) guideEvents.dispatchEvent(new CustomEvent('body-move', { detail: move })) }

@@ -2,11 +2,11 @@
 import '../dev/fakeMic.js'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect, setGuideMic, setGuideConfirmKey, guideEvents } from '../data/guideStage'
+import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect, setGuideMic, setGuideConfirmKey, guideEvents, sendBodyMove } from '../data/guideStage'
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
-import { command, yesNo, saysNone, matchDetail, norm, wakeWord } from '../data/voiceMatch'
+import { command, yesNo, saysNone, matchDetail, norm, wakeWord, bodyMove } from '../data/voiceMatch'
 import { gotMany, asSentence } from '../data/guideSpeech'
 
 /* ── The talking guide: Chandra's face in the bottom-left corner ──────────
@@ -1152,6 +1152,7 @@ export default function TalkingGuide() {
   // After a spoken step: if, a moment later, nothing is being said or
   // listened for (the new page had nothing to say), listen again.
   const whichOne = useRef(null)   // { key, ids }: the two answers just asked about
+  const lastMove = useRef(null)   // the last way the body was turned by voice ("a bit more")
   const keepListening = () => setTimeout(() => {
     if (!micOnRef.current || rec.current || speakingNowRef.current || expectNext.current) return
     if (landingRef.current) { startListening('start'); return }
@@ -1175,6 +1176,25 @@ export default function TalkingGuide() {
       if (!wk.rest) { voice.stop(); sayThen(VOICE.wake, kindRef.current() || 'chat'); return }
       alts = alts.map((a) => (wakeWord(a) || { rest: a }).rest || a)
       text = alts[0]
+    }
+    // The drawing page: "turn left", "show the back", "zoom in"... turn the
+    // 3D body (Chandra, 15 Oct 2026). A yes or no to the read-back
+    // ("right", "that's right") stays an answer.
+    if (stage === 'draw' && assess && !(kind === 'confirm' && yesNo(text))) {
+      const mv = bodyMove(text)
+      if (mv) {
+        if (demo.current.msgId) { voice.stop(); endDemo() }
+        const OPP = { left: 'right', right: 'left', up: 'down', down: 'up', in: 'out', out: 'in' }
+        let move = mv
+        if (mv === 'more') move = lastMove.current
+        else if (mv === 'other') move = OPP[lastMove.current] || null
+        else if (mv === 'which') move = ['left', 'right'].includes(lastMove.current) ? lastMove.current : null
+        if (!move) { sayThen(VOICE.whichWay, kind); return }
+        sendBodyMove(move)
+        if (OPP[move]) lastMove.current = move
+        listenFor(kind)
+        return
+      }
     }
     // "Stop talking", "be quiet": on computers it only stops talking (it
     // already has); the microphone stays on. "Stop listening" turns it off.
@@ -1212,7 +1232,7 @@ export default function TalkingGuide() {
     }
     const cmd = command(text)
     if (cmd === 'stop') { micOff(true); return }
-    if (cmd === 'help') { sayThen(VOICE.help, kind); return }
+    if (cmd === 'help') { sayThen(stage === 'draw' && assess ? `${VOICE.helpTurn} ${VOICE.help}` : VOICE.help, kind); return }
     if (cmd === 'repeat' && lastGuide) { say(lastGuide); listenFor(kind); return }
     if (cmd === 'next' && kind !== 'chat') { voiceNext(kind); return }
     if (cmd === 'back' && kind !== 'chat') {

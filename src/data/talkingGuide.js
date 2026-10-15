@@ -138,6 +138,8 @@ export const VOICE = {
   yesNo: 'Please say yes or no, or tap a button.',
   safetyTap: 'If one of these applies to you, please tap it on the screen. If none of them apply, say none.',
   tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
+  // The drawing page: turning the body by voice (15 Oct 2026).
+  helpTurn: 'To turn the body, say turn left, turn right, show the back, or zoom in.',
   help: 'You can say your answer, using the words on the button or its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
   offer: "You can talk with me as we go: answer by speaking or by tapping, whichever you like. To speak, tap Use my microphone.",
@@ -146,6 +148,8 @@ export const VOICE = {
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
   drawFirst: 'Please draw where it hurts first, then say next.',
   noNext: "There's nothing to move on to here. You can ask me a question instead.",
+  // "Turn it that way", with no direction yet (the drawing page).
+  whichWay: 'Left or right?',
   // Two answers fit what was said about equally; their labels follow.
   whichOne: 'Which one did you mean?',
   // Called by name ("hey Chandra") with nothing after it.
