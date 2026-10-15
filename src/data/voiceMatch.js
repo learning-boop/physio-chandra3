@@ -80,8 +80,10 @@ export function command(text) {
    often hear the name as Sandra, Shandra or Chandler, so those count too.
    Returns { wake, rest }: the call itself, and whatever was said after it
    ("hey Chandra, next" → rest "next"); null when there is no call. */
-const WAKE_NAME = '(?:chandra|chandras|shandra|sandra|chandler|tandra|chanda|chandar)'
-const WAKE_RE = new RegExp(`^\\s*((?:(?:hey|hi|hello|ok|okay|excuse me)\\s+)?${WAKE_NAME})\\b[\\s,.!?]*(.*)$`, 'i')
+// The phone's own model (Android) can hear it as johndroe / jondra / sondra,
+// and a filler word may come first ("um, Chandra", "yeah Chandra").
+const WAKE_NAME = '(?:chandra|chandras|shandra|sandra|chandler|tandra|chanda|chandar|johndroe|jondra|jondro|chondra|shondra|sondra|candra)'
+const WAKE_RE = new RegExp(`^\\s*((?:(?:hey|hi|hello|ok|okay|excuse me|um|uh|oh|yeah|so|and)\\s+){0,2}${WAKE_NAME})\\b[\\s,.!?]*(.*)$`, 'i')
 const GREET_RE = /^\s*((?:hey|hi|hello)(?: there)?)[\s,.!?]*$/i
 export function wakeWord(text) {
   const t = String(text || '').trim()

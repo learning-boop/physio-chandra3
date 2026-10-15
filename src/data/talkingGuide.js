@@ -128,7 +128,7 @@ export const DEMO_STEPS = [null, 'turn', 'draw', 'undo', null, null]
    browser's own permission prompt. Keep MIC_NOTE in step with the privacy
    notice (src/pages/PrivacyPage.jsx, "The virtual assistant"). */
 export const MIC_ASK = "Would you like to answer by speaking instead of tapping? I'll listen after each question, and you can say yes or no when I check your answer."
-export const MIC_NOTE = 'To do this, your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. This website does not record or keep your voice. You can switch the microphone off at any time, or just tap instead.'
+export const MIC_NOTE = 'To do this, your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. On Android phones this is done on the phone itself, after a one-time download of about 40 MB. This website does not record or keep your voice. You can switch the microphone off at any time, or just tap instead.'
 export const VOICE = {
   on: "Thank you. When the microphone glows, I'm listening. You can say your answer, or its letter.",
   denied: "I can't use the microphone, so please tap your answers instead.",
@@ -308,7 +308,7 @@ export const TOPICS = {
   microphone: {
     q: 'What happens with my voice?',
     keys: ['microphone', 'mic', 'listening', 'listen to me', 'recording', 'record my', 'my voice', 'speak my answers', 'talk to you', 'voice answers'],
-    a: 'You can answer by speaking only if you agree and allow the microphone. Your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text, and only the text is used, on this device, to pick your answer. This website does not record or keep your voice. Say stop listening, or tap the microphone, to switch it off.',
+    a: 'You can answer by speaking only if you agree and allow the microphone. Your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text; on Android phones, the phone does this itself. Only the text is used, on this device, to pick your answer. This website does not record or keep your voice. Say stop listening, or tap the microphone, to switch it off.',
     link: { to: '/privacy', label: 'Read the privacy notice' },
     next: ['privacy'],
   },

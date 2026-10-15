@@ -1601,7 +1601,7 @@ export default function PainAssessment() {
         <button className="pa-confirm-no" onClick={() => sendGuide('mic-no')}>Just tap</button>
       </div>
       <p className="pa-mic-offer-note">
-        Your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. This website does not record or keep your voice. <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>Privacy notice</Link>
+        Your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. On Android phones this is done on the phone itself, after a one-time download of about 40 MB. This website does not record or keep your voice. <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>Privacy notice</Link>
       </p>
     </div>
   ) : null)
@@ -2088,7 +2088,7 @@ export default function PainAssessment() {
                       <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
                         <li>This guide offers general information to help you describe your symptoms. It is not a diagnosis and does not replace an assessment by a qualified health professional.</li>
                         <li>It is not for emergencies. If you think you need urgent help, call 9-1-1, or HealthLink BC on 8-1-1.</li>
-                        <li>The voice guide is a virtual assistant, not Chandra: its answers are written in advance, and its voice is an AI copy of Chandra’s voice. If you turn the microphone on, your browser’s speech service turns what you say into text.</li>
+                        <li>The voice guide is a virtual assistant, not Chandra: its answers are written in advance, and its voice is an AI copy of Chandra’s voice. If you turn the microphone on, your browser’s speech service turns what you say into text (on Android phones, the phone itself does this).</li>
                         <li>Your answers stay on this device unless you choose to share them: the optional AI overview, emailing your summary to Chandra, or an optional anonymous copy to help improve this guide.</li>
                       </ul>
                       <p style={{ margin: '8px 0 0' }}>

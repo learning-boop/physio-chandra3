@@ -8,6 +8,7 @@ import {
 } from '../data/talkingGuide'
 import { command, yesNo, saysNone, matchDetail, norm, wakeWord, bodyMove } from '../data/voiceMatch'
 import { gotMany, asSentence } from '../data/guideSpeech'
+import { OnDeviceRecognition, prepareOnDevice, onDeviceReady, releaseOnDevice } from './onDeviceSpeech'
 
 /* ── The talking guide: Chandra's face in the bottom-left corner ──────────
    On every page (Chandra, 10 Oct 2026). The face is the logo itself
@@ -155,6 +156,13 @@ const KEEP_ON = !!Recognition && !(/Android|iPhone|iPad|iPod|Mobile/i.test(UA) |
    2026). There it listens only when the assistant is waiting for an answer,
    with at most two restarts; a tap on the microphone light listens again. */
 const ANDROID = /Android/i.test(UA)
+/* Android, once the speech model on the phone is ready (./onDeviceSpeech.js,
+   Chandra chose it 15 Oct 2026): no beeps, continuous, nothing sent. Not
+   with the development test microphone (src/dev/fakeMic.js). */
+const ON_DEVICE = ANDROID && typeof WebAssembly !== 'undefined' && !(typeof window !== 'undefined' && window.__mic)
+const usingOnDevice = () => ON_DEVICE && onDeviceReady()
+// Android's own recognition beeps at every start: listen less there.
+const beeps = () => ANDROID && !usingOnDevice()
 let onDevice = null
 async function canRecogniseOnDevice() {
   if (onDevice !== null) return onDevice
@@ -753,12 +761,12 @@ export default function TalkingGuide() {
     if (!Recognition || !micOnRef.current) return
     const g = ++gen.current
     if (rec.current) { rec.current.__cut = true; try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
-    const r = new Recognition()
+    const r = usingOnDevice() ? new OnDeviceRecognition() : new Recognition()
     r.lang = 'en-CA'
     r.interimResults = true
     r.maxAlternatives = 3
     r.continuous = true
-    try { if (await canRecogniseOnDevice()) r.processLocally = true } catch { /* not offered */ }
+    if (!(r instanceof OnDeviceRecognition)) { try { if (await canRecogniseOnDevice()) r.processLocally = true } catch { /* not offered */ } }
     // Stopped, switched off, or started again while waiting: give way.
     if (g !== gen.current || !micOnRef.current || rec.current) return
     let finals = []
@@ -814,7 +822,7 @@ export default function TalkingGuide() {
       // microphone is gone, or after about a minute).
       if (r.__cut || !micOnRef.current || failed === 'not-allowed' || failed === 'service-not-allowed' || failed === 'audio-capture') return
       if (failed === 'network') { if (tries < 1) setTimeout(() => startListening(kind, tries + 1), 800); else heardRef.current && heardRef.current(null, 'nonet'); return }
-      if (tries < (ANDROID ? 2 : 7)) setTimeout(() => { if (!rec.current && micOnRef.current && (KEEP_ON || !window.speechSynthesis?.speaking)) startListening(r.__kind || kind, tries + 1) }, 250)
+      if (tries < (beeps() ? 2 : 7)) setTimeout(() => { if (!rec.current && micOnRef.current && (KEEP_ON || !window.speechSynthesis?.speaking)) startListening(r.__kind || kind, tries + 1) }, 250)
     }
     rec.current = r
     recKind.current = kind
@@ -865,8 +873,15 @@ export default function TalkingGuide() {
   // 14 Oct 2026: phones stopped listening for good after about 40 s of
   // silence, so the wake word was never heard).
   const kindRef = useRef(null)
+  const [deviceReady, setDeviceReady] = useState(false)
   useEffect(() => {
-    if (!Recognition || !micOn || hidden || ANDROID) return
+    if (!ON_DEVICE || !micOn) return
+    let live = true
+    prepareOnDevice().then(() => { if (live) setDeviceReady(true) }).catch(() => { /* stays with the browser's recognition */ })
+    return () => { live = false }
+  }, [micOn])
+  useEffect(() => {
+    if (!Recognition || !micOn || hidden || (ANDROID && !deviceReady)) return
     const t = setInterval(() => {
       if (!micOnRef.current || rec.current || document.hidden) return
       if (!KEEP_ON && (speakingNowRef.current || window.speechSynthesis?.speaking)) return
@@ -874,10 +889,11 @@ export default function TalkingGuide() {
       expectNext.current = null
       if (k) startListening(k)
     }, 1000)
-    const onVis = () => { if (document.hidden) stopListening() }
+    // A hidden tab: stop listening (and, on Android, let go of the microphone).
+    const onVis = () => { if (document.hidden) { stopListening(); if (ON_DEVICE) releaseOnDevice() } }
     document.addEventListener('visibilitychange', onVis)
     return () => { clearInterval(t); document.removeEventListener('visibilitychange', onVis) }
-  }, [micOn, hidden, startListening, stopListening])
+  }, [micOn, hidden, deviceReady, startListening, stopListening])
   useEffect(() => { stopListening() }, [pathname, stopListening])
   // Off the landing page, its "how to start" listening ends.
   useEffect(() => { if (!onLanding && (recKind.current === 'start' || expectNext.current === 'start')) { if (expectNext.current === 'start') expectNext.current = null; if (rec.current && recKind.current === 'start') stopListening() } }, [onLanding, stopListening])
@@ -929,6 +945,7 @@ export default function TalkingGuide() {
   }
   const micOff = (sayIt = true) => {
     stopListening()
+    if (ON_DEVICE) releaseOnDevice()
     setMicOn(false)
     micOnRef.current = false
     store.set('sessionStorage', 'tg-mic', 'off')

@@ -1,0 +1,13 @@
+en-us-small.tar.gz is the Vosk small US English speech model
+(vosk-model-small-en-us-0.15), repackaged unchanged as a tar.gz with the
+files in a "model" folder (the format vosk-browser loads).
+
+Copyright 2020 Alpha Cephei Inc.
+Licensed under the Apache License, Version 2.0:
+https://www.apache.org/licenses/LICENSE-2.0
+Source: https://alphacephei.com/vosk/models
+
+Used on Android phones by the Physio Chandra virtual assistant to turn the
+patient's speech into text on the phone itself (nothing is sent anywhere).
+The browser library is vosk-browser (Apache-2.0),
+https://github.com/ccoreilly/vosk-browser
