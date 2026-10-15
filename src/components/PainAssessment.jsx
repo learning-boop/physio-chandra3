@@ -710,6 +710,15 @@ export default function PainAssessment() {
     try { return alsoConsiderAcross(keys, scopedAnswers, shown, 2, (review?.dropped || []).map((d) => d.id)) } catch { return [] }
   }, [keys, scopedAnswers, shown, review])
   const modelSmall = ['emergency', 'physician', 'questions', 'review', 'safety', 'injury', 'urgent', 'ok'].includes(stage)
+  /* Only the question on screen, from the "about you" cards to the review
+     (Chandra, 15 Oct 2026: one flash card at a time, nothing else, on phones
+     and computers). The 3D body stays loaded but hidden: it holds the
+     drawing, which the results and the PDF still need. The drawing can be
+     seen any time from the "Your areas" line (pictures taken as the
+     drawing page is left). */
+  const focusStage = ['about', 'area', 'emergency', 'physician', 'safety', 'injury', 'questions', 'review', 'urgent'].includes(stage)
+  const [drawSnap, setDrawSnap] = useState(null)   // { views: [{ src, label }] }
+  const [showDrawing, setShowDrawing] = useState(false)
 
   const otherFlagged = flags.includes('__other') && flagOther.trim().length > 0
   // Only red flags route away from the result; a caution does not.
@@ -1498,6 +1507,14 @@ export default function PainAssessment() {
   // Into the deck from the drawing: the first card; back from the safety
   // pages: the last one.
   const prevStage = useRef(stage)
+  const snapFrom = useRef(stage)
+  useLayoutEffect(() => {
+    if (snapFrom.current === 'draw' && stage !== 'draw') {
+      try { const shot = bodyApi.current && bodyApi.current.capture(); if (shot && shot.views && shot.views.length) setDrawSnap(shot) } catch { /* no pictures: the names still show */ }
+    }
+    if (!focusStage) setShowDrawing(false)
+    snapFrom.current = stage
+  }, [stage]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (stage === 'about' && prevStage.current !== 'about') setAboutAt(prevStage.current === 'draw' ? 0 : 99)
     prevStage.current = stage
@@ -1777,7 +1794,7 @@ export default function PainAssessment() {
       // container and stop the figure sticking as the results are read.
       minHeight: '100svh', position: 'relative', overflowX: 'clip',
     }}>
-      <div className="pa-grid" style={{ maxWidth: 1280, margin: '0 auto' }}>
+      <div className={'pa-grid' + (focusStage ? ' pa-focus' : '')} style={{ maxWidth: 1280, margin: '0 auto' }}>
         <style>{`
           /* Clear the fixed navbar, then leave breathing room above the fold. */
           .pa-section { padding-top: clamp(74px, 19vw, 92px); }
@@ -1897,6 +1914,28 @@ export default function PainAssessment() {
              empty below the panel. Sized off the *small* viewport unit so the
              browser chrome collapsing never crops it. */
           .pa-model { height: min(68svh, 640px); order: -1; }
+          .pa-model.pa-hidden { display: none !important; }
+          .pa-areas-line {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%; text-align: left;
+            margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(201,169,110,0.35); color: rgba(255,255,255,0.85);
+            font: 500 14px/1.4 var(--font-body);
+          }
+          .pa-areas-line:hover, .pa-areas-line:focus-visible { border-color: ${GOLD_LIGHT}; outline: none; }
+          .pa-areas-line b { color: #fff; font-weight: 600; }
+          .pa-areas-line .pa-areas-view { margin-left: auto; color: ${GOLD_LIGHT}; text-decoration: underline; white-space: nowrap; }
+          .pa-drawing-dlg {
+            position: fixed; inset: 0; z-index: 500; display: flex; align-items: center; justify-content: center;
+            background: rgba(4,10,20,0.78); padding: 16px;
+          }
+          .pa-drawing-box {
+            width: min(560px, 100%); max-height: 90svh; overflow: auto; border-radius: 16px; padding: 18px;
+            background: #0d1b2e; border: 1px solid rgba(201,169,110,0.45); color: #fff;
+          }
+          .pa-drawing-pics { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 12px 0; }
+          .pa-drawing-pics figure { margin: 0; }
+          .pa-drawing-pics img { width: 100%; border-radius: 10px; display: block; background: #fff; }
+          .pa-drawing-pics figcaption { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px; text-align: center; }
           /* Once the questions begin the figure shrinks, but it must stay big
              enough to read the marked areas on it. */
           .pa-model.small { height: min(42svh, 380px); }
@@ -2026,7 +2065,8 @@ export default function PainAssessment() {
           }
 
           @media (min-width: 900px) {
-            .pa-grid { grid-template-columns: ${stage === 'landing' || stage === 'guide' ? '1fr' : modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
+            .pa-grid { grid-template-columns: ${stage === 'landing' || stage === 'guide' || focusStage ? '1fr' : modelSmall ? '1fr 340px' : '5fr 6fr'}; gap: 36px; align-items: center; }
+            .pa-grid.pa-focus > .pa-panel { max-width: 720px; width: 100%; margin: 0 auto; }
             .pa-model { order: 2; height: min(86vh, 820px); }
             /* From the questions onward the panel grows much taller than the
                figure, and centring it parks the figure halfway down a long
@@ -2042,7 +2082,36 @@ export default function PainAssessment() {
         `}</style>
 
         {/* ── LEFT: the guided panel ── */}
-        <div style={{ minWidth: 0, paddingTop: 8 }}>
+        <div className="pa-panel" style={{ minWidth: 0, paddingTop: 8 }}>
+          {focusStage && areaChips.some((c) => c.on) && (
+            <button type="button" className="pa-areas-line" onClick={() => setShowDrawing(true)} aria-haspopup="dialog">
+              <span>Your areas: <b>{areaChips.filter((c) => c.on).map((c) => c.name).join(' · ')}</b></span>
+              <span className="pa-areas-view">View drawing</span>
+            </button>
+          )}
+          {showDrawing && (
+            <div className="pa-drawing-dlg" role="dialog" aria-modal="true" aria-label="Your drawing"
+              onClick={(e) => { if (e.target === e.currentTarget) setShowDrawing(false) }}
+              onKeyDown={(e) => { if (e.key === 'Escape') setShowDrawing(false) }}>
+              <div className="pa-drawing-box">
+                <span style={label}>Your drawing</span>
+                <p style={{ margin: '8px 0 0', fontSize: 15.5, lineHeight: 1.5 }}>
+                  {areaChips.filter((c) => c.on).map((c) => c.name).join(' · ')}
+                </p>
+                {drawSnap && drawSnap.views && drawSnap.views.length > 0 && (
+                  <div className="pa-drawing-pics">
+                    {drawSnap.views.map((v, i) => (
+                      <figure key={i}>
+                        <img src={v.src} alt={v.label ? `Your drawing: ${v.label}` : 'Your drawing'} />
+                        {v.label && <figcaption>{v.label}</figcaption>}
+                      </figure>
+                    ))}
+                  </div>
+                )}
+                <button type="button" className="pa-primary" style={{ ...goldBtn, marginTop: 8 }} autoFocus onClick={() => setShowDrawing(false)}>Close</button>
+              </div>
+            </div>
+          )}
           <AnimatePresence mode="wait">
 
             {/* LANDING — heading + Start only. The 3D body is not shown here;
@@ -3770,7 +3839,7 @@ export default function PainAssessment() {
             Not on the landing page: it appears once Start is pressed. */}
         {stage !== 'landing' && stage !== 'guide' && (
         <motion.div layout transition={{ duration: 0.55, ease: EASE }}
-          className={'pa-model' + (modelSmall ? ' small' : '')}>
+          className={'pa-model' + (modelSmall ? ' small' : '') + (focusStage ? ' pa-hidden' : '')} aria-hidden={focusStage || undefined}>
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
             {/* Voice guide demo: a hand shows the swipe that turns the body
                 (the body turns with it), then a finger traces a line. */}
