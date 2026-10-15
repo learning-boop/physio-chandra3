@@ -132,6 +132,13 @@ function pickVoice() {
   return best
 }
 
+/* With Chandra's recordings on the site, a sentence without one is only
+   read by the browser's voice when that voice is one of the known male
+   voices (Edge's Brian and the like). Phones mostly have only a female
+   voice ("Google US English"), which Chandra heard instead of his own
+   (14 Oct 2026): there the sentence is skipped (its words are on screen). */
+const knownMale = (v) => !!v && PREFERRED_VOICES.some((p) => v.name.includes(p)) && !isFemale(v)
+
 /* ── Listening ─────────────────────────────────────────────────────────────
    The browser's speech recognition (Chrome, Edge, Safari; not Firefox).
    Where the browser can do it on the device, it is asked to. */
@@ -143,6 +150,11 @@ const Recognition = typeof window !== 'undefined' && (window.SpeechRecognition |
    while the microphone is open; there it listens after each question. */
 const UA = typeof navigator !== 'undefined' ? navigator.userAgent : ''
 const KEEP_ON = !!Recognition && !(/Android|iPhone|iPad|iPod|Mobile/i.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1))
+/* Android plays a beep every time listening starts, and ends listening
+   after a few seconds of silence (Chandra heard "too many beeps", 14 Oct
+   2026). There it listens only when the assistant is waiting for an answer,
+   with at most two restarts; a tap on the microphone light listens again. */
+const ANDROID = /Android/i.test(UA)
 let onDevice = null
 async function canRecogniseOnDevice() {
   if (onDevice !== null) return onDevice
@@ -196,6 +208,7 @@ function useVoice(level, volume, onBlocked) {
 
   // One sentence in the browser's voice.
   const ttsOne = useCallback((id, i, text, t, onDone, onFail) => {
+    if (import.meta.env.DEV) { (window.__tts = window.__tts || []).push(text) }
     const u = new SpeechSynthesisUtterance(text)
     const v = pickVoice()
     if (v) { u.voice = v; u.lang = v.lang } else u.lang = 'en-CA'
@@ -269,12 +282,20 @@ function useVoice(level, volume, onBlocked) {
     const viaVoice = () => {
       if (!supported) { next(); return }
       if (!voicesSettled) { voicesReady().then(() => { if (t === token.current) viaVoice() }); return }
+      if (hasRecordings() && !knownMale(pickVoice())) { next(); return }
       const wait = 150 - (Date.now() - cutAt.current)
       if (wait > 0) { setTimeout(() => { if (t === token.current) viaVoice() }, wait); return }
       ttsOne(id, i, parts[i], t, next, (why) => (why === 'blocked' ? blocked() : next()))
     }
     const src = audioFor(parts[i])
-    if (src) clipOne(id, i, src, t, next, (why) => (why === 'blocked' ? blocked() : viaVoice()))
+    // A recording that fails to play (a slow connection, the phone busy with
+    // the microphone) is tried once more before anything else.
+    if (src) {
+      clipOne(id, i, src, t, next, (why) => {
+        if (why === 'blocked') { blocked(); return }
+        setTimeout(() => { if (t === token.current) clipOne(id, i, src, t, next, (w2) => (w2 === 'blocked' ? blocked() : viaVoice())) }, 400)
+      })
+    }
     else viaVoice()
     // Fetch the next recording while this one plays.
     const after = parts[i + 1] && audioFor(parts[i + 1])
@@ -793,7 +814,7 @@ export default function TalkingGuide() {
       // microphone is gone, or after about a minute).
       if (r.__cut || !micOnRef.current || failed === 'not-allowed' || failed === 'service-not-allowed' || failed === 'audio-capture') return
       if (failed === 'network') { if (tries < 1) setTimeout(() => startListening(kind, tries + 1), 800); else heardRef.current && heardRef.current(null, 'nonet'); return }
-      if (tries < 7) setTimeout(() => { if (!rec.current && micOnRef.current && (KEEP_ON || !window.speechSynthesis?.speaking)) startListening(r.__kind || kind, tries + 1) }, 250)
+      if (tries < (ANDROID ? 2 : 7)) setTimeout(() => { if (!rec.current && micOnRef.current && (KEEP_ON || !window.speechSynthesis?.speaking)) startListening(r.__kind || kind, tries + 1) }, 250)
     }
     rec.current = r
     recKind.current = kind
@@ -845,7 +866,7 @@ export default function TalkingGuide() {
   // silence, so the wake word was never heard).
   const kindRef = useRef(null)
   useEffect(() => {
-    if (!Recognition || !micOn || hidden) return
+    if (!Recognition || !micOn || hidden || ANDROID) return
     const t = setInterval(() => {
       if (!micOnRef.current || rec.current || document.hidden) return
       if (!KEEP_ON && (speakingNowRef.current || window.speechSynthesis?.speaking)) return

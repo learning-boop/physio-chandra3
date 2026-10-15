@@ -173,7 +173,7 @@ const WHY = {
 
 /* Each entry: shown only when the drawing matches, in this order.
    tier 'emergency' → emergency screen (call911: 911, else go now); 'urgent' → see a physician first. */
-const PATTERNS = [
+export const PATTERNS = [
   // 6 Oct 2026, general conditions cross-check (approved by Chandra), S3: sudden vision loss in one eye or one-sided weakness, for every
   // drawing (the head, neck and arm areas ask their own stroke question,
   // group "stroke", and PainAssessment.jsx then leaves this one out).

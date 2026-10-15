@@ -23,6 +23,8 @@ import * as ST from './steroids.js'
 import * as PG from './pregnancy.js'
 import * as SP from './spondylolysis.js'
 import * as OI from './oi.js'
+import * as GQ from './genericQuestions.js'
+import { PATTERNS } from './patternChecks.js'
 
 /* How an answer reads aloud: no dashes or dots between parts, no quotes. */
 export const spoken = (t) => String(t || '').replace(/\s*[·—–]\s*/g, ', ').replace(/[“”"]/g, '').replace(/\s+/g, ' ').trim()
@@ -109,6 +111,22 @@ export function allGuideLines() {
   arr(PS.PSYCHOSOCIAL_QUESTIONS).forEach(question)
   arr(SG.GENERAL_RED_FLAGS).forEach((f) => add(asSentence(f.text)))
   for (const list of [DM.DM_RED_FLAGS, ST.STEROID_RED_FLAGS, PG.PREG_RED_FLAGS, OI.OI_RED_FLAGS]) arr(list).forEach((f) => add(asSentence(f && f.text)))
+
+  // The generic questions (areas without their own set, such as the
+  // stomach), with every area's name and its own worse / easier options
+  // (built in PainAssessment.jsx, buildQuestions).
+  const areaWords = [...new Set([...Object.values(regions).map((r) => r.name && r.name.toLowerCase()).filter(Boolean), ...Object.values(GQ.TYPE_WORD)])]
+  for (const q of GQ.QUESTIONS) question({ ...q, options: (q.options || []).map((o) => (typeof o === 'string' ? { label: o } : o)) })
+  for (const a of areaWords) {
+    add(`When did your ${a} pain begin?`)
+    add(`What tends to make your ${a} pain worse?`)
+    add(`What tends to ease your ${a} pain?`)
+  }
+  for (const list of [...Object.values(GQ.REGION_AGGRAVATORS), ...Object.values(GQ.REGION_EASERS)]) list.forEach((l) => add(asSentence(l)))
+  // Safety items from every body part and from the drawing's pattern (read
+  // back when ticked).
+  arr(GQ.UNIVERSAL_CHECKS).forEach((f) => add(asSentence(f.text)))
+  arr(PATTERNS).forEach((f) => add(asSentence(f.text)))
 
   // Injury questions.
   for (const sc of arr(INJ.SCREENS)) arr(sc.questions).forEach(question)
