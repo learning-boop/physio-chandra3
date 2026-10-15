@@ -727,12 +727,12 @@ function InteractionGuard({ controlsRef, highlightRef, interactedRef }) {
         // still turns the body / scrolls the page, so the user is never stuck.
         if (onBody(e.clientX, e.clientY)) { panState.current = null; return }
         panState.current = { x: e.clientX, y: e.clientY, id: e.pointerId, mode: null, type: e.pointerType, onBodyStart: false }
-        el.setPointerCapture?.(e.pointerId)
+        try { el.setPointerCapture?.(e.pointerId) } catch { /* pointer already gone */ }
         return
       }
       const hit = onBody(e.clientX, e.clientY)
       panState.current = { x: e.clientX, y: e.clientY, id: e.pointerId, mode: null, type: e.pointerType, onBodyStart: hit }
-      el.setPointerCapture?.(e.pointerId)
+      try { el.setPointerCapture?.(e.pointerId) } catch { /* pointer already gone */ }
     }
 
     const onPointerMove = (e) => {
@@ -903,7 +903,7 @@ function DrawSurface({ active, erasing, onPathUpdate, onPathComplete, onErase, o
     if (!active) return
     const p = cast(e.clientX, e.clientY)
     if (!p) return
-    gl.domElement.setPointerCapture?.(e.pointerId)
+    try { gl.domElement.setPointerCapture?.(e.pointerId) } catch { /* pointer already gone */ }
     drawing.current = true
     if (erasing) { onEraseStart(); onErase(p); return }
     pathRef.current = [p]

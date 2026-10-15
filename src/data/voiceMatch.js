@@ -34,6 +34,11 @@ const IRREGULAR = { fell: 'fall', fallen: 'fall', hurt: 'hurt', woke: 'wake', wo
 const stem = (x) => { const w = IRREGULAR[x] || x; return w.length <= 3 ? w : w.replace(/(ness|ing|ed|es|s)$/, '').replace(/([b-df-hj-np-tv-z])\1$/, '$1').replace(/(.{3,})e$/, '$1') }
 // Everyday words for the words on the buttons (by stem).
 const SYN = {
+  // Sex at birth (Chandra, 14 Oct 2026: not recognised by voice). Speech
+  // services often write "male" as mail / Mel / meal, and people say "a man".
+  mail: ['mal'], mel: ['mal'], meal: ['mal'], man: ['mal'], men: ['mal'], boy: ['mal'], guy: ['mal'], gentleman: ['mal'],
+  masculin: ['mal'], woman: ['femal'], women: ['femal'], girl: ['femal'], lady: ['femal'], ladi: ['femal'], feminin: ['femal'],
+  femail: ['femal'], femel: ['femal'], other: ['intersex', 'prefer'], rather: ['prefer'], nonbinary: ['intersex', 'prefer'],
   tingl: ['pin', 'needl'], tingly: ['pin', 'needl'], prickl: ['pin', 'needl'], prickly: ['pin', 'needl'], numb: ['numb'],
   stab: ['sharp'], knif: ['sharp'], zap: ['electric', 'shoot'], shock: ['electric'], achy: ['ach', 'dull'], ach: ['dull'],
   throb: ['ach'], puffy: ['swell'], swel: ['swell'], trip: ['fall'], tripp: ['fall'], step: ['stair'], upstair: ['stair'],
@@ -176,7 +181,8 @@ const NEG_LABEL = /^(no\b|none|neither|nothing|disagree|not\b|never|it does not|
 const POS_LABEL = /^(yes\b|agree\b)/i
 const UNSURE_LABEL = /not sure|don.t know|cannot (tell|find|say)|unsure/i
 export function matchDetail(text, options, multi = false) {
-  let t = norm(text)
+  // Heard as two words: "fee mail", "fe male"; "non binary".
+  let t = norm(text).replace(/ (fee|fe|fi) ?(male|mail|mel|meal) /g, ' female ').replace(/ non binary /g, ' nonbinary ')
   const usable = options.filter((o) => !o.skip)
   const none = { ids: [], close: null }
   if (!usable.length) return none
