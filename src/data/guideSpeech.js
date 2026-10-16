@@ -84,7 +84,9 @@ export function allGuideLines() {
   const chatty = (t) => /^(topic|reply)-|^fallback$|^greeting$/.test(t.name)
   for (const t of spokenAll) if (!chatty(t)) add(t.text)
   ABOUT.fixed.forEach(add)
-  ABOUT.titles.forEach(add)
+  // A grouped page says its title first, with a full stop ("How your pain
+  // behaves. How bad…"): a different recording from the bare title.
+  ABOUT.titles.forEach((t) => { add(t); if (!/[.?!]$/.test(t)) add(t + '.') })
   ACKS.forEach(add)
   ;['You chose these.', 'You ticked these.', 'You marked these areas.', 'Is that right?', 'Is that everything?', 'Got it.',
     "Anything else? Say next when you're done.", 'You chose: none of these. Is that right?'].forEach(add)
