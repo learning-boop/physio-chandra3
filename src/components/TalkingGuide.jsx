@@ -6,7 +6,7 @@ import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDe
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
-import { command, yesNo, saysNone, matchDetail, norm, wakeWord, bodyMove, areaEdit } from '../data/voiceMatch'
+import { command, yesNo, saysNone, matchDetail, norm, wakeWord, bodyMove, areaEdit, voiceWords } from '../data/voiceMatch'
 import { gotMany, asSentence } from '../data/guideSpeech'
 import { OnDeviceRecognition, prepareOnDevice, onDeviceReady, releaseOnDevice } from './onDeviceSpeech'
 
@@ -156,6 +156,8 @@ const KEEP_ON = !!Recognition && !(/Android|iPhone|iPad|iPod|Mobile/i.test(UA) |
    2026). There it listens only when the assistant is waiting for an answer,
    with at most two restarts; a tap on the microphone light listens again. */
 const ANDROID = /Android/i.test(UA)
+// Phones and tablets (the voice is played straight, see clipOne).
+const PHONE_UA = /Android|iPhone|iPad|iPod|Mobile/i.test(UA) || (/Macintosh/.test(UA) && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1)
 /* Android, once the speech model on the phone is ready (./onDeviceSpeech.js,
    Chandra chose it 15 Oct 2026): no beeps, continuous, nothing sent. Not
    with the development test microphone (src/dev/fakeMic.js). */
@@ -249,7 +251,11 @@ function useVoice(level, volume, onBlocked) {
   const clipOne = useCallback((id, i, src, t, onDone, onFail) => {
     const a = new Audio(src)
     audio.current = a
-    try {
+    // Phones: played straight, not through an AudioContext (that is only for
+    // the mouth's movement). On an iPhone a context made while the
+    // microphone is open can send the voice to the quiet earpiece; the mouth
+    // then keeps its own rhythm.
+    if (!PHONE_UA) try {
       const Ctx = window.AudioContext || window.webkitAudioContext
       audioCtx.current = audioCtx.current || new Ctx()
       audioCtx.current.resume?.()
@@ -633,10 +639,25 @@ export default function TalkingGuide() {
   // the stage change before it).
   if (unmuteFor.current) { if (voiceOn) unmuteFor.current = false; else soundRef.current = true }
   const spoke = useRef({ text: '', endedAt: 0 })
+  const speakSoon = useRef(false)   // phones: the voice starts in a moment (no listening till then)
   const say = useCallback((msg) => {
     if (!soundRef.current) return
     spoke.current = { text: msg.text, endedAt: 0 }
-    if (msg.audio || hasRecordings() || voice.supported) voice.speak(msg.id, msg.text, msg.audio)
+    if (!(msg.audio || hasRecordings() || voice.supported)) return
+    // Phones: stop listening first, and give the phone a moment to leave its
+    // listening audio mode, or the start of the voice comes out quiet. It
+    // listens again (for the same thing) once the voice has finished.
+    if (!KEEP_ON && rec.current) {
+      expectNext.current = expectNext.current || recKind.current
+      rec.current.__cut = true
+      try { rec.current.abort() } catch { /* already stopped */ }
+      rec.current = null
+      setHearing(null)
+      speakSoon.current = true
+      setTimeout(() => { speakSoon.current = false; if (soundRef.current) voice.speak(msg.id, msg.text, msg.audio) }, 250)
+      return
+    }
+    voice.speak(msg.id, msg.text, msg.audio)
   }, [voice])
 
   const addGuide = useCallback((text, extra = {}) => {
@@ -762,6 +783,12 @@ export default function TalkingGuide() {
     const g = ++gen.current
     if (rec.current) { rec.current.__cut = true; try { rec.current.abort() } catch { /* already stopped */ } rec.current = null }
     const r = usingOnDevice() ? new OnDeviceRecognition() : new Recognition()
+    // The phone's model: the words this card can be answered with (any words
+    // for a question to the assistant).
+    if (r instanceof OnDeviceRecognition && kind !== 'chat' && kind !== 'nav') {
+      const sc = getGuideScreen()
+      r.words = voiceWords([...((sc && sc.options) || []).map((o) => o.label), ...((sc && sc.areas) || []).map((a) => a.label)])
+    }
     r.lang = 'en-CA'
     r.interimResults = true
     r.maxAlternatives = 3
@@ -883,7 +910,7 @@ export default function TalkingGuide() {
   useEffect(() => {
     if (!Recognition || !micOn || hidden || (ANDROID && !deviceReady)) return
     const t = setInterval(() => {
-      if (!micOnRef.current || rec.current || document.hidden) return
+      if (!micOnRef.current || rec.current || document.hidden || speakSoon.current) return
       if (!KEEP_ON && (speakingNowRef.current || window.speechSynthesis?.speaking)) return
       const k = expectNext.current || (kindRef.current && kindRef.current())
       expectNext.current = null
@@ -1182,7 +1209,7 @@ export default function TalkingGuide() {
   const pendingAck = useRef('')   // said before the next screen ("Okay, none of these apply.")
   const lastMove = useRef(null)   // the last way the body was turned by voice ("a bit more")
   const keepListening = () => setTimeout(() => {
-    if (!micOnRef.current || rec.current || speakingNowRef.current || expectNext.current) return
+    if (!micOnRef.current || rec.current || speakingNowRef.current || expectNext.current || speakSoon.current) return
     if (landingRef.current) { startListening('start'); return }
     const sc = guidedRef.current ? getGuideScreen() : null
     startListening(sc && sc.voice ? 'answer' : 'nav')

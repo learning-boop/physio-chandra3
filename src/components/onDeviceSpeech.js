@@ -37,12 +37,17 @@ export function prepareOnDevice() {
 }
 
 let recognizer = null
-async function ensureAudio() {
+let recognizerWords = null   // the grammar the recogniser was made with ('' = any words)
+async function ensureAudio(words = null) {
   const { model } = await prepareOnDevice()
   if (!stream) {
     stream = await navigator.mediaDevices.getUserMedia({
       video: false,
-      audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1 },
+      // No call-style processing (Chandra, 15 Oct 2026: "the voice suddenly
+      // gets low"): with echo cancellation on, Android switches to its phone-
+      // call audio mode and turns the media volume down while the mic is open.
+      // The assistant never listens while it talks, so there is no echo.
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 },
     })
   }
   if (!ctx) {
@@ -50,10 +55,15 @@ async function ensureAudio() {
     ctx = new Ctx()
   }
   if (ctx.state === 'suspended') { try { await ctx.resume() } catch { /* resumes on the next tap */ } }
+  const key = words && words.length ? words.join(' ') : ''
+  if (recognizer && recognizerWords !== key) { try { recognizer.remove() } catch { /* gone */ } recognizer = null }
   if (!recognizer) {
-    recognizer = new model.KaldiRecognizer(ctx.sampleRate)
-    recognizer.on('partialresult', (m) => { const t = (m.result && m.result.partial) || ''; if (current && t) current._partial(t) })
-    recognizer.on('result', (m) => { const t = (m.result && m.result.text) || ''; if (current && t) current._final(t) })
+    recognizerWords = key
+    recognizer = key ? new model.KaldiRecognizer(ctx.sampleRate, JSON.stringify(words)) : new model.KaldiRecognizer(ctx.sampleRate)
+    // "[unk]": a sound outside the words expected; left out.
+    const clean = (t) => String(t || '').replace(/\[unk\]/g, ' ').replace(/\s+/g, ' ').trim()
+    recognizer.on('partialresult', (m) => { const t = clean(m.result && m.result.partial); if (current && t) current._partial(t) })
+    recognizer.on('result', (m) => { const t = clean(m.result && m.result.text); if (current && t) current._final(t) })
   }
   if (!node) {
     const src = ctx.createMediaStreamSource(stream)
@@ -73,6 +83,7 @@ export function releaseOnDevice() {
   if (stream) { stream.getTracks().forEach((t) => t.stop()); stream = null }
   if (ctx) { try { ctx.close() } catch { /* already */ } ctx = null }
   recognizer = null
+  recognizerWords = null
 }
 
 export class OnDeviceRecognition {
@@ -80,11 +91,12 @@ export class OnDeviceRecognition {
     this.lang = 'en-US'; this.continuous = true; this.interimResults = true; this.maxAlternatives = 1
     this.onresult = null; this.onerror = null; this.onend = null
     this._ended = false
+    this.words = null   // the words to expect (an answer card), or null for any words
   }
   start() {
     if (current && current !== this) current.abort()
     current = this
-    ensureAudio().catch((e) => {
+    ensureAudio(this.words).catch((e) => {
       const name = e && e.name
       this._fail(name === 'NotAllowedError' || name === 'SecurityError' ? 'not-allowed' : name === 'NotFoundError' ? 'audio-capture' : 'network')
     })

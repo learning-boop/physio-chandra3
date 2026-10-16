@@ -94,6 +94,32 @@ export function wakeWord(text) {
   return null
 }
 
+/* Android's on-phone model hears best when told which words to expect
+   (Chandra, 15 Oct 2026: "struggling to pick a few answers"). On a card it
+   gets these everyday words plus the card's own answer words; anything else
+   comes back as [unk] and is ignored. */
+const EVERYDAY = ('yes yeah yep yup yea sure okay ok right correct absolutely definitely certainly of course i do have am it does is did '
+  + 'no nope nah naw not never none nothing neither wrong incorrect at all think so really quite '
+  + 'maybe perhaps sometimes kind sort bit little unsure idea know dont don\'t can\'t cannot hard tell say '
+  + 'next continue go on move forward done finished that\'s thats all it back previous repeat again pardon help stop listening talking quiet '
+  + 'chandra hey hi hello um uh oh and but or the a an my me i\'m im of to with for in on at this that these those them one '
+  + 'first second third fourth fifth sixth last letter option number '
+  + 'zero two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen '
+  + 'twenty thirty forty fifty sixty seventy eighty ninety hundred years year old weeks week months month days day hours today yesterday '
+  + 'since ago about less more than under over couple few several half and a few '
+  + 'male female man woman guy boy girl lady intersex prefer rather other '
+  + 'left right side front turn around zoom closer up down tilt show view whole body remove take off put keep add '
+  + 'start without voice guide tap '
+  + 'tingling tingly prickly stabbing stab sharp burning shooting electric shock achy aching ache dull throbbing numb numbness '
+  + 'swollen swelling puffy locks locking stuck buckles buckle gives way clicking clicks popping pop weak stiff stiffness '
+  + 'stairs steps sitting standing walking running lying bending lifting twisting kneeling night morning sleep rest heat ice').split(/\s+/)
+export function voiceWords(labels = []) {
+  const out = new Set(EVERYDAY)
+  for (const l of labels) for (const w of String(l || '').toLowerCase().replace(/[’']/g, "'").replace(/[^a-z' ]+/g, ' ').split(/\s+/)) if (w) out.add(w)
+  out.add('[unk]')
+  return [...out]
+}
+
 /* Changing the areas picked up from the drawing, by voice (Chandra, 15 Oct
    2026): "remove the knee", "take off my left shoulder", "not the hip",
    "delete neck" → { op: 'remove', what }; "add the hip back", "put back the
@@ -223,6 +249,9 @@ const UNSURE_LABEL = /not sure|don.t know|cannot (tell|find|say)|unsure/i
 export function matchDetail(text, options, multi = false) {
   // Heard as two words: "fee mail", "fe male"; "non binary".
   let t = norm(text).replace(/ (fee|fe|fi) ?(male|mail|mel|meal) /g, ' female ').replace(/ non binary /g, ' nonbinary ')
+    // "To" heard as "two" between numbers ("5 two 15", "6 weeks two 3
+    // months"), and "twenty nine" heard as "twenty night".
+    .replace(/ (\d+)((?: [a-z]+)?) 2 (\d+) /g, ' $1$2 to $3 ').replace(/ (\d0) night /g, (m, a) => ` ${Number(a) + 9} `)
   const usable = options.filter((o) => !o.skip)
   const none = { ids: [], close: null }
   if (!usable.length) return none
