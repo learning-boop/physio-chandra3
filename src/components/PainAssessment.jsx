@@ -1572,6 +1572,13 @@ export default function PainAssessment() {
   })
   useEffect(() => () => clearTimeout(nextTimer.current), [])
   // Tapping (or saying) an answer on a question card.
+  // Taking answers off a tick-all card by voice (16 Oct 2026): "remove B",
+  // "not the high shelf", "clear this question".
+  const voiceUntick = (qq) => (qq.multi ? {
+    picked: Array.isArray(answers[qq.id]) ? answers[qq.id] : [],
+    unpick: (oid) => { if (isPicked(qq, oid)) toggleAnswer(qq, oid) },
+    clear: () => setAnswers((a) => ({ ...a, [qq.id]: undefined, [qq.id + '_other']: undefined })),
+  } : {})
   const pickCard = (qq, oid) => {
     const was = isPicked(qq, oid)
     toggleAnswer(qq, oid)
@@ -1730,6 +1737,10 @@ export default function PainAssessment() {
         voice: 'answer', multi: !!q.multi,
         options: arrangeOptions(q.options, q.text).map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
         pick: (oid) => { if (!(q.multi ? Array.isArray(injuryDraft) && injuryDraft.includes(oid) : injuryDraft === oid)) tapInjury(q, oid) },
+        // Taking answers off by voice (16 Oct 2026): "remove B", "clear".
+        picked: ids,
+        unpick: (oid) => { if (q.multi && ids.includes(oid)) pickInjury(q, oid) },
+        clear: () => setInjuryDraft(undefined),
       }
     }
     if (stage === 'questions' && !fromReview) {
@@ -1758,7 +1769,9 @@ export default function PainAssessment() {
         ...(subNow ? {
           voice: 'answer', multi: !!subNow.multi,
           options: subOptions.map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
-          pick: (oid) => pickCard(subNow, oid),
+          // Saying an answer ticks it; it never unticks one already ticked.
+          pick: (oid) => { if (!isPicked(subNow, oid)) pickCard(subNow, oid) },
+          ...voiceUntick(subNow),
         } : q.textarea ? { voice: 'confirm' } : gateClosed ? {
           voice: 'answer', multi: false,
           options: [{ id: '__open', label: 'Yes, show me the list', letter: 'A' }, { id: q.gate.no, label: 'No', letter: 'B' }],
@@ -1773,6 +1786,7 @@ export default function PainAssessment() {
           return {
             voice: 'answer', multi: !!q.multi, options: list,
             pick: (oid) => { if (!isPicked(q, oid)) pickCard(q, oid) },
+            ...voiceUntick(q),
           }
         })()),
       }

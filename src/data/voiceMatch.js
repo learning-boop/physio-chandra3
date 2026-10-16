@@ -109,6 +109,8 @@ const EVERYDAY = ('yes yeah yep yup yea sure okay ok right correct absolutely de
   + 'since ago about less more than under over couple few several half and a few '
   + 'male female man woman guy boy girl lady intersex prefer rather other '
   + 'left right side front turn around zoom closer up down tilt show view whole body remove take off put keep add '
+  + 'cancel untick uncheck clear select tick pick choose delete everything '
+  + 'b c d e f g h i j k l m n o p q r s t bee see sea dee gee jay kay pee tee '
   + 'start without voice guide tap '
   + 'tingling tingly prickly stabbing stab sharp burning shooting electric shock achy aching ache dull throbbing numb numbness '
   + 'swollen swelling puffy locks locking stuck buckles buckle gives way clicking clicks popping pop weak stiff stiffness '
@@ -239,6 +241,71 @@ function byRange(t, options) {
 /* "None of these" on a safety page. */
 export const saysNone = (text) => has(norm(text), NONE) && !has(norm(text), ['yes', 'i have', 'i do', 'i am', 'i ve', "i've"])
 
+/* Answers said by their letters (Chandra, 16 Oct 2026): "A and C",
+   "select A, B and D", "letters B and E". Only when every word is a letter,
+   a joining word or "select"/"tick", and every letter is on the screen;
+   otherwise null. Speech services often write a letter as a word ("bee",
+   "see", "dee"); those count only beside "and" or "select", so "I see"
+   stays a sentence. Returns option ids in the order said. */
+const LETTER_SOUND = { bee: 'b', be: 'b', see: 'c', sea: 'c', si: 'c', dee: 'd', ef: 'f', eff: 'f', gee: 'g', jay: 'j', kay: 'k',
+  el: 'l', em: 'm', en: 'n', pee: 'p', pea: 'p', are: 'r', es: 's', ess: 's', tee: 't', tea: 't' }
+const LETTER_JOIN = new Set(['and', 'also', 'plus', 'then', 'both'])
+const LETTER_LEAD = new Set(['select', 'tick', 'pick', 'choose', 'add', 'letter', 'letters', 'option', 'options', 'answer', 'answers', 'the', 'please'])
+export function lettersSaid(text, options) {
+  const tokens = norm(text).trim().split(' ').filter(Boolean)
+  const out = []
+  let joined = false, sounded = false
+  for (const w of tokens) {
+    if (LETTER_JOIN.has(w) || LETTER_LEAD.has(w)) { joined = true; continue }
+    let l = /^[a-t]$/.test(w) ? w : LETTER_SOUND[w]
+    if (!l) return null
+    if (!/^[a-t]$/.test(w)) sounded = true
+    const o = options.find((x) => x.letter && x.letter.toLowerCase() === l && !x.skip)
+    if (!o) return null
+    if (!out.includes(o.id)) out.push(o.id)
+  }
+  if (!out.length || (sounded && !joined)) return null
+  return out
+}
+
+/* Taking an answer off by voice (Chandra, 16 Oct 2026): "remove B",
+   "cancel B", "untick the high shelf", "not the high shelf", "cancel B and
+   select C" → { op: 'remove', ids, add }; "clear", "clear all", "clear
+   this question", "untick everything" → { op: 'clear' }. null when the
+   words are not about taking something off, so an answer is never ticked
+   by a sentence that asked for it to come off. `picked`: the ids ticked
+   now, tried first when the answer is named by its words. */
+const REMOVE_VERB = '(?:remove|cancel|untick|uncheck|unselect|deselect|delete|drop|take (?:off|out|away)|get rid of|forget|scratch)'
+export function answerEdit(text, options, picked = []) {
+  const t = norm(text)
+  if (options.some((o) => norm(o.label) === t)) return null
+  if (/^ (?:please )?(?:(?:clear|reset)(?: all| everything| them all| all of them| my answers| the answers| this question| this one| this page)?|(?:remove|cancel|untick|uncheck|delete|undo) (?:all|everything|them all|all of them|all of those|my answers|the answers|this question|this one)|start (?:this question|this one) again)(?: please)? $/.test(t)) return { op: 'clear' }
+  // Both in one go, either order (Chandra, 16 Oct 2026): "remove A and add
+  // B and C", "add B and C and remove A", "swap A for B", "change A to B".
+  let takeOff, putOn
+  const swap = t.match(/^ (?:please )?(?:swap|replace|change|switch) (.+?) (?:for|with|to|into) (.+?) $/)
+  const addFirst = t.match(new RegExp(`^ (?:please )?(?:select|tick|pick|choose|add|put in) (.+?) (?:and |but |then )?(?:also )?${REMOVE_VERB} (.+?) $`))
+  if (swap) [takeOff, putOn] = [swap[1], swap[2]]
+  else if (addFirst) [takeOff, putOn] = [addFirst[2], addFirst[1]]
+  else {
+    let m = t.match(new RegExp(`^ (?:please )?(?:no )?${REMOVE_VERB}(?: about)? (.+?) $`))
+    if (!m) m = t.match(/^ (?:no )?not ((?:the|that|my|letter|option) .+?|[a-t](?: and [a-t])*) $/)
+    if (!m) return null;
+    [takeOff, putOn] = m[1].split(/ (?:and |then )?(?:instead )?(?:select|tick|pick|choose|add|put in)(?: instead)? /)
+  }
+  const resolve = (part, pool) => {
+    if (!part || !part.trim()) return []
+    const p = ' ' + part.trim().replace(/ please$/, '') + ' '
+    const ls = lettersSaid(p, pool)
+    if (ls) return ls
+    if (/^ (?:that|it|that one|this one) $/.test(p)) return []
+    const ticked = pool.filter((o) => picked.includes(o.id))
+    const r = ticked.length ? matchDetail(p, ticked, true) : { ids: [] }
+    return r.ids.length ? r.ids : matchDetail(p, pool, true).ids
+  }
+  return { op: 'remove', ids: resolve(takeOff, options), add: resolve(putOn, options) }
+}
+
 /* Which of `options` ([{ id, label, letter, skip }], in screen order) the
    text means: { ids, close }. `ids` is empty when unsure; `close` then
    holds the two answers that fit about equally (to ask which one). With
@@ -258,6 +325,10 @@ export function matchDetail(text, options, multi = false) {
   const one = (o) => (o && !o.skip ? { ids: [o.id], close: null } : null)
   const short = t.trim().split(' ').length <= 3
 
+  // "A and C", "select A, B and D": several letters at once. On a
+  // one-answer card two letters are asked about rather than guessed.
+  const letters = lettersSaid(t, options)
+  if (letters && letters.length > 1) return multi ? { ids: letters, close: null } : { ids: [], close: letters.slice(0, 2) }
   // "B", "letter B", "option B" (short answers only: "a" is also a word).
   if (short) {
     const m = t.match(/^ (?:option |letter |answer )?([a-t]) $/)

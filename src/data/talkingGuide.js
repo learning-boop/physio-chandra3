@@ -140,7 +140,7 @@ export const VOICE = {
   tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
   // The drawing page: turning the body by voice (15 Oct 2026).
   helpTurn: 'To turn the body, say turn left, turn right, show the back, or zoom in.',
-  help: 'You can say your answer, using the words on the button or its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
+  help: 'You can say your answer, using the words on the button or its letter. Where you can tick more than one, say several letters, like A and C. To take one off, say remove, and its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
   offer: "You can talk with me as we go: answer by speaking or by tapping, whichever you like. To speak, tap Use my microphone.",
   noMic: "I can't find a microphone, so please tap your answers instead.",
@@ -162,6 +162,13 @@ export const VOICE = {
   whichWay: 'Left or right?',
   // Two answers fit what was said about equally; their labels follow.
   whichOne: 'Which one did you mean?',
+  // Taking answers off by voice (16 Oct 2026): "remove B", "clear".
+  removed: 'Okay, I took this off.',
+  notTicked: "That one wasn't ticked.",
+  whichOff: 'Which one should I take off? Say its letter.',
+  cleared: "Okay, I've cleared this question. Say your answers again, or tap them.",
+  sayInstead: 'Just say the answer you want instead.',
+  anythingElse: "Anything else? Say next when you're done.",
   // Called by name ("hey Chandra") with nothing after it.
   wake: "Yes? I'm listening.",
   // The landing page, once the microphone is on.

@@ -6,7 +6,7 @@ import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDe
 import {
   PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
-import { command, yesNo, saysNone, matchDetail, norm, wakeWord, bodyMove, areaEdit, voiceWords } from '../data/voiceMatch'
+import { command, yesNo, saysNone, matchDetail, answerEdit, norm, wakeWord, bodyMove, areaEdit, voiceWords } from '../data/voiceMatch'
 import { gotMany, asSentence } from '../data/guideSpeech'
 import { OnDeviceRecognition, prepareOnDevice, onDeviceReady, releaseOnDevice } from './onDeviceSpeech'
 
@@ -1334,6 +1334,31 @@ export default function TalkingGuide() {
     if (sc.voice === 'answer') {
       // Tick-all cards: "next" / "that's all" moves on.
       if (sc.multi && alts.some((a) => /\b(done|that'?s (all|it)|nothing else|no more|finished)\b/i.test(a))) { sc.proceed(); return }
+      // Taking answers off (Chandra, 16 Oct 2026): "remove B", "not the high
+      // shelf", "cancel B and select C", "clear this question". Checked
+      // before matching, so "remove the high shelf" never ticks it.
+      const edit = alts.map((a) => answerEdit(a, sc.options, sc.picked || [])).find(Boolean)
+      if (edit) {
+        whichOne.current = null
+        misses.current = 0
+        if (edit.op === 'clear') {
+          if (sc.clear) { sc.clear(); sayThen(VOICE.cleared, 'answer') } else sayThen(VOICE.sayInstead, 'answer')
+          return
+        }
+        const label = (id) => (sc.options.find((o) => o.id === id) || {}).label
+        const off = sc.unpick ? edit.ids.filter((id) => (sc.picked || []).includes(id)) : []
+        off.forEach((id) => sc.unpick(id))
+        edit.add.forEach((id) => sc.pick(id))
+        if (!sc.multi && edit.add.length) return   // a one-answer card moves on by itself
+        if (!edit.ids.length && !edit.add.length) { sayThen(VOICE.whichOff, 'answer'); return }
+        const parts = []
+        if (off.length) parts.push(`${VOICE.removed} ${off.map(label).filter(Boolean).map(asSentence).join(' ')}`)
+        else parts.push(sc.multi ? VOICE.notTicked : VOICE.sayInstead)
+        if (edit.add.length) parts.push(gotMany(edit.add.map(label).filter(Boolean)))
+        else if (sc.multi) parts.push(VOICE.anythingElse)
+        sayThen(parts.join(' '), 'answer')
+        return
+      }
       let ids = []
       // Just asked "which one did you mean?": first among those two.
       const narrowed = whichOne.current && whichOne.current.key === sc.key ? sc.options.filter((o) => whichOne.current.ids.includes(o.id)) : null
