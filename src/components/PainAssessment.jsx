@@ -1593,7 +1593,12 @@ export default function PainAssessment() {
     else if (card === 'dm') setAnswers((a) => ({ ...a, dm: oid }))
     else if (card === 'spondy') setAnswers((a) => ({ ...a, spondy: oid }))
     else if (card === 'steroid') setAnswers((a) => ({ ...a, steroid: oid }))
-    else if (card === 'oi') { if (oid === '__skip') { goNextCard(); return } setAnswers((a) => (oiOn(a) ? dropOi(a) : { ...a, oi: 'yes' })); return }
+    // Brittle bone disease: Yes or No moves on; tapping Yes again takes it off.
+    else if (card === 'oi') {
+      if (oid === 'no') { setAnswers((a) => ({ ...dropOi(a), oi: 'no' })); queueNext(); return }
+      if (oiOn(answers)) { setAnswers(dropOi); return }
+      setAnswers((a) => ({ ...a, oi: 'yes' }))
+    }
     // After a birth, a follow-up question shows on the same card: no auto move.
     if (card === 'preg' && (oid === 'pp6' || oid === 'pp12')) return
     queueNext()
@@ -1636,7 +1641,7 @@ export default function PainAssessment() {
     dm: { text: DM_STATUS.text, options: arrangeOptions(DM_STATUS.options, DM_STATUS.text) },
     spondy: { text: SPONDY_STATUS.text, options: SPONDY_STATUS.options },
     steroid: { text: STEROID_STATUS.text, options: arrangeOptions(STEROID_STATUS.options, STEROID_STATUS.text) },
-    oi: { text: OI_STATUS.text, options: [{ id: 'yes', label: OI_STATUS.yes }, { id: '__skip', label: 'No' }] },
+    oi: { text: OI_STATUS.text, options: [{ id: 'no', label: OI_STATUS.no }, { id: 'yes', label: OI_STATUS.yes }] },
   }
 
   /* ── Voice guide (Chandra, 10 Oct 2026) ──────────────────────────────────
@@ -2780,16 +2785,18 @@ export default function PainAssessment() {
                     </p>
                   </div>
                 )}
-                {/* Osteogenesis imperfecta (../data/oi.js): optional, a single
-                    tick; leave it blank if it does not apply. */}
+                {/* Osteogenesis imperfecta (../data/oi.js): Yes or No, still
+                    optional (Continue works without an answer). */}
                 {aboutCard === 'oi' && (
                   <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
                     <p style={{ ...qText, fontSize: 15, margin: '0 0 4px' }}><span aria-hidden="true" style={qMark} /><span>{OI_STATUS.text} <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13 }}>(optional)</span></span></p>
-                    <button style={chip(oiOn(answers))} aria-pressed={oiOn(answers)} onClick={() => aboutPick('oi', 'yes')}>
-                      <span style={letterStyle(oiOn(answers))}>{oiOn(answers) ? '✓' : '·'}</span><span>{OI_STATUS.yes}</span>
-                    </button>
+                    {[['no', OI_STATUS.no, answers.oi === 'no'], ['yes', OI_STATUS.yes, oiOn(answers)]].map(([id, label, sel], i) => (
+                      <button key={id} style={chip(sel)} aria-pressed={sel} onClick={() => aboutPick('oi', id)}>
+                        <span style={letterStyle(sel)}>{LETTERS[i]}</span><span>{label}</span>
+                      </button>
+                    ))}
                     <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: '6px 0 0', lineHeight: 1.6, maxWidth: 520 }}>
-                      If this does not apply to you, just tap Continue.
+                      {OI_STATUS.why}
                     </p>
                   </div>
                 )}

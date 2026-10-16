@@ -93,7 +93,7 @@ export function allGuideLines() {
   ABOUT.ages.forEach((a) => add(asSentence(a)))
   ABOUT.sex.forEach((x) => add(asSentence(x)))
   for (const q of [DM.DM_STATUS, ST.STEROID_STATUS, PG.PREG_STATUS, PG.PREG_BIRTH, SP.SPONDY_STATUS]) question(q)
-  if (OI.OI_STATUS) { add(spoken(OI.OI_STATUS.text)); add(asSentence(OI.OI_STATUS.yes)) }
+  if (OI.OI_STATUS) { add(spoken(OI.OI_STATUS.text)); add(asSentence(OI.OI_STATUS.yes)); add(asSentence(OI.OI_STATUS.no)) }
 
   // Pain questions, every area: its own questions, the opening details and
   // the closing screens, and its area name (for the drawing read-back).

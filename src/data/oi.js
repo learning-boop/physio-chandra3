@@ -31,6 +31,9 @@
 export const OI_STATUS = {
   id: 'oi', text: 'Do you have brittle bone disease (osteogenesis imperfecta, OI)?',
   yes: 'Yes, I have brittle bone disease (OI)',
+  // A "No" to tap (Chandra, 16 Oct 2026); still optional: Continue works too.
+  no: 'No',
+  why: 'Brittle bone disease changes which safety questions matter, as a new pain after a small knock can be a broken bone. This answer goes in your summary and PDF, not in any anonymous copy.',
 }
 export const oiOn = (a = {}) => a.oi === 'yes'
 
