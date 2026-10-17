@@ -44,6 +44,12 @@ This is a stretch or tear of the ligament running along the inner side of your k
 - The knee feels loose sideways, gives way or buckles: book a physiotherapy assessment within a few days
 - Pain or swelling from a milder sprain has not improved within a couple of weeks
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee, test the inner ligament and explain how bad the sprain looks.
+- You get brace advice if needed, and exercises to rebuild movement and strength step by step.
+- A gradual plan can help you return safely to walking, work and sport.
+
 ## clinicNotes
 - Diagnosis (ligament CPG 2017): valgus or rotational force, typically a blow to the outer knee with the foot planted; MCL tenderness reproduces the familiar pain. Valgus stress at 30 degrees: pain sens 78%, spec 67%; laxity sens 91%, spec 49% (CPG; the AIM manual found no psychometric data, p.71). Swain test. MCL with ACL is a common combination: check Lachman and pivot shift; Ottawa knee rule.
 - Grading (IKDC, AIM manual p.71): grade I no laxity; grade II 5-15 degrees; grade III over 15 degrees, with laxity in extension. Laxity at 0 degrees suggests a combined cruciate or posteromedial corner injury: orthopaedic referral. Isolated MCL swelling is fairly local; a joint effusion points to ACL, cartilage or kneecap dislocation (p.70). The deep MCL and medial meniscus are often injured together (p.69). After a kneecap dislocation, torn MPFL tenderness overlaps the femoral MCL origin (p.70).

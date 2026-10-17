@@ -45,5 +45,11 @@ The ulnar nerve passes through a small tunnel at the base of the palm on the lit
 - Pain in the heel of the hand after a fall, or after a club or bat hit the ground: see a doctor the same day, as a small bone there can break
 - A finger goes cold, white or blue: see a doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the feeling and strength in your hand and explain what presses on the nerve.
+- Changes to your grip, handlebars, gloves and tool handles can help take pressure off the nerve.
+- You get a plan to keep cycling and working comfortably, and to know when a doctor's check is needed.
+
 ## clinicNotes
 - Zones: 1 mixed, 2 motor only (deep branch; e.g. hook of hamate fracture), 3 sensory only. Froment's and Wartenberg's signs; dorsal ulnar cutaneous sensation and FDP 4/5 strength are spared at Guyon's and affected at the elbow. A ganglion causes about 30-40% (StatPearls); ultrasound or MRI for a ganglion, CT for the hamate. Differentials: cubital tunnel, C8-T1, thoracic outlet, Pancoast tumour; painless wasting without sensory loss can be motor neurone disease (refer). Hypothenar hammer syndrome (ulnar artery) in people who use the palm as a hammer.

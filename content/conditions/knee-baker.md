@@ -41,6 +41,12 @@ Pain at the back of the knee often comes from a fluid-filled swelling there (a B
 - The fullness keeps coming back
 - Bending or straightening is getting harder
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and explain how the swelling links to the joint itself.
+- Treatment focuses on the knee problem behind it, with exercises to keep the knee moving and strong.
+- You get advice on activity so you can stay active with less swelling.
+
 ## clinicNotes
 - Popliteal cyst: in adults usually secondary to a joint problem (a meniscal tear or OA) through the semimembranosus-gastrocnemius bursa; in children usually a primary cyst that tends to resolve. Confirm with ultrasound when needed. Treat the underlying joint problem (OA or meniscus); aspiration or injection are medical options.
 - Differentials: DVT (duplex ultrasound; a cyst and a clot can occur together, so a swollen calf needs an ultrasound even with a known cyst), a ruptured cyst (pseudothrombophlebitis), popliteal artery aneurysm (a pulsing lump; vascular claudication), popliteus or hamstring tendinopathy (pain on resisted knee flexion or tibial internal rotation, local tenderness, no lump), gastrocnemius trigger-point referral.

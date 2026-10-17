@@ -46,6 +46,13 @@ Some hips have a slightly shallower socket or extra-stretchy ligaments, so the b
 - Groin or hip discomfort continues for several weeks despite easing back on aggravating activities
 - After a tackle or a fall, a clunk with severe pain, or you cannot put weight on the leg: go to the emergency department
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your hip moves and explain in plain words why it feels loose.
+- Strength and balance exercises for your hip and buttock aim to give the joint more support.
+- You get advice on which movements to ease off and a gradual plan back to sport.
+
 ## clinicNotes
 - Structural instability (JOSPT 2014, C): anterior groin, lateral or general hip pain reproduced by FADIR or FABER; positive apprehension; IR over 30 degrees at 90 degrees of flexion; mechanical symptoms. Imaging: lateral centre-edge angle under 25 degrees, Tonnis angle over 10 degrees (dysplasia). Ligamentum teres tear: instability on squatting.
 - Risk factors (F): local or general laxity (Beighton), connective tissue disorders, bony shape, rotational and end-range sports. Measures (A): HOS, HAGOS or iHOT-33. Interventions (F): education to avoid end-range loading, neuromuscular re-education, strength and power; caution with capsular mobilisation in a lax hip.

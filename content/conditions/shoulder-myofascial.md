@@ -49,6 +49,12 @@ A muscle that has become tight and sensitive, often from being held in one posit
 - You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring
 - Pins and needles, numbness, weakness, or pain that shoots into the arm or hand: these point to a nerve, so please mention them; we check the nerves first
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can find the tight, tender muscle and explain why the ache spreads.
+- Hands-on pressure, stretching and gradual strengthening can help ease the ache.
+- You get advice on movement breaks, your workstation and self-massage, so you can manage it yourself.
+
 ## clinicNotes
 - Shoulder referral maps: infraspinatus to the anterior shoulder and lateral arm (sometimes forearm); supraspinatus to the lateral arm; upper trapezius to the neck and temple. Distinguish from rotator cuff tendinopathy (painful arc, resisted tests, tender over the tendon) and cervical radiculopathy.
 - Myofascial pain syndrome, 2018 Delphi criteria (2 of 3): taut band, hypersensitive spot, referred pain on stimulation (local twitch supportive, not required). Palpation reliability is only moderate: treat the label as a working hypothesis and judge by response. The site asks the patient to press the spot themselves (the shared tender-spot question).

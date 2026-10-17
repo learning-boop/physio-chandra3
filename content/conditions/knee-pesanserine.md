@@ -41,6 +41,12 @@ Three tendons join on the inner side of the shin just below the knee, with a sma
 - The pain is not settling after a few weeks of easing off
 - It is limiting walking, stairs, or sleep
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and explain why the inner shin is sore.
+- Thigh and hip strengthening, with changes to the activities that bring it on, can help ease the pain.
+- If you also have knee arthritis, a physiotherapist can help you manage both together.
+
 ## clinicNotes
 - Pain and tenderness over the medial proximal tibia about 2-5 cm below the joint line, at the insertion of sartorius, gracilis and semitendinosus; swelling uncommon. More common in women, with knee OA, obesity and diabetes, and in runners. Clinical diagnosis; ultrasound if unclear.
 - Differentials: medial tibiofemoral OA, medial meniscus (joint-line tenderness), MCL (along the ligament, after a valgus force), saphenous nerve, tibial stress fracture or insufficiency fracture (bone tenderness, night pain), tumour (rare).

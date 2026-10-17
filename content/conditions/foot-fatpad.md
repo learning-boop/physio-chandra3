@@ -45,5 +45,11 @@ The natural cushioning pad under your heel bone can become bruised and sore, or 
 - Heel pain doesn't ease after a few weeks of cushioning changes
 - You're unsure if it's this or another heel problem and want a clear plan
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check whether your heel pain comes from the fat pad or something else.
+- Heel cushions, taping and footwear advice can help protect the heel pad and ease the pain.
+- You get a plan to pace standing and walking so you can keep doing your daily activities.
+
 ## clinicNotes
 - Heel pain CPG 2014: in a cohort of 250, fat pad atrophy 15% vs plantar fasciitis 53%. Fat pad cases were far more likely to have pain with long standing (OR 20.9), night pain (OR 20.9) and pain in both heels (OR 25), WITHOUT first-step morning pain. Ask about earlier steroid injections (fat atrophy). Consider when the picture is not plantar fasciitis-like or fascia-directed care fails (C). Source: Martin RL et al., JOSPT 2014;44(11):A1-A23 (heel pain revision 2014; superseded by Koc TA et al., JOSPT 2023;53(12), which lists heel fat pad syndrome under plantar heel pain and examines the plantar calcaneus to rule out fat pad atrophy).

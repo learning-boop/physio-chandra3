@@ -42,6 +42,12 @@ The hinge where the mobile neck meets the stiffer upper back can become restrict
 - Stiffness limits looking up or over the shoulder
 - You want targeted mobility and strengthening for desk work
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your neck and upper back move together and explain what is going on.
+- Hands-on care for the upper back and neck, with shoulder and neck exercises, can help ease stiffness.
+- You get desk and posture advice and a plan to help keep pain from coming back.
+
 ## clinicNotes
 - JOSPT 2017 category: neck pain with mobility deficits at the cervicothoracic junction (C): cervical and upper thoracic motion limitation reproducing the pain, no trauma, no radiating arm signs. Stage: acute under 6 weeks, subacute 6-12, chronic over 12; match dose to irritability.
 - Assess (B): CROM, CFRT, cervical and thoracic segmental mobility with provocation, upper trapezius pressure-pain threshold. Outcomes (A): NDI, NPRS, PSFS. No imaging without red flags; IFOMPT cervical framework before cervical manual therapy.

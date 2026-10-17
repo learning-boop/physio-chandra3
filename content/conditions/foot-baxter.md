@@ -44,6 +44,12 @@ A small nerve runs under the inner side of the heel, close to where the thick ba
 - Pain on one spot of bone that is worse with every step or hopping, or when the sides of the heel are squeezed: see a doctor first, as it could be a stress fracture
 - Heel pain with other swollen joints, back stiffness in the morning, or psoriasis: mention it to your doctor as well
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check whether a pinched heel nerve, the plantar fascia, or both are causing your pain.
+- Gentle nerve-gliding exercises, hands-on care and footwear advice can help ease the pressure on the nerve.
+- You get a step-by-step plan to build back walking and standing time without stirring it up.
+
 ## clinicNotes
 - Baxter's nerve (first branch of the lateral plantar nerve) is caught between abductor hallucis and quadratus plantae, near the medial calcaneal tubercle; the medial calcaneal nerve supplies the heel skin. Features: medial heel burning that builds through the day, tenderness over the nerve (medial heel, deeper and more medial than the fascia insertion), sometimes abductor digiti minimi weakness (difficulty spreading the little toe); numbness is uncommon.
 - Neurodynamics (Butler; Shacklock): tibial nerve test DF/EV then SLR, differentiating heel symptoms with the SLR (Shacklock's "focused sequence": ankle first); nerve palpation behind the medial malleolus and at the medial heel, compared with the other side; swelling over the tarsal tunnel.

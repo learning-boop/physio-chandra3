@@ -42,6 +42,12 @@ This is a stretch or tear of the ligament on the outer side of your knee, typica
 - The bony bump on the outer side just below the knee is very sore to press: an X-ray is needed first
 - A milder sprain is not settling after a couple of weeks, or the knee feels loose or shifts to the side during activity
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee, test the outer ligament and explain how bad the sprain looks.
+- You get brace advice if needed, and exercises to rebuild movement and strength step by step.
+- A gradual plan can help you return safely to walking, work and sport.
+
 ## clinicNotes
 - Diagnosis (ligament CPG 2017): varus force; local swelling and tenderness over the LCL; lateral pain and laxity on varus stress at 0 and 30 degrees. LCL injury is the least common knee ligament injury (incidence about 4%, CPG). Suspect a posterolateral corner (PLC) injury with hyperextension plus varus or a posterolateral blow to the medial tibia near extension; it can be part of a knee dislocation. Dial test and external rotation recurvatum for the PLC (not in the CPG).
 - Neurovascular check: peroneal nerve injury occurs in about 13-44% of PLC or multiligament injuries (PMC8475172; not stated in the CPG). Ottawa fibular head tenderness (CPG p.a16; fibular head avulsion, the arcuate sign) is checked in clinic.

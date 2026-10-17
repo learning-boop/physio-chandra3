@@ -37,6 +37,12 @@ Two tendons run behind the bony bump on the outer ankle and steady the ankle on 
 - It is not settling after 2 to 3 weeks of easing off
 - The ankle also keeps rolling or giving way
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the tendons on the outer ankle and explain what is going on.
+- Graded strengthening and balance training can help the tendons settle and steady the ankle.
+- You get a plan to return to sport and uneven ground, and a referral if the tendons slip.
+
 ## clinicNotes
 - Peroneal tendinopathy, split tears (brevis) and subluxation or dislocation (superior peroneal retinaculum injury, often misdiagnosed as a sprain; usually needs surgery when acute). Resisted eversion and plantarflexion-eversion pain; tenderness behind the lateral malleolus; subluxation with resisted eversion from dorsiflexion. Ultrasound shows dynamic subluxation and tears; MRI. Often coexists with chronic ankle instability and a cavovarus foot.
 - Management: load modification, progressive eversion and plantarflexion strengthening, balance training, lateral wedge for cavovarus; refer subluxation, persistent tears.

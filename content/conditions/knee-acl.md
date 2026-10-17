@@ -47,6 +47,12 @@ This is an injury to one of the main ligaments deep inside the knee, usually fro
 - Your knee is stuck and will not straighten fully: see a doctor soon, as it may need an early surgical opinion
 - Your knee gave way or buckled after a twisting or landing injury, or keeps giving way: book a physiotherapy assessment
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and explain the injury and your options in plain words.
+- A structured strength, balance and movement programme is a key part of recovery, with or without surgery.
+- You get a step-by-step return-to-sport plan, with exercises that may help lower the chance of another injury.
+
 ## clinicNotes
 - Diagnosis (ligament CPG 2017): non-contact deceleration or cutting with valgus near extension (about 70%; about 30% contact, including a blow to the back of the knee, AIM manual p.55), a pop, swelling within 0-12 hours (haemarthrosis), giving way. Lachman sens 85%, spec 94%; pivot shift sens 24%, spec 98% (rules in); anterior drawer. The AIM manual's 2016 pooled figures (p.56): Lachman sens 0.87, spec 0.94; pivot shift sens 0.49, spec 0.98, +LR 16; anterior drawer sens 0.73, spec 0.93; lever sign close to 100% sensitive; in acute or partial tears Lachman 0.42, anterior drawer 0.29, pivot shift 0.11.
 - Ottawa knee rule (CPG p.a16): age 55 or over, isolated kneecap tenderness, fibular head tenderness, cannot flex to 90 degrees, cannot bear weight for 4 steps. The patient screen asks only age, steps and flexion: palpate the kneecap and fibular head in clinic. Validated in adults (Bachmann 2004: sens 98.5%, -LR 0.05); the Pittsburgh rule under 12. Check MCL, menisci (medial meniscus involved in about 50%), the posterolateral corner, a Segond fracture, and the look-alikes: kneecap dislocation and osteochondral fracture (x-ray, AIM manual p.57).

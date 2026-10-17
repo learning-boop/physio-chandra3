@@ -35,3 +35,9 @@ The lowest ribs are held only loosely at the front. If that hold gives, the end 
 - It affects sport, work or sleep
 - You want the rib and its movement assessed
 - The pain comes with a fever, burning or blood when you pass urine, or after fatty meals, or does not change at all with movement: see a doctor first
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your lower ribs move and explain what is causing the click.
+- Gentle hands-on care with trunk mobility and strengthening exercises can help reduce catching and pain.
+- You get advice on which movements to ease off for now and a plan back to sport and work.

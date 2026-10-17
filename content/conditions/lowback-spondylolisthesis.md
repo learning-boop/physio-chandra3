@@ -62,5 +62,11 @@ Spondylolisthesis means one of the bones in the lower back sits a little forward
 - Leg symptoms on walking that keep shortening your walking distance, or leg pain and tingling that is not settling after about 12 weeks of treatment: see your doctor to discuss whether imaging or a specialist opinion would help
 - You want a plan: a physiotherapy assessment can work out which positions unload your back, and build the strength programme that suits the slip you have
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your back moves and explain what the slip means in plain words.
+- Graded strengthening of your trunk and hips can help ease pain and support everyday movement.
+- You get easier positions for flare-ups and a step-by-step plan back to the activities you enjoy.
+
 ## clinicNotes
 Adult isthmic (younger, arching-sport history) and degenerative (over 50, women about 3:1, most often L4-L5) slips. Diagnosis needs a STANDING lateral X-ray: a slip can reduce when supine. Meyerding grade 1-2 in the great majority; grades 3-4 are rare and belong with the spine surgeon. Examination: palpable step and segmental tenderness, extension-provoked pain, hamstring tightness, hip flexor length, lordosis and sacral angle, full neuro screen L2-S1, SLR, and the claudication history that points to co-existing stenosis. Management: graded loading with trunk and hip strengthening, flexion-biased activity during flares, and education that the segment is stable. Surgery is discussed when radicular or claudication symptoms persist beyond about 12 weeks with imaging that matches (SPORT, Abdu 2018). Co-displays with the stenosis card when walking brings on heavy legs.

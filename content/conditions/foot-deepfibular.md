@@ -42,6 +42,12 @@ A nerve runs down the front of the ankle under the straps of tissue that hold th
 - Moving your back changes it, or it spreads up the shin: the knee or the back may be the source
 - Burning or numbness in both feet, like socks: see your doctor, as a general nerve condition can cause this
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can find where the nerve on top of your foot is being pressed and explain why.
+- Lacing and padding changes, gentle nerve-gliding exercises and freeing up stiff joints can help ease it.
+- You get advice on footwear and activity to help keep the pressure off the nerve.
+
 ## clinicNotes
 - Deep fibular nerve under the inferior extensor retinaculum (anterior tarsal tunnel), or distally over a talonavicular or first tarsometatarsal osteophyte, an os intermetatarseum or EHB. Sensory: first web space; motor: EDB (often only wasting of EDB).
 - Neurodynamics (Shacklock; Butler): fibular neurodynamic test PF/IN of the ankle AND toes, then SLR (the toes are often omitted; differentiate with hip flexion; sensitise with hip adduction and medial rotation, contralateral lateral flexion). Palpate between EHL and EDL tendons over the dorsum of the ankle and along to the first metatarsal; Tinel; compare sides.

@@ -34,6 +34,12 @@ Deep at the back of the ankle, tissue or a small extra bone (the os trigonum) ca
 - The ankle also swells or catches
 - It started after a sprain or a fall and is not settling: see us, as an X-ray may be needed
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check what is being pinched at the back of your ankle and explain it.
+- Changing your load and technique, hands-on joint work and strengthening can help ease the pinch.
+- You get a step-by-step plan back to dance, kicking or downhill running.
+
 ## clinicNotes
 - Posterior ankle impingement: the forced plantarflexion test reproduces posterior pain; os trigonum or Stieda process on a lateral X-ray; FHL tenosynovitis (pain with resisted hallux flexion, triggering). Dancers, footballers, downhill runners. Management: load modification, technique, mobilisation, FHL loading; injection or arthroscopic excision if it fails.
 - Sources: AIM Theory Manual 2023 Ch. 2.8; JOSPT ankle sprain CPG 2021 (os trigonum as copathology).

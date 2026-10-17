@@ -54,6 +54,12 @@ The capsule around the shoulder joint tightens, causing pain then marked stiffne
 - It came on with no injury: please also ask your doctor whether your thyroid and blood sugar have been checked (simple blood tests)
 - You'd like a staged plan matched to the phase you're in
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can explain how frozen shoulder usually changes over time and what to expect.
+- Gentle stretching and movement, matched to how sore your shoulder is, can help ease pain and stiffness.
+- You get tips for sleep, dressing and reaching, and a plan that changes as your shoulder improves.
+
 ## clinicNotes
 - Diagnosis (JOSPT 2013, F): age 40-65; gradual, progressive pain and stiffness limiting sleep, grooming, dressing and reaching; passive glenohumeral motion limited in several planes, ER (at the side) most; ER and IR fall as abduction goes from 45 to 90 degrees; end-range passive motion reproduces the pain; accessory glides restricted in all directions. Radiographs are normal: BESS/BOA require X-rays in two planes to exclude glenohumeral OA, avascular necrosis and posterior dislocation (seizure, electric shock). Stage 1 is often mistaken for rotator cuff pain.
 - Rule out (CPG): normal passive motion; radiographic OA; rotation increasing with abduction and subscapularis provocation; ULNT reproducing the pain. Clinical reasoning (not in the CPG): both shoulders stiff over 50, think of polymyalgia rheumatica.

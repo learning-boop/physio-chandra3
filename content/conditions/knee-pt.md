@@ -45,6 +45,12 @@ The tendon just below the kneecap can become sensitive when jumping, landing, or
 - You want a staged tendon-loading program, the core of good care
 - It's affecting performance or daily stairs
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and explain why the tendon has become sore.
+- A step-by-step tendon loading programme can help the tendon get stronger and less painful.
+- You get a gradual plan to build back up to jumping, landing and your sport.
+
 ## clinicNotes
 - Diagnosis (Malliaras 2015): pain localised to the inferior pole of the patella, load-dependent, rising with the energy-storage demand of the tendon (jumping, landing, change of direction); first episode usually between 15 and 30 (AIM manual p.28); pain often worse 24 hours later (p.29). Decline single-leg squat at 25 degrees. Palpation is of low value (sens 37-56%, spec 47-83%). Imaging does not confirm the diagnosis: tendon changes are common without pain.
 - Measure: VISA-P (minimal clinically important change about 13 points).

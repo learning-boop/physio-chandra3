@@ -32,3 +32,9 @@ A thin skin nerve runs down the thumb side of the forearm to the back of the thu
 - The burning or tingling lasts more than a few weeks after removing the pressure
 - The numb patch is spreading
 - You are not sure whether it is this or a tendon problem at the wrist
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the thin skin nerve and explain what is pressing on it.
+- Simple changes, like loosening straps and easing pressure, can help the nerve settle.
+- You get advice on daily tasks and forearm twisting to help the symptoms stay settled.

@@ -132,6 +132,8 @@ for (const file of files) {
     id: meta.id, name: meta.name, clin: meta.clin || '', ...(gates ? { gates } : {}),
     blurb: sections.blurb, noticed: sections.noticed,
     homeCare: sections.homeCare, seePhysioIf: sections.seePhysioIf,
+    // Optional (17 Oct 2026): "How physiotherapy helps" on the results card.
+    ...(sections.physioHelps && sections.physioHelps.length ? { physioHelps: [].concat(sections.physioHelps) } : {}),
     // Optional: a refer-first condition's "see your doctor" note, shown at
     // the top of its results card, and notes for the clinician summary only.
     ...(sections.doctorFirst ? { doctorFirst: [].concat(sections.doctorFirst).join(' ') } : {}),

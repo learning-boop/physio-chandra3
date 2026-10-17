@@ -47,6 +47,12 @@ This is osteoarthritis at the joint where the thumb meets the wrist: a slow chan
 - The ache or stiffness has lasted several weeks without improving
 - Several finger joints in both hands are swollen and stiff for more than an hour in the morning, or the thumb base is suddenly hot, red and swollen: see a doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your thumb joint and explain in plain words what is going on.
+- Thumb and hand strengthening, with a supportive splint if needed, can help ease pain with pinching.
+- You get easier ways to grip, tips on tools, and a plan to manage flare-ups.
+
 ## clinicNotes
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.
 - Thumb base: EULAR 2018, long-term thumb base orthosis, exercise, joint protection. Manual therapy plus exercise improved pain but not pinch or grip strength (Villafane 2013, cited in the AIM manual). Measures: grip and pinch, AUSCAN.

@@ -44,6 +44,12 @@ The small joint where the collarbone meets the shoulder blade can be sprained by
 - Pain persists past about 2 to 3 weeks
 - You want a graded return to gym or sport
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the joint at the top of your shoulder and explain what is going on.
+- Gradual movement and strengthening exercises can help you get back to lifting and pressing.
+- You get a step-by-step plan for the gym, sport or work at a pace that suits the joint.
+
 ## clinicNotes
 - Kelley 2013 lists AC joint sprain and AC osteoarthritis among shoulder differentials; neither shoulder CPG gives AC test accuracy. Chronopoulos 2004: cross-body adduction sens 77%, spec 79%; all three of cross-body adduction, resisted extension and active compression positive, sens 25%, spec 97%. A painful arc at the top of the range (not mid-range) points away from the rotator cuff; deep or anterior pain and passive stiffness point to the glenohumeral joint.
 - Grades (Rockwood): I-II managed without surgery (usually settle in 1-6 weeks); III debated (similar long-term function; about 22% of non-operative cases later have surgery; meta-analyses 2024-25); IV-VI surgical. A step deformity after injury needs bilateral AP or Zanca X-rays before rehabilitation. In children a fall onto the shoulder is more often a clavicle (physeal) fracture. Weightlifters: distal clavicle osteolysis.

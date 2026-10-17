@@ -14,7 +14,7 @@
 import { LOCATION_QUESTION_IDS } from './drawnLocation.js'
 import {
   REGIONS, ZONE_TO_REGION, computeResults, computeNearMisses, computeRaw, shouldStop, isRelevant, answeredRegionCount, questionValue,
-  contenders, separationValue,
+  contenders, separationValue, allQuestions,
 } from './symptomGuide.js'
 
 /* Regions on one anatomical chain, from the spine outwards. */
@@ -457,3 +457,24 @@ export function forPerson(f, { age, sex } = {}) {
 
 /** True when a flag belongs to this group (a flag's group may be a list). */
 export const inGroup = (f, g) => [].concat(f.group || []).includes(g)
+
+/** "Why this may fit" on a results card (17 Oct 2026): the patient's own
+    answers that pointed most to this condition, strongest first, as the
+    labels they saw. Only answers that added to its score count; answers
+    that argued against it are never shown as reasons. */
+export function reasonsFor(keys, answers, rk, cid, max = 3) {
+  const region = REGIONS[rk]
+  if (!region) return []
+  const ra = regionAnswers(keys, rk, answers)
+  const out = []
+  for (const q of allQuestions(region)) {
+    const a = ra[q.id]
+    if (a === undefined) continue
+    for (const oid of [].concat(a)) {
+      const o = (q.options || []).find((x) => x.id === oid)
+      const w = o && o.weights ? o.weights[cid] || 0 : 0
+      if (w > 0 && !out.some((r) => r.label === o.label)) out.push({ label: q.id === 'age' ? `Your age group: ${o.label}` : `You said: ${o.label}`, w })
+    }
+  }
+  return out.sort((x, y) => y.w - x.w).slice(0, max).map((r) => r.label)
+}

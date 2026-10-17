@@ -32,3 +32,9 @@ A nerve wraps around the bone just below the outer knee, and a branch runs down 
 - The tingling has not eased after a few weeks
 - Your foot slaps down or your toes catch: see a doctor first
 - Moving your back changes it: the back may be the source
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the nerve and the strength in your foot and ankle.
+- You get advice on avoiding pressure on the outer knee, with exercises to keep the ankle moving.
+- If your foot is weak, a physiotherapist can help you walk more safely and suggest a doctor visit.

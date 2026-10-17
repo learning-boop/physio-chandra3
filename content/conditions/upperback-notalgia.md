@@ -38,6 +38,12 @@ Small skin nerves come out from the spine and pass through the back muscles to t
 - Weakness or numbness in both legs, unsteady walking, or bladder changes: go to an emergency department
 - The itch or burning is affecting sleep, or has not eased with movement after a few weeks: we can assess the upper back and the nerve
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your upper back and explain how a squeezed skin nerve causes the itch.
+- Mid-back mobility exercises and gentle hands-on care for the muscles and nerve may help ease symptoms.
+- You get posture advice, and support to work with your doctor if the itch persists.
+
 ## clinicNotes
 - Cutaneous branches of the dorsal rami T2-T6 entrapped as they pierce multifidus and the fascia at a right angle; often with upper thoracic stiffness or degenerative change at the same levels. Hyperpigmentation from scratching is common.
 - Neurodynamics (Butler): tender spots or nodules where the nerves become cutaneous, more tender in slump long sitting and less with the neck extended (structural differentiation); more reactive laterally along the lateral branch. Upper thoracic segments: slump long sitting with cervical lateral flexion (symptoms on the convex side), PA and wedge mobilisation at the level.

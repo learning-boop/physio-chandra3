@@ -38,5 +38,11 @@ The median nerve, the same nerve involved in carpal tunnel syndrome, can be sque
 - Your pinch or grip keeps getting weaker, or the muscles at the base of the thumb look thinner: see a doctor, who may arrange nerve tests
 - You are not sure whether it is this or carpal tunnel at the wrist
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check where the nerve is irritated and explain it in plain words.
+- Changes to gripping and forearm turning, with gentle exercises, can help the nerve settle.
+- You get advice on tool and computer work to help keep the symptoms calm.
+
 ## clinicNotes
 - CTS CPG 2019 lists pronator syndrome as a median nerve differential. Favour a proximal level when sensation over the thenar eminence is involved (palmar cutaneous branch leaves before the tunnel), there is no night waking eased by shaking, and the forearm aches with pronation or grip. Wrist provocation tests cannot separate the two levels and ULNT1 does not discriminate (D); use nerve conduction studies when unclear. Source: Erickson 2019.

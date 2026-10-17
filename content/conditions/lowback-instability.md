@@ -35,6 +35,12 @@ Some low back pain happens because the deep core muscles aren't controlling move
 - Episodes of pain keep coming back despite general exercise
 - You're noticing ongoing weakness, giving way, or you're avoiding movements out of worry
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your back and core muscles control movement and explain what is going on.
+- Guided exercises to train deep core control and trunk strength can help reduce catching and pain.
+- You get a plan to build confidence in lifting, bending and sport, and to reduce flare-ups.
+
 ## clinicNotes
 - Classification (JOSPT 2012, B): low back pain with movement coordination impairments. Recurrent episodes with or without referred leg pain; symptoms at initial to mid range that worsen at end range or with sustained positions; possible segmental hypermobility, reduced trunk strength and endurance, coordination deficits in daily tasks.
 - Stabilisation prediction rule (Hicks): under 40, positive prone instability test, aberrant movements (painful arc, catch, thigh climbing, reversed lumbopelvic rhythm), SLR over 91 degrees; 3 or more +LR 4.0, fewer than 2 -LR 0.20 (not validated).

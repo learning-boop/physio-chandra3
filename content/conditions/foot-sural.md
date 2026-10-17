@@ -34,6 +34,12 @@ A thin nerve runs down the back of the calf, beside the heel cord and behind the
 - Burning or numbness in both feet, like socks: see your doctor, as a general nerve condition can cause this
 - A new lump along the nerve, or numbness after an ankle operation or a cut: see your doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can find where the nerve on the outer foot is irritated and explain why.
+- Easing pressure from shoes or scars, plus gentle nerve-gliding exercises, can help settle the nerve.
+- Balance and strength work aims to help prevent the ankle sprains that can irritate it.
+
 ## clinicNotes
 - Sural nerve: lateral to the Achilles, then behind and below the lateral malleolus to the lateral border of the foot (lateral dorsal cutaneous nerve); can anastomose with the superficial fibular nerve (Shacklock). Traction in inversion sprains; compression by boots, scar, ganglia, fractures of the base of the 5th metatarsal, peroneal tendon pathology, and after Achilles or lateral ankle surgery.
 - Neurodynamics: sural test DF/IN then SLR (normal response: pulling in the lateral ankle, sometimes posterolateral calf; SLR about 30-60 degrees); sensitise with hip adduction and medial rotation, contralateral lateral flexion, slump. Palpate lateral to the Achilles with counter-pressure medially; compare sides. Butler: nerve massage for swelling around the lateral Achilles.

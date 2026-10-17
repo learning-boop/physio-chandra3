@@ -42,6 +42,12 @@ Osteoarthritis is the most common reason for aching in several joints as we get 
 - A joint that is suddenly very swollen, hot and too painful to touch, especially with a fever: see a doctor the same day
 - Pain that wakes you and does not change with position, or unexplained weight loss: see your doctor within days
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your joints and explain in plain words how joints change with age.
+- A guided strength and walking or fitness programme can help ease pain and keep you active.
+- You get a plan for busy days and flare-ups, and advice on any helpful walking aids or supports.
+
 ## clinicNotes
 - Clinical diagnosis without imaging (NICE NG226 2022): 45 or over, activity-related joint pain, and no morning stiffness or stiffness of 30 minutes or less.
 - Hand OA: Heberden's and Bouchard's nodes, thumb base; consider erosive OA and inflammatory arthritis when soft swelling or long morning stiffness.

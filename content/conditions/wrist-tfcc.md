@@ -43,6 +43,12 @@ The TFCC is the wrist's 'meniscus' on the little-finger side: a cartilage cushio
 - Weakness with rotation or weight-bearing on the hand
 - You want a graded strengthening and stability plan
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the little-finger side of your wrist and explain what is going on.
+- A wrist support for loaded tasks, then gradual grip and wrist strengthening, can help it settle.
+- You get a step-by-step plan back to sport and work, and advice if a hand surgeon's opinion is needed.
+
 ## clinicNotes
 - Tests: ulnar fovea sign (reported sensitivity 95%, specificity 87%; Tay 2007, not re-checked); piano-key and DRUJ ballottement tests; press test; ulnar variance on X-ray. A complete foveal tear with DRUJ subluxation predicts failure of conservative care: refer to a hand surgeon. Above-elbow splinting for about 6 weeks did better than short-arm (76% vs 29%; retrospective, BJJ 2021).
 - Your TFCC protocol differs from current evidence: grade III DRUJ mobilisation at 3 to 6 weeks and high-grade glides in phase 3 conflict with possible DRUJ laxity or a foveal tear; cross-friction at the fovea and nerve dry needling have no evidence; it does not cover immobilisation (above-elbow 4 to 6 weeks) or referral of foveal tears; recovery estimates are unreferenced; the "APTA... Physiopedia 2023" reference is mislabelled.

@@ -34,6 +34,11 @@ export const AUTHORED = [
         "The ankle is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day",
         "Morning stiffness lasting well over 30 minutes, or both ankles or several joints are swollen: see your doctor"
       ],
+      "physioHelps": [
+        "A physiotherapist can check how your ankle moves and explain arthritis in plain words.",
+        "Strength and balance training, plus footwear advice such as a rocker sole, can help ease pain.",
+        "You get a plan to manage busy days and flare-ups and keep doing what you enjoy."
+      ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
         "Ankle: mostly after old injury (about 7 to 8 in 10 post-traumatic). Symptomatic radiographic ankle OA in 3.4% of community adults aged 50 and over (Murray 2018, PLoS One); the older \"about 1%\" figure (AIM manual p. 573) is out of date. No ankle-specific OA guideline; general OA guidance applied by extension. Strength, balance and a rocker sole; screen for instability."
@@ -136,6 +141,11 @@ export const AUTHORED = [
         "It is limiting squatting, running, or sport",
         "The ankle also swells or catches: this can be a cartilage problem, and may need a scan"
       ],
+      "physioHelps": [
+        "A physiotherapist can check what is pinching at the front of your ankle and explain it.",
+        "Hands-on joint work, strengthening and changes to how you load the ankle can help ease the pinch.",
+        "You get a plan to return to squatting, stairs and sport step by step."
+      ],
       "clinicNotes": [
         "Anterolateral (soft-tissue) impingement follows about 3% of sprains (the distal fascicle of the ATFL is one cause); anterior bony impingement (tibial and talar osteophytes, \"footballer's ankle\") shows on a lateral X-ray (AIM manual p. 527).",
         "Molloy synovial impingement test: reported sensitivity 94.8%, specificity 88% (Molloy 2003, JBJS Br; one study). Measure with the weight-bearing lunge.",
@@ -215,6 +225,11 @@ export const AUTHORED = [
         "The ankle still feels like it could give way after 2 weeks",
         "You've sprained the same ankle more than once — balance retraining prevents the cycle",
         "Weeks later there is a deep ache, swelling or catching inside the ankle: see us, as the joint surface may need checking"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your sprain, rule out a break, and explain how ligaments heal.",
+        "Taping or a brace, gentle hands-on care and early exercise can help you walk comfortably sooner.",
+        "Balance and strength training aims to lower the chance of the ankle rolling again."
       ],
       "clinicNotes": [
         "Diagnosis (B): inversion injury, Ottawa ankle rules negative, then the reverse anterolateral drawer test (sens 0.89, spec 0.90) and anterolateral talar palpation added to the traditional drawer (sens 0.22). Examination is most accurate 4 to 5 days after injury.",
@@ -322,6 +337,11 @@ export const AUTHORED = [
         "The ankle also aches deep inside, catches or locks, or keeps swelling: see us, as other problems inside the joint or a tendon may need checking, sometimes with a scan",
         "It still keeps rolling after 3 to 6 months of a steady exercise programme: ask us or your doctor about a surgeon's opinion"
       ],
+      "physioHelps": [
+        "A physiotherapist can check why your ankle keeps giving way and explain it in plain words.",
+        "Balance and strength training, with hands-on work to free up stiffness, can help steady the ankle.",
+        "You get a plan back to sport and uneven ground with more confidence."
+      ],
       "clinicNotes": [
         "Definition (JOSPT 2021): instability or giving way persisting 12 months or more after the first sprain, with activity limitation; mechanical and/or functional (sensorimotor). About 40% of first-time sprains.",
         "Discriminative tools (B): CAIT 25 or less (sens 96.6%, spec 86.8%, LR+ 7.31; MCID 3); IdFAI 11 or more; AII 4 or more yes. Functional tests that discriminate: side hop, timed and multiple hop, foot-lift, SEBT (medial, anteromedial, posteromedial).",
@@ -423,6 +443,11 @@ export const AUTHORED = [
         "You would like help with graded movement, desensitisation, and brain-training approaches such as graded motor imagery and mirror therapy",
         "Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day"
       ],
+      "physioHelps": [
+        "Alongside your doctor's care, a physiotherapist can explain why the ankle is so sensitive and what helps.",
+        "Gentle movement, gradual loading and calming touch exercises aim to settle the sensitivity and stiffness.",
+        "Brain-training methods such as mirror exercises and a paced plan can help you use the ankle again."
+      ],
       "doctorFirst": "If this fits, please see your family doctor or surgeon within the next few days. CRPS is diagnosed by a doctor, who will also check for other causes such as an infection, a blood clot or a problem with healing. Book physiotherapy straight away alongside: early treatment matters.",
       "clinicNotes": [
         "Budapest clinical criteria (Harden 2010): continuing disproportionate pain + at least one symptom in 3 of 4 categories (sensory, vasomotor, sudomotor/oedema, motor/trophic) + at least one sign in 2 of 4 at examination + no better explanation. CRPS I without, CRPS II with a major nerve lesion. Valencia update (Goebel 2021, Pain): \"CRPS-NOS\" is kept for people never documented as meeting the criteria; people who met them before and now meet only some are \"CRPS with remission of some features\".",
@@ -514,6 +539,11 @@ export const AUTHORED = [
         "You would like a structured movement, strength and balance programme",
         "Progress has stalled, or you are not back to the activities you want"
       ],
+      "physioHelps": [
+        "Once your fracture team allows, a physiotherapist can explain what to expect as the bone heals.",
+        "A guided programme of movement, strength, balance and walking can help ease stiffness and a limp.",
+        "You get a step-by-step plan back to work, sport and the things you enjoy."
+      ],
       "clinicNotes": [
         "Rehabilitation after ankle or foot fracture (cast, boot or ORIF): early weight bearing as permitted, ROM (weight-bearing lunge), strength, balance and gait training; measure LEFS or OMAS, lunge test, single-leg balance, hop tests for sport.",
         "Safety: DVT or PE (af-dvt), infection or wound problems, CRPS (A9/B9, af-crps), compartment syndrome early after injury, non-union.",
@@ -571,6 +601,11 @@ export const AUTHORED = [
         "You could not take 4 steps straight after the injury, or the bone is tender to press: see a doctor for an X-ray first",
         "The bone on the outside of your leg is tender to press just below the knee: see a doctor the same day for an X-ray",
         "Your calf becomes swollen, warm or tender, especially in a brace, boot or cast: see a doctor the same day; if you are also short of breath or have chest pain, call 911"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check for a high ankle sprain and arrange a surgeon's opinion if needed.",
+        "Protected walking, then graded strength and balance work, can help the ligaments recover.",
+        "You get a step-by-step return-to-sport plan based on how the ankle is doing."
       ],
       "clinicNotes": [
         "JOSPT lateral ankle sprain CPG 2021: syndesmosis injury is a key differential and copathology of acute and persisting sprains; apply the full Ottawa ankle rules first. Imaging (ACR, cited in the CPG): alignment change suggesting syndesmosis injury warrants leg and stress radiographs, MRI or CT; refer with any diastasis concern or failure to settle. (The CPG's \"more than 3 weeks of sport\" figure refers to severe multi-ligament sprains, not syndesmosis injuries specifically.)",
@@ -678,6 +713,11 @@ export const AUTHORED = [
         "It is limiting walking or running",
         "You want a graded tendon-loading plan"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the back of your heel and explain what is irritated there.",
+        "Heel lifts, footwear changes and a graded tendon-strengthening programme can help ease the pain.",
+        "You get a plan to build back walking, running and hills without stirring it up."
+      ],
       "clinicNotes": [
         "Insertional pain is outside the 2024 midportion Achilles CPG revision. Loading without end-range dorsiflexion (not below level; Jonsson 2008; Chimenti 2019); heel lifts; shockwave as an add-on (low to moderate evidence). The Royal London and arc signs are for midportion pain only. Haglund's deformity and retrocalcaneal bursitis are included in this card.",
         "Screen for spondyloarthritis (enthesitis), recent fluoroquinolone or steroid use, and calcaneal stress fracture (squeeze test; af-stress and ft-stress)."
@@ -757,6 +797,11 @@ export const AUTHORED = [
         "You cannot get back to sport",
         "Still aching deep inside, swelling or catching 6 weeks after a sprain: your doctor may arrange an X-ray and then an MRI, and we can help with that referral",
         "The ankle locks and will not free up: see a doctor soon"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your ankle and arrange imaging or a surgeon's opinion if needed.",
+        "A paced programme of movement, strength and balance can help ease the ache and swelling.",
+        "You get a step-by-step plan back to activity that respects how the joint surface is healing."
       ],
       "clinicNotes": [
         "JOSPT lateral ankle sprain CPG 2021: osteochondral lesions and talar bone bruises are listed copathologies of acute sprains (MRI copathology in 92%), and chondral lesions and loose bodies of chronic instability. Medial tibia or talus bone bruise within 2 weeks: longer return to walking (25 vs 16 days) and sport (92 vs 56). Imaging (ACR via the CPG): symptoms over 6 weeks, radiographs; if negative with suspected lesion, impingement or instability, MRI. Refer when symptoms or function do not fully recover. Source: Martin RL et al., JOSPT 2021.",
@@ -844,6 +889,11 @@ export const AUTHORED = [
         "It is not settling after 2 to 3 weeks of easing off",
         "The ankle also keeps rolling or giving way"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the tendons on the outer ankle and explain what is going on.",
+        "Graded strengthening and balance training can help the tendons settle and steady the ankle.",
+        "You get a plan to return to sport and uneven ground, and a referral if the tendons slip."
+      ],
       "clinicNotes": [
         "Peroneal tendinopathy, split tears (brevis) and subluxation or dislocation (superior peroneal retinaculum injury, often misdiagnosed as a sprain; usually needs surgery when acute). Resisted eversion and plantarflexion-eversion pain; tenderness behind the lateral malleolus; subluxation with resisted eversion from dorsiflexion. Ultrasound shows dynamic subluxation and tears; MRI. Often coexists with chronic ankle instability and a cavovarus foot.",
         "Management: load modification, progressive eversion and plantarflexion strengthening, balance training, lateral wedge for cavovarus; refer subluxation, persistent tears.",
@@ -923,6 +973,11 @@ export const AUTHORED = [
         "The ankle also swells or catches",
         "It started after a sprain or a fall and is not settling: see us, as an X-ray may be needed"
       ],
+      "physioHelps": [
+        "A physiotherapist can check what is being pinched at the back of your ankle and explain it.",
+        "Changing your load and technique, hands-on joint work and strengthening can help ease the pinch.",
+        "You get a step-by-step plan back to dance, kicking or downhill running."
+      ],
       "clinicNotes": [
         "Posterior ankle impingement: the forced plantarflexion test reproduces posterior pain; os trigonum or Stieda process on a lateral X-ray; FHL tenosynovitis (pain with resisted hallux flexion, triggering). Dancers, footballers, downhill runners. Management: load modification, technique, mobilisation, FHL loading; injection or arthroscopic excision if it fails.",
         "Sources: AIM Theory Manual 2023 Ch. 2.8; JOSPT ankle sprain CPG 2021 (os trigonum as copathology)."
@@ -1001,6 +1056,11 @@ export const AUTHORED = [
         "You want a plan to manage sport through the growth spurt",
         "The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your child's heel and explain growing-bone heel pain in plain words.",
+        "Heel cups, footwear advice and calf stretches can help ease the soreness.",
+        "Your child gets a plan to adjust, not stop, sport while the heel settles."
+      ],
       "clinicNotes": [
         "Peak age: girls about 8 to 12, boys about 10 to 14; often both heels. Positive medial-lateral heel squeeze; X-ray only if atypical (one side, night pain, swelling, pain at rest).",
         "Evidence: self-limiting; wait-and-see, heel raise and physiotherapy similar (Wiegerinck 2016, J Pediatr Orthop); heel raise or footwear (James 2016, BJSM); James 2013 systematic review."
@@ -1060,6 +1120,11 @@ export const AUTHORED = [
         "It is not settling after 2 to 3 weeks",
         "The ankle keeps rolling or giving way",
         "The ankle also locks, or keeps swelling: see us, as a scan may be needed"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the soft hollow on the outer ankle and explain why it is sore.",
+        "Balance training, strengthening and footwear or insole advice can help ease pain and steady the ankle.",
+        "You get a plan back to walking and sport on uneven ground."
       ],
       "clinicNotes": [
         "Lateral hindfoot pain over the sinus tarsi after inversion sprains or with excessive pronation; subtalar instability, interosseous or cervical ligament injury, synovitis. Tender sinus tarsi; pain on supination and on inversion with plantarflexion. Diagnostic anaesthetic injection or MRI if unclear. Management: orthoses, proprioceptive and peroneal strengthening, mobilisation; injection or arthroscopy if persistent.",
@@ -1135,6 +1200,11 @@ export const AUTHORED = [
         "Tingling, numbness, or burning hasn't settled within a couple of weeks",
         "The sensations are spreading or becoming more intense"
       ],
+      "physioHelps": [
+        "A physiotherapist can check whether a squeezed nerve at the inner ankle fits your symptoms.",
+        "Footwear or arch support advice and gentle ankle and nerve movement can help ease the pressure.",
+        "You get a plan to pace your activity, and a referral if checks show it is needed."
+      ],
       "clinicNotes": [
         "Heel pain CPG 2014 and 2023: negative tarsal tunnel, nerve tension and sensory tests are required to classify plantar fasciitis (B); a positive result redirects to nerve entrapment, and lumbopelvic referral must also be excluded (F). Source: Martin RL et al., JOSPT 2014; Koc TA et al., JOSPT 2023.",
         "Tests: Tinel's behind the medial malleolus; dorsiflexion-eversion test (Kinoshita 2001); triple compression test (AIM manual p. 569: sensitivity 85.9%, specificity 100%, Abouelela 2012). Kinoshita figures not checked against the primary paper.",
@@ -1204,6 +1274,11 @@ export const AUTHORED = [
         "Inner-ankle pain with any new arch flattening — early care shortens recovery",
         "Pain with stairs, hills, or longer standing",
         "A single-leg heel raise is painful or impossible"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the tendon that supports your arch and how your foot is holding up.",
+        "A graded strengthening programme with arch supports can help ease pain and support the arch.",
+        "You get a plan to build back walking and activity, and to keep the tendon strong."
       ],
       "clinicNotes": [
         "Terminology: the 2020 consensus renamed adult-acquired flatfoot \"progressive collapsing foot deformity\" (PCFD), staged flexible (1) or rigid (2), classes A to E (Myerson 2020, Foot Ankle Int). Your protocol already uses \"PCFD Stage I-II\".",
@@ -1290,6 +1365,11 @@ export const AUTHORED = [
         "A strain has not improved after 2 weeks",
         "You felt a pop and the muscle now looks a different shape: see a doctor within a few days, as a tendon tear is best repaired early",
         "You want a plan to return to lifting or sport"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check whether it is normal soreness or a strain and explain what is going on.",
+        "A graded strengthening plan can help the muscle heal and rebuild its strength.",
+        "You get advice on building training loads up gradually to lower the chance of another strain."
       ]
     },
     "resolved": [
@@ -1406,6 +1486,11 @@ export const AUTHORED = [
         "Tingling or heaviness keeps coming back with overhead work or carrying",
         "It is affecting your grip, work or sleep",
         "You want a plan for posture, breathing and first-rib mobility that eases the outlet"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your neck, shoulders and posture and explain what irritates the nerves.",
+        "Exercises for the shoulder blade muscles and tight neck muscles can help calm the symptoms.",
+        "You get advice on overhead work, carrying and your desk set-up to help keep symptoms settled."
       ]
     },
     "resolved": [
@@ -1487,6 +1572,11 @@ export const AUTHORED = [
         "You would like an assessment with a pelvic health physiotherapist",
         "You have not yet seen your doctor about bowel or gynaecological causes",
         "Bleeding from your bottom, black stools, or a change in your bowel habit lasting more than 3 weeks: see your doctor first"
+      ],
+      "physioHelps": [
+        "A pelvic health physiotherapist can check the muscles around your tailbone and explain what is going on.",
+        "Breathing, relaxation and gentle exercises can help these muscles let go and ease the ache.",
+        "You get simple toilet, sitting and daily habits to help keep flare-ups down."
       ]
     },
     "resolved": [
@@ -1576,6 +1666,11 @@ export const AUTHORED = [
         "You want the tailbone assessed and a plan for sitting and activity",
         "The pain is severe, or getting worse after the first two weeks: see a doctor, who may arrange an X-ray",
         "Numbness around your bottom or genitals, or new trouble passing urine or controlling your bowels: go to the emergency department now"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your tailbone after the fall and explain how it usually heals.",
+        "You get advice on cushions, sitting position and gentle movement to ease pressure while it settles.",
+        "A step-by-step plan can help you get back to sitting longer, driving and your usual activities."
       ]
     },
     "resolved": [
@@ -1675,6 +1770,11 @@ export const AUTHORED = [
         "It hasn't eased after 2 months",
         "Standing up from sitting keeps catching",
         "You want an assessment; treatment of the tailbone and the muscles around it helps many people"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your tailbone moves as you sit and stand, and explain it plainly.",
+        "You learn easier ways to sit down and stand up, with cushion advice to ease the catch.",
+        "Gentle exercises and a daily plan can help you sit for longer with less pain."
       ]
     },
     "resolved": [
@@ -1750,6 +1850,11 @@ export const AUTHORED = [
         "Every breath or sleeping on that side stays painful",
         "It keeps returning with twisting at work or in sport",
         "Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the rib joint and explain why it hurts when you breathe or twist.",
+        "Gentle hands-on care for the rib and upper back, with breathing and turning exercises, can help ease pain.",
+        "You get a plan to return to work and sport, and to reduce flare-ups."
       ]
     },
     "resolved": [
@@ -1812,6 +1917,11 @@ export const AUTHORED = [
         "Recurring end-of-day neck/upper-back ache",
         "Stiffness limits looking up or over the shoulder",
         "You want targeted mobility and strengthening for desk work"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your neck and upper back move together and explain what is going on.",
+        "Hands-on care for the upper back and neck, with shoulder and neck exercises, can help ease stiffness.",
+        "You get desk and posture advice and a plan to help keep pain from coming back."
       ],
       "clinicNotes": [
         "JOSPT 2017 category: neck pain with mobility deficits at the cervicothoracic junction (C): cervical and upper thoracic motion limitation reproducing the pain, no trauma, no radiating arm signs. Stage: acute under 6 weeks, subacute 6-12, chronic over 12; match dose to irritability.",
@@ -1931,6 +2041,11 @@ export const AUTHORED = [
         "You want a plan for posture, breathing and first-rib mobility that eases the outlet",
         "The arm swells or turns blue or purple, or the hand goes cold, pale and painful: see a doctor the same day",
         "The small muscles of the hand are getting thinner, or your grip is getting weak: see a doctor"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your nerves, posture and first rib, and explain why the arm tingles.",
+        "Posture, breathing and first-rib mobility exercises aim to ease pressure on the nerves to your arm.",
+        "You get advice on carrying, overhead work and your work set-up to help prevent flare-ups."
       ]
     },
     "resolved": [
@@ -2031,6 +2146,11 @@ export const AUTHORED = [
         "You want a graded plan to return to lifting or sport",
         "You felt a pop, with bruising, or the biceps now bulges higher up the arm: see a doctor the same day, as a tear is best repaired early. If it happened more than 2 weeks ago, still see a doctor within a few days"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the tendon, explain what is going on, and spot signs that need a doctor.",
+        "A gradual strengthening programme for the arm aims to help the tendon handle lifting again.",
+        "You get a step-by-step plan back to lifting, pulling and work tasks without overdoing it."
+      ],
       "clinicNotes": [
         "Hook test: 100% sensitivity and specificity in the original series (O'Driscoll 2007); later series lower (reported about 78% overall, 83% complete, 30% partial tears), so a negative test does not exclude a tear. Ultrasound or MRI if a tear is suspected. Acute repair preferred; over about 4 weeks often needs reconstruction (ISAKOS 2023). Non-operative care reportedly loses about 40-50% of supination endurance (secondary source).",
         "Differentials: brachialis strain, bicipitoradial bursitis, lateral antebrachial cutaneous nerve entrapment, C5-6 radiculopathy."
@@ -2120,6 +2240,11 @@ export const AUTHORED = [
         "Tingling or numbness persists more than a few weeks",
         "Your grip keeps getting weaker, the muscle between your thumb and index finger looks thinner, or the numbness is there all the time: see a doctor, who may arrange nerve tests",
         "You would like help with positions and habits: most mild cases settle within a few months with these changes"
+      ],
+      "physioHelps": [
+        "A physiotherapist can explain how the nerve gets irritated and check the feeling and grip in your hand.",
+        "Clear advice on elbow positions, leaning and sleep habits can help the nerve settle.",
+        "A physiotherapist can track your progress and tell you when a doctor's review is worthwhile."
       ],
       "clinicNotes": [
         "Examination: McGowan grade; elbow flexion test and flexion-pressure test; Tinel's at the cubital tunnel; Froment's and Wartenberg's signs; intrinsic and first dorsal interosseous wasting; C8-T1 and thoracic outlet differentials.",
@@ -2231,6 +2356,11 @@ export const AUTHORED = [
         "Movement has stopped improving, or the elbow is getting stiffer",
         "You would like a structured movement and strengthening programme"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your elbow and work within the limits your fracture clinic has set.",
+        "Guided movement, then strengthening, aims to bring back bending, straightening and arm strength.",
+        "You get a step-by-step plan back to daily tasks, work and sport as the bone heals."
+      ],
       "clinicNotes": [
         "Early active movement after a simple dislocation gives better early function than plaster (FuncSiE, Iordens 2017). Post-traumatic stiffness: loss of extension most common; heterotopic ossification after severe injuries; ulnar nerve symptoms are common. Measure flexion-extension arc (functional 30-130 degrees), pronation-supination, QuickDASH or MEPS.",
         "After a dislocation that reduced: posterolateral rotatory instability (PLRI) if clunking pushing up from a chair (chair and push-up signs); refer.",
@@ -2296,6 +2426,11 @@ export const AUTHORED = [
         "Grip strength is dropping",
         "You want a graded return-to-sport loading plan",
         "Tingling in the ring and little fingers is there all the time, or your hand is getting weaker: see a doctor"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your inner elbow and explain in plain words what is going on.",
+        "A gradual forearm strengthening programme can help the tendons cope with gripping and lifting again.",
+        "You get advice on sport, work and carrying, and a plan to manage flare-ups."
       ],
       "clinicNotes": [
         "Diagnosis: pain on resisted wrist flexion and pronation; tender 5-10 mm distal and anterior to the medial epicondyle; peak 4th to 6th decade (AIM manual pp. 316-317). No physiotherapy trials specific to medial pain; care follows the lateral evidence; eccentric not superior (AIM p. 317).",
@@ -2425,6 +2560,11 @@ export const AUTHORED = [
         "Stiffness is limiting daily tasks like washing your hair or eating",
         "It locks and will not free up, or the joint becomes hot and swollen: see a doctor"
       ],
+      "physioHelps": [
+        "A physiotherapist can check how your elbow bends and straightens and explain what is going on.",
+        "Regular movement and strength exercises can help ease stiffness and keep your elbow working.",
+        "You get advice on pacing heavy gripping tasks and managing flare-ups at work and home."
+      ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
         "Elbow: OA is uncommon (about 2%, reported) and often under 60: heavy manual work or an old injury (AIM manual p. 573 lists \"elbow (with trauma)\"); NICE NG226's \"45 or over\" fits the elbow poorly. Pain at the end of range rather than mid-range; ulnar nerve symptoms are common alongside. Catching or locking points to a loose body. The general OA principles apply to the arthritis part.",
@@ -2536,6 +2676,11 @@ export const AUTHORED = [
         "Pushing or straightening the arm is getting weaker",
         "You felt a pop at the back of the elbow after a fall or a forced push, and straightening the arm is now weak: see a doctor the same day"
       ],
+      "physioHelps": [
+        "A physiotherapist can check whether the fluid sac or the tendon is the problem and explain it simply.",
+        "Padding and avoiding pressure can help the sac settle, and gradual strengthening can help a sore tendon.",
+        "You get a plan for building back pushing, push-ups and work tasks step by step."
+      ],
       "clinicNotes": [
         "Olecranon bursitis: conservative care first (protect, pad, avoid leaning); aspiration did not raise infection risk in aseptic bursitis (Kaur 2023 systematic review). Septic bursitis: mostly S. aureus, fever in only about 4 in 10 (reported figures); aspiration and culture are physician decisions. Also consider gout or tophi and RA nodules (\"sudden pain and swelling with no injury\").",
         "Triceps tendinopathy: pain with resisted extension and pushing; distal triceps rupture (a pop after a fall on the outstretched hand or a forced push, weak extension, a palpable gap) needs early surgical opinion. Differentials: posteromedial impingement or valgus extension overload in throwers, snapping triceps or ulnar nerve subluxation."
@@ -2631,6 +2776,11 @@ export const AUTHORED = [
         "The ache has not eased after 2 to 3 weeks",
         "Tennis elbow treatment has not helped",
         "You cannot fully straighten your fingers at the knuckles, or your wrist or fingers are getting weaker: see a doctor, who may arrange nerve tests"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check whether the ache comes from the nerve or the tendon and explain it simply.",
+        "Changes to how you twist and grip, with gentle exercises, can help the irritated nerve settle.",
+        "You get a plan to help you get back to tool, computer and sport tasks comfortably."
       ],
       "clinicNotes": [
         "In posterior interosseous nerve palsy the wrist can still lift (drifting to the thumb side) but the fingers cannot straighten at the knuckles; no sensory loss. Radial tunnel: deep ache 3-5 cm below the lateral epicondyle, worse with resisted supination; sensory and motor change rare; often coexists with tennis elbow (AIM manual p. 325; Lucado 2022)."
@@ -2731,6 +2881,11 @@ export const AUTHORED = [
         "Daily tasks like holding a cup are limited",
         "Strength is gradually dropping: a graded loading programme helps most people",
         "Your hand or wrist is getting weaker, or you cannot straighten your wrist or fingers: see a doctor"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your elbow and explain in plain words what is going on.",
+        "A gradual forearm strengthening programme, sometimes with hands-on treatment or taping, can help ease pain.",
+        "You get advice on easing grip loads at work and home, and a plan for flare-ups."
       ],
       "clinicNotes": [
         "Tests: Cozen's (sensitivity 84-91%), Maudsley's, Mill's (53-76%); diagnostic evidence weak (Lucado 2022, CPG12-13). Measures: PRTEE, PSFS, pain-free grip.",
@@ -2864,6 +3019,11 @@ export const AUTHORED = [
         "You felt a pop, or the elbow feels like it could slip or give way: see a doctor promptly, as a full tear may need a surgeon's opinion",
         "You want a graded throwing programme to return to sport"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the inner elbow ligament and explain in plain words what is going on.",
+        "Strengthening for the forearm, shoulder and whole body aims to share out the load of throwing.",
+        "A step-by-step throwing plan can help you return to your sport at a pace your elbow can manage."
+      ],
       "clinicNotes": [
         "Moving valgus stress test: sensitivity 100% (17 of 17), specificity 75% (3 of 4), n = 21 (O'Driscoll 2005): a small sample. Ulnar nerve symptoms often coexist. Differential: posteromedial impingement or valgus extension overload.",
         "Under 16: medial epicondyle apophysitis or avulsion (little leaguer's elbow), not the ligament; a pop means a same-day X-ray (erf-child)."
@@ -2957,6 +3117,11 @@ export const AUTHORED = [
         "Pain on one spot of bone that is worse with every step or hopping, or when the sides of the heel are squeezed: see a doctor first, as it could be a stress fracture",
         "Heel pain with other swollen joints, back stiffness in the morning, or psoriasis: mention it to your doctor as well"
       ],
+      "physioHelps": [
+        "A physiotherapist can check whether a pinched heel nerve, the plantar fascia, or both are causing your pain.",
+        "Gentle nerve-gliding exercises, hands-on care and footwear advice can help ease the pressure on the nerve.",
+        "You get a step-by-step plan to build back walking and standing time without stirring it up."
+      ],
       "clinicNotes": [
         "Baxter's nerve (first branch of the lateral plantar nerve) is caught between abductor hallucis and quadratus plantae, near the medial calcaneal tubercle; the medial calcaneal nerve supplies the heel skin. Features: medial heel burning that builds through the day, tenderness over the nerve (medial heel, deeper and more medial than the fascia insertion), sometimes abductor digiti minimi weakness (difficulty spreading the little toe); numbness is uncommon.",
         "Neurodynamics (Butler; Shacklock): tibial nerve test DF/EV then SLR, differentiating heel symptoms with the SLR (Shacklock's \"focused sequence\": ankle first); nerve palpation behind the medial malleolus and at the medial heel, compared with the other side; swelling over the tarsal tunnel.",
@@ -3027,6 +3192,11 @@ export const AUTHORED = [
         "Pain is limiting walking or shoe choice",
         "The toe is crossing over or under the second toe",
         "You want footwear advice, or are considering surgery"
+      ],
+      "physioHelps": [
+        "A physiotherapist can look at your foot and explain in plain words what the bunion means for you.",
+        "Footwear advice, toe spacers and toe and foot exercises can help ease the pain.",
+        "You get a plan to stay active, and advice on when a surgeon's opinion may be worth considering."
       ],
       "clinicNotes": [
         "Prevalence about 23% at ages 18-65 and about 35% in women over 65 (AIM manual). Conservative care: toe separators, splints and exercise give small, low-quality reductions in the hallux valgus angle (2021 network meta-analysis, PMC8038851); footwear for pain. A bunion shifts the sesamoids laterally."
@@ -3108,6 +3278,11 @@ export const AUTHORED = [
         "A hand or foot is still much more painful, swollen, sensitive or discoloured than you would expect a few weeks after an injury, operation or cast: see your doctor and book physiotherapy now rather than waiting",
         "You would like help with graded movement, desensitisation, and brain-training approaches such as graded motor imagery and mirror therapy",
         "Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day"
+      ],
+      "physioHelps": [
+        "Alongside your doctor's care, a physiotherapist can explain why the foot is so sensitive and what helps.",
+        "Gentle movement, gradual loading and calming touch exercises aim to settle the sensitivity and stiffness.",
+        "Brain-training methods such as mirror exercises and a paced plan can help you use the foot again."
       ],
       "doctorFirst": "If this fits, please see your family doctor or surgeon within the next few days. CRPS is diagnosed by a doctor, who will also check for other causes such as an infection, a blood clot or a problem with healing. Book physiotherapy straight away alongside: early treatment matters.",
       "clinicNotes": [
@@ -3195,6 +3370,11 @@ export const AUTHORED = [
         "It is not settling after 1 to 2 weeks",
         "You want hands-on treatment and a plan back to sport"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the outer side of your foot and rule out other causes of the pain.",
+        "Hands-on treatment of the joint, taping or a small pad, and strengthening can help ease the pain.",
+        "You get a plan to return to walking, running or dancing step by step."
+      ],
       "clinicNotes": [
         "Lateral midfoot pain over the calcaneocuboid joint or 4th and 5th TMT joints; pain with lateral column loading and push-off; often after inversion sprain or in dancers. No validated test (evidence low: case series and reviews); use history, palpation, midfoot stress and response to taping or padding. Exclude a 5th metatarsal base fracture, a Lisfranc injury (plantar ecchymosis) and stress fracture.",
         "Management: cuboid manipulation (whip or squeeze) with consent, taping or a cuboid pad, peroneus longus and intrinsic strengthening, footwear; the protocol expects improvement in 2 to 6 weeks in mild cases (figures not independently sourced).",
@@ -3265,6 +3445,11 @@ export const AUTHORED = [
         "Moving your back changes it, or it spreads up the shin: the knee or the back may be the source",
         "Burning or numbness in both feet, like socks: see your doctor, as a general nerve condition can cause this"
       ],
+      "physioHelps": [
+        "A physiotherapist can find where the nerve on top of your foot is being pressed and explain why.",
+        "Lacing and padding changes, gentle nerve-gliding exercises and freeing up stiff joints can help ease it.",
+        "You get advice on footwear and activity to help keep the pressure off the nerve."
+      ],
       "clinicNotes": [
         "Deep fibular nerve under the inferior extensor retinaculum (anterior tarsal tunnel), or distally over a talonavicular or first tarsometatarsal osteophyte, an os intermetatarseum or EHB. Sensory: first web space; motor: EDB (often only wasting of EDB).",
         "Neurodynamics (Shacklock; Butler): fibular neurodynamic test PF/IN of the ankle AND toes, then SLR (the toes are often omitted; differentiate with hip flexion; sensitise with hip adduction and medial rotation, contralateral lateral flexion). Palpate between EHL and EDL tendons over the dorsum of the ankle and along to the first metatarsal; Tinel; compare sides.",
@@ -3331,6 +3516,11 @@ export const AUTHORED = [
         "Pain in both heels, with back stiffness in the mornings, psoriasis, sore red eyes or other swollen joints: see your doctor",
         "Heel pain doesn't ease after a few weeks of cushioning changes",
         "You're unsure if it's this or another heel problem and want a clear plan"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check whether your heel pain comes from the fat pad or something else.",
+        "Heel cushions, taping and footwear advice can help protect the heel pad and ease the pain.",
+        "You get a plan to pace standing and walking so you can keep doing your daily activities."
       ],
       "clinicNotes": [
         "Heel pain CPG 2014: in a cohort of 250, fat pad atrophy 15% vs plantar fasciitis 53%. Fat pad cases were far more likely to have pain with long standing (OR 20.9), night pain (OR 20.9) and pain in both heels (OR 25), WITHOUT first-step morning pain. Ask about earlier steroid injections (fat atrophy). Consider when the picture is not plantar fasciitis-like or fascia-directed care fails (C). Source: Martin RL et al., JOSPT 2014;44(11):A1-A23 (heel pain revision 2014; superseded by Koc TA et al., JOSPT 2023;53(12), which lists heel fat pad syndrome under plantar heel pain and examines the plantar calcaneus to rule out fat pad atrophy)."
@@ -3440,6 +3630,11 @@ export const AUTHORED = [
         "You would like a structured movement, strength and balance programme",
         "Progress has stalled, or you are not back to the activities you want"
       ],
+      "physioHelps": [
+        "Once your fracture team allows, a physiotherapist can explain what to expect as the bone heals.",
+        "A guided programme of movement, strength, balance and walking can help ease stiffness and a limp.",
+        "You get a step-by-step plan back to work, sport and the things you enjoy."
+      ],
       "clinicNotes": [
         "Rehabilitation after ankle or foot fracture (cast, boot or ORIF): early weight bearing as permitted, ROM (weight-bearing lunge), strength, balance and gait training; measure LEFS or OMAS, lunge test, single-leg balance, hop tests for sport.",
         "Safety: DVT or PE (af-dvt), infection or wound problems, CRPS (A9/B9, af-crps), compartment syndrome early after injury, non-union.",
@@ -3499,6 +3694,11 @@ export const AUTHORED = [
         "It has not settled after 2 to 3 weeks of shoe changes",
         "A toe is starting to drift or lift",
         "You want help with footwear and insoles"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the ball of your foot and explain what is causing the soreness.",
+        "Padding, taping and footwear advice can help take load off the sore area while it settles.",
+        "Calf and foot strengthening and a paced return to activity aim to help prevent flare-ups."
       ],
       "clinicNotes": [
         "Plantar plate: pain under the 2nd MTP, swelling on top, the toe drifting or lifting; vertical stress (drawer) test, often quoted as sensitivity 80.6% and specificity 99.8% (Klein 2012; secondary sources only). Taping the toe down; offloading.",
@@ -3595,6 +3795,11 @@ export const AUTHORED = [
         "It is getting worse despite shoe changes",
         "You want advice on insoles and strengthening"
       ],
+      "physioHelps": [
+        "A physiotherapist can check how your midfoot moves and explain arthritis in plain words.",
+        "A strengthening programme, plus advice on stiffer-soled shoes or inserts, can help ease the ache.",
+        "You get a plan to manage busy days and flare-ups and stay active."
+      ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
         "Midfoot: stiffer-soled or rocker shoes, orthoses; ask about an old midfoot (Lisfranc) injury.",
@@ -3689,6 +3894,11 @@ export const AUTHORED = [
         "Ball-of-foot pain or the pebble feeling persists after 2 to 3 weeks of footwear changes",
         "Toe tingling or numbness continues",
         "You want gait and footwear assessment before considering injections"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check whether an irritated nerve between the toes fits your symptoms.",
+        "Advice on wider shoes and a small pad under the foot can help ease pressure on the nerve.",
+        "You get a plan to keep walking and staying active, and advice if other options are needed."
       ],
       "clinicNotes": [
         "Tests (Pitcher 2024, Foot Ankle Orthop, systematic review): thumb-index web-space squeeze sensitivity 0.96, LR- 0.04 (a negative test rules out); a click reported by the patient specificity 0.96, LR+ 13.1; Mulder's sign sensitivity 29-94%, LR+ 2.19; toe-tip sensory deficit specificity 100%, sensitivity 49%; plain web-space tenderness weak. Burning alone is weak (specificity 48%).",
@@ -3812,6 +4022,11 @@ export const AUTHORED = [
         "Mornings or long standing remain painful",
         "You want a loading and footwear plan — most cases settle with the right progression",
         "Burning on the inner heel that builds through the day, rather than first-step pain: see us, as a small nerve may be involved"
+      ],
+      "physioHelps": [
+        "A physiotherapist can confirm what is causing your heel pain and explain it in plain words.",
+        "Calf and foot stretches, hands-on care and taping can help ease the first-step pain.",
+        "You get a plan for footwear, a night splint if needed, and building back activity."
       ],
       "clinicNotes": [
         "Diagnosis (B, 2014; unchanged 2023): plantar medial heel pain worst on the first steps and after long weight bearing; a recent increase in weight-bearing activity; pain on palpation of the proximal plantar fascia insertion; positive windlass test; NEGATIVE tarsal tunnel, nerve tension and sensory tests; limited dorsiflexion; abnormal Foot Posture Index; high BMI in non-athletes. Rule out lumbopelvic referral (F).",
@@ -3946,6 +4161,11 @@ export const AUTHORED = [
         "The toe is getting stiffer",
         "You want advice on shoes, insoles, or other options"
       ],
+      "physioHelps": [
+        "A physiotherapist can check how your big toe moves and explain the arthritis in plain words.",
+        "Joint mobilisation, toe and calf strengthening and a stiff insert or rocker shoe can help ease pain.",
+        "You get a plan to keep walking and staying active while managing flare-ups."
+      ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
         "Big toe: rocker sole or a stiff insert; 1st MTP mobilisation and toe and calf strength. A sudden hot, red toe may be gout (gout favours joints with OA, and the two coexist): see a doctor.",
@@ -4032,6 +4252,11 @@ export const AUTHORED = [
         "You want a plan to return to running or dance",
         "You have diabetes and a callus, blister or sore under the big toe joint: see your doctor or diabetes foot clinic within a day or two"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the small bones under your big toe and whether a scan is needed.",
+        "Padding, stiffer-soled shoes and a period of reduced load can help the area settle.",
+        "You get a step-by-step plan back to running, jumping or dancing."
+      ],
       "clinicNotes": [
         "Great toe sesamoid stress fracture is a high-risk bone stress injury (AIM manual Ch. 2.8, Table 2; Warden 2014): higher non-union and surgery rates. MRI separates sesamoiditis, stress fracture and avascular necrosis (adolescents and young women). Ask about a turf-toe injury (foot injury screen I7); bipartite sesamoids are common."
       ]
@@ -4115,6 +4340,11 @@ export const AUTHORED = [
         "You want a plan to manage sport through the growth spurt",
         "The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your child's heel and explain growing-bone heel pain in plain words.",
+        "Heel cups, footwear advice and calf stretches can help ease the soreness.",
+        "Your child gets a plan to adjust, not stop, sport while the heel settles."
+      ],
       "clinicNotes": [
         "Peak age: girls about 8 to 12, boys about 10 to 14; often both heels. Positive medial-lateral heel squeeze; X-ray only if atypical (one side, night pain, swelling, pain at rest).",
         "Evidence: self-limiting; wait-and-see, heel raise and physiotherapy similar (Wiegerinck 2016, J Pediatr Orthop); heel raise or footwear (James 2016, BJSM); James 2013 systematic review."
@@ -4178,6 +4408,11 @@ export const AUTHORED = [
         "Burning or numbness in both feet, like socks: see your doctor, as a general nerve condition can cause this",
         "A new lump along the nerve, or numbness after an ankle operation or a cut: see your doctor"
       ],
+      "physioHelps": [
+        "A physiotherapist can find where the nerve on the outer foot is irritated and explain why.",
+        "Easing pressure from shoes or scars, plus gentle nerve-gliding exercises, can help settle the nerve.",
+        "Balance and strength work aims to help prevent the ankle sprains that can irritate it."
+      ],
       "clinicNotes": [
         "Sural nerve: lateral to the Achilles, then behind and below the lateral malleolus to the lateral border of the foot (lateral dorsal cutaneous nerve); can anastomose with the superficial fibular nerve (Shacklock). Traction in inversion sprains; compression by boots, scar, ganglia, fractures of the base of the 5th metatarsal, peroneal tendon pathology, and after Achilles or lateral ankle surgery.",
         "Neurodynamics: sural test DF/IN then SLR (normal response: pulling in the lateral ankle, sometimes posterolateral calf; SLR about 30-60 degrees); sensitise with hip adduction and medial rotation, contralateral lateral flexion, slump. Palpate lateral to the Achilles with counter-pressure medially; compare sides. Butler: nerve massage for swelling around the lateral Achilles.",
@@ -4224,6 +4459,11 @@ export const AUTHORED = [
         "The toes or foot are getting weak or thinner, or there is a lump or swelling behind the inner ankle bone: see a doctor",
         "Tingling, numbness, or burning hasn't settled within a couple of weeks",
         "The sensations are spreading or becoming more intense"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check whether a squeezed nerve at the inner ankle fits your symptoms.",
+        "Footwear or arch support advice and gentle ankle and nerve movement can help ease the pressure.",
+        "You get a plan to pace your activity, and a referral if checks show it is needed."
       ],
       "clinicNotes": [
         "Heel pain CPG 2014 and 2023: negative tarsal tunnel, nerve tension and sensory tests are required to classify plantar fasciitis (B); a positive result redirects to nerve entrapment, and lumbopelvic referral must also be excluded (F). Source: Martin RL et al., JOSPT 2014; Koc TA et al., JOSPT 2023.",
@@ -4294,6 +4534,11 @@ export const AUTHORED = [
         "Inner-ankle pain with any new arch flattening — early care shortens recovery",
         "Pain with stairs, hills, or longer standing",
         "A single-leg heel raise is painful or impossible"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the tendon that supports your arch and how your foot is holding up.",
+        "A graded strengthening programme with arch supports can help ease pain and support the arch.",
+        "You get a plan to build back walking and activity, and to keep the tendon strong."
       ],
       "clinicNotes": [
         "Terminology: the 2020 consensus renamed adult-acquired flatfoot \"progressive collapsing foot deformity\" (PCFD), staged flexible (1) or rigid (2), classes A to E (Myerson 2020, Foot Ankle Int). Your protocol already uses \"PCFD Stage I-II\".",
@@ -4374,6 +4619,11 @@ export const AUTHORED = [
         "It takes longer and longer to settle after stopping",
         "Pain lasts into the next day: see a doctor, as that is not typical",
         "The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your forearm and grip and explain what is causing the tightness.",
+        "Advice on how hard you grip and how your equipment is set up can help reduce the build-up.",
+        "A gradual training plan aims to help you manage longer sessions with less arm pump."
       ]
     },
     "resolved": [
@@ -4449,6 +4699,11 @@ export const AUTHORED = [
         "It has not settled after 2 weeks of easing off",
         "The swelling or creaking keeps coming back when you restart",
         "You want a plan to return to rowing, paddling, lifting, or work"
+      ],
+      "physioHelps": [
+        "A physiotherapist can confirm where the tendons are irritated and explain what is going on.",
+        "Easing the repeated wrist movement for a while, then gentle strengthening, can help the tendons settle.",
+        "You get a gradual plan back to rowing, paddling, lifting or work, with tips on technique."
       ]
     },
     "resolved": [
@@ -4536,6 +4791,11 @@ export const AUTHORED = [
         "The ache has not settled after 2 to 3 weeks of changes",
         "It is limiting your work or sport",
         "You start to notice tingling or weakness in the hand"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your forearm and explain why the muscles are aching.",
+        "Advice on breaks, grip and workstation set-up, plus gradual strengthening, can help ease the ache.",
+        "You get a plan to build longer or heavier tasks back up step by step."
       ]
     },
     "resolved": [
@@ -4616,6 +4876,11 @@ export const AUTHORED = [
         "The tingling or ache has not eased after 2 to 3 weeks",
         "Your pinch or grip keeps getting weaker, or the muscles at the base of the thumb look thinner: see a doctor, who may arrange nerve tests",
         "You are not sure whether it is this or carpal tunnel at the wrist"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check where the nerve is irritated and explain it in plain words.",
+        "Changes to gripping and forearm turning, with gentle exercises, can help the nerve settle.",
+        "You get advice on tool and computer work to help keep the symptoms calm."
       ],
       "clinicNotes": [
         "CTS CPG 2019 lists pronator syndrome as a median nerve differential. Favour a proximal level when sensation over the thenar eminence is involved (palmar cutaneous branch leaves before the tunnel), there is no night waking eased by shaking, and the forearm aches with pronation or grip. Wrist provocation tests cannot separate the two levels and ULNT1 does not discriminate (D); use nerve conduction studies when unclear. Source: Erickson 2019."
@@ -4705,6 +4970,11 @@ export const AUTHORED = [
         "The ache has not eased after 2 to 3 weeks",
         "Tennis elbow treatment has not helped",
         "You cannot fully straighten your fingers at the knuckles, or your wrist or fingers are getting weaker: see a doctor, who may arrange nerve tests"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check whether the ache comes from the nerve or the tendon and explain it simply.",
+        "Changes to how you twist and grip, with gentle exercises, can help the irritated nerve settle.",
+        "You get a plan to help you get back to tool, computer and sport tasks comfortably."
       ]
     },
     "resolved": [
@@ -4785,6 +5055,11 @@ export const AUTHORED = [
         "The burning or tingling lasts more than a few weeks after removing the pressure",
         "The numb patch is spreading",
         "You are not sure whether it is this or a tendon problem at the wrist"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the thin skin nerve and explain what is pressing on it.",
+        "Simple changes, like loosening straps and easing pressure, can help the nerve settle.",
+        "You get advice on daily tasks and forearm twisting to help the symptoms stay settled."
       ]
     },
     "resolved": [
@@ -4857,6 +5132,11 @@ export const AUTHORED = [
         "A hand or foot is still much more painful, swollen, sensitive or discoloured than you would expect a few weeks after an injury, operation or cast: see your doctor and book physiotherapy now rather than waiting",
         "You would like help with graded movement, desensitisation, and brain-training approaches such as graded motor imagery and mirror therapy",
         "Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day"
+      ],
+      "physioHelps": [
+        "Alongside your doctor's care, a physiotherapist can explain CRPS and why your hand is so sensitive.",
+        "Gentle daily use, touch training and mirror exercises aim to calm the sensitivity and ease stiffness.",
+        "You get a step-by-step plan to use your hand more in daily life, at your own pace."
       ],
       "doctorFirst": "If this fits, please see your family doctor or surgeon within the next few days. CRPS is diagnosed by a doctor, who will also check for other causes such as an infection, a blood clot or a problem with healing. Book physiotherapy straight away alongside: early treatment matters.",
       "clinicNotes": [
@@ -4942,6 +5222,11 @@ export const AUTHORED = [
         "It started after a cut: go to an emergency department today, as a cut nerve or tendon is best repaired early",
         "The numbness is spreading to other fingers"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the feeling in your finger and explain which nerve is irritated.",
+        "Changing or padding your grip on tools or balls can help take pressure off the nerve.",
+        "You get a plan to return to your tools, sport or hobby while the nerve settles."
+      ],
       "clinicNotes": [
         "Tinel's over the digital nerve; two-point discrimination; Semmes-Weinstein monofilaments. A cut digital nerve needs surgical repair within days; a painful neuroma can follow. A thumb splint can press on the ulnar digital nerve of the thumb (AIM manual). Differentials: partial carpal tunnel, C6-C8 radiculopathy, Guyon's canal."
       ]
@@ -5016,6 +5301,11 @@ export const AUTHORED = [
         "You have found a lump or cord in your palm and want to understand it, and what to watch for",
         "A finger has started to bend and you would like help deciding on the next step: if the hand no longer lies flat, we will also suggest you see your family doctor about a hand-surgeon referral",
         "You are having, or have had, a release procedure and want a hand-therapy plan: swelling control, early movement, scar care, and a graded return to strength, work and hobbies"
+      ],
+      "physioHelps": [
+        "A physiotherapist can explain Dupuytren's and help you keep an eye on any change in your fingers.",
+        "If a finger starts to bend, a physiotherapist can help you decide when to see a hand surgeon.",
+        "After a procedure, guided exercises, scar care and, if needed, a night splint can help your hand recover."
       ],
       "clinicNotes": [
         "Physio role: education and monitoring; timely referral (GP to hand surgeon) once the hand no longer lies flat; hand therapy before and after fasciectomy, needle fasciotomy or injection. Stretching, splinting and manual therapy do not prevent progression (NICE IPG43 / BSSH); do not sell a course of treatment to \"prevent\" it.",
@@ -5113,6 +5403,11 @@ export const AUTHORED = [
         "The finger stays stiff or swollen after the splint comes off",
         "You would like help with exercises, splints and a return to sport or work"
       ],
+      "physioHelps": [
+        "Once a doctor has checked it, a physiotherapist can explain the injury and how long to protect it.",
+        "Splint advice, then gentle movement and strengthening, aims to bring back finger bend and grip.",
+        "You get a plan for getting back to work, sport and daily tasks, including taping if needed."
+      ],
       "clinicNotes": [
         "Mallet finger: continuous extension splint about 6 weeks (bony) or 8 weeks (tendon), then about 2 weeks at night (hospital patient leaflets). PIP sprain or volar plate: early protected motion, buddy taping, extension-block splint if unstable; fracture-dislocation needs X-ray. Skier's thumb: Stener lesion needs surgery; partial tears, thumb spica 4 to 6 weeks then strengthening (AIM manual). Boutonnière: PIP extension splint, DIP free.",
         "Later (no card yet): finger ganglions (seed cyst, mucous cyst), diabetic stiff hand (cheiroarthropathy), boutonnière deformity rehabilitation."
@@ -5194,6 +5489,11 @@ export const AUTHORED = [
         "Pain or stiffness is limiting everyday tasks",
         "A finger joint is becoming crooked, or gives way when you pinch",
         "You want an exercise plan and advice on splints or aids"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your finger joints and explain in plain words what is going on.",
+        "Daily hand exercises, easier ways of doing tasks and, if needed, a splint can help ease pain.",
+        "You get tips on tools and pacing, and a plan for cold days and flare-ups."
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
@@ -5320,6 +5620,11 @@ export const AUTHORED = [
         "Grip or fine motor control is slipping",
         "Many improve with a night splint and changes to how you use the hand, and some need surgery; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the feeling and strength in your hand and explain what is going on.",
+        "A night wrist splint, with advice on hand and wrist positions, can help ease the tingling.",
+        "You get keyboard and work tips, and regular checks to see if a doctor's review is needed."
+      ],
       "clinicNotes": [
         "Severity: mild, typical pattern with intermittent symptoms and a normal exam; moderate, constant symptoms, thenar weakness or sensory loss in digits 1-3 without atrophy; severe, thenar atrophy. Refer to a hand surgeon with thenar atrophy; to a physician with signs of another condition; suggest nerve conduction studies when the exam is inconclusive; refer for a surgical opinion if not improving.",
         "Wainner cluster (B): over 45, shaking relieves symptoms, wrist ratio over 0.67, CTQ symptom score over 1.9, reduced thumb pad sensation; 4 or more positive +LR 4.6, all 5 spec 0.99. Katz hand diagram, Phalen, Tinel and carpal compression estimate likelihood (B) but are weak alone (Phalen +LR 1.3; Tinel about 1.0). Sensation over the thenar eminence is spared in CTS (palmar cutaneous branch); dorsal hand symptoms make CTS unlikely.",
@@ -5434,6 +5739,11 @@ export const AUTHORED = [
         "Pinching or gripping is getting weaker",
         "You want advice on how you hold your phone, tools, or controller"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your thumb and hand and explain why the muscles ache.",
+        "Gentle stretches, hands-on work for tight spots, and strengthening can help ease the ache.",
+        "You get tips on breaks, phone use and pinching tasks to help the ache stay settled."
+      ],
       "clinicNotes": [
         "Adductor pollicis, opponens and first dorsal interosseous trigger points (Travell & Simons 2019; expert opinion). Avoid hyperextension pressure on the thumb MCP during web-space stretching (AIM manual). Differentials: de Quervain's (texting thumb is often this), thumb base OA from 45 (grind test), trigger thumb, C6 radiculopathy."
       ]
@@ -5527,6 +5837,11 @@ export const AUTHORED = [
         "Thumb pain is limiting everyday tasks like opening jars or turning keys",
         "The ache or stiffness has lasted several weeks without improving",
         "Several finger joints in both hands are swollen and stiff for more than an hour in the morning, or the thumb base is suddenly hot, red and swollen: see a doctor"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your thumb joint and explain in plain words what is going on.",
+        "Thumb and hand strengthening, with a supportive splint if needed, can help ease pain with pinching.",
+        "You get easier ways to grip, tips on tools, and a plan to manage flare-ups."
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
@@ -5635,6 +5950,11 @@ export const AUTHORED = [
         "A finger is stuck bent and will not straighten: see your doctor within a few days",
         "In a young child, a thumb stuck bent is usually a \"trigger thumb\": please see your family doctor"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your finger and explain why it catches or locks.",
+        "A small splint that rests the finger, with advice on gripping, can help the catching settle.",
+        "You get tips on tools and hand tasks, and advice on when a doctor's review is worthwhile."
+      ],
       "clinicNotes": [
         "Grading: Quinnell or Green. MCP-blocking splint at 10-15 degrees for 6 to 10 weeks (success roughly half to two-thirds). About half resolve without treatment within about 8 months in one cohort (secondary source). Steroid injection is a physician decision and works less well with diabetes; surgical release after failure. Differentials: Dupuytren's, OA, a locked MCP, flexor sheath infection (Kanavel signs: emergency).",
         "Children's trigger thumb is a different condition (not overuse): more than 60% resolve on their own (about 76% over a median of about 4 years in one series); surgery is often deferred, and delay past age 3 does not worsen the outcome. The clinic does not see children under 5."
@@ -5723,6 +6043,11 @@ export const AUTHORED = [
         "Your headaches are happening regularly, or are affecting work or sleep",
         "You are taking pain medicine for them often: a physiotherapy assessment can help find out whether your neck is involved, and no doctor's referral is needed",
         "You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer. If any of the warning signs apply, see a doctor first"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the top of your neck and explain how it can cause head pain.",
+        "Hands-on care with deep neck and shoulder blade exercises can help reduce how often headaches come.",
+        "You learn a self-help neck movement for when a headache starts, plus desk and sleep set-up tips."
       ],
       "clinicNotes": [
         "Physio-led after the headache red-flag screen (SNNOOP10). Refer to the GP if pain medicine is used on 10 or more days a month, if there are red or orange flags, or if there is no change after 6 to 8 weeks of well-delivered care.",
@@ -5886,6 +6211,11 @@ export const AUTHORED = [
         "You want a step-by-step plan to return to sport, school or work",
         "Tiredness, weakness, low mood, or changes in sex drive or periods are not improving 3 months or more after the injury: please also ask your family doctor about a hormone (pituitary) blood test, which can be checked alongside physiotherapy"
       ],
+      "physioHelps": [
+        "Once a doctor has checked you, a physiotherapist can explain your symptoms and the expected recovery.",
+        "Gentle graded exercise, plus neck, balance and eye-movement exercises where needed, can help ease symptoms.",
+        "You get a step-by-step return to school, work and, once your doctor has cleared you, sport."
+      ],
       "doctorFirst": "Concussion is diagnosed by a doctor or nurse practitioner, who also checks for a more serious injury. If one has not seen you yet, please see them first: your family doctor or a walk-in clinic, or call HealthLink BC on 8-1-1. Do not return to sport or activities with a risk of falling until they have cleared you.",
       "clinicNotes": [
         "Physio role is the recovery phase, alongside the GP or NP. Confirm medical assessment and diagnosis (BC guideline: ideally within 72 h); check red flags and the C-spine (Canadian C-Spine Rule).",
@@ -6005,6 +6335,11 @@ export const AUTHORED = [
         "Neck and shoulder tension comes with them",
         "You want a plan combining posture, exercise and relaxation",
         "A sudden, severe headache, or one with a fever, a stiff neck, weakness, confusion or a change in vision: call 911 or go to the emergency department now"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your neck, shoulders and posture, and explain what may trigger your headaches.",
+        "Neck and shoulder exercises, with gentle hands-on care, may help reduce how often headaches come.",
+        "You get a plan combining posture, regular exercise and relaxation to help manage busy days."
       ]
     },
     "resolved": [
@@ -6127,6 +6462,11 @@ export const AUTHORED = [
         "A lump in the groin, testicle pain or swelling, or burning or blood when you pass urine: see a doctor",
         "Under 18 with a pop while kicking: see a doctor first"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your groin, including a simple squeeze test, and explain what is going on.",
+        "A step-by-step inner-thigh strengthening programme is the main treatment and can help ease the pain.",
+        "You get a gradual return-to-sport plan, plus exercises that may help prevent groin problems coming back."
+      ],
       "clinicNotes": [
         "Doha agreement (Weir 2015): adductor-related groin pain = adductor tenderness and pain on resisted adduction; usually long-standing overuse (acute strains: thigh-adductor). Measures: the 5-second squeeze test (pain 0-10; reflects sporting hip and groin function) and adductor squeeze strength. Differentials: obturator nerve entrapment, hip-related groin pain, pubic bone stress, inguinal-related pain, hernia.",
         "Management: progressive adductor strengthening (Holmich, Lancet 1999); prevention: the Copenhagen adduction programme reduced groin problems by 41% in male footballers (Haroy, BJSM 2019). ESSKA-EHPA-ESMA 2024 consensus keeps the Doha entities; sources often coexist.",
@@ -6221,6 +6561,11 @@ export const AUTHORED = [
         "Leg weakness, a foot that slaps or catches, or numbness that keeps spreading: see a doctor soon",
         "Deep buttock pain at night that does not change with position, or a past cancer: see your doctor"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your buttock, back and nerve to work out where the pain comes from.",
+        "Gentle nerve-gliding exercises and gradual buttock strengthening can help calm the irritated nerve.",
+        "You get advice on sitting and activity so you can build back up without stirring it up."
+      ],
       "clinicNotes": [
         "Hamstring CPG 2022 lists deep gluteal and ischial tunnel syndromes as differentials of posterior thigh pain, with lumbar radiculopathy and SIJ. Sudden onset while sprinting or stretching with pain on resisted knee flexion favours a hamstring strain; tenderness at the ischial tuberosity favours proximal hamstring tendon pathology or avulsion (refer the same day after a pop with bruising and a gap). Source: Martin RL et al., JOSPT 2022.",
         "Diagnosis: Hopayian 2010 core features: buttock pain, tenderness at the sciatic notch, worse sitting, worse with piriformis tension. Martin 2014 against endoscopy: seated piriformis stretch test sens 0.52, spec 0.90; active piriformis test 0.78/0.80; both 0.91/0.80. Chandra's piriformis protocol describes the seated test as resisted external rotation, which mixes up Martin's passive seated stretch test with the active side-lying test.",
@@ -6302,6 +6647,11 @@ export const AUTHORED = [
         "You would like a guided rehab plan: physiotherapy is the usual first step and helps many people",
         "It is not improving after about 3 months of a guided programme: we can discuss a referral to a hip specialist",
         "Groin pain that aches at night, or hurts to hop or run, especially after an increase in training: see a doctor before running again"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your hip moves and explain in plain words what the pinch means.",
+        "A guided programme to strengthen and control your hip in comfortable ranges can help ease the pain.",
+        "You get advice on sitting, squatting and sport so you can stay active with fewer flare-ups."
       ],
       "clinicNotes": [
         "Diagnosis (JOSPT 2014; the criteria list is evidence level III, the C grade is for the intra-articular classification): anterior groin and/or lateral hip pain, aching or sharp, worse with sitting; reproduced by FADIR; IR under 20 degrees at 90 degrees of flexion, with flexion and abduction also limited; clicking, catching or locking may be present.",
@@ -6437,6 +6787,11 @@ export const AUTHORED = [
         "A sudden pop at the outer hip, then a marked limp or you cannot lift the leg out to the side: see a doctor (possible tendon tear)",
         "You run or train hard and have a deep groin ache that is worse with hopping or aches at night: see a doctor before more running"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your outer hip and explain why the tendons have become sore.",
+        "Simple advice on lying, sitting and standing, plus a step-by-step strengthening programme, can help ease pain.",
+        "You get a plan to build up walking and activity again while keeping flare-ups down."
+      ],
       "clinicNotes": [
         "Lateral hip pain also fits the hip OA criteria (Koc 2025) and FAI (Enseki 2014): check IR at 90 degrees of flexion and FADIR before calling it isolated GTPS; concurrent OA is common over 50. Source: Koc 2025; Enseki 2014.",
         "Mainly a tendinopathy, not a bursitis (AIM manual p.376; Chandra's gluteal tendinopathy protocols); peak age 40-60, women up to 4 times more often (p.377). Kinsella 2024 (JOSPT meta-analysis): tenderness then pain on resisted abduction raises the probability from 59% to 96%, both negative lowers it to 14%. Palpation sens 80%, spec 47% (Grimaldi 2017; p.380). Lequesne 2008 single-leg stance and resisted de-rotation figures come from a small refractory cohort and overestimate accuracy. Outcome: VISA-G (Fearon 2015; the manual p.379 says there is no validated measure).",
@@ -6567,6 +6922,11 @@ export const AUTHORED = [
         "It is not easing after a few weeks of changing your sitting and training",
         "You want a staged loading plan to get back to running"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your sit bone and thigh and explain why the tendon is sore.",
+        "A step-by-step loading programme, starting gently and building up, can help the tendon get stronger.",
+        "You get advice on sitting and training, and a gradual plan to get back to running."
+      ],
       "clinicNotes": [
         "Diagnosis: deep buttock pain at the ischial tuberosity with sitting and hamstring loading; tender at the tuberosity; provocation by the bent-knee stretch, the Puranen-Orava test and the modified bent-knee stretch; ultrasound or MRI if unclear. Ischial bursitis often coexists.",
         "Differentials: deep gluteal syndrome (sciatic symptoms, sciatic notch tenderness), ischiofemoral impingement, lumbar radiculopathy, SIJ, an avulsion (a pop with bruising: same day, I5 in the injury screen), a stress fracture of the pelvis.",
@@ -6653,6 +7013,11 @@ export const AUTHORED = [
         "The hip repeatedly feels like it's about to give way or catches/locks",
         "Groin or hip discomfort continues for several weeks despite easing back on aggravating activities",
         "After a tackle or a fall, a clunk with severe pain, or you cannot put weight on the leg: go to the emergency department"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your hip moves and explain in plain words why it feels loose.",
+        "Strength and balance exercises for your hip and buttock aim to give the joint more support.",
+        "You get advice on which movements to ease off and a gradual plan back to sport."
       ],
       "clinicNotes": [
         "Structural instability (JOSPT 2014, C): anterior groin, lateral or general hip pain reproduced by FADIR or FABER; positive apprehension; IR over 30 degrees at 90 degrees of flexion; mechanical symptoms. Imaging: lateral centre-edge angle under 25 degrees, Tonnis angle over 10 degrees (dysplasia). Ligamentum teres tear: instability on squatting.",
@@ -6754,6 +7119,11 @@ export const AUTHORED = [
         "You have had a fall, or feel unsteady on your feet",
         "Pain and function stay poor despite a good exercise programme: your doctor can talk with you about seeing a surgeon",
         "The pain suddenly becomes much worse, aches at night whatever position you are in, or you can no longer put weight on the leg: see your doctor first, as an X-ray may be needed"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your hip moves and explain in plain words what is going on.",
+        "A guided strength and movement programme can help ease pain and stiffness and keep you active.",
+        "You get a plan to manage busy days and flare-ups, and to keep doing what you enjoy."
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
@@ -6895,6 +7265,11 @@ export const AUTHORED = [
         "You want a plan to return to running or kicking",
         "You cannot lift your knee while sitting, or the pain came with a fever or feeling unwell: see a doctor the same day"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the front of your hip and explain why the hip flexor is sore.",
+        "Gentle stretches and a step-by-step strengthening programme can help settle the pain.",
+        "You get a gradual plan to get back to running, kicking and sport."
+      ],
       "clinicNotes": [
         "Nonarthritic hip CPG 2014 lists iliopsoas problems as a differential of intra-articular pain; FADIR and FABER are non-specific, so pain on resisted hip flexion and a painful snap help separate it. Over 50, check the hip OA criteria (IR under 24 degrees, morning stiffness under 1 hour). Source: Enseki 2014; Koc 2025.",
         "Doha 2015 iliopsoas-related groin pain: pain on resisted hip flexion and/or the hip-flexor stretch (Thomas position); dynamic ultrasound for a painful snap. Internal snapping (as the hip goes from bent to straight) is often painless and can be left alone if pain-free. Red flags: a lesser trochanter avulsion in an adult without real injury is usually pathological (metastasis); psoas abscess (fever, hip held bent, unwell; JOSPT 2014 a11 differential)."
@@ -6976,6 +7351,11 @@ export const AUTHORED = [
         "A painful groin lump that will not go back in, especially with feeling sick or vomiting: go to the emergency department now",
         "Pain or swelling in a testicle: see a doctor; sudden severe testicle pain: go to the emergency department now",
         "Doha 2015 inguinal-related groin pain: pain in the inguinal canal region, tenderness there, no palpable hernia, pain on resisted abdominal testing, Valsalva, cough or sneeze. \"Sports hernia\" is a misnomer (British Hernia Society inguinal disruption consensus; ESSKA 2024). Femoral hernia (a lump just below the crease) is more common in women and more likely to become trapped. Ultrasound or a surgical review when a hernia is suspected; surgery is an option after failed rehabilitation."
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your groin, and suggest a doctor visit if a hernia needs ruling out.",
+        "A gradual core and hip strengthening programme can help settle the pain.",
+        "You get a step-by-step plan to get back to running, kicking and twisting sport."
       ]
     },
     "resolved": [
@@ -7040,6 +7420,11 @@ export const AUTHORED = [
         "Both thighs are affected, you are losing weight without trying, or there is a lump in the tummy or groin: see your doctor",
         "Numbness between the legs, or new trouble passing urine or controlling your bowels: go to the emergency department now",
         "You want help working out the cause"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the nerve and explain in plain words what is causing the burning or tingling.",
+        "You get advice on clothing, belts and positions to take pressure off the nerve.",
+        "Gentle movement and activity advice can help symptoms settle over time."
       ]
     },
     "resolved": [
@@ -7105,6 +7490,11 @@ export const AUTHORED = [
         "It keeps coming back despite stretching, or limits work, sleep or sport",
         "You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring",
         "Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check where the ache comes from and explain why a sore muscle can spread pain.",
+        "Hands-on care with gentle stretching, and teaching you to ease the tender spot, can help relieve it.",
+        "Graded exercise and changes to work, sleep and daily habits can help stop it building up again."
       ],
       "clinicNotes": [
         "Hip and buttock referral maps: gluteus minimus to the lateral and posterior thigh and calf (\"pseudo-sciatica\"); gluteus medius to the iliac crest, sacrum and buttock; piriformis to the buttock and posterior thigh. Distinguish from gluteal tendinopathy (tender over the greater trochanter, single-leg stance), deep gluteal syndrome (sciatic nerve signs) and lumbar radiculopathy.",
@@ -7190,6 +7580,11 @@ export const AUTHORED = [
         "New inner thigh numbness or weakness after pelvic or hip surgery, or after childbirth: see your doctor",
         "Pain also goes down the front of the thigh from the back: the low back may be the source"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your inner thigh, hip and nerve to work out where the pain comes from.",
+        "Gentle nerve-gliding exercises with inner-thigh and hip strengthening can help calm the irritated nerve.",
+        "You get a plan to adjust your training and build back up to sport gradually."
+      ],
       "clinicNotes": [
         "Obturator nerve (L2-L4): sensory to a variable medial thigh patch (often the distal medial thigh), motor to the adductors. Exercise-induced entrapment in athletes (fascia over pectineus and adductor brevis; Bradshaw 1997), after pelvic or hip surgery, obstetric injury, obturator hernia (elderly, thin women; Howship-Romberg sign), pelvic masses.",
         "Neurodynamics (Butler): slump knee bend in side-lying (knee flexion, hip extension) then hip ABDUCTION, differentiate with the neck; the femoral slump without abduction is the femoral nerve and the upper roots (lowback-upperroot.md). Adductor weakness, medial thigh sensation, adductor reflex.",
@@ -7237,6 +7632,11 @@ export const AUTHORED = [
         "A swollen, warm or tender calf or thigh: see a doctor the same day; if you are also short of breath or have chest pain, call 911",
         "You would like a structured strength, walking and balance programme, or have had a fall",
         "Progress has stalled, or you are not back to the activities you want"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your walking, strength and balance, and follow your surgeon's advice.",
+        "A step-by-step strength, walking and balance programme can help you get stronger and steadier.",
+        "You get a home programme and safety tips to help you get back to everyday activities."
       ],
       "clinicNotes": [
         "Hip fracture (JOSPT CPG 2021): post-acute rehabilitation with progressive strength (including weight-bearing) and balance training (A), activity training and a home programme; screen fall risk, cognition, nutrition and bone health (refer for osteoporosis management); measures: TUG, gait speed, 30-s chair stand, SPPB, balance.",
@@ -7296,6 +7696,11 @@ export const AUTHORED = [
         "Pain at rest or at night, pain on hopping, or a limp, especially if you run a lot, your periods have stopped, or you have low bone density: see a doctor (possible bone stress in the pubic bone)",
         "Pain at the front of the pelvis with a fever, especially after a birth or an operation: see a doctor today",
         "Since the birth, severe pain at the front of the pelvis so you can hardly walk, sometimes after a click: see your doctor or maternity team"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the front of your pelvis and explain what is making it sore.",
+        "You get easier ways to move day to day, with gradual hip and core strengthening.",
+        "A step-by-step plan can help you get back to sport or daily activities with fewer flare-ups."
       ],
       "clinicNotes": [
         "Doha 2015 pubic-related groin pain: local tenderness of the pubic symphysis and adjacent bone. MRI bone marrow oedema is common in athletes without symptoms. Differentials: pubic bone stress injury (bone stress consensus 2024; hpf-stress now names the pelvis), osteomyelitis pubis (fever; after birth or surgery), symphysis separation after birth (pg-symphysis), adductor- and inguinal-related pain. Pelvic girdle pain in pregnancy can also be felt at the back of the pelvis (sij:pgp).",
@@ -7369,6 +7774,11 @@ export const AUTHORED = [
         "The jaw starts to catch or lock",
         "Pain lasts more than a few weeks or limits eating",
         "You want exercises to control how the jaw opens"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your jaw joint moves and explain why it clicks.",
+        "Exercises to control how your jaw opens can help ease pain and catching.",
+        "You learn jaw habits for eating, yawning and resting to help keep it comfortable."
       ]
     },
     "resolved": [
@@ -7467,6 +7877,11 @@ export const AUTHORED = [
         "Book soon: early guided movement gives the best chance of restoring opening",
         "Opening is not improving over a week or two",
         "Eating or cleaning your teeth is difficult"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how far your jaw opens and explain what is blocking it.",
+        "Gentle, guided jaw movement and hands-on care can help improve opening, especially when started early.",
+        "You get a home exercise plan and advice on eating and jaw habits as it improves."
       ]
     },
     "resolved": [
@@ -7549,6 +7964,11 @@ export const AUTHORED = [
         "Headaches or ear symptoms come with it",
         "You want a plan combining jaw exercises, posture and relaxation",
         "If you are over 50: jaw ache when chewing that eases when you stop, a tender scalp or temple, or a change in vision: see a doctor the same day"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your jaw muscles, neck and posture, and explain why the ache spreads.",
+        "Jaw exercises, gentle muscle release and relaxation training can help ease pain and tightness.",
+        "You learn habits to reduce clenching and a plan to manage stress-related flare-ups."
       ]
     },
     "resolved": [
@@ -7664,6 +8084,11 @@ export const AUTHORED = [
         "Your knee is stuck and will not straighten fully: see a doctor soon, as it may need an early surgical opinion",
         "Your knee gave way or buckled after a twisting or landing injury, or keeps giving way: book a physiotherapy assessment"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and explain the injury and your options in plain words.",
+        "A structured strength, balance and movement programme is a key part of recovery, with or without surgery.",
+        "You get a step-by-step return-to-sport plan, with exercises that may help lower the chance of another injury."
+      ],
       "clinicNotes": [
         "Diagnosis (ligament CPG 2017): non-contact deceleration or cutting with valgus near extension (about 70%; about 30% contact, including a blow to the back of the knee, AIM manual p.55), a pop, swelling within 0-12 hours (haemarthrosis), giving way. Lachman sens 85%, spec 94%; pivot shift sens 24%, spec 98% (rules in); anterior drawer. The AIM manual's 2016 pooled figures (p.56): Lachman sens 0.87, spec 0.94; pivot shift sens 0.49, spec 0.98, +LR 16; anterior drawer sens 0.73, spec 0.93; lever sign close to 100% sensitive; in acute or partial tears Lachman 0.42, anterior drawer 0.29, pivot shift 0.11.",
         "Ottawa knee rule (CPG p.a16): age 55 or over, isolated kneecap tenderness, fibular head tenderness, cannot flex to 90 degrees, cannot bear weight for 4 steps. The patient screen asks only age, steps and flexion: palpate the kneecap and fibular head in clinic. Validated in adults (Bachmann 2004: sens 98.5%, -LR 0.05); the Pittsburgh rule under 12. Check MCL, menisci (medial meniscus involved in about 50%), the posterolateral corner, a Segond fracture, and the look-alikes: kneecap dislocation and osteochondral fracture (x-ray, AIM manual p.57).",
@@ -7762,6 +8187,11 @@ export const AUTHORED = [
         "The fullness keeps coming back",
         "Bending or straightening is getting harder"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and explain how the swelling links to the joint itself.",
+        "Treatment focuses on the knee problem behind it, with exercises to keep the knee moving and strong.",
+        "You get advice on activity so you can stay active with less swelling."
+      ],
       "clinicNotes": [
         "Popliteal cyst: in adults usually secondary to a joint problem (a meniscal tear or OA) through the semimembranosus-gastrocnemius bursa; in children usually a primary cyst that tends to resolve. Confirm with ultrasound when needed. Treat the underlying joint problem (OA or meniscus); aspiration or injection are medical options.",
         "Differentials: DVT (duplex ultrasound; a cyst and a clot can occur together, so a swollen calf needs an ultrasound even with a known cyst), a ruptured cyst (pseudothrombophlebitis), popliteal artery aneurysm (a pulsing lump; vascular claudication), popliteus or hamstring tendinopathy (pain on resisted knee flexion or tibial internal rotation, local tenderness, no lump), gastrocnemius trigger-point referral.",
@@ -7841,6 +8271,11 @@ export const AUTHORED = [
         "Knee pain isn't improving with knee-focused self-care",
         "You notice hip or groin stiffness alongside the knee symptoms"
       ],
+      "physioHelps": [
+        "A physiotherapist can check both your hip and knee to find where the pain really comes from.",
+        "For adults, hip stretching and strengthening exercises can help ease the pain felt in the knee.",
+        "For children and teenagers, a physiotherapist can make sure a doctor checks the hip first."
+      ],
       "clinicNotes": [
         "Adults: hip OA is \"sometimes felt in the thigh or knee\" (Koc 2025). Check the OA criteria: over 50, morning stiffness under 1 hour, hip internal rotation under 24 degrees, or internal rotation and flexion 15 degrees less than the other side, and pain on passive internal rotation. Lesher 2008 found knee referral in only 2% of hip joint pain (buttock 71%, thigh 57%, groin 55%), so a hip examination is worth doing but knee referral is the exception. Hip dysplasia is another cause (AIM manual, referred-pain list).",
         "Children and teenagers: SUFE (about 9 to 17, peaking at 13 to 15 in boys) and Perthes (about 4 to 10) present at the knee (Willy 2019 PFP CPG; Enseki 2014). In a review of 102 SUFE cases, diagnosis was delayed an average of 76 days after the first primary-care visit, some labelled as knee problems. Suspected SUFE needs a same-day orthopaedic referral (BJGP 2020 limping child guide); the site asks kf-sufe and kf-perthes the same day.",
@@ -7915,6 +8350,11 @@ export const AUTHORED = [
         "It recurs at the same distance despite adjustments",
         "You'd like a running-load and strength plan",
         "Pain starts appearing in daily activities too"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and hip and explain why the outer knee is sore.",
+        "Hip strengthening, with a short break below the point where pain starts, can help settle it.",
+        "You get a gradual plan back to running or cycling, including tips on training, shoes and bike set-up."
       ],
       "clinicNotes": [
         "Diagnosis by history (lateral knee pain at a predictable distance, worse downhill and descending stairs) plus Renne's and Noble's tests, which have no sensitivity or specificity data (AIM manual p.23); Ober's test for tightness. Imaging is largely not indicated. Typical age from the teens to the 50s (p.22).",
@@ -8007,6 +8447,11 @@ export const AUTHORED = [
         "The kneecap is still out of place, or the knee looks out of shape: go to the emergency department now",
         "The kneecap popped out and went back, especially for the first time, or the knee swelled quickly: see a doctor the same day for an X-ray",
         "You keep getting the feeling that the kneecap might slip, or it has slipped more than once: book a physiotherapy assessment"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and explain what happened when the kneecap shifted.",
+        "Thigh and hip strengthening, with short-term brace advice if needed, aims to help support the kneecap.",
+        "You get a step-by-step return-to-sport plan to help lower the chance of it happening again."
       ],
       "clinicNotes": [
         "Presentation (AIM manual pp.63-66): knee flexed with internal rotation of the femur over a planted foot (valgus); the kneecap usually goes laterally and about 80% reduce spontaneously; haemarthrosis, medial (MPFL) tenderness overlapping the femoral MCL origin, apprehension, difficulty walking. 70% are under 20; highest risk in girls aged 10-17.",
@@ -8110,6 +8555,11 @@ export const AUTHORED = [
         "The bony bump on the outer side just below the knee is very sore to press: an X-ray is needed first",
         "A milder sprain is not settling after a couple of weeks, or the knee feels loose or shifts to the side during activity"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your knee, test the outer ligament and explain how bad the sprain looks.",
+        "You get brace advice if needed, and exercises to rebuild movement and strength step by step.",
+        "A gradual plan can help you return safely to walking, work and sport."
+      ],
       "clinicNotes": [
         "Diagnosis (ligament CPG 2017): varus force; local swelling and tenderness over the LCL; lateral pain and laxity on varus stress at 0 and 30 degrees. LCL injury is the least common knee ligament injury (incidence about 4%, CPG). Suspect a posterolateral corner (PLC) injury with hyperextension plus varus or a posterolateral blow to the medial tibia near extension; it can be part of a knee dislocation. Dial test and external rotation recurvatum for the PLC (not in the CPG).",
         "Neurovascular check: peroneal nerve injury occurs in about 13-44% of PLC or multiligament injuries (PMC8475172; not stated in the CPG). Ottawa fibular head tenderness (CPG p.a16; fibular head avulsion, the arcuate sign) is checked in clinic.",
@@ -8201,6 +8651,11 @@ export const AUTHORED = [
         "The knee feels loose sideways, gives way or buckles: book a physiotherapy assessment within a few days",
         "Pain or swelling from a milder sprain has not improved within a couple of weeks"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your knee, test the inner ligament and explain how bad the sprain looks.",
+        "You get brace advice if needed, and exercises to rebuild movement and strength step by step.",
+        "A gradual plan can help you return safely to walking, work and sport."
+      ],
       "clinicNotes": [
         "Diagnosis (ligament CPG 2017): valgus or rotational force, typically a blow to the outer knee with the foot planted; MCL tenderness reproduces the familiar pain. Valgus stress at 30 degrees: pain sens 78%, spec 67%; laxity sens 91%, spec 49% (CPG; the AIM manual found no psychometric data, p.71). Swain test. MCL with ACL is a common combination: check Lachman and pivot shift; Ottawa knee rule.",
         "Grading (IKDC, AIM manual p.71): grade I no laxity; grade II 5-15 degrees; grade III over 15 degrees, with laxity in extension. Laxity at 0 degrees suggests a combined cruciate or posteromedial corner injury: orthopaedic referral. Isolated MCL swelling is fairly local; a joint effusion points to ACL, cartilage or kneecap dislocation (p.70). The deep MCL and medial meniscus are often injured together (p.69). After a kneecap dislocation, torn MPFL tenderness overlaps the femoral MCL origin (p.70).",
@@ -8281,6 +8736,11 @@ export const AUTHORED = [
         "Your knee gets stuck and will not straighten fully: see a doctor soon",
         "Joint-line pain persists beyond about 2 weeks, or there is catching",
         "You want a rehab-first plan: for many age-related tears, exercise does as well as surgery"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and explain in plain words what is going on.",
+        "A guided strength and movement programme can help ease pain and improve how the knee works.",
+        "You get a plan to return to daily activities and sport, and to manage flare-ups."
       ],
       "clinicNotes": [
         "Diagnosis (meniscus and cartilage CPG 2018): twisting injury, tearing sensation, swelling over 6-24 hours, catching or locking, pain on forced hyperextension and maximal flexion, McMurray pain or click, joint-line tenderness, Thessaly at 20 degrees. Single tests are weak in primary care (Blyth: McMurray sens 0.58, spec 0.56; joint-line tenderness sens 0.77, spec 0.26; Thessaly sens 0.66, spec 0.39). The AIM manual (p.75) gives McMurray about 50-55% sensitive and 77% specific (medial), with joint-line tenderness higher on both. A composite of more than 3 positive findings has spec 90.2% (sens 30.8%), more than 5 spec 99.0% (sens 11.2%): it rules in, not out (the composite has 5 items; \">5\" as published).",
@@ -8408,6 +8868,11 @@ export const AUTHORED = [
         "Pain or stiffness limits walking, stairs, or sleep",
         "You'd like a structured education and exercise programme (e.g., GLA:D-style)",
         "You're weighing options and want conservative care optimized first"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your knee moves and explain in plain words what is going on.",
+        "A guided strength and walking programme can help ease pain and keep you active.",
+        "You get a plan to manage busy days and flare-ups, and to stay doing what you enjoy."
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 Ch. 2.9 pp. 572-581 and Ch. 2.7 pp. 426-445): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant (any loss helps; 10% likely better than 5%); manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only. The AIM manual describes early OA from about 30 to 50 (p.7); the age band cannot separate under-45s.",
@@ -8541,6 +9006,11 @@ export const AUTHORED = [
         "The pain isn't settling after a few weeks of reduced activity",
         "It's getting in the way of sport or everyday activity"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your child's knee and explain growth-related knee pain in plain words.",
+        "A step-by-step activity plan, with thigh and hip strengthening, can help ease the pain.",
+        "Your child gets a clear plan to build back to their sport while keeping pain low."
+      ],
       "clinicNotes": [
         "Osgood-Schlatter: traction apophysitis of the tibial tuberosity (tender tuberosity, often a bump); Sinding-Larsen-Johansson: the same at the inferior patellar pole. An x-ray can confirm either (AIM manual pp.29, 31). Differential: patellar tendinopathy (older), patellofemoral pain, and the hip: SUFE and Perthes can present as knee pain (in a review of 102 SUFE cases, 2 had first been called Osgood-Schlatter); tibial tubercle avulsion fracture (sudden pain after jumping, boys 12-17: same-day doctor); bone tumour (night or rest pain: kf-tumour).",
         "Management (Rathleff 2020, Orthop J Sports Med): 4 weeks of reduced sport, then an 11-step activity ladder advanced only with pain at or below 2/10 during and the morning after, plus knee and hip strengthening; 80% reported success at 12 weeks and 90% at 12 months, though only 69% were back in sport at 12 months. Icing and stretching have no trial support. SOGOOD RCT protocol (2024) under way.",
@@ -8645,6 +9115,11 @@ export const AUTHORED = [
         "Deep knee pain or swelling continues beyond a couple of weeks",
         "The knee feels like it shifts or gives way during normal daily movement"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and the other ligaments, and explain the injury plainly.",
+        "A thigh-focused strengthening programme, with brace advice if needed, can help support the knee as it heals.",
+        "You get a step-by-step plan to get back to daily life and sport."
+      ],
       "clinicNotes": [
         "Mechanism (AIM manual pp.61-62): dashboard injury (posterior force to the anterior tibia with the knee flexed), a fall onto the flexed knee with the foot plantarflexed, or hyperextension. Often subtle (\"slight oedema, slight discomfort, slight stiffness\"). Most are aged 20-29; up to 95% occur with other ligament injuries (posterolateral corner, ACL, MCL): check them.",
         "Tests: posterior drawer sens 90%, spec 99%; supine internal rotation test 95.5% / 97.1%; posterior sag; MRI close to 100% when acute (AIM manual).",
@@ -8707,6 +9182,11 @@ export const AUTHORED = [
         "The knee becomes hot, red and swollen: see a doctor the same day",
         "The pain is not settling after a few weeks of easing off",
         "It is limiting walking, stairs, or sleep"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and explain why the inner shin is sore.",
+        "Thigh and hip strengthening, with changes to the activities that bring it on, can help ease the pain.",
+        "If you also have knee arthritis, a physiotherapist can help you manage both together."
       ],
       "clinicNotes": [
         "Pain and tenderness over the medial proximal tibia about 2-5 cm below the joint line, at the insertion of sartorius, gracilis and semitendinosus; swelling uncommon. More common in women, with knee OA, obesity and diabetes, and in runners. Clinical diagnosis; ultrasound if unclear.",
@@ -8803,6 +9283,11 @@ export const AUTHORED = [
         "The pain or stiffness is starting to limit your daily activities or sleep",
         "Symptoms keep getting worse despite gentle activity changes"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and explain in plain words what is happening behind the kneecap.",
+        "A guided thigh and hip strengthening programme can help ease pain and keep you active.",
+        "You get a plan to manage stairs, busy days and flare-ups, and to stay doing what you enjoy."
+      ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); PFOA is not separately defined in NICE: see the international PFOA consortium consensus (van Middelkoop 2018). First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",
         "Kneecap: quadriceps and hip strengthening are the core; patellar taping helps short term; brace evidence is mixed (pooled trials not significant; ACR 2019 conditional for a patellofemoral brace). Measures: KOOS-PF, stairs and squat tolerance. Crepitus often accompanies patellofemoral degenerative change (AIM manual p.42); patellofemoral x-ray views if imaging is needed (p.8). About 40% of older adults with knee pain have both tibiofemoral and patellofemoral OA on x-ray (p.5).",
@@ -8895,6 +9380,11 @@ export const AUTHORED = [
         "It's not settling after about 2 weeks of load management, or has lasted more than 6 weeks: earlier exercise care tends to do better",
         "It limits sport, stairs, or work",
         "You'd like a graded strengthening plan, the best-evidenced treatment"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and hip and explain why the kneecap area is sore.",
+        "A step-by-step hip and thigh strengthening programme is the main treatment and can help ease pain.",
+        "You get a plan to adjust and then rebuild your activity, and to manage flare-ups."
       ],
       "clinicNotes": [
         "Diagnosis (B): pain around or behind the kneecap reproduced by squatting, stairs, prolonged sitting or other loaded flexion, after excluding other causes. Pain on squatting is the test (A: +LR 1.8, -LR 0.2); reduced patellar tilt supports it (C: +LR 5.4). Clarke's sign is not useful (sens 0.39, spec 0.67; AIM manual p.44). Clicks or clunks may be heard (p.42). A rise in load is reported by almost all patients (p.39); PFP is common after knee surgery such as meniscectomy or ACL reconstruction (p.42).",
@@ -9021,6 +9511,11 @@ export const AUTHORED = [
         "The swelling has not gone down after 2 to 3 weeks",
         "It keeps coming back with work"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the swelling and suggest a doctor visit if it looks infected.",
+        "You get advice on kneeling, knee pads and keeping the knee moving while it settles.",
+        "A plan for work and daily activities can help lower the chance of it coming back."
+      ],
       "clinicNotes": [
         "Superficial bursa between the skin and the kneecap; repeated kneeling or a direct blow. The knee joint itself moves freely and there is no joint effusion (a joint effusion points to the joint, not the bursa).",
         "Septic bursitis: warmth, redness, peri-bursal tenderness, cellulitis, a skin breach; risk higher with diabetes, immunosuppression, alcohol use and kneeling occupations. Fever is present in fewer than half, and clinical features alone cannot exclude infection: refer for aspiration and culture if suspected (StatPearls, septic bursitis).",
@@ -9103,6 +9598,11 @@ export const AUTHORED = [
         "Pain persists or returns each session",
         "You want a staged tendon-loading program, the core of good care",
         "It's affecting performance or daily stairs"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your knee and explain why the tendon has become sore.",
+        "A step-by-step tendon loading programme can help the tendon get stronger and less painful.",
+        "You get a gradual plan to build back up to jumping, landing and your sport."
       ],
       "clinicNotes": [
         "Diagnosis (Malliaras 2015): pain localised to the inferior pole of the patella, load-dependent, rising with the energy-storage demand of the tendon (jumping, landing, change of direction); first episode usually between 15 and 30 (AIM manual p.28); pain often worse 24 hours later (p.29). Decline single-leg squat at 25 degrees. Palpation is of low value (sens 37-56%, spec 47-83%). Imaging does not confirm the diagnosis: tendon changes are common without pain.",
@@ -9203,6 +9703,11 @@ export const AUTHORED = [
         "The burning has not eased after a few weeks",
         "It is limiting sleep or walking"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the nerve and explain why the skin feels burning, tingling or numb.",
+        "Gentle desensitising and advice on avoiding pressure can help the area feel more comfortable.",
+        "You get a plan to keep the knee moving and stay active while the nerve settles."
+      ],
       "clinicNotes": [
         "The saphenous nerve is purely sensory (the terminal branch of the femoral nerve). Its infrapatellar branch is commonly cut or stretched in knee surgery: after knee replacement, objective numbness is near universal and subjective numbness 37-55%, usually lateral to and below the scar (Ann R Coll Surg Engl 2013); the numb area shrinks over the first year.",
         "Other causes: adductor (Hunter's) canal entrapment, varicose vein surgery or vein harvest, pressure from a brace or kneeling. Weakness or spreading numbness points to the femoral nerve or an L3-L4 root: refer.",
@@ -9259,6 +9764,11 @@ export const AUTHORED = [
         "Heel/calf pain lasts more than 1–2 weeks or keeps flaring",
         "Stairs, walking, or running are limited",
         "You want a structured loading program — the proven treatment for tendinopathy"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your Achilles and explain why the tendon has become sore.",
+        "A step-by-step calf and tendon loading programme can help the tendon get stronger.",
+        "You get a gradual plan to adjust your training and get back to running and sport."
       ]
     },
     "resolved": [
@@ -9334,6 +9844,11 @@ export const AUTHORED = [
         "You want a plan to return to sport: re-injury is common",
         "The whole calf becomes swollen, warm, or tender: see a doctor the same day",
         "You felt a snap at the back of the heel, or cannot go up on tiptoe on that leg: see a doctor the same day, as the Achilles tendon can tear"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your calf and explain how bad the strain looks.",
+        "Gentle calf exercises, building up step by step, can help the muscle heal and get stronger.",
+        "You get a gradual plan to get back to running, jumping and sport."
       ]
     },
     "resolved": [
@@ -9415,6 +9930,11 @@ export const AUTHORED = [
         "Your foot goes numb or weak during exercise",
         "It takes longer and longer to settle after stopping",
         "The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your legs and explain why they tighten up during exercise.",
+        "Changes to running form, such as shorter, quicker steps, may help ease the symptoms.",
+        "You get a plan to adjust training and cross-train, and advice if a doctor's opinion is needed."
       ]
     },
     "resolved": [
@@ -9501,6 +10021,11 @@ export const AUTHORED = [
         "Shin pain persists despite 2 weeks of reduced load",
         "Pain is becoming sharper and more focal (needs a stress-fracture check)",
         "You want a running load and biomechanics review"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your shins and explain why they hurt when you run.",
+        "Calf strengthening and a short cut-back in running can help the shins settle.",
+        "You get a gradual return-to-running plan, with tips on shoes, surfaces and training load."
       ]
     },
     "resolved": [
@@ -9581,6 +10106,11 @@ export const AUTHORED = [
         "The tingling has not eased after a few weeks",
         "Your foot slaps down or your toes catch: see a doctor first",
         "Moving your back changes it: the back may be the source"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the nerve and the strength in your foot and ankle.",
+        "You get advice on avoiding pressure on the outer knee, with exercises to keep the ankle moving.",
+        "If your foot is weak, a physiotherapist can help you walk more safely and suggest a doctor visit."
       ]
     },
     "resolved": [
@@ -9643,6 +10173,11 @@ export const AUTHORED = [
         "The burning has not eased after a few weeks",
         "The numb patch is spreading, or the leg feels weak or gives way: see a doctor soon, as it may come from the back or a larger nerve",
         "It is limiting sleep or walking"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the nerve and explain why the skin feels burning, tingling or numb.",
+        "Gentle desensitising and advice on avoiding pressure can help the area feel more comfortable.",
+        "You get a plan to keep the knee moving and stay active while the nerve settles."
       ]
     },
     "resolved": [
@@ -9697,6 +10232,11 @@ export const AUTHORED = [
         "Your back pain started before 40, came on slowly, is stiff for more than half an hour each morning and feels better with movement than rest, especially if it has lasted more than 3 months: we can check the pattern, start you on the right exercise plan, and write to your doctor about further tests",
         "You have been diagnosed and would like a personalised programme for mobility, strength, posture, breathing and fitness, adjusted during flares",
         "Any new painful red eye, or new severe neck or back pain after even a minor fall, needs medical care first"
+      ],
+      "physioHelps": [
+        "Alongside your doctor's care, a physiotherapist can check how your back moves and explain what is going on.",
+        "A regular exercise plan for movement, strength, fitness, posture and breathing can help ease stiffness.",
+        "You get a plan to keep active at work and home, and to manage flare-ups."
       ],
       "doctorFirst": "This pattern is worth checking with your family doctor, who can arrange blood tests and imaging and consider a referral to a rheumatologist. Early diagnosis makes a real difference. Physiotherapy can start alongside: you do not need to wait.",
       "clinicNotes": [
@@ -9789,6 +10329,11 @@ export const AUTHORED = [
         "Numbness around your saddle area or genitals, a new bladder or bowel change, or leg pain spreading to both legs: go to the emergency department now",
         "Leg symptoms are spreading further down or getting stronger despite trying position changes",
         "There's no improvement after a couple of weeks of adjusting your positions and staying active"
+      ],
+      "physioHelps": [
+        "A physiotherapist can test which movements and positions ease your pain, and explain what is going on.",
+        "Specific repeated movements, hands-on care and core exercises can help settle back and leg pain.",
+        "You get a plan to return to sitting, bending and daily tasks, and to reduce flare-ups."
       ],
       "clinicNotes": [
         "Classification (JOSPT 2012, B): acute low back pain with related (referred) lower extremity pain. Back pain with buttock, thigh or leg pain worse with flexion and sitting, that centralises or eases with positioning, manual procedures or repeated movements; lateral shift, reduced lordosis and limited extension are common.",
@@ -9890,6 +10435,11 @@ export const AUTHORED = [
         "It recurs with particular activities",
         "You'd like specific mobility and strength work for it"
       ],
+      "physioHelps": [
+        "A physiotherapist can find which movements bring on your pain and explain in plain words what is happening.",
+        "Hands-on joint care alongside exercise can help ease pain and get your back moving more freely.",
+        "You get advice to stay active and a plan to manage standing, arching back and future flare-ups."
+      ],
       "clinicNotes": [
         "No facet-specific category in JOSPT 2012 or 2021: classify as low back pain with mobility deficits (2012, B) when unilateral pain is reproduced at end-range (here extension) and by segmental provocation. Facet pain cannot be confirmed clinically without a block; prefer impairment-based labels. Under 20 with extension pain and sport: screen for spondylolysis first.",
         "Acute: thrust or non-thrust mobilisation (2021, A), prediction rule as for non-specific low back pain. Chronic: mobilisation (A) with exercise (A). Education to stay active (B).",
@@ -9974,6 +10524,11 @@ export const AUTHORED = [
         "Episodes of pain keep coming back despite general exercise",
         "You're noticing ongoing weakness, giving way, or you're avoiding movements out of worry"
       ],
+      "physioHelps": [
+        "A physiotherapist can check how your back and core muscles control movement and explain what is going on.",
+        "Guided exercises to train deep core control and trunk strength can help reduce catching and pain.",
+        "You get a plan to build confidence in lifting, bending and sport, and to reduce flare-ups."
+      ],
       "clinicNotes": [
         "Classification (JOSPT 2012, B): low back pain with movement coordination impairments. Recurrent episodes with or without referred leg pain; symptoms at initial to mid range that worsen at end range or with sustained positions; possible segmental hypermobility, reduced trunk strength and endurance, coordination deficits in daily tasks.",
         "Stabilisation prediction rule (Hicks): under 40, positive prone instability test, aberrant movements (painful arc, catch, thigh climbing, reversed lumbopelvic rhythm), SLR over 91 degrees; 3 or more +LR 4.0, fewer than 2 -LR 0.20 (not validated).",
@@ -10038,6 +10593,11 @@ export const AUTHORED = [
         "It keeps coming back despite stretching, or limits work, sleep or sport",
         "You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring",
         "Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first"
+      ],
+      "physioHelps": [
+        "A physiotherapist can find the sore muscle, rule out other causes and explain why the ache spreads.",
+        "Hands-on muscle release and stretching can ease pain for a while, alongside graded strengthening.",
+        "You learn self-release and changes to posture, work and sleep set-up to help prevent flare-ups."
       ],
       "clinicNotes": [
         "Low back referral maps: quadratus lumborum to the iliac crest, SIJ and buttock (and greater trochanter); paraspinals locally; gluteus medius to the iliac crest and sacrum. Often coexists with facet or non-specific low back pain; distinguish from radiating pain (pain below the knee, neuro signs, SLR).",
@@ -10131,6 +10691,11 @@ export const AUTHORED = [
         "A foot that has started to slap or drag, or toes that catch: see a doctor the same day",
         "Numbness that does not go away, or weakness: book promptly; you do not need a referral to see us, and we will involve your doctor if it persists or gets worse",
         "The pulling, tingling or burning keeps returning, or is affecting sitting, sleep, work or sport: a physiotherapy assessment can check how the nerve is moving and give you a plan"
+      ],
+      "physioHelps": [
+        "A physiotherapist can test how the nerve moves and explain why a sensitive nerve is usually healthy.",
+        "Gentle nerve gliding exercises, which help the nerve slide more easily, can help ease leg symptoms.",
+        "You get a step-by-step plan to return to the positions and activities that bring it on."
       ],
       "clinicNotes": [
         "Physio-led. Two questions drive reasoning (as for the arm, content/reference/neural-mechanosensitivity.md): is the nerve SENSITIVE (pain with stretch or pressure) and is it CONDUCTING poorly (numbness, weakness, reflex change)? Then where along the tract (root, lumbosacral plexus, piriformis, hamstrings, fibular head, tarsal tunnel), and more than one site?",
@@ -10245,6 +10810,11 @@ export const AUTHORED = [
         "Back pain after a fall, a crash or a heavy knock, or after even a minor strain or fall if you are over 70, have thin bones (osteoporosis) or take steroid tablets: see a doctor today",
         "Constant pain that is the same whatever you do and wakes you most nights, weight loss you cannot explain, a past cancer, or feeling generally unwell: see your doctor this week",
         "Under 20, with pain on arching your back in sport for more than 2 to 3 weeks: see your doctor for an X-ray before training through it"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your back and explain that pain does not mean damage.",
+        "An exercise programme you enjoy, with hands-on care where it helps, can ease pain and stiffness.",
+        "You get a paced plan to return to work, sport and daily life, and to manage flare-ups."
       ],
       "clinicNotes": [
         "Non-specific low back pain, mechanical (nociceptive) pattern: symptoms change with posture and activity; no nerve root signs, no red flags. JOSPT 2012 (B) classification for the acute, often one-sided pattern: low back pain with mobility deficits (restricted lumbar range and segmental mobility, pain reproduced by segmental provocation).",
@@ -10404,6 +10974,11 @@ export const AUTHORED = [
         "Leg pain that is not easing at all by about 6 weeks, or is still limiting your daily life at about 12 weeks: see your doctor to discuss a review and whether a specialist opinion would help",
         "Leg symptoms are limiting your work, sleep or walking, or have not started to ease after two to three weeks: a physiotherapy assessment can check the nerve, work out which positions help, and give you a plan"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your nerves, strength and feeling, and explain what is irritating the nerve.",
+        "Core strengthening, hands-on care and gentle nerve gliding exercises can help ease back and leg pain.",
+        "You get a plan to stay active, track your progress and return to daily life and work."
+      ],
       "clinicNotes": [
         "Classification (JOSPT 2012, B): low back pain with radiating pain. Acute: narrow-band lancinating leg pain, possible paraesthesia, numbness or weakness, reproduced at initial to mid range, with SLR or slump; subacute, mid range worse at end range; chronic, sustained end-range SLR or slump. Full neurological exam and UMN screen (tone, clonus).",
         "Severe or progressive deficit: prompt MRI or CT and referral. Imaging otherwise only for injection or surgical candidates. Cauda equina: urinary retention sens 0.90, spec 0.95, +LR 18. Symptoms below the knee predict chronicity.",
@@ -10496,6 +11071,11 @@ export const AUTHORED = [
         "Back pain starting after a fall, a car crash or a heavy knock, especially if you are over 65 or have thin bones: seek urgent medical care, as the bone itself needs checking",
         "Leg symptoms on walking that keep shortening your walking distance, or leg pain and tingling that is not settling after about 12 weeks of treatment: see your doctor to discuss whether imaging or a specialist opinion would help",
         "You want a plan: a physiotherapy assessment can work out which positions unload your back, and build the strength programme that suits the slip you have"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your back moves and explain what the slip means in plain words.",
+        "Graded strengthening of your trunk and hips can help ease pain and support everyday movement.",
+        "You get easier positions for flare-ups and a step-by-step plan back to the activities you enjoy."
       ],
       "clinicNotes": [
         "Adult isthmic (younger, arching-sport history) and degenerative (over 50, women about 3:1, most often L4-L5) slips. Diagnosis needs a STANDING lateral X-ray: a slip can reduce when supine. Meyerding grade 1-2 in the great majority; grades 3-4 are rare and belong with the spine surgeon. Examination: palpable step and segmental tenderness, extension-provoked pain, hamstring tightness, hip flexor length, lordosis and sacral angle, full neuro screen L2-S1, SLR, and the claudication history that points to co-existing stenosis. Management: graded loading with trunk and hip strengthening, flexion-biased activity during flares, and education that the segment is stable. Surgery is discussed when radicular or claudication symptoms persist beyond about 12 weeks with imaging that matches (SPORT, Abdu 2018). Co-displays with the stenosis card when walking brings on heavy legs."
@@ -10598,6 +11178,11 @@ export const AUTHORED = [
         "New clumsiness of the hands, unsteady walking, stiff legs, or neck pain with the leg symptoms: see a doctor promptly, as the spinal cord higher up may be involved",
         "Your walking distance has shrunk, your legs tire or tingle when you stand or walk, or you have been told you have spinal stenosis and want a plan for it: a physiotherapy assessment can help you work out the right next steps"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your back, legs and balance, and explain what the narrowing means.",
+        "A guided programme of stretches, leg and trunk strength and graded walking can help you walk further.",
+        "You get fitness options in comfortable positions, like cycling or pool walking, and a plan for daily life."
+      ],
       "clinicNotes": [
         "From \"Stenosis lumbar.docx\" (v1.0, signed by Chandra 5 Oct 2026). History: N-CLASS criteria (Genevay 2018; reported specificity 92%, sensitivity 80%): bilateral leg symptoms, provoked by standing or walking, relieved by sitting or flexion, age, and no pain with sitting. Observation: flexed posture, flattened lordosis, gait.",
         "Examination: standing lumbar extension 30-second test; repeated-movement response; neuro screen L3-S1 (myotomes, dermatomes, reflexes), Romberg and balance; SLR and slump (usually negative). Vascular screen: pedal pulses, capillary refill, skin changes; bicycle versus treadmill test to separate neurogenic from vascular claudication. Hip screen (FADIR, FABER, internal rotation range). Upper motor neuron screen if any hand or gait clues (Hoffmann, clonus, Babinski).",
@@ -10699,6 +11284,11 @@ export const AUTHORED = [
         "Diabetes, with sudden severe thigh pain then weakness and weight loss: see your doctor promptly (diabetic amyotrophy)",
         "Leg symptoms limiting walking, sleep or work, or not easing after two to three weeks: a physiotherapy assessment can check the nerve and give you a plan"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your hip, nerves and thigh strength, and explain where the pain comes from.",
+        "Gentle nerve gliding exercises and movements that ease your symptoms can help settle thigh pain.",
+        "You get a graded plan to return to walking, stairs and daily activities as it settles."
+      ],
       "clinicNotes": [
         "Upper lumbar roots (L2-L4) and the femoral nerve. Less common than L5-S1 and more often older patients; anterior thigh pain is also referred from the hip, so clear the hip first.",
         "Tests: femoral nerve stretch / prone knee bend (crude: many structures); slump knee bend (side-lying slump, knee about 90 degrees, extend the hip, differentiate with the neck; Trainor and Pinnington 2011 pilot, small sample: sensitivity 100% (40-100), specificity 83% (52-98), LR+ 6.0, LR- 0, kappa 0.71 - promising, not yet confirmed); the femoral nerve stretch test can be falsely positive from tight or injured anterior thigh muscles and from the hip; normal femoral slump responses (Lai et al. 2012). Add hip abduction for the obturator nerve, adduction for the lateral femoral cutaneous nerve (Butler). Hip lateral and medial rotation bias the ilioinguinal and iliohypogastric nerves.",
@@ -10792,6 +11382,11 @@ export const AUTHORED = [
         "You feel off-balance or dizzy along with neck pain or stiffness, especially after a neck injury: an assessment can help work out whether your neck is involved, and we will involve your doctor if another cause needs checking",
         "You would like a plan to retrain neck position sense, eye and head coordination, and balance",
         "The dizziness keeps coming back with desk work, screens or driving"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your neck, balance and inner ear, and explain how the neck can affect balance.",
+        "Gentle hands-on care for the upper neck, with head-position and balance training, may help ease dizziness.",
+        "You get neck exercises and work set-up advice to help you feel steadier day to day."
       ],
       "clinicNotes": [
         "Diagnosis of exclusion (Reiley 2017): no single confirming test. Care route: physio-led after screening; if other causes of dizziness have not been checked, family doctor alongside.",
@@ -10930,6 +11525,11 @@ export const AUTHORED = [
         "A headache that wakes you with vomiting, is worse lying down, coughing or straining, or is steadily getting worse: see a doctor",
         "It started after a knock to the head or a car accident: see a doctor first to check for concussion"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the top of your neck and explain how it can cause head pain.",
+        "Hands-on care with deep neck and shoulder blade exercises can help reduce how often headaches come.",
+        "You learn a self-help neck movement for when a headache starts, plus desk and sleep set-up tips."
+      ],
       "clinicNotes": [
         "Physio-led after the headache red-flag screen (SNNOOP10). Refer to the GP if pain medicine is used on 10 or more days a month, if there are red or orange flags, or if there is no change after 6 to 8 weeks of well-delivered care.",
         "Subjective: headache diary (frequency, intensity, duration), side-locking, onset relative to neck pain, triggers, medication days a month, migraine and tension-type features. Outcomes: HIT-6, NDI, PSFS.",
@@ -11035,6 +11635,11 @@ export const AUTHORED = [
         "You would like your hands, walking and balance checked; we will write to your family doctor with what we find",
         "Your medical team advises monitoring, and you would like a supervised programme for balance, strength, hand function and falls prevention",
         "You are preparing for, or recovering from, neck surgery (usually from about 4 weeks after, or as your surgeon advises)"
+      ],
+      "physioHelps": [
+        "Once your doctor has checked it, a physiotherapist can help you alongside their care.",
+        "Guided balance, walking, grip and strength exercises aim to keep you moving safely and confidently.",
+        "A physiotherapist checks your nerve signs at each visit and keeps your doctor informed of any changes."
       ],
       "doctorFirst": "Please see your family doctor soon. These symptoms need a medical assessment, which may include an MRI. We can assess you as well and write to your doctor.",
       "clinicNotes": [
@@ -11164,6 +11769,11 @@ export const AUTHORED = [
         "It is affecting your work, driving or sleep; a physiotherapy assessment can help you find the right exercises and plan, and no doctor's referral is needed",
         "Pins and needles in both hands, clumsy hands, changes in your walking, a fever or weight loss you cannot explain, or a past cancer: see a doctor first",
         "A sudden, severe neck pain or headache unlike any before, with dizziness, double vision, slurred speech or trouble swallowing: call 911"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your neck and upper back move and explain what is going on.",
+        "Hands-on care for the neck and upper back, with neck and shoulder exercises, can help ease stiffness.",
+        "You get advice to stay active and a plan to manage future flare-ups at work and home."
       ],
       "clinicNotes": [
         "JOSPT 2017 category: neck pain with mobility deficits. Stage: acute (under 6 weeks), subacute (6-12 weeks), chronic (over 12 weeks); rate irritability. Physio-led (direct access).",
@@ -11317,6 +11927,11 @@ export const AUTHORED = [
         "You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring",
         "Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first"
       ],
+      "physioHelps": [
+        "A physiotherapist can find the sore muscle, rule out other causes and explain why the ache spreads.",
+        "Hands-on muscle release and stretching can ease pain for a while, alongside graded strengthening.",
+        "You learn self-release and changes to posture, desk and sleep set-up to help prevent flare-ups."
+      ],
       "clinicNotes": [
         "Neck referral maps: upper trapezius to the temple and occiput; levator scapulae to the angle of the neck; suboccipitals to the eye and forehead. Overlaps neck pain with mobility deficits and tension-type or cervicogenic headache (muscle referral is often a contributor).",
         "Myofascial pain syndrome, 2018 Delphi criteria (2 of 3): taut band, hypersensitive spot, referred pain on stimulation (local twitch supportive, not required). Palpation reliability is only moderate: treat the label as a working hypothesis and judge by response. The site asks the patient to press the spot themselves (the shared tender-spot question).",
@@ -11411,6 +12026,11 @@ export const AUTHORED = [
         "A cold, pale or blue hand, or a swollen, discoloured arm: see a doctor the same day",
         "Severe shoulder or arm pain that eases and is followed by weakness: see a doctor",
         "A burning or \"dead arm\" after a tackle or collision that settles within minutes is usually a stretched nerve (a \"stinger\"); if it happens in both arms, or keeps coming back, see a doctor before returning to sport"
+      ],
+      "physioHelps": [
+        "A physiotherapist can test how the nerve moves and explain why a sensitive nerve is usually healthy.",
+        "Gentle nerve gliding exercises and hands-on care along the nerve's path can help ease arm symptoms.",
+        "You get a step-by-step plan to return to the arm and neck positions that bring it on."
       ],
       "clinicNotes": [
         "Physio-led. Refer for nerve conduction studies or to the GP with progressive loss of function, wasting, bilateral or systemic features, or no change after 6 to 8 weeks of well-delivered care.",
@@ -11559,6 +12179,11 @@ export const AUTHORED = [
         "Bladder or bowel changes, or new weakness or numbness in both legs: go to an emergency department now",
         "Clumsy hands, symptoms in both arms, unsteady walking, or weakness getting worse over days: see a doctor today",
         "A burning or \"dead arm\" after a tackle or collision that settles within minutes is usually a stretched nerve (a \"stinger\"); if it happens in both arms, or keeps coming back, see a doctor before returning to sport"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your nerves, strength and feeling, and explain what is irritating the nerve.",
+        "Exercise, hands-on care for the neck and upper back, and nerve gliding can help ease arm pain.",
+        "You get advice to keep working and active, and a plan to track how the nerve settles."
       ],
       "clinicNotes": [
         "Record: body chart (arm vs neck dominance, paraesthesia distribution), 24-hour behaviour, irritability, neuropathic descriptors; NPRS, NDI, PSFS; DN4 or painDETECT if the neuropathic component is unclear.",
@@ -11736,6 +12361,11 @@ export const AUTHORED = [
         "A sudden, new, severe pain unlike before, or dizziness, double vision, trouble speaking or swallowing, or a numb face: call 911",
         "You have rheumatoid arthritis, Down syndrome, or take steroid tablets long term, or your head feels too heavy to hold up: see a doctor first"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the top of your neck and explain that this is common and usually not damage.",
+        "Chin-nod and head-turning exercises, building to neck strength, with hands-on care, can help ease stiffness.",
+        "You get desk, screen, driving and sleep tips to help keep it from coming back."
+      ],
       "clinicNotes": [
         "Physio-led. Refer to the GP with red flags, systemic features, or no change after 6 to 8 weeks of well-delivered care. Over 50 with both shoulders and the neck stiff in the morning and feeling unwell: GP (polymyalgia rheumatica).",
         "Subjective: body chart, irritability, 24-hour behaviour, work and screen set-up, dizziness history. Outcomes: NDI, PSFS, NPRS.",
@@ -11865,6 +12495,11 @@ export const AUTHORED = [
         "Dizziness that keeps coming back, or a new headache unlike before, since the injury: see a doctor today",
         "Trouble concentrating, feeling foggy or poor sleep since the injury: see your doctor to check for a concussion"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your neck after the injury and explain what to expect as it recovers.",
+        "Neck exercises for movement, strength and control, with gentle hands-on care, can help your recovery.",
+        "You get a plan to stay active and return to driving, work and daily life step by step."
+      ],
       "clinicNotes": [
         "Physio-led after injury screening. Nerve signs (WAD grade III): physio plus doctor. Suspected fracture (grade IV): Emergency.",
         "Grade with the Quebec Task Force (0-IV). Canadian C-spine rule if acute; neuro exam (dermatomes, myotomes, reflexes).",
@@ -11954,6 +12589,11 @@ export const AUTHORED = [
         "It started after a fall, an accident or a knock: see a doctor first",
         "A fever, a severe headache, or feeling very unwell with the stiff neck: get urgent medical care",
         "It is not easing after a few days, or keeps coming back: a physiotherapy assessment can help free it up and stop it recurring"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your neck and explain that a suddenly locked neck is common.",
+        "Gentle hands-on care for the neck and upper back, with easy movement exercises, can help free it up.",
+        "You get advice to stay active and simple tips to help prevent it happening again."
       ],
       "clinicNotes": [
         "Acute wry neck: sudden painful restriction, usually on waking, often thought to be a locked facet (zygapophyseal) joint or acute disc irritation; JOSPT 2017 acute neck pain with mobility deficits (thoracic manipulation and cervical mobilisation, active ROM, advice to stay active).",
@@ -12054,6 +12694,11 @@ export const AUTHORED = [
         "Pain persists past about 2 to 3 weeks",
         "You want a graded return to gym or sport"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the joint at the top of your shoulder and explain what is going on.",
+        "Gradual movement and strengthening exercises can help you get back to lifting and pressing.",
+        "You get a step-by-step plan for the gym, sport or work at a pace that suits the joint."
+      ],
       "clinicNotes": [
         "Kelley 2013 lists AC joint sprain and AC osteoarthritis among shoulder differentials; neither shoulder CPG gives AC test accuracy. Chronopoulos 2004: cross-body adduction sens 77%, spec 79%; all three of cross-body adduction, resisted extension and active compression positive, sens 25%, spec 97%. A painful arc at the top of the range (not mid-range) points away from the rotator cuff; deep or anterior pain and passive stiffness point to the glenohumeral joint.",
         "Grades (Rockwood): I-II managed without surgery (usually settle in 1-6 weeks); III debated (similar long-term function; about 22% of non-operative cases later have surgery; meta-analyses 2024-25); IV-VI surgical. A step deformity after injury needs bilateral AP or Zanca X-rays before rehabilitation. In children a fall onto the shoulder is more often a clavicle (physeal) fracture. Weightlifters: distal clavicle osteolysis.",
@@ -12153,6 +12798,11 @@ export const AUTHORED = [
         "Pain that comes on with effort or breathlessness: call 911",
         "The pain has lasted more than a few weeks and isn't settling with simple measures and gentle movement",
         "Not settling after about 3 months: ask about shockwave or a needle wash-out of the deposit"
+      ],
+      "physioHelps": [
+        "A physiotherapist can explain calcium deposits in plain words and what to expect as they settle.",
+        "Gentle movement during a flare, then gradual strengthening, can help ease pain and restore use.",
+        "You get a plan for overhead tasks and flare-ups, and help knowing when to see your doctor."
       ],
       "clinicNotes": [
         "Calcium deposit in a rotator cuff tendon, confirmed on imaging; managed within the rotator cuff recommendations (exercise A, education C, NSAIDs B for the doctor, injection B but not first line). Peak age 30-60, more often women (Chandra's protocol; reviews report over 75% women in many series).",
@@ -12267,6 +12917,11 @@ export const AUTHORED = [
         "The shoulder is hot, red or swollen, or you have a fever: see a doctor the same day",
         "Pain that comes on with effort, chest tightness or breathlessness: call 911",
         "Weakness that came on slowly: a physiotherapy programme is a good first step, with an ultrasound if it is not improving"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your shoulder strength and help you know if a doctor should see it soon.",
+        "A guided strengthening programme can help many people with a gradual tear lift and use the arm again.",
+        "You get a step-by-step plan for daily tasks, with regular checks on how you are progressing."
       ],
       "clinicNotes": [
         "Clusters (AIM manual p.286): painful arc + drop arm + external rotation weakness, +LR 15.6; age over 65 + external rotation weakness + night pain, +LR 9.8. External rotation lag sign and drop arm for full-thickness supraspinatus and infraspinatus tears; belly press and lift-off for subscapularis.",
@@ -12394,6 +13049,11 @@ export const AUTHORED = [
         "You have diabetes or a thyroid condition with new shoulder stiffness",
         "It came on with no injury: please also ask your doctor whether your thyroid and blood sugar have been checked (simple blood tests)",
         "You'd like a staged plan matched to the phase you're in"
+      ],
+      "physioHelps": [
+        "A physiotherapist can explain how frozen shoulder usually changes over time and what to expect.",
+        "Gentle stretching and movement, matched to how sore your shoulder is, can help ease pain and stiffness.",
+        "You get tips for sleep, dressing and reaching, and a plan that changes as your shoulder improves."
       ],
       "clinicNotes": [
         "Diagnosis (JOSPT 2013, F): age 40-65; gradual, progressive pain and stiffness limiting sleep, grooming, dressing and reaching; passive glenohumeral motion limited in several planes, ER (at the side) most; ER and IR fall as abduction goes from 45 to 90 degrees; end-range passive motion reproduces the pain; accessory glides restricted in all directions. Radiographs are normal: BESS/BOA require X-rays in two planes to exclude glenohumeral OA, avascular necrosis and posterior dislocation (seizure, electric shock). Stage 1 is often mistaken for rotator cuff pain.",
@@ -12542,6 +13202,11 @@ export const AUTHORED = [
         "It has slipped or dislocated before: a structured strengthening program is first-line care",
         "Apprehension limits sport or work, or you want assessment before returning to overhead or contact sport"
       ],
+      "physioHelps": [
+        "A physiotherapist can check how your shoulder moves and explain why it slips.",
+        "A tailored strengthening programme aims to help the muscles hold the shoulder steady and build confidence.",
+        "You get a plan back to sport, and advice on when a surgeon's opinion may be worthwhile."
+      ],
       "clinicNotes": [
         "JOSPT adhesive capsulitis CPG 2013 differential (F): instability fits age under 40, a history of dislocation, excess glenohumeral accessory motion and apprehension in flexion, horizontal abduction and/or external rotation; global motion loss and no apprehension point away.",
         "First dislocation: X-ray before and after reduction (BESS 2016; Dutch guideline, Acta Orthop 2026). At 40 or over: screen for a rotator cuff tear (about 57% full-thickness on ultrasound after a first dislocation over 40) and axillary nerve injury, and image early if weakness persists (BESS 2016; Lizzio 2017 via AIM manual p.304; the site's injury screen I4, I5).",
@@ -12662,6 +13327,11 @@ export const AUTHORED = [
         "It is not improving after a few weeks of easing off",
         "You want a plan for returning to throwing or overhead sport"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your shoulder and explain in plain words what may be going on.",
+        "Shoulder and shoulder-blade strengthening, with advice on throwing load, can help ease pain and catching.",
+        "You get a step-by-step return to overhead sport, and advice on when a surgeon's opinion is worthwhile."
+      ],
       "clinicNotes": [
         "Mechanisms: repetitive overhead or throwing loading (posterosuperior or SLAP, peel-back), traction, a fall onto the outstretched arm, dislocation (anterior-inferior, Bankart). Often coexists with instability or rotator cuff pain.",
         "Tests are individually weak (AIM manual pp.306-308): crank +LR about 1.4-1.6; anterior slide +LR about 0.7; biceps load tests modest. Combine history, clusters and response to load; MR arthrography if management would change.",
@@ -12750,6 +13420,11 @@ export const AUTHORED = [
         "It keeps coming back despite stretching, or limits work, sleep or sport",
         "You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring",
         "Pins and needles, numbness, weakness, or pain that shoots into the arm or hand: these point to a nerve, so please mention them; we check the nerves first"
+      ],
+      "physioHelps": [
+        "A physiotherapist can find the tight, tender muscle and explain why the ache spreads.",
+        "Hands-on pressure, stretching and gradual strengthening can help ease the ache.",
+        "You get advice on movement breaks, your workstation and self-massage, so you can manage it yourself."
       ],
       "clinicNotes": [
         "Shoulder referral maps: infraspinatus to the anterior shoulder and lateral arm (sometimes forearm); supraspinatus to the lateral arm; upper trapezius to the neck and temple. Distinguish from rotator cuff tendinopathy (painful arc, resisted tests, tender over the tendon) and cervical radiculopathy.",
@@ -12846,6 +13521,11 @@ export const AUTHORED = [
         "Pain at night that no position eases, a new lump, or weight loss you cannot explain: see a doctor",
         "Stiffness or pain limits dressing, reaching or sleep",
         "You would like a structured exercise plan, or are weighing up options with your doctor"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your shoulder moves and explain in plain words what is going on.",
+        "Regular movement and strength exercises are the core of care and can help ease pain.",
+        "You get a plan to pace heavy or overhead tasks and to manage flare-ups."
       ],
       "clinicNotes": [
         "Glenohumeral OA: age usually over 55, or earlier after instability surgery, dislocation, fracture or avascular necrosis; gradual pain with use, crepitus, global restriction of active and passive range (external rotation often most), posterior humeral head migration. X-ray (true AP and axillary views) confirms; it also separates OA from frozen shoulder, where radiographs are normal (JOSPT 2013, BESS/BOA).",
@@ -12965,6 +13645,11 @@ export const AUTHORED = [
         "It isn't clearly improving after about 2 weeks, or reaching, dressing or sleep stay limited",
         "Not better after about 3 months of exercise: ask about a review with a sports physician or surgeon",
         "You want a graded strengthening plan, the treatment with the best evidence"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your shoulder and explain in plain words why it hurts.",
+        "A graded strengthening programme is the main treatment, sometimes with hands-on care for short-term relief.",
+        "You get advice on work and overhead tasks, and a plan back to sport or the gym."
       ],
       "clinicNotes": [
         "Scope (JOSPT 2025): rotator cuff tendinopathy includes subacromial pain (formerly \"impingement\"), subacromial bursopathy, long head of biceps tendinopathy (front of the shoulder, down the front of the arm) and partial-thickness tears; calcific when imaging shows a deposit. Full-thickness tears are excluded by the CPG; the AIM manual (p.287) manages atraumatic full-thickness tears with rehabilitation in the same pathway.",
@@ -13142,6 +13827,11 @@ export const AUTHORED = [
         "Weakness after a fall or a shoulder dislocation: see a doctor, as the tendons or a nerve may be injured",
         "Pain spreading down the arm with tingling, or neck movement changes it: the neck may be the source"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your shoulder strength and explain what is irritating the nerve.",
+        "Shoulder-blade control exercises, gentle nerve gliding and easing overhead load can help the nerve settle.",
+        "You get a gradual plan back to overhead sport or work, with checks on your strength."
+      ],
       "clinicNotes": [
         "Suprascapular nerve (C5-C6, upper trunk): compression or traction at the suprascapular notch (supraspinatus and infraspinatus) or the spinoglenoid notch (infraspinatus only, often painless wasting in volleyball players); paralabral cysts from SLAP tears, fractures, repetitive overhead traction.",
         "Neurodynamics (Butler): neck lateral flexion away with shoulder girdle depression, then horizontal adduction or a force down the humeral shaft; scapular rotation as a mobilisation. Palpate the suprascapular notch; compare infraspinatus bulk; ER strength at 0 degrees.",
@@ -13203,6 +13893,11 @@ export const AUTHORED = [
         "Your back pain started before 40, came on slowly, is stiff for more than half an hour each morning and feels better with movement than rest, especially if it has lasted more than 3 months: we can check the pattern, start you on the right exercise plan, and write to your doctor about further tests",
         "You have been diagnosed and would like a personalised programme for mobility, strength, posture, breathing and fitness, adjusted during flares",
         "Any new painful red eye, or new severe neck or back pain after even a minor fall, needs medical care first"
+      ],
+      "physioHelps": [
+        "Once your doctor has checked it, a physiotherapist can help you alongside your medical care.",
+        "A regular exercise programme for movement, strength, posture and breathing can help ease stiffness.",
+        "You get a daily plan to manage stiff mornings, work and flare-ups, and to stay active."
       ],
       "doctorFirst": "This pattern is worth checking with your family doctor, who can arrange blood tests and imaging and consider a referral to a rheumatologist. Early diagnosis makes a real difference. Physiotherapy can start alongside: you do not need to wait.",
       "clinicNotes": [
@@ -13295,6 +13990,11 @@ export const AUTHORED = [
         "Pain persists more than ~2 weeks",
         "It began after pregnancy or a fall",
         "Walking or stairs remain limited"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your back and pelvis and explain what is causing the pain.",
+        "Hands-on treatment alongside exercise can help ease pain and get you moving more easily.",
+        "You get a plan for daily habits and activity to help manage flare-ups."
       ],
       "clinicNotes": [
         "JOSPT 2012 includes SI segments in low back pain with mobility deficits (B): unilateral back, buttock or thigh pain reproduced by provocation of the involved SI segments. Acute: thrust or non-thrust mobilisation (2021, A); the thrust prediction rule was derived on a lumbopelvic thrust (4 of 5, +LR 13.2). Chronic: exercise (A) with mobilisation (A) and pain neuroscience education (A). Source: Delitto 2012; George 2021."
@@ -13445,6 +14145,11 @@ export const AUTHORED = [
         "Pain limits walking, stairs or sleep",
         "It has not eased in the weeks after giving birth",
         "You want exercises and support that are safe for your stage of pregnancy"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your pelvis and explain in plain words why it hurts during pregnancy.",
+        "You get easier ways to move day to day, with gentle exercises and support belt advice.",
+        "A plan for work, sleep and activity can help you stay active through pregnancy and after birth."
       ]
     },
     "resolved": [
@@ -13537,6 +14242,11 @@ export const AUTHORED = [
         "Walking is still painful after a few days",
         "The pain is moving up into the groin",
         "You want a plan to return to sport"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your inner thigh and explain how bad the strain looks.",
+        "Squeezing exercises and step-by-step strengthening can help the muscle heal and get stronger.",
+        "You get a gradual plan to get back to running, kicking and side-to-side sport."
       ]
     },
     "resolved": [
@@ -13624,6 +14334,11 @@ export const AUTHORED = [
         "You feel a hard lump in the muscle weeks later",
         "You want a plan to return to sport",
         "The pain and tense swelling keep building over the hours after the knock, or the leg goes numb: go to the emergency department now"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your thigh and use how far your knee bends to judge the bruise.",
+        "Gentle early movement, building to strengthening, can help you regain knee bend and strength.",
+        "You get a step-by-step plan to get back to sport."
       ]
     },
     "resolved": [
@@ -13705,6 +14420,11 @@ export const AUTHORED = [
         "It comes back after every session",
         "You want a training plan that builds up safely",
         "Your urine turns dark like cola, or your muscles are severely weak or swollen after exercise: go to the emergency department now"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your thigh and explain why it aches after a harder workout.",
+        "Gentle movement, stretching and hands-on care for tight spots can help ease the soreness.",
+        "You get a plan to build your training up a little at a time."
       ]
     },
     "resolved": [
@@ -13796,6 +14516,11 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The pain isn't easing after a couple of weeks, or you're still limping when walking",
         "You've strained this area before and want a structured plan to get back to sport safely and lower the chance of it happening again"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your thigh and explain how bad the strain looks.",
+        "A step-by-step strengthening programme, with gentle movement early on, can help the muscle heal.",
+        "You get a gradual return-to-sport plan, with exercises that may help lower the chance of another strain."
       ],
       "clinicNotes": [
         "Diagnosis (B): sudden posterior thigh pain during activity, reproduced by stretch and/or resisted contraction, with local tenderness and loss of function; sudden onset is the most useful history item. Sprint type (late swing) is usually biceps femoris; overstretch type (hip flexion with knee extension) usually proximal semimembranosus, with a longer recovery.",
@@ -13929,6 +14654,11 @@ export const AUTHORED = [
         "Both thighs are affected, you are losing weight without trying, or there is a lump in the tummy or groin: see your doctor",
         "Numbness between the legs, or new trouble passing urine or controlling your bowels: go to the emergency department now",
         "You want help working out the cause"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the nerve and explain in plain words what is causing the burning or tingling.",
+        "You get advice on clothing, belts and positions to take pressure off the nerve.",
+        "Gentle movement and activity advice can help symptoms settle over time."
       ]
     },
     "resolved": [
@@ -13991,6 +14721,11 @@ export const AUTHORED = [
         "You cannot walk normally after a few days",
         "You want a graded plan to return to kicking or sprinting: re-injury is common without one",
         "It keeps coming back"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your thigh and explain how bad the strain looks.",
+        "Gentle stretching and step-by-step strengthening can help the muscle heal and get stronger.",
+        "You get a gradual plan to get back to kicking, sprinting and sport."
       ]
     },
     "resolved": [
@@ -14084,6 +14819,11 @@ export const AUTHORED = [
         "Pelvic-rim or flank pain hasn't responded to treatment aimed at the low back or hip",
         "The pattern keeps recurring",
         "You'd like assessment of the thoracolumbar junction specifically"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check where your mid and low back meet, and explain why the pain is felt lower down.",
+        "Gentle hands-on care and mobility exercises for this area can help ease pelvic-rim, flank or groin pain.",
+        "You get advice on sitting and staying active to help keep it from coming back."
       ]
     },
     "resolved": [
@@ -14177,6 +14917,11 @@ export const AUTHORED = [
         "It affects sport, work or sleep",
         "You want the rib and its movement assessed",
         "The pain comes with a fever, burning or blood when you pass urine, or after fatty meals, or does not change at all with movement: see a doctor first"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your lower ribs move and explain what is causing the click.",
+        "Gentle hands-on care with trunk mobility and strengthening exercises can help reduce catching and pain.",
+        "You get advice on which movements to ease off for now and a plan back to sport and work."
       ]
     },
     "resolved": [
@@ -14245,6 +14990,11 @@ export const AUTHORED = [
         "It hasn't settled after 2 weeks",
         "It keeps coming back with lifting or sport",
         "You'd like a mobility and strength plan for the junction"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your lower ribcage and low back move, and explain what is going on.",
+        "Hands-on care with a mobility and strength plan for the area can help ease stiffness.",
+        "You get advice on sitting, lifting and sport to help reduce flare-ups."
       ]
     },
     "resolved": [
@@ -14344,6 +15094,11 @@ export const AUTHORED = [
         "It keeps coming back",
         "You want a plan to return to the gym or sport",
         "Chest pain with breathlessness, sweating, feeling sick, or pain spreading to the arm, jaw or back: call 911"
+      ],
+      "physioHelps": [
+        "Once a doctor has ruled out other causes of chest pain, a physiotherapist can check your ribs.",
+        "Gentle chest stretches and upper-back exercises can help ease pain while the joints settle.",
+        "You get a step-by-step plan to return to pushing exercises, the gym or sport."
       ]
     },
     "resolved": [
@@ -14403,6 +15158,11 @@ export const AUTHORED = [
         "It keeps coming back despite stretching, or limits work, sleep or sport",
         "You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring",
         "Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first"
+      ],
+      "physioHelps": [
+        "A physiotherapist can find the sore muscle, rule out other causes and explain why the ache spreads.",
+        "Hands-on muscle release and stretching can ease pain for a while, alongside graded strengthening.",
+        "You learn self-release and changes to posture, work and sleep set-up to help prevent flare-ups."
       ],
       "clinicNotes": [
         "Upper back referral: rhomboids and middle trapezius to the medial scapular border; lower trapezius to the suprascapular area and neck. Exclude rib and costovertebral joints (breathing-related), T-spine nerve root (band-like burning), and visceral referral (cardiac, gallbladder, lung, aorta) before calling it muscle.",
@@ -14481,6 +15241,11 @@ export const AUTHORED = [
         "You want the spine checked as the source",
         "A rash or blisters appear in the same strip: see a doctor within a day or two, as shingles treatment works best early",
         "Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your mid back and the nerve, and explain why the pain wraps around.",
+        "Gentle mid-back movement, breathing exercises and hands-on care can help ease the nerve irritation.",
+        "You get advice on posture and activity, and a plan to stay active while it settles."
       ]
     },
     "resolved": [
@@ -14553,6 +15318,11 @@ export const AUTHORED = [
         "Weakness or numbness in both legs, unsteady walking, or bladder changes: go to an emergency department",
         "The itch or burning is affecting sleep, or has not eased with movement after a few weeks: we can assess the upper back and the nerve"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your upper back and explain how a squeezed skin nerve causes the itch.",
+        "Mid-back mobility exercises and gentle hands-on care for the muscles and nerve may help ease symptoms.",
+        "You get posture advice, and support to work with your doctor if the itch persists."
+      ],
       "clinicNotes": [
         "Cutaneous branches of the dorsal rami T2-T6 entrapped as they pierce multifidus and the fascia at a right angle; often with upper thoracic stiffness or degenerative change at the same levels. Hyperpigmentation from scratching is common.",
         "Neurodynamics (Butler): tender spots or nodules where the nerves become cutaneous, more tender in slump long sitting and less with the neck extended (structural differentiation); more reactive laterally along the lateral branch. Upper thoracic segments: slump long sitting with cervical lateral flexion (symptoms on the convex side), PA and wedge mobilisation at the level.",
@@ -14608,6 +15378,11 @@ export const AUTHORED = [
         "After a spinal fracture, once your doctor has checked you: for pain relief, safe ways to move, and strength and balance training",
         "If sudden mid-back pain started after a small movement and you are over 50, see your doctor first for an X-ray, then book",
         "If your thin bones or a fracture have no obvious cause, ask your doctor whether your vitamin D, calcium and parathyroid hormone have been checked (a simple blood test)"
+      ],
+      "physioHelps": [
+        "Once your doctor has checked it, a physiotherapist can help you with a safe movement plan.",
+        "Strength and balance exercises, done at least twice a week, may help lower your chance of a fall.",
+        "You learn safer ways to bend, lift and move, plus posture and breathing exercises."
       ],
       "doctorFirst": "If this pain started suddenly after a small movement, a cough or a minor fall, please see your doctor in the next few days for an examination and an X-ray before starting treatment. Physiotherapy can then help you with a safe movement and exercise plan.",
       "clinicNotes": [
@@ -14712,6 +15487,11 @@ export const AUTHORED = [
         "It has not eased after a week or two",
         "Every breath or sleeping on that side stays painful",
         "It keeps returning with twisting at work or in sport"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the rib joint and explain why it hurts when you breathe or twist.",
+        "Gentle hands-on care for the rib and mid back, with breathing and turning exercises, can help ease pain.",
+        "You get a plan to return to work and sport, and to reduce flare-ups."
       ]
     },
     "resolved": [
@@ -14780,6 +15560,11 @@ export const AUTHORED = [
         "Stiffness or ache persists beyond 2 weeks",
         "It limits work, sport, or sleep",
         "You'd like a posture-and-strength plan for desk work"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check how your mid back moves and explain why it dislikes staying still.",
+        "Hands-on care with mobility and strength exercises can help ease stiffness and ache.",
+        "You get a posture-and-strength plan for desk work and tips to keep your back moving."
       ]
     },
     "resolved": [
@@ -14882,6 +15667,11 @@ export const AUTHORED = [
         "A joint that is suddenly very swollen, hot and too painful to touch, especially with a fever: see a doctor the same day",
         "Pain that wakes you and does not change with position, or unexplained weight loss: see your doctor within days"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your joints and explain in plain words how joints change with age.",
+        "A guided strength and walking or fitness programme can help ease pain and keep you active.",
+        "You get a plan for busy days and flare-ups, and advice on any helpful walking aids or supports."
+      ],
       "clinicNotes": [
         "Clinical diagnosis without imaging (NICE NG226 2022): 45 or over, activity-related joint pain, and no morning stiffness or stiffness of 30 minutes or less.",
         "Hand OA: Heberden's and Bouchard's nodes, thumb base; consider erosive OA and inflammatory arthritis when soft swelling or long morning stiffness.",
@@ -14958,6 +15748,11 @@ export const AUTHORED = [
         "Morning stiffness lasting more than an hour, swollen or hot joints, or a new rash: see your doctor (possible inflammatory condition)",
         "New weakness, numbness in a clear pattern, bladder or bowel change, or vision change: see your doctor promptly; go to the emergency department if it is sudden or severe",
         "Thoughts of harming yourself, or feeling unable to cope: please reach out today - your doctor, 9-8-8 (call or text, any time), or the emergency department"
+      ],
+      "physioHelps": [
+        "A physiotherapist can explain how an oversensitive pain system works and what helps it settle.",
+        "Gentle exercise that starts below your limits and builds slowly can help ease pain and tiredness.",
+        "You get a pacing plan for activity, sleep and relaxation to help manage busy days and flare-ups."
       ],
       "clinicNotes": [
         "The \"Fibromyalgia\" document (signed 2 Oct 2026; content/reference/fibromyalgia.md) as path 4 of the question flow (6 Oct 2026): a widespread drawing whose owner says the pain is in many places most days skips the per-area joint questions and red flags.",
@@ -15081,6 +15876,11 @@ export const AUTHORED = [
         "You would like help with graded movement, desensitisation, and brain-training approaches such as graded motor imagery and mirror therapy",
         "Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day"
       ],
+      "physioHelps": [
+        "Alongside your doctor's care, a physiotherapist can explain CRPS and why your hand is so sensitive.",
+        "Gentle daily use, touch training and mirror exercises aim to calm the sensitivity and ease stiffness.",
+        "You get a step-by-step plan to use your hand more in daily life, at your own pace."
+      ],
       "doctorFirst": "If this fits, please see your family doctor or surgeon within the next few days. CRPS is diagnosed by a doctor, who will also check for other causes such as an infection, a blood clot or a problem with healing. Book physiotherapy straight away alongside: early treatment matters.",
       "clinicNotes": [
         "Budapest clinical criteria (Harden 2010): continuing disproportionate pain + at least one symptom in 3 of 4 categories (sensory, vasomotor, sudomotor/oedema, motor/trophic) + at least one sign in 2 of 4 at examination + no better explanation. CRPS I without, CRPS II with a major nerve lesion. Valencia update (Goebel 2021, Pain): \"CRPS-NOS\" is kept for people never documented as meeting the criteria; people who met them before and now meet only some are \"CRPS with remission of some features\".",
@@ -15165,6 +15965,11 @@ export const AUTHORED = [
         "It has not settled after 2 to 3 weeks: see us or your doctor, as an X-ray or MRI may be needed",
         "The wrist clicks, gives way, or your grip is getting weaker"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your wrist and help you know if an X-ray or a doctor's review is needed.",
+        "Avoiding weight on the bent-back wrist, and a short-term support, can help it settle.",
+        "A gradual strengthening plan aims to help you get back to weight-bearing and heavy tasks."
+      ],
       "clinicNotes": [
         "Scapholunate injury: often after a fall on the outstretched hand; Watson (scaphoid shift) test of limited value; clenched-fist PA X-ray for widening; MRI or arthroscopy; refer early (Aspetar review).",
         "Kienböck's: ages about 20-40, dorsal central pain, early X-ray normal: MRI (PMC12301778). Occult dorsal ganglion: ultrasound."
@@ -15244,6 +16049,11 @@ export const AUTHORED = [
         "Thumb-side pain lasts more than 1 to 2 weeks",
         "It returns whenever you resume normal activity",
         "Splints or rest alone haven't fixed it: a physiotherapist can guide a gradual return to load"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the thumb side of your wrist and explain what is irritating the tendons.",
+        "A thumb splint for sore tasks, better lifting technique and gradual strengthening can help it settle.",
+        "You get tips for lifting a baby or kettle, and advice on when a doctor's review is worthwhile."
       ],
       "clinicNotes": [
         "Tests: the thumb-in-fist-then-ulnar-deviation test (W5) is the Eichhoff test, which gives more false positives than Finkelstein's original (traction on the thumb) and the WHAT test (wrist hyperflexion and abduction of the thumb; Goubau 2014; Wu 2018). AIM manual: Finkelstein sensitivity 81%, specificity 50%, LR+ 1.62.",
@@ -15355,6 +16165,11 @@ export const AUTHORED = [
         "The tendon keeps snapping out of place",
         "You want a plan to return to racquet sports, golf, or tool work"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the tendon on the little-finger side and explain what is going on.",
+        "Easing forceful twisting, and sometimes a splint, can help the tendon settle before gradual strengthening.",
+        "You get advice on your grip or swing, and a step-by-step plan back to sport."
+      ],
       "clinicNotes": [
         "ECU synergy test (resisted thumb abduction with the wrist neutral and the forearm supinated); dynamic ultrasound for subluxation. Acute subluxation under 3 weeks: above-elbow cast or Muenster splint in pronation and slight radial deviation; chronic: refer. Differentials: TFCC tear, ulnar impaction, DRUJ problems (PMC10167632)."
       ]
@@ -15439,6 +16254,11 @@ export const AUTHORED = [
         "Movement or grip has stopped improving",
         "You would like a structured movement and strengthening programme"
       ],
+      "physioHelps": [
+        "A physiotherapist can check your wrist and work within what your fracture clinic or surgeon allows.",
+        "Guided movement, then strengthening, aims to bring back wrist movement and grip strength.",
+        "You get a gradual plan back to daily tasks, work and sport over the coming months."
+      ],
       "clinicNotes": [
         "Distal radius fracture rehabilitation: early finger and shoulder ROM; wrist ROM and strengthening after immobilisation or as the surgeon allows; measure PRWE, grip, ROM. CRPS screen (W9). Acute carpal tunnel (injury screen I4).",
         "Bone health: a distal radius fracture at 50 or over warrants osteoporosis assessment (fracture liaison; PMC11427598).",
@@ -15494,6 +16314,11 @@ export const AUTHORED = [
         "The lump is painful with daily tasks or training",
         "You're unsure the lump is a typical ganglion: an assessment, sometimes with an ultrasound, gives clarity",
         "It limits wrist strength or mobility"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the lump, explain what it is, and why it is usually harmless.",
+        "Advice on wrist positions and supports for floor work and lifting can help ease discomfort.",
+        "You get advice on when a doctor's review is worthwhile if the lump stays troublesome."
       ],
       "clinicNotes": [
         "Transillumination; carpal boss (bony, at the 2nd-3rd CMC base) as a differential; scapholunate screen (Watson test, limited value); an occult dorsal ganglion shows on ultrasound. Palm-side ganglions lie near the radial artery (no pressure techniques). Natural history: adults about 33-58% resolve (secondary sources), children 80-93%. Aspiration recurrence is high (a physician decision); refer after 6 to 12 weeks if troublesome (your ganglion protocol)."
@@ -15579,6 +16404,11 @@ export const AUTHORED = [
         "The back of your hand is numb too: the nerve may be pressed higher up, at the elbow",
         "Pain in the heel of the hand after a fall, or after a club or bat hit the ground: see a doctor the same day, as a small bone there can break",
         "A finger goes cold, white or blue: see a doctor"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the feeling and strength in your hand and explain what presses on the nerve.",
+        "Changes to your grip, handlebars, gloves and tool handles can help take pressure off the nerve.",
+        "You get a plan to keep cycling and working comfortably, and to know when a doctor's check is needed."
       ],
       "clinicNotes": [
         "Zones: 1 mixed, 2 motor only (deep branch; e.g. hook of hamate fracture), 3 sensory only. Froment's and Wartenberg's signs; dorsal ulnar cutaneous sensation and FDP 4/5 strength are spared at Guyon's and affected at the elbow. A ganglion causes about 30-40% (StatPearls); ultrasound or MRI for a ganglion, CT for the hamate. Differentials: cubital tunnel, C8-T1, thoracic outlet, Pancoast tumour; painless wasting without sensory loss can be motor neurone disease (refer). Hypothenar hammer syndrome (ulnar artery) in people who use the palm as a hammer."
@@ -15690,6 +16520,11 @@ export const AUTHORED = [
         "Both hands tingle or go numb at night: please also ask your doctor whether your thyroid and blood sugar have been checked (simple blood tests)",
         "Grip or fine motor control is slipping",
         "Many improve with a night splint and changes to how you use the hand, and some need surgery; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check the feeling and strength in your hand and explain what is going on.",
+        "A night wrist splint, with advice on hand and wrist positions, can help ease the tingling.",
+        "You get keyboard and work tips, and regular checks to see if a doctor's review is needed."
       ],
       "clinicNotes": [
         "Severity: mild, typical pattern with intermittent symptoms and a normal exam; moderate, constant symptoms, thenar weakness or sensory loss in digits 1-3 without atrophy; severe, thenar atrophy. Refer to a hand surgeon with thenar atrophy; to a physician with signs of another condition; suggest nerve conduction studies when the exam is inconclusive; refer for a surgical opinion if not improving.",
@@ -15813,6 +16648,11 @@ export const AUTHORED = [
         "Weakness with rotation or weight-bearing on the hand",
         "You want a graded strengthening and stability plan"
       ],
+      "physioHelps": [
+        "A physiotherapist can check the little-finger side of your wrist and explain what is going on.",
+        "A wrist support for loaded tasks, then gradual grip and wrist strengthening, can help it settle.",
+        "You get a step-by-step plan back to sport and work, and advice if a hand surgeon's opinion is needed."
+      ],
       "clinicNotes": [
         "Tests: ulnar fovea sign (reported sensitivity 95%, specificity 87%; Tay 2007, not re-checked); piano-key and DRUJ ballottement tests; press test; ulnar variance on X-ray. A complete foveal tear with DRUJ subluxation predicts failure of conservative care: refer to a hand surgeon. Above-elbow splinting for about 6 weeks did better than short-arm (76% vs 29%; retrospective, BJJ 2021).",
         "Your TFCC protocol differs from current evidence: grade III DRUJ mobilisation at 3 to 6 weeks and high-grade glides in phase 3 conflict with possible DRUJ laxity or a foveal tear; cross-friction at the fovea and nerve dry needling have no evidence; it does not cover immobilisation (above-elbow 4 to 6 weeks) or referral of foveal tears; recovery estimates are unreferenced; the \"APTA... Physiopedia 2023\" reference is mislabelled.",
@@ -15920,6 +16760,11 @@ export const AUTHORED = [
         "Thumb pain is limiting everyday tasks like opening jars or turning keys",
         "The ache or stiffness has lasted several weeks without improving",
         "Several finger joints in both hands are swollen and stiff for more than an hour in the morning, or the thumb base is suddenly hot, red and swollen: see a doctor"
+      ],
+      "physioHelps": [
+        "A physiotherapist can check your thumb joint and explain in plain words what is going on.",
+        "Thumb and hand strengthening, with a supportive splint if needed, can help ease pain with pinching.",
+        "You get easier ways to grip, tips on tools, and a plan to manage flare-ups."
       ],
       "clinicNotes": [
         "Osteoarthritis foundation (content/reference/osteoarthritis.md; \"Osteoarthritis.docx\" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid \"wear and tear\" and \"bone on bone\" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.",

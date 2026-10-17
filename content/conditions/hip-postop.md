@@ -38,6 +38,12 @@ After a hip replacement or a hip fracture operation, a guided programme of exerc
 - You would like a structured strength, walking and balance programme, or have had a fall
 - Progress has stalled, or you are not back to the activities you want
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your walking, strength and balance, and follow your surgeon's advice.
+- A step-by-step strength, walking and balance programme can help you get stronger and steadier.
+- You get a home programme and safety tips to help you get back to everyday activities.
+
 ## clinicNotes
 - Hip fracture (JOSPT CPG 2021): post-acute rehabilitation with progressive strength (including weight-bearing) and balance training (A), activity training and a home programme; screen fall risk, cognition, nutrition and bone health (refer for osteoporosis management); measures: TUG, gait speed, 30-s chair stand, SPPB, balance.
 - Hip replacement: follow the surgeon's precautions (approach-specific); progressive strengthening, gait and functional training; outcome HOOS or Oxford Hip Score.

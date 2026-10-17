@@ -45,6 +45,12 @@ A muscle that has become tight and sensitive, often from being held in one posit
 - You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring
 - Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can find the sore muscle, rule out other causes and explain why the ache spreads.
+- Hands-on muscle release and stretching can ease pain for a while, alongside graded strengthening.
+- You learn self-release and changes to posture, work and sleep set-up to help prevent flare-ups.
+
 ## clinicNotes
 - Upper back referral: rhomboids and middle trapezius to the medial scapular border; lower trapezius to the suprascapular area and neck. Exclude rib and costovertebral joints (breathing-related), T-spine nerve root (band-like burning), and visceral referral (cardiac, gallbladder, lung, aorta) before calling it muscle.
 - Myofascial pain syndrome, 2018 Delphi criteria (2 of 3): taut band, hypersensitive spot, referred pain on stimulation (local twitch supportive, not required). Palpation reliability is only moderate: treat the label as a working hypothesis and judge by response. The site asks the patient to press the spot themselves (the shared tender-spot question).

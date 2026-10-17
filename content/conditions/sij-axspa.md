@@ -61,6 +61,13 @@ This pattern is worth checking with your family doctor, who can arrange blood te
 - You have been diagnosed and would like a personalised programme for mobility, strength, posture, breathing and fitness, adjusted during flares
 - Any new painful red eye, or new severe neck or back pain after even a minor fall, needs medical care first
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- Once your doctor has checked it, a physiotherapist can help you alongside your medical care.
+- A regular exercise programme for movement, strength, posture and breathing can help ease stiffness.
+- You get a daily plan to manage stiff mornings, work and flare-ups, and to stay active.
+
 ## clinicNotes
 - ASAS inflammatory back pain (Sieper 2009): 4 or more of 5 (onset before 40, insidious onset, better with exercise, not better with rest, night pain improving on getting up): sensitivity 77%, specificity 91.7% (AIM manual p. 616). Chronic back pain (3 months or more) is the frame. A short-term response to NSAIDs also points to inflammation.
 - SpA features: enthesitis (Achilles, plantar fascia), dactylitis (about 6%), uveitis, psoriasis, IBD, family history, peripheral arthritis (ankles 40%, hips 36%, knees 29%, shoulders 19%, SC joints 14%; Sampaio-Barros 2001). Hip involvement in 25-35%, with a poorer prognosis. Extra-articular: cardiovascular risk, restrictive lung disease from a rigid chest.

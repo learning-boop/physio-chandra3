@@ -46,6 +46,12 @@ A gradual change in the cartilage and bone of the main shoulder joint, usually a
 - Stiffness or pain limits dressing, reaching or sleep
 - You would like a structured exercise plan, or are weighing up options with your doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your shoulder moves and explain in plain words what is going on.
+- Regular movement and strength exercises are the core of care and can help ease pain.
+- You get a plan to pace heavy or overhead tasks and to manage flare-ups.
+
 ## clinicNotes
 - Glenohumeral OA: age usually over 55, or earlier after instability surgery, dislocation, fracture or avascular necrosis; gradual pain with use, crepitus, global restriction of active and passive range (external rotation often most), posterior humeral head migration. X-ray (true AP and axillary views) confirms; it also separates OA from frozen shoulder, where radiographs are normal (JOSPT 2013, BESS/BOA).
 - Management: education, range and strength exercise, activity modification (osteoarthritis foundation, content/reference/osteoarthritis.md); injection and arthroplasty are medical and surgical options when function is limited.

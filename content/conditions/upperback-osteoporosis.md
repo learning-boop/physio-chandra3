@@ -63,6 +63,12 @@ If this pain started suddenly after a small movement, a cough or a minor fall, p
 - If sudden mid-back pain started after a small movement and you are over 50, see your doctor first for an X-ray, then book
 - If your thin bones or a fracture have no obvious cause, ask your doctor whether your vitamin D, calcium and parathyroid hormone have been checked (a simple blood test)
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- Once your doctor has checked it, a physiotherapist can help you with a safe movement plan.
+- Strength and balance exercises, done at least twice a week, may help lower your chance of a fall.
+- You learn safer ways to bend, lift and move, plus posture and breathing exercises.
+
 ## clinicNotes
 - Unexplained osteoporosis or fragility fracture: check calcium and PTH (NICE NG132; "Hyperparathyroidism" document, signed 3 Oct 2026, content/reference/hyperparathyroidism.md), and 25-OH vitamin D, phosphate and ALP: a low DXA can be osteomalacia, and antiresorptives before vitamin D repletion are inappropriate ("Osteomalacia" document, content/reference/osteomalacia.md). PHPT doubles forearm and triples spine fracture risk; FRAX underestimates it.
 - Refer-first when a fresh vertebral fracture is possible: GP for thoracolumbar X-ray and DXA. Osteoporosis Canada 2023: BMD for everyone 70 or over, and 50-69 with a risk factor; a hip or vertebral fracture after 50 generally meets the threshold to discuss medication. Co-manage calcium, vitamin D and medication with the GP.

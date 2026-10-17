@@ -43,6 +43,12 @@ The ball of the foot carries a lot of load with every step, especially in high h
 - A toe is starting to drift or lift
 - You want help with footwear and insoles
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the ball of your foot and explain what is causing the soreness.
+- Padding, taping and footwear advice can help take load off the sore area while it settles.
+- Calf and foot strengthening and a paced return to activity aim to help prevent flare-ups.
+
 ## clinicNotes
 - Plantar plate: pain under the 2nd MTP, swelling on top, the toe drifting or lifting; vertical stress (drawer) test, often quoted as sensitivity 80.6% and specificity 99.8% (Klein 2012; secondary sources only). Taping the toe down; offloading.
 - Freiberg's (osteochondrosis of the 2nd, sometimes 3rd, metatarsal head): most common in teenage girls; X-ray; offloading first.

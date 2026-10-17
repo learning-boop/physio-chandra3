@@ -44,3 +44,9 @@ Just above the groin crease is a weaker area of the tummy wall, where the inguin
 - A painful groin lump that will not go back in, especially with feeling sick or vomiting: go to the emergency department now
 - Pain or swelling in a testicle: see a doctor; sudden severe testicle pain: go to the emergency department now
 - Doha 2015 inguinal-related groin pain: pain in the inguinal canal region, tenderness there, no palpable hernia, pain on resisted abdominal testing, Valsalva, cough or sneeze. "Sports hernia" is a misnomer (British Hernia Society inguinal disruption consensus; ESSKA 2024). Femoral hernia (a lump just below the crease) is more common in women and more likely to become trapped. Ultrasound or a surgical review when a hernia is suspected; surgery is an option after failed rehabilitation.
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your groin, and suggest a doctor visit if a hernia needs ruling out.
+- A gradual core and hip strengthening programme can help settle the pain.
+- You get a step-by-step plan to get back to running, kicking and twisting sport.

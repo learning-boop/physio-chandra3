@@ -45,6 +45,12 @@ The knee's cartilage shock-absorbers can be irritated by twisting, deep squattin
 - Joint-line pain persists beyond about 2 weeks, or there is catching
 - You want a rehab-first plan: for many age-related tears, exercise does as well as surgery
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and explain in plain words what is going on.
+- A guided strength and movement programme can help ease pain and improve how the knee works.
+- You get a plan to return to daily activities and sport, and to manage flare-ups.
+
 ## clinicNotes
 - Diagnosis (meniscus and cartilage CPG 2018): twisting injury, tearing sensation, swelling over 6-24 hours, catching or locking, pain on forced hyperextension and maximal flexion, McMurray pain or click, joint-line tenderness, Thessaly at 20 degrees. Single tests are weak in primary care (Blyth: McMurray sens 0.58, spec 0.56; joint-line tenderness sens 0.77, spec 0.26; Thessaly sens 0.66, spec 0.39). The AIM manual (p.75) gives McMurray about 50-55% sensitive and 77% specific (medial), with joint-line tenderness higher on both. A composite of more than 3 positive findings has spec 90.2% (sens 30.8%), more than 5 spec 99.0% (sens 11.2%): it rules in, not out (the composite has 5 items; ">5" as published).
 - Risk: degenerative tears with age over 60 (OR 2.32), work kneeling or squatting, many flights of stairs; sex: the CPG lists male sex, the AIM manual female sex for medial tears (p.74). Medial tears are about three times more common than lateral (10.8% vs 3.7%, p.74). Acute tears with soccer and rugby, and delayed ACL reconstruction.

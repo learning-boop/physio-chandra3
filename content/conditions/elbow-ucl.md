@@ -41,6 +41,12 @@ The ligament on the inner side of the elbow takes a large strain each time the a
 - You felt a pop, or the elbow feels like it could slip or give way: see a doctor promptly, as a full tear may need a surgeon's opinion
 - You want a graded throwing programme to return to sport
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the inner elbow ligament and explain in plain words what is going on.
+- Strengthening for the forearm, shoulder and whole body aims to share out the load of throwing.
+- A step-by-step throwing plan can help you return to your sport at a pace your elbow can manage.
+
 ## clinicNotes
 - Moving valgus stress test: sensitivity 100% (17 of 17), specificity 75% (3 of 4), n = 21 (O'Driscoll 2005): a small sample. Ulnar nerve symptoms often coexist. Differential: posteromedial impingement or valgus extension overload.
 - Under 16: medial epicondyle apophysitis or avulsion (little leaguer's elbow), not the ligament; a pop means a same-day X-ray (erf-child).

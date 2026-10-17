@@ -53,6 +53,12 @@ Irritation of the strong tissue band supporting the arch, where it anchors into 
 - You want a loading and footwear plan — most cases settle with the right progression
 - Burning on the inner heel that builds through the day, rather than first-step pain: see us, as a small nerve may be involved
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can confirm what is causing your heel pain and explain it in plain words.
+- Calf and foot stretches, hands-on care and taping can help ease the first-step pain.
+- You get a plan for footwear, a night splint if needed, and building back activity.
+
 ## clinicNotes
 - Diagnosis (B, 2014; unchanged 2023): plantar medial heel pain worst on the first steps and after long weight bearing; a recent increase in weight-bearing activity; pain on palpation of the proximal plantar fascia insertion; positive windlass test; NEGATIVE tarsal tunnel, nerve tension and sensory tests; limited dorsiflexion; abnormal Foot Posture Index; high BMI in non-athletes. Rule out lumbopelvic referral (F).
 - Risk factors (B): limited dorsiflexion, high BMI in non-athletes, running, work-related weight bearing on hard surfaces.

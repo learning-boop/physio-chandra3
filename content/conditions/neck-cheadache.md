@@ -72,6 +72,12 @@ A cervicogenic headache is a headache that starts in the joints, muscles or nerv
 - A headache that wakes you with vomiting, is worse lying down, coughing or straining, or is steadily getting worse: see a doctor
 - It started after a knock to the head or a car accident: see a doctor first to check for concussion
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the top of your neck and explain how it can cause head pain.
+- Hands-on care with deep neck and shoulder blade exercises can help reduce how often headaches come.
+- You learn a self-help neck movement for when a headache starts, plus desk and sleep set-up tips.
+
 ## clinicNotes
 - Physio-led after the headache red-flag screen (SNNOOP10). Refer to the GP if pain medicine is used on 10 or more days a month, if there are red or orange flags, or if there is no change after 6 to 8 weeks of well-delivered care.
 - Subjective: headache diary (frequency, intensity, duration), side-locking, onset relative to neck pain, triggers, medication days a month, migraine and tension-type features. Outcomes: HIT-6, NDI, PSFS.

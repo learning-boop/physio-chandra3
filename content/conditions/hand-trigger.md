@@ -42,6 +42,12 @@ The tendons that bend the fingers run through tight bands in the palm. If a tend
 - A finger is stuck bent and will not straighten: see your doctor within a few days
 - In a young child, a thumb stuck bent is usually a "trigger thumb": please see your family doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your finger and explain why it catches or locks.
+- A small splint that rests the finger, with advice on gripping, can help the catching settle.
+- You get tips on tools and hand tasks, and advice on when a doctor's review is worthwhile.
+
 ## clinicNotes
 - Grading: Quinnell or Green. MCP-blocking splint at 10-15 degrees for 6 to 10 weeks (success roughly half to two-thirds). About half resolve without treatment within about 8 months in one cohort (secondary source). Steroid injection is a physician decision and works less well with diabetes; surgical release after failure. Differentials: Dupuytren's, OA, a locked MCP, flexor sheath infection (Kanavel signs: emergency).
 - Children's trigger thumb is a different condition (not overuse): more than 60% resolve on their own (about 76% over a median of about 4 years in one series); surgery is often deferred, and delay past age 3 does not worsen the outcome. The clinic does not see children under 5.

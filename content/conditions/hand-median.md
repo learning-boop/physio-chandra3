@@ -47,6 +47,12 @@ The median nerve supplies feeling to the thumb, index, and middle fingers. Compr
 - Grip or fine motor control is slipping
 - Many improve with a night splint and changes to how you use the hand, and some need surgery; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the feeling and strength in your hand and explain what is going on.
+- A night wrist splint, with advice on hand and wrist positions, can help ease the tingling.
+- You get keyboard and work tips, and regular checks to see if a doctor's review is needed.
+
 ## clinicNotes
 - Severity: mild, typical pattern with intermittent symptoms and a normal exam; moderate, constant symptoms, thenar weakness or sensory loss in digits 1-3 without atrophy; severe, thenar atrophy. Refer to a hand surgeon with thenar atrophy; to a physician with signs of another condition; suggest nerve conduction studies when the exam is inconclusive; refer for a surgical opinion if not improving.
 - Wainner cluster (B): over 45, shaking relieves symptoms, wrist ratio over 0.67, CTQ symptom score over 1.9, reduced thumb pad sensation; 4 or more positive +LR 4.6, all 5 spec 0.99. Katz hand diagram, Phalen, Tinel and carpal compression estimate likelihood (B) but are weak alone (Phalen +LR 1.3; Tinel about 1.0). Sensation over the thenar eminence is spared in CTS (palmar cutaneous branch); dorsal hand symptoms make CTS unlikely.

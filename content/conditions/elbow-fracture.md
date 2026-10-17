@@ -35,6 +35,12 @@ After a broken or dislocated elbow, the elbow easily stiffens, especially in str
 - Movement has stopped improving, or the elbow is getting stiffer
 - You would like a structured movement and strengthening programme
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your elbow and work within the limits your fracture clinic has set.
+- Guided movement, then strengthening, aims to bring back bending, straightening and arm strength.
+- You get a step-by-step plan back to daily tasks, work and sport as the bone heals.
+
 ## clinicNotes
 - Early active movement after a simple dislocation gives better early function than plaster (FuncSiE, Iordens 2017). Post-traumatic stiffness: loss of extension most common; heterotopic ossification after severe injuries; ulnar nerve symptoms are common. Measure flexion-extension arc (functional 30-130 degrees), pronation-supination, QuickDASH or MEPS.
 - After a dislocation that reduced: posterolateral rotatory instability (PLRI) if clunking pushing up from a chair (chair and push-up signs); refer.

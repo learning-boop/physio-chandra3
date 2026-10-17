@@ -48,6 +48,12 @@ This is irritation of the growing bone just below the kneecap (Osgood-Schlatter)
 - The pain isn't settling after a few weeks of reduced activity
 - It's getting in the way of sport or everyday activity
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your child's knee and explain growth-related knee pain in plain words.
+- A step-by-step activity plan, with thigh and hip strengthening, can help ease the pain.
+- Your child gets a clear plan to build back to their sport while keeping pain low.
+
 ## clinicNotes
 - Osgood-Schlatter: traction apophysitis of the tibial tuberosity (tender tuberosity, often a bump); Sinding-Larsen-Johansson: the same at the inferior patellar pole. An x-ray can confirm either (AIM manual pp.29, 31). Differential: patellar tendinopathy (older), patellofemoral pain, and the hip: SUFE and Perthes can present as knee pain (in a review of 102 SUFE cases, 2 had first been called Osgood-Schlatter); tibial tubercle avulsion fracture (sudden pain after jumping, boys 12-17: same-day doctor); bone tumour (night or rest pain: kf-tumour).
 - Management (Rathleff 2020, Orthop J Sports Med): 4 weeks of reduced sport, then an 11-step activity ladder advanced only with pain at or below 2/10 during and the morning after, plus knee and hip strengthening; 80% reported success at 12 weeks and 90% at 12 months, though only 69% were back in sport at 12 months. Icing and stretching have no trial support. SOGOOD RCT protocol (2024) under way.

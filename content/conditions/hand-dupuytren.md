@@ -58,6 +58,12 @@ Dupuytren's is a thickening of the tough layer of tissue just under the skin of 
 - A finger has started to bend and you would like help deciding on the next step: if the hand no longer lies flat, we will also suggest you see your family doctor about a hand-surgeon referral
 - You are having, or have had, a release procedure and want a hand-therapy plan: swelling control, early movement, scar care, and a graded return to strength, work and hobbies
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can explain Dupuytren's and help you keep an eye on any change in your fingers.
+- If a finger starts to bend, a physiotherapist can help you decide when to see a hand surgeon.
+- After a procedure, guided exercises, scar care and, if needed, a night splint can help your hand recover.
+
 ## clinicNotes
 - Physio role: education and monitoring; timely referral (GP to hand surgeon) once the hand no longer lies flat; hand therapy before and after fasciectomy, needle fasciotomy or injection. Stretching, splinting and manual therapy do not prevent progression (NICE IPG43 / BSSH); do not sell a course of treatment to "prevent" it.
 - Assess: Hueston table-top test; passive extension deficit at MCP and PIP by goniometry, each joint; Tubiana stage; nodule vs cord, skin pitting; diathesis (bilateral, early onset, family history, Garrod's pads, plantar nodules) means higher recurrence.

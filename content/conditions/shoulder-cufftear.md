@@ -47,6 +47,12 @@ One of the tendons that lift and turn the arm can tear through, either suddenly 
 - Pain that comes on with effort, chest tightness or breathlessness: call 911
 - Weakness that came on slowly: a physiotherapy programme is a good first step, with an ultrasound if it is not improving
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your shoulder strength and help you know if a doctor should see it soon.
+- A guided strengthening programme can help many people with a gradual tear lift and use the arm again.
+- You get a step-by-step plan for daily tasks, with regular checks on how you are progressing.
+
 ## clinicNotes
 - Clusters (AIM manual p.286): painful arc + drop arm + external rotation weakness, +LR 15.6; age over 65 + external rotation weakness + night pain, +LR 9.8. External rotation lag sign and drop arm for full-thickness supraspinatus and infraspinatus tears; belly press and lift-off for subscapularis.
 - Traumatic tear (fall, heavy pull, first dislocation over 40): ultrasound or MRI and early orthopaedic review; repair within about 3 weeks gives lower retear rates and better function (meta-analysis 2025), though one cohort found no difference at 3 months. BESS/BOA 2015 lists an acute traumatic tear as needing urgent referral.

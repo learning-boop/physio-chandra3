@@ -66,6 +66,12 @@ Pain in many places that has lasted a long time is very often a sign that the bo
 - New weakness, numbness in a clear pattern, bladder or bowel change, or vision change: see your doctor promptly; go to the emergency department if it is sudden or severe
 - Thoughts of harming yourself, or feeling unable to cope: please reach out today - your doctor, 9-8-8 (call or text, any time), or the emergency department
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can explain how an oversensitive pain system works and what helps it settle.
+- Gentle exercise that starts below your limits and builds slowly can help ease pain and tiredness.
+- You get a pacing plan for activity, sleep and relaxation to help manage busy days and flare-ups.
+
 ## clinicNotes
 - The "Fibromyalgia" document (signed 2 Oct 2026; content/reference/fibromyalgia.md) as path 4 of the question flow (6 Oct 2026): a widespread drawing whose owner says the pain is in many places most days skips the per-area joint questions and red flags.
 - Confirm a widespread, non-anatomical, disproportionate pattern (IASP 2021 nociplastic grading; ACR 2016 WPI and SSS as a structured aid). The diagnosis stays with the family doctor (Canadian guidelines 2012: primary care, no specialist referral). Screen for mimics and comorbidities: inflammatory arthritis, axSpA, PMR, myopathy, thyroid, vitamin D, sleep apnoea, medication; recommend GP bloods if not done.

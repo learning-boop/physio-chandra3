@@ -69,6 +69,12 @@ Please see your family doctor soon. These symptoms need a medical assessment, wh
 - Your medical team advises monitoring, and you would like a supervised programme for balance, strength, hand function and falls prevention
 - You are preparing for, or recovering from, neck surgery (usually from about 4 weeks after, or as your surgeon advises)
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- Once your doctor has checked it, a physiotherapist can help you alongside their care.
+- Guided balance, walking, grip and strength exercises aim to keep you moving safely and confidently.
+- A physiotherapist checks your nerve signs at each visit and keeps your doctor informed of any changes.
+
 ## clinicNotes
 - Refer first: family doctor, then MRI or spine specialist. Physiotherapy supports alongside.
 - Cook cluster (gait deviation, +Hoffmann, inverted supinator, +Babinski, age over 45): 3 or more of 5 rules in; 1 or fewer helps rule out.

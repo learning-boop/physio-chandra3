@@ -42,3 +42,9 @@ A fall straight onto the bottom can bruise the tailbone or strain the small join
 - You want the tailbone assessed and a plan for sitting and activity
 - The pain is severe, or getting worse after the first two weeks: see a doctor, who may arrange an X-ray
 - Numbness around your bottom or genitals, or new trouble passing urine or controlling your bowels: go to the emergency department now
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your tailbone after the fall and explain how it usually heals.
+- You get advice on cushions, sitting position and gentle movement to ease pressure while it settles.
+- A step-by-step plan can help you get back to sitting longer, driving and your usual activities.

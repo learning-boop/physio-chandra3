@@ -46,6 +46,12 @@ This is osteoarthritis behind the kneecap: a slow change in the cartilage and bo
 - The pain or stiffness is starting to limit your daily activities or sleep
 - Symptoms keep getting worse despite gentle activity changes
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and explain in plain words what is happening behind the kneecap.
+- A guided thigh and hip strengthening programme can help ease pain and keep you active.
+- You get a plan to manage stairs, busy days and flare-ups, and to stay doing what you enjoy.
+
 ## clinicNotes
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); PFOA is not separately defined in NICE: see the international PFOA consortium consensus (van Middelkoop 2018). First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.
 - Kneecap: quadriceps and hip strengthening are the core; patellar taping helps short term; brace evidence is mixed (pooled trials not significant; ACR 2019 conditional for a patellofemoral brace). Measures: KOOS-PF, stairs and squat tolerance. Crepitus often accompanies patellofemoral degenerative change (AIM manual p.42); patellofemoral x-ray views if imaging is needed (p.8). About 40% of older adults with knee pain have both tibiofemoral and patellofemoral OA on x-ray (p.5).

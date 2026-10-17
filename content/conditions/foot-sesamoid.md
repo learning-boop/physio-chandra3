@@ -38,5 +38,11 @@ Two small bones sit under the big toe joint, inside the tendon that bends the to
 - You want a plan to return to running or dance
 - You have diabetes and a callus, blister or sore under the big toe joint: see your doctor or diabetes foot clinic within a day or two
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the small bones under your big toe and whether a scan is needed.
+- Padding, stiffer-soled shoes and a period of reduced load can help the area settle.
+- You get a step-by-step plan back to running, jumping or dancing.
+
 ## clinicNotes
 - Great toe sesamoid stress fracture is a high-risk bone stress injury (AIM manual Ch. 2.8, Table 2; Warden 2014): higher non-union and surgery rates. MRI separates sesamoiditis, stress fracture and avascular necrosis (adolescents and young women). Ask about a turf-toe injury (foot injury screen I7); bipartite sesamoids are common.

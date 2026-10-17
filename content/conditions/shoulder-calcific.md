@@ -51,6 +51,12 @@ Small calcium deposits can build up inside one of the rotator cuff tendons, caus
 - The pain has lasted more than a few weeks and isn't settling with simple measures and gentle movement
 - Not settling after about 3 months: ask about shockwave or a needle wash-out of the deposit
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can explain calcium deposits in plain words and what to expect as they settle.
+- Gentle movement during a flare, then gradual strengthening, can help ease pain and restore use.
+- You get a plan for overhead tasks and flare-ups, and help knowing when to see your doctor.
+
 ## clinicNotes
 - Calcium deposit in a rotator cuff tendon, confirmed on imaging; managed within the rotator cuff recommendations (exercise A, education C, NSAIDs B for the doctor, injection B but not first line). Peak age 30-60, more often women (Chandra's protocol; reviews report over 75% women in many series).
 - Imaging: the CPG advises none at the first visit (F) and ultrasound first if not improving by 12 weeks (F); Chandra's protocol uses a plain X-ray first. In an acute crisis, or before shockwave or lavage, an X-ray or ultrasound to confirm the deposit is reasonable; otherwise follow the CPG.

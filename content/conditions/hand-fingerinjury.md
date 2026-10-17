@@ -36,6 +36,12 @@ Jammed fingers, thumb sprains and small finger fractures are common, and the fin
 - The finger stays stiff or swollen after the splint comes off
 - You would like help with exercises, splints and a return to sport or work
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- Once a doctor has checked it, a physiotherapist can explain the injury and how long to protect it.
+- Splint advice, then gentle movement and strengthening, aims to bring back finger bend and grip.
+- You get a plan for getting back to work, sport and daily tasks, including taping if needed.
+
 ## clinicNotes
 - Mallet finger: continuous extension splint about 6 weeks (bony) or 8 weeks (tendon), then about 2 weeks at night (hospital patient leaflets). PIP sprain or volar plate: early protected motion, buddy taping, extension-block splint if unstable; fracture-dislocation needs X-ray. Skier's thumb: Stener lesion needs surgery; partial tears, thumb spica 4 to 6 weeks then strengthening (AIM manual). Boutonnière: PIP extension splint, DIP free.
 - Later (no card yet): finger ganglions (seed cyst, mucous cyst), diabetic stiff hand (cheiroarthropathy), boutonnière deformity rehabilitation.

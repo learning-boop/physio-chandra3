@@ -42,3 +42,9 @@ During pregnancy the load on the pelvis grows and the way the body carries it ch
 - Pain limits walking, stairs or sleep
 - It has not eased in the weeks after giving birth
 - You want exercises and support that are safe for your stage of pregnancy
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your pelvis and explain in plain words why it hurts during pregnancy.
+- You get easier ways to move day to day, with gentle exercises and support belt advice.
+- A plan for work, sleep and activity can help you stay active through pregnancy and after birth.

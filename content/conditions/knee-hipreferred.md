@@ -40,6 +40,12 @@ Sometimes pain that seems to come from the knee is actually being sent there fro
 - Knee pain isn't improving with knee-focused self-care
 - You notice hip or groin stiffness alongside the knee symptoms
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check both your hip and knee to find where the pain really comes from.
+- For adults, hip stretching and strengthening exercises can help ease the pain felt in the knee.
+- For children and teenagers, a physiotherapist can make sure a doctor checks the hip first.
+
 ## clinicNotes
 - Adults: hip OA is "sometimes felt in the thigh or knee" (Koc 2025). Check the OA criteria: over 50, morning stiffness under 1 hour, hip internal rotation under 24 degrees, or internal rotation and flexion 15 degrees less than the other side, and pain on passive internal rotation. Lesher 2008 found knee referral in only 2% of hip joint pain (buttock 71%, thigh 57%, groin 55%), so a hip examination is worth doing but knee referral is the exception. Hip dysplasia is another cause (AIM manual, referred-pain list).
 - Children and teenagers: SUFE (about 9 to 17, peaking at 13 to 15 in boys) and Perthes (about 4 to 10) present at the knee (Willy 2019 PFP CPG; Enseki 2014). In a review of 102 SUFE cases, diagnosis was delayed an average of 76 days after the first primary-care visit, some labelled as knee problems. Suspected SUFE needs a same-day orthopaedic referral (BJGP 2020 limping child guide); the site asks kf-sufe and kf-perthes the same day.

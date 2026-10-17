@@ -49,6 +49,12 @@ The mirror image of tennis elbow: overload of the tendons that flex the wrist an
 - You want a graded return-to-sport loading plan
 - Tingling in the ring and little fingers is there all the time, or your hand is getting weaker: see a doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your inner elbow and explain in plain words what is going on.
+- A gradual forearm strengthening programme can help the tendons cope with gripping and lifting again.
+- You get advice on sport, work and carrying, and a plan to manage flare-ups.
+
 ## clinicNotes
 - Diagnosis: pain on resisted wrist flexion and pronation; tender 5-10 mm distal and anterior to the medial epicondyle; peak 4th to 6th decade (AIM manual pp. 316-317). No physiotherapy trials specific to medial pain; care follows the lateral evidence; eccentric not superior (AIM p. 317).
 - Differentials: UCL sprain (throwers), ulnar neuropathy (often coexists), C8-T1 radiculopathy. Under 16: medial epicondyle apophysitis or avulsion (little leaguer's elbow).

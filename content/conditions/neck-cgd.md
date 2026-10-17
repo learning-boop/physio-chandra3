@@ -68,6 +68,12 @@ A feeling of being off-balance or unsteady that may come from the neck. Your bra
 - You would like a plan to retrain neck position sense, eye and head coordination, and balance
 - The dizziness keeps coming back with desk work, screens or driving
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your neck, balance and inner ear, and explain how the neck can affect balance.
+- Gentle hands-on care for the upper neck, with head-position and balance training, may help ease dizziness.
+- You get neck exercises and work set-up advice to help you feel steadier day to day.
+
 ## clinicNotes
 - Diagnosis of exclusion (Reiley 2017): no single confirming test. Care route: physio-led after screening; if other causes of dizziness have not been checked, family doctor alongside.
 - Screen first: Canadian C-spine rule (if trauma); IFOMPT cervical framework for vascular pathology; neuro screen (5 Ds, 3 Ns).

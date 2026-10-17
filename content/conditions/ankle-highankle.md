@@ -43,6 +43,12 @@ Just above the ankle, the two bones of the lower leg are held together by strong
 - The bone on the outside of your leg is tender to press just below the knee: see a doctor the same day for an X-ray
 - Your calf becomes swollen, warm or tender, especially in a brace, boot or cast: see a doctor the same day; if you are also short of breath or have chest pain, call 911
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check for a high ankle sprain and arrange a surgeon's opinion if needed.
+- Protected walking, then graded strength and balance work, can help the ligaments recover.
+- You get a step-by-step return-to-sport plan based on how the ankle is doing.
+
 ## clinicNotes
 - JOSPT lateral ankle sprain CPG 2021: syndesmosis injury is a key differential and copathology of acute and persisting sprains; apply the full Ottawa ankle rules first. Imaging (ACR, cited in the CPG): alignment change suggesting syndesmosis injury warrants leg and stress radiographs, MRI or CT; refer with any diastasis concern or failure to settle. (The CPG's "more than 3 weeks of sport" figure refers to severe multi-ligament sprains, not syndesmosis injuries specifically.)
 - Tests (Sman 2015, BJSM 49:323; AIM manual p. 527): AITFL (syndesmosis) tenderness most sensitive (92%, LR- 0.28); squeeze test most specific (88%, LR+ 2.15); dorsiflexion-external rotation test sensitivity 71%; unable to hop sensitivity 89%; pain out of proportion specificity 79%. Use a combination, not one test. About 20% of ankle sprains (AIM manual).

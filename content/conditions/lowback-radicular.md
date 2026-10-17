@@ -50,6 +50,12 @@ Irritation of a nerve as it leaves the lower spine — commonly related to a dis
 - Leg pain that is not easing at all by about 6 weeks, or is still limiting your daily life at about 12 weeks: see your doctor to discuss a review and whether a specialist opinion would help
 - Leg symptoms are limiting your work, sleep or walking, or have not started to ease after two to three weeks: a physiotherapy assessment can check the nerve, work out which positions help, and give you a plan
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your nerves, strength and feeling, and explain what is irritating the nerve.
+- Core strengthening, hands-on care and gentle nerve gliding exercises can help ease back and leg pain.
+- You get a plan to stay active, track your progress and return to daily life and work.
+
 ## clinicNotes
 - Classification (JOSPT 2012, B): low back pain with radiating pain. Acute: narrow-band lancinating leg pain, possible paraesthesia, numbness or weakness, reproduced at initial to mid range, with SLR or slump; subacute, mid range worse at end range; chronic, sustained end-range SLR or slump. Full neurological exam and UMN screen (tone, clonus).
 - Severe or progressive deficit: prompt MRI or CT and referral. Imaging otherwise only for injection or surgical candidates. Cauda equina: urinary retention sens 0.90, spec 0.95, +LR 18. Symptoms below the knee predict chronicity.

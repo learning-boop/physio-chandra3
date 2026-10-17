@@ -40,6 +40,12 @@ A sprain can also bruise or damage the cartilage and bone on top of the ankle bo
 - Still aching deep inside, swelling or catching 6 weeks after a sprain: your doctor may arrange an X-ray and then an MRI, and we can help with that referral
 - The ankle locks and will not free up: see a doctor soon
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your ankle and arrange imaging or a surgeon's opinion if needed.
+- A paced programme of movement, strength and balance can help ease the ache and swelling.
+- You get a step-by-step plan back to activity that respects how the joint surface is healing.
+
 ## clinicNotes
 - JOSPT lateral ankle sprain CPG 2021: osteochondral lesions and talar bone bruises are listed copathologies of acute sprains (MRI copathology in 92%), and chondral lesions and loose bodies of chronic instability. Medial tibia or talus bone bruise within 2 weeks: longer return to walking (25 vs 16 days) and sport (92 vs 56). Imaging (ACR via the CPG): symptoms over 6 weeks, radiographs; if negative with suspected lesion, impingement or instability, MRI. Refer when symptoms or function do not fully recover. Source: Martin RL et al., JOSPT 2021.
 - Incidence and natural history: lesions in about 6.5% of sprains (AIM manual p. 538; p. 526 says up to 14%), usually posteromedial or anterolateral talar dome. Non-operative care: pooled clinical success about 45%; most lesions unchanged on MRI (84%); OA progression about 9% (2023 systematic review, PMC10356662).

@@ -36,3 +36,9 @@ Overload of the inner shin-bone lining from a jump in running volume, harder sur
 - Shin pain persists despite 2 weeks of reduced load
 - Pain is becoming sharper and more focal (needs a stress-fracture check)
 - You want a running load and biomechanics review
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your shins and explain why they hurt when you run.
+- Calf strengthening and a short cut-back in running can help the shins settle.
+- You get a gradual return-to-running plan, with tips on shoes, surfaces and training load.

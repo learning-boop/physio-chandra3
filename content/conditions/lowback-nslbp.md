@@ -89,6 +89,12 @@ This is the most common kind of back pain. The muscles, joints, discs and ligame
 - Constant pain that is the same whatever you do and wakes you most nights, weight loss you cannot explain, a past cancer, or feeling generally unwell: see your doctor this week
 - Under 20, with pain on arching your back in sport for more than 2 to 3 weeks: see your doctor for an X-ray before training through it
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your back and explain that pain does not mean damage.
+- An exercise programme you enjoy, with hands-on care where it helps, can ease pain and stiffness.
+- You get a paced plan to return to work, sport and daily life, and to manage flare-ups.
+
 ## clinicNotes
 - Non-specific low back pain, mechanical (nociceptive) pattern: symptoms change with posture and activity; no nerve root signs, no red flags. JOSPT 2012 (B) classification for the acute, often one-sided pattern: low back pain with mobility deficits (restricted lumbar range and segmental mobility, pain reproduced by segmental provocation).
 - First visit: red-flag screen including cauda equina (GIRFT 2023 pathway); STarT Back risk stratification, re-screened at 2 to 4 weeks, to inform prognosis, review frequency and the intensity of care (NICE NG59 1.1.3 as amended 29 Jul 2026: no longer a route to psychological therapy); pain-type classification (nociceptive/mechanical, neuropathic, nociplastic: IASP 2021 criteria, Kosek 2021).

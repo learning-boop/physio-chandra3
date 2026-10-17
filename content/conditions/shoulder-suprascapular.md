@@ -44,6 +44,12 @@ A nerve runs across the top and back of the shoulder blade to the muscles that l
 - Weakness after a fall or a shoulder dislocation: see a doctor, as the tendons or a nerve may be injured
 - Pain spreading down the arm with tingling, or neck movement changes it: the neck may be the source
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your shoulder strength and explain what is irritating the nerve.
+- Shoulder-blade control exercises, gentle nerve gliding and easing overhead load can help the nerve settle.
+- You get a gradual plan back to overhead sport or work, with checks on your strength.
+
 ## clinicNotes
 - Suprascapular nerve (C5-C6, upper trunk): compression or traction at the suprascapular notch (supraspinatus and infraspinatus) or the spinoglenoid notch (infraspinatus only, often painless wasting in volleyball players); paralabral cysts from SLAP tears, fractures, repetitive overhead traction.
 - Neurodynamics (Butler): neck lateral flexion away with shoulder girdle depression, then horizontal adduction or a force down the humeral shaft; scapular rotation as a mobilisation. Palpate the suprascapular notch; compare infraspinatus bulk; ER strength at 0 degrees.

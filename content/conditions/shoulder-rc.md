@@ -63,6 +63,12 @@ The most common shoulder problem: the tendons that lift and steady the arm becom
 - Not better after about 3 months of exercise: ask about a review with a sports physician or surgeon
 - You want a graded strengthening plan, the treatment with the best evidence
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your shoulder and explain in plain words why it hurts.
+- A graded strengthening programme is the main treatment, sometimes with hands-on care for short-term relief.
+- You get advice on work and overhead tasks, and a plan back to sport or the gym.
+
 ## clinicNotes
 - Scope (JOSPT 2025): rotator cuff tendinopathy includes subacromial pain (formerly "impingement"), subacromial bursopathy, long head of biceps tendinopathy (front of the shoulder, down the front of the arm) and partial-thickness tears; calcific when imaging shows a deposit. Full-thickness tears are excluded by the CPG; the AIM manual (p.287) manages atraumatic full-thickness tears with rehabilitation in the same pathway.
 - Tests (B): painful arc to rule in (sens 0.62, spec 0.82, +LR 3.44); Hawkins-Kennedy to rule out (sens 0.83, -LR 0.25); 3 of 5 (Hawkins-Kennedy, Neer, painful arc, empty can, resisted ER) +LR 2.93, -LR 0.34. Never diagnose on tests alone; screen the neck and red flags (F).

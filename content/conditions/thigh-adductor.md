@@ -36,3 +36,9 @@ The inner thigh muscles pull the legs together and steady the hip when you chang
 - Walking is still painful after a few days
 - The pain is moving up into the groin
 - You want a plan to return to sport
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your inner thigh and explain how bad the strain looks.
+- Squeezing exercises and step-by-step strengthening can help the muscle heal and get stronger.
+- You get a gradual plan to get back to running, kicking and side-to-side sport.

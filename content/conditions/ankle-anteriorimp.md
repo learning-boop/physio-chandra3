@@ -36,6 +36,12 @@ At the front of the ankle, the shin bone and the ankle bone can pinch soft tissu
 - It is limiting squatting, running, or sport
 - The ankle also swells or catches: this can be a cartilage problem, and may need a scan
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check what is pinching at the front of your ankle and explain it.
+- Hands-on joint work, strengthening and changes to how you load the ankle can help ease the pinch.
+- You get a plan to return to squatting, stairs and sport step by step.
+
 ## clinicNotes
 - Anterolateral (soft-tissue) impingement follows about 3% of sprains (the distal fascicle of the ATFL is one cause); anterior bony impingement (tibial and talar osteophytes, "footballer's ankle") shows on a lateral X-ray (AIM manual p. 527).
 - Molloy synovial impingement test: reported sensitivity 94.8%, specificity 88% (Molloy 2003, JBJS Br; one study). Measure with the weight-bearing lunge.

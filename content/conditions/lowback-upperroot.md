@@ -51,6 +51,12 @@ The nerves that supply the front of the thigh leave the spine higher up in the l
 - Diabetes, with sudden severe thigh pain then weakness and weight loss: see your doctor promptly (diabetic amyotrophy)
 - Leg symptoms limiting walking, sleep or work, or not easing after two to three weeks: a physiotherapy assessment can check the nerve and give you a plan
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your hip, nerves and thigh strength, and explain where the pain comes from.
+- Gentle nerve gliding exercises and movements that ease your symptoms can help settle thigh pain.
+- You get a graded plan to return to walking, stairs and daily activities as it settles.
+
 ## clinicNotes
 - Upper lumbar roots (L2-L4) and the femoral nerve. Less common than L5-S1 and more often older patients; anterior thigh pain is also referred from the hip, so clear the hip first.
 - Tests: femoral nerve stretch / prone knee bend (crude: many structures); slump knee bend (side-lying slump, knee about 90 degrees, extend the hip, differentiate with the neck; Trainor and Pinnington 2011 pilot, small sample: sensitivity 100% (40-100), specificity 83% (52-98), LR+ 6.0, LR- 0, kappa 0.71 - promising, not yet confirmed); the femoral nerve stretch test can be falsely positive from tight or injured anterior thigh muscles and from the hip; normal femoral slump responses (Lai et al. 2012). Add hip abduction for the obturator nerve, adduction for the lateral femoral cutaneous nerve (Butler). Hip lateral and medial rotation bias the ilioinguinal and iliohypogastric nerves.

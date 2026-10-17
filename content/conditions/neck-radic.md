@@ -83,6 +83,12 @@ A nerve in the neck has become irritated or squeezed where it leaves the spine, 
 - Clumsy hands, symptoms in both arms, unsteady walking, or weakness getting worse over days: see a doctor today
 - A burning or "dead arm" after a tackle or collision that settles within minutes is usually a stretched nerve (a "stinger"); if it happens in both arms, or keeps coming back, see a doctor before returning to sport
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your nerves, strength and feeling, and explain what is irritating the nerve.
+- Exercise, hands-on care for the neck and upper back, and nerve gliding can help ease arm pain.
+- You get advice to keep working and active, and a plan to track how the nerve settles.
+
 ## clinicNotes
 - Record: body chart (arm vs neck dominance, paraesthesia distribution), 24-hour behaviour, irritability, neuropathic descriptors; NPRS, NDI, PSFS; DN4 or painDETECT if the neuropathic component is unclear.
 - Wainner cluster: ULNT1 (median) +, Spurling A +, distraction +, ipsilateral rotation under 60 degrees. 3 of 4 +LR 6.1; 4 of 4 +LR 30.3 (setting-dependent, very low certainty in recent reviews: Cervical Clinic Manual 2026). A negative ULNT1 helps rule out. Shoulder abduction relief sign; neck distraction (Thoomes 2018: Spurling and distraction most useful to rule in, combined with history).

@@ -43,3 +43,9 @@ The chewing muscles in the cheek and temple can become sore and tight, often wit
 - Headaches or ear symptoms come with it
 - You want a plan combining jaw exercises, posture and relaxation
 - If you are over 50: jaw ache when chewing that eases when you stop, a tender scalp or temple, or a change in vision: see a doctor the same day
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your jaw muscles, neck and posture, and explain why the ache spreads.
+- Jaw exercises, gentle muscle release and relaxation training can help ease pain and tightness.
+- You learn habits to reduce clenching and a plan to manage stress-related flare-ups.

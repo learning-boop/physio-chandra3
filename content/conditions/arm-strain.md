@@ -43,3 +43,9 @@ The big muscles of the upper arm can ache for a day or three after a new or hard
 - A strain has not improved after 2 weeks
 - You felt a pop and the muscle now looks a different shape: see a doctor within a few days, as a tendon tear is best repaired early
 - You want a plan to return to lifting or sport
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check whether it is normal soreness or a strain and explain what is going on.
+- A graded strengthening plan can help the muscle heal and rebuild its strength.
+- You get advice on building training loads up gradually to lower the chance of another strain.

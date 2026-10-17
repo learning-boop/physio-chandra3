@@ -38,3 +38,9 @@ A nerve that runs through the muscles at the top of the forearm can be squeezed 
 - The ache has not eased after 2 to 3 weeks
 - Tennis elbow treatment has not helped
 - You cannot fully straighten your fingers at the knuckles, or your wrist or fingers are getting weaker: see a doctor, who may arrange nerve tests
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check whether the ache comes from the nerve or the tendon and explain it simply.
+- Changes to how you twist and grip, with gentle exercises, can help the irritated nerve settle.
+- You get a plan to help you get back to tool, computer and sport tasks comfortably.

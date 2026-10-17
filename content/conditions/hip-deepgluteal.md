@@ -45,6 +45,13 @@ The sciatic nerve passes under the deep buttock muscles; muscles, bands of tissu
 - Leg weakness, a foot that slaps or catches, or numbness that keeps spreading: see a doctor soon
 - Deep buttock pain at night that does not change with position, or a past cancer: see your doctor
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your buttock, back and nerve to work out where the pain comes from.
+- Gentle nerve-gliding exercises and gradual buttock strengthening can help calm the irritated nerve.
+- You get advice on sitting and activity so you can build back up without stirring it up.
+
 ## clinicNotes
 - Hamstring CPG 2022 lists deep gluteal and ischial tunnel syndromes as differentials of posterior thigh pain, with lumbar radiculopathy and SIJ. Sudden onset while sprinting or stretching with pain on resisted knee flexion favours a hamstring strain; tenderness at the ischial tuberosity favours proximal hamstring tendon pathology or avulsion (refer the same day after a pop with bruising and a gap). Source: Martin RL et al., JOSPT 2022.
 - Diagnosis: Hopayian 2010 core features: buttock pain, tenderness at the sciatic notch, worse sitting, worse with piriformis tension. Martin 2014 against endoscopy: seated piriformis stretch test sens 0.52, spec 0.90; active piriformis test 0.78/0.80; both 0.91/0.80. Chandra's piriformis protocol describes the seated test as resisted external rotation, which mixes up Martin's passive seated stretch test with the active side-lying test.

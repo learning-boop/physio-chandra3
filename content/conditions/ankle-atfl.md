@@ -48,6 +48,12 @@ The most commonly injured ligament in the ankle, stretched or torn when the ankl
 - You've sprained the same ankle more than once — balance retraining prevents the cycle
 - Weeks later there is a deep ache, swelling or catching inside the ankle: see us, as the joint surface may need checking
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your sprain, rule out a break, and explain how ligaments heal.
+- Taping or a brace, gentle hands-on care and early exercise can help you walk comfortably sooner.
+- Balance and strength training aims to lower the chance of the ankle rolling again.
+
 ## clinicNotes
 - Diagnosis (B): inversion injury, Ottawa ankle rules negative, then the reverse anterolateral drawer test (sens 0.89, spec 0.90) and anterolateral talar palpation added to the traditional drawer (sens 0.22). Examination is most accurate 4 to 5 days after injury.
 - Ottawa ankle rules applied in full: sensitivity 92-100%; weight bearing alone drops sensitivity to about 88%. They cover the distal tibia and fibula, base of the 5th metatarsal and navicular; under 18, the full rules (sens 100%) beat the low-risk ankle rules.

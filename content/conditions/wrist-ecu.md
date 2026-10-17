@@ -38,5 +38,11 @@ A tendon runs in a groove on the back of the wrist, on the little-finger side. R
 - The tendon keeps snapping out of place
 - You want a plan to return to racquet sports, golf, or tool work
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the tendon on the little-finger side and explain what is going on.
+- Easing forceful twisting, and sometimes a splint, can help the tendon settle before gradual strengthening.
+- You get advice on your grip or swing, and a step-by-step plan back to sport.
+
 ## clinicNotes
 - ECU synergy test (resisted thumb abduction with the wrist neutral and the forearm supinated); dynamic ultrasound for subluxation. Acute subluxation under 3 weeks: above-elbow cast or Muenster splint in pronation and slight radial deviation; chronic: refer. Differentials: TFCC tear, ulnar impaction, DRUJ problems (PMC10167632).

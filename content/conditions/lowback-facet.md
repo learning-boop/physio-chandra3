@@ -40,6 +40,12 @@ The small joints at the back of the spine can become irritated, typically causin
 - It recurs with particular activities
 - You'd like specific mobility and strength work for it
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can find which movements bring on your pain and explain in plain words what is happening.
+- Hands-on joint care alongside exercise can help ease pain and get your back moving more freely.
+- You get advice to stay active and a plan to manage standing, arching back and future flare-ups.
+
 ## clinicNotes
 - No facet-specific category in JOSPT 2012 or 2021: classify as low back pain with mobility deficits (2012, B) when unilateral pain is reproduced at end-range (here extension) and by segmental provocation. Facet pain cannot be confirmed clinically without a block; prefer impairment-based labels. Under 20 with extension pain and sport: screen for spondylolysis first.
 - Acute: thrust or non-thrust mobilisation (2021, A), prediction rule as for non-specific low back pain. Chronic: mobilisation (A) with exercise (A). Education to stay active (B).

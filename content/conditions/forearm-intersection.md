@@ -37,3 +37,9 @@ A few finger-widths above the wrist on the thumb side, two sets of tendons that 
 - It has not settled after 2 weeks of easing off
 - The swelling or creaking keeps coming back when you restart
 - You want a plan to return to rowing, paddling, lifting, or work
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can confirm where the tendons are irritated and explain what is going on.
+- Easing the repeated wrist movement for a while, then gentle strengthening, can help the tendons settle.
+- You get a gradual plan back to rowing, paddling, lifting or work, with tips on technique.

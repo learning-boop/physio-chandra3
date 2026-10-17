@@ -55,6 +55,12 @@ The shoulder slips, or has come out of place (dislocated), most often in younger
 - It has slipped or dislocated before: a structured strengthening program is first-line care
 - Apprehension limits sport or work, or you want assessment before returning to overhead or contact sport
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your shoulder moves and explain why it slips.
+- A tailored strengthening programme aims to help the muscles hold the shoulder steady and build confidence.
+- You get a plan back to sport, and advice on when a surgeon's opinion may be worthwhile.
+
 ## clinicNotes
 - JOSPT adhesive capsulitis CPG 2013 differential (F): instability fits age under 40, a history of dislocation, excess glenohumeral accessory motion and apprehension in flexion, horizontal abduction and/or external rotation; global motion loss and no apprehension point away.
 - First dislocation: X-ray before and after reduction (BESS 2016; Dutch guideline, Acta Orthop 2026). At 40 or over: screen for a rotator cuff tear (about 57% full-thickness on ultrasound after a first dislocation over 40) and axillary nerve injury, and image early if weakness persists (BESS 2016; Lizzio 2017 via AIM manual p.304; the site's injury screen I4, I5).

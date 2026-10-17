@@ -42,6 +42,12 @@ The ulnar nerve runs through a tight tunnel at the inner elbow (the 'funny bone'
 - Your grip keeps getting weaker, the muscle between your thumb and index finger looks thinner, or the numbness is there all the time: see a doctor, who may arrange nerve tests
 - You would like help with positions and habits: most mild cases settle within a few months with these changes
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can explain how the nerve gets irritated and check the feeling and grip in your hand.
+- Clear advice on elbow positions, leaning and sleep habits can help the nerve settle.
+- A physiotherapist can track your progress and tell you when a doctor's review is worthwhile.
+
 ## clinicNotes
 - Examination: McGowan grade; elbow flexion test and flexion-pressure test; Tinel's at the cubital tunnel; Froment's and Wartenberg's signs; intrinsic and first dorsal interosseous wasting; C8-T1 and thoracic outlet differentials.
 - Treatment: education and avoiding sustained flexion and pressure; 89.5% improved with information alone, and splints or nerve glides added nothing (Svernlöv 2009); night extension positioning. Refer promptly with wasting or constant numbness; otherwise after about 3 months of failed care (NHS RefHelp: routine at 6 months, urgent with wasting). Simple decompression and transposition similar (Caliandro 2016, Cochrane CD006839).

@@ -42,6 +42,12 @@ This is back pain that's thought to come from a disc that reacts to certain posi
 - Leg symptoms are spreading further down or getting stronger despite trying position changes
 - There's no improvement after a couple of weeks of adjusting your positions and staying active
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can test which movements and positions ease your pain, and explain what is going on.
+- Specific repeated movements, hands-on care and core exercises can help settle back and leg pain.
+- You get a plan to return to sitting, bending and daily tasks, and to reduce flare-ups.
+
 ## clinicNotes
 - Classification (JOSPT 2012, B): acute low back pain with related (referred) lower extremity pain. Back pain with buttock, thigh or leg pain worse with flexion and sitting, that centralises or eases with positioning, manual procedures or repeated movements; lateral shift, reduced lordosis and limited extension are common.
 - Repeated movement testing: record the baseline symptom location, then judge centralisation or peripheralisation; the direction is chosen by response, not presumed. Centralisation is common (about 70% subacute, 52% chronic). 2021: MDT (C) acute, (B) chronic.

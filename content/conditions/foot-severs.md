@@ -37,6 +37,12 @@ In children aged about 8 to 14, the growth plate at the back of the heel bone is
 - You want a plan to manage sport through the growth spurt
 - The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your child's heel and explain growing-bone heel pain in plain words.
+- Heel cups, footwear advice and calf stretches can help ease the soreness.
+- Your child gets a plan to adjust, not stop, sport while the heel settles.
+
 ## clinicNotes
 - Peak age: girls about 8 to 12, boys about 10 to 14; often both heels. Positive medial-lateral heel squeeze; X-ray only if atypical (one side, night pain, swelling, pain at rest).
 - Evidence: self-limiting; wait-and-see, heel raise and physiotherapy similar (Wiegerinck 2016, J Pediatr Orthop); heel raise or footwear (James 2016, BJSM); James 2013 systematic review.

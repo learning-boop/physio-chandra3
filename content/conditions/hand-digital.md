@@ -36,5 +36,11 @@ Each finger has two small nerves running down its sides. Pressure from gripping 
 - It started after a cut: go to an emergency department today, as a cut nerve or tendon is best repaired early
 - The numbness is spreading to other fingers
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the feeling in your finger and explain which nerve is irritated.
+- Changing or padding your grip on tools or balls can help take pressure off the nerve.
+- You get a plan to return to your tools, sport or hobby while the nerve settles.
+
 ## clinicNotes
 - Tinel's over the digital nerve; two-point discrimination; Semmes-Weinstein monofilaments. A cut digital nerve needs surgical repair within days; a painful neuroma can follow. A thumb splint can press on the ulnar digital nerve of the thumb (AIM manual). Differentials: partial carpal tunnel, C6-C8 radiculopathy, Guyon's canal.

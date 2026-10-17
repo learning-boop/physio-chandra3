@@ -35,6 +35,12 @@ After a broken wrist, whether treated in a cast or with surgery, the wrist and f
 - Movement or grip has stopped improving
 - You would like a structured movement and strengthening programme
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your wrist and work within what your fracture clinic or surgeon allows.
+- Guided movement, then strengthening, aims to bring back wrist movement and grip strength.
+- You get a gradual plan back to daily tasks, work and sport over the coming months.
+
 ## clinicNotes
 - Distal radius fracture rehabilitation: early finger and shoulder ROM; wrist ROM and strengthening after immobilisation or as the surgeon allows; measure PRWE, grip, ROM. CRPS screen (W9). Acute carpal tunnel (injury screen I4).
 - Bone health: a distal radius fracture at 50 or over warrants osteoporosis assessment (fracture liaison; PMC11427598).

@@ -80,6 +80,12 @@ Nerves run from the neck to the fingers and have to slide and stretch every time
 - Severe shoulder or arm pain that eases and is followed by weakness: see a doctor
 - A burning or "dead arm" after a tackle or collision that settles within minutes is usually a stretched nerve (a "stinger"); if it happens in both arms, or keeps coming back, see a doctor before returning to sport
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can test how the nerve moves and explain why a sensitive nerve is usually healthy.
+- Gentle nerve gliding exercises and hands-on care along the nerve's path can help ease arm symptoms.
+- You get a step-by-step plan to return to the arm and neck positions that bring it on.
+
 ## clinicNotes
 - Physio-led. Refer for nerve conduction studies or to the GP with progressive loss of function, wasting, bilateral or systemic features, or no change after 6 to 8 weeks of well-delivered care.
 - Two questions drive reasoning: is the nerve SENSITIVE (pain with stretch or pressure) and is it CONDUCTING poorly (numbness, weakness, reflex change)? Then where along the nerve (root, plexus, a tunnel further down), and is there more than one site (double crush)? The engine reports at most "possible" neuropathic pain (Finnerup 2016 grading).

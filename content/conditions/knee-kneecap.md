@@ -42,6 +42,12 @@ This happens when the kneecap shifts partly or fully out of its groove, usually 
 - The kneecap popped out and went back, especially for the first time, or the knee swelled quickly: see a doctor the same day for an X-ray
 - You keep getting the feeling that the kneecap might slip, or it has slipped more than once: book a physiotherapy assessment
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and explain what happened when the kneecap shifted.
+- Thigh and hip strengthening, with short-term brace advice if needed, aims to help support the kneecap.
+- You get a step-by-step return-to-sport plan to help lower the chance of it happening again.
+
 ## clinicNotes
 - Presentation (AIM manual pp.63-66): knee flexed with internal rotation of the femur over a planted foot (valgus); the kneecap usually goes laterally and about 80% reduce spontaneously; haemarthrosis, medial (MPFL) tenderness overlapping the femoral MCL origin, apprehension, difficulty walking. 70% are under 20; highest risk in girls aged 10-17.
 - Recurrence: about 36% at 20 years; 60-70% with trochlear dysplasia under 25; two or more Parikh risk factors give over 50% risk. Past dislocation is associated with later patellofemoral OA (OR 3.2; p.64).

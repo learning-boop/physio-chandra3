@@ -32,3 +32,9 @@ A skin nerve runs down the inside of the knee to the inner shin. It can be irrit
 - The burning has not eased after a few weeks
 - The numb patch is spreading, or the leg feels weak or gives way: see a doctor soon, as it may come from the back or a larger nerve
 - It is limiting sleep or walking
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the nerve and explain why the skin feels burning, tingling or numb.
+- Gentle desensitising and advice on avoiding pressure can help the area feel more comfortable.
+- You get a plan to keep the knee moving and stay active while the nerve settles.

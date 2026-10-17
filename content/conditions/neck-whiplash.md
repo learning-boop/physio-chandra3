@@ -61,6 +61,12 @@ Whiplash is a neck injury caused by a sudden jolt that throws the head forwards 
 - Dizziness that keeps coming back, or a new headache unlike before, since the injury: see a doctor today
 - Trouble concentrating, feeling foggy or poor sleep since the injury: see your doctor to check for a concussion
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your neck after the injury and explain what to expect as it recovers.
+- Neck exercises for movement, strength and control, with gentle hands-on care, can help your recovery.
+- You get a plan to stay active and return to driving, work and daily life step by step.
+
 ## clinicNotes
 - Physio-led after injury screening. Nerve signs (WAD grade III): physio plus doctor. Suspected fracture (grade IV): Emergency.
 - Grade with the Quebec Task Force (0-IV). Canadian C-spine rule if acute; neuro exam (dermatomes, myotomes, reflexes).

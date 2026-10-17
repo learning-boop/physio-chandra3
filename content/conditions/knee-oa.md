@@ -55,6 +55,12 @@ A gradual change in the joint's cartilage and bone, common from midlife onward. 
 - You'd like a structured education and exercise programme (e.g., GLA:D-style)
 - You're weighing options and want conservative care optimized first
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your knee moves and explain in plain words what is going on.
+- A guided strength and walking programme can help ease pain and keep you active.
+- You get a plan to manage busy days and flare-ups, and to stay doing what you enjoy.
+
 ## clinicNotes
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 Ch. 2.9 pp. 572-581 and Ch. 2.7 pp. 426-445): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant (any loss helps; 10% likely better than 5%); manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only. The AIM manual describes early OA from about 30 to 50 (p.7); the age band cannot separate under-45s.
 - Knee: ACR clinical criteria, knee pain plus 3 of: over 50, stiffness under 30 minutes, crepitus, bony tenderness, bony enlargement, no palpable warmth (sens 95%, spec 69%). Measures: KOOS, 30-s chair stand, 40-m fast-paced walk, stair climb. Walking aid (cane in the opposite hand: NICE consider, AAOS moderate); tai chi (ACR strong). Tibiofemoral (unloader) brace in some cases (ACR strong; NICE only with instability or abnormal loading when exercise alone is not enough). Lateral wedge insoles are not recommended (AAOS strong against; OARSI; ACR conditional against).

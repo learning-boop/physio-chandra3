@@ -41,6 +41,12 @@ This is when an ankle carries on rolling or giving way, or never feels quite tru
 - The ankle also aches deep inside, catches or locks, or keeps swelling: see us, as other problems inside the joint or a tendon may need checking, sometimes with a scan
 - It still keeps rolling after 3 to 6 months of a steady exercise programme: ask us or your doctor about a surgeon's opinion
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check why your ankle keeps giving way and explain it in plain words.
+- Balance and strength training, with hands-on work to free up stiffness, can help steady the ankle.
+- You get a plan back to sport and uneven ground with more confidence.
+
 ## clinicNotes
 - Definition (JOSPT 2021): instability or giving way persisting 12 months or more after the first sprain, with activity limitation; mechanical and/or functional (sensorimotor). About 40% of first-time sprains.
 - Discriminative tools (B): CAIT 25 or less (sens 96.6%, spec 86.8%, LR+ 7.31; MCID 3); IdFAI 11 or more; AII 4 or more yes. Functional tests that discriminate: side hop, timed and multiple hop, foot-lift, SEBT (medial, anteromedial, posteromedial).

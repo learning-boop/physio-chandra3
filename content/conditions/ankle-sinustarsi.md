@@ -34,6 +34,12 @@ Just in front of the bony bump on the outer ankle is a small soft hollow. After 
 - The ankle keeps rolling or giving way
 - The ankle also locks, or keeps swelling: see us, as a scan may be needed
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the soft hollow on the outer ankle and explain why it is sore.
+- Balance training, strengthening and footwear or insole advice can help ease pain and steady the ankle.
+- You get a plan back to walking and sport on uneven ground.
+
 ## clinicNotes
 - Lateral hindfoot pain over the sinus tarsi after inversion sprains or with excessive pronation; subtalar instability, interosseous or cervical ligament injury, synovitis. Tender sinus tarsi; pain on supination and on inversion with plantarflexion. Diagnostic anaesthetic injection or MRI if unclear. Management: orthoses, proprioceptive and peroneal strengthening, mobilisation; injection or arthroscopy if persistent.
 - Source: AIM Theory Manual 2023 p. 528.

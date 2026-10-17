@@ -43,6 +43,12 @@ Where the Achilles tendon attaches to the heel bone, the tendon, a small fluid s
 - It is limiting walking or running
 - You want a graded tendon-loading plan
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the back of your heel and explain what is irritated there.
+- Heel lifts, footwear changes and a graded tendon-strengthening programme can help ease the pain.
+- You get a plan to build back walking, running and hills without stirring it up.
+
 ## clinicNotes
 - Insertional pain is outside the 2024 midportion Achilles CPG revision. Loading without end-range dorsiflexion (not below level; Jonsson 2008; Chimenti 2019); heel lifts; shockwave as an add-on (low to moderate evidence). The Royal London and arc signs are for midportion pain only. Haglund's deformity and retrocalcaneal bursitis are included in this card.
 - Screen for spondyloarthritis (enthesitis), recent fluoroquinolone or steroid use, and calcaneal stress fracture (squeeze test; af-stress and ft-stress).

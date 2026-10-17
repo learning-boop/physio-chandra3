@@ -58,6 +58,13 @@ The tendons of the buttock muscles, where they attach at the bony point of the o
 - A sudden pop at the outer hip, then a marked limp or you cannot lift the leg out to the side: see a doctor (possible tendon tear)
 - You run or train hard and have a deep groin ache that is worse with hopping or aches at night: see a doctor before more running
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your outer hip and explain why the tendons have become sore.
+- Simple advice on lying, sitting and standing, plus a step-by-step strengthening programme, can help ease pain.
+- You get a plan to build up walking and activity again while keeping flare-ups down.
+
 ## clinicNotes
 - Lateral hip pain also fits the hip OA criteria (Koc 2025) and FAI (Enseki 2014): check IR at 90 degrees of flexion and FADIR before calling it isolated GTPS; concurrent OA is common over 50. Source: Koc 2025; Enseki 2014.
 - Mainly a tendinopathy, not a bursitis (AIM manual p.376; Chandra's gluteal tendinopathy protocols); peak age 40-60, women up to 4 times more often (p.377). Kinsella 2024 (JOSPT meta-analysis): tenderness then pain on resisted abduction raises the probability from 59% to 96%, both negative lowers it to 14%. Palpation sens 80%, spec 47% (Grimaldi 2017; p.380). Lequesne 2008 single-leg stance and resisted de-rotation figures come from a small refractory cohort and overestimate accuracy. Outcome: VISA-G (Fearon 2015; the manual p.379 says there is no validated measure).

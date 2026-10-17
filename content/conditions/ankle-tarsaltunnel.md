@@ -38,6 +38,12 @@ A nerve running behind the inner ankle bone can become squeezed, sending burning
 - Tingling, numbness, or burning hasn't settled within a couple of weeks
 - The sensations are spreading or becoming more intense
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check whether a squeezed nerve at the inner ankle fits your symptoms.
+- Footwear or arch support advice and gentle ankle and nerve movement can help ease the pressure.
+- You get a plan to pace your activity, and a referral if checks show it is needed.
+
 ## clinicNotes
 - Heel pain CPG 2014 and 2023: negative tarsal tunnel, nerve tension and sensory tests are required to classify plantar fasciitis (B); a positive result redirects to nerve entrapment, and lumbopelvic referral must also be excluded (F). Source: Martin RL et al., JOSPT 2014; Koc TA et al., JOSPT 2023.
 - Tests: Tinel's behind the medial malleolus; dorsiflexion-eversion test (Kinoshita 2001); triple compression test (AIM manual p. 569: sensitivity 85.9%, specificity 100%, Abouelela 2012). Kinoshita figures not checked against the primary paper.

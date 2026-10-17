@@ -48,6 +48,12 @@ A small nerve between the toes becomes irritated and thickened, giving burning, 
 - Toe tingling or numbness continues
 - You want gait and footwear assessment before considering injections
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check whether an irritated nerve between the toes fits your symptoms.
+- Advice on wider shoes and a small pad under the foot can help ease pressure on the nerve.
+- You get a plan to keep walking and staying active, and advice if other options are needed.
+
 ## clinicNotes
 - Tests (Pitcher 2024, Foot Ankle Orthop, systematic review): thumb-index web-space squeeze sensitivity 0.96, LR- 0.04 (a negative test rules out); a click reported by the patient specificity 0.96, LR+ 13.1; Mulder's sign sensitivity 29-94%, LR+ 2.19; toe-tip sensory deficit specificity 100%, sensitivity 49%; plain web-space tenderness weak. Burning alone is weak (specificity 48%).
 - Imaging: ultrasound about as accurate as MRI (Bignotti 2015). Treatment: wide toe box, metatarsal pad behind the pain; Cochrane 2024 (Matthews BG et al., CD014687): ultrasound-guided corticosteroid with local anaesthetic probably reduces pain (moderate certainty; a physician decision); little evidence for other non-surgical treatments.

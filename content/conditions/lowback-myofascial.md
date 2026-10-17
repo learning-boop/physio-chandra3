@@ -49,6 +49,12 @@ A muscle that has become tight and sensitive, often from being held in one posit
 - You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring
 - Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can find the sore muscle, rule out other causes and explain why the ache spreads.
+- Hands-on muscle release and stretching can ease pain for a while, alongside graded strengthening.
+- You learn self-release and changes to posture, work and sleep set-up to help prevent flare-ups.
+
 ## clinicNotes
 - Low back referral maps: quadratus lumborum to the iliac crest, SIJ and buttock (and greater trochanter); paraspinals locally; gluteus medius to the iliac crest and sacrum. Often coexists with facet or non-specific low back pain; distinguish from radiating pain (pain below the knee, neuro signs, SLR).
 - Myofascial pain syndrome, 2018 Delphi criteria (2 of 3): taut band, hypersensitive spot, referred pain on stimulation (local twitch supportive, not required). Palpation reliability is only moderate: treat the label as a working hypothesis and judge by response. The site asks the patient to press the spot themselves (the shared tender-spot question).

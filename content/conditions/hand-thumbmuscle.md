@@ -38,5 +38,11 @@ The small muscles that move the thumb and index finger work hard with texting, g
 - Pinching or gripping is getting weaker
 - You want advice on how you hold your phone, tools, or controller
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your thumb and hand and explain why the muscles ache.
+- Gentle stretches, hands-on work for tight spots, and strengthening can help ease the ache.
+- You get tips on breaks, phone use and pinching tasks to help the ache stay settled.
+
 ## clinicNotes
 - Adductor pollicis, opponens and first dorsal interosseous trigger points (Travell & Simons 2019; expert opinion). Avoid hyperextension pressure on the thumb MCP during web-space stretching (AIM manual). Differentials: de Quervain's (texting thumb is often this), thumb base OA from 45 (grind test), trigger thumb, C6 radiculopathy.

@@ -37,3 +37,9 @@ A nerve leaving the mid back runs around the chest between the ribs. When it is 
 - You want the spine checked as the source
 - A rash or blisters appear in the same strip: see a doctor within a day or two, as shingles treatment works best early
 - Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your mid back and the nerve, and explain why the pain wraps around.
+- Gentle mid-back movement, breathing exercises and hands-on care can help ease the nerve irritation.
+- You get advice on posture and activity, and a plan to stay active while it settles.

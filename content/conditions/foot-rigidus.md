@@ -40,6 +40,12 @@ Arthritis in the big toe joint makes it stiff, especially when bending the toe u
 - The toe is getting stiffer
 - You want advice on shoes, insoles, or other options
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your big toe moves and explain the arthritis in plain words.
+- Joint mobilisation, toe and calf strengthening and a stiff insert or rocker shoe can help ease pain.
+- You get a plan to keep walking and staying active while managing flare-ups.
+
 ## clinicNotes
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.
 - Big toe: rocker sole or a stiff insert; 1st MTP mobilisation and toe and calf strength. A sudden hot, red toe may be gout (gout favours joints with OA, and the two coexist): see a doctor.

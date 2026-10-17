@@ -42,6 +42,12 @@ At the point of the elbow there is a small fluid sac (bursa) that cushions the b
 - Pushing or straightening the arm is getting weaker
 - You felt a pop at the back of the elbow after a fall or a forced push, and straightening the arm is now weak: see a doctor the same day
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check whether the fluid sac or the tendon is the problem and explain it simply.
+- Padding and avoiding pressure can help the sac settle, and gradual strengthening can help a sore tendon.
+- You get a plan for building back pushing, push-ups and work tasks step by step.
+
 ## clinicNotes
 - Olecranon bursitis: conservative care first (protect, pad, avoid leaning); aspiration did not raise infection risk in aseptic bursitis (Kaur 2023 systematic review). Septic bursitis: mostly S. aureus, fever in only about 4 in 10 (reported figures); aspiration and culture are physician decisions. Also consider gout or tophi and RA nodules ("sudden pain and swelling with no injury").
 - Triceps tendinopathy: pain with resisted extension and pushing; distal triceps rupture (a pop after a fall on the outstretched hand or a forced push, weak extension, a palpable gap) needs early surgical opinion. Differentials: posteromedial impingement or valgus extension overload in throwers, snapping triceps or ulnar nerve subluxation.

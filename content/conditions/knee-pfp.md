@@ -48,6 +48,12 @@ Pain from the joint between the kneecap and thigh bone, usually when it's asked 
 - It limits sport, stairs, or work
 - You'd like a graded strengthening plan, the best-evidenced treatment
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and hip and explain why the kneecap area is sore.
+- A step-by-step hip and thigh strengthening programme is the main treatment and can help ease pain.
+- You get a plan to adjust and then rebuild your activity, and to manage flare-ups.
+
 ## clinicNotes
 - Diagnosis (B): pain around or behind the kneecap reproduced by squatting, stairs, prolonged sitting or other loaded flexion, after excluding other causes. Pain on squatting is the test (A: +LR 1.8, -LR 0.2); reduced patellar tilt supports it (C: +LR 5.4). Clarke's sign is not useful (sens 0.39, spec 0.67; AIM manual p.44). Clicks or clunks may be heard (p.42). A rise in load is reported by almost all patients (p.39); PFP is common after knee surgery such as meniscectomy or ACL reconstruction (p.42).
 - Subgroups (F): overuse or overload; muscle performance deficits (hip and quadriceps); movement coordination (dynamic valgus); mobility (foot pronation, or tight hamstrings, quadriceps, calf, lateral retinaculum or ITB). Measures (A): AKPS, KOOS-PF, worst and usual pain; squat, step-down and single-leg squat (B). The AIM manual uses LEFS and PSFS (p.45).

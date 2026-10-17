@@ -61,6 +61,12 @@ If this fits, please see your family doctor or surgeon within the next few days.
 - You would like help with graded movement, desensitisation, and brain-training approaches such as graded motor imagery and mirror therapy
 - Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- Alongside your doctor's care, a physiotherapist can explain why the ankle is so sensitive and what helps.
+- Gentle movement, gradual loading and calming touch exercises aim to settle the sensitivity and stiffness.
+- Brain-training methods such as mirror exercises and a paced plan can help you use the ankle again.
+
 ## clinicNotes
 - Budapest clinical criteria (Harden 2010): continuing disproportionate pain + at least one symptom in 3 of 4 categories (sensory, vasomotor, sudomotor/oedema, motor/trophic) + at least one sign in 2 of 4 at examination + no better explanation. CRPS I without, CRPS II with a major nerve lesion. Valencia update (Goebel 2021, Pain): "CRPS-NOS" is kept for people never documented as meeting the criteria; people who met them before and now meet only some are "CRPS with remission of some features".
 - Measure side to side: skin temperature (infrared thermometer), girth, colour, sweating; allodynia (light touch, brush) and hyperalgesia (pinprick) map; goniometry; grip and pinch or toe strength; tremor and dystonia; left/right judgement accuracy and speed (Recognise) as a GMI baseline; Bath body perception disturbance scale; TSK-11, PCS; sleep.

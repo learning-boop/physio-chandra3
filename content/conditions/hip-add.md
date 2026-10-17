@@ -48,6 +48,13 @@ Pain where the inner-thigh muscles attach to the pubic bone, often building up o
 - A lump in the groin, testicle pain or swelling, or burning or blood when you pass urine: see a doctor
 - Under 18 with a pop while kicking: see a doctor first
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your groin, including a simple squeeze test, and explain what is going on.
+- A step-by-step inner-thigh strengthening programme is the main treatment and can help ease the pain.
+- You get a gradual return-to-sport plan, plus exercises that may help prevent groin problems coming back.
+
 ## clinicNotes
 - Doha agreement (Weir 2015): adductor-related groin pain = adductor tenderness and pain on resisted adduction; usually long-standing overuse (acute strains: thigh-adductor). Measures: the 5-second squeeze test (pain 0-10; reflects sporting hip and groin function) and adductor squeeze strength. Differentials: obturator nerve entrapment, hip-related groin pain, pubic bone stress, inguinal-related pain, hernia.
 - Management: progressive adductor strengthening (Holmich, Lancet 1999); prevention: the Copenhagen adduction programme reduced groin problems by 41% in male footballers (Haroy, BJSM 2019). ESSKA-EHPA-ESMA 2024 consensus keeps the Doha entities; sources often coexist.

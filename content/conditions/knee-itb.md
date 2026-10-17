@@ -43,6 +43,12 @@ Irritation where the long band on the outside of the thigh crosses the knee, cla
 - You'd like a running-load and strength plan
 - Pain starts appearing in daily activities too
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and hip and explain why the outer knee is sore.
+- Hip strengthening, with a short break below the point where pain starts, can help settle it.
+- You get a gradual plan back to running or cycling, including tips on training, shoes and bike set-up.
+
 ## clinicNotes
 - Diagnosis by history (lateral knee pain at a predictable distance, worse downhill and descending stairs) plus Renne's and Noble's tests, which have no sensitivity or specificity data (AIM manual p.23); Ober's test for tightness. Imaging is largely not indicated. Typical age from the teens to the 50s (p.22).
 - Differentials: lateral meniscus, LCL and posterolateral corner, superior tibiofibular joint, biceps femoris or popliteus tendons, patellofemoral pain, peroneal nerve, TFL or gluteus minimus referral, lumbar (L5) referral.

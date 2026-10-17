@@ -38,6 +38,12 @@ This ligament sits deep at the back of the knee and can be strained by a hard bl
 - Deep knee pain or swelling continues beyond a couple of weeks
 - The knee feels like it shifts or gives way during normal daily movement
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your knee and the other ligaments, and explain the injury plainly.
+- A thigh-focused strengthening programme, with brace advice if needed, can help support the knee as it heals.
+- You get a step-by-step plan to get back to daily life and sport.
+
 ## clinicNotes
 - Mechanism (AIM manual pp.61-62): dashboard injury (posterior force to the anterior tibia with the knee flexed), a fall onto the flexed knee with the foot plantarflexed, or hyperextension. Often subtle ("slight oedema, slight discomfort, slight stiffness"). Most are aged 20-29; up to 95% occur with other ligament injuries (posterolateral corner, ACL, MCL): check them.
 - Tests: posterior drawer sens 90%, spec 99%; supine internal rotation test 95.5% / 97.1%; posterior sag; MRI close to 100% when acute (AIM manual).

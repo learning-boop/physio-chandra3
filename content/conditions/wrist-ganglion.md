@@ -40,5 +40,11 @@ A smooth, harmless fluid-filled lump, most often on the back of the wrist, that 
 - You're unsure the lump is a typical ganglion: an assessment, sometimes with an ultrasound, gives clarity
 - It limits wrist strength or mobility
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the lump, explain what it is, and why it is usually harmless.
+- Advice on wrist positions and supports for floor work and lifting can help ease discomfort.
+- You get advice on when a doctor's review is worthwhile if the lump stays troublesome.
+
 ## clinicNotes
 - Transillumination; carpal boss (bony, at the 2nd-3rd CMC base) as a differential; scapholunate screen (Watson test, limited value); an occult dorsal ganglion shows on ultrasound. Palm-side ganglions lie near the radial artery (no pressure techniques). Natural history: adults about 33-58% resolve (secondary sources), children 80-93%. Aspiration recurrence is high (a physician decision); refer after 6 to 12 weeks if troublesome (your ganglion protocol).

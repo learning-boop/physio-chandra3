@@ -43,6 +43,12 @@ This is an injury to the muscle group at the back of your thigh, usually happeni
 - The pain isn't easing after a couple of weeks, or you're still limping when walking
 - You've strained this area before and want a structured plan to get back to sport safely and lower the chance of it happening again
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your thigh and explain how bad the strain looks.
+- A step-by-step strengthening programme, with gentle movement early on, can help the muscle heal.
+- You get a gradual return-to-sport plan, with exercises that may help lower the chance of another strain.
+
 ## clinicNotes
 - Diagnosis (B): sudden posterior thigh pain during activity, reproduced by stretch and/or resisted contraction, with local tenderness and loss of function; sudden onset is the most useful history item. Sprint type (late swing) is usually biceps femoris; overstretch type (hip flexion with knee extension) usually proximal semimembranosus, with a longer recovery.
 - Grading by active knee extension deficit (hip at 90 degrees): under 15 degrees about 26 days, 16-25 about 31 days, 26-35 about 75 days. Complete tear: diffuse bruising, palpable gap, cannot walk; refer suspected grade III or proximal tendon avulsion to a physician and imaging (radiographs for proximal symptoms). Imaging is not needed for grades I-II.

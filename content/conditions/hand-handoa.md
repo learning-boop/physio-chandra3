@@ -48,6 +48,12 @@ Arthritis in the small joints in the middle and at the end of the fingers is com
 - A finger joint is becoming crooked, or gives way when you pinch
 - You want an exercise plan and advice on splints or aids
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your finger joints and explain in plain words what is going on.
+- Daily hand exercises, easier ways of doing tasks and, if needed, a splint can help ease pain.
+- You get tips on tools and pacing, and a plan for cold days and flare-ups.
+
 ## clinicNotes
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.
 - Hand: EULAR 2018, education, joint protection, hand exercises, orthoses as needed. Measures: AUSCAN or FIHOA, grip and pinch. Screen an inflammatory pattern (knuckle or wrist swelling, morning stiffness over an hour).

@@ -35,6 +35,12 @@ A skin nerve runs down the inside of the knee to the inner shin. It can be irrit
 - The burning has not eased after a few weeks
 - It is limiting sleep or walking
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the nerve and explain why the skin feels burning, tingling or numb.
+- Gentle desensitising and advice on avoiding pressure can help the area feel more comfortable.
+- You get a plan to keep the knee moving and stay active while the nerve settles.
+
 ## clinicNotes
 - The saphenous nerve is purely sensory (the terminal branch of the femoral nerve). Its infrapatellar branch is commonly cut or stretched in knee surgery: after knee replacement, objective numbness is near universal and subjective numbness 37-55%, usually lateral to and below the scar (Ann R Coll Surg Engl 2013); the numb area shrinks over the first year.
 - Other causes: adductor (Hunter's) canal entrapment, varicose vein surgery or vein harvest, pressure from a brace or kneeling. Weakness or spreading numbness points to the femoral nerve or an L3-L4 root: refer.

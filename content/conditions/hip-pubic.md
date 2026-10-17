@@ -42,6 +42,13 @@ The two halves of the pelvis meet at the front, at the pubic bone. Kicking and t
 - Pain at the front of the pelvis with a fever, especially after a birth or an operation: see a doctor today
 - Since the birth, severe pain at the front of the pelvis so you can hardly walk, sometimes after a click: see your doctor or maternity team
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the front of your pelvis and explain what is making it sore.
+- You get easier ways to move day to day, with gradual hip and core strengthening.
+- A step-by-step plan can help you get back to sport or daily activities with fewer flare-ups.
+
 ## clinicNotes
 - Doha 2015 pubic-related groin pain: local tenderness of the pubic symphysis and adjacent bone. MRI bone marrow oedema is common in athletes without symptoms. Differentials: pubic bone stress injury (bone stress consensus 2024; hpf-stress now names the pelvis), osteomyelitis pubis (fever; after birth or surgery), symphysis separation after birth (pg-symphysis), adductor- and inguinal-related pain. Pelvic girdle pain in pregnancy can also be felt at the back of the pelvis (sij:pgp).
 - Sources: Weir A et al., BJSM 2015 (Doha); ESSKA consensus 2024; NHS pelvic girdle pain in pregnancy.

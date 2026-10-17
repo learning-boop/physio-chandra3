@@ -34,6 +34,12 @@ After a broken ankle or foot, whether treated in a cast, a boot or with surgery,
 - You would like a structured movement, strength and balance programme
 - Progress has stalled, or you are not back to the activities you want
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- Once your fracture team allows, a physiotherapist can explain what to expect as the bone heals.
+- A guided programme of movement, strength, balance and walking can help ease stiffness and a limp.
+- You get a step-by-step plan back to work, sport and the things you enjoy.
+
 ## clinicNotes
 - Rehabilitation after ankle or foot fracture (cast, boot or ORIF): early weight bearing as permitted, ROM (weight-bearing lunge), strength, balance and gait training; measure LEFS or OMAS, lunge test, single-leg balance, hop tests for sport.
 - Safety: DVT or PE (af-dvt), infection or wound problems, CRPS (A9/B9, af-crps), compartment syndrome early after injury, non-union.

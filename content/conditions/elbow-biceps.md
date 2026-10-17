@@ -41,6 +41,12 @@ The biceps attaches just below the front of the elbow. Heavy lifting, pulling, o
 - You want a graded plan to return to lifting or sport
 - You felt a pop, with bruising, or the biceps now bulges higher up the arm: see a doctor the same day, as a tear is best repaired early. If it happened more than 2 weeks ago, still see a doctor within a few days
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the tendon, explain what is going on, and spot signs that need a doctor.
+- A gradual strengthening programme for the arm aims to help the tendon handle lifting again.
+- You get a step-by-step plan back to lifting, pulling and work tasks without overdoing it.
+
 ## clinicNotes
 - Hook test: 100% sensitivity and specificity in the original series (O'Driscoll 2007); later series lower (reported about 78% overall, 83% complete, 30% partial tears), so a negative test does not exclude a tear. Ultrasound or MRI if a tear is suspected. Acute repair preferred; over about 4 weeks often needs reconstruction (ISAKOS 2023). Non-operative care reportedly loses about 40-50% of supination endurance (secondary source).
 - Differentials: brachialis strain, bicipitoradial bursitis, lateral antebrachial cutaneous nerve entrapment, C5-6 radiculopathy.

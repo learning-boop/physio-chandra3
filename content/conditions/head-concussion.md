@@ -70,6 +70,12 @@ Concussion is diagnosed by a doctor or nurse practitioner, who also checks for a
 - You want a step-by-step plan to return to sport, school or work
 - Tiredness, weakness, low mood, or changes in sex drive or periods are not improving 3 months or more after the injury: please also ask your family doctor about a hormone (pituitary) blood test, which can be checked alongside physiotherapy
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- Once a doctor has checked you, a physiotherapist can explain your symptoms and the expected recovery.
+- Gentle graded exercise, plus neck, balance and eye-movement exercises where needed, can help ease symptoms.
+- You get a step-by-step return to school, work and, once your doctor has cleared you, sport.
+
 ## clinicNotes
 - Physio role is the recovery phase, alongside the GP or NP. Confirm medical assessment and diagnosis (BC guideline: ideally within 72 h); check red flags and the C-spine (Canadian C-Spine Rule).
 - Symptom inventory: SCOAT6 / Child SCOAT6 (over 72 h), RPQ or PCSS at baseline and serially. Risk of persisting symptoms: PoCS Rule (14 and over), 5P (5 to 18).

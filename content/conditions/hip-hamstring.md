@@ -42,6 +42,12 @@ The hamstring tendons attach to the bone you sit on, at the bottom of the buttoc
 - It is not easing after a few weeks of changing your sitting and training
 - You want a staged loading plan to get back to running
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your sit bone and thigh and explain why the tendon is sore.
+- A step-by-step loading programme, starting gently and building up, can help the tendon get stronger.
+- You get advice on sitting and training, and a gradual plan to get back to running.
+
 ## clinicNotes
 - Diagnosis: deep buttock pain at the ischial tuberosity with sitting and hamstring loading; tender at the tuberosity; provocation by the bent-knee stretch, the Puranen-Orava test and the modified bent-knee stretch; ultrasound or MRI if unclear. Ischial bursitis often coexists.
 - Differentials: deep gluteal syndrome (sciatic symptoms, sciatic notch tenderness), ischiofemoral impingement, lumbar radiculopathy, SIJ, an avulsion (a pop with bruising: same day, I5 in the injury screen), a stress fracture of the pelvis.

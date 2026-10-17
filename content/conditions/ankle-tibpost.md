@@ -42,6 +42,12 @@ The tibialis posterior tendon holds up the arch from the inner ankle. When overl
 - Pain with stairs, hills, or longer standing
 - A single-leg heel raise is painful or impossible
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the tendon that supports your arch and how your foot is holding up.
+- A graded strengthening programme with arch supports can help ease pain and support the arch.
+- You get a plan to build back walking and activity, and to keep the tendon strong.
+
 ## clinicNotes
 - Terminology: the 2020 consensus renamed adult-acquired flatfoot "progressive collapsing foot deformity" (PCFD), staged flexible (1) or rigid (2), classes A to E (Myerson 2020, Foot Ankle Int). Your protocol already uses "PCFD Stage I-II".
 - Examination: single-leg heel raise with heel inversion, too-many-toes sign, navicular drop, FPI-6. Refer rigid or rapidly progressing deformity to orthopaedics.

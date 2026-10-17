@@ -36,3 +36,9 @@ The nerves to the arm pass through a narrow gap between the collarbone, the firs
 - Tingling or heaviness keeps coming back with overhead work or carrying
 - It is affecting your grip, work or sleep
 - You want a plan for posture, breathing and first-rib mobility that eases the outlet
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your neck, shoulders and posture and explain what irritates the nerves.
+- Exercises for the shoulder blade muscles and tight neck muscles can help calm the symptoms.
+- You get advice on overhead work, carrying and your desk set-up to help keep symptoms settled.

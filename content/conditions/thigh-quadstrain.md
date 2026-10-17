@@ -37,3 +37,9 @@ The quadriceps are the big muscles at the front of the thigh. A sudden kick, spr
 - You cannot walk normally after a few days
 - You want a graded plan to return to kicking or sprinting: re-injury is common without one
 - It keeps coming back
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your thigh and explain how bad the strain looks.
+- Gentle stretching and step-by-step strengthening can help the muscle heal and get stronger.
+- You get a gradual plan to get back to kicking, sprinting and sport.

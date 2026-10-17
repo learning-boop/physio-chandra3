@@ -10,6 +10,7 @@ import { CLINICS } from '../data/clinics'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
 import TypedAnswer from './TypedAnswer'
+import ResultsConditions from './ResultsConditions'
 import FeedbackForm from './FeedbackForm'
 import { preloadPdf } from './resultsPdf'
 import GuideSteps from './GuideSteps'
@@ -18,6 +19,7 @@ import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS, computeRaw }
 import {
   primaryRegion, questionRegions, needsAreaChoice,
   buildScreens, nextQuestion, rankAcross, alsoConsiderAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS, isBonus, widespreadFlags,
+  reasonsFor,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
@@ -717,6 +719,8 @@ export default function PainAssessment() {
      seen any time from the "Your areas" line (pictures taken as the
      drawing page is left). */
   const focusStage = ['about', 'area', 'emergency', 'physician', 'safety', 'injury', 'questions', 'review', 'urgent'].includes(stage)
+    // The results on a phone (17 Oct 2026): the results first, the body behind "View drawing".
+    || (stage === 'ok' && isPhone)
   const [drawSnap, setDrawSnap] = useState(null)   // { views: [{ src, label }] }
   const [showDrawing, setShowDrawing] = useState(false)
 
@@ -1096,9 +1100,12 @@ export default function PainAssessment() {
      phone most of all. The jump is instant: a smooth scroll is cut short on
      phones by the fade between screens and the body resizing, and it
      stopped part of the way up. */
+  // The results, one step at a time (Chandra, 17 Oct 2026).
+  const [resPage, setResPage] = useState(0)
+  useEffect(() => { if (stage !== 'ok') setResPage(0) }, [stage])
   const sectionRef = useRef(null)
   const firstScreen = useRef(true)
-  const screenKey = `${stage}|${qIndex}|${injuryQ}`
+  const screenKey = `${stage}|${qIndex}|${injuryQ}|${resPage}`
   useLayoutEffect(() => {
     if (firstScreen.current) { firstScreen.current = false; return }
     const el = sectionRef.current
@@ -1961,6 +1968,14 @@ export default function PainAssessment() {
           .pa-confirm-no { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); }
           .pa-confirm-no:hover { border-color: ${GOLD_LIGHT}; }
           .pa-emg-q { margin: 0; font-size: clamp(20px, 5vw, 24px); line-height: 1.4; color: #fff; font-weight: 600; }
+          .pa-resbar { max-width: 920px; margin: 0 0 16px; }
+          .pa-resbar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+          .pa-resstep { font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: ${GOLD_LIGHT}; }
+          .pa-resbook { min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid ${GOLD}; background: rgba(201,169,110,0.16); color: #fff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+          .pa-resbook:hover { background: rgba(201,169,110,0.3); }
+          .pa-resprog { height: 4px; border-radius: 999px; background: rgba(255,255,255,0.1); margin-top: 8px; overflow: hidden; }
+          .pa-resprog span { display: block; height: 100%; background: ${GOLD}; border-radius: 999px; transition: width 0.4s ease; }
+          .pa-resnav { margin-top: 24px; }
           .pa-emg-card .pa-gate > button:first-child { display: none !important; }
           .pa-emg-card .pa-gate-body { margin-top: 0; }
           .pa-emg-more { margin: 10px 0 0; padding-left: 20px; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.85); }
@@ -3477,8 +3492,53 @@ export default function PainAssessment() {
             )}
 
             {/* NON-URGENT RESULT */}
-            {stage === 'ok' && (
-              <Fade k="ok">
+            {stage === 'ok' && (() => {
+              /* The results as steps (Chandra, 17 Oct 2026): the matches
+                 first, then how the pain behaves and how it is affecting
+                 them, the AI overview, keeping the results, the next step,
+                 the summary for the physiotherapist, helping improve the
+                 guide, and a thank-you. A step with nothing to show is left
+                 out. A small Book button on every step (when booking is
+                 offered at all). */
+              const bookOK = !underFive && !holdBooking
+              const resPages = [
+                { key: 'results', title: 'Your results' },
+                ...(painType || behaviour.notes.length ? [{ key: 'behaves', title: 'How your pain behaves' }] : []),
+                ...(psych.notes.length ? [{ key: 'affecting', title: 'How it is affecting you' }] : []),
+                { key: 'ai', title: 'AI overview (optional)' },
+                { key: 'keep', title: 'Keep your results' },
+                { key: 'next', title: bookOK ? 'Book an assessment' : 'Your next step' },
+                { key: 'summary', title: 'Summary for your physiotherapist' },
+                { key: 'improve', title: 'Help improve this guide' },
+                { key: 'thanks', title: 'Thank you' },
+              ]
+              const ri = Math.min(resPage, resPages.length - 1)
+              const resKey = resPages[ri].key
+              const nextPage = resPages[ri + 1]
+              const goKey = (k) => setResPage(Math.max(0, resPages.findIndex((x) => x.key === k)))
+              const resTop = (
+                <div className="pa-resbar">
+                  <div className="pa-resbar-row">
+                    <span className="pa-resstep">Step {ri + 1} of {resPages.length} · {resPages[ri].title}</span>
+                    {bookOK && resKey !== 'next' && (
+                      <button type="button" className="pa-resbook" onClick={() => goKey('next')}>Book an assessment</button>
+                    )}
+                  </div>
+                  <div className="pa-resprog" aria-hidden="true"><span style={{ width: `${((ri + 1) / resPages.length) * 100}%` }} /></div>
+                </div>
+              )
+              const resNav = (
+                <div className="pa-actions pa-resnav">
+                  {nextPage && (
+                    <button className="pa-primary" style={goldBtn} onClick={() => setResPage(ri + 1)}>Next: {nextPage.title}</button>
+                  )}
+                  {ri > 0 && <button style={ghostBtn} onClick={() => setResPage(ri - 1)}>Back</button>}
+                </div>
+              )
+              return (
+              <Fade k={`ok:${resKey}`}>
+                {resTop}
+                {resKey === 'results' && (<>
                 <div style={headBand()}>
                 <span style={label}>Your Results · General Education</span>
                 <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 0' }}>
@@ -3487,7 +3547,7 @@ export default function PainAssessment() {
                 </div>
                 <p style={{ fontSize: 14.5, color: 'rgba(255,255,255,0.7)', margin: '0 0 14px', maxWidth: 520 }}>
                   Reference code: <strong style={{ color: '#fff', letterSpacing: '0.05em' }}>{visitCode || '…'}</strong>
-                  <span style={{ color: 'rgba(255,255,255,0.5)' }}> · save your results at the end of this page</span>
+                  <span style={{ color: 'rgba(255,255,255,0.5)' }}> · you can save your results as a PDF in a later step</span>
                 </p>
 
                 {/* Not-a-diagnosis notice, first on the results (CHCPBC Practice
@@ -3573,29 +3633,8 @@ export default function PainAssessment() {
 
                 {shown.length > 0 ? (
                   <div style={{ marginBottom: 24 }}>
-                    {shown.map(({ c, rk }) => (
-                      <div key={`${rk}/${c.id}`} style={{ ...card, maxWidth: 520, marginBottom: 10 }}>
-                        {multiArea && (
-                          <span style={{ ...label, fontSize: 15, display: 'block', marginBottom: 8 }}>{REGIONS[rk].name}</span>
-                        )}
-                        {/* The condition name stands out (Chandra, 2 Oct 2026):
-                            larger, bold, on a gold band. A tint with an accent
-                            bar, not solid gold, so it does not read as a button. */}
-                        <p style={{ fontSize: 'clamp(19px,4.6vw,22px)', color: '#fff', margin: 0, lineHeight: 1.35, fontWeight: 700,
-                          background: 'rgba(201,169,110,0.22)', borderLeft: `4px solid ${GOLD}`, borderRadius: 8, padding: '10px 14px' }}>{c.name}</p>
-                        {/* A refer-first condition (cervical myelopathy): its
-                            see-your-doctor note comes before anything else. */}
-                        {c.doctorFirst && (
-                          <p style={{ fontSize: 14.5, lineHeight: 1.55, color: '#fcd34d', margin: '10px 0 0', padding: '10px 12px', border: '1px solid rgba(245,158,11,0.55)', background: 'rgba(245,158,11,0.07)', borderRadius: 10 }}>
-                            {c.doctorFirst}
-                          </p>
-                        )}
-                        <p style={{ ...body, fontSize: 14.5, margin: '8px 0 0' }}>{c.blurb}</p>
-                        <Bullets title="What people often notice" items={c.noticed} />
-                        <Bullets title="What often helps" items={c.homeCare} />
-                        <Bullets title="See a physiotherapist if" items={c.seePhysioIf} />
-                      </div>
-                    ))}
+                    <ResultsConditions shown={shown} multiArea={multiArea} regionName={(rk) => REGIONS[rk].name}
+                      reasons={(rk, id) => reasonsFor(keys, scopedAnswers, rk, id)} />
                     <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
                       These patterns can be associated with answers like yours. They are general
                       education, not findings about you — only an individual, hands-on assessment
@@ -3873,6 +3912,8 @@ export default function PainAssessment() {
                   </>
                 )}
 
+                </>)}
+                {resKey === 'behaves' && (<>
                 {/* Pain type (mechanism) — fixed rules in ../data/painType.js.
                     Shown only when the answers clearly point somewhere. */}
                 {painType && (
@@ -3907,6 +3948,8 @@ export default function PainAssessment() {
                   </>
                 )}
 
+                </>)}
+                {resKey === 'results' && (<>
                 {/* Persistent widespread pain ("Fibromyalgia" document, signed
                     2 Oct 2026; ../data/widespreadPain.js): the full explainer
                     belongs here and only here. */}
@@ -3929,6 +3972,8 @@ export default function PainAssessment() {
                   </>
                 )}
 
+                </>)}
+                {resKey === 'behaves' && (<>
                 {/* How the pain behaves: severity, irritability, 24-hour
                     pattern and easing, read by fixed rules — not the AI. */}
                 {behaviour.notes.length > 0 && (
@@ -3947,6 +3992,8 @@ export default function PainAssessment() {
                   </>
                 )}
 
+                </>)}
+                {resKey === 'affecting' && (<>
                 {/* Yellow flags — supportive notes only; no score or label is
                     shown, and nothing here changes whether booking is offered. */}
                 {psych.notes.length > 0 && (
@@ -3968,11 +4015,15 @@ export default function PainAssessment() {
                   </>
                 )}
 
+                </>)}
+                {resKey === 'ai' && (<>
                 <span style={{ ...label, marginBottom: 12 }}>AI Overview · Optional</span>
                 <div style={{ maxWidth: 520, margin: '12px 0 26px' }}>
                   <PainAIPanel zones={zones} answers={aiAnswers.core} privateAnswers={aiAnswers.wellbeing} notes={notesText} matched={matched} onReview={setReview} aiOnly />
                 </div>
 
+                </>)}
+                {resKey === 'next' && (<>
                 {underFive ? (
                   /* Under 5 first (clinic rule: Chandra sees children from 5),
                      also when a doctor must see them first (14 Oct 2026). */
@@ -4011,15 +4062,22 @@ export default function PainAssessment() {
                   </>
                 )}
 
+                </>)}
+                {resKey === 'summary' && (<>
                 {/* Everything the screen worked out, in the order of the CPA
                     Orthopaedic Division subjective booklet — for Chandra, and
                     built on the device from the answers already given. */}
                 <ClinicianSummary text={visitCode ? `Reference code: ${visitCode}\n\n${summaryText}` : summaryText}
                   clinic={CLINICS.find((c) => c.id === clinicId) || null} code={visitCode || ''} />
 
-                <span style={{ ...label, margin: '30px 0 12px' }}>Keep Your Results</span>
-                <SaveResults code={visitCode} pdfData={pdfData} anonPayload={anonPayload} />
+                </>)}
+                {resKey === 'keep' && (<>
+                <span style={{ ...label, margin: '6px 0 12px' }}>Keep Your Results</span>
+                <SaveResults code={visitCode} pdfData={pdfData} anonPayload={anonPayload} part="keep" />
 
+                </>)}
+                {resKey === 'improve' && (<>
+                <SaveResults code={visitCode} pdfData={pdfData} anonPayload={anonPayload} part="share" />
                 {/* Anonymous feedback, for everyone who reaches the results
                     (Chandra, 2 Oct 2026). Only if ticked separately: the areas
                     drawn and the conditions shown, no answers. */}
@@ -4028,7 +4086,27 @@ export default function PainAssessment() {
                   results: shown.map(({ c, rk }) => ({ region: rk, id: c.id })),
                 })} />
 
+                </>)}
+                {resKey === 'thanks' && (<>
+                <div style={headBand()}>
+                  <span style={label}>All done</span>
+                  <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,40px)', margin: '14px 0 0' }}>
+                    Thank you for <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>using the guide</em>
+                  </h2>
+                </div>
+                <div style={{ ...card, maxWidth: 520, marginBottom: 14 }}>
+                  <p style={{ ...body, fontSize: 15.5, margin: 0, color: 'rgba(255,255,255,0.88)' }}>
+                    We hope your results help you understand your pain a little better. Before you go:
+                  </p>
+                  <ul style={{ margin: '10px 0 0', paddingLeft: 20, fontSize: 15, lineHeight: 1.7, color: 'rgba(255,255,255,0.82)' }}>
+                    <li>Save your results as a PDF, if you have not yet, and keep your reference code <strong style={{ color: '#fff' }}>{visitCode || ''}</strong>.</li>
+                    {bookOK && <li>When you are ready, book an assessment and bring your code, so the visit starts from your answers.</li>}
+                    <li>If your symptoms change or get worse, please see a health professional.</li>
+                  </ul>
+                </div>
                 <div className="pa-actions" style={{ marginTop: 22 }}>
+                  {bookOK && <button className="pa-primary" style={goldBtn} onClick={() => goKey('next')}>Book an assessment</button>}
+                  <button style={ghostBtn} onClick={() => goKey('keep')}>Save my results</button>
                   <button style={ghostBtn} onClick={restart}>Start Over</button>
                 </div>
                 <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '20px 0 0', maxWidth: 520 }}>
@@ -4036,8 +4114,11 @@ export default function PainAssessment() {
                   results vary and no particular outcome is implied or guaranteed. If your
                   symptoms change or worsen, please seek advice from a health professional.
                 </p>
+                </>)}
+                {resNav}
               </Fade>
-            )}
+              )
+            })()}
           </AnimatePresence>
 
         </div>

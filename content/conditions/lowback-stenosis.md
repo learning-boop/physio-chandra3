@@ -59,6 +59,12 @@ Lumbar spinal stenosis means the space for the nerves in the lower back has beco
 - New clumsiness of the hands, unsteady walking, stiff legs, or neck pain with the leg symptoms: see a doctor promptly, as the spinal cord higher up may be involved
 - Your walking distance has shrunk, your legs tire or tingle when you stand or walk, or you have been told you have spinal stenosis and want a plan for it: a physiotherapy assessment can help you work out the right next steps
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your back, legs and balance, and explain what the narrowing means.
+- A guided programme of stretches, leg and trunk strength and graded walking can help you walk further.
+- You get fitness options in comfortable positions, like cycling or pool walking, and a plan for daily life.
+
 ## clinicNotes
 - From "Stenosis lumbar.docx" (v1.0, signed by Chandra 5 Oct 2026). History: N-CLASS criteria (Genevay 2018; reported specificity 92%, sensitivity 80%): bilateral leg symptoms, provoked by standing or walking, relieved by sitting or flexion, age, and no pain with sitting. Observation: flexed posture, flattened lordosis, gait.
 - Examination: standing lumbar extension 30-second test; repeated-movement response; neuro screen L3-S1 (myotomes, dermatomes, reflexes), Romberg and balance; SLR and slump (usually negative). Vascular screen: pedal pulses, capillary refill, skin changes; bicycle versus treadmill test to separate neurogenic from vascular claudication. Hip screen (FADIR, FABER, internal rotation range). Upper motor neuron screen if any hand or gait clues (Hoffmann, clonus, Babinski).

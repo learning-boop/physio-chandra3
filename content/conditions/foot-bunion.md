@@ -38,5 +38,11 @@ A bunion is a bony bump on the inside of the big toe joint, with the big toe lea
 - The toe is crossing over or under the second toe
 - You want footwear advice, or are considering surgery
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can look at your foot and explain in plain words what the bunion means for you.
+- Footwear advice, toe spacers and toe and foot exercises can help ease the pain.
+- You get a plan to stay active, and advice on when a surgeon's opinion may be worth considering.
+
 ## clinicNotes
 - Prevalence about 23% at ages 18-65 and about 35% in women over 65 (AIM manual). Conservative care: toe separators, splints and exercise give small, low-quality reductions in the hallux valgus angle (2021 network meta-analysis, PMC8038851); footwear for pain. A bunion shifts the sesamoids laterally.

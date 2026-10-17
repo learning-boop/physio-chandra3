@@ -49,6 +49,12 @@ An overload of the tendons that lift the wrist and fingers, felt at the outer el
 - Strength is gradually dropping: a graded loading programme helps most people
 - Your hand or wrist is getting weaker, or you cannot straighten your wrist or fingers: see a doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your elbow and explain in plain words what is going on.
+- A gradual forearm strengthening programme, sometimes with hands-on treatment or taping, can help ease pain.
+- You get advice on easing grip loads at work and home, and a plan for flare-ups.
+
 ## clinicNotes
 - Tests: Cozen's (sensitivity 84-91%), Maudsley's, Mill's (53-76%); diagnostic evidence weak (Lucado 2022, CPG12-13). Measures: PRTEE, PSFS, pain-free grip.
 - Treatment (Lucado 2022, JOSPT CPG): progressive loading, isometric, concentric or eccentric (B; no type superior); manual therapy and MWM (B); dry needling (B); rigid taping (B); counterforce brace for relief during activity (F; D long term); cryotherapy for irritable cases (E). Imaging only if the diagnosis is uncertain (BESS 2023); about half of people without symptoms show tendon changes (AIM manual pp. 321, 325).

@@ -14,7 +14,9 @@ const API_URL = import.meta.env.VITE_API_URL || ''
      answers chosen, to improve and train the guide (api/anon-share.js). The
      copy never carries the reference code, a name, contact details or
      anything typed in their own words. */
-export default function SaveResults({ code, pdfData, anonPayload }) {
+/* `part` (17 Oct 2026, results shown page by page): 'keep' = the code and
+   the PDF, 'share' = the anonymous copy; left out, both. */
+export default function SaveResults({ code, pdfData, anonPayload, part = 'both' }) {
   const [pdfState, setPdfState] = useState('idle')      // idle | busy | done | error
   const [agree, setAgree] = useState(false)
   const [shareState, setShareState] = useState('idle')  // idle | busy | done | error
@@ -53,7 +55,7 @@ export default function SaveResults({ code, pdfData, anonPayload }) {
 
   return (
     <div className="sr" style={{ maxWidth: 520 }}>
-      <div className="sr-card">
+      {part !== 'share' && <div className="sr-card">
         <span className="sr-label">Your reference code</span>
         <p className="sr-code" aria-live="polite">{code || 'Creating…'}</p>
         <p className="sr-text">
@@ -67,9 +69,9 @@ export default function SaveResults({ code, pdfData, anonPayload }) {
         {pdfState === 'done' && <p className="sr-note">Your PDF is ready. On a phone, choose where to save or send it.</p>}
         {pdfState === 'error' && <p className="sr-note sr-warn">The PDF could not be made on this device. You can still copy the summary below.</p>}
         <p className="sr-small">The PDF is made on your device and is not sent anywhere.</p>
-      </div>
+      </div>}
 
-      <div className="sr-card">
+      {part !== 'keep' && <div className="sr-card">
         <span className="sr-label">Help improve this guide · Optional</span>
         <p className="sr-text">
           You can choose to share an <strong>anonymous</strong> copy of your drawing and the answers
@@ -95,7 +97,7 @@ export default function SaveResults({ code, pdfData, anonPayload }) {
           )}
         {shareState === 'error' && <p className="sr-note sr-warn">It could not be shared just now. Nothing was saved. You can try again later.</p>}
         <p className="sr-small">Nothing is shared unless you tick the box and press Share.</p>
-      </div>
+      </div>}
 
       <style>{`
         .sr-card {

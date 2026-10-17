@@ -42,3 +42,9 @@ The nerves to the arm pass through a narrow gap between the collarbone, the firs
 - You want a plan for posture, breathing and first-rib mobility that eases the outlet
 - The arm swells or turns blue or purple, or the hand goes cold, pale and painful: see a doctor the same day
 - The small muscles of the hand are getting thinner, or your grip is getting weak: see a doctor
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your nerves, posture and first rib, and explain why the arm tingles.
+- Posture, breathing and first-rib mobility exercises aim to ease pressure on the nerves to your arm.
+- You get advice on carrying, overhead work and your work set-up to help prevent flare-ups.

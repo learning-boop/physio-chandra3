@@ -36,6 +36,12 @@ A nerve runs from the low back through the pelvis to the inner thigh, where it s
 - New inner thigh numbness or weakness after pelvic or hip surgery, or after childbirth: see your doctor
 - Pain also goes down the front of the thigh from the back: the low back may be the source
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your inner thigh, hip and nerve to work out where the pain comes from.
+- Gentle nerve-gliding exercises with inner-thigh and hip strengthening can help calm the irritated nerve.
+- You get a plan to adjust your training and build back up to sport gradually.
+
 ## clinicNotes
 - Obturator nerve (L2-L4): sensory to a variable medial thigh patch (often the distal medial thigh), motor to the adductors. Exercise-induced entrapment in athletes (fascia over pectineus and adductor brevis; Bradshaw 1997), after pelvic or hip surgery, obstetric injury, obturator hernia (elderly, thin women; Howship-Romberg sign), pelvic masses.
 - Neurodynamics (Butler): slump knee bend in side-lying (knee flexion, hip extension) then hip ABDUCTION, differentiate with the neck; the femoral slump without abduction is the femoral nerve and the upper roots (lowback-upperroot.md). Adductor weakness, medial thigh sensation, adductor reflex.

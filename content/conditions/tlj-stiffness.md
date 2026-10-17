@@ -38,3 +38,9 @@ The joints where the stiff ribcage spine meets the mobile low back take a lot of
 - It hasn't settled after 2 weeks
 - It keeps coming back with lifting or sport
 - You'd like a mobility and strength plan for the junction
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your lower ribcage and low back move, and explain what is going on.
+- Hands-on care with a mobility and strength plan for the area can help ease stiffness.
+- You get advice on sitting, lifting and sport to help reduce flare-ups.

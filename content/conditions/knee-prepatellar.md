@@ -41,6 +41,12 @@ A small fluid sac sits in front of the kneecap to let the skin glide over it. A 
 - The swelling has not gone down after 2 to 3 weeks
 - It keeps coming back with work
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the swelling and suggest a doctor visit if it looks infected.
+- You get advice on kneeling, knee pads and keeping the knee moving while it settles.
+- A plan for work and daily activities can help lower the chance of it coming back.
+
 ## clinicNotes
 - Superficial bursa between the skin and the kneecap; repeated kneeling or a direct blow. The knee joint itself moves freely and there is no joint effusion (a joint effusion points to the joint, not the bursa).
 - Septic bursitis: warmth, redness, peri-bursal tenderness, cellulitis, a skin breach; risk higher with diabetes, immunosuppression, alcohol use and kneeling occupations. Fever is present in fewer than half, and clinical features alone cannot exclude infection: refer for aspiration and culture if suspected (StatPearls, septic bursitis).

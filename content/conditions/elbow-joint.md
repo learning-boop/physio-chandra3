@@ -43,6 +43,12 @@ Pain from inside the elbow joint itself tends to come with stiffness, where the 
 - Stiffness is limiting daily tasks like washing your hair or eating
 - It locks and will not free up, or the joint becomes hot and swollen: see a doctor
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your elbow bends and straightens and explain what is going on.
+- Regular movement and strength exercises can help ease stiffness and keep your elbow working.
+- You get advice on pacing heavy gripping tasks and managing flare-ups at work and home.
+
 ## clinicNotes
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.
 - Elbow: OA is uncommon (about 2%, reported) and often under 60: heavy manual work or an old injury (AIM manual p. 573 lists "elbow (with trauma)"); NICE NG226's "45 or over" fits the elbow poorly. Pain at the end of range rather than mid-range; ulnar nerve symptoms are common alongside. Catching or locking points to a loose body. The general OA principles apply to the arthritis part.

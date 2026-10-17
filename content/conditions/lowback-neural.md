@@ -57,6 +57,12 @@ Nerves run from the low back to the toes and have to slide and stretch every tim
 - Numbness that does not go away, or weakness: book promptly; you do not need a referral to see us, and we will involve your doctor if it persists or gets worse
 - The pulling, tingling or burning keeps returning, or is affecting sitting, sleep, work or sport: a physiotherapy assessment can check how the nerve is moving and give you a plan
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can test how the nerve moves and explain why a sensitive nerve is usually healthy.
+- Gentle nerve gliding exercises, which help the nerve slide more easily, can help ease leg symptoms.
+- You get a step-by-step plan to return to the positions and activities that bring it on.
+
 ## clinicNotes
 - Physio-led. Two questions drive reasoning (as for the arm, content/reference/neural-mechanosensitivity.md): is the nerve SENSITIVE (pain with stretch or pressure) and is it CONDUCTING poorly (numbness, weakness, reflex change)? Then where along the tract (root, lumbosacral plexus, piriformis, hamstrings, fibular head, tarsal tunnel), and more than one site?
 - Shacklock's response classes: musculoskeletal (structural differentiation does not change it), normal neurogenic (symmetrical, like normals: posterior thigh to knee, sometimes upper calf; SLR range about 50-100 degrees), abnormal neurogenic OVERT (reproduces the clinical pain) or COVERT (abnormal, does not reproduce it but is relevant). Do not use "positive"; then decide relevance and look for the cause - an abnormal test does not name it.

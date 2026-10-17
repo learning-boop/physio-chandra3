@@ -51,6 +51,13 @@ The hip's ball and socket can pinch its cartilage rim (labrum) in deep flexion a
 - It is not improving after about 3 months of a guided programme: we can discuss a referral to a hip specialist
 - Groin pain that aches at night, or hurts to hop or run, especially after an increase in training: see a doctor before running again
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your hip moves and explain in plain words what the pinch means.
+- A guided programme to strengthen and control your hip in comfortable ranges can help ease the pain.
+- You get advice on sitting, squatting and sport so you can stay active with fewer flare-ups.
+
 ## clinicNotes
 - Diagnosis (JOSPT 2014; the criteria list is evidence level III, the C grade is for the intra-articular classification): anterior groin and/or lateral hip pain, aching or sharp, worse with sitting; reproduced by FADIR; IR under 20 degrees at 90 degrees of flexion, with flexion and abduction also limited; clicking, catching or locking may be present.
 - Imaging: cam (alpha angle over 60 degrees) or pincer (lateral centre-edge angle over 35 degrees, crossover sign); the link between shape and pain is not established. Labral tear on MR arthrogram: sens 71-100%, spec 44-71%.

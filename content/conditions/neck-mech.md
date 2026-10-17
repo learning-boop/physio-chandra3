@@ -78,6 +78,12 @@ This is the common type of neck pain where the neck feels stiff and sore, and tu
 - Pins and needles in both hands, clumsy hands, changes in your walking, a fever or weight loss you cannot explain, or a past cancer: see a doctor first
 - A sudden, severe neck pain or headache unlike any before, with dizziness, double vision, slurred speech or trouble swallowing: call 911
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how your neck and upper back move and explain what is going on.
+- Hands-on care for the neck and upper back, with neck and shoulder exercises, can help ease stiffness.
+- You get advice to stay active and a plan to manage future flare-ups at work and home.
+
 ## clinicNotes
 - JOSPT 2017 category: neck pain with mobility deficits. Stage: acute (under 6 weeks), subacute (6-12 weeks), chronic (over 12 weeks); rate irritability. Physio-led (direct access).
 - Assess: cervical AROM (CROM), cervical flexion-rotation test, cervical and thoracic segmental mobility (PAIVMs) with pain provocation, craniocervical flexion test, deep neck flexor endurance. X-rays or scans are usually not needed without red flags (German guideline 2025).

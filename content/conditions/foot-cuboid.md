@@ -36,6 +36,12 @@ On the outer side of the middle of the foot, the cuboid bone and its joints can 
 - It is not settling after 1 to 2 weeks
 - You want hands-on treatment and a plan back to sport
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the outer side of your foot and rule out other causes of the pain.
+- Hands-on treatment of the joint, taping or a small pad, and strengthening can help ease the pain.
+- You get a plan to return to walking, running or dancing step by step.
+
 ## clinicNotes
 - Lateral midfoot pain over the calcaneocuboid joint or 4th and 5th TMT joints; pain with lateral column loading and push-off; often after inversion sprain or in dancers. No validated test (evidence low: case series and reviews); use history, palpation, midfoot stress and response to taping or padding. Exclude a 5th metatarsal base fracture, a Lisfranc injury (plantar ecchymosis) and stress fracture.
 - Management: cuboid manipulation (whip or squeeze) with consent, taping or a cuboid pad, peroneus longus and intrinsic strengthening, footwear; the protocol expects improvement in 2 to 6 weeks in mild cases (figures not independently sourced).

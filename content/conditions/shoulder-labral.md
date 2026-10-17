@@ -39,6 +39,12 @@ The labrum is a rim of firm tissue that deepens the shoulder socket. It can be i
 - It is not improving after a few weeks of easing off
 - You want a plan for returning to throwing or overhead sport
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your shoulder and explain in plain words what may be going on.
+- Shoulder and shoulder-blade strengthening, with advice on throwing load, can help ease pain and catching.
+- You get a step-by-step return to overhead sport, and advice on when a surgeon's opinion is worthwhile.
+
 ## clinicNotes
 - Mechanisms: repetitive overhead or throwing loading (posterosuperior or SLAP, peel-back), traction, a fall onto the outstretched arm, dislocation (anterior-inferior, Bankart). Often coexists with instability or rotator cuff pain.
 - Tests are individually weak (AIM manual pp.306-308): crank +LR about 1.4-1.6; anterior slide +LR about 0.7; biceps load tests modest. Combine history, clusters and response to load; MR arthrography if management would change.

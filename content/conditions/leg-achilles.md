@@ -37,3 +37,9 @@ The Achilles dislikes sudden jumps in training load. It responds with pain and m
 - Heel/calf pain lasts more than 1–2 weeks or keeps flaring
 - Stairs, walking, or running are limited
 - You want a structured loading program — the proven treatment for tendinopathy
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your Achilles and explain why the tendon has become sore.
+- A step-by-step calf and tendon loading programme can help the tendon get stronger.
+- You get a gradual plan to adjust your training and get back to running and sport.

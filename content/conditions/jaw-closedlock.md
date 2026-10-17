@@ -35,3 +35,9 @@ When the cartilage disc in the jaw joint slips forward and stays there, it can b
 - Book soon: early guided movement gives the best chance of restoring opening
 - Opening is not improving over a week or two
 - Eating or cleaning your teeth is difficult
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check how far your jaw opens and explain what is blocking it.
+- Gentle, guided jaw movement and hands-on care can help improve opening, especially when started early.
+- You get a home exercise plan and advice on eating and jaw habits as it improves.

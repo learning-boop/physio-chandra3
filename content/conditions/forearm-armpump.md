@@ -36,3 +36,9 @@ In sports that need hard, repeated gripping, such as motocross, rowing, climbing
 - It takes longer and longer to settle after stopping
 - Pain lasts into the next day: see a doctor, as that is not typical
 - The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your forearm and grip and explain what is causing the tightness.
+- Advice on how hard you grip and how your equipment is set up can help reduce the build-up.
+- A gradual training plan aims to help you manage longer sessions with less arm pump.

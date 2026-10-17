@@ -36,6 +36,12 @@ A deep ache in the middle of the back of the wrist, with no lump, can come from 
 - It has not settled after 2 to 3 weeks: see us or your doctor, as an X-ray or MRI may be needed
 - The wrist clicks, gives way, or your grip is getting weaker
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your wrist and help you know if an X-ray or a doctor's review is needed.
+- Avoiding weight on the bent-back wrist, and a short-term support, can help it settle.
+- A gradual strengthening plan aims to help you get back to weight-bearing and heavy tasks.
+
 ## clinicNotes
 - Scapholunate injury: often after a fall on the outstretched hand; Watson (scaphoid shift) test of limited value; clenched-fist PA X-ray for widening; MRI or arthroscopy; refer early (Aspetar review).
 - Kienböck's: ages about 20-40, dorsal central pain, early X-ray normal: MRI (PMC12301778). Occult dorsal ganglion: ultrasound.

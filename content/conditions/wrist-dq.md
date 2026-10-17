@@ -45,6 +45,12 @@ The tendons that move the thumb run through a snug tunnel on the thumb side of t
 - It returns whenever you resume normal activity
 - Splints or rest alone haven't fixed it: a physiotherapist can guide a gradual return to load
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the thumb side of your wrist and explain what is irritating the tendons.
+- A thumb splint for sore tasks, better lifting technique and gradual strengthening can help it settle.
+- You get tips for lifting a baby or kettle, and advice on when a doctor's review is worthwhile.
+
 ## clinicNotes
 - Tests: the thumb-in-fist-then-ulnar-deviation test (W5) is the Eichhoff test, which gives more false positives than Finkelstein's original (traction on the thumb) and the WHAT test (wrist hyperflexion and abduction of the thumb; Goubau 2014; Wu 2018). AIM manual: Finkelstein sensitivity 81%, specificity 50%, LR+ 1.62.
 - Treatment: relative rest, thumb spica splint for aggravating tasks, lifting technique (new parents), graded loading (low-certainty evidence). Injection plus splint has the strongest evidence (Challoumas 2023 network meta-analysis; the splint adds little), a physician decision. Hand surgeon if not better after 6 to 12 weeks, or both sides (AIM).

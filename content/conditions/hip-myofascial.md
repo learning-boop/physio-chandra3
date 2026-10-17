@@ -50,6 +50,13 @@ A muscle that has become tight and sensitive, often from being held in one posit
 - You would like hands-on help to settle it (pressure techniques, and dry needling where appropriate and with your consent) and a plan to stop it recurring
 - Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first
 
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check where the ache comes from and explain why a sore muscle can spread pain.
+- Hands-on care with gentle stretching, and teaching you to ease the tender spot, can help relieve it.
+- Graded exercise and changes to work, sleep and daily habits can help stop it building up again.
+
 ## clinicNotes
 - Hip and buttock referral maps: gluteus minimus to the lateral and posterior thigh and calf ("pseudo-sciatica"); gluteus medius to the iliac crest, sacrum and buttock; piriformis to the buttock and posterior thigh. Distinguish from gluteal tendinopathy (tender over the greater trochanter, single-leg stance), deep gluteal syndrome (sciatic nerve signs) and lumbar radiculopathy.
 - Myofascial pain syndrome, 2018 Delphi criteria (2 of 3): taut band, hypersensitive spot, referred pain on stimulation (local twitch supportive, not required). Palpation reliability is only moderate: treat the label as a working hypothesis and judge by response. The site asks the patient to press the spot themselves (the shared tender-spot question).

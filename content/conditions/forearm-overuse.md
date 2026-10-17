@@ -36,3 +36,9 @@ The muscles that grip and move the wrist and fingers fill most of the forearm. L
 - The ache has not settled after 2 to 3 weeks of changes
 - It is limiting your work or sport
 - You start to notice tingling or weakness in the hand
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your forearm and explain why the muscles are aching.
+- Advice on breaks, grip and workstation set-up, plus gradual strengthening, can help ease the ache.
+- You get a plan to build longer or heavier tasks back up step by step.

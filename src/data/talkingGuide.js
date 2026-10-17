@@ -97,7 +97,7 @@ export const PAGE_MESSAGES = {
     // Said to everyone, so no booking here (14 Oct 2026): under-5 and
     // doctor-first results must not be told to book; the page's own next
     // step says what fits.
-    text: "These are your results. They are general information about what your answers can be associated with. They are not a diagnosis. Your next step is at the end of the page. You can save your results as a PDF.",
+    text: "These are your results. They are general information about what your answers can be associated with. They are not a diagnosis. Tap Next to go through them, one step at a time.",
     chips: ['results', 'save', 'privacy'],
   },
   '/about': {

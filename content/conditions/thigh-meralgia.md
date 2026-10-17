@@ -40,3 +40,9 @@ A skin nerve passes just inside the front of the hip bone on its way to the oute
 - Both thighs are affected, you are losing weight without trying, or there is a lump in the tummy or groin: see your doctor
 - Numbness between the legs, or new trouble passing urine or controlling your bowels: go to the emergency department now
 - You want help working out the cause
+
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check the nerve and explain in plain words what is causing the burning or tingling.
+- You get advice on clothing, belts and positions to take pressure off the nerve.
+- Gentle movement and activity advice can help symptoms settle over time.

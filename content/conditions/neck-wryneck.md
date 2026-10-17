@@ -45,6 +45,12 @@ A neck that suddenly locks, often on waking or after a small awkward movement, s
 - A fever, a severe headache, or feeling very unwell with the stiff neck: get urgent medical care
 - It is not easing after a few days, or keeps coming back: a physiotherapy assessment can help free it up and stop it recurring
 
+## physioHelps
+<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+- A physiotherapist can check your neck and explain that a suddenly locked neck is common.
+- Gentle hands-on care for the neck and upper back, with easy movement exercises, can help free it up.
+- You get advice to stay active and simple tips to help prevent it happening again.
+
 ## clinicNotes
 - Acute wry neck: sudden painful restriction, usually on waking, often thought to be a locked facet (zygapophyseal) joint or acute disc irritation; JOSPT 2017 acute neck pain with mobility deficits (thoracic manipulation and cervical mobilisation, active ROM, advice to stay active).
 - In children: exclude Grisel's syndrome (atlantoaxial rotatory subluxation after a throat or ENT infection or surgery), retropharyngeal abscess, trauma, and, rarely, a posterior fossa tumour (persistent tilt, headache, vomiting): doctor first. The site does not see children under 5.
