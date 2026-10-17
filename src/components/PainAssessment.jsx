@@ -9,6 +9,7 @@ import { byMechanism, smartArea, smartAreas, gateUnsureFlags, gateRows } from '.
 import { CLINICS } from '../data/clinics'
 import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
+import TypedAnswer from './TypedAnswer'
 import FeedbackForm from './FeedbackForm'
 import { preloadPdf } from './resultsPdf'
 import GuideSteps from './GuideSteps'
@@ -947,7 +948,7 @@ export default function PainAssessment() {
     )
   }
   // "When did this start?" once a nerve or spinal cord sign is ticked.
-  const whenAsk = (members) => lbProto && members.some((m) => WHEN_FOR.includes(m.id) && flags.includes(m.id)) && (
+  const whenAsk = (members) => lbProto && members.some((m) => m && WHEN_FOR.includes(m.id) && flags.includes(m.id)) && (
     <div style={{ marginTop: 10 }}>
       <p className="pa-gate-ask">{WHEN_Q.text}</p>
       {WHEN_Q.options.map((o) => {
@@ -1423,7 +1424,7 @@ export default function PainAssessment() {
   // The questions come in parts: emergency signs, then signs for a doctor
   // (with the injury questions), then the pain itself. An area with no
   // emergency page starts at the doctor part.
-  const PART_NAMES = { emergency: 'Emergency Check', physician: 'Doctor Check', pain: 'About Your Pain' }
+  const PART_NAMES = { emergency: 'Emergency Check', physician: 'Symptoms That May Need a Doctor', pain: 'About Your Pain' }
   const partLabel = (part) => {
     const parts = ['emergency', 'physician', 'pain'].filter((p) => p !== 'emergency' || screening.emergency.length)
     return `Part ${parts.indexOf(part) + 1} of ${parts.length} · ${PART_NAMES[part]}`
@@ -2650,8 +2651,7 @@ export default function PainAssessment() {
                                     <Tick on={sel} />
                                   </button>
                             {sel && (
-                              <input
-                                autoFocus
+                              <TypedAnswer
                                 value={answers[q.id + '_other'] || ''}
                                 onChange={(e) => setAnswer(q.id + '_other', e.target.value)}
                                 placeholder="Describe it in your own words…"
@@ -2660,6 +2660,8 @@ export default function PainAssessment() {
                                   color: '#fff', padding: '16px 17px', fontSize: 16.5,
                                   fontFamily: 'var(--font-body)', boxSizing: 'border-box', minHeight: 56,
                                 }}
+                                options={head.filter((o) => !isPicked(q, o.id)).map((o) => ({ id: o.id, label: o.label }))}
+                                onPick={(id) => { if (!isPicked(q, id)) toggleAnswer(q, id) }}
                               />
                             )}
                                 </>
@@ -2961,7 +2963,7 @@ export default function PainAssessment() {
                     <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 8px', maxWidth: 520 }}>
                       {emergency
                         ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
-                        : <>Next, signs that may need a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>doctor's check</em></>}
+                        : <>A few more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety questions</em></>}
                     </h2>
                     <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
                       {emergency ? 'Most people answer no. Is this happening to you now?' : 'Most people answer no. Does this fit you now?'}
@@ -2986,7 +2988,7 @@ export default function PainAssessment() {
                             {signSentences(emgCard.more).map((x) => <li key={x}>{x}</li>)}
                           </ul>
                         )}
-                        {emgYes ? whenAsk([r.flag]) : ynRow}
+                        {emgYes && r.flag ? whenAsk([r.flag]) : ynRow}
                       </>
                     )}
                     {openEmpty && emgYes && (
@@ -3019,7 +3021,7 @@ export default function PainAssessment() {
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 10px', maxWidth: 520 }}>
                     {emergency
                       ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
-                      : <>Next, symptoms that may need a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>doctor's attention</em></>}
+                      : <>A few more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety questions</em></>}
                   </h2>
                   <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
                     {emergency
@@ -3092,8 +3094,7 @@ export default function PainAssessment() {
                           <span>Other — enter your own answer</span>
                         </button>
                         {sel && (
-                          <input
-                            autoFocus
+                          <TypedAnswer
                             value={flagOther}
                             onChange={(e) => setFlagOther(e.target.value)}
                             placeholder="Please describe the symptom…"

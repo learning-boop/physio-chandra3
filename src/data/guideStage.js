@@ -78,4 +78,7 @@ export const guideEvents = typeof window !== 'undefined' ? new EventTarget() : n
 export const sendGuide = (type) => { if (guideEvents) guideEvents.dispatchEvent(new Event(type)) }
 /* Turning the 3D body by voice ('left', 'right', 'back', 'front',
    'leftSide', 'rightSide', 'up', 'down', 'in', 'out'): Body3D.jsx moves. */
+/* A typed answer was read on the device (./../components/TypedAnswer.jsx):
+   { kind: 'urgent' | 'suggest' | 'noted', label? } for the assistant to say. */
+export const sendGuideTyped = (detail) => { if (guideEvents) guideEvents.dispatchEvent(new CustomEvent('typed', { detail })) }
 export const sendBodyMove = (move) => { if (guideEvents) guideEvents.dispatchEvent(new CustomEvent('body-move', { detail: move })) }

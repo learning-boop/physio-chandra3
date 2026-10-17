@@ -1243,11 +1243,30 @@ export default function TalkingGuide() {
   const showMe = () => { stopListening(); soundRef.current = true; startDemo() }
   const quiet = () => { stopListening(); voice.stop(); if (modeRef.current !== 'chat') setMode('face') }
   const micStart = () => { micAsked.current = true; afterConsent.current = () => { if (guidedRef.current) listenFor('nav') }; micYes() }
-  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo(), 'mic-off': () => { if (micOnRef.current || rec.current) micOff(false) }, demo: showMe, quiet, 'mic-start': micStart }
+  // 'typed': a typed answer was read on the device (TypedAnswer.jsx). Urgent
+  // words: the emergency advice, always shown. In voice guide mode, what it
+  // may mean ("Pins and needles. Is that what you meant?") or a thank-you;
+  // the typed words themselves are never read out.
+  const typed = (d) => {
+    if (!d) return
+    if (d.kind === 'urgent') {
+      const r = findReply('emergency')
+      stopListening()
+      const msg = addGuide(r.a, { urgent: true, calls: r.calls })
+      setChips([])
+      setMode('bubble')
+      say(msg)
+      return
+    }
+    if (!guidedRef.current) return
+    if (d.kind === 'suggest' && d.label) sayThen(`${asSentence(d.label)} ${VOICE.typedMean}`)
+    else if (d.kind === 'noted') sayThen(VOICE.typedNoted)
+  }
+  handlers.current = { typed, yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo(), 'mic-off': () => { if (micOnRef.current || rec.current) micOff(false) }, demo: showMe, quiet, 'mic-start': micStart }
   useEffect(() => {
     if (!guideEvents) return
-    const on = (e) => { const h = handlers.current[e.type]; if (h) h() }
-    const types = ['yes', 'change', 'mic-yes', 'mic-no', 'mic-off', 'demo', 'quiet', 'mic-start']
+    const on = (e) => { const h = handlers.current[e.type]; if (h) h(e.detail) }
+    const types = ['yes', 'change', 'mic-yes', 'mic-no', 'mic-off', 'demo', 'quiet', 'mic-start', 'typed']
     types.forEach((t) => guideEvents.addEventListener(t, on))
     return () => types.forEach((t) => guideEvents.removeEventListener(t, on))
   }, [])

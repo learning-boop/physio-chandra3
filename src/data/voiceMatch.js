@@ -404,3 +404,22 @@ export function matchDetail(text, options, multi = false) {
   return { ids: [], close }
 }
 export function matchOptions(text, options, multi = false) { return matchDetail(text, options, multi).ids }
+
+/* Typed answers ("Something else", "Other"): clearly urgent words only
+   (17 Oct 2026). Stricter than the chat's emergency words: "pee", "poo",
+   "bowel" or "bleeding" alone are everyday answers here ("worse when I
+   strain on the toilet"), so only phrases that point to an emergency. */
+const URGENT_PHRASES = ['chest pain', 'chest hurts', 'chest tight', 'tight chest', "can't breathe", 'cant breathe', 'cannot breathe',
+  'short of breath', 'shortness of breath', 'trouble breathing', 'struggling to breathe', 'stroke', 'face drooping', 'face droop',
+  'slurred', 'passed out', 'fainted', 'blacked out', 'unconscious', 'seizure', 'numb between', 'numbness between',
+  'numb groin', 'numb around my bottom', 'numb bottom', 'saddle', 'wet myself', 'wetting myself', "can't pee", 'cant pee',
+  'cannot pee', 'unable to pee', "can't urinate", 'cannot urinate', 'not peeing', 'lost control', "can't control my bladder",
+  "can't control my bowel", "can't hold my pee", "can't hold my poo", 'leaking urine', 'leaking pee', 'pooed myself',
+  'kill myself', 'end my life', 'self harm', 'hurt myself', 'overdose', 'bone sticking out', 'coughing blood',
+  'coughing up blood', 'vomiting blood', 'throwing up blood', 'blood in my pee', 'blood in my urine', 'black poo', 'black stool',
+  'worst headache', 'sudden headache', 'ambulance', 'emergency', '9 1 1', '911', 'both legs weak', 'legs giving way']
+const URGENT_STEMS = ['suicid', 'incontinen']
+export const typedUrgent = (text) => {
+  const t = norm(text)
+  return has(t, URGENT_PHRASES) || URGENT_STEMS.some((s) => t.includes(s))
+}

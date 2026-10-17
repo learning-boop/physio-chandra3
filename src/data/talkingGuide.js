@@ -173,6 +173,10 @@ export const VOICE = {
   cleared: "Okay, I've cleared this question. Say your answers again, or tap them.",
   sayInstead: 'Just say the answer you want instead.',
   anythingElse: "Anything else? Say next when you're done.",
+  // A typed answer (17 Oct 2026): what it may mean, or a thank-you. The
+  // typed words are never read out.
+  typedMean: 'Is that what you meant? If it is, tap Yes.',
+  typedNoted: "Thank you, I've noted what you wrote. Chandra will go through it with you.",
   // Called by name ("hey Chandra") with nothing after it.
   wake: "Yes? I'm listening.",
   // The landing page, once the microphone is on.
