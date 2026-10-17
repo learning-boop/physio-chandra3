@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect, setGuideMic, setGuideConfirmKey, guideEvents, sendBodyMove } from '../data/guideStage'
 import {
-  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
+  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, TRAINING, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
 import { command, yesNo, saysNone, matchDetail, answerEdit, norm, wakeWord, bodyMove, areaEdit, voiceWords } from '../data/voiceMatch'
 import { gotMany, asSentence } from '../data/guideSpeech'
@@ -1185,11 +1185,22 @@ export default function TalkingGuide() {
   // Taps on the page for me (src/data/guideStage.js, sendGuide).
   const handlers = useRef({})
   // 'mic-off': "Start without voice" was tapped, so the microphone goes off.
-  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo(), 'mic-off': () => { if (micOnRef.current || rec.current) micOff(false) } }
+  // 'training': "Walk me through it" on the how-it-works page, read out
+  // even when the voice is off (the tap asks for it).
+  const training = () => {
+    stopListening()
+    voice.stop()
+    const msg = addGuide(forDevice(TRAINING, phone))
+    setMode('bubble')
+    soundRef.current = true
+    say(msg)
+    if (guidedRef.current && micOnRef.current) listenFor('nav')
+  }
+  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo(), 'mic-off': () => { if (micOnRef.current || rec.current) micOff(false) }, training }
   useEffect(() => {
     if (!guideEvents) return
     const on = (e) => { const h = handlers.current[e.type]; if (h) h() }
-    const types = ['yes', 'change', 'mic-yes', 'mic-no', 'mic-off']
+    const types = ['yes', 'change', 'mic-yes', 'mic-no', 'mic-off', 'training']
     types.forEach((t) => guideEvents.addEventListener(t, on))
     return () => types.forEach((t) => guideEvents.removeEventListener(t, on))
   }, [])

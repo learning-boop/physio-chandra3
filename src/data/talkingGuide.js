@@ -42,11 +42,13 @@ export const PAGE_MESSAGES = {
     text: "Hi, tap Start to begin. Starting means you agree to the terms below.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
+  // Short (Chandra, 17 Oct 2026): the full walk-through is TRAINING below,
+  // read out only when "Walk me through it" is tapped.
   'guide:guide': {
     open: true,
     text: {
-      phone: "Okay, here's how it works. First, turn the body: swipe left or right until the sore side faces you. Swipe up or down to tilt it, and pinch to zoom in. Next, tap Draw, then trace every painful area with your finger, including where the pain spreads. Made a mistake? No worries, just tap Undo. Then answer the questions: tap the answer that fits best, and tap Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can tap the face in the corner at any time to ask me a question.",
-      computer: "Okay, here's how it works. First, turn the body: click and drag left or right until the sore side faces you. Drag up or down to tilt it, and scroll to zoom in. Next, click Draw, then trace every painful area, including where the pain spreads. Made a mistake? No worries, just click Undo. Then answer the questions: click the answer that fits best, and click Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can click the face in the corner at any time to ask me a question.",
+      phone: "Okay, follow the steps below, then tap Continue. If you'd like me to talk you through them, tap Walk me through it.",
+      computer: "Okay, follow the steps below, then click Continue. If you'd like me to talk you through them, click Walk me through it.",
     },
     chips: ['turn-body', 'draw', 'answer', 'change-answer'],
   },
@@ -114,6 +116,13 @@ export const PAGE_MESSAGES = {
   },
 }
 
+/* The how-it-works page in full, read out when "Walk me through it" is
+   tapped (the words of the recordings made for that page). */
+export const TRAINING = {
+  phone: "Okay, here's how it works. First, turn the body: swipe left or right until the sore side faces you. Swipe up or down to tilt it, and pinch to zoom in. Next, tap Draw, then trace every painful area with your finger, including where the pain spreads. Made a mistake? No worries, just tap Undo. Then answer the questions: tap the answer that fits best, and tap Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can tap the face in the corner at any time to ask me a question.",
+  computer: "Okay, here's how it works. First, turn the body: click and drag left or right until the sore side faces you. Drag up or down to tilt it, and scroll to zoom in. Next, click Draw, then trace every painful area, including where the pain spreads. Made a mistake? No worries, just click Undo. Then answer the questions: click the answer that fits best, and click Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can click the face in the corner at any time to ask me a question.",
+}
+
 /* ── Voice guide mode ("Start with voice guide") ───────────────────────────
    The drawing page's demo: read out while the body turns by itself and a
    hand shows the gestures. DEMO_STEPS says what is shown during each
@@ -142,7 +151,7 @@ export const VOICE = {
   helpTurn: 'To turn the body, say turn left, turn right, show the back, or zoom in.',
   help: 'You can say your answer, using the words on the button or its letter. Where you can tick more than one, say several letters, like A and C. To take one off, say remove, and its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
-  offer: "You can talk with me as we go: answer by speaking or by tapping, whichever you like. To speak, tap Use my microphone.",
+  offer: "If you'd like to talk with me by voice, tap Use my microphone. This gives permission to use your microphone.",
   noMic: "I can't find a microphone, so please tap your answers instead.",
   noService: "Speech recognition is switched off on this device. On an iPhone, turn on Dictation in Settings, then tap the microphone. Or just tap your answers.",
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
@@ -513,6 +522,7 @@ export function allSpokenTexts() {
   both('demo', DEMO)
   add('change-reply', CHANGE_REPLY)
   add('mic-ask', MIC_ASK)
+  both('training', TRAINING)
   for (const [k, t] of Object.entries(VOICE)) add('voice-' + k, t)
   add('fallback', FALLBACK.a)
   add('greeting', GREETING)

@@ -1624,7 +1624,7 @@ export default function PainAssessment() {
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" stroke="none" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" /></svg>
         Talk with me?
       </p>
-      <p className="pa-mic-offer-text">Answer each question by speaking or by tapping, whichever you like. Each answer moves you on to the next question.</p>
+      <p className="pa-mic-offer-text">If you'd like to talk with me by voice, tap <strong>Use my microphone</strong>. This gives permission to use your microphone. Or just tap your answers.</p>
       <div className="pa-mic-offer-btns">
         <button className="pa-confirm-yes" onClick={() => sendGuide('mic-yes')}>Use my microphone</button>
         <button className="pa-confirm-no" onClick={() => sendGuide('mic-no')}>Just tap</button>
@@ -1893,6 +1893,9 @@ export default function PainAssessment() {
           .pa-mic-offer-title svg { color: #7DD8D3; }
           .pa-mic-offer-text { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.85); }
           .pa-mic-offer-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+          .pa-guide-short { text-align: center; margin: 0 auto 18px; max-width: 520px; }
+          .pa-guide-short p { margin: 0 0 10px; font-size: 17px; line-height: 1.5; color: rgba(255,255,255,0.9); }
+          .pa-guide-short .pa-quiet-start { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; padding-left: 22px; padding-right: 22px; }
           .pa-mic-offer-note { margin: 12px 0 0; font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,0.6); }
           @media (prefers-reduced-motion: reduce) { .pa-confirm { animation: none; } }
           .pa-quiet-start {
@@ -2207,6 +2210,17 @@ export default function PainAssessment() {
                     <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 0' }}>
                       Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
                     </h2>
+                  </div>
+                  {/* Short by default (Chandra, 17 Oct 2026): the full spoken
+                      walk-through only when asked for. */}
+                  <div className="pa-guide-short">
+                    <p>Follow the steps below, then {isPhone ? 'tap' : 'click'} <b>Continue</b>.</p>
+                    <button type="button" className="pa-quiet-start" onClick={() => { unlockSpeech(); sendGuide('training') }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" />
+                      </svg>
+                      Walk me through it
+                    </button>
                   </div>
                   {micOffer()}
                   <GuideSteps phone={isPhone} />
