@@ -25,11 +25,24 @@ import * as SP from './spondylolysis.js'
 import * as OI from './oi.js'
 import * as GQ from './genericQuestions.js'
 import { PATTERNS } from './patternChecks.js'
+import * as SGT from './safetyGates.js'
+import * as EMG from './emergencyGroups.js'
+import * as PQ from './plainQuestions.js'
 
 /* How an answer reads aloud: no dashes or dots between parts, no quotes. */
 export const spoken = (t) => String(t || '').replace(/\s*[·—–]\s*/g, ', ').replace(/[“”"]/g, '').replace(/\s+/g, ' ').trim()
 /* One item as a sentence of its own. */
 export const asSentence = (t) => { const x = spoken(t); return /[.!?]$/.test(x) ? x : x + '.' }
+
+/* The emergency flash cards (17 Oct 2026): the question, then each sign
+   under it as a sentence of its own, so every card is made of recorded
+   sentences whatever signs it shows. PainAssessment.jsx uses these. */
+const capFirst = (t) => t.charAt(0).toUpperCase() + t.slice(1)
+export const signSentences = (more = '') => String(more).split(/;\s*(?:or\s+)?/).map((p) => p.trim()).filter(Boolean).map((p) => asSentence(capFirst(p)))
+export const safetyCard = (text, more = '') => [asSentence(text), ...signSentences(more)].join(' ')
+export const EMG_INTRO = 'First, a few safety questions. Most people answer no.'
+export const DOC_INTRO = 'Next, a few signs a doctor may need to check. Most people answer no.'
+export const EMG_TAP = 'If this is happening to you, please tap Yes. If not, say no.'
 
 /* The read-backs (PainAssessment uses these, so the wording matches). */
 export const readOne = (label) => `You answered: ${spoken(label).replace(/[.!?]+$/, '')}. Is that right?`
@@ -129,6 +142,26 @@ export function allGuideLines() {
   // back when ticked).
   arr(GQ.UNIVERSAL_CHECKS).forEach((f) => add(asSentence(f.text)))
   arr(PATTERNS).forEach((f) => add(asSentence(f.text)))
+
+  // The emergency flash cards: their opening, the emergency group titles,
+  // and the sign lines and plain ticks of the questions in those groups
+  // (the doctor page and final check stay checklists, so not theirs).
+  add(EMG_INTRO); add(DOC_INTRO); add(EMG_TAP)
+  // The doctor page's groups are each body part's (safetyGates.js GATES).
+  const docGroups = Object.values(SGT.GATES || {}).flat()
+  const emIds = new Set([...arr(EMG.EM_GROUPS), ...docGroups].flatMap((g) => arr(g && g.members)))
+  ;[...arr(EMG.EM_GROUPS), ...docGroups].forEach((g) => g && typeof g.title === 'string' && add(asSentence(g.title)))
+  for (const t of Object.values(SGT.THEME_TITLES || {})) {
+    if (typeof t === 'string') add(asSentence(t))
+    else if (typeof t === 'function') for (const ms of [[], [{ id: 'cast' }], [{ id: 'replacement' }], [{ id: 'cast' }, { id: 'replacement' }]]) add(asSentence(t(ms)))
+  }
+  for (const id of emIds) {
+    const v = (SGT.SHORT || {})[id] || (SGT.SIGNS || {})[id]
+    if (typeof v === 'string') signSentences(v).forEach(add)
+    if (PQ.PLAIN_Q && typeof PQ.PLAIN_Q[id] === 'string') add(asSentence(PQ.PLAIN_Q[id]))
+    arr(PQ.TICKS && PQ.TICKS[id]).forEach((t) => t && t.text && add(asSentence(t.text)))
+  }
+  add(asSentence('Do any of these fit you?'))
 
   // Injury questions.
   for (const sc of arr(INJ.SCREENS)) arr(sc.questions).forEach(question)

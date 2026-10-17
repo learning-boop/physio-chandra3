@@ -177,7 +177,9 @@ function MovePic({ kind, phone }) {
   )
 }
 
-export default function GuideSteps({ phone }) {
+/* compact (page 2, "Before you start", 17 Oct 2026): the three steps only,
+   small, without the moving-the-body tiles. */
+export default function GuideSteps({ phone, compact = false }) {
   const steps = [
     { n: '1', title: 'Turn the body', pic: <TurnPic phone={phone} />,
       text: phone ? 'Swipe left or right so the sore side faces you.' : 'Mouse: click and drag left or right. Touchpad: press and slide. Turn it until the sore side faces you.' },
@@ -193,8 +195,13 @@ export default function GuideSteps({ phone }) {
       ['tilt', 'See the soles', 'Mouse: click and drag up or down', 'Touchpad: press and slide up or down'],
       ['zoom', 'Zoom in or out', 'Mouse: scroll the wheel on the body', 'Touchpad: pinch on the body']]
   return (
-    <div className="gs">
+    <div className={'gs' + (compact ? ' gs-compact' : '')}>
       <style>{`
+        .gs-compact { max-width: 760px; margin: 0 auto; }
+        .gs-compact .gs-steps { margin-bottom: 16px; gap: 10px; }
+        .gs-compact .gs-card { padding: 10px 12px; }
+        .gs-compact .gs-pic { height: 90px; }
+        @media (max-width: 719px) { .gs-compact .gs-card .gs-pic { width: 76px; flex-basis: 76px; } .gs-compact .gs-card { gap: 10px; padding: 8px 12px; } }
         .gs { width: 100%; }
         .gs-steps { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
         @media (min-width: 720px) { .gs-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } }
@@ -279,6 +286,7 @@ export default function GuideSteps({ phone }) {
           </li>
         ))}
       </ol>
+      {!compact && <>
       <span className="gs-label">Moving the body</span>
       <ul className="gs-moves">
         {moves.map(([kind, action, ...lines]) => (
@@ -289,6 +297,7 @@ export default function GuideSteps({ phone }) {
           </li>
         ))}
       </ul>
+      </>}
     </div>
   )
 }

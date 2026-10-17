@@ -41,5 +41,24 @@ if (import.meta.env.DEV && typeof window !== 'undefined' && /[?&]fakemic\b/.test
     r.onresult && r.onresult({ resultIndex: 0, results: [res] })
     return true
   }
+  // Like a real browser: the words arrive one by one as interim results,
+  // and the final words only finalMs later (Chrome: about 1-2 s).
+  window.__speak = (text, finalMs = 1500) => {
+    const r = state.running
+    note(`speak "${text}" → ${r ? 'heard' : 'NOT LISTENING'}`)
+    if (!r) return false
+    const words = text.split(' ')
+    words.forEach((_, i) => setTimeout(() => {
+      if (state.running !== r) return
+      const res = Object.assign([{ transcript: words.slice(0, i + 1).join(' '), confidence: 0.5 }], { isFinal: false })
+      r.onresult && r.onresult({ resultIndex: 0, results: [res] })
+    }, i * 250))
+    setTimeout(() => {
+      if (state.running !== r) return
+      const res = Object.assign([{ transcript: text, confidence: 0.9 }], { isFinal: true })
+      r.onresult && r.onresult({ resultIndex: 0, results: [res] })
+    }, (words.length - 1) * 250 + finalMs)
+    return true
+  }
   if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = async () => ({ getTracks: () => [{ stop() {} }] })
 }

@@ -38,24 +38,26 @@ export const PAGE_MESSAGES = {
     // Under 5 seconds (Chandra, 14 Oct 2026): no clinic details, straight
     // to the action, and one sentence about agreeing by starting; the terms
     // are on screen and never read out. With the microphone on, "start with
-    // voice guide" or "start without voice" can also be said.
-    text: "Hi, tap Start to begin. Starting means you agree to the terms below.",
+    // voice guide" or "start without voice" can also be said. One Start
+    // button and no terms here since 17 Oct 2026: they are on page 2.
+    text: "Hi there. When you're ready, tap Let's get started.",
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
-  // Short (Chandra, 17 Oct 2026): the full walk-through is TRAINING below,
-  // read out only when "Walk me through it" is tapped.
+  // Page 2, "Before you start" (Chandra, 17 Oct 2026): every agreement on
+  // one page; spoken in under 10 seconds (VOICE.offer is added while the
+  // microphone has not been chosen).
   'guide:guide': {
     open: true,
     text: {
-      phone: "Okay, follow the steps below, then tap Continue. If you'd like me to talk you through them, tap Walk me through it.",
-      computer: "Okay, follow the steps below, then click Continue. If you'd like me to talk you through them, click Walk me through it.",
+      phone: "Choose voice or tap, then tap I agree, let's start.",
+      computer: "Choose voice or tap, then click I agree, let's start.",
     },
-    chips: ['turn-body', 'draw', 'answer', 'change-answer'],
+    chips: ['privacy', 'what-is-this', 'how-long'],
   },
   'guide:draw': {
     text: {
-      phone: 'Tap Draw, then trace every painful area. Tap Turn to spin the body again. Undo takes back the last line. When every sore area is marked, tap Continue.',
-      computer: 'Click Draw, then trace every painful area. Click Turn to spin the body again. Undo takes back the last line. When every sore area is marked, click Continue.',
+      phone: "Now tap Draw, and trace where it hurts. Need a hand? Tap Show me how.",
+      computer: "Now click Draw, and trace where it hurts. Need a hand? Click Show me how.",
     },
     chips: ['turn-body', 'zoom', 'draw'],
   },
@@ -116,22 +118,15 @@ export const PAGE_MESSAGES = {
   },
 }
 
-/* The how-it-works page in full, read out when "Walk me through it" is
-   tapped (the words of the recordings made for that page). */
-export const TRAINING = {
-  phone: "Okay, here's how it works. First, turn the body: swipe left or right until the sore side faces you. Swipe up or down to tilt it, and pinch to zoom in. Next, tap Draw, then trace every painful area with your finger, including where the pain spreads. Made a mistake? No worries, just tap Undo. Then answer the questions: tap the answer that fits best, and tap Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can tap the face in the corner at any time to ask me a question.",
-  computer: "Okay, here's how it works. First, turn the body: click and drag left or right until the sore side faces you. Drag up or down to tilt it, and scroll to zoom in. Next, click Draw, then trace every painful area, including where the pain spreads. Made a mistake? No worries, just click Undo. Then answer the questions: click the answer that fits best, and click Back to go back a step. Safety questions come first, so if anything needs a doctor first, the guide tells you straight away. You can click the face in the corner at any time to ask me a question.",
-}
-
 /* ── Voice guide mode ("Start with voice guide") ───────────────────────────
    The drawing page's demo: read out while the body turns by itself and a
    hand shows the gestures. DEMO_STEPS says what is shown during each
    sentence ('turn', 'draw', 'undo' or null), so keep one sentence per step. */
 export const DEMO = {
-  phone: "Alright, let me show you how. To turn the body, swipe across it with one finger, like this. Then tap Draw, and trace over every place that hurts, like this. If you make a mistake, tap Undo. Now it's your turn. Take your time, eh. When you've finished, I'll read back what you marked.",
-  computer: "Alright, let me show you how. To turn the body, click and drag across it, like this. Then click Draw, and trace over every place that hurts, like this. If you make a mistake, click Undo. Now it's your turn. Take your time, eh. When you've finished, I'll read back what you marked.",
+  phone: "Alright, let me show you how. To turn the body, swipe across it with one finger, like this. To zoom in or out, pinch with two fingers, like this. Then tap Draw, and trace over every place that hurts, like this. If you make a mistake, tap Undo. Now it's your turn. Take your time. When you've finished, I'll read back what you marked.",
+  computer: "Alright, let me show you how. To turn the body, click and drag across it, like this. To zoom in or out, scroll with your mouse, or pinch on your touchpad, like this. Then click Draw, and trace over every place that hurts, like this. If you make a mistake, click Undo. Now it's your turn. Take your time. When you've finished, I'll read back what you marked.",
 }
-export const DEMO_STEPS = [null, 'turn', 'draw', 'undo', null, null]
+export const DEMO_STEPS = [null, 'turn', 'zoom', 'draw', 'undo', null, null]
 /* ── Answering by voice (Chandra, 10 Oct 2026) ─────────────────────────────
    Only after the patient agrees (MIC_ASK, with MIC_NOTE on screen) and the
    browser's own permission prompt. Keep MIC_NOTE in step with the privacy
@@ -151,7 +146,7 @@ export const VOICE = {
   helpTurn: 'To turn the body, say turn left, turn right, show the back, or zoom in.',
   help: 'You can say your answer, using the words on the button or its letter. Where you can tick more than one, say several letters, like A and C. To take one off, say remove, and its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
-  offer: "If you'd like to talk with me by voice, tap Use my microphone. This gives permission to use your microphone.",
+  offer: "To answer by speaking, tick Use my microphone.",
   noMic: "I can't find a microphone, so please tap your answers instead.",
   noService: "Speech recognition is switched off on this device. On an iPhone, turn on Dictation in Settings, then tap the microphone. Or just tap your answers.",
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
@@ -181,8 +176,8 @@ export const VOICE = {
   // Called by name ("hey Chandra") with nothing after it.
   wake: "Yes? I'm listening.",
   // The landing page, once the microphone is on.
-  startAsk: 'How would you like to start? Say start with voice guide, or start without voice.',
-  startAgain: 'Sorry, I missed that. Say start with voice guide, or start without voice. Or just tap a button.',
+  startAsk: "Say start when you're ready.",
+  startAgain: "Sorry, I missed that. Say start, or just tap Let's get started.",
 }
 
 /* Said when the visitor taps "Change it" after a read-back. */
@@ -522,7 +517,6 @@ export function allSpokenTexts() {
   both('demo', DEMO)
   add('change-reply', CHANGE_REPLY)
   add('mic-ask', MIC_ASK)
-  both('training', TRAINING)
   for (const [k, t] of Object.entries(VOICE)) add('voice-' + k, t)
   add('fallback', FALLBACK.a)
   add('greeting', GREETING)

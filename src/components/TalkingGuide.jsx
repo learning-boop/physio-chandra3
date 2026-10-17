@@ -2,9 +2,9 @@
 import '../dev/fakeMic.js'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, unlockSpeech, takeGuideReflect, setGuideMic, setGuideConfirmKey, guideEvents, sendBodyMove } from '../data/guideStage'
+import { useGuideStage, useGuided, useGuideScreenSig, getGuideScreen, setGuideDemo, setGuided, unlockSpeech, takeGuideReflect, setGuideMic, setGuideConfirmKey, guideEvents, sendBodyMove } from '../data/guideStage'
 import {
-  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, TRAINING, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
+  PAGE_MESSAGES, SILENT_STAGES, TOPICS, DEFAULT_CHIPS, PREFERRED_VOICES, FEMALE_VOICES, NATURAL_MARKS, ROBOTIC_VOICES, VOICE_STYLE, GREETING, DEMO, DEMO_STEPS, CHANGE_REPLY, ACKS, MIC_ASK, MIC_NOTE, VOICE, audioFor, splitSentences, hasRecordings, findReply, forDevice,
 } from '../data/talkingGuide'
 import { command, yesNo, saysNone, matchDetail, answerEdit, norm, wakeWord, bodyMove, areaEdit, voiceWords } from '../data/voiceMatch'
 import { gotMany, asSentence } from '../data/guideSpeech'
@@ -687,7 +687,9 @@ export default function TalkingGuide() {
     if (guidedRef.current && assess) {
       // Question steps are read out one screen at a time (below).
       if (SCREEN_STAGES.includes(stage)) { setChips(page.chips || DEFAULT_CHIPS); return }
-      // The drawing page opens with the demo, once per visit.
+      // The drawing page opens with the demo, once per visit (back on
+      // 17 Oct 2026, Chandra: show how to move the 3D body). Touching the
+      // body stops it; "Show me how" plays it again.
       if (stage === 'draw' && !seenList().includes(ctxKey)) {
         markSeen(ctxKey)
         setChips(page.chips || DEFAULT_CHIPS)
@@ -774,6 +776,30 @@ export default function TalkingGuide() {
   }
   const isEchoRef = useRef(isEcho)
   isEchoRef.current = isEcho
+  /* Quicker answers (Chandra, 17 Oct 2026: "answers are not picked
+     quickly"). The browser's final words come 1-2 s after the patient
+     stops; the words heard so far are used instead once they have stayed
+     the same for EARLY_MS and clearly give one answer (one card answer, a
+     yes or no, none, next or back). Anything else waits for the final
+     words, as before: lists on tick-all cards, "no, but...", taking answers
+     off, questions for the assistant. */
+  const EARLY_MS = 450
+  const earlyOk = (kind, text) => {
+    const t = norm(text).trim()
+    if (!t || /\bbut\b/.test(t) || wakeWord(text)) return false
+    if (kind === 'confirm') return !!yesNo(text)
+    if (kind === 'nav') { const c = command(text); return c === 'next' || c === 'back' }
+    if (kind !== 'answer') return false
+    const sc = getGuideScreen()
+    if (!sc || !sc.voice) return false
+    if (sc.voice === 'none') return saysNone(text)
+    if (sc.voice === 'confirm') return yesNo(text) === 'yes'
+    if (sc.voice !== 'answer' || sc.multi || !sc.options) return false
+    if (answerEdit(text, sc.options, sc.picked || [])) return false
+    return matchDetail(text, sc.options, false).ids.length === 1
+  }
+  const earlyOkRef = useRef(earlyOk)
+  earlyOkRef.current = earlyOk
   // Listening stays on while an answer is awaited (Chandra, 13 Oct 2026:
   // the back-and-forth stopped when the browser gave up after a few seconds
   // of silence): it starts again by itself, up to about a minute, and stops
@@ -798,8 +824,20 @@ export default function TalkingGuide() {
     if (g !== gen.current || !micOnRef.current || rec.current) return
     let finals = []
     let lastHeard = ''   // Safari often ends without a final result: the last words heard count
+    let earlyTimer = 0
     r.__kind = kind
+    // Act on what was said now, without waiting for the browser to close.
+    const act = (list) => {
+      if (r.__acted) return
+      r.__acted = true
+      clearTimeout(earlyTimer)
+      if (rec.current === r) rec.current = null
+      setHearing(null)
+      try { r.stop() } catch { /* already stopping */ }
+      if (heardRef.current) heardRef.current(list, r.__kind || kind, !!r.__barged)
+    }
     r.onresult = (e) => {
+      if (r.__acted) return
       let interim = ''
       let fin = null
       for (let i = e.resultIndex; i < e.results.length; i++) {
@@ -822,8 +860,17 @@ export default function TalkingGuide() {
       if (fin && fin.length) finals = fin
       else if (interim.trim()) lastHeard = interim.trim()
       setHearing({ text: finals[0] || interim })
-      // The first complete answer is enough: stop and act on it.
-      if (finals.length) { try { r.stop() } catch { /* already stopping */ } }
+      // The first complete answer is enough: act on it at once.
+      clearTimeout(earlyTimer)
+      if (finals.length) { act(finals); return }
+      // Or the words so far, once they rest and clearly give one answer.
+      const now = interim.trim()
+      if (now && !speakingNowRef.current) {
+        earlyTimer = setTimeout(() => {
+          if (r.__acted || lastHeard !== now) return
+          if (earlyOkRef.current(r.__kind || kind, now)) act([now])
+        }, EARLY_MS)
+      }
     }
     let failed = null
     r.onerror = (e) => {
@@ -841,7 +888,9 @@ export default function TalkingGuide() {
       }
     }
     r.onend = () => {
+      clearTimeout(earlyTimer)
       if (rec.current === r) rec.current = null
+      if (r.__acted) return
       setHearing(null)
       if (!finals.length && lastHeard && !r.__cut) finals = [lastHeard]
       if (finals.length) { if (heardRef.current) heardRef.current(finals, r.__kind || kind, !!r.__barged); return }
@@ -889,7 +938,7 @@ export default function TalkingGuide() {
       const kind = expectNext.current
       expectNext.current = null
       if (kind) startListening(kind)
-    }, 400)
+    }, 250)
     return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voice.now.id, micOn, startListening])
@@ -1036,7 +1085,7 @@ export default function TalkingGuide() {
     listenFor('nav')
     // Without sentence-by-sentence timing (a recording, or no voice), the
     // steps follow the clock instead.
-    const at = [[1500, 'turn'], [5600, 'draw'], [9800, 'undo'], [12400, null]]
+    const at = [[1500, 'turn'], [5600, 'zoom'], [9200, 'draw'], [13400, 'undo'], [16000, null]]
     demo.current.timers = at.map(([ms, step]) => setTimeout(() => {
       if (demo.current.byVoice || demo.current.msgId !== msg.id) return
       if (step) setGuideDemo(step); else endDemo()
@@ -1088,7 +1137,7 @@ export default function TalkingGuide() {
     if (!sc) { screenSeen.current = { key: null, sig: null }; setConfirm(null); if (modeRef.current === 'confirm') setMode('face'); return }
     if (sc.key !== screenSeen.current.key) {
       // One answer card to the next: a calm "Thank you." or "Okay." first.
-      const flow = /^(q:|about:|injury:)/
+      const flow = /^(q:|about:|injury:|emergency:|physician:)/
       if (flow.test(screenSeen.current.key || '') && flow.test(sc.key)) acked.current = true
       screenSeen.current = { key: sc.key, sig: sc.sig }
       setConfirm(null)
@@ -1098,7 +1147,9 @@ export default function TalkingGuide() {
         markSeen(ctxKey)
         // Flash cards: say back the answer just given, then the next card.
         const got = takeGuideReflect().replace(/[.\s]+$/, '')
-        const ack = acked.current ? ACKS[Math.floor(Math.random() * ACKS.length)] + ' ' : ''
+        // One acknowledgement, not two ("Okay. Got it. ..."), so the next
+        // question comes sooner (17 Oct 2026).
+        const ack = acked.current && !got ? ACKS[Math.floor(Math.random() * ACKS.length)] + ' ' : ''
         acked.current = false
         const pre = pendingAck.current ? pendingAck.current + ' ' : ''
         pendingAck.current = ''
@@ -1185,22 +1236,18 @@ export default function TalkingGuide() {
   // Taps on the page for me (src/data/guideStage.js, sendGuide).
   const handlers = useRef({})
   // 'mic-off': "Start without voice" was tapped, so the microphone goes off.
-  // 'training': "Walk me through it" on the how-it-works page, read out
-  // even when the voice is off (the tap asks for it).
-  const training = () => {
-    stopListening()
-    voice.stop()
-    const msg = addGuide(forDevice(TRAINING, phone))
-    setMode('bubble')
-    soundRef.current = true
-    say(msg)
-    if (guidedRef.current && micOnRef.current) listenFor('nav')
-  }
-  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo(), 'mic-off': () => { if (micOnRef.current || rec.current) micOff(false) }, training }
+  // 'demo': "Show me how" on the drawing page, heard even when the voice
+  // is off (the tap asks for it). 'quiet': "Just tap, no voice" on page 2.
+  // 'mic-start': the microphone was ticked on page 2; after the browser's
+  // prompt it just listens (the drawing page has already said its line).
+  const showMe = () => { stopListening(); soundRef.current = true; startDemo() }
+  const quiet = () => { stopListening(); voice.stop(); if (modeRef.current !== 'chat') setMode('face') }
+  const micStart = () => { micAsked.current = true; afterConsent.current = () => { if (guidedRef.current) listenFor('nav') }; micYes() }
+  handlers.current = { yes: () => confirmYes(), change: () => confirmChange(), 'mic-yes': () => micYes(), 'mic-no': () => micNo(), 'mic-off': () => { if (micOnRef.current || rec.current) micOff(false) }, demo: showMe, quiet, 'mic-start': micStart }
   useEffect(() => {
     if (!guideEvents) return
     const on = (e) => { const h = handlers.current[e.type]; if (h) h() }
-    const types = ['yes', 'change', 'mic-yes', 'mic-no', 'mic-off', 'training']
+    const types = ['yes', 'change', 'mic-yes', 'mic-no', 'mic-off', 'demo', 'quiet', 'mic-start']
     types.forEach((t) => guideEvents.addEventListener(t, on))
     return () => types.forEach((t) => guideEvents.removeEventListener(t, on))
   }, [])
@@ -1299,8 +1346,8 @@ export default function TalkingGuide() {
       const all = alts.map(norm).join(' | ')
       if (/\b(without|no voice|no guide|not? (the )?voice|tap|tapping|myself|on my own|quiet|silent|mute)\b/.test(all)) {
         micOff(false)
-        const btn = document.querySelector('.pa-landing .pa-quiet-start')
-        if (btn) btn.click()
+        const btn = document.querySelector('.pa-landing .pa-primary')
+        if (btn) { btn.click(); setGuided(false) }
         return
       }
       if (/\b(voice|guide|start|begin|with|talk|speak|yes|go|next|continue|ready)\b/.test(all)) {
@@ -1396,8 +1443,8 @@ export default function TalkingGuide() {
       if (picked.some((l) => /^(none|no)\b/i.test(l))) { setTimeout(() => sc.proceed(), 400); return }
       sayThen(gotMany(picked), 'answer')
     } else if (sc.voice === 'none') {
-      if (alts.some(saysNone)) { pendingAck.current = VOICE.noneNoted; sc.proceed() }
-      else sayThen(VOICE.safetyTap, 'answer')
+      if (alts.some(saysNone)) { pendingAck.current = sc.noneAck === undefined ? VOICE.noneNoted : sc.noneAck; sc.proceed() }
+      else sayThen(sc.tapMsg || VOICE.safetyTap, 'answer')
     } else if (sc.voice === 'confirm') {
       if (alts.some((a) => yesNo(a) === 'yes') && sc.ready) { acked.current = true; sc.proceed() }
       else sayThen(sc.key === 'draw' ? VOICE.drawFirst : VOICE.tapThenDone, 'answer')

@@ -11,7 +11,6 @@ import ClinicianSummary from './ClinicianSummary'
 import SaveResults from './SaveResults'
 import FeedbackForm from './FeedbackForm'
 import { preloadPdf } from './resultsPdf'
-import GuideVideo from './GuideVideo'
 import GuideSteps from './GuideSteps'
 import { buildClinicianSummary, MAX_HYPOTHESES } from '../data/clinicianSummary'
 import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS, computeRaw } from '../data/symptomGuide'
@@ -49,8 +48,8 @@ import {
 import { emergencyLevel, EMERGENCY_ADVICE, bySeverity } from '../data/emergencyAdvice'
 import { QUESTIONS, REGION_AGGRAVATORS, REGION_EASERS, TYPE_TO_KEY, TYPE_WORD, UNIVERSAL_CHECKS } from '../data/genericQuestions'
 import { SCREENS, INJURY_KEYS, injuryFlow, injuryQuestion, injuryScreenApplies } from '../data/injuryScreen'
-import { spoken as speakable, readOne, readAge, readMany, readAreas, readTicked } from '../data/guideSpeech'
-import { setGuideStage, setGuided, useGuided, useGuideDemo, setGuideScreen, unlockSpeech, setGuideReflect, useGuideMic, useGuideConfirmKey, sendGuide } from '../data/guideStage'
+import { spoken as speakable, readOne, readAge, readMany, readAreas, readTicked, safetyCard, signSentences, asSentence as sentenceOf, EMG_INTRO, DOC_INTRO, EMG_TAP } from '../data/guideSpeech'
+import { setGuideStage, setGuided, useGuided, useGuideDemo, setGuideScreen, unlockSpeech, setGuideReflect, useGuideMic, useGuideConfirmKey, sendGuide, sendBodyMove } from '../data/guideStage'
 
 const GOLD = '#c9a96e'
 const GOLD_LIGHT = '#e8d5b0'
@@ -961,7 +960,8 @@ export default function PainAssessment() {
       })}
     </div>
   )
-  const gateList = (list) => gateRows(list).map((r, i) => {
+  const gateList = (list) => gateRows(list).map((r, i) => gateRow(r, i))
+  const gateRow = (r, i) => {
     if (r.flag && notForThem(r.flag)) return null
     if (r.flag) return plainTicks(r.flag).length ? <div key={r.flag.id}>{plainQuestion(r.flag, LETTERS[i] || '·')}{whenAsk([r.flag])}</div> : flagChip(r.flag, LETTERS[i] || '·')
     const open = openGates.includes(r.gate.id)
@@ -1014,10 +1014,71 @@ export default function PainAssessment() {
         )}
       </div>
     )
-  })
+  }
   // The page a red flag was ticked on, so Back from the urgent screen returns there.
   const [flaggedAt, setFlaggedAt] = useState(null)
   const routeUrgent = (from) => { setFlaggedAt(from); setStage('urgent') }
+
+  /* The emergency and doctor pages as flash cards (Chandra, 17 Oct 2026):
+     one question per screen with No and Yes. No moves to the next card; a
+     Yes goes straight to the urgent advice, once what it needs is answered
+     on the same card (a group's signs, or "When did this start?"). A
+     question with several ticks shows them, with None of these. */
+  const cardStage = stage === 'emergency' || stage === 'physician' ? stage : null
+  const [emgAt, setEmgAt] = useState(0)
+  const [emgYes, setEmgYes] = useState(false)
+  const [emgDone, setEmgDone] = useState(0)
+  const emgRows = gateRows(stage === 'physician' ? screening.physician : screening.emergency).filter((r) => !(r.flag && notForThem(r.flag)))
+  const emgIdx = Math.min(emgAt, Math.max(0, emgRows.length - 1))
+  const emgRow = emgRows[emgIdx] || null
+  const emgCardOf = (r) => {
+    if (!r) return null
+    if (r.gate) {
+      const cut = r.gate.text.indexOf(': ')
+      return { kind: 'gate', text: cut < 0 ? r.gate.text : r.gate.text.slice(0, cut), more: cut < 0 ? '' : r.gate.text.slice(cut + 2) }
+    }
+    const ticks = plainTicks(r.flag)
+    if (ticks.length > 1) return { kind: 'ticks', text: PLAIN_Q[r.flag.id] || 'Do any of these fit you?', ticks }
+    if (ticks.length === 1) return { kind: 'tick', text: ticks[0].text, tick: ticks[0] }
+    return { kind: 'flag', text: r.flag.text }
+  }
+  const emgCard = emgCardOf(emgRow)
+  const prevEmgStage = useRef(stage)
+  useEffect(() => {
+    // Coming forward: the first card; back from a later page: the last one;
+    // back from the urgent advice: the card it came from.
+    const prev = prevEmgStage.current
+    if ((stage === 'emergency' || stage === 'physician') && prev !== stage && prev !== 'urgent') {
+      const order = ['landing', 'guide', 'draw', 'about', 'emergency', ...(smartFirst ? ['injury', 'physician'] : ['physician', 'injury'])]
+      const forward = !order.includes(prev) || order.indexOf(prev) < order.indexOf(stage)
+      setEmgAt(forward ? 0 : 99)
+      setEmgYes(false)
+    }
+    prevEmgStage.current = stage
+  }, [stage]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setEmgYes(false) }, [emgIdx])
+  const emgMembers = (r) => (r.gate ? [...r.members, r.unsure] : [r.flag])
+  const emgClear = (r) => {
+    if (r.gate) setOpenGates((cur) => cur.filter((x) => x !== r.gate.id))
+    setFlags((cur) => emgMembers(r).reduce((acc, m) => clearQuestion(acc, m.id), cur))
+  }
+  const emgNo = () => {
+    if (!emgRow) { setEmgDone((n) => n + 1); return }
+    emgClear(emgRow)
+    setEmgYes(false)
+    if (emgIdx < emgRows.length - 1) setEmgAt(emgIdx + 1)
+    else setEmgDone((n) => n + 1)
+  }
+  const emgYesTap = () => {
+    const r = emgRow
+    if (!r) return
+    if (r.gate) { setOpenGates((cur) => (cur.includes(r.gate.id) ? cur : [...cur, r.gate.id])); setEmgYes(true); return }
+    if (emgCard.kind === 'tick') setFlags((cur) => (cur.includes(tickId(r.flag.id, emgCard.tick.key)) ? cur : toggleTick(cur, r.flag.id, emgCard.tick.key)))
+    else setFlags((cur) => (cur.includes(r.flag.id) ? cur : [...cur, r.flag.id]))
+    // "When did this start?" first, where it is asked; otherwise straight on.
+    if (lbProto && WHEN_FOR.includes(r.flag.id)) { setEmgYes(true); return }
+    routeUrgent(cardStage)
+  }
 
   /* ── Injury screens (../data/injuryScreen.js: neck, shoulder, upper arm) ──
      Straight after the physician-first page, when one applies. Its answers are
@@ -1480,6 +1541,7 @@ export default function PainAssessment() {
           : a !== undefined
   }
   // Continue on the emergency and doctor pages.
+  useEffect(() => { if (emgDone && cardStage) safetyNext(cardStage) }, [emgDone]) // eslint-disable-line react-hooks/exhaustive-deps
   function safetyNext(st) {
     const emergency = st === 'emergency'
     const list = emergency ? screening.emergency : screening.physician
@@ -1617,23 +1679,9 @@ export default function PainAssessment() {
       <button className="pa-confirm-no" onClick={() => sendGuide('change')}>Change</button>
     </div>
   ) : null)
-  // On the how-it-works page: talk with the assistant? (asked once a visit)
-  const micOffer = () => (guided && canListen && micChoice === null ? (
-    <div className="pa-mic-offer">
-      <p className="pa-mic-offer-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" stroke="none" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" /></svg>
-        Talk with me?
-      </p>
-      <p className="pa-mic-offer-text">If you'd like to talk with me by voice, tap <strong>Use my microphone</strong>. This gives permission to use your microphone. Or just tap your answers.</p>
-      <div className="pa-mic-offer-btns">
-        <button className="pa-confirm-yes" onClick={() => sendGuide('mic-yes')}>Use my microphone</button>
-        <button className="pa-confirm-no" onClick={() => sendGuide('mic-no')}>Just tap</button>
-      </div>
-      <p className="pa-mic-offer-note">
-        Your browser’s speech service (Google in Chrome, Microsoft in Edge, Apple in Safari) turns your voice into text. On Android phones this is done on the phone itself, after a one-time download of about 40 MB. This website does not record or keep your voice. <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>Privacy notice</Link>
-      </p>
-    </div>
-  ) : null)
+  // Page 2: answer by speaking? Ticked again if agreed earlier this visit.
+  const [useMic, setUseMic] = useState(() => micChoice === 'on')
+  useEffect(() => { if (micChoice === 'on') setUseMic(true) }, [micChoice])
   const ABOUT_Q = {
     age: { text: 'Your age?', options: ABOUT_AGES },
     sex: { text: 'Your sex assigned at birth?', options: ABOUT_SEX },
@@ -1714,6 +1762,17 @@ export default function PainAssessment() {
         voice: 'answer', multi: false,
         options: card.options.map((o, i) => ({ id: o.id, label: o.label, letter: LETTERS[i] })),
         pick: (oid) => aboutPick(aboutCard, oid),
+      }
+    }
+    if (cardStage && emgCard) {
+      const ticks = emgCard.kind === 'ticks'
+      return {
+        key: `${cardStage}:${emgIdx}`, ready: true, sig: emgYes ? 'yes' : '',
+        say: (emgIdx === 0 ? (cardStage === 'emergency' ? EMG_INTRO : DOC_INTRO) + ' ' : '') + (ticks ? safetyCard(emgCard.text, emgCard.ticks.map((t) => t.text).join('; ')) : emgCard.more ? safetyCard(emgCard.text, emgCard.more) : sentenceOf(emgCard.text)),
+        // A spoken "no" (or "none") moves on; a yes is tapped, so a safety
+        // answer is never taken from speech alone.
+        proceed: emgNo, voice: emgYes ? null : 'none', noneAck: '',
+        tapMsg: ticks ? undefined : EMG_TAP,
       }
     }
     if (stage === 'emergency' || stage === 'physician') {
@@ -1805,6 +1864,16 @@ export default function PainAssessment() {
   // The drawing-page demo turns the body on its own while the guide says how.
   const [demoTurn, setDemoTurn] = useState(0)
   useEffect(() => { if (guideDemo === 'turn') setDemoTurn((n) => n + 1) }, [guideDemo])
+  // The demo's zoom step (Chandra, 17 Oct 2026): in, then back out, with
+  // one picture for every device (a magnifier showing + then -).
+  const [zoomPhase, setZoomPhase] = useState('in')
+  useEffect(() => {
+    if (guideDemo !== 'zoom') return
+    setZoomPhase('in')
+    sendBodyMove('in')
+    const t = setTimeout(() => { setZoomPhase('out'); sendBodyMove('out') }, 1500)
+    return () => clearTimeout(t)
+  }, [guideDemo])
 
   return (
     <section ref={sectionRef} className="pa-section" style={{
@@ -1864,13 +1933,18 @@ export default function PainAssessment() {
             70% { transform: translate(140px, 210px); opacity: 1; }
             100% { transform: translate(140px, 210px); opacity: 0; }
           }
+          .pa-demo-mag { transform-box: fill-box; transform-origin: center; }
+          .pa-demo-mag-in { animation: pa-demo-mag-in 1.5s ease-in-out both; }
+          .pa-demo-mag-out { animation: pa-demo-mag-out 1.5s ease-in-out both; }
+          @keyframes pa-demo-mag-in { from { transform: scale(0.75); } to { transform: scale(1.2); } }
+          @keyframes pa-demo-mag-out { from { transform: scale(1.2); } to { transform: scale(0.75); } }
           .pa-demo-draw .pa-demo-finger { animation: pa-demo-trace 2.4s ease-in-out infinite; offset-path: path('M112 178 q8 12 0 24 q-8 12 2 26'); }
           @keyframes pa-demo-trace { 0% { offset-distance: 0%; } 75%, 100% { offset-distance: 100%; } }
           .pa-demo-line { stroke-dasharray: 60; stroke-dashoffset: 60; animation: pa-demo-ink 2.4s ease-in-out infinite; }
           @keyframes pa-demo-ink { 0% { stroke-dashoffset: 60; } 75%, 100% { stroke-dashoffset: 0; } }
           .pa-demo-ripple { animation: pa-demo-ripple 1.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
           @keyframes pa-demo-ripple { from { transform: scale(0.6); opacity: 1; } to { transform: scale(1.3); opacity: 0; } }
-          /* Voice guide: "Is that right?" on the card, and the microphone offer. */
+          /* Voice guide: "Is that right?" on the card; page 2, "Before you start". */
           .pa-confirm {
             display: flex; flex-wrap: wrap; align-items: center; gap: 10px; max-width: 520px;
             margin: 16px 0 0; padding: 12px 14px; border-radius: 14px;
@@ -1885,18 +1959,38 @@ export default function PainAssessment() {
           .pa-confirm-yes { flex: 1 1 auto; background: ${GOLD}; color: #081527; border: 1px solid ${GOLD}; }
           .pa-confirm-no { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); }
           .pa-confirm-no:hover { border-color: ${GOLD_LIGHT}; }
-          .pa-mic-offer {
-            max-width: 620px; margin: 0 auto 20px; padding: 16px 18px; border-radius: 16px; text-align: left;
-            background: rgba(92,200,194,0.12); border: 1px solid rgba(92,200,194,0.55);
+          .pa-emg-q { margin: 0; font-size: clamp(20px, 5vw, 24px); line-height: 1.4; color: #fff; font-weight: 600; }
+          .pa-emg-card .pa-gate > button:first-child { display: none !important; }
+          .pa-emg-card .pa-gate-body { margin-top: 0; }
+          .pa-emg-more { margin: 10px 0 0; padding-left: 20px; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+          .pa-emg-more li + li { margin-top: 6px; }
+          .pa-emg-yn { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+          .pa-emg-yn button { min-height: 58px; border-radius: 16px; font: inherit; font-size: 18px; font-weight: 700; cursor: pointer; }
+          .pa-emg-no { background: ${GOLD}; color: #081527; border: 1px solid ${GOLD}; }
+          .pa-emg-yes { background: transparent; color: #fff; border: 1.5px solid rgba(240,128,108,0.8); }
+          .pa-emg-yes:hover { background: rgba(240,128,108,0.14); }
+          .pa-showme.pa-quiet-start { display: inline-flex; gap: 8px; width: auto; margin-top: 12px; padding-left: 20px; padding-right: 20px; }
+          .pa-landing-lede { margin: 0 auto ${isPhone ? 22 : 28}px; max-width: 520px; font-size: clamp(17px, 4.4vw, 19px); line-height: 1.55; color: rgba(255,255,255,0.88); text-wrap: balance; }
+          .pa-ready { max-width: 640px; margin: 0 auto 18px; }
+          .pa-ready-q { margin: 4px 0 18px; font-size: clamp(28px, 6.4vw, 42px); line-height: 1.2; text-align: center; }
+          .pa-ready-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+          .pa-ready-choice button {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 10px 12px;
+            border-radius: 14px; border: 1.5px solid rgba(201,169,110,0.4); background: rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.85); font: inherit; font-size: 15.5px; font-weight: 600; cursor: pointer;
           }
-          .pa-mic-offer-title { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: 18px; font-weight: 600; color: #fff; }
-          .pa-mic-offer-title svg { color: #7DD8D3; }
-          .pa-mic-offer-text { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.85); }
-          .pa-mic-offer-btns { display: flex; flex-wrap: wrap; gap: 10px; }
-          .pa-guide-short { text-align: center; margin: 0 auto 18px; max-width: 520px; }
-          .pa-guide-short p { margin: 0 0 10px; font-size: 17px; line-height: 1.5; color: rgba(255,255,255,0.9); }
-          .pa-guide-short .pa-quiet-start { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; padding-left: 22px; padding-right: 22px; }
-          .pa-mic-offer-note { margin: 12px 0 0; font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,0.6); }
+          .pa-ready-choice button.on { background: rgba(201,169,110,0.22); border-color: ${GOLD}; color: #fff; }
+          .pa-ready-mic {
+            display: flex; gap: 12px; align-items: flex-start; margin: 12px 0 0; padding: 12px 14px; border-radius: 14px;
+            background: rgba(125,216,211,0.08); border: 1px solid rgba(125,216,211,0.35); cursor: pointer;
+            font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.9); text-align: left;
+          }
+          .pa-ready-mic input { width: 22px; height: 22px; margin-top: 1px; accent-color: ${GOLD}; flex-shrink: 0; }
+          .pa-ready-mic small { display: block; margin-top: 4px; font-size: 12.5px; line-height: 1.5; color: rgba(255,255,255,0.6); }
+          .pa-ready-terms { margin: 14px 0 0; padding: 12px 16px 12px 34px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); text-align: left; font-size: 14.5px; line-height: 1.55; color: rgba(255,255,255,0.8); }
+          .pa-ready-terms li + li { margin-top: 4px; }
+          .pa-ready-terms b, .pa-ready-small b { color: #fff; }
+          .pa-ready-small { margin: 10px auto 0; max-width: 520px; text-align: center; font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.65); }
           @media (prefers-reduced-motion: reduce) { .pa-confirm { animation: none; } }
           .pa-quiet-start {
             display: inline-flex; align-items: center; justify-content: center; width: 100%;
@@ -1906,7 +2000,7 @@ export default function PainAssessment() {
           }
           .pa-quiet-start:hover { border-color: ${GOLD_LIGHT}; color: #fff; }
           @media (prefers-reduced-motion: reduce) {
-            .pa-demo-glow, .pa-demo-finger, .pa-demo-line, .pa-demo-ripple { animation: none; }
+            .pa-demo-glow, .pa-demo-finger, .pa-demo-line, .pa-demo-ripple, .pa-demo-mag { animation: none; }
             .pa-demo-line { stroke-dashoffset: 0; }
           }
           .pa-ob:disabled { opacity: 0.35; cursor: not-allowed; }
@@ -2142,95 +2236,92 @@ export default function PainAssessment() {
               <Fade k="landing">
                 <div className="pa-landing">
                   <div className="pa-glass">
-                    <h1 className="pa-glass-title" style={{ ...h2, fontSize: 'clamp(34px,8.5vw,60px)', margin: isPhone ? '0 0 24px' : '0 0 32px' }}>
+                    <h1 className="pa-glass-title" style={{ ...h2, fontSize: 'clamp(34px,8.5vw,60px)', margin: isPhone ? '0 0 14px' : '0 0 18px' }}>
                       What Could Be Causing<br /><em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>Your Pain</em>?
                     </h1>
-                    {/* Voice guide (Chandra, 10 Oct 2026): the assistant in the
-                        corner reads each step out, shows how to turn and draw,
-                        and reads back each answer before moving on. The main
-                        (gold) button since 13 Oct 2026 (Chandra); starting
-                        without voice stays one tap away. */}
+                    {/* Persuasive but within CHCPBC wording (Chandra, 17 Oct
+                        2026): what they do, how easy it is, what they get. No
+                        promise of a diagnosis or an outcome. */}
+                    <p className="pa-landing-lede">
+                      Show where it hurts and answer a few simple questions.
+                      You'll see what your pain may be linked to, and your next step.
+                    </p>
+                    {/* One Start button (Chandra, 17 Oct 2026): the voice choice,
+                        the terms and the microphone are all on the next page.
+                        The voice guide is on unless switched off there. */}
                     <div className="pa-actions" style={{ margin: '0 auto' }}>
                       <button className="pa-primary" style={{ ...goldBtn, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
                         onClick={() => { unlockSpeech(); setGuided(true); setStage('guide') }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" />
-                        </svg>
-                        Start with voice guide
+                        Let’s get started
                       </button>
                     </div>
-                    <button className="pa-quiet-start" style={{ maxWidth: 520, display: 'flex', margin: '12px auto 0' }}
-                      onClick={() => { sendGuide('mic-off'); setGuided(false); setStage('guide') }}>
-                      Start without voice
-                    </button>
-                    {/* Agreeing by starting (Chandra, 14 Oct 2026): the line
-                        sits right under the buttons, the terms below it. The
-                        assistant only says one short sentence about it. */}
-                    <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.82)', margin: '14px auto 0', maxWidth: 520 }}>
-                      By pressing <strong style={{ color: '#fff' }}>Start with voice guide</strong> or{' '}
-                      <strong style={{ color: '#fff' }}>Start without voice</strong>, you agree to the{' '}
-                      <a href="#pa-terms" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>terms below</a>.
-                    </p>
                     {/* How long it takes, set apart in a soft gold panel. */}
                     <p style={{
                       fontSize: 'clamp(17px, 4.4vw, 19px)', lineHeight: 1.55, color: '#fff', fontWeight: 500,
                       margin: '20px auto 0', maxWidth: 520, padding: '14px 20px', borderRadius: 14,
                       background: 'rgba(201,169,110,0.22)', border: '1px solid rgba(201,169,110,0.55)',
                     }}>
-                      It takes about <span style={{ color: GOLD_LIGHT }}>5–15 minutes</span>.
-                      Careful answers give the most useful results.
+                      It may take <span style={{ color: GOLD_LIGHT }}>5–15 minutes</span>. Go at your own pace.
                     </p>
-                    <div id="pa-terms" style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.68)', margin: '20px auto 0', maxWidth: 520, textAlign: 'left' }}>
-                      <p style={{ margin: 0, fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: GOLD_LIGHT, textAlign: 'center' }}>Terms of use</p>
-                      <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
-                        <li>This guide offers general information to help you describe your symptoms. It is not a diagnosis and does not replace an assessment by a qualified health professional.</li>
-                        <li>It is not for emergencies. If you think you need urgent help, call 9-1-1, or HealthLink BC on 8-1-1.</li>
-                        <li>The voice guide is a virtual assistant, not Chandra: its answers are written in advance, and its voice is an AI copy of Chandra’s voice. If you turn the microphone on, your browser’s speech service turns what you say into text (on Android phones, the phone itself does this).</li>
-                        <li>Your answers stay on this device unless you choose to share them: the optional AI overview, emailing your summary to Chandra, or an optional anonymous copy to help improve this guide.</li>
-                      </ul>
-                      <p style={{ margin: '8px 0 0' }}>
-                        Full details: <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>.
-                      </p>
-                    </div>
                   </div>
                 </div>
               </Fade>
             )}
 
-            {/* HOW IT WORKS: a page of its own after Start (Chandra, 28 Sep
-                2026). Redesigned 6 Oct 2026 (Chandra): no 3D body here, the three
-                steps and how to move the body as pictures (./GuideSteps.jsx),
-                centred on phone and desktop. The body first appears on the
-                next page, where the "Drag to turn" hint shows on it. */}
+            {/* BEFORE YOU START (Chandra, 17 Oct 2026): every agreement on one
+                page (voice or tap, the microphone, the terms and privacy)
+                with the three steps as small pictures, so the next page
+                starts straight on the body. Spoken: under 10 seconds. */}
             {stage === 'guide' && (
               <Fade k="guide">
                 <div className="pa-guide">
-                  <div style={{ ...headBand(), maxWidth: 'none' }}>
-                    <span style={label}>How It Works</span>
-                    <h2 style={{ ...h2, fontSize: 'clamp(28px,6.4vw,42px)', margin: '12px 0 0' }}>
-                      Three <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>simple steps</em>
+                  {/* The question is the heading (Chandra, 17 Oct 2026). */}
+                  <div className="pa-ready">
+                    <h2 className="pa-ready-q" style={{ ...h2 }}>
+                      How would you like <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>to go?</em>
                     </h2>
+                    <div className="pa-ready-choice" role="radiogroup" aria-label="How would you like to go?">
+                      <button type="button" role="radio" aria-checked={guided} className={guided ? 'on' : ''}
+                        onClick={() => { if (!guided) { unlockSpeech(); setGuided(true) } }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" /></svg>
+                        Guide me by voice
+                      </button>
+                      <button type="button" role="radio" aria-checked={!guided} className={!guided ? 'on' : ''}
+                        onClick={() => { if (guided) { sendGuide('quiet'); setGuided(false); setUseMic(false) } }}>
+                        Just tap, no voice
+                      </button>
+                    </div>
+                    {guided && canListen && (
+                      <label className="pa-ready-mic">
+                        <input type="checkbox" checked={useMic} onChange={(e) => setUseMic(e.target.checked)} />
+                        <span>
+                          <b>Use my microphone</b> to answer by speaking. Ticking this gives permission to use your microphone.
+                          <small> Your browser’s speech service (Google, Microsoft or Apple; on Android, the phone itself) turns your voice into text. This website does not record or keep your voice.</small>
+                        </span>
+                      </label>
+                    )}
+                    <ul className="pa-ready-terms">
+                      <li>General information to help you describe your pain. <b>Not a diagnosis</b>, and not a replacement for an assessment.</li>
+                      <li><b>Not for emergencies:</b> call 9-1-1, or HealthLink BC on 8-1-1.</li>
+                      <li>The voice is a virtual assistant using an AI copy of Chandra’s voice, not Chandra.</li>
+                      <li><b>Your answers stay on this device</b> unless you choose to share them.</li>
+                    </ul>
                   </div>
-                  {/* Short by default (Chandra, 17 Oct 2026): the full spoken
-                      walk-through only when asked for. */}
-                  <div className="pa-guide-short">
-                    <p>Follow the steps below, then {isPhone ? 'tap' : 'click'} <b>Continue</b>.</p>
-                    <button type="button" className="pa-quiet-start" onClick={() => { unlockSpeech(); sendGuide('training') }}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" />
-                      </svg>
-                      Walk me through it
-                    </button>
-                  </div>
-                  {micOffer()}
-                  <GuideSteps phone={isPhone} />
-                  {/* A short video on how the guide works, behind a button
-                      (shown once public/videos/guide-intro.mp4 exists). */}
-                  <div className="pa-guide-video"><GuideVideo /></div>
+                  <GuideSteps phone={isPhone} compact />
                   <div className="pa-actions pa-guide-actions">
-                    <button className="pa-primary" style={goldBtn} onClick={() => setStage('draw')}>Continue</button>
+                    <button className="pa-primary" style={goldBtn} onClick={() => {
+                      unlockSpeech()
+                      // The browser's own microphone prompt follows this tap.
+                      if (guided && canListen && useMic) sendGuide('mic-start')
+                      else if (guided && micChoice === null) sendGuide('mic-no')
+                      setStage('draw')
+                    }}>I agree, let’s start</button>
                     <button style={ghostBtn} onClick={restart}>Back</button>
                   </div>
+                  <p className="pa-ready-small">
+                    By tapping <b>I agree, let’s start</b>, you agree to the points above and the{' '}
+                    <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>.
+                  </p>
                 </div>
               </Fade>
             )}
@@ -2248,6 +2339,14 @@ export default function PainAssessment() {
                     Tap <b>Draw</b> on the body, then trace every painful area. Tap <b>Turn</b> to
                     spin the body.
                   </p>
+                  {/* The moving-hand demo only when asked for (Chandra, 17 Oct
+                      2026): the patient starts drawing straight away. */}
+                  <button type="button" className="pa-quiet-start pa-showme" onClick={() => { unlockSpeech(); sendGuide('demo') }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" />
+                    </svg>
+                    Show me how
+                  </button>
                 </div>
 
                 {/* Turn / Draw and Undo / Redo sit on the body itself (see the
@@ -2835,7 +2934,79 @@ export default function PainAssessment() {
             {/* SAFETY FIRST — two pages straight after the drawing. Page 1 holds
                 everything that means emergency care now; page 2 everything that means
                 "see a doctor first". Any tick stops the questionnaire there. */}
-            {(stage === 'emergency' || stage === 'physician') && (() => {
+            {cardStage && emgCard && (() => {
+              const r = emgRow
+              const emergency = cardStage === 'emergency'
+              const tone = emergency ? 'coral' : 'amber'
+              const ticked = emgMembers(r).some((m) => flags.includes(m.id) || flags.some((x) => x.startsWith(m.id + '~')))
+              const openEmpty = r.gate ? gateOpenEmpty([...r.members, r.unsure]) || (emgYes && !ticked) : false
+              const back = () => {
+                if (emgYes) { setEmgYes(false); return }
+                if (emgIdx > 0) { setEmgAt(emgIdx - 1); return }
+                if (emergency) { setStage('about'); return }
+                // Knee prototype: the doctor page comes after the injury screen.
+                if (smartFirst && injuryQ) { setStage('injury'); return }
+                setStage(!screening.emergency.length ? 'about' : 'emergency')
+              }
+              const ynRow = (
+                <div className="pa-emg-yn">
+                  <button className="pa-emg-no" onClick={emgNo}>No</button>
+                  <button className="pa-emg-yes" onClick={emgYesTap}>Yes</button>
+                </div>
+              )
+              return (
+                <Fade k={`${cardStage}:${emgIdx}`}>
+                  <div style={headBand(tone)}>
+                    <span style={bandLabel(tone)}>{partLabel(cardStage)} · {emgIdx + 1} of {emgRows.length}</span>
+                    <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 8px', maxWidth: 520 }}>
+                      {emergency
+                        ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
+                        : <>Next, signs that may need a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>doctor's check</em></>}
+                    </h2>
+                    <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
+                      {emergency ? 'Most people answer no. Is this happening to you now?' : 'Most people answer no. Does this fit you now?'}
+                    </p>
+                  </div>
+                  <div className="pa-emg-card" style={{ ...qPanel }}>
+                    {emgCard.kind === 'ticks' ? (
+                      <>
+                        <p className="pa-emg-q">{emgCard.text}</p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                          {emgCard.ticks.map((t) => tickChip(r.flag, t))}
+                        </div>
+                        {whenAsk([r.flag])}
+                      </>
+                    ) : r.gate && emgYes && openGates.includes(r.gate.id) ? (
+                      gateRow(r, emgIdx)
+                    ) : (
+                      <>
+                        <p className="pa-emg-q">{emgCard.text}</p>
+                        {emgCard.more && (
+                          <ul className="pa-emg-more">
+                            {signSentences(emgCard.more).map((x) => <li key={x}>{x}</li>)}
+                          </ul>
+                        )}
+                        {emgYes ? whenAsk([r.flag]) : ynRow}
+                      </>
+                    )}
+                    {openEmpty && emgYes && (
+                      <p className="pa-gate-hint" role="status">Please tick which one applies, or "Not sure which".</p>
+                    )}
+                  </div>
+                  {confirmRow()}
+                  <div className="pa-actions" style={{ marginTop: 20 }}>
+                    {(emgYes || emgCard.kind === 'ticks') && (
+                      emgCard.kind === 'ticks' && !ticked
+                        ? <button className="pa-primary" style={goldBtn} onClick={emgNo}>None of these</button>
+                        : <button className="pa-primary" style={{ ...goldBtn, opacity: openEmpty ? 0.45 : 1, cursor: openEmpty ? 'not-allowed' : 'pointer' }}
+                            aria-disabled={openEmpty} onClick={() => { if (!openEmpty) routeUrgent(cardStage) }}>Continue</button>
+                    )}
+                    <button style={ghostBtn} onClick={back}>Back</button>
+                  </div>
+                </Fade>
+              )
+            })()}
+            {stage === 'physician' && !emgCard && (() => {
               const emergency = stage === 'emergency'
               const list = emergency ? screening.emergency : screening.physician
               const ticked = flaggedIn(list)
@@ -3878,6 +4049,21 @@ export default function PainAssessment() {
           <div className="pa-model-stage" onPointerDown={() => setHasTurned(true)}>
             {/* Voice guide demo: a hand shows the swipe that turns the body
                 (the body turns with it), then a finger traces a line. */}
+            {stage === 'draw' && guideDemo === 'zoom' && (
+              <svg className="pa-demo-hand pa-demo-zoom" viewBox="0 0 200 300" aria-hidden="true">
+                <g transform="translate(100 205)">
+                  <g key={zoomPhase} className={'pa-demo-mag pa-demo-mag-' + zoomPhase}>
+                    <circle r="22" fill="rgba(8,21,39,0.72)" stroke="#e8d5b0" strokeWidth="4" />
+                    <path d="M16 16 L32 32" stroke="#e8d5b0" strokeWidth="7" strokeLinecap="round" />
+                    <path d="M-10 0 H10" stroke="#c9a96e" strokeWidth="5" strokeLinecap="round" />
+                    {zoomPhase === 'in' && <path d="M0 -10 V10" stroke="#c9a96e" strokeWidth="5" strokeLinecap="round" />}
+                  </g>
+                  <text y="56" textAnchor="middle" fill="#fff" fontSize="15" fontWeight="600" style={{ paintOrder: 'stroke', stroke: 'rgba(8,21,39,0.8)', strokeWidth: 4 }}>
+                    {zoomPhase === 'in' ? 'Zoom in' : 'Zoom out'}
+                  </text>
+                </g>
+              </svg>
+            )}
             {stage === 'draw' && (guideDemo === 'turn' || guideDemo === 'draw') && (
               <svg className={'pa-demo-hand pa-demo-' + guideDemo} viewBox="0 0 200 300" aria-hidden="true">
                 {guideDemo === 'draw' && (
