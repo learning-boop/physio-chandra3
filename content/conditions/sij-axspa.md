@@ -63,7 +63,7 @@ This pattern is worth checking with your family doctor, who can arrange blood te
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Once your doctor has checked it, a physiotherapist can help you alongside your medical care.
 - A regular exercise programme for movement, strength, posture and breathing can help ease stiffness.
 - You get a daily plan to manage stiff mornings, work and flare-ups, and to stay active.

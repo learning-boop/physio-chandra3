@@ -58,7 +58,7 @@ Nerves run from the low back to the toes and have to slide and stretch every tim
 - The pulling, tingling or burning keeps returning, or is affecting sitting, sleep, work or sport: a physiotherapy assessment can check how the nerve is moving and give you a plan
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can test how the nerve moves and explain why a sensitive nerve is usually healthy.
 - Gentle nerve gliding exercises, which help the nerve slide more easily, can help ease leg symptoms.
 - You get a step-by-step plan to return to the positions and activities that bring it on.

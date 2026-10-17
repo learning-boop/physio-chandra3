@@ -52,7 +52,7 @@ A muscle that has become tight and sensitive, often from being held in one posit
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check where the ache comes from and explain why a sore muscle can spread pain.
 - Hands-on care with gentle stretching, and teaching you to ease the tender spot, can help relieve it.
 - Graded exercise and changes to work, sleep and daily habits can help stop it building up again.

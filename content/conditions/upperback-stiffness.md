@@ -41,7 +41,7 @@ Stiffness and muscle ache of the mid-back region, commonly linked to sustained p
 - You'd like a posture-and-strength plan for desk work
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your mid back moves and explain why it dislikes staying still.
 - Hands-on care with mobility and strength exercises can help ease stiffness and ache.
 - You get a posture-and-strength plan for desk work and tips to keep your back moving.

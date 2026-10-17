@@ -44,7 +44,7 @@ Where the Achilles tendon attaches to the heel bone, the tendon, a small fluid s
 - You want a graded tendon-loading plan
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the back of your heel and explain what is irritated there.
 - Heel lifts, footwear changes and a graded tendon-strengthening programme can help ease the pain.
 - You get a plan to build back walking, running and hills without stirring it up.

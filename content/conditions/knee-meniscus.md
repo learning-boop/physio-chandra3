@@ -46,7 +46,7 @@ The knee's cartilage shock-absorbers can be irritated by twisting, deep squattin
 - You want a rehab-first plan: for many age-related tears, exercise does as well as surgery
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and explain in plain words what is going on.
 - A guided strength and movement programme can help ease pain and improve how the knee works.
 - You get a plan to return to daily activities and sport, and to manage flare-ups.

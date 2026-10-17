@@ -48,7 +48,7 @@ One of the tendons that lift and turn the arm can tear through, either suddenly 
 - Weakness that came on slowly: a physiotherapy programme is a good first step, with an ultrasound if it is not improving
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your shoulder strength and help you know if a doctor should see it soon.
 - A guided strengthening programme can help many people with a gradual tear lift and use the arm again.
 - You get a step-by-step plan for daily tasks, with regular checks on how you are progressing.

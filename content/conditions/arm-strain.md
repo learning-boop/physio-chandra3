@@ -45,7 +45,7 @@ The big muscles of the upper arm can ache for a day or three after a new or hard
 - You want a plan to return to lifting or sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check whether it is normal soreness or a strain and explain what is going on.
 - A graded strengthening plan can help the muscle heal and rebuild its strength.
 - You get advice on building training loads up gradually to lower the chance of another strain.

@@ -43,7 +43,7 @@ This is a stretch or tear of the ligament on the outer side of your knee, typica
 - A milder sprain is not settling after a couple of weeks, or the knee feels loose or shifts to the side during activity
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee, test the outer ligament and explain how bad the sprain looks.
 - You get brace advice if needed, and exercises to rebuild movement and strength step by step.
 - A gradual plan can help you return safely to walking, work and sport.

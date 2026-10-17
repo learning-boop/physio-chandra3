@@ -43,7 +43,7 @@ This happens when the kneecap shifts partly or fully out of its groove, usually 
 - You keep getting the feeling that the kneecap might slip, or it has slipped more than once: book a physiotherapy assessment
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and explain what happened when the kneecap shifted.
 - Thigh and hip strengthening, with short-term brace advice if needed, aims to help support the kneecap.
 - You get a step-by-step return-to-sport plan to help lower the chance of it happening again.

@@ -37,7 +37,7 @@ The tailbone normally tilts slightly as you sit down and stand up. After childbi
 - You want an assessment; treatment of the tailbone and the muscles around it helps many people
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your tailbone moves as you sit and stand, and explain it plainly.
 - You learn easier ways to sit down and stand up, with cushion advice to ease the catch.
 - Gentle exercises and a daily plan can help you sit for longer with less pain.

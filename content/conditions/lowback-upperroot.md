@@ -52,7 +52,7 @@ The nerves that supply the front of the thigh leave the spine higher up in the l
 - Leg symptoms limiting walking, sleep or work, or not easing after two to three weeks: a physiotherapy assessment can check the nerve and give you a plan
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your hip, nerves and thigh strength, and explain where the pain comes from.
 - Gentle nerve gliding exercises and movements that ease your symptoms can help settle thigh pain.
 - You get a graded plan to return to walking, stairs and daily activities as it settles.

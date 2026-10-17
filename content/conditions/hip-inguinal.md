@@ -46,7 +46,7 @@ Just above the groin crease is a weaker area of the tummy wall, where the inguin
 - Doha 2015 inguinal-related groin pain: pain in the inguinal canal region, tenderness there, no palpable hernia, pain on resisted abdominal testing, Valsalva, cough or sneeze. "Sports hernia" is a misnomer (British Hernia Society inguinal disruption consensus; ESSKA 2024). Femoral hernia (a lump just below the crease) is more common in women and more likely to become trapped. Ultrasound or a surgical review when a hernia is suspected; surgery is an option after failed rehabilitation.
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your groin, and suggest a doctor visit if a hernia needs ruling out.
 - A gradual core and hip strengthening programme can help settle the pain.
 - You get a step-by-step plan to get back to running, kicking and twisting sport.

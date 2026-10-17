@@ -39,7 +39,7 @@ The small muscles that move the thumb and index finger work hard with texting, g
 - You want advice on how you hold your phone, tools, or controller
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your thumb and hand and explain why the muscles ache.
 - Gentle stretches, hands-on work for tight spots, and strengthening can help ease the ache.
 - You get tips on breaks, phone use and pinching tasks to help the ache stay settled.

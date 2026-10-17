@@ -55,7 +55,7 @@ The capsule around the shoulder joint tightens, causing pain then marked stiffne
 - You'd like a staged plan matched to the phase you're in
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can explain how frozen shoulder usually changes over time and what to expect.
 - Gentle stretching and movement, matched to how sore your shoulder is, can help ease pain and stiffness.
 - You get tips for sleep, dressing and reaching, and a plan that changes as your shoulder improves.

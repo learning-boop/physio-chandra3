@@ -54,7 +54,7 @@ Irritation of the strong tissue band supporting the arch, where it anchors into 
 - Burning on the inner heel that builds through the day, rather than first-step pain: see us, as a small nerve may be involved
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can confirm what is causing your heel pain and explain it in plain words.
 - Calf and foot stretches, hands-on care and taping can help ease the first-step pain.
 - You get a plan for footwear, a night splint if needed, and building back activity.

@@ -69,7 +69,7 @@ A feeling of being off-balance or unsteady that may come from the neck. Your bra
 - The dizziness keeps coming back with desk work, screens or driving
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your neck, balance and inner ear, and explain how the neck can affect balance.
 - Gentle hands-on care for the upper neck, with head-position and balance training, may help ease dizziness.
 - You get neck exercises and work set-up advice to help you feel steadier day to day.

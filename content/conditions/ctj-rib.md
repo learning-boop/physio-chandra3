@@ -36,7 +36,7 @@ Each rib joins the spine at small joints that move with every breath. A sudden t
 - Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the rib joint and explain why it hurts when you breathe or twist.
 - Gentle hands-on care for the rib and upper back, with breathing and turning exercises, can help ease pain.
 - You get a plan to return to work and sport, and to reduce flare-ups.

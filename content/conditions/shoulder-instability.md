@@ -56,7 +56,7 @@ The shoulder slips, or has come out of place (dislocated), most often in younger
 - Apprehension limits sport or work, or you want assessment before returning to overhead or contact sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your shoulder moves and explain why it slips.
 - A tailored strengthening programme aims to help the muscles hold the shoulder steady and build confidence.
 - You get a plan back to sport, and advice on when a surgeon's opinion may be worthwhile.

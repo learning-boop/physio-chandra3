@@ -41,7 +41,7 @@ Inside the jaw joint, a small disc of cartilage cushions the jaw as it moves. If
 - You want exercises to control how the jaw opens
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your jaw joint moves and explain why it clicks.
 - Exercises to control how your jaw opens can help ease pain and catching.
 - You learn jaw habits for eating, yawning and resting to help keep it comfortable.

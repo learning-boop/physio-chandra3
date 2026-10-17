@@ -46,7 +46,7 @@ The natural cushioning pad under your heel bone can become bruised and sore, or 
 - You're unsure if it's this or another heel problem and want a clear plan
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check whether your heel pain comes from the fat pad or something else.
 - Heel cushions, taping and footwear advice can help protect the heel pad and ease the pain.
 - You get a plan to pace standing and walking so you can keep doing your daily activities.

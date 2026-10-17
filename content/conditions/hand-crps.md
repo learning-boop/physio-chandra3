@@ -61,7 +61,7 @@ If this fits, please see your family doctor or surgeon within the next few days.
 - Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Alongside your doctor's care, a physiotherapist can explain CRPS and why your hand is so sensitive.
 - Gentle daily use, touch training and mirror exercises aim to calm the sensitivity and ease stiffness.
 - You get a step-by-step plan to use your hand more in daily life, at your own pace.

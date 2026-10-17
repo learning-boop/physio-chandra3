@@ -41,7 +41,7 @@ A sprain can also bruise or damage the cartilage and bone on top of the ankle bo
 - The ankle locks and will not free up: see a doctor soon
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your ankle and arrange imaging or a surgeon's opinion if needed.
 - A paced programme of movement, strength and balance can help ease the ache and swelling.
 - You get a step-by-step plan back to activity that respects how the joint surface is healing.

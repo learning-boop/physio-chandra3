@@ -44,7 +44,7 @@ The two halves of the pelvis meet at the front, at the pubic bone. Kicking and t
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the front of your pelvis and explain what is making it sore.
 - You get easier ways to move day to day, with gradual hip and core strengthening.
 - A step-by-step plan can help you get back to sport or daily activities with fewer flare-ups.

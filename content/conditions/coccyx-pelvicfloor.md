@@ -41,7 +41,7 @@ The muscles of the pelvic floor attach to the tailbone. When they stay tight or 
 - Bleeding from your bottom, black stools, or a change in your bowel habit lasting more than 3 weeks: see your doctor first
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A pelvic health physiotherapist can check the muscles around your tailbone and explain what is going on.
 - Breathing, relaxation and gentle exercises can help these muscles let go and ease the ache.
 - You get simple toilet, sitting and daily habits to help keep flare-ups down.

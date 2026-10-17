@@ -72,7 +72,7 @@ A cervicogenic headache is a headache that starts in the joints, muscles or nerv
 - You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer. If any of the warning signs apply, see a doctor first
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the top of your neck and explain how it can cause head pain.
 - Hands-on care with deep neck and shoulder blade exercises can help reduce how often headaches come.
 - You learn a self-help neck movement for when a headache starts, plus desk and sleep set-up tips.

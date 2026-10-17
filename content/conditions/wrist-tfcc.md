@@ -44,7 +44,7 @@ The TFCC is the wrist's 'meniscus' on the little-finger side: a cartilage cushio
 - You want a graded strengthening and stability plan
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the little-finger side of your wrist and explain what is going on.
 - A wrist support for loaded tasks, then gradual grip and wrist strengthening, can help it settle.
 - You get a step-by-step plan back to sport and work, and advice if a hand surgeon's opinion is needed.

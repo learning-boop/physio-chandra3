@@ -36,7 +36,7 @@ After a broken or dislocated elbow, the elbow easily stiffens, especially in str
 - You would like a structured movement and strengthening programme
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your elbow and work within the limits your fracture clinic has set.
 - Guided movement, then strengthening, aims to bring back bending, straightening and arm strength.
 - You get a step-by-step plan back to daily tasks, work and sport as the bone heals.

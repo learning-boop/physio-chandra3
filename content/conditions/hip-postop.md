@@ -39,7 +39,7 @@ After a hip replacement or a hip fracture operation, a guided programme of exerc
 - Progress has stalled, or you are not back to the activities you want
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your walking, strength and balance, and follow your surgeon's advice.
 - A step-by-step strength, walking and balance programme can help you get stronger and steadier.
 - You get a home programme and safety tips to help you get back to everyday activities.

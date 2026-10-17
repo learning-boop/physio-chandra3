@@ -43,7 +43,7 @@ At the point of the elbow there is a small fluid sac (bursa) that cushions the b
 - You felt a pop at the back of the elbow after a fall or a forced push, and straightening the arm is now weak: see a doctor the same day
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check whether the fluid sac or the tendon is the problem and explain it simply.
 - Padding and avoiding pressure can help the sac settle, and gradual strengthening can help a sore tendon.
 - You get a plan for building back pushing, push-ups and work tasks step by step.

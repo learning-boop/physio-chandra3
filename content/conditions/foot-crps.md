@@ -62,7 +62,7 @@ If this fits, please see your family doctor or surgeon within the next few days.
 - Any wound that is red, discharging or getting worse, or a fever, needs your doctor the same day
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Alongside your doctor's care, a physiotherapist can explain why the foot is so sensitive and what helps.
 - Gentle movement, gradual loading and calming touch exercises aim to settle the sensitivity and stiffness.
 - Brain-training methods such as mirror exercises and a paced plan can help you use the foot again.

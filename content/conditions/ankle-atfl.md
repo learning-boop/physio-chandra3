@@ -49,7 +49,7 @@ The most commonly injured ligament in the ankle, stretched or torn when the ankl
 - Weeks later there is a deep ache, swelling or catching inside the ankle: see us, as the joint surface may need checking
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your sprain, rule out a break, and explain how ligaments heal.
 - Taping or a brace, gentle hands-on care and early exercise can help you walk comfortably sooner.
 - Balance and strength training aims to lower the chance of the ankle rolling again.

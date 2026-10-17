@@ -44,7 +44,7 @@ Pain from inside the elbow joint itself tends to come with stiffness, where the 
 - It locks and will not free up, or the joint becomes hot and swollen: see a doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your elbow bends and straightens and explain what is going on.
 - Regular movement and strength exercises can help ease stiffness and keep your elbow working.
 - You get advice on pacing heavy gripping tasks and managing flare-ups at work and home.

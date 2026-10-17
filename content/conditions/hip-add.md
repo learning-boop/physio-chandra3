@@ -50,7 +50,7 @@ Pain where the inner-thigh muscles attach to the pubic bone, often building up o
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your groin, including a simple squeeze test, and explain what is going on.
 - A step-by-step inner-thigh strengthening programme is the main treatment and can help ease the pain.
 - You get a gradual return-to-sport plan, plus exercises that may help prevent groin problems coming back.

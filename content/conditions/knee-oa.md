@@ -56,7 +56,7 @@ A gradual change in the joint's cartilage and bone, common from midlife onward. 
 - You're weighing options and want conservative care optimized first
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your knee moves and explain in plain words what is going on.
 - A guided strength and walking programme can help ease pain and keep you active.
 - You get a plan to manage busy days and flare-ups, and to stay doing what you enjoy.

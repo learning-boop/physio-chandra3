@@ -62,7 +62,7 @@ Whiplash is a neck injury caused by a sudden jolt that throws the head forwards 
 - Trouble concentrating, feeling foggy or poor sleep since the injury: see your doctor to check for a concussion
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your neck after the injury and explain what to expect as it recovers.
 - Neck exercises for movement, strength and control, with gentle hands-on care, can help your recovery.
 - You get a plan to stay active and return to driving, work and daily life step by step.

@@ -37,7 +37,7 @@ A nerve runs from the low back through the pelvis to the inner thigh, where it s
 - Pain also goes down the front of the thigh from the back: the low back may be the source
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your inner thigh, hip and nerve to work out where the pain comes from.
 - Gentle nerve-gliding exercises with inner-thigh and hip strengthening can help calm the irritated nerve.
 - You get a plan to adjust your training and build back up to sport gradually.

@@ -41,7 +41,7 @@ Arthritis in the big toe joint makes it stiff, especially when bending the toe u
 - You want advice on shoes, insoles, or other options
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your big toe moves and explain the arthritis in plain words.
 - Joint mobilisation, toe and calf strengthening and a stiff insert or rocker shoe can help ease pain.
 - You get a plan to keep walking and staying active while managing flare-ups.

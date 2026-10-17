@@ -90,7 +90,7 @@ This is the most common kind of back pain. The muscles, joints, discs and ligame
 - Under 20, with pain on arching your back in sport for more than 2 to 3 weeks: see your doctor for an X-ray before training through it
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your back and explain that pain does not mean damage.
 - An exercise programme you enjoy, with hands-on care where it helps, can ease pain and stiffness.
 - You get a paced plan to return to work, sport and daily life, and to manage flare-ups.

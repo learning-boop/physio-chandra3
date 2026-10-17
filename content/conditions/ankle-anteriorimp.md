@@ -37,7 +37,7 @@ At the front of the ankle, the shin bone and the ankle bone can pinch soft tissu
 - The ankle also swells or catches: this can be a cartilage problem, and may need a scan
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check what is pinching at the front of your ankle and explain it.
 - Hands-on joint work, strengthening and changes to how you load the ankle can help ease the pinch.
 - You get a plan to return to squatting, stairs and sport step by step.

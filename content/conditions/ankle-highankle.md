@@ -44,7 +44,7 @@ Just above the ankle, the two bones of the lower leg are held together by strong
 - Your calf becomes swollen, warm or tender, especially in a brace, boot or cast: see a doctor the same day; if you are also short of breath or have chest pain, call 911
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check for a high ankle sprain and arrange a surgeon's opinion if needed.
 - Protected walking, then graded strength and balance work, can help the ligaments recover.
 - You get a step-by-step return-to-sport plan based on how the ankle is doing.

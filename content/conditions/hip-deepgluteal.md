@@ -47,7 +47,7 @@ The sciatic nerve passes under the deep buttock muscles; muscles, bands of tissu
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your buttock, back and nerve to work out where the pain comes from.
 - Gentle nerve-gliding exercises and gradual buttock strengthening can help calm the irritated nerve.
 - You get advice on sitting and activity so you can build back up without stirring it up.

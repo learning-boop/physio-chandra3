@@ -40,7 +40,7 @@ A nerve that runs through the muscles at the top of the forearm can be squeezed 
 - You cannot fully straighten your fingers at the knuckles, or your wrist or fingers are getting weaker: see a doctor, who may arrange nerve tests
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check whether the ache comes from the nerve or the tendon and explain it simply.
 - Changes to how you twist and grip, with gentle exercises, can help the irritated nerve settle.
 - You get a plan to help you get back to tool, computer and sport tasks comfortably.

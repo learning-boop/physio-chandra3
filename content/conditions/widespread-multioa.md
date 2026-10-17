@@ -43,7 +43,7 @@ Osteoarthritis is the most common reason for aching in several joints as we get 
 - Pain that wakes you and does not change with position, or unexplained weight loss: see your doctor within days
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your joints and explain in plain words how joints change with age.
 - A guided strength and walking or fitness programme can help ease pain and keep you active.
 - You get a plan for busy days and flare-ups, and advice on any helpful walking aids or supports.

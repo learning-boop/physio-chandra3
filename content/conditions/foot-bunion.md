@@ -39,7 +39,7 @@ A bunion is a bony bump on the inside of the big toe joint, with the big toe lea
 - You want footwear advice, or are considering surgery
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can look at your foot and explain in plain words what the bunion means for you.
 - Footwear advice, toe spacers and toe and foot exercises can help ease the pain.
 - You get a plan to stay active, and advice on when a surgeon's opinion may be worth considering.

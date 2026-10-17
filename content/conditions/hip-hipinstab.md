@@ -48,7 +48,7 @@ Some hips have a slightly shallower socket or extra-stretchy ligaments, so the b
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your hip moves and explain in plain words why it feels loose.
 - Strength and balance exercises for your hip and buttock aim to give the joint more support.
 - You get advice on which movements to ease off and a gradual plan back to sport.

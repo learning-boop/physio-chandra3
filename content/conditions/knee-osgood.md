@@ -49,7 +49,7 @@ This is irritation of the growing bone just below the kneecap (Osgood-Schlatter)
 - It's getting in the way of sport or everyday activity
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your child's knee and explain growth-related knee pain in plain words.
 - A step-by-step activity plan, with thigh and hip strengthening, can help ease the pain.
 - Your child gets a clear plan to build back to their sport while keeping pain low.

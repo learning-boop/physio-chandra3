@@ -50,7 +50,7 @@ A muscle that has become tight and sensitive, often from being held in one posit
 - Pins and needles, numbness, weakness, or pain that shoots into the arm or hand: these point to a nerve, so please mention them; we check the nerves first
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can find the tight, tender muscle and explain why the ache spreads.
 - Hands-on pressure, stretching and gradual strengthening can help ease the ache.
 - You get advice on movement breaks, your workstation and self-massage, so you can manage it yourself.

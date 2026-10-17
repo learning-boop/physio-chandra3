@@ -41,7 +41,7 @@ Irritation at the thoracolumbar junction can refer pain along nerves that travel
 - You'd like assessment of the thoracolumbar junction specifically
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check where your mid and low back meet, and explain why the pain is felt lower down.
 - Gentle hands-on care and mobility exercises for this area can help ease pelvic-rim, flank or groin pain.
 - You get advice on sitting and staying active to help keep it from coming back.

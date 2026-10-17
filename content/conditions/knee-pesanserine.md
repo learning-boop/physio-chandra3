@@ -42,7 +42,7 @@ Three tendons join on the inner side of the shin just below the knee, with a sma
 - It is limiting walking, stairs, or sleep
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and explain why the inner shin is sore.
 - Thigh and hip strengthening, with changes to the activities that bring it on, can help ease the pain.
 - If you also have knee arthritis, a physiotherapist can help you manage both together.

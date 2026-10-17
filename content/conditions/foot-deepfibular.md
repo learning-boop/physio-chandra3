@@ -43,7 +43,7 @@ A nerve runs down the front of the ankle under the straps of tissue that hold th
 - Burning or numbness in both feet, like socks: see your doctor, as a general nerve condition can cause this
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can find where the nerve on top of your foot is being pressed and explain why.
 - Lacing and padding changes, gentle nerve-gliding exercises and freeing up stiff joints can help ease it.
 - You get advice on footwear and activity to help keep the pressure off the nerve.

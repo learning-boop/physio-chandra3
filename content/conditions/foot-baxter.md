@@ -45,7 +45,7 @@ A small nerve runs under the inner side of the heel, close to where the thick ba
 - Heel pain with other swollen joints, back stiffness in the morning, or psoriasis: mention it to your doctor as well
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check whether a pinched heel nerve, the plantar fascia, or both are causing your pain.
 - Gentle nerve-gliding exercises, hands-on care and footwear advice can help ease the pressure on the nerve.
 - You get a step-by-step plan to build back walking and standing time without stirring it up.

@@ -46,7 +46,7 @@ The tendons that move the thumb run through a snug tunnel on the thumb side of t
 - Splints or rest alone haven't fixed it: a physiotherapist can guide a gradual return to load
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the thumb side of your wrist and explain what is irritating the tendons.
 - A thumb splint for sore tasks, better lifting technique and gradual strengthening can help it settle.
 - You get tips for lifting a baby or kettle, and advice on when a doctor's review is worthwhile.

@@ -35,7 +35,7 @@ Just in front of the bony bump on the outer ankle is a small soft hollow. After 
 - The ankle also locks, or keeps swelling: see us, as a scan may be needed
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the soft hollow on the outer ankle and explain why it is sore.
 - Balance training, strengthening and footwear or insole advice can help ease pain and steady the ankle.
 - You get a plan back to walking and sport on uneven ground.

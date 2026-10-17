@@ -37,7 +37,7 @@ Jammed fingers, thumb sprains and small finger fractures are common, and the fin
 - You would like help with exercises, splints and a return to sport or work
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Once a doctor has checked it, a physiotherapist can explain the injury and how long to protect it.
 - Splint advice, then gentle movement and strengthening, aims to bring back finger bend and grip.
 - You get a plan for getting back to work, sport and daily tasks, including taping if needed.

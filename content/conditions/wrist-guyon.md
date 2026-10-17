@@ -46,7 +46,7 @@ The ulnar nerve passes through a small tunnel at the base of the palm on the lit
 - A finger goes cold, white or blue: see a doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the feeling and strength in your hand and explain what presses on the nerve.
 - Changes to your grip, handlebars, gloves and tool handles can help take pressure off the nerve.
 - You get a plan to keep cycling and working comfortably, and to know when a doctor's check is needed.

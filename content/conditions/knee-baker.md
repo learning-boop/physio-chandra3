@@ -42,7 +42,7 @@ Pain at the back of the knee often comes from a fluid-filled swelling there (a B
 - Bending or straightening is getting harder
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and explain how the swelling links to the joint itself.
 - Treatment focuses on the knee problem behind it, with exercises to keep the knee moving and strong.
 - You get advice on activity so you can stay active with less swelling.

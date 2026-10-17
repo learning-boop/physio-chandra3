@@ -39,7 +39,7 @@ A sudden push-off, such as a lunge in tennis or a sprint, can tear some fibres o
 - You felt a snap at the back of the heel, or cannot go up on tiptoe on that leg: see a doctor the same day, as the Achilles tendon can tear
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your calf and explain how bad the strain looks.
 - Gentle calf exercises, building up step by step, can help the muscle heal and get stronger.
 - You get a gradual plan to get back to running, jumping and sport.

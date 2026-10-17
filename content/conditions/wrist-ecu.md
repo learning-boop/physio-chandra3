@@ -39,7 +39,7 @@ A tendon runs in a groove on the back of the wrist, on the little-finger side. R
 - You want a plan to return to racquet sports, golf, or tool work
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the tendon on the little-finger side and explain what is going on.
 - Easing forceful twisting, and sometimes a splint, can help the tendon settle before gradual strengthening.
 - You get advice on your grip or swing, and a step-by-step plan back to sport.

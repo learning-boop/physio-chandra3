@@ -35,7 +35,7 @@ A thin nerve runs down the back of the calf, beside the heel cord and behind the
 - A new lump along the nerve, or numbness after an ankle operation or a cut: see your doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can find where the nerve on the outer foot is irritated and explain why.
 - Easing pressure from shoes or scars, plus gentle nerve-gliding exercises, can help settle the nerve.
 - Balance and strength work aims to help prevent the ankle sprains that can irritate it.

@@ -44,7 +44,7 @@ The ball of the foot carries a lot of load with every step, especially in high h
 - You want help with footwear and insoles
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the ball of your foot and explain what is causing the soreness.
 - Padding, taping and footwear advice can help take load off the sore area while it settles.
 - Calf and foot strengthening and a paced return to activity aim to help prevent flare-ups.

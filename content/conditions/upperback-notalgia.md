@@ -39,7 +39,7 @@ Small skin nerves come out from the spine and pass through the back muscles to t
 - The itch or burning is affecting sleep, or has not eased with movement after a few weeks: we can assess the upper back and the nerve
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your upper back and explain how a squeezed skin nerve causes the itch.
 - Mid-back mobility exercises and gentle hands-on care for the muscles and nerve may help ease symptoms.
 - You get posture advice, and support to work with your doctor if the itch persists.

@@ -40,7 +40,7 @@ The labrum is a rim of firm tissue that deepens the shoulder socket. It can be i
 - You want a plan for returning to throwing or overhead sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your shoulder and explain in plain words what may be going on.
 - Shoulder and shoulder-blade strengthening, with advice on throwing load, can help ease pain and catching.
 - You get a step-by-step return to overhead sport, and advice on when a surgeon's opinion is worthwhile.

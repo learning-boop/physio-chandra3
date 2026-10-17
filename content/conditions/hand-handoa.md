@@ -49,7 +49,7 @@ Arthritis in the small joints in the middle and at the end of the fingers is com
 - You want an exercise plan and advice on splints or aids
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your finger joints and explain in plain words what is going on.
 - Daily hand exercises, easier ways of doing tasks and, if needed, a splint can help ease pain.
 - You get tips on tools and pacing, and a plan for cold days and flare-ups.

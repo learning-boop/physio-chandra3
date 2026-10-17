@@ -59,7 +59,7 @@ Dupuytren's is a thickening of the tough layer of tissue just under the skin of 
 - You are having, or have had, a release procedure and want a hand-therapy plan: swelling control, early movement, scar care, and a graded return to strength, work and hobbies
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can explain Dupuytren's and help you keep an eye on any change in your fingers.
 - If a finger starts to bend, a physiotherapist can help you decide when to see a hand surgeon.
 - After a procedure, guided exercises, scar care and, if needed, a night splint can help your hand recover.

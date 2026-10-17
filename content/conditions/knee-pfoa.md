@@ -47,7 +47,7 @@ This is osteoarthritis behind the kneecap: a slow change in the cartilage and bo
 - Symptoms keep getting worse despite gentle activity changes
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and explain in plain words what is happening behind the kneecap.
 - A guided thigh and hip strengthening programme can help ease pain and keep you active.
 - You get a plan to manage stairs, busy days and flare-ups, and to stay doing what you enjoy.

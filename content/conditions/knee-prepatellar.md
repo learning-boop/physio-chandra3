@@ -42,7 +42,7 @@ A small fluid sac sits in front of the kneecap to let the skin glide over it. A 
 - It keeps coming back with work
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the swelling and suggest a doctor visit if it looks infected.
 - You get advice on kneeling, knee pads and keeping the knee moving while it settles.
 - A plan for work and daily activities can help lower the chance of it coming back.

@@ -56,7 +56,7 @@ This is a gradual change in the hip joint, common with age, that causes deep gro
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your hip moves and explain in plain words what is going on.
 - A guided strength and movement programme can help ease pain and stiffness and keep you active.
 - You get a plan to manage busy days and flare-ups, and to keep doing what you enjoy.

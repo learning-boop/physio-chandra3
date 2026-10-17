@@ -44,7 +44,7 @@ Arthritis can develop in the small joints across the middle of the foot with age
 - You want advice on insoles and strengthening
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your midfoot moves and explain arthritis in plain words.
 - A strengthening programme, plus advice on stiffer-soled shoes or inserts, can help ease the ache.
 - You get a plan to manage busy days and flare-ups and stay active.

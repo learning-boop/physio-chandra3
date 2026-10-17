@@ -50,7 +50,7 @@ An overload of the tendons that lift the wrist and fingers, felt at the outer el
 - Your hand or wrist is getting weaker, or you cannot straighten your wrist or fingers: see a doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your elbow and explain in plain words what is going on.
 - A gradual forearm strengthening programme, sometimes with hands-on treatment or taping, can help ease pain.
 - You get advice on easing grip loads at work and home, and a plan for flare-ups.

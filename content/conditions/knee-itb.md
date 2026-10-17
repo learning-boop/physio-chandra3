@@ -44,7 +44,7 @@ Irritation where the long band on the outside of the thigh crosses the knee, cla
 - Pain starts appearing in daily activities too
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and hip and explain why the outer knee is sore.
 - Hip strengthening, with a short break below the point where pain starts, can help settle it.
 - You get a gradual plan back to running or cycling, including tips on training, shoes and bike set-up.

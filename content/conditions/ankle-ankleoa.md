@@ -46,7 +46,7 @@ Unlike the hip and knee, ankle arthritis usually follows an old injury, such as 
 - Morning stiffness lasting well over 30 minutes, or both ankles or several joints are swollen: see your doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your ankle moves and explain arthritis in plain words.
 - Strength and balance training, plus footwear advice such as a rocker sole, can help ease pain.
 - You get a plan to manage busy days and flare-ups and keep doing what you enjoy.

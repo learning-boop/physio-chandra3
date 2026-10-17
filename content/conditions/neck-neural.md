@@ -81,7 +81,7 @@ Nerves run from the neck to the fingers and have to slide and stretch every time
 - A burning or "dead arm" after a tackle or collision that settles within minutes is usually a stretched nerve (a "stinger"); if it happens in both arms, or keeps coming back, see a doctor before returning to sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can test how the nerve moves and explain why a sensitive nerve is usually healthy.
 - Gentle nerve gliding exercises and hands-on care along the nerve's path can help ease arm symptoms.
 - You get a step-by-step plan to return to the arm and neck positions that bring it on.

@@ -64,7 +64,7 @@ The most common shoulder problem: the tendons that lift and steady the arm becom
 - You want a graded strengthening plan, the treatment with the best evidence
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your shoulder and explain in plain words why it hurts.
 - A graded strengthening programme is the main treatment, sometimes with hands-on care for short-term relief.
 - You get advice on work and overhead tasks, and a plan back to sport or the gym.

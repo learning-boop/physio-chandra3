@@ -41,7 +41,7 @@ Sometimes pain that seems to come from the knee is actually being sent there fro
 - You notice hip or groin stiffness alongside the knee symptoms
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check both your hip and knee to find where the pain really comes from.
 - For adults, hip stretching and strengthening exercises can help ease the pain felt in the knee.
 - For children and teenagers, a physiotherapist can make sure a doctor checks the hip first.

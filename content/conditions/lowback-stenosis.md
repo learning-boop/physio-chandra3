@@ -60,7 +60,7 @@ Lumbar spinal stenosis means the space for the nerves in the lower back has beco
 - Your walking distance has shrunk, your legs tire or tingle when you stand or walk, or you have been told you have spinal stenosis and want a plan for it: a physiotherapy assessment can help you work out the right next steps
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your back, legs and balance, and explain what the narrowing means.
 - A guided programme of stretches, leg and trunk strength and graded walking can help you walk further.
 - You get fitness options in comfortable positions, like cycling or pool walking, and a plan for daily life.

@@ -71,7 +71,7 @@ Concussion is diagnosed by a doctor or nurse practitioner, who also checks for a
 - Tiredness, weakness, low mood, or changes in sex drive or periods are not improving 3 months or more after the injury: please also ask your family doctor about a hormone (pituitary) blood test, which can be checked alongside physiotherapy
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Once a doctor has checked you, a physiotherapist can explain your symptoms and the expected recovery.
 - Gentle graded exercise, plus neck, balance and eye-movement exercises where needed, can help ease symptoms.
 - You get a step-by-step return to school, work and, once your doctor has cleared you, sport.

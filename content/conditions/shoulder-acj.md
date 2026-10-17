@@ -45,7 +45,7 @@ The small joint where the collarbone meets the shoulder blade can be sprained by
 - You want a graded return to gym or sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the joint at the top of your shoulder and explain what is going on.
 - Gradual movement and strengthening exercises can help you get back to lifting and pressing.
 - You get a step-by-step plan for the gym, sport or work at a pace that suits the joint.

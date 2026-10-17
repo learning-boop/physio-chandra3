@@ -43,7 +43,7 @@ The tendons that bend the fingers run through tight bands in the palm. If a tend
 - In a young child, a thumb stuck bent is usually a "trigger thumb": please see your family doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your finger and explain why it catches or locks.
 - A small splint that rests the finger, with advice on gripping, can help the catching settle.
 - You get tips on tools and hand tasks, and advice on when a doctor's review is worthwhile.

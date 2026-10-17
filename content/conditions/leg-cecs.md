@@ -40,7 +40,7 @@ The muscles of the lower leg sit in tight compartments. In some runners and marc
 - The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your legs and explain why they tighten up during exercise.
 - Changes to running form, such as shorter, quicker steps, may help ease the symptoms.
 - You get a plan to adjust training and cross-train, and advice if a doctor's opinion is needed.

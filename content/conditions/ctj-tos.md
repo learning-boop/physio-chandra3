@@ -44,7 +44,7 @@ The nerves to the arm pass through a narrow gap between the collarbone, the firs
 - The small muscles of the hand are getting thinner, or your grip is getting weak: see a doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your nerves, posture and first rib, and explain why the arm tingles.
 - Posture, breathing and first-rib mobility exercises aim to ease pressure on the nerves to your arm.
 - You get advice on carrying, overhead work and your work set-up to help prevent flare-ups.

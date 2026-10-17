@@ -43,7 +43,7 @@ The tibialis posterior tendon holds up the arch from the inner ankle. When overl
 - A single-leg heel raise is painful or impossible
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the tendon that supports your arch and how your foot is holding up.
 - A graded strengthening programme with arch supports can help ease pain and support the arch.
 - You get a plan to build back walking and activity, and to keep the tendon strong.

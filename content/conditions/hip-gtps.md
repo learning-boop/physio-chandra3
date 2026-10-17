@@ -60,7 +60,7 @@ The tendons of the buttock muscles, where they attach at the bony point of the o
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your outer hip and explain why the tendons have become sore.
 - Simple advice on lying, sitting and standing, plus a step-by-step strengthening programme, can help ease pain.
 - You get a plan to build up walking and activity again while keeping flare-ups down.

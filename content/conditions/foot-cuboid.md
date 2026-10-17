@@ -37,7 +37,7 @@ On the outer side of the middle of the foot, the cuboid bone and its joints can 
 - You want hands-on treatment and a plan back to sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the outer side of your foot and rule out other causes of the pain.
 - Hands-on treatment of the joint, taping or a small pad, and strengthening can help ease the pain.
 - You get a plan to return to walking, running or dancing step by step.

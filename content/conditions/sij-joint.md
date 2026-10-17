@@ -49,7 +49,7 @@ The joint between the base of the spine and the pelvis can become sensitive — 
 - Walking or stairs remain limited
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your back and pelvis and explain what is causing the pain.
 - Hands-on treatment alongside exercise can help ease pain and get you moving more easily.
 - You get a plan for daily habits and activity to help manage flare-ups.

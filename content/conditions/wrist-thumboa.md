@@ -52,7 +52,7 @@ This is osteoarthritis at the joint where the thumb meets the wrist: a slow chan
 - Several finger joints in both hands are swollen and stiff for more than an hour in the morning, or the thumb base is suddenly hot, red and swollen: see a doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your thumb joint and explain in plain words what is going on.
 - Thumb and hand strengthening, with a supportive splint if needed, can help ease pain with pinching.
 - You get easier ways to grip, tips on tools, and a plan to manage flare-ups.

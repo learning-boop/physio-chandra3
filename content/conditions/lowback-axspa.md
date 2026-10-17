@@ -61,7 +61,7 @@ This pattern is worth checking with your family doctor, who can arrange blood te
 - Any new painful red eye, or new severe neck or back pain after even a minor fall, needs medical care first
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Alongside your doctor's care, a physiotherapist can check how your back moves and explain what is going on.
 - A regular exercise plan for movement, strength, fitness, posture and breathing can help ease stiffness.
 - You get a plan to keep active at work and home, and to manage flare-ups.

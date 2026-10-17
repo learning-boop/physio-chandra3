@@ -39,7 +39,7 @@ A hard knock to the thigh, such as a knee in football or a tackle, bruises the m
 - The pain and tense swelling keep building over the hours after the knock, or the leg goes numb: go to the emergency department now
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your thigh and use how far your knee bends to judge the bruise.
 - Gentle early movement, building to strengthening, can help you regain knee bend and strength.
 - You get a step-by-step plan to get back to sport.

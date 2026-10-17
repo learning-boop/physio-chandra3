@@ -39,7 +39,7 @@ Two small bones sit under the big toe joint, inside the tendon that bends the to
 - You have diabetes and a callus, blister or sore under the big toe joint: see your doctor or diabetes foot clinic within a day or two
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the small bones under your big toe and whether a scan is needed.
 - Padding, stiffer-soled shoes and a period of reduced load can help the area settle.
 - You get a step-by-step plan back to running, jumping or dancing.

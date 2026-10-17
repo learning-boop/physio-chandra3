@@ -63,7 +63,7 @@ Spondylolisthesis means one of the bones in the lower back sits a little forward
 - You want a plan: a physiotherapy assessment can work out which positions unload your back, and build the strength programme that suits the slip you have
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your back moves and explain what the slip means in plain words.
 - Graded strengthening of your trunk and hips can help ease pain and support everyday movement.
 - You get easier positions for flare-ups and a step-by-step plan back to the activities you enjoy.

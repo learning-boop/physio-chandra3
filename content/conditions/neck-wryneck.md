@@ -46,7 +46,7 @@ A neck that suddenly locks, often on waking or after a small awkward movement, s
 - It is not easing after a few days, or keeps coming back: a physiotherapy assessment can help free it up and stop it recurring
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your neck and explain that a suddenly locked neck is common.
 - Gentle hands-on care for the neck and upper back, with easy movement exercises, can help free it up.
 - You get advice to stay active and simple tips to help prevent it happening again.

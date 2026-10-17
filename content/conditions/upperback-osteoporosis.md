@@ -64,7 +64,7 @@ If this pain started suddenly after a small movement, a cough or a minor fall, p
 - If your thin bones or a fracture have no obvious cause, ask your doctor whether your vitamin D, calcium and parathyroid hormone have been checked (a simple blood test)
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Once your doctor has checked it, a physiotherapist can help you with a safe movement plan.
 - Strength and balance exercises, done at least twice a week, may help lower your chance of a fall.
 - You learn safer ways to bend, lift and move, plus posture and breathing exercises.

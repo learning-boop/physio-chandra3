@@ -48,7 +48,7 @@ This is an injury to one of the main ligaments deep inside the knee, usually fro
 - Your knee gave way or buckled after a twisting or landing injury, or keeps giving way: book a physiotherapy assessment
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and explain the injury and your options in plain words.
 - A structured strength, balance and movement programme is a key part of recovery, with or without surgery.
 - You get a step-by-step return-to-sport plan, with exercises that may help lower the chance of another injury.

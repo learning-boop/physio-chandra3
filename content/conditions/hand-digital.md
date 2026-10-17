@@ -37,7 +37,7 @@ Each finger has two small nerves running down its sides. Pressure from gripping 
 - The numbness is spreading to other fingers
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the feeling in your finger and explain which nerve is irritated.
 - Changing or padding your grip on tools or balls can help take pressure off the nerve.
 - You get a plan to return to your tools, sport or hobby while the nerve settles.

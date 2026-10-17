@@ -39,7 +39,7 @@ This ligament sits deep at the back of the knee and can be strained by a hard bl
 - The knee feels like it shifts or gives way during normal daily movement
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and the other ligaments, and explain the injury plainly.
 - A thigh-focused strengthening programme, with brace advice if needed, can help support the knee as it heals.
 - You get a step-by-step plan to get back to daily life and sport.

@@ -35,7 +35,7 @@ The joints where the ribs meet the breastbone can become irritated, often after 
 - Chest pain with breathlessness, sweating, feeling sick, or pain spreading to the arm, jaw or back: call 911
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Once a doctor has ruled out other causes of chest pain, a physiotherapist can check your ribs.
 - Gentle chest stretches and upper-back exercises can help ease pain while the joints settle.
 - You get a step-by-step plan to return to pushing exercises, the gym or sport.

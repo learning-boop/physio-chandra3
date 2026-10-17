@@ -38,7 +38,7 @@ In sports that need hard, repeated gripping, such as motocross, rowing, climbing
 - The pain keeps building after you stop, or follows an injury or a tight cast: go to the emergency department now
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your forearm and grip and explain what is causing the tightness.
 - Advice on how hard you grip and how your equipment is set up can help reduce the build-up.
 - A gradual training plan aims to help you manage longer sessions with less arm pump.

@@ -39,7 +39,7 @@ A few finger-widths above the wrist on the thumb side, two sets of tendons that 
 - You want a plan to return to rowing, paddling, lifting, or work
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can confirm where the tendons are irritated and explain what is going on.
 - Easing the repeated wrist movement for a while, then gentle strengthening, can help the tendons settle.
 - You get a gradual plan back to rowing, paddling, lifting or work, with tips on technique.

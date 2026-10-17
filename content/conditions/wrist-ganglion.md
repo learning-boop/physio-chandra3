@@ -41,7 +41,7 @@ A smooth, harmless fluid-filled lump, most often on the back of the wrist, that 
 - It limits wrist strength or mobility
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the lump, explain what it is, and why it is usually harmless.
 - Advice on wrist positions and supports for floor work and lifting can help ease discomfort.
 - You get advice on when a doctor's review is worthwhile if the lump stays troublesome.

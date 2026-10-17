@@ -38,7 +38,7 @@ The inner thigh muscles pull the legs together and steady the hip when you chang
 - You want a plan to return to sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your inner thigh and explain how bad the strain looks.
 - Squeezing exercises and step-by-step strengthening can help the muscle heal and get stronger.
 - You get a gradual plan to get back to running, kicking and side-to-side sport.

@@ -49,7 +49,7 @@ Pain from the joint between the kneecap and thigh bone, usually when it's asked 
 - You'd like a graded strengthening plan, the best-evidenced treatment
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and hip and explain why the kneecap area is sore.
 - A step-by-step hip and thigh strengthening programme is the main treatment and can help ease pain.
 - You get a plan to adjust and then rebuild your activity, and to manage flare-ups.

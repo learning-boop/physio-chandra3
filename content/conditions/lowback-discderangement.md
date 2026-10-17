@@ -43,7 +43,7 @@ This is back pain that's thought to come from a disc that reacts to certain posi
 - There's no improvement after a couple of weeks of adjusting your positions and staying active
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can test which movements and positions ease your pain, and explain what is going on.
 - Specific repeated movements, hands-on care and core exercises can help settle back and leg pain.
 - You get a plan to return to sitting, bending and daily tasks, and to reduce flare-ups.

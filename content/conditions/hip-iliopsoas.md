@@ -43,7 +43,7 @@ The hip flexor muscle runs down the front of the hip into the top of the thigh. 
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the front of your hip and explain why the hip flexor is sore.
 - Gentle stretches and a step-by-step strengthening programme can help settle the pain.
 - You get a gradual plan to get back to running, kicking and sport.

@@ -50,7 +50,7 @@ The median nerve supplies feeling to the thumb, index, and middle fingers. Compr
 - Many improve with a night splint and changes to how you use the hand, and some need surgery; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the feeling and strength in your hand and explain what is going on.
 - A night wrist splint, with advice on hand and wrist positions, can help ease the tingling.
 - You get keyboard and work tips, and regular checks to see if a doctor's review is needed.

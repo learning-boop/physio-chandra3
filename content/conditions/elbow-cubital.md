@@ -43,7 +43,7 @@ The ulnar nerve runs through a tight tunnel at the inner elbow (the 'funny bone'
 - You would like help with positions and habits: most mild cases settle within a few months with these changes
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can explain how the nerve gets irritated and check the feeling and grip in your hand.
 - Clear advice on elbow positions, leaning and sleep habits can help the nerve settle.
 - A physiotherapist can track your progress and tell you when a doctor's review is worthwhile.

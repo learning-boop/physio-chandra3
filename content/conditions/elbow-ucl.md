@@ -42,7 +42,7 @@ The ligament on the inner side of the elbow takes a large strain each time the a
 - You want a graded throwing programme to return to sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the inner elbow ligament and explain in plain words what is going on.
 - Strengthening for the forearm, shoulder and whole body aims to share out the load of throwing.
 - A step-by-step throwing plan can help you return to your sport at a pace your elbow can manage.

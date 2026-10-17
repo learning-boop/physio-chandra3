@@ -73,7 +73,7 @@ The joints and muscles at the very top of the neck, where the skull sits on the 
 - You have rheumatoid arthritis, Down syndrome, or take steroid tablets long term, or your head feels too heavy to hold up: see a doctor first
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the top of your neck and explain that this is common and usually not damage.
 - Chin-nod and head-turning exercises, building to neck strength, with hands-on care, can help ease stiffness.
 - You get desk, screen, driving and sleep tips to help keep it from coming back.

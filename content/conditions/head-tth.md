@@ -46,7 +46,7 @@ The most common headache: a pressing or tight band across the forehead, temples 
 - A sudden, severe headache, or one with a fever, a stiff neck, weakness, confusion or a change in vision: call 911 or go to the emergency department now
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your neck, shoulders and posture, and explain what may trigger your headaches.
 - Neck and shoulder exercises, with gentle hands-on care, may help reduce how often headaches come.
 - You get a plan combining posture, regular exercise and relaxation to help manage busy days.

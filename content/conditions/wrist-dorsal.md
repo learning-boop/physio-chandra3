@@ -37,7 +37,7 @@ A deep ache in the middle of the back of the wrist, with no lump, can come from 
 - The wrist clicks, gives way, or your grip is getting weaker
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your wrist and help you know if an X-ray or a doctor's review is needed.
 - Avoiding weight on the bent-back wrist, and a short-term support, can help it settle.
 - A gradual strengthening plan aims to help you get back to weight-bearing and heavy tasks.

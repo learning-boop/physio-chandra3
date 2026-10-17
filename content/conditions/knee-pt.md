@@ -46,7 +46,7 @@ The tendon just below the kneecap can become sensitive when jumping, landing, or
 - It's affecting performance or daily stairs
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee and explain why the tendon has become sore.
 - A step-by-step tendon loading programme can help the tendon get stronger and less painful.
 - You get a gradual plan to build back up to jumping, landing and your sport.

@@ -39,7 +39,7 @@ A nerve leaving the mid back runs around the chest between the ribs. When it is 
 - Chest pain with breathlessness, sweating, or pain spreading to the arm or jaw: call 911
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your mid back and the nerve, and explain why the pain wraps around.
 - Gentle mid-back movement, breathing exercises and hands-on care can help ease the nerve irritation.
 - You get advice on posture and activity, and a plan to stay active while it settles.

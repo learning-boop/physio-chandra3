@@ -34,7 +34,7 @@ A thin skin nerve runs down the thumb side of the forearm to the back of the thu
 - You are not sure whether it is this or a tendon problem at the wrist
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the thin skin nerve and explain what is pressing on it.
 - Simple changes, like loosening straps and easing pressure, can help the nerve settle.
 - You get advice on daily tasks and forearm twisting to help the symptoms stay settled.

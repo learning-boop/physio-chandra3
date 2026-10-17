@@ -43,7 +43,7 @@ The hinge where the mobile neck meets the stiffer upper back can become restrict
 - You want targeted mobility and strengthening for desk work
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your neck and upper back move together and explain what is going on.
 - Hands-on care for the upper back and neck, with shoulder and neck exercises, can help ease stiffness.
 - You get desk and posture advice and a plan to help keep pain from coming back.

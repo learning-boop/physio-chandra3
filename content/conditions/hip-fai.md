@@ -53,7 +53,7 @@ The hip's ball and socket can pinch its cartilage rim (labrum) in deep flexion a
 
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your hip moves and explain in plain words what the pinch means.
 - A guided programme to strengthen and control your hip in comfortable ranges can help ease the pain.
 - You get advice on sitting, squatting and sport so you can stay active with fewer flare-ups.

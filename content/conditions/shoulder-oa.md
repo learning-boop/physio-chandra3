@@ -47,7 +47,7 @@ A gradual change in the cartilage and bone of the main shoulder joint, usually a
 - You would like a structured exercise plan, or are weighing up options with your doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your shoulder moves and explain in plain words what is going on.
 - Regular movement and strength exercises are the core of care and can help ease pain.
 - You get a plan to pace heavy or overhead tasks and to manage flare-ups.

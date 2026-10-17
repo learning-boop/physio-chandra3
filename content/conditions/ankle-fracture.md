@@ -36,7 +36,7 @@ After a broken ankle or foot, whether treated in a cast, a boot or with surgery,
 - Progress has stalled, or you are not back to the activities you want
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - Once your fracture team allows, a physiotherapist can explain what to expect as the bone heals.
 - A guided programme of movement, strength, balance and walking can help ease stiffness and a limp.
 - You get a step-by-step plan back to work, sport and the things you enjoy.

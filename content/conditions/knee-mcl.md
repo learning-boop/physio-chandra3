@@ -45,7 +45,7 @@ This is a stretch or tear of the ligament running along the inner side of your k
 - Pain or swelling from a milder sprain has not improved within a couple of weeks
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your knee, test the inner ligament and explain how bad the sprain looks.
 - You get brace advice if needed, and exercises to rebuild movement and strength step by step.
 - A gradual plan can help you return safely to walking, work and sport.

@@ -49,7 +49,7 @@ A small nerve between the toes becomes irritated and thickened, giving burning, 
 - You want gait and footwear assessment before considering injections
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check whether an irritated nerve between the toes fits your symptoms.
 - Advice on wider shoes and a small pad under the foot can help ease pressure on the nerve.
 - You get a plan to keep walking and staying active, and advice if other options are needed.

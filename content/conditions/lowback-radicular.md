@@ -51,7 +51,7 @@ Irritation of a nerve as it leaves the lower spine — commonly related to a dis
 - Leg symptoms are limiting your work, sleep or walking, or have not started to ease after two to three weeks: a physiotherapy assessment can check the nerve, work out which positions help, and give you a plan
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your nerves, strength and feeling, and explain what is irritating the nerve.
 - Core strengthening, hands-on care and gentle nerve gliding exercises can help ease back and leg pain.
 - You get a plan to stay active, track your progress and return to daily life and work.

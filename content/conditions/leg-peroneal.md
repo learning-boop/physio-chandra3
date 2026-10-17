@@ -34,7 +34,7 @@ A nerve wraps around the bone just below the outer knee, and a branch runs down 
 - Moving your back changes it: the back may be the source
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the nerve and the strength in your foot and ankle.
 - You get advice on avoiding pressure on the outer knee, with exercises to keep the ankle moving.
 - If your foot is weak, a physiotherapist can help you walk more safely and suggest a doctor visit.

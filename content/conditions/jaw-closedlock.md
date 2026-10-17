@@ -37,7 +37,7 @@ When the cartilage disc in the jaw joint slips forward and stays there, it can b
 - Eating or cleaning your teeth is difficult
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how far your jaw opens and explain what is blocking it.
 - Gentle, guided jaw movement and hands-on care can help improve opening, especially when started early.
 - You get a home exercise plan and advice on eating and jaw habits as it improves.

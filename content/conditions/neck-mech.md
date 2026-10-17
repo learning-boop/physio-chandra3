@@ -79,7 +79,7 @@ This is the common type of neck pain where the neck feels stiff and sore, and tu
 - A sudden, severe neck pain or headache unlike any before, with dizziness, double vision, slurred speech or trouble swallowing: call 911
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your neck and upper back move and explain what is going on.
 - Hands-on care for the neck and upper back, with neck and shoulder exercises, can help ease stiffness.
 - You get advice to stay active and a plan to manage future flare-ups at work and home.

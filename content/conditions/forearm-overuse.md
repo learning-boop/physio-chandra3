@@ -38,7 +38,7 @@ The muscles that grip and move the wrist and fingers fill most of the forearm. L
 - You start to notice tingling or weakness in the hand
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your forearm and explain why the muscles are aching.
 - Advice on breaks, grip and workstation set-up, plus gradual strengthening, can help ease the ache.
 - You get a plan to build longer or heavier tasks back up step by step.

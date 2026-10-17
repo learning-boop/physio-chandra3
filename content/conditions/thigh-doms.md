@@ -41,7 +41,7 @@ After a new or harder workout, the thigh muscles often ache and stiffen for one 
 - Your urine turns dark like cola, or your muscles are severely weak or swollen after exercise: go to the emergency department now
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your thigh and explain why it aches after a harder workout.
 - Gentle movement, stretching and hands-on care for tight spots can help ease the soreness.
 - You get a plan to build your training up a little at a time.

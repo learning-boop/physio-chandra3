@@ -73,7 +73,7 @@ A cervicogenic headache is a headache that starts in the joints, muscles or nerv
 - It started after a knock to the head or a car accident: see a doctor first to check for concussion
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the top of your neck and explain how it can cause head pain.
 - Hands-on care with deep neck and shoulder blade exercises can help reduce how often headaches come.
 - You learn a self-help neck movement for when a headache starts, plus desk and sleep set-up tips.

@@ -34,7 +34,7 @@ A skin nerve runs down the inside of the knee to the inner shin. It can be irrit
 - It is limiting sleep or walking
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the nerve and explain why the skin feels burning, tingling or numb.
 - Gentle desensitising and advice on avoiding pressure can help the area feel more comfortable.
 - You get a plan to keep the knee moving and stay active while the nerve settles.

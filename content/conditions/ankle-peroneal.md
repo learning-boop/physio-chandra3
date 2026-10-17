@@ -38,7 +38,7 @@ Two tendons run behind the bony bump on the outer ankle and steady the ankle on 
 - The ankle also keeps rolling or giving way
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check the tendons on the outer ankle and explain what is going on.
 - Graded strengthening and balance training can help the tendons settle and steady the ankle.
 - You get a plan to return to sport and uneven ground, and a referral if the tendons slip.

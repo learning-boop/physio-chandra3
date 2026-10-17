@@ -50,7 +50,7 @@ The mirror image of tennis elbow: overload of the tendons that flex the wrist an
 - Tingling in the ring and little fingers is there all the time, or your hand is getting weaker: see a doctor
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your inner elbow and explain in plain words what is going on.
 - A gradual forearm strengthening programme can help the tendons cope with gripping and lifting again.
 - You get advice on sport, work and carrying, and a plan to manage flare-ups.

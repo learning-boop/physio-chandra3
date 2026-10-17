@@ -35,7 +35,7 @@ Deep at the back of the ankle, tissue or a small extra bone (the os trigonum) ca
 - It started after a sprain or a fall and is not settling: see us, as an X-ray may be needed
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check what is being pinched at the back of your ankle and explain it.
 - Changing your load and technique, hands-on joint work and strengthening can help ease the pinch.
 - You get a step-by-step plan back to dance, kicking or downhill running.

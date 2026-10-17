@@ -67,7 +67,7 @@ Pain in many places that has lasted a long time is very often a sign that the bo
 - Thoughts of harming yourself, or feeling unable to cope: please reach out today - your doctor, 9-8-8 (call or text, any time), or the emergency department
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can explain how an oversensitive pain system works and what helps it settle.
 - Gentle exercise that starts below your limits and builds slowly can help ease pain and tiredness.
 - You get a pacing plan for activity, sleep and relaxation to help manage busy days and flare-ups.

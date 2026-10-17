@@ -50,7 +50,7 @@ A muscle that has become tight and sensitive, often from being held in one posit
 - Pins and needles, numbness, weakness, or pain that shoots into the hand or foot: these point to a nerve, so please mention them; we check the nerves first
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can find the sore muscle, rule out other causes and explain why the ache spreads.
 - Hands-on muscle release and stretching can ease pain for a while, alongside graded strengthening.
 - You learn self-release and changes to posture, work and sleep set-up to help prevent flare-ups.

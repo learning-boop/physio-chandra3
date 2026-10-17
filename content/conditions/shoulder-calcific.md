@@ -52,7 +52,7 @@ Small calcium deposits can build up inside one of the rotator cuff tendons, caus
 - Not settling after about 3 months: ask about shockwave or a needle wash-out of the deposit
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can explain calcium deposits in plain words and what to expect as they settle.
 - Gentle movement during a flare, then gradual strengthening, can help ease pain and restore use.
 - You get a plan for overhead tasks and flare-ups, and help knowing when to see your doctor.

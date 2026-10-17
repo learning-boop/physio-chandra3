@@ -84,7 +84,7 @@ A nerve in the neck has become irritated or squeezed where it leaves the spine, 
 - A burning or "dead arm" after a tackle or collision that settles within minutes is usually a stretched nerve (a "stinger"); if it happens in both arms, or keeps coming back, see a doctor before returning to sport
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your nerves, strength and feeling, and explain what is irritating the nerve.
 - Exercise, hands-on care for the neck and upper back, and nerve gliding can help ease arm pain.
 - You get advice to keep working and active, and a plan to track how the nerve settles.

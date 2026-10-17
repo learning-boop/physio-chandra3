@@ -39,7 +39,7 @@ A nerve running behind the inner ankle bone can become squeezed, sending burning
 - The sensations are spreading or becoming more intense
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check whether a squeezed nerve at the inner ankle fits your symptoms.
 - Footwear or arch support advice and gentle ankle and nerve movement can help ease the pressure.
 - You get a plan to pace your activity, and a referral if checks show it is needed.

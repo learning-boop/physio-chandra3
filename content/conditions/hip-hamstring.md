@@ -43,7 +43,7 @@ The hamstring tendons attach to the bone you sit on, at the bottom of the buttoc
 - You want a staged loading plan to get back to running
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your sit bone and thigh and explain why the tendon is sore.
 - A step-by-step loading programme, starting gently and building up, can help the tendon get stronger.
 - You get advice on sitting and training, and a gradual plan to get back to running.

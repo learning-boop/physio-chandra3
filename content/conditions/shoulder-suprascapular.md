@@ -45,7 +45,7 @@ A nerve runs across the top and back of the shoulder blade to the muscles that l
 - Pain spreading down the arm with tingling, or neck movement changes it: the neck may be the source
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check your shoulder strength and explain what is irritating the nerve.
 - Shoulder-blade control exercises, gentle nerve gliding and easing overhead load can help the nerve settle.
 - You get a gradual plan back to overhead sport or work, with checks on your strength.

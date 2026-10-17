@@ -36,7 +36,7 @@ Some low back pain happens because the deep core muscles aren't controlling move
 - You're noticing ongoing weakness, giving way, or you're avoiding movements out of worry
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check how your back and core muscles control movement and explain what is going on.
 - Guided exercises to train deep core control and trunk strength can help reduce catching and pain.
 - You get a plan to build confidence in lifting, bending and sport, and to reduce flare-ups.

@@ -39,7 +39,7 @@ The median nerve, the same nerve involved in carpal tunnel syndrome, can be sque
 - You are not sure whether it is this or carpal tunnel at the wrist
 
 ## physioHelps
-<!-- DRAFT 17 Oct 2026, awaiting Chandra's review -->
+<!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
 - A physiotherapist can check where the nerve is irritated and explain it in plain words.
 - Changes to gripping and forearm turning, with gentle exercises, can help the nerve settle.
 - You get advice on tool and computer work to help keep the symptoms calm.
