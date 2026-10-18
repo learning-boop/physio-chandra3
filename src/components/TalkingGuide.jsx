@@ -757,21 +757,24 @@ export default function TalkingGuide() {
   voiceRef.current = voice
   // The assistant's own voice coming back through the speakers: words that
   // are mostly in what it is saying (or said a moment ago) are not the
-  // patient's. Short words just after it stopped ("yes") are the patient's.
-  // A short complete phrase (`final`, 4 words or fewer) is the patient's
-  // even when the words are in what it says ("start with voice guide"
-  // while it says "Say start with voice guide"); partial words heard while
-  // it talks are checked, so it does not interrupt itself.
-  const isEcho = (said, final = false) => {
+  // patient's. Short ones too (Chandra, 18 Oct 2026: "Has a doctor told you
+  // that you have diabetes...?" was cut off, and the echoed "diabetes"
+  // ticked "Yes, diabetes"). A command ("quiet", "next") is always the
+  // patient's; so is a yes, no or none just after it stopped.
+  const isEcho = (said) => {
     const w = norm(said).trim().split(' ').filter(Boolean)
     if (!w.length) return true
+    if (command(said)) return false
     const now = speakingNowRef.current
-    if (final && w.length <= 4) return false
-    // Just after it stopped: only on computers (phones were not listening
-    // while it talked), only longer phrases, never a command ("go for next").
-    if (!now && (!KEEP_ON || w.length < 4 || command(said) || Date.now() - spoke.current.endedAt > 1500)) return false
     const script = new Set(norm(spoke.current.text).trim().split(' '))
-    return w.filter((x) => script.has(x)).length / w.length >= 0.6
+    const share = w.filter((x) => script.has(x)).length / w.length
+    if (now) return share >= 0.6
+    // Just after it stopped: only on computers (phones were not listening
+    // while it talked). The browser's final words come a second or two
+    // late, so its own words can still arrive now.
+    if (!KEEP_ON || Date.now() - spoke.current.endedAt > 2000) return false
+    if (yesNo(said) || saysNone(said)) return false
+    return share === 1 || (w.length >= 4 && share >= 0.6)
   }
   const isEchoRef = useRef(isEcho)
   isEchoRef.current = isEcho
@@ -849,7 +852,7 @@ export default function TalkingGuide() {
       // A finished "Chandra" on its own is always a call.
       const wk = wakeWord(said)
       const called = !!wk && ((fin && !wk.rest) || !norm(spoke.current.text).includes(norm(wk.wake).trim()))
-      if (!called && isEchoRef.current(said, !!(fin && fin.length))) return   // its own voice
+      if (!called && isEchoRef.current(said)) return   // its own voice
       // The patient talks over the assistant: it stops and listens.
       if (speakingNowRef.current) {
         if (!called && !fin && said.trim().split(/\s+/).length < 2) return
