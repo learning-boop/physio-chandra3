@@ -297,15 +297,29 @@ const card = { border: '1px solid rgba(201,169,110,0.25)', background: 'rgba(201
    - Question panel: soft teal, the colour most linked with health and
      calm, for "what to answer". Chosen answers stay gold, which stands
      out clearly on it.
-   - The emergency check's band is a soft coral (important, not alarming)
-     and the doctor check's a soft amber; strong red stays for the emergency result.
+   - Each part of the questions follows the physio flag system, with a
+     small flag by its label (Chandra, 17 Oct 2026): Part 1 emergency, red
+     (red flags, urgent); Part 2 doctor, orange (red flags, not urgent);
+     Part 3 about your pain, green (the muscle and joint questions a physio
+     treats); Part 4 how it is affecting you, yellow (yellow flags: fear,
+     mood, sleep, work). The answer panels stay teal and chosen answers
+     gold in every part.
    All text keeps well over 4.5:1 contrast on the navy. */
 const TEAL = '#5CC8C2'
 const BAND_TONES = {
   gold: ['rgba(201,169,110,0.26)', 'rgba(201,169,110,0.07)', 'rgba(201,169,110,0.42)', GOLD],
-  coral: ['rgba(240,128,108,0.20)', 'rgba(240,128,108,0.05)', 'rgba(240,128,108,0.42)', '#f3a08e'],
-  amber: ['rgba(245,180,85,0.19)', 'rgba(245,180,85,0.05)', 'rgba(245,180,85,0.40)', '#f5c170'],
+  red: ['rgba(235,80,80,0.24)', 'rgba(235,80,80,0.06)', 'rgba(235,80,80,0.55)', '#ff8a80'],
+  orange: ['rgba(245,140,55,0.22)', 'rgba(245,140,55,0.05)', 'rgba(245,140,55,0.50)', '#ffad6b'],
+  green: ['rgba(95,190,110,0.20)', 'rgba(95,190,110,0.05)', 'rgba(95,190,110,0.45)', '#8fd99b'],
+  yellow: ['rgba(240,205,70,0.20)', 'rgba(240,205,70,0.05)', 'rgba(240,205,70,0.48)', '#f5d76e'],
 }
+/* The flag by a part's label, in the part's colour. */
+const PartFlag = ({ tone }) => (
+  <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true" style={{ marginRight: 7, verticalAlign: '-1px' }}>
+    <path d="M5 22V3" stroke={BAND_TONES[tone][3]} strokeWidth="2.4" strokeLinecap="round" />
+    <path d="M6 4h12l-3 4.5 3 4.5H6z" fill={BAND_TONES[tone][3]} />
+  </svg>
+)
 const headBand = (tone = 'gold') => {
   const [from, to, line, accent] = BAND_TONES[tone]
   return {
@@ -2536,6 +2550,7 @@ export default function PainAssessment() {
               const isPsych = q.id === PSYCH_ID
               const psychBefore = path.slice(0, Math.max(0, path.indexOf(qIndex))).some((i) => activeQuestions[i]?.id === PSYCH_ID)
               const painStep = step - (psychBefore ? 1 : 0)
+              const partTone = isPsych ? 'yellow' : 'green'
               const painTotal = Math.max(plannedScreens - (activeQuestions.some((x) => x.id === PSYCH_ID) ? 1 : 0), painStep)
               return (
                 <Fade k={'q' + qIndex + '.' + subIdx}>
@@ -2543,8 +2558,8 @@ export default function PainAssessment() {
                       checks to the pain questions, and why these areas when
                       the drawing covers more than one. */}
                   {step === 1 && !isPsych && !fromReview && (
-                    <p style={{ fontSize: 15, lineHeight: 1.6, color: GOLD_LIGHT, margin: '0 0 18px', maxWidth: 520 }}>
-                      <span style={{ ...label, display: 'block', marginBottom: 4 }}>{partLabel('pain')}</span>
+                    <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.88)', margin: '0 0 18px', maxWidth: 520 }}>
+                      <span style={{ ...bandLabel(partTone), display: 'block', marginBottom: 4 }}><PartFlag tone={partTone} />{partLabel('pain')}</span>
                       Safety checks complete. Now, a few questions about your pain, to match
                       it with the conditions a physiotherapist commonly treats.
                     </p>
@@ -2552,18 +2567,18 @@ export default function PainAssessment() {
                   {/* Headline band: where they are. A grouped screen's title
                       ("How your pain behaves") sits in it too. */}
                   {isPsych && subIdx === 0 && !fromReview && (
-                    <p style={{ fontSize: 15, lineHeight: 1.6, color: GOLD_LIGHT, margin: '0 0 18px', maxWidth: 520 }}>
-                      <span style={{ ...label, display: 'block', marginBottom: 4 }}>{partLabel('affect')}</span>
+                    <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.88)', margin: '0 0 18px', maxWidth: 520 }}>
+                      <span style={{ ...bandLabel(partTone), display: 'block', marginBottom: 4 }}><PartFlag tone={partTone} />{partLabel('affect')}</span>
                       Pain questions complete. Last, a few questions about how the pain is
                       affecting your mood, sleep and daily life. There are no right or wrong answers.
                     </p>
                   )}
-                  <div style={headBand()}>
-                  <span style={label}>{isPsych
+                  <div style={headBand(partTone)}>
+                  <span style={bandLabel(partTone)}><PartFlag tone={partTone} />{isPsych
                     ? `Question ${subsNow ? subIdx + 1 : 1} of ${subsNow ? subsNow.length : 1}`
                     : `${q.area ? `${q.area} · ` : ''}Question ${painStep} of ${painTotal}${subsNow ? ` · ${subIdx + 1} of ${subsNow.length}` : ''}`}</span>
                   <div style={{ height: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 2, margin: '12px 0 0', maxWidth: 520 }}>
-                    <motion.div animate={{ width: `${(isPsych ? (subIdx + 1) / (subsNow ? subsNow.length : 1) : painStep / painTotal) * 100}%` }} style={{ height: 4, background: GOLD, borderRadius: 2 }} />
+                    <motion.div animate={{ width: `${(isPsych ? (subIdx + 1) / (subsNow ? subsNow.length : 1) : painStep / painTotal) * 100}%` }} style={{ height: 4, background: BAND_TONES[partTone][3], borderRadius: 2 }} />
                   </div>
                   {q.group && (
                     <>
@@ -2986,7 +3001,7 @@ export default function PainAssessment() {
             {cardStage && emgCard && (() => {
               const r = emgRow
               const emergency = cardStage === 'emergency'
-              const tone = emergency ? 'coral' : 'amber'
+              const tone = emergency ? 'red' : 'orange'
               const ticked = emgMembers(r).some((m) => flags.includes(m.id) || flags.some((x) => x.startsWith(m.id + '~')))
               const openEmpty = r.gate ? gateOpenEmpty([...r.members, r.unsure]) || (emgYes && !ticked) : false
               const back = () => {
@@ -3006,7 +3021,7 @@ export default function PainAssessment() {
               return (
                 <Fade k={`${cardStage}:${emgIdx}`}>
                   <div style={headBand(tone)}>
-                    <span style={bandLabel(tone)}>{partLabel(cardStage)} · {emgIdx + 1} of {emgRows.length}</span>
+                    <span style={bandLabel(tone)}><PartFlag tone={tone} />{partLabel(cardStage)} · {emgIdx + 1} of {emgRows.length}</span>
                     <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 8px', maxWidth: 520 }}>
                       {emergency
                         ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
@@ -3063,8 +3078,8 @@ export default function PainAssessment() {
               const next = () => safetyNext(stage)
               return (
                 <Fade k={stage}>
-                  <div style={headBand(emergency ? 'coral' : 'amber')}>
-                  <span style={bandLabel(emergency ? 'coral' : 'amber')}>{partLabel(emergency ? 'emergency' : 'physician')}</span>
+                  <div style={headBand(emergency ? 'red' : 'orange')}>
+                  <span style={bandLabel(emergency ? 'red' : 'orange')}><PartFlag tone={emergency ? 'red' : 'orange'} />{partLabel(emergency ? 'emergency' : 'physician')}</span>
                   <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 10px', maxWidth: 520 }}>
                     {emergency
                       ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
@@ -3111,8 +3126,8 @@ export default function PainAssessment() {
                 "other" box, and the cautions that shape the first appointment. */}
             {stage === 'safety' && (
               <Fade k="safety">
-                <div style={headBand(finalChecks.length ? 'amber' : 'gold')}>
-                <span style={bandLabel(finalChecks.length ? 'amber' : 'gold')}>Before Your Results</span>
+                <div style={headBand(finalChecks.length ? 'orange' : 'gold')}>
+                <span style={bandLabel(finalChecks.length ? 'orange' : 'gold')}>Before Your Results</span>
                 <h2 style={{ ...h2, fontSize: 'clamp(25px,5.8vw,36px)', margin: '12px 0 10px', maxWidth: 520 }}>
                   {finalChecks.length
                     ? <>One more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety check</em></>
@@ -3344,8 +3359,8 @@ export default function PainAssessment() {
               const ready = q.multi ? Array.isArray(injuryDraft) && injuryDraft.length > 0 : injuryDraft !== undefined
               return (
                 <Fade k={`injury-${injuryQ}`}>
-                  <div style={headBand('amber')}>
-                    <span style={bandLabel('amber')}>{partLabel('physician')} · {screen.title}</span>
+                  <div style={headBand('orange')}>
+                    <span style={bandLabel('orange')}><PartFlag tone="orange" />{partLabel('physician')} · {screen.title}</span>
                   </div>
                   <div style={{ ...qPanel, display: 'flex', flexDirection: 'column', gap: 9 }}>
                   <h2 style={{ ...h2, fontSize: 'clamp(23px,5.4vw,32px)', margin: '0 0 8px', display: 'flex', gap: 12 }}>
