@@ -173,16 +173,16 @@ export const PLAIN_SHORT = {
   'nrf-cord': 'You cannot hold your pee or poo',
   'nrf-cord-legs': 'Both legs, or hands and feet, numb or weak, or trouble breathing',
   'nrf-mening': 'A fever with a stiff neck or a rash',
-  'nrf-cardiac': 'Pain that comes with effort, or with chest pain',
+  'nrf-cardiac': 'Pain on brisk walking or stairs, or with chest pain',
   'nrf-after': 'Bad signs after a neck crack, crash or knock',
   'nrf-after-doc': 'Dizziness or a new headache since an injury',
   'nrf-myelo': 'An arm, hand or leg quickly getting weak or clumsy',
   'nrf-upperinstab': 'A head too heavy to hold, or tingling lips',
   // Shoulder
-  'rf-cardiac1': 'Pain that comes with effort, or chest tightness',
+  'rf-cardiac1': 'Pain on brisk walking or stairs, or chest tightness',
   'srf-kehr': 'Shoulder-tip pain after a blow, or feeling faint',
   'srf-ectopic': 'Could be pregnant, with low tummy pain',
-  'srf-lung': 'Sudden sharp pain on breathing, and breathless',
+  'srf-lung': 'Sudden sharp pain on breathing, and newly breathless',
   'srf-rhabdo': 'Very sore or weak muscles, and dark pee',
   'rf-hotjoint': 'A hot, red, swollen joint with a fever or feeling unwell',
   'srf-pmr': 'Both shoulders stiff each morning, and feeling unwell',
@@ -339,14 +339,14 @@ export const PLAIN_SHORT = {
   'hnd-lump': 'A growing, painful or large lump, or a dark streak under a nail',
   // Forearm
   'frf-necfasc': 'A hot red area spreading fast, with bad pain or feeling unwell',
-  'frf-cardiac': 'Left arm pain with effort, or with chest tightness or breathlessness',
+  'frf-cardiac': 'Left arm pain on brisk walking, or with chest tightness or breathlessness',
   'frf-stroke': 'A drooping face, one weak or numb side, or trouble speaking',
   'frf-nerve': 'A weaker hand, a dropped wrist, or cannot make an OK sign',
   'frf-pancoast': 'A smoker with little-finger-side arm pain and a cough or droopy eyelid',
   'frf-stress': 'A young gymnast with pinpoint forearm bone pain',
   'frf-shingles': 'A band of burning pain with a rash',
   // Upper arm
-  'arf-cardiac': 'Arm pain with effort, or with chest tightness, breathlessness or jaw pain',
+  'arf-cardiac': 'Arm pain on brisk walking, or with chest tightness, breathlessness or jaw pain',
   'arf-clotlung': 'A suddenly swollen, bluish arm, with breathlessness or chest pain',
   'arf-clot': 'A whole arm swollen, heavy or bluish over a day or two',
   'arf-pancoast': 'A smoker with arm pain to the little finger, and cough or droopy eyelid',
@@ -354,8 +354,8 @@ export const PLAIN_SHORT = {
   'arf-shingles': 'A band of burning pain with a rash',
   // Mid back (and front of the chest)
   'trf-aorta': 'Sudden tearing pain in your back',
-  'trf-cardiac': 'Pain with chest tightness or breathlessness, or with effort',
-  'trf-lung': 'Sudden sharp pain on breathing, and breathless',
+  'trf-cardiac': 'Pain with chest tightness or breathlessness, or on brisk walking or stairs',
+  'trf-lung': 'Sudden sharp pain on breathing, and newly breathless',
   'trf-cord': 'You cannot hold your pee or poo',
   'trf-fracture': 'A crash, fall from a height, or hard blow in the last few days',
   'trf-cancer': 'Cancer in the past, and this back pain is new',
@@ -365,7 +365,7 @@ export const PLAIN_SHORT = {
   'trf-gut': 'Pain with eating, heartburn, black poo, or after fatty meals',
   // Base of the neck
   'crf-aorta': 'Sudden tearing pain between your shoulder blades',
-  'crf-cardiac': 'Pain with chest tightness or breathlessness, or with effort',
+  'crf-cardiac': 'Pain with chest tightness or breathlessness, or on brisk walking or stairs',
   'crf-cord-legs': 'Both legs suddenly weak, numb or unsteady',
   'crf-trauma5d': 'Getting worse since a crash or knock: dizziness, double vision, slurred speech',
   'crf-trauma5d-doc': 'Since a crash or knock: dizziness that comes back, or other new signs',
@@ -394,7 +394,7 @@ export const PLAIN_SHORT = {
   'xrf-sphincter': 'Trouble holding in wind or poo since giving birth',
   // Jaw
   'mrf-stuckopen': 'Your jaw stuck open',
-  'mrf-cardiac': 'Jaw pain with effort, or with chest tightness or breathlessness',
+  'mrf-cardiac': 'Jaw pain on brisk walking, or with chest tightness or breathlessness',
   'mrf-droop': 'One side of your face suddenly drooping',
   'mrf-fracture': 'Teeth not meeting properly after a blow to the face',
   'mrf-gca': 'Over 50: jaw ache when chewing, tender scalp, or vision change',
@@ -429,7 +429,7 @@ export const MULTI_SHORT = {
   ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout', 'hnd-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['rf-aaa', 'hpf-aaa', 'jrf-aaa', 'trf-aorta', 'jrf-aorta', 'crf-aorta'], 'Sudden tearing or very bad back or tummy pain, or feeling faint'),
-  ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung', 'mrf-cardiac'], 'Chest tightness, breathlessness, sweating, effort or jaw pain, or sharp pain on breathing'),
+  ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung', 'mrf-cardiac'], 'Chest tightness, cold sweat, arm or jaw pain on brisk walking, or sudden breathlessness'),
   ...fam(['rf-osteo', 'hpf-nofall', 'trf-osteo', 'crf-osteo', 'jrf-osteo', 'prf-osteo', 'xrf-osteo'], 'Sudden pain after a small strain or slip, with weak bones or older age'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
@@ -613,42 +613,42 @@ export const SUBHEAD = {
    `sex`: birth sex the tick applies to. */
 export const TICKS = {
   'rf-saddle': [
-    { key: 'numb', text: 'Numb or tingly between your legs or around your bottom', tell: 'I have numbness between my legs' },
+    { key: 'numb', text: 'Numb or tingly *between your legs or around your bottom*', tell: 'I have numbness between my legs' },
     { key: 'paper', text: 'You cannot feel the toilet paper when you wipe', tell: 'I cannot feel the toilet paper when I wipe' },
   ],
   'rf-bladder': [
-    { key: 'start', text: 'Hard to start peeing, or a weak, slow stream', tell: 'it is hard to start peeing' },
-    { key: 'full', text: 'You cannot feel when your bladder is full or empty', tell: 'I cannot feel when my bladder is full' },
-    { key: 'leak', text: 'Pee leaks out and you cannot stop it', tell: 'I am leaking pee' },
-    { key: 'bowel', text: 'You cannot hold your poo, or cannot feel it coming', tell: 'I cannot control my bowels' },
+    { key: 'start', text: '*New* trouble starting to pee, or a weak stream (not a problem for years)', tell: 'it is hard to start peeing' },
+    { key: 'full', text: '*New*: you cannot feel when your bladder is full or empty', tell: 'I cannot feel when my bladder is full' },
+    { key: 'leak', text: '*New* leaking of pee you cannot stop (not small leaks on coughing or sneezing)', tell: 'I am leaking pee' },
+    { key: 'bowel', text: '*New*: you cannot hold your poo, or cannot feel it coming', tell: 'I cannot control my bowels' },
   ],
   'rf-sexual': [
     { key: 'feel', text: 'Less feeling in your private parts during sex', tell: 'I have less feeling during sex' },
     { key: 'erect', sex: 'male', text: 'New trouble getting an erection or ejaculating', tell: 'I have new trouble with erections' },
   ],
   'rf-legs': [
-    { key: 'both', text: 'Your leg pain has spread to both legs', tell: 'my leg pain has spread to both legs' },
-    { key: 'weak', text: 'A leg or foot getting weaker fast, over hours or days', tell: 'my leg is getting weaker quickly' },
+    { key: 'both', text: 'Your leg pain has spread to *both* legs (not just one)', tell: 'my leg pain has spread to both legs' },
+    { key: 'weak', text: 'A leg or foot *weakening fast* over hours or days, like a flopping foot', tell: 'my leg is getting weaker quickly' },
   ],
   'jrf-conus-legs': [
-    { key: 'both', text: 'Both legs suddenly weak or numb', tell: 'both my legs suddenly went weak or numb' },
+    { key: 'both', text: '*Both* legs *suddenly* weak or numb (not just one leg)', tell: 'both my legs suddenly went weak or numb' },
   ],
   'rf-aaa': [
-    { key: 'faint', combo: true, text: 'Sudden, very bad pain in your back or tummy, and you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
+    { key: 'faint', combo: true, text: '*Sudden, severe* pain in your back or tummy, the worst you have had, *and* you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
   ],
   'jrf-aorta': [
-    { key: 'tear', text: 'Sudden tearing or ripping pain in your back, spreading to your chest or tummy', tell: 'I have a sudden tearing pain in my back' },
+    { key: 'tear', text: '*Sudden*, severe tearing pain in your back, spreading to your chest or tummy', tell: 'I have a sudden tearing pain in my back' },
   ],
   'jrf-pancreas': [
     { key: 'sick', combo: true, text: 'Very bad pain in your upper tummy going through to your back, and you are being sick', tell: 'I have very bad upper tummy pain and I am being sick' },
   ],
   'jrf-testis': [
-    { key: 'pain', sex: 'male', text: 'Sudden, very bad pain in a testicle (ball)', tell: 'I have sudden, very bad pain in a testicle' },
+    { key: 'pain', sex: 'male', text: '*Sudden*, very bad pain in a testicle (ball)', tell: 'I have sudden, very bad pain in a testicle' },
   ],
   'pc-stroke': [
-    { key: 'face', text: 'One side of your face drooping', tell: 'one side of my face is drooping' },
-    { key: 'side', text: 'Weakness or numbness down one side of your body', tell: 'one side of my body is weak or numb' },
-    { key: 'speech', text: 'Slurred or muddled speech', tell: 'my speech is slurred' },
+    { key: 'face', text: 'One side of your face *suddenly* drooping, like a lopsided smile', tell: 'one side of my face is drooping' },
+    { key: 'side', text: '*Sudden* numb or weak face, arm or leg, *one side* (not just tingly fingers)', tell: 'one side of my body is weak or numb' },
+    { key: 'speech', text: '*Sudden* slurred or muddled speech', tell: 'my speech is slurred' },
     { key: 'eye', text: 'Sudden loss of sight in one eye', tell: 'I suddenly lost the sight in one eye' },
   ],
   'rf-fracture': [
@@ -718,32 +718,32 @@ export const TICKS = {
   ],
   // ── Neck ──
   'nrf-stroke': [
-    { key: 'headache', text: 'The worst headache of your life', tell: 'I suddenly have the worst headache of my life' },
-    { key: 'face', text: 'A drooping or numb face', tell: 'my face is drooping or numb' },
-    { key: 'side', text: 'Weakness or numbness in an arm or leg on one side', tell: 'one side of my body is weak or numb' },
-    { key: 'speech', text: 'Slurred speech, or trouble finding or understanding words', tell: 'my speech is slurred' },
-    { key: 'sight', text: 'Loss of sight, or seeing double', tell: 'I have lost sight or I am seeing double' },
-    { key: 'swallow', text: 'Trouble swallowing', tell: 'I have trouble swallowing' },
-    { key: 'confused', text: 'Confusion, falls or blackouts', tell: 'I have had confusion, falls or blackouts' },
-    { key: 'dizzy', combo: true, text: 'New dizziness or spinning, with vomiting, or you cannot stand or walk', tell: 'I have new dizziness and cannot stand or walk' },
+    { key: 'headache', text: 'A *sudden*, explosive headache, the *worst of your life*', tell: 'I suddenly have the worst headache of my life' },
+    { key: 'face', text: 'One side of your face *suddenly* drooping or numb, like a lopsided smile', tell: 'my face is drooping or numb' },
+    { key: 'side', text: '*Sudden* numb or weak face, arm or leg, *one side* (not just tingly fingers)', tell: 'one side of my body is weak or numb' },
+    { key: 'speech', text: '*Sudden* slurred speech, or trouble finding or understanding words', tell: 'my speech is slurred' },
+    { key: 'sight', text: '*Sudden* loss of sight, or seeing double', tell: 'I have lost sight or I am seeing double' },
+    { key: 'swallow', text: '*New* trouble swallowing', tell: 'I have trouble swallowing' },
+    { key: 'confused', text: '*New* confusion, sudden falls, or blacking out', tell: 'I have had confusion, falls or blackouts' },
+    { key: 'dizzy', combo: true, text: '*New* dizziness or spinning, with vomiting, or you *cannot stand or walk*', tell: 'I have new dizziness and cannot stand or walk' },
   ],
   'nrf-cord': [
-    { key: 'hold', text: 'You cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
-    { key: 'cannot', text: 'You cannot pee at all', tell: 'I cannot pee' },
+    { key: 'hold', text: 'You *suddenly* cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
+    { key: 'cannot', text: 'You *cannot pee at all*, even though you need to', tell: 'I cannot pee' },
   ],
   'nrf-cord-legs': [
-    { key: 'legs', text: 'New numbness or weakness in both legs', tell: 'both my legs are numb or weak' },
-    { key: 'spread', text: 'Numbness or weakness spreading fast in both hands and feet', tell: 'numbness is spreading in my hands and feet' },
-    { key: 'breath', text: 'Any trouble breathing or swallowing', tell: 'I have trouble breathing or swallowing' },
+    { key: 'legs', text: '*New* numbness or weakness in *both* legs at once (not just one)', tell: 'both my legs are numb or weak' },
+    { key: 'spread', text: 'Numbness or weakness spreading fast in *both hands and both feet* (not one hand)', tell: 'numbness is spreading in my hands and feet' },
+    { key: 'breath', text: '*New* trouble breathing or swallowing', tell: 'I have trouble breathing or swallowing' },
   ],
   'nrf-mening': [
-    { key: 'fever', combo: true, text: 'A fever, and a stiff neck, a bad headache, a rash, or light hurting your eyes', tell: 'I have a fever with a stiff neck' },
-    { key: 'unwell', combo: true, text: 'A fever, and you feel very unwell', tell: 'I have a fever and feel very unwell' },
+    { key: 'fever', combo: true, text: 'A *fever*, and a stiff neck (it hurts to bend your chin to your chest), a bad headache, a rash, or light hurting your eyes', tell: 'I have a fever with a stiff neck' },
+    { key: 'unwell', combo: true, text: 'A *fever*, and you feel very unwell', tell: 'I have a fever and feel very unwell' },
   ],
   'nrf-cardiac': [
-    { key: 'effort', text: 'Neck, jaw or arm pain when you walk fast or climb stairs', tell: 'the pain comes on when I walk fast or climb stairs' },
-    { key: 'chest', text: 'With the pain: chest pain, pressure or tightness', tell: 'I have chest pain or tightness with it' },
-    { key: 'breath', text: 'With the pain: short of breath, sweaty or feeling sick', tell: 'I feel short of breath, sweaty or sick with it' },
+    { key: 'effort', text: 'Neck, jaw or arm pain on *brisk walking or stairs*, not from moving them', tell: 'the pain comes on when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: *chest* pain, pressure, squeezing or tightness, like a heavy weight', tell: 'I have chest pain or tightness with it' },
+    { key: 'breath', text: 'With the pain: *unusually* short of breath, a cold sweat, or feeling sick', tell: 'I feel short of breath, sweaty or sick with it' },
   ],
   'nrf-after': [
     { key: 'severe', text: 'Very bad neck pain, unlike any you have had before', tell: 'I have very bad neck pain, unlike any before' },
@@ -772,9 +772,9 @@ export const TICKS = {
   ],
   // ── Shoulder ──
   'rf-cardiac1': [
-    { key: 'effort', text: 'Shoulder, jaw or left arm pain when you walk fast or climb stairs', tell: 'the pain comes on when I walk fast or climb stairs' },
-    { key: 'chest', text: 'With the pain: chest tightness', tell: 'I have chest tightness with it' },
-    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+    { key: 'effort', text: 'Shoulder, jaw or left arm pain on *brisk walking or stairs*, not arm movement', tell: 'the pain comes on when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: *chest* pressure, squeezing or tightness, like a heavy weight', tell: 'I have chest tightness with it' },
+    { key: 'breath', text: 'With the pain: *unusually* short of breath, or a cold sweat', tell: 'I am short of breath or sweating with it' },
   ],
   'srf-kehr': [
     { key: 'blow', combo: true, text: 'Pain at the tip of your left shoulder that started after a blow to your tummy or ribs', tell: 'pain at the tip of my left shoulder started after a blow to my tummy' },
@@ -784,13 +784,13 @@ export const TICKS = {
     { key: 'preg', combo: true, sex: 'female', text: 'You could be pregnant, and you have pain low in your tummy and at the tip of your shoulder', tell: 'I could be pregnant, and I have low tummy pain and shoulder-tip pain' },
   ],
   'srf-lung': [
-    { key: 'breath', combo: true, text: 'Sudden, sharp pain when you breathe in, and you are short of breath', tell: 'I have sudden, sharp pain when I breathe in and I am short of breath' },
+    { key: 'breath', combo: true, text: '*Sudden*, sharp pain when you breathe in, *and* newly short of breath, even at rest or walking slowly (not just a catch on breathing)', tell: 'I have sudden, sharp pain when I breathe in and I am short of breath' },
   ],
   'srf-rhabdo': [
-    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, and pee that is dark like cola', tell: 'I have very bad muscle pain and my pee is dark like cola' },
+    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, *and* pee that is *dark like cola*', tell: 'I have very bad muscle pain and my pee is dark like cola' },
   ],
   'rf-hotjoint': [
-    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
+    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, *and* a *fever* or feeling very unwell, shivery like flu', tell: 'my joint is hot and swollen and I have a fever' },
   ],
   'srf-pmr': [
     { key: 'stiff', combo: true, text: 'Both shoulders (often the hips too) stiff and aching for over 45 minutes each morning, and you feel unwell', tell: 'both my shoulders are stiff every morning and I feel unwell' },
@@ -810,18 +810,18 @@ export const TICKS = {
   ],
   // ── Knee ──
   'kf-compartment': [
-    { key: 'tight', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
-    { key: 'toes', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
+    { key: 'tight', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'toes', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
   ],
   'kf-septic': [
-    { key: 'fever', combo: true, text: 'A hot, red, swollen knee, with a fever or feeling unwell', tell: 'my knee is hot, red and swollen, and I have a fever' },
+    { key: 'fever', combo: true, text: 'A hot, red, swollen knee, *and* a *fever* or feeling unwell, shivery like flu', tell: 'my knee is hot, red and swollen, and I have a fever' },
   ],
   'kf-pe': [
-    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf or thigh, and you are short of breath, have chest pain or cough blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
+    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf or thigh, *and* you are newly short of breath, have chest pain, or cough up blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
   ],
   'kf-cauda': [
-    { key: 'numb', text: 'New numbness between your legs or around your bottom', tell: 'I have new numbness between my legs' },
-    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+    { key: 'numb', text: '*New* numbness *between your legs or around your bottom*', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: '*New* trouble peeing, or holding your poo (not a long-standing problem)', tell: 'I have new trouble peeing or holding my bowels' },
   ],
   'kf-dvt': [
     { key: 'calf', text: 'A calf that is swollen, warm or tender', tell: 'my calf is swollen, warm or tender' },
@@ -861,7 +861,7 @@ export const TICKS = {
   ],
   // ── Hip ──
   'hpf-aaa': [
-    { key: 'faint', combo: true, text: 'Sudden, very bad pain in your back, tummy or groin, and you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
+    { key: 'faint', combo: true, text: '*Sudden, severe* pain in your back, tummy or groin, the worst you have had, *and* you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
   ],
   'hpf-septic': [
     { key: 'fever', combo: true, text: 'A very painful hip with a fever, and you cannot put weight on the leg', tell: 'my hip is very painful, I have a fever and cannot put weight on the leg' },
@@ -871,7 +871,7 @@ export const TICKS = {
     { key: 'preg', combo: true, sex: 'female', text: 'You could be pregnant, and have sudden pain low on one side of your tummy or groin, bleeding, or feeling faint', tell: 'I could be pregnant, and I have sudden low pain on one side' },
   ],
   'hpf-torsion': [
-    { key: 'pain', sex: 'male', text: 'Sudden, very bad pain in a testicle (ball)', tell: 'I have sudden, very bad pain in a testicle' },
+    { key: 'pain', sex: 'male', text: '*Sudden*, very bad pain in a testicle (ball)', tell: 'I have sudden, very bad pain in a testicle' },
   ],
   'hpf-strangulated': [
     { key: 'stuck', text: 'A painful or firm lump in your groin that will not go back in', tell: 'I have a painful groin lump that will not go back in' },
@@ -882,7 +882,7 @@ export const TICKS = {
     { key: 'stand', text: 'You cannot stand on the leg, or it looks shorter or turned', tell: 'after my hip operation I cannot stand on the leg' },
   ],
   'hpf-rhabdo': [
-    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, and pee that is dark like cola', tell: 'I have very bad muscle pain and my pee is dark like cola' },
+    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, *and* pee that is *dark like cola*', tell: 'I have very bad muscle pain and my pee is dark like cola' },
   ],
   'hpf-replacement': [
     { key: 'sore', combo: true, text: 'After a hip replacement or hip operation: the hip newly painful, warm or swollen, a red or leaking wound, or a fever', tell: 'my operated hip is newly painful, warm or swollen' },
@@ -914,15 +914,15 @@ export const TICKS = {
     { key: 'bleed', sex: 'female', text: 'Unusual bleeding or discharge from your vagina', tell: 'I have unusual bleeding or discharge' },
   ],
   'hpf-cauda': [
-    { key: 'numb', text: 'New numbness between your legs or around your bottom', tell: 'I have new numbness between my legs' },
-    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+    { key: 'numb', text: '*New* numbness *between your legs or around your bottom*', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: '*New* trouble peeing, or holding your poo (not a long-standing problem)', tell: 'I have new trouble peeing or holding my bowels' },
   ],
   'jrf-aaa': [
-    { key: 'faint', combo: true, text: 'Sudden, very bad pain in your back, tummy or side, and you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
+    { key: 'faint', combo: true, text: '*Sudden, severe* pain in your back, tummy or side, the worst you have had, *and* you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
   ],
   'jrf-conus': [
-    { key: 'hold', text: 'You cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
-    { key: 'numb', text: 'No feeling between your legs or around your bottom', tell: 'I have lost feeling between my legs' },
+    { key: 'hold', text: 'You *suddenly* cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
+    { key: 'numb', text: 'No feeling *between your legs or around your bottom*', tell: 'I have lost feeling between my legs' },
   ],
   'jrf-fracture': [
     { key: 'crash', text: 'A car crash', tell: 'I was in a car crash in the last few days' },
@@ -931,21 +931,21 @@ export const TICKS = {
   ],
   // ── Ankle ──
   'af-compartment': [
-    { key: 'tight', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
-    { key: 'toes', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
+    { key: 'tight', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'toes', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
   ],
   'af-septic': [
-    { key: 'fever', combo: true, text: 'A hot, red, swollen ankle, with a fever or feeling unwell', tell: 'my ankle is hot, red and swollen, and I have a fever' },
+    { key: 'fever', combo: true, text: 'A hot, red, swollen ankle, *and* a *fever* or feeling unwell, shivery like flu', tell: 'my ankle is hot, red and swollen, and I have a fever' },
   ],
   'af-pe': [
-    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf or ankle, and you are short of breath, have chest pain or cough blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
+    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf or ankle, *and* you are newly short of breath, have chest pain, or cough up blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
   ],
   'af-ischaemia': [
-    { key: 'foot', text: 'Your foot suddenly became cold, pale, numb, or painful at rest', tell: 'my foot suddenly became cold, pale or numb' },
+    { key: 'foot', text: 'Your foot *suddenly* cold, pale, numb or painful at rest, unlike the other foot', tell: 'my foot suddenly became cold, pale or numb' },
   ],
   'af-necfasc': [
-    { key: 'pain', combo: true, text: 'A hot, red area around the ankle spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
-    { key: 'unwell', combo: true, text: 'A hot, red area around the ankle spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+    { key: 'pain', combo: true, text: 'A hot, red area around the ankle *spreading fast*, with pain *far worse than it looks*', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area around the ankle *spreading fast*, *and* you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
   ],
   'af-cast': [
     { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
@@ -988,16 +988,16 @@ export const TICKS = {
   ],
   // ── Foot ──
   'ft-compartment': [
-    { key: 'tight', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
-    { key: 'toes', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
+    { key: 'tight', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'toes', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
   ],
   'ft-ischaemia': [
-    { key: 'cold', text: 'Your foot or toes suddenly cold, pale, blue or numb', tell: 'my foot or toes suddenly became cold, pale or numb' },
-    { key: 'rest', text: 'Sudden, very bad foot pain at rest', tell: 'I suddenly have very bad foot pain at rest' },
+    { key: 'cold', text: 'Your foot or toes *suddenly* cold, pale, blue or numb, unlike the other foot', tell: 'my foot or toes suddenly became cold, pale or numb' },
+    { key: 'rest', text: 'Sudden, very bad foot pain *while resting*', tell: 'I suddenly have very bad foot pain at rest' },
   ],
   'ft-necfasc': [
-    { key: 'pain', combo: true, text: 'A hot, red area on your foot spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
-    { key: 'unwell', combo: true, text: 'A hot, red area on your foot spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+    { key: 'pain', combo: true, text: 'A hot, red area on your foot *spreading fast*, with pain *far worse than it looks*', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area on your foot *spreading fast*, *and* you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
   ],
   'ft-diabeticinfection': [
     { key: 'wound', combo: true, text: 'You have diabetes, and a foot wound with spreading redness, pus, a bad smell, or a fever', tell: 'I have diabetes and an infected foot wound' },
@@ -1044,21 +1044,21 @@ export const TICKS = {
   ],
   // ── Thigh ──
   'tgf-pe': [
-    { key: 'breath', combo: true, text: 'A swollen, warm or tender thigh or calf, and you are short of breath, have chest pain or cough blood', tell: 'my leg is swollen and I am short of breath or have chest pain' },
+    { key: 'breath', combo: true, text: 'A swollen, warm or tender thigh or calf, *and* you are newly short of breath, have chest pain, or cough up blood', tell: 'my leg is swollen and I am short of breath or have chest pain' },
   ],
   'tgf-compartment': [
-    { key: 'tense', combo: true, text: 'Thigh pain far worse than expected, still climbing even with pain relief, with the thigh tense, hard and swollen', tell: 'my thigh pain is far worse than expected and still climbing, and the thigh is hard and swollen' },
+    { key: 'tense', combo: true, text: 'Thigh pain *far worse than expected*, *still climbing* even with pain relief, with the thigh tense, hard and swollen', tell: 'my thigh pain is far worse than expected and still climbing, and the thigh is hard and swollen' },
   ],
   'tgf-rhabdo': [
-    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, and pee that is dark like cola', tell: 'I have very bad muscle pain and my pee is dark like cola' },
+    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, *and* pee that is *dark like cola*', tell: 'I have very bad muscle pain and my pee is dark like cola' },
   ],
   'tgf-necfasc': [
-    { key: 'pain', combo: true, text: 'A hot, red area on your thigh spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
-    { key: 'unwell', combo: true, text: 'A hot, red area on your thigh spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+    { key: 'pain', combo: true, text: 'A hot, red area on your thigh *spreading fast*, with pain *far worse than it looks*', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area on your thigh *spreading fast*, *and* you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
   ],
   'tgf-cauda': [
-    { key: 'numb', text: 'New numbness between your legs or around your bottom', tell: 'I have new numbness between my legs' },
-    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+    { key: 'numb', text: '*New* numbness *between your legs or around your bottom*', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: '*New* trouble peeing, or holding your poo (not a long-standing problem)', tell: 'I have new trouble peeing or holding my bowels' },
   ],
   'tgf-dvt': [
     { key: 'leg', text: 'A thigh or calf that is swollen, warm or tender', tell: 'my thigh or calf is swollen, warm or tender' },
@@ -1090,26 +1090,26 @@ export const TICKS = {
   ],
   // ── Lower leg ──
   'lgf-pe': [
-    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf, and you are short of breath, have chest pain or cough blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
+    { key: 'breath', combo: true, text: 'A swollen, warm or tender calf, *and* you are newly short of breath, have chest pain, or cough up blood', tell: 'my calf is swollen and I am short of breath or have chest pain' },
   ],
   'lgf-compartment': [
-    { key: 'tight', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
-    { key: 'toes', combo: true, text: 'Pain far worse than expected, still climbing even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
+    { key: 'tight', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and the muscle tight and swollen', tell: 'the pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'toes', combo: true, text: 'Pain *far worse than expected*, *still climbing* even with pain relief, and much worse when your toes are moved', tell: 'the pain is far worse than expected and still climbing, and much worse when my toes move' },
   ],
   'lgf-rhabdo': [
-    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, and pee that is dark like cola', tell: 'I have very bad muscle pain and my pee is dark like cola' },
+    { key: 'cola', combo: true, text: 'Very bad muscle pain or weakness, *and* pee that is *dark like cola*', tell: 'I have very bad muscle pain and my pee is dark like cola' },
   ],
   'lgf-ischaemia': [
-    { key: 'cold', text: 'Your foot or lower leg suddenly cold, pale or numb', tell: 'my foot or lower leg suddenly became cold, pale or numb' },
-    { key: 'rest', text: 'Sudden, very bad pain in the foot or lower leg at rest', tell: 'I suddenly have very bad pain in my leg at rest' },
+    { key: 'cold', text: 'Your foot or lower leg *suddenly* cold, pale or numb, unlike the other side', tell: 'my foot or lower leg suddenly became cold, pale or numb' },
+    { key: 'rest', text: '*Sudden*, very bad pain in the foot or lower leg *while resting*', tell: 'I suddenly have very bad pain in my leg at rest' },
   ],
   'lgf-necfasc': [
-    { key: 'pain', combo: true, text: 'A hot, red area on your leg spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
-    { key: 'unwell', combo: true, text: 'A hot, red area on your leg spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+    { key: 'pain', combo: true, text: 'A hot, red area on your leg *spreading fast*, with pain *far worse than it looks*', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area on your leg *spreading fast*, *and* you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
   ],
   'lgf-cauda': [
-    { key: 'numb', text: 'New numbness between your legs or around your bottom', tell: 'I have new numbness between my legs' },
-    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+    { key: 'numb', text: '*New* numbness *between your legs or around your bottom*', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: '*New* trouble peeing, or holding your poo (not a long-standing problem)', tell: 'I have new trouble peeing or holding my bowels' },
   ],
   'lgf-cast': [
     { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
@@ -1170,11 +1170,11 @@ export const TICKS = {
   ],
   // ── Elbow ──
   'erf-hot': [
-    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
+    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, *and* a *fever* or feeling very unwell, shivery like flu', tell: 'my joint is hot and swollen and I have a fever' },
   ],
   'erf-compartment': [
-    { key: 'tight', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'my forearm pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
-    { key: 'fingers', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and much worse when your fingers are moved', tell: 'my forearm pain is far worse than expected and still climbing, and much worse when my fingers move' },
+    { key: 'tight', combo: true, text: 'Forearm or hand pain *far worse than expected*, *still climbing* even with pain relief, and the muscle tight and swollen', tell: 'my forearm pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'fingers', combo: true, text: 'Forearm or hand pain *far worse than expected*, *still climbing* even with pain relief, and much worse when your fingers are moved', tell: 'my forearm pain is far worse than expected and still climbing, and much worse when my fingers move' },
   ],
   'erf-cast': [
     { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
@@ -1208,19 +1208,19 @@ export const TICKS = {
   ],
   // ── Wrist ──
   'wrf-stroke': [
-    { key: 'face', text: 'One side of your face drooping', tell: 'one side of my face is drooping' },
-    { key: 'side', text: 'Weakness or numbness down one whole side', tell: 'one whole side of my body is weak or numb' },
-    { key: 'speech', text: 'Trouble speaking', tell: 'I have trouble speaking' },
+    { key: 'face', text: 'One side of your face *suddenly* drooping, like a lopsided smile', tell: 'one side of my face is drooping' },
+    { key: 'side', text: '*Sudden* weakness or numbness down *one whole side* (not just your hand)', tell: 'one whole side of my body is weak or numb' },
+    { key: 'speech', text: '*Sudden* trouble speaking, or slurred words', tell: 'I have trouble speaking' },
   ],
   'wrf-hot': [
-    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
+    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, *and* a *fever* or feeling very unwell, shivery like flu', tell: 'my joint is hot and swollen and I have a fever' },
   ],
   'wrf-bite': [
     { key: 'cut', combo: true, text: 'A cut, bite or puncture on the wrist or hand, now swollen, red and very painful to move the fingers', tell: 'a cut or bite on my hand is now swollen, red and very painful' },
   ],
   'wrf-compartment': [
-    { key: 'tight', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'my forearm pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
-    { key: 'fingers', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and much worse when your fingers are moved', tell: 'my forearm pain is far worse than expected and still climbing, and much worse when my fingers move' },
+    { key: 'tight', combo: true, text: 'Forearm or hand pain *far worse than expected*, *still climbing* even with pain relief, and the muscle tight and swollen', tell: 'my forearm pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'fingers', combo: true, text: 'Forearm or hand pain *far worse than expected*, *still climbing* even with pain relief, and much worse when your fingers are moved', tell: 'my forearm pain is far worse than expected and still climbing, and much worse when my fingers move' },
   ],
   'wrf-cast': [
     { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
@@ -1265,8 +1265,8 @@ export const TICKS = {
     { key: 'bend', text: 'A finger you suddenly cannot bend', tell: 'since the procedure I suddenly cannot bend a finger' },
   ],
   'hnd-compartment': [
-    { key: 'tight', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and the muscle tight and swollen', tell: 'my hand pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
-    { key: 'fingers', combo: true, text: 'Forearm or hand pain far worse than expected, still climbing even with pain relief, and much worse when your fingers are moved', tell: 'my hand pain is far worse than expected and still climbing, and much worse when my fingers move' },
+    { key: 'tight', combo: true, text: 'Forearm or hand pain *far worse than expected*, *still climbing* even with pain relief, and the muscle tight and swollen', tell: 'my hand pain is far worse than expected and still climbing, and the muscle is tight and swollen' },
+    { key: 'fingers', combo: true, text: 'Forearm or hand pain *far worse than expected*, *still climbing* even with pain relief, and much worse when your fingers are moved', tell: 'my hand pain is far worse than expected and still climbing, and much worse when my fingers move' },
   ],
   'hnd-bite': [
     { key: 'finger', combo: true, text: 'One whole finger swollen, held slightly bent, and very painful to straighten (often after a cut, bite, splinter or prick)', tell: 'one whole finger is swollen, held bent and very painful to straighten' },
@@ -1275,7 +1275,7 @@ export const TICKS = {
     { key: 'gun', text: 'Paint, grease or oil forced into your hand by a spray or grease gun', tell: 'paint or grease was forced into my hand by a spray or grease gun' },
   ],
   'hnd-hot': [
-    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, with a fever or feeling very unwell', tell: 'my joint is hot and swollen and I have a fever' },
+    { key: 'fever', combo: true, text: 'A hot, red or swollen joint, *and* a *fever* or feeling very unwell, shivery like flu', tell: 'my joint is hot and swollen and I have a fever' },
   ],
   'hnd-cast': [
     { key: 'tight', text: 'A cast, splint or bandage getting tighter and sorer (do not cut it off)', tell: 'my cast is getting tighter and more painful' },
@@ -1312,18 +1312,18 @@ export const TICKS = {
   ],
   // ── Forearm ──
   'frf-necfasc': [
-    { key: 'pain', combo: true, text: 'A hot, red area on your forearm spreading fast, with pain far worse than it looks', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
-    { key: 'unwell', combo: true, text: 'A hot, red area on your forearm spreading fast, and you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
+    { key: 'pain', combo: true, text: 'A hot, red area on your forearm *spreading fast*, with pain *far worse than it looks*', tell: 'a hot red area is spreading fast and the pain is far worse than it looks' },
+    { key: 'unwell', combo: true, text: 'A hot, red area on your forearm *spreading fast*, *and* you feel very unwell', tell: 'a hot red area is spreading fast and I feel very unwell' },
   ],
   'frf-cardiac': [
-    { key: 'effort', text: 'Pain inside your left forearm or arm when you walk fast or climb stairs', tell: 'my left arm hurts when I walk fast or climb stairs' },
-    { key: 'chest', text: 'With the pain: chest tightness', tell: 'I have chest tightness with it' },
-    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+    { key: 'effort', text: 'Inner left forearm or arm pain on *brisk walking or stairs*, not arm movement', tell: 'my left arm hurts when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: *chest* pressure, squeezing or tightness, like a heavy weight', tell: 'I have chest tightness with it' },
+    { key: 'breath', text: 'With the pain: *unusually* short of breath, or a cold sweat', tell: 'I am short of breath or sweating with it' },
   ],
   'frf-stroke': [
-    { key: 'face', text: 'One side of your face drooping', tell: 'one side of my face is drooping' },
-    { key: 'side', text: 'Weakness or numbness down one whole side', tell: 'one whole side of my body is weak or numb' },
-    { key: 'speech', text: 'Trouble speaking', tell: 'I have trouble speaking' },
+    { key: 'face', text: 'One side of your face *suddenly* drooping, like a lopsided smile', tell: 'one side of my face is drooping' },
+    { key: 'side', text: '*Sudden* weakness or numbness down *one whole side* (not just your hand)', tell: 'one whole side of my body is weak or numb' },
+    { key: 'speech', text: '*Sudden* trouble speaking, or slurred words', tell: 'I have trouble speaking' },
   ],
   'frf-nerve': [
     { key: 'weaker', text: 'Your hand getting weaker', tell: 'my hand is getting weaker' },
@@ -1341,12 +1341,12 @@ export const TICKS = {
   ],
   // ── Upper arm ──
   'arf-cardiac': [
-    { key: 'effort', text: 'Arm pain, especially inside the left arm, when you walk fast or climb stairs', tell: 'my arm hurts when I walk fast or climb stairs' },
-    { key: 'chest', text: 'With the pain: chest tightness or jaw pain', tell: 'I have chest tightness or jaw pain with it' },
-    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+    { key: 'effort', text: 'Arm pain (often inner left) on *brisk walking or stairs*, not from moving it', tell: 'my arm hurts when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: *chest* pressure or tightness, or jaw pain', tell: 'I have chest tightness or jaw pain with it' },
+    { key: 'breath', text: 'With the pain: *unusually* short of breath, or a cold sweat', tell: 'I am short of breath or sweating with it' },
   ],
   'arf-clotlung': [
-    { key: 'arm', combo: true, text: 'Your whole arm suddenly swollen, heavy or bluish, and you are short of breath or have chest pain', tell: 'my arm suddenly swelled and turned bluish, and I am short of breath or have chest pain' },
+    { key: 'arm', combo: true, text: 'Your *whole* arm *suddenly* swollen, heavy or bluish, *and* you are newly short of breath or have chest pain', tell: 'my arm suddenly swelled and turned bluish, and I am short of breath or have chest pain' },
   ],
   'arf-clot': [
     { key: 'arm', text: 'Your whole arm swollen, heavy or bluish over a day or two', tell: 'my whole arm has become swollen, heavy or bluish' },
@@ -1362,14 +1362,14 @@ export const TICKS = {
   ],
   // ── Mid back (and front of the chest) ──
   'trf-aorta': [
-    { key: 'tear', text: 'Sudden tearing or ripping pain in your mid back, or spreading into your chest', tell: 'I have a sudden tearing pain in my back' },
+    { key: 'tear', text: '*Sudden*, severe tearing pain in your mid back, or spreading into your chest', tell: 'I have a sudden tearing pain in my back' },
   ],
   'trf-cardiac': [
-    { key: 'chest', text: 'Chest tightness, shortness of breath or sweating with the pain', tell: 'I have chest tightness, breathlessness or sweating with it' },
-    { key: 'effort', combo: true, text: 'Pain brought on by effort, and spreading to your arm or jaw', tell: 'the pain comes on with effort and spreads to my arm or jaw' },
+    { key: 'chest', text: 'With the pain: *chest* pressure or tightness, *unusual* breathlessness, or a cold sweat', tell: 'I have chest tightness, breathlessness or sweating with it' },
+    { key: 'effort', combo: true, text: 'Pain brought on by *walking fast or climbing stairs* (not by twisting or bending), and spreading to your arm or jaw', tell: 'the pain comes on with effort and spreads to my arm or jaw' },
   ],
   'trf-cord': [
-    { key: 'hold', text: 'You cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
+    { key: 'hold', text: 'You *suddenly* cannot hold your pee or poo', tell: 'I cannot control my bladder or bowels' },
   ],
   'trf-fracture': [
     { key: 'crash', text: 'A car crash', tell: 'I was in a car crash in the last few days' },
@@ -1398,20 +1398,20 @@ export const TICKS = {
   ],
   // ── Base of the neck ──
   'crf-aorta': [
-    { key: 'tear', text: 'Sudden tearing or ripping pain between your shoulder blades, or spreading into your chest', tell: 'I have a sudden tearing pain between my shoulder blades' },
+    { key: 'tear', text: '*Sudden*, severe tearing pain between your shoulder blades, or spreading into your chest', tell: 'I have a sudden tearing pain between my shoulder blades' },
   ],
   'crf-cardiac': [
-    { key: 'chest', text: 'Chest tightness, shortness of breath or sweating with the pain', tell: 'I have chest tightness, breathlessness or sweating with it' },
-    { key: 'effort', combo: true, text: 'Pain brought on by effort, and spreading to your left arm or jaw', tell: 'the pain comes on with effort and spreads to my left arm or jaw' },
+    { key: 'chest', text: 'With the pain: *chest* pressure or tightness, *unusual* breathlessness, or a cold sweat', tell: 'I have chest tightness, breathlessness or sweating with it' },
+    { key: 'effort', combo: true, text: 'Pain brought on by *walking fast or climbing stairs* (not by twisting or bending), and spreading to your left arm or jaw', tell: 'the pain comes on with effort and spreads to my left arm or jaw' },
   ],
   'crf-cord-legs': [
-    { key: 'legs', text: 'New weakness, numbness or unsteadiness in both legs, coming on suddenly', tell: 'both my legs suddenly became weak, numb or unsteady' },
+    { key: 'legs', text: '*Sudden* weakness, numbness or unsteadiness in *both* legs (not just one leg)', tell: 'both my legs suddenly became weak, numb or unsteady' },
   ],
   'crf-trauma5d': [
     { key: 'dizzy', text: 'Dizziness', tell: 'I am dizzy' },
     { key: 'vision', text: 'Double vision', tell: 'I have double vision' },
     { key: 'speech', text: 'Slurred speech', tell: 'my speech is slurred' },
-    { key: 'swallow', text: 'Trouble swallowing', tell: 'I have trouble swallowing' },
+    { key: 'swallow', text: '*New* trouble swallowing', tell: 'I have trouble swallowing' },
     { key: 'falls', text: 'Sudden falls or blackouts', tell: 'I have had sudden falls or blackouts' },
     { key: 'sick', text: 'Feeling sick', tell: 'I feel sick' },
     { key: 'numb', text: 'Numbness in your face or around your lips', tell: 'my face or lips are numb' },
@@ -1421,7 +1421,7 @@ export const TICKS = {
     { key: 'dizzy', text: 'Dizziness that keeps coming back or will not go away', tell: 'since the accident, dizziness keeps coming back' },
     { key: 'vision', text: 'Double vision', tell: 'I have double vision' },
     { key: 'speech', text: 'Slurred speech', tell: 'my speech is slurred' },
-    { key: 'swallow', text: 'Trouble swallowing', tell: 'I have trouble swallowing' },
+    { key: 'swallow', text: '*New* trouble swallowing', tell: 'I have trouble swallowing' },
     { key: 'falls', text: 'Sudden falls or blackouts', tell: 'I have had sudden falls or blackouts' },
     { key: 'sick', text: 'Feeling sick', tell: 'I feel sick' },
     { key: 'numb', text: 'Numbness in your face or around your lips', tell: 'my face or lips are numb' },
@@ -1447,8 +1447,8 @@ export const TICKS = {
   ],
   // ── Sacroiliac joint ──
   'prf-cauda': [
-    { key: 'numb', text: 'New numbness or tingling between your legs, around your bottom or private parts', tell: 'I have new numbness between my legs' },
-    { key: 'pee', text: 'New trouble peeing, or holding your poo', tell: 'I have new trouble peeing or holding my bowels' },
+    { key: 'numb', text: '*New* numbness or tingling *between your legs, around your bottom or private parts*', tell: 'I have new numbness between my legs' },
+    { key: 'pee', text: '*New* trouble peeing, or holding your poo (not a long-standing problem)', tell: 'I have new trouble peeing or holding my bowels' },
   ],
   'prf-fracture': [
     { key: 'stand', combo: true, text: 'After a fall or accident, you cannot stand or put weight on your leg', tell: 'after a fall I cannot stand or put weight on my leg' },
@@ -1481,13 +1481,13 @@ export const TICKS = {
   ],
   // ── Tailbone ──
   'xrf-saddle': [
-    { key: 'numb', text: 'New numbness or tingling between your legs, around your bottom or private parts', tell: 'I have new numbness between my legs' },
+    { key: 'numb', text: '*New* numbness or tingling *between your legs, around your bottom or private parts*', tell: 'I have new numbness between my legs' },
     { key: 'paper', text: 'You cannot feel the toilet paper when you wipe', tell: 'I cannot feel the toilet paper when I wipe' },
   ],
   'xrf-bladder': [
-    { key: 'pee', text: 'New trouble peeing', tell: 'I have new trouble peeing' },
-    { key: 'leak', text: 'Pee leaking out', tell: 'I am leaking pee' },
-    { key: 'bowel', text: 'You cannot hold your poo', tell: 'I cannot control my bowels' },
+    { key: 'pee', text: '*New* trouble peeing (not a long-standing problem)', tell: 'I have new trouble peeing' },
+    { key: 'leak', text: '*New* pee leaking out that you cannot stop', tell: 'I am leaking pee' },
+    { key: 'bowel', text: '*New*: you cannot hold your poo', tell: 'I cannot control my bowels' },
   ],
   'xrf-bowel': [
     { key: 'bleed', text: 'Bleeding from your bottom', tell: 'I have bleeding from my bottom' },
@@ -1513,12 +1513,12 @@ export const TICKS = {
     { key: 'open', text: 'Your jaw is stuck open and you cannot close your mouth', tell: 'my jaw is stuck open and I cannot close my mouth' },
   ],
   'mrf-cardiac': [
-    { key: 'effort', text: 'Jaw pain when you walk fast or climb stairs', tell: 'my jaw hurts when I walk fast or climb stairs' },
-    { key: 'chest', text: 'With the pain: chest tightness', tell: 'I have chest tightness with it' },
-    { key: 'breath', text: 'With the pain: short of breath or sweating', tell: 'I am short of breath or sweating with it' },
+    { key: 'effort', text: 'Jaw pain on *brisk walking or stairs*, not when you chew', tell: 'my jaw hurts when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: *chest* pressure, squeezing or tightness, like a heavy weight', tell: 'I have chest tightness with it' },
+    { key: 'breath', text: 'With the pain: *unusually* short of breath, or a cold sweat', tell: 'I am short of breath or sweating with it' },
   ],
   'mrf-droop': [
-    { key: 'droop', text: 'One side of your face suddenly drooping or weak', tell: 'one side of my face suddenly drooped' },
+    { key: 'droop', text: 'One side of your face *suddenly* drooping or weak, like a lopsided smile', tell: 'one side of my face suddenly drooped' },
   ],
   'mrf-fracture': [
     { key: 'bite', combo: true, text: 'After a blow to the jaw or face, your teeth no longer meet the way they used to', tell: 'after a blow to my face my teeth no longer meet properly' },
@@ -1548,25 +1548,25 @@ export const TICKS = {
   ],
   // ── Head ──
   'hrf-thunderclap': [
-    { key: 'sudden', text: 'A sudden headache that reached its worst within a minute', tell: 'I suddenly have the worst headache of my life' },
+    { key: 'sudden', text: 'A *sudden*, explosive headache that reached its worst *within a minute*', tell: 'I suddenly have the worst headache of my life' },
   ],
   'hrf-stroke': [
-    { key: 'side', text: 'Weakness or numbness on one side', tell: 'one side of my body is weak or numb' },
-    { key: 'face', text: 'A drooping face', tell: 'my face is drooping' },
-    { key: 'speech', text: 'Trouble speaking or understanding', tell: 'I have trouble speaking or understanding' },
-    { key: 'confused', text: 'Confusion', tell: 'I am confused' },
-    { key: 'vision', text: 'Loss of vision, or seeing double', tell: 'I have lost vision or I am seeing double' },
-    { key: 'walk', text: 'Trouble walking', tell: 'I have trouble walking' },
+    { key: 'side', text: '*Sudden* numb or weak face, arm or leg, *one side* (not just tingly fingers)', tell: 'one side of my body is weak or numb' },
+    { key: 'face', text: 'One side of your face *suddenly* drooping', tell: 'my face is drooping' },
+    { key: 'speech', text: '*Sudden* trouble speaking or understanding', tell: 'I have trouble speaking or understanding' },
+    { key: 'confused', text: '*New* confusion', tell: 'I am confused' },
+    { key: 'vision', text: '*Sudden* loss of vision, or seeing double', tell: 'I have lost vision or I am seeing double' },
+    { key: 'walk', text: '*Sudden* trouble walking, or losing your balance', tell: 'I have trouble walking' },
   ],
   'hrf-mening': [
-    { key: 'fever', combo: true, text: 'A fever, and a stiff neck or a new rash', tell: 'I have a fever with a stiff neck or a rash' },
+    { key: 'fever', combo: true, text: 'A *fever*, and a stiff neck or a new rash', tell: 'I have a fever with a stiff neck or a rash' },
     { key: 'unwell', text: 'Very drowsy, confused, or feeling very unwell', tell: 'I am very drowsy or feel very unwell' },
   ],
   'hrf-glaucoma': [
     { key: 'eye', combo: true, text: 'One eye painful and red, with blurred vision or halos around lights', tell: 'one eye is painful and red, with blurred vision or halos' },
   ],
   'hrf-headinjury': [
-    { key: 'vomit', text: 'Vomiting more than once', tell: 'since a blow to my head I have vomited more than once' },
+    { key: 'vomit', text: 'Vomiting *more than once*', tell: 'since a blow to my head I have vomited more than once' },
     { key: 'drowsy', text: 'Very drowsy or confused', tell: 'since a blow to my head I am very drowsy or confused' },
     { key: 'worse', text: 'A headache that is getting worse', tell: 'since a blow to my head the headache is getting worse' },
   ],
@@ -1707,5 +1707,11 @@ export function tellThem(flags = [], answers = {}, area = 'lowerback') {
   return `I have ${painWord(area)}, and ${list}.${when ? ` ${when.tell}` : ''}`
 }
 
+/* Key words in a tick are wrapped in *stars* to show in bold (Chandra,
+   17 Oct 2026: emergency signs were mistaken for everyday ones, like
+   numbness in one hand for numbness in both). bareText drops the stars for
+   the voice, the summary and the PDF. */
+export const bareText = (s) => String(s || '').replace(/\*/g, '')
+
 /** The ticked signs, for Chandra's summary. */
-export const tickedText = (qid, flags = []) => tickedOf(qid, flags).map((t) => t.text)
+export const tickedText = (qid, flags = []) => tickedOf(qid, flags).map((t) => bareText(t.text))

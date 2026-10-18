@@ -41,7 +41,7 @@ import { CES_WARNING, cesWarningText, cesWarning } from '../data/caudaEquina'
 import { SPONDY_CAUTION, SPONDY_STATUS, spondyAsked, spondyDiagnosed, spondylolysisPanel } from '../data/spondylolysis'
 import { cautionRows, tickedIn } from '../data/cautionGroups'
 import { physioPlan, strictestPlan, PLAN_LABEL, PLAN_TEXT } from '../data/physioPlan'
-import { plainAreas, coverOut, gateQ, SUBHEAD, shortFor, PLAIN_Q, TICKS, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText } from '../data/plainQuestions'
+import { plainAreas, coverOut, gateQ, SUBHEAD, shortFor, PLAIN_Q, TICKS, ticksFor, tickId, toggleTick, clearQuestion, WHEN_Q, WHEN_FOR, tellThem, tickedText, bareText } from '../data/plainQuestions'
 import { OSTEOPENIA_CAUTION, BONE_DETAILS, osteopeniaOn, bonePanel, boneSummary } from '../data/osteopenia'
 import { OSTEOMALACIA_CAUTION, osteomalaciaPanel, STRESS_IDS, STRESS_LINE } from '../data/osteomalacia'
 import { OI_STATUS, OI_DETAILS, oiOn, oiRedFlags, oiPanel, oiSummary } from '../data/oi'
@@ -72,6 +72,10 @@ const BEHAV_ID = '__behav'
 const PSYCH_ID = '__psych'
 /* Unscored screens that always close the questions, in this order. */
 const TAIL_IDS = [BEHAV_ID, PSYCH_ID]
+/* "How it is affecting you" is its own part (Chandra, 17 Oct 2026), after
+   the pain questions. Spoken before its first question; keep in step with
+   ABOUT.fixed in ../data/guideSpeech.js. */
+const PSYCH_INTRO = 'Last part: how the pain is affecting you. There are no right or wrong answers.'
 const PSYCH_SCREEN = {
   id: PSYCH_ID, group: PSYCHOSOCIAL_QUESTIONS, text: 'How it is affecting you',
   hint: 'There are no right or wrong answers — choose the one closest to how you feel.',
@@ -930,12 +934,14 @@ export default function PainAssessment() {
   // A question none of whose signs can apply to this birth sex (periods or
   // vaginal bleeding, for a male patient): not shown on plain pages.
   const notForThem = (m) => lbProto && !!TICKS[m.id] && !plainTicks(m).length
+  // A tick's *key words* in bold (../data/plainQuestions.js, bareText).
+  const boldStars = (text) => String(text).split(/\*([^*]+)\*/).map((part, i) => (i % 2 ? <b key={i} className="pa-key">{part}</b> : part))
   const tickChip = (m, t, letter = '·') => {
     const sel = flags.includes(tickId(m.id, t.key))
     return (
       <button key={tickId(m.id, t.key)} style={chip(sel)} onClick={() => setFlags((cur) => toggleTick(cur, m.id, t.key))}>
         <span style={letterStyle(sel)}>{letter}</span>
-        <span>{t.text}</span>
+        <span>{boldStars(t.text)}</span>
       </button>
     )
   }
@@ -1431,9 +1437,10 @@ export default function PainAssessment() {
   // The questions come in parts: emergency signs, then signs for a doctor
   // (with the injury questions), then the pain itself. An area with no
   // emergency page starts at the doctor part.
-  const PART_NAMES = { emergency: 'Emergency Check', physician: 'Symptoms That May Need a Doctor', pain: 'About Your Pain' }
+  const PART_NAMES = { emergency: 'Emergency Check', physician: 'Symptoms That May Need a Doctor', pain: 'About Your Pain', affect: 'How It Is Affecting You' }
+  const hasPsych = !skipPsych && activeQuestions.some((x) => x.id === PSYCH_ID)
   const partLabel = (part) => {
-    const parts = ['emergency', 'physician', 'pain'].filter((p) => p !== 'emergency' || screening.emergency.length)
+    const parts = ['emergency', 'physician', 'pain', 'affect'].filter((p) => (p !== 'emergency' || screening.emergency.length) && (p !== 'affect' || hasPsych))
     return `Part ${parts.indexOf(part) + 1} of ${parts.length} · ${PART_NAMES[part]}`
   }
   // Region flows ask whichever question is most useful next, or finish; the
@@ -1773,7 +1780,7 @@ export default function PainAssessment() {
       const ticks = emgCard.kind === 'ticks'
       return {
         key: `${cardStage}:${emgIdx}`, ready: true, sig: emgYes ? 'yes' : '',
-        say: (emgIdx === 0 ? (cardStage === 'emergency' ? EMG_INTRO : DOC_INTRO) + ' ' : '') + (ticks ? safetyCard(emgCard.text, emgCard.ticks.map((t) => t.text).join('; ')) : emgCard.more ? safetyCard(emgCard.text, emgCard.more) : sentenceOf(emgCard.text)),
+        say: (emgIdx === 0 ? (cardStage === 'emergency' ? EMG_INTRO : DOC_INTRO) + ' ' : '') + (ticks ? safetyCard(emgCard.text, emgCard.ticks.map((t) => bareText(t.text)).join('; ')) : emgCard.more ? safetyCard(emgCard.text, emgCard.more) : sentenceOf(emgCard.text)),
         // A spoken "no" (or "none") moves on; a yes is tapped, so a safety
         // answer is never taken from speech alone.
         proceed: emgNo, voice: emgYes ? null : 'none', noneAck: '',
@@ -1833,7 +1840,7 @@ export default function PainAssessment() {
       const subOptions = subNow && arrangeOptions(subNow.id === 'pattern24' && restWorseKnown ? subNow.options.filter((o) => o.id !== 'restWorse') : subNow.options, subNow.text)
       return {
         key: `q:${qIndex}:${subIdx}`, ready: cardReady, sig,
-        say: spoken(subNow ? (subIdx === 0 ? `${q.text}. ${subNow.text}` : subNow.text) : gateClosed ? q.gate.ask : q.text),
+        say: spoken(subNow ? (subIdx === 0 ? `${q.id === PSYCH_ID ? PSYCH_INTRO : `${q.text}.`} ${subNow.text}` : subNow.text) : gateClosed ? q.gate.ask : q.text),
         proceed: goNextCard,
         ...(subNow ? {
           voice: 'answer', multi: !!subNow.multi,
@@ -2524,12 +2531,18 @@ export default function PainAssessment() {
               // A list behind a yes/no needs the yes/no answered first.
               const gateClosed = !q.group && !listOpen(q)
               const canNext = questionReady(q)
+              // Its own part: no question number, and the pain questions are
+              // counted without it.
+              const isPsych = q.id === PSYCH_ID
+              const psychBefore = path.slice(0, Math.max(0, path.indexOf(qIndex))).some((i) => activeQuestions[i]?.id === PSYCH_ID)
+              const painStep = step - (psychBefore ? 1 : 0)
+              const painTotal = Math.max(plannedScreens - (activeQuestions.some((x) => x.id === PSYCH_ID) ? 1 : 0), painStep)
               return (
                 <Fade k={'q' + qIndex + '.' + subIdx}>
                   {/* On the first question only: the move from the safety
                       checks to the pain questions, and why these areas when
                       the drawing covers more than one. */}
-                  {step === 1 && !fromReview && (
+                  {step === 1 && !isPsych && !fromReview && (
                     <p style={{ fontSize: 15, lineHeight: 1.6, color: GOLD_LIGHT, margin: '0 0 18px', maxWidth: 520 }}>
                       <span style={{ ...label, display: 'block', marginBottom: 4 }}>{partLabel('pain')}</span>
                       Safety checks complete. Now, a few questions about your pain, to match
@@ -2538,10 +2551,19 @@ export default function PainAssessment() {
                   )}
                   {/* Headline band: where they are. A grouped screen's title
                       ("How your pain behaves") sits in it too. */}
+                  {isPsych && subIdx === 0 && !fromReview && (
+                    <p style={{ fontSize: 15, lineHeight: 1.6, color: GOLD_LIGHT, margin: '0 0 18px', maxWidth: 520 }}>
+                      <span style={{ ...label, display: 'block', marginBottom: 4 }}>{partLabel('affect')}</span>
+                      Pain questions complete. Last, a few questions about how the pain is
+                      affecting your mood, sleep and daily life. There are no right or wrong answers.
+                    </p>
+                  )}
                   <div style={headBand()}>
-                  <span style={label}>{q.area ? `${q.area} · ` : ''}Question {step} of {Math.max(plannedScreens, step)}{subsNow ? ` · part ${subIdx + 1} of ${subsNow.length}` : ''}</span>
+                  <span style={label}>{isPsych
+                    ? `Question ${subsNow ? subIdx + 1 : 1} of ${subsNow ? subsNow.length : 1}`
+                    : `${q.area ? `${q.area} · ` : ''}Question ${painStep} of ${painTotal}${subsNow ? ` · ${subIdx + 1} of ${subsNow.length}` : ''}`}</span>
                   <div style={{ height: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 2, margin: '12px 0 0', maxWidth: 520 }}>
-                    <motion.div animate={{ width: `${(step / Math.max(plannedScreens, step)) * 100}%` }} style={{ height: 4, background: GOLD, borderRadius: 2 }} />
+                    <motion.div animate={{ width: `${(isPsych ? (subIdx + 1) / (subsNow ? subsNow.length : 1) : painStep / painTotal) * 100}%` }} style={{ height: 4, background: GOLD, borderRadius: 2 }} />
                   </div>
                   {q.group && (
                     <>

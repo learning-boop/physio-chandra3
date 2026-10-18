@@ -302,7 +302,7 @@ export const PATTERNS = [
   },
   {
     id: 'pc-cardiac', tier: 'emergency', call911: true, why: WHY.cardiac,
-    text: 'Pain or tightness in the chest, left arm or jaw — especially with sweating, nausea, or shortness of breath',
+    text: 'Chest pain, pressure or tightness, like a heavy weight, or left arm or jaw pain that comes with a cold sweat, feeling sick or shortness of breath',
     // Spec's cardiac map: central chest, left arm, jaw. Deliberately NOT every
     // neck drawing — that would put a heart-attack question in front of
     // everyone with a stiff neck.

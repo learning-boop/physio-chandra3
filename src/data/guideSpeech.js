@@ -60,6 +60,7 @@ const ABOUT = {
   sex: ['Female', 'Male', 'Intersex, or prefer not to say'],
   titles: ['Your age?', 'Your sex assigned at birth?', 'A few details to start', 'How your pain behaves', 'How it is affecting you'],
   fixed: [
+    'Last part: how the pain is affecting you. There are no right or wrong answers.',
     'First, some safety questions. Tick anything that is happening to you now. If none of them apply, tap None of these apply.',
     'Next, some signs a doctor may need to check. Tick any that fit you now. If none apply, tap None of these apply.',
     'You said none of these apply to you right now. Is that right?',
@@ -159,7 +160,7 @@ export function allGuideLines() {
     const v = (SGT.SHORT || {})[id] || (SGT.SIGNS || {})[id]
     if (typeof v === 'string') signSentences(v).forEach(add)
     if (PQ.PLAIN_Q && typeof PQ.PLAIN_Q[id] === 'string') add(asSentence(PQ.PLAIN_Q[id]))
-    arr(PQ.TICKS && PQ.TICKS[id]).forEach((t) => t && t.text && add(asSentence(t.text)))
+    arr(PQ.TICKS && PQ.TICKS[id]).forEach((t) => t && t.text && add(asSentence(PQ.bareText(t.text))))
   }
   add(asSentence('Do any of these fit you?'))
 
