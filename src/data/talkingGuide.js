@@ -85,8 +85,13 @@ export const PAGE_MESSAGES = {
     text: "One question at a time. Tap the answer that fits best, and the next one comes up. If you're unsure, pick the closest one. Back takes you to the previous question.",
     chips: ['answer', 'change-answer', 'how-long'],
   },
+  // Matches the page (18 Oct 2026): the answers are folded until "Check or
+  // change your answers" is tapped, and a note can be added.
   'guide:review': {
-    text: 'Here are your answers. Tap any answer to change it. When everything looks right, tap Continue.',
+    text: {
+      phone: 'Anything to add or change? Tap Check or change your answers to see them. You can also add a note for the physiotherapist. When it looks right, tap Continue.',
+      computer: 'Anything to add or change? Click Check or change your answers to see them. You can also add a note for the physiotherapist. When it looks right, click Continue.',
+    },
     chips: ['change-answer'],
   },
   'guide:safety': {
