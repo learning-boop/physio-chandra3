@@ -144,8 +144,11 @@ export const VOICE = {
   tapThenDone: "Please tap your answers on this page. When you've finished, say done.",
   // The drawing page: turning the body by voice (15 Oct 2026).
   helpTurn: 'To turn the body, say turn left, turn right, show the back, or zoom in.',
-  help: 'You can say your answer, using the words on the button or its letter. Where you can tick more than one, say several letters, like A and C. To take one off, say remove, and its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
+  help: 'You can say your answer, using the words on the button or its letter. Where you can tick more than one, say several letters, like A and C. To take one off, say remove, and its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, say quiet to mute me, or say stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
+  // Muted by voice: shown, never said. Unmuted: said.
+  muted: 'Voice muted. Say unmute, or tap the speaker, to hear me again. You can still answer by speaking.',
+  unmuted: "Okay, I'm talking again.",
   noMic: "I can't find a microphone, so please tap your answers instead.",
   noService: "Speech recognition is switched off on this device. On an iPhone, turn on Dictation in Settings, then tap the microphone. Or just tap your answers.",
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",

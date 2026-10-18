@@ -1347,9 +1347,16 @@ export default function TalkingGuide() {
         return
       }
     }
-    // "Stop talking", "be quiet": on computers it only stops talking (it
-    // already has); the microphone stays on. "Stop listening" turns it off.
-    if (KEEP_ON && command(text) === 'stop' && !/listen|mic|tap/i.test(text)) { voice.stop(); return }
+    // "Quiet", "mute", "stop talking"... mute the voice; "unmute", "talk
+    // again" bring it back (Chandra, 17 Oct 2026). The microphone stays on,
+    // so answers can still be said. On the landing page "start without
+    // voice" / "start quietly" still start (below).
+    const muteCmd = command(text)
+    if ((muteCmd === 'mute' || muteCmd === 'unmute') && !(kind === 'start' && /(start|begin|without)/.test(norm(text)))) {
+      if (muteCmd === 'mute') muteByVoice(kind)
+      else unmuteByVoice(kind)
+      return
+    }
     // On computers the microphone hears the room too: a long sentence that
     // is no answer or question for me is left alone.
     const chatter = KEEP_ON && text.trim().split(/\s+/).length > 6
@@ -1549,6 +1556,24 @@ export default function TalkingGuide() {
     if (!on) { voice.stop(); stopListening() }
     else if (lastGuide) say(lastGuide)
   }
+  // Muted or unmuted by voice: shown on screen, and listening goes on.
+  const muteByVoice = (kind) => {
+    voice.stop()
+    soundRef.current = false
+    setVoiceOn(false)
+    store.set('localStorage', 'tg-voice', 'off')
+    setWaitTap(null)
+    addGuide(VOICE.muted)
+    if (modeRef.current !== 'chat') setMode('bubble')
+    if (kind) listenFor(kind)
+  }
+  const unmuteByVoice = (kind) => {
+    soundRef.current = true
+    setVoiceOn(true)
+    store.set('localStorage', 'tg-voice', 'on')
+    setWaitTap(null)
+    sayThen(VOICE.unmuted, kind)
+  }
   const changeVolume = (v) => {
     setVol(v)
     volRef.current = v
@@ -1595,7 +1620,7 @@ export default function TalkingGuide() {
   ) : (
     <p className="tg-status" aria-live="polite">
       {waitTap === msg.id && voiceOn ? 'Tap anywhere to hear me.'
-        : !voiceOn ? 'Sound is off. Tap Unmute to hear me.'
+        : !voiceOn ? (micOn ? 'Sound is off. Say unmute, or tap Unmute, to hear me.' : 'Sound is off. Tap Unmute to hear me.')
         : voice.now.id === msg.id ? <><span className="tg-dots" aria-hidden="true"><i /><i /><i /></span> Speaking…</>
         : hearing ? <><span className="tg-dots tg-dots-teal" aria-hidden="true"><i /><i /><i /></span> Listening…</>
           : idle}

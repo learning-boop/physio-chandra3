@@ -69,8 +69,25 @@ export function command(text) {
   // Short phrases only, so an answer that mentions "next to" is not taken.
   if (n <= 6 && (has(t, ['next', 'go next', 'go for next', 'next question', 'next one', 'next please', 'continue', 'go on', 'move on',
     'carry on', 'keep going', 'let s go', "let's go", 'lets go', 'proceed', 'go ahead', 'moving on', 'skip ahead', 'forward']) && !has(t, ['next to']))) return 'next'
-  if (has(t, ['stop listening', 'microphone off', 'mic off', 'stop the microphone', 'turn off the microphone', 'be quiet',
-    'stop talking', 'quiet', 'shut up', 'i ll tap', "i'll tap", 'tap instead'])) return 'stop'
+  // Sound back on first: "don't be quiet", "unmute", "talk again" hold the
+  // mute words too (Chandra, 17 Oct 2026). Clear phrases count in a short
+  // sentence ("can you please stop talking now"); single words ("quiet",
+  // "louder") only when said nearly alone, so an answer ("worse when it's
+  // quiet at night") is never taken for one.
+  if ((n <= 8 && has(t, ['unmute', 'un mute', 'voice on', 'sound on', 'turn the voice on', 'turn on the voice', 'turn the sound on',
+    'turn on the sound', 'talk again', 'speak again', 'start talking', 'start speaking', 'you can talk', 'you can speak',
+    'i want to hear you', 'i can t hear you', "i can't hear you", 'don t be quiet', "don't be quiet"])) ||
+    (n <= 3 && has(t, ['louder', 'talk to me', 'read it out', 'read out loud']))) return 'unmute'
+  // Muting the voice, the many ways people say it. The microphone stays on,
+  // so answers can still be said.
+  if ((n <= 8 && has(t, ['mute', 'muted', 'be quiet', 'keep quiet', 'quiet please', 'be silent', 'shut up', 'stop talking',
+    'stop speaking', 'stop reading', 'don t talk', "don't talk", 'don t speak', "don't speak", 'no talking', 'voice off',
+    'sound off', 'turn the voice off', 'turn off the voice', 'turn the sound off', 'turn off the sound', 'switch off the voice',
+    'switch the voice off', 'i don t want the voice', "i don't want the voice", 'keep it down', 'pipe down', 'zip it',
+    'enough talking', 'stop the voice'])) ||
+    (n <= 3 && has(t, ['quiet', 'silence', 'silent', 'shush', 'shh', 'hush', 'too loud', 'too noisy', 'that s enough', "that's enough"]))) return 'mute'
+  if (has(t, ['stop listening', 'microphone off', 'mic off', 'stop the microphone', 'turn off the microphone', 'turn the microphone off',
+    'i ll tap', "i'll tap", 'tap instead'])) return 'stop'
   if (has(t, ['help', 'what do i say', 'what should i say', 'how does this work'])) return 'help'
   return null
 }
@@ -102,6 +119,7 @@ const EVERYDAY = ('yes yeah yep yup yea sure okay ok right correct absolutely de
   + 'no nope nah naw not never none nothing neither wrong incorrect at all think so really quite '
   + 'maybe perhaps sometimes kind sort bit little unsure idea know dont don\'t can\'t cannot hard tell say '
   + 'next continue go on move forward done finished that\'s thats all it back previous repeat again pardon help stop listening talking quiet '
+  + 'mute unmute muted silence silent shush hush shut up voice sound off talk speak louder loud enough '
   + 'chandra hey hi hello um uh oh and but or the a an my me i\'m im of to with for in on at this that these those them one '
   + 'first second third fourth fifth sixth last letter option number '
   + 'zero two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen '
