@@ -1687,11 +1687,6 @@ export default function PainAssessment() {
       <button className="pa-confirm-no" onClick={() => sendGuide('change')}>Change</button>
     </div>
   ) : null)
-  // Page 2: choosing "Guide me by voice" also means answering by speaking
-  // (Chandra, 17 Oct 2026: no separate tick box), unless switched off there
-  // or turned off earlier this visit.
-  const [useMic, setUseMic] = useState(() => micChoice !== 'off')
-  useEffect(() => { if (micChoice === 'on') setUseMic(true) }, [micChoice])
   const ABOUT_Q = {
     age: { text: 'Your age?', options: ABOUT_AGES },
     sex: { text: 'Your sex assigned at birth?', options: ABOUT_SEX },
@@ -1991,23 +1986,26 @@ export default function PainAssessment() {
           .pa-landing-lede { margin: 0 auto ${isPhone ? 22 : 28}px; max-width: 520px; font-size: clamp(17px, 4.4vw, 19px); line-height: 1.55; color: rgba(255,255,255,0.88); text-wrap: balance; }
           .pa-ready { max-width: 640px; margin: 0 auto 18px; }
           .pa-ready-q { margin: 4px 0 18px; font-size: clamp(28px, 6.4vw, 42px); line-height: 1.2; text-align: center; }
-          .pa-ready-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-          .pa-ready-choice button {
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 10px 12px;
-            border-radius: 14px; border: 1.5px solid rgba(201,169,110,0.4); background: rgba(255,255,255,0.04);
-            color: rgba(255,255,255,0.85); font: inherit; font-size: 15.5px; font-weight: 600; cursor: pointer;
+          .pa-start-pick { display: grid; grid-template-columns: ${isPhone ? '1fr' : '1fr 1fr'}; gap: 12px; }
+          .pa-start-btn {
+            display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 14px 18px; border-radius: 18px;
+            font: inherit; text-align: left; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
           }
-          .pa-ready-choice button.on { background: rgba(201,169,110,0.22); border-color: ${GOLD}; color: #fff; }
-          .pa-ready-mic {
-            margin: 12px 0 0; padding: 12px 14px; border-radius: 14px;
-            background: rgba(125,216,211,0.08); border: 1px solid rgba(125,216,211,0.35);
-            font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.9); text-align: left;
+          .pa-start-btn:hover { transform: translateY(-1px); }
+          .pa-start-btn:active { transform: scale(0.98); }
+          .pa-start-btn:focus-visible { outline: 3px solid ${GOLD_LIGHT}; outline-offset: 3px; }
+          .pa-start-btn.voice { background: ${GOLD}; border: 1.5px solid ${GOLD}; color: #081527; box-shadow: 0 8px 24px rgba(201,169,110,0.28); }
+          .pa-start-btn.voice:hover { box-shadow: 0 10px 28px rgba(201,169,110,0.4); }
+          .pa-start-btn.tap { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(201,169,110,0.5); color: #fff; }
+          .pa-start-btn.tap:hover { background: rgba(201,169,110,0.12); }
+          .pa-start-ic {
+            display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+            width: 48px; height: 48px; border-radius: 50%;
           }
-          .pa-ready-mic small { display: block; margin-top: 4px; font-size: 12.5px; line-height: 1.5; color: rgba(255,255,255,0.6); }
-          .pa-ready-mic-switch {
-            display: block; margin-top: 6px; padding: 6px 0; background: none; border: 0; cursor: pointer;
-            font: inherit; font-size: 13.5px; font-weight: 600; color: ${GOLD_LIGHT}; text-decoration: underline; text-underline-offset: 3px;
-          }
+          .pa-start-btn.voice .pa-start-ic { background: rgba(8,21,39,0.12); }
+          .pa-start-btn.tap .pa-start-ic { background: rgba(201,169,110,0.16); color: ${GOLD_LIGHT}; }
+          .pa-start-txt b { display: block; font-size: 18px; font-weight: 700; line-height: 1.25; }
+          .pa-start-txt small { display: block; margin-top: 3px; font-size: 14px; line-height: 1.4; opacity: 0.85; }
           .pa-ready-terms { margin: 14px 0 0; padding: 12px 16px 12px 34px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); text-align: left; font-size: 14.5px; line-height: 1.55; color: rgba(255,255,255,0.8); }
           .pa-ready-terms li + li { margin-top: 4px; }
           .pa-ready-terms b, .pa-ready-small b { color: #fff; }
@@ -2289,44 +2287,56 @@ export default function PainAssessment() {
               </Fade>
             )}
 
-            {/* BEFORE YOU START (Chandra, 17 Oct 2026): every agreement on one
-                page (voice or tap, the microphone, the terms and privacy)
-                with the three steps as small pictures, so the next page
-                starts straight on the body. Spoken: under 10 seconds. */}
+            {/* BEFORE YOU START (Chandra, 17 Oct 2026): one tap starts. Two
+                buttons, voice or tap; pressing either agrees to the points
+                and the privacy notice, and the voice one also allows the
+                microphone (the browser asks right after the tap). No separate
+                choice and "I agree" any more: the preselected voice choice
+                looked like it did nothing. Spoken: under 10 seconds. */}
             {stage === 'guide' && (
               <Fade k="guide">
                 <div className="pa-guide">
-                  {/* The question is the heading (Chandra, 17 Oct 2026). */}
                   <div className="pa-ready">
                     <h2 className="pa-ready-q" style={{ ...h2 }}>
                       How would you like <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>to go?</em>
                     </h2>
-                    <div className="pa-ready-choice" role="radiogroup" aria-label="How would you like to go?">
-                      <button type="button" role="radio" aria-checked={guided} className={guided ? 'on' : ''}
-                        onClick={() => { if (!guided) { unlockSpeech(); setGuided(true); setUseMic(true) } }}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" /></svg>
-                        Guide me by voice
+                    <div className="pa-start-pick">
+                      <button type="button" className="pa-start-btn voice" onClick={() => {
+                        unlockSpeech()
+                        setGuided(true)
+                        // The browser's own microphone prompt follows this tap.
+                        if (canListen) sendGuide('mic-start')
+                        else if (micChoice === null) sendGuide('mic-no')
+                        setStage('draw')
+                      }}>
+                        <span className="pa-start-ic" aria-hidden="true">
+                          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0" /><path d="M12 18v3" /></svg>
+                        </span>
+                        <span className="pa-start-txt">
+                          <b>Start with voice</b>
+                          <small>{canListen ? 'I’ll read each question to you. Answer by speaking or tapping.' : 'I’ll read each question to you. Tap your answers.'}</small>
+                        </span>
                       </button>
-                      <button type="button" role="radio" aria-checked={!guided} className={!guided ? 'on' : ''}
-                        onClick={() => { if (guided) { sendGuide('quiet'); setGuided(false); setUseMic(false) } }}>
-                        Just tap, no voice
+                      <button type="button" className="pa-start-btn tap" onClick={() => {
+                        sendGuide('quiet')
+                        sendGuide('mic-off')
+                        setGuided(false)
+                        setStage('draw')
+                      }}>
+                        <span className="pa-start-ic" aria-hidden="true">
+                          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10" /><path d="M12 9.5a1.5 1.5 0 0 1 3 0V11" /><path d="M15 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.5a6 6 0 0 1-4.6-2.2L4.5 15.6a1.5 1.5 0 0 1 2.3-1.9L9 16V11" /></svg>
+                        </span>
+                        <span className="pa-start-txt">
+                          <b>Start without voice</b>
+                          <small>Read and tap at your own pace.</small>
+                        </span>
                       </button>
                     </div>
-                    {guided && canListen && (
-                      <div className="pa-ready-mic">
-                        {useMic ? (
-                          <span>
-                            By pressing <b>Guide me by voice</b>, you allow the microphone so you can answer by speaking, and agree to the{' '}
-                            <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>.
-                          </span>
-                        ) : (
-                          <span>Voice only: the microphone stays off, and you tap your answers.</span>
-                        )}
-                        <button type="button" className="pa-ready-mic-switch" onClick={() => setUseMic(!useMic)}>
-                          {useMic ? 'Voice only, don’t use my microphone' : 'Use my microphone too'}
-                        </button>
-                      </div>
-                    )}
+                    <p className="pa-ready-small">
+                      By pressing a Start button, you agree to the points below and the{' '}
+                      <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>
+                      {canListen ? <>. <b>Start with voice</b> also allows your microphone, so you can answer by speaking.</> : '.'}
+                    </p>
                     <ul className="pa-ready-terms">
                       <li>General information to help you describe your pain. <b>Not a diagnosis</b>, and not a replacement for an assessment.</li>
                       <li><b>Not for emergencies:</b> call 9-1-1, or HealthLink BC on 8-1-1.</li>
@@ -2336,19 +2346,8 @@ export default function PainAssessment() {
                   </div>
                   <GuideSteps phone={isPhone} compact />
                   <div className="pa-actions pa-guide-actions">
-                    <button className="pa-primary" style={goldBtn} onClick={() => {
-                      unlockSpeech()
-                      // The browser's own microphone prompt follows this tap.
-                      if (guided && canListen && useMic) sendGuide('mic-start')
-                      else if (guided && micChoice === null) sendGuide('mic-no')
-                      setStage('draw')
-                    }}>I agree, let’s start</button>
                     <button style={ghostBtn} onClick={restart}>Back</button>
                   </div>
-                  <p className="pa-ready-small">
-                    By tapping <b>I agree, let’s start</b>, you agree to the points above and the{' '}
-                    <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>.
-                  </p>
                 </div>
               </Fade>
             )}

@@ -698,10 +698,8 @@ export default function TalkingGuide() {
       }
     }
     clearTimeout(welcomeTimer.current)
-    // Voice guide, how-to page, microphone not chosen yet: add how to talk with me.
-    const offerNow = guidedRef.current && assess && stage === 'guide' && !!Recognition && !micOnRef.current && store.get('sessionStorage', 'tg-mic') === null
     const base = !Recognition && page.textNoMic ? page.textNoMic : page.text
-    const text = forDevice(base, phone) + (offerNow ? ' ' + VOICE.offer : '')
+    const text = forDevice(base, phone)
     const msg = addGuide(text, { audio: page.audio })
     setChips(page.chips || DEFAULT_CHIPS)
     const seen = seenList().includes(ctxKey)
@@ -718,10 +716,11 @@ export default function TalkingGuide() {
     } else if (!seen && speakNow) {
       markSeen(ctxKey)
       say(msg)
-      // Voice guide: then listen ("next", "go back", or a question), or,
-      // before the microphone is chosen, say how to talk with me.
+      // Voice guide: then listen ("next", "go back", or a question), except
+      // on page 2 before the microphone is chosen (its Start button asks).
       if (guidedRef.current && assess) {
-        if (!offerNow) listenFor('nav')
+        const micUnchosen = stage === 'guide' && !!Recognition && !micOnRef.current && store.get('sessionStorage', 'tg-mic') === null
+        if (!micUnchosen) listenFor('nav')
       }
     } else {
       setMode('face')
@@ -1238,7 +1237,7 @@ export default function TalkingGuide() {
   // 'mic-off': "Start without voice" was tapped, so the microphone goes off.
   // 'demo': "Show me how" on the drawing page, heard even when the voice
   // is off (the tap asks for it). 'quiet': "Just tap, no voice" on page 2.
-  // 'mic-start': the microphone was ticked on page 2; after the browser's
+  // 'mic-start': "Start with voice" on page 2; after the browser's
   // prompt it just listens (the drawing page has already said its line).
   const showMe = () => { stopListening(); soundRef.current = true; startDemo() }
   const quiet = () => { stopListening(); voice.stop(); if (modeRef.current !== 'chat') setMode('face') }

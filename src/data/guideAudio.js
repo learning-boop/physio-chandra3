@@ -4,8 +4,8 @@
 export const GUIDE_AUDIO = {
   '5b6d78ca': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/5b6d78ca.mp3',
   '8122bbae': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/8122bbae.mp3',
-  'ce73902c': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/ce73902c.mp3',
-  '4e520601': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/4e520601.mp3',
+  '9269aefb': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/9269aefb.mp3',
+  '36b580fa': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/36b580fa.mp3',
   '39c922d8': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/39c922d8.mp3',
   'fec7f0fc': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/fec7f0fc.mp3',
   'c2e8c905': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/c2e8c905.mp3',
@@ -85,7 +85,6 @@ export const GUIDE_AUDIO = {
   'bb343142': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/bb343142.mp3',
   '20360b37': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/20360b37.mp3',
   '6e832f47': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/6e832f47.mp3',
-  '4f259761': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/4f259761.mp3',
   '5b03718a': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/5b03718a.mp3',
   'e40433e7': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/e40433e7.mp3',
   '32d632ce': '/audio/guide/elevenlabs-dj4paqs2i4velfjppqsx/32d632ce.mp3',

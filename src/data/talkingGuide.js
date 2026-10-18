@@ -44,13 +44,13 @@ export const PAGE_MESSAGES = {
     chips: ['what-is-this', 'privacy', 'about-chandra', 'booking'],
   },
   // Page 2, "Before you start" (Chandra, 17 Oct 2026): every agreement on
-  // one page; spoken in under 10 seconds (VOICE.offer is added while the
-  // microphone has not been chosen).
+  // one page; spoken in under 10 seconds. Two start buttons, and starting
+  // with voice also allows the microphone.
   'guide:guide': {
     open: true,
     text: {
-      phone: "Choose voice or tap, then tap I agree, let's start.",
-      computer: "Choose voice or tap, then click I agree, let's start.",
+      phone: 'Tap Start with voice, or Start without voice.',
+      computer: 'Click Start with voice, or Start without voice.',
     },
     chips: ['privacy', 'what-is-this', 'how-long'],
   },
@@ -146,7 +146,6 @@ export const VOICE = {
   helpTurn: 'To turn the body, say turn left, turn right, show the back, or zoom in.',
   help: 'You can say your answer, using the words on the button or its letter. Where you can tick more than one, say several letters, like A and C. To take one off, say remove, and its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
-  offer: 'With voice, you can answer by speaking too.',
   noMic: "I can't find a microphone, so please tap your answers instead.",
   noService: "Speech recognition is switched off on this device. On an iPhone, turn on Dictation in Settings, then tap the microphone. Or just tap your answers.",
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
