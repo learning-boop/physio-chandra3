@@ -1687,8 +1687,10 @@ export default function PainAssessment() {
       <button className="pa-confirm-no" onClick={() => sendGuide('change')}>Change</button>
     </div>
   ) : null)
-  // Page 2: answer by speaking? Ticked again if agreed earlier this visit.
-  const [useMic, setUseMic] = useState(() => micChoice === 'on')
+  // Page 2: choosing "Guide me by voice" also means answering by speaking
+  // (Chandra, 17 Oct 2026: no separate tick box), unless switched off there
+  // or turned off earlier this visit.
+  const [useMic, setUseMic] = useState(() => micChoice !== 'off')
   useEffect(() => { if (micChoice === 'on') setUseMic(true) }, [micChoice])
   const ABOUT_Q = {
     age: { text: 'Your age?', options: ABOUT_AGES },
@@ -1997,12 +1999,15 @@ export default function PainAssessment() {
           }
           .pa-ready-choice button.on { background: rgba(201,169,110,0.22); border-color: ${GOLD}; color: #fff; }
           .pa-ready-mic {
-            display: flex; gap: 12px; align-items: flex-start; margin: 12px 0 0; padding: 12px 14px; border-radius: 14px;
-            background: rgba(125,216,211,0.08); border: 1px solid rgba(125,216,211,0.35); cursor: pointer;
+            margin: 12px 0 0; padding: 12px 14px; border-radius: 14px;
+            background: rgba(125,216,211,0.08); border: 1px solid rgba(125,216,211,0.35);
             font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.9); text-align: left;
           }
-          .pa-ready-mic input { width: 22px; height: 22px; margin-top: 1px; accent-color: ${GOLD}; flex-shrink: 0; }
           .pa-ready-mic small { display: block; margin-top: 4px; font-size: 12.5px; line-height: 1.5; color: rgba(255,255,255,0.6); }
+          .pa-ready-mic-switch {
+            display: block; margin-top: 6px; padding: 6px 0; background: none; border: 0; cursor: pointer;
+            font: inherit; font-size: 13.5px; font-weight: 600; color: ${GOLD_LIGHT}; text-decoration: underline; text-underline-offset: 3px;
+          }
           .pa-ready-terms { margin: 14px 0 0; padding: 12px 16px 12px 34px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); text-align: left; font-size: 14.5px; line-height: 1.55; color: rgba(255,255,255,0.8); }
           .pa-ready-terms li + li { margin-top: 4px; }
           .pa-ready-terms b, .pa-ready-small b { color: #fff; }
@@ -2298,7 +2303,7 @@ export default function PainAssessment() {
                     </h2>
                     <div className="pa-ready-choice" role="radiogroup" aria-label="How would you like to go?">
                       <button type="button" role="radio" aria-checked={guided} className={guided ? 'on' : ''}
-                        onClick={() => { if (!guided) { unlockSpeech(); setGuided(true) } }}>
+                        onClick={() => { if (!guided) { unlockSpeech(); setGuided(true); setUseMic(true) } }}>
                         <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" /></svg>
                         Guide me by voice
                       </button>
@@ -2308,13 +2313,19 @@ export default function PainAssessment() {
                       </button>
                     </div>
                     {guided && canListen && (
-                      <label className="pa-ready-mic">
-                        <input type="checkbox" checked={useMic} onChange={(e) => setUseMic(e.target.checked)} />
-                        <span>
-                          <b>Use my microphone</b> to answer by speaking. Ticking this gives permission to use your microphone.
-                          <small> Your browser’s speech service (Google, Microsoft or Apple; on Android, the phone itself) turns your voice into text. This website does not record or keep your voice.</small>
-                        </span>
-                      </label>
+                      <div className="pa-ready-mic">
+                        {useMic ? (
+                          <span>
+                            By pressing <b>Guide me by voice</b>, you allow the microphone so you can answer by speaking, and agree to the{' '}
+                            <Link to="/privacy" style={{ color: GOLD_LIGHT, textDecoration: 'underline' }}>privacy notice</Link>.
+                          </span>
+                        ) : (
+                          <span>Voice only: the microphone stays off, and you tap your answers.</span>
+                        )}
+                        <button type="button" className="pa-ready-mic-switch" onClick={() => setUseMic(!useMic)}>
+                          {useMic ? 'Voice only, don’t use my microphone' : 'Use my microphone too'}
+                        </button>
+                      </div>
                     )}
                     <ul className="pa-ready-terms">
                       <li>General information to help you describe your pain. <b>Not a diagnosis</b>, and not a replacement for an assessment.</li>

@@ -146,7 +146,7 @@ export const VOICE = {
   helpTurn: 'To turn the body, say turn left, turn right, show the back, or zoom in.',
   help: 'You can say your answer, using the words on the button or its letter. Where you can tick more than one, say several letters, like A and C. To take one off, say remove, and its letter. Say next to move on, or go back. When I check something with you, say yes or no. You can also say repeat, or stop listening. And you can ask me a question any time.',
   chooseFirst: 'Please answer this one first. You can say your answer, or tap it.',
-  offer: "To answer by speaking, tick Use my microphone.",
+  offer: 'With voice, you can answer by speaking too.',
   noMic: "I can't find a microphone, so please tap your answers instead.",
   noService: "Speech recognition is switched off on this device. On an iPhone, turn on Dictation in Settings, then tap the microphone. Or just tap your answers.",
   noNet: "I'm having trouble hearing you right now. Please tap your answer, or try again in a moment.",
