@@ -122,6 +122,8 @@ export function allGuideLines() {
     // Safety items of the area (read back when ticked).
     arr(r.redFlags).forEach((f) => add(asSentence(f.text)))
   }
+  // Areas asked another area's questions keep their own name (AF.SHOWN_AS).
+  for (const s of Object.values(AF.SHOWN_AS || {})) for (const v of [s.alone, s.both]) { add(asSentence(v.name)); add(`How did the ${v.word} pain start?`) }
   question(PT.PAIN_QUALITY)
   if (typeof PB.behaviourQuestions === 'function') arr(PB.behaviourQuestions()).forEach(question)
   arr(PS.PSYCHOSOCIAL_QUESTIONS).forEach(question)

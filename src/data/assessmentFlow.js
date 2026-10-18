@@ -37,8 +37,25 @@ export const REGION_CHAINS = [
 ]
 
 const AREA_WORD = {
-  lowback: 'low back', upperback: 'upper back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head', arm: 'upper arm', shoulder: 'shoulder',
+  lowback: 'low back', upperback: 'mid back', neck: 'neck', ctj: 'base of the neck', tlj: 'mid-to-low back', sij: 'back of the pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head', arm: 'upper arm', shoulder: 'shoulder',
   elbow: 'elbow', forearm: 'forearm', wrist: 'wrist', hand: 'hand or fingers', hip: 'hip', thigh: 'thigh', knee: 'knee', leg: 'lower leg', ankle: 'ankle', foot: 'foot or toes',
+}
+
+/* Areas asked another area's questions, named after what was drawn
+   (Chandra, 18 Oct 2026: a chest drawing was called "mid back"). The front
+   of the chest is asked the mid-back questions (costochondritis, ribs), and
+   the side below the ribs the mid-to-low back ones; both keep their own
+   name, alone or with the back. */
+export const SHOWN_AS = {
+  upperback: { from: 'chest', own: 'upperback', alone: { name: 'Chest', word: 'chest' }, both: { name: 'Mid back and chest', word: 'mid back and chest' } },
+  tlj: { from: 'flank', own: 'tlj', alone: { name: 'Side, below the ribs', word: 'side' }, both: { name: 'Mid-to-low back and side', word: 'mid-to-low back and side' } },
+}
+/** { regionKey: { name, word } } for the regions drawn as another area. */
+export function regionLabels(zones = []) {
+  const types = new Set(zones.filter((z) => !z.implied).map((z) => z.type))
+  const out = {}
+  for (const [k, s] of Object.entries(SHOWN_AS)) if (types.has(s.from)) out[k] = types.has(s.own) ? s.both : s.alone
+  return out
 }
 
 /** Region keys (with an authored question set) of the drawn zones, in drawing order. */
@@ -142,7 +159,7 @@ const sharesDuration = (q) =>
   q.options.every((o) => DURATIONS.some((d) => d.to.includes(o.id)))
 
 /** The opening questions for these regions (one region: its own, unchanged). */
-export function buildContext(keys) {
+export function buildContext(keys, labels = {}) {
   if (keys.length === 1) return REGIONS[keys[0]].context
   const out = []
   const ages = keys.map((k) => REGIONS[k].context.find(sharesAge)).filter(Boolean)
@@ -151,7 +168,8 @@ export function buildContext(keys) {
     const r = REGIONS[k]
     for (const q of r.context) {
       if (sharesAge(q) || sharesDuration(q) || sharesTender(q)) continue
-      const text = q.id === 'onset' ? `How did the ${AREA_WORD[k] || r.name.toLowerCase()} pain start?` : `${r.name}: ${q.text}`
+      const name = (labels[k] && labels[k].name) || r.name
+      const text = q.id === 'onset' ? `How did the ${(labels[k] && labels[k].word) || AREA_WORD[k] || r.name.toLowerCase()} pain start?` : `${name}: ${q.text}`
       out.push({ ...q, id: `${q.id}@${k}`, text })
     }
   }
@@ -202,11 +220,11 @@ export function regionAnswers(keys, rk, answers) {
 }
 
 /** Screen list: one grouped opening screen, then each region's questions. */
-export function buildScreens(keys) {
-  const context = buildContext(keys)
+export function buildScreens(keys, labels = {}) {
+  const context = buildContext(keys, labels)
   const multi = keys.length > 1
   const questions = keys.flatMap((k) =>
-    REGIONS[k].questions.map((q) => ({ ...q, rk: k, area: multi ? REGIONS[k].name : null })))
+    REGIONS[k].questions.map((q) => ({ ...q, rk: k, area: multi ? (labels[k] && labels[k].name) || REGIONS[k].name : null })))
   return { context, questions }
 }
 

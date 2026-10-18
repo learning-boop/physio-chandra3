@@ -130,7 +130,7 @@ export const gateQ = (gid, area) => {
   return typeof q === 'string' || !q ? q : pick(q, area) || q.any || Object.values(q)[0]
 }
 /* "I have … pain" in the Tell them line. */
-export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back', sij: 'buttock and pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head' }
+export const AREA_WORD = { lowerback: 'low back', neck: 'neck', shoulder: 'shoulder', knee: 'knee', hip: 'hip', ankle: 'ankle', foot: 'foot', thigh: 'thigh', lowerleg: 'lower leg', elbow: 'elbow', wrist: 'wrist', hand: 'hand', forearm: 'forearm', upperarm: 'upper arm', upperback: 'mid back', ctj: 'neck and upper back', tlj: 'mid-to-low back', sij: 'buttock and pelvis', coccyx: 'tailbone', jaw: 'jaw', head: 'head', chest: 'chest', flank: 'side' }
 /** "low back pain", or "low back and hip pain" for several areas. */
 export const painWord = (area) => {
   const w = [...new Set([].concat(area || []).map((a) => AREA_WORD[a]).filter(Boolean))]
@@ -146,7 +146,7 @@ export const PLAIN_SHORT = {
   'jrf-conus-legs': 'Both legs suddenly weak or numb',
   // Emergency: sudden illness
   'rf-aaa': 'Sudden, very bad pain, and feeling faint',
-  'jrf-aorta': 'Sudden tearing pain in your back',
+  'jrf-aorta': 'Sudden tearing pain in your back or side',
   'jrf-pancreas': 'Very bad upper tummy pain, and being sick',
   'jrf-testis': 'Sudden, very bad pain in a testicle',
   'pc-stroke': 'A drooping face, one weak side, slurred speech, or sight loss',
@@ -155,7 +155,7 @@ export const PLAIN_SHORT = {
   // See a doctor
   'rf-osteo': 'Sudden pain after a small strain or slip, with weak bones or older age',
   'sc-trauma': 'A bad fall or accident',
-  'rf-cancer': 'Cancer in the past, and this back pain is new',
+  'rf-cancer': 'Cancer in the past, and this pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
   'rf-infection': 'Fever, or a higher chance of infection',
   'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', tlj: 'Weight loss, a growing lump, or bad night pain', sij: 'Weight loss, a growing lump, or bad night pain', coccyx: 'Fever, or weight loss without trying', jaw: 'Fever, weight loss, night pain, or past cancer', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
@@ -353,12 +353,12 @@ export const PLAIN_SHORT = {
   'arf-pta': 'Sudden bad pain, then a weak or thin arm',
   'arf-shingles': 'A band of burning pain with a rash',
   // Mid back (and front of the chest)
-  'trf-aorta': 'Sudden tearing pain in your back',
+  'trf-aorta': 'Sudden tearing pain in your chest or back',
   'trf-cardiac': 'Pain with chest tightness or breathlessness, or on brisk walking or stairs',
   'trf-lung': 'Sudden sharp pain on breathing, and newly breathless',
   'trf-cord': 'You cannot hold your pee or poo',
   'trf-fracture': 'A crash, fall from a height, or hard blow in the last few days',
-  'trf-cancer': 'Cancer in the past, and this back pain is new',
+  'trf-cancer': 'Cancer in the past, and this pain is new',
   'trf-osteo': 'Sudden pain after a small strain or slip, with weak bones or older age',
   'trf-infection': 'Fever, a weak immune system, or injected drugs',
   'trf-kidney': 'Side or lower-rib pain with a fever, or burning or bloody pee',
@@ -637,7 +637,7 @@ export const TICKS = {
     { key: 'faint', combo: true, text: '*Sudden, severe* pain in your back or tummy, the worst you have had, *and* you feel faint, sweaty, or a pulsing in your tummy', tell: 'I have sudden, very bad pain and I feel faint' },
   ],
   'jrf-aorta': [
-    { key: 'tear', text: '*Sudden*, severe tearing pain in your back, spreading to your chest or tummy', tell: 'I have a sudden tearing pain in my back' },
+    { key: 'tear', text: '*Sudden*, severe tearing pain in your back or side, spreading to chest or tummy', tell: 'I have a sudden tearing pain in my back' },
   ],
   'jrf-pancreas': [
     { key: 'sick', combo: true, text: 'Very bad pain in your upper tummy going through to your back, and you are being sick', tell: 'I have very bad upper tummy pain and I am being sick' },
@@ -664,7 +664,7 @@ export const TICKS = {
     { key: 'any', combo: true, text: 'Any fall, and you are 65 or over or have weak bones', tell: 'I had a fall, and I am over 65 or have weak bones' },
   ],
   'rf-cancer': [
-    { key: 'past', combo: true, text: 'You have had cancer before, and this back pain is new', tell: 'I have had cancer before, and this back pain is new' },
+    { key: 'past', combo: true, text: 'You have had cancer before, and this pain is new', tell: 'I have had cancer before, and this back pain is new' },
   ],
   'rf-spondy': [
     { key: 'arch', combo: true, text: 'You are under 20, and it hurts to bend backwards, especially in sport like gymnastics, dance, cricket or tennis', tell: 'I am under 20 and it hurts to bend backwards in sport' },
@@ -1362,7 +1362,7 @@ export const TICKS = {
   ],
   // ── Mid back (and front of the chest) ──
   'trf-aorta': [
-    { key: 'tear', text: '*Sudden*, severe tearing pain in your mid back, or spreading into your chest', tell: 'I have a sudden tearing pain in my back' },
+    { key: 'tear', text: '*Sudden*, severe tearing pain in your chest or mid back', tell: 'I have a sudden tearing pain in my back' },
   ],
   'trf-cardiac': [
     { key: 'chest', text: 'With the pain: *chest* pressure or tightness, *unusual* breathlessness, or a cold sweat', tell: 'I have chest tightness, breathlessness or sweating with it' },
@@ -1374,16 +1374,16 @@ export const TICKS = {
   'trf-fracture': [
     { key: 'crash', text: 'A car crash', tell: 'I was in a car crash in the last few days' },
     { key: 'height', text: 'A fall from a height, like a ladder, stairs or a roof', tell: 'I fell from a height in the last few days' },
-    { key: 'blow', text: 'A hard blow to the back', tell: 'I had a hard blow to my back in the last few days' },
+    { key: 'blow', text: 'A hard blow to the back or chest', tell: 'I had a hard blow to my back in the last few days' },
   ],
   'trf-cancer': [
-    { key: 'past', combo: true, text: 'You have had cancer before, and this mid-back pain is new', tell: 'I have had cancer before, and this back pain is new' },
+    { key: 'past', combo: true, text: 'You have had cancer before, and this pain is new', tell: 'I have had cancer before, and this back pain is new' },
   ],
   'trf-osteo': [
     { key: 'strain', combo: true, text: 'Pain came on suddenly after a small strain, cough, lift or fall from standing, and you are over 50, have weak bones or take steroid tablets', tell: 'the pain came on suddenly after a small strain, and I am over 50 or have weak bones' },
   ],
   'trf-infection': [
-    { key: 'fever', text: 'A fever or chills with the back pain', tell: 'I have a fever or chills' },
+    { key: 'fever', text: 'A fever or chills with the pain', tell: 'I have a fever or chills' },
     { key: 'immune', text: 'A weak immune system, from an illness or medicines', tell: 'I have a weak immune system' },
     { key: 'drugs', text: 'You have injected drugs', tell: 'I have injected drugs' },
   ],

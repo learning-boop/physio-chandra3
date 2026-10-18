@@ -19,7 +19,7 @@ import { REGIONS, ZONE_TO_REGION, GENERAL_RED_FLAGS, SPECIAL_CARDS, computeRaw }
 import {
   primaryRegion, questionRegions, needsAreaChoice,
   buildScreens, nextQuestion, rankAcross, alsoConsiderAcross, specialsAcross, regionRedFlagsFor, inGroup, forPerson, MAX_SCORED_QUESTIONS, isBonus, widespreadFlags,
-  reasonsFor,
+  reasonsFor, regionLabels,
 } from '../data/assessmentFlow'
 import { behaviourQuestions, interpretBehaviour } from '../data/painBehaviour'
 import { PSYCHOSOCIAL_QUESTIONS, interpretPsychosocial, psychosocialQuestionsFor, skipPsychosocial } from '../data/psychosocial'
@@ -493,17 +493,21 @@ export default function PainAssessment() {
      `areaPick` holds the person's taps, by area; the rest follow the ink. */
   const [areaPick, setAreaPick] = useState({})
   useEffect(() => { if (!zones.length) { setAreaPick({}); setTravel({}); setPathPick(null) } }, [zones])
+  // A chest or side drawing keeps its own name though it is asked the back
+  // questions (../data/assessmentFlow.js, SHOWN_AS).
+  const areaLabels = useMemo(() => regionLabels(drawnZ), [drawnZ])
+  const regionName = (k) => (areaLabels[k] && areaLabels[k].name) || REGIONS[k].name
   const areaChips = useMemo(() => {
     const seen = new Set(); const out = []
     drawnZ.filter((z) => !z.implied).forEach((z) => {
       const k = ZONE_TO_REGION[z.type]
       if (k && REGIONS[k] && !seen.has(k)) {
         seen.add(k)
-        out.push({ key: k, name: REGIONS[k].name, on: areaPick[k] ?? !minorKeys.has(k), touched: minorKeys.has(k) })
+        out.push({ key: k, name: regionName(k), on: areaPick[k] ?? !minorKeys.has(k), touched: minorKeys.has(k) })
       }
     })
     return out
-  }, [drawnZ, areaPick, minorKeys])
+  }, [drawnZ, areaPick, minorKeys, areaLabels]) // eslint-disable-line react-hooks/exhaustive-deps
   const leftOut = useMemo(() => new Set(areaChips.filter((c) => !c.on).map((c) => c.key)), [areaChips])
   const toggleArea = (k) => {
     const chip = areaChips.find((c) => c.key === k)
@@ -524,10 +528,10 @@ export default function PainAssessment() {
     // Implied areas are not choices: they come with the area they belong to.
     flowZ.filter((z) => !z.implied).forEach((z) => {
       const k = ZONE_TO_REGION[z.type]
-      if (k && REGIONS[k] && !seen.has(k)) { seen.add(k); out.push({ key: k, name: REGIONS[k].name }) }
+      if (k && REGIONS[k] && !seen.has(k)) { seen.add(k); out.push({ key: k, name: regionName(k) }) }
     })
     return out
-  }, [flowZ])
+  }, [flowZ, areaLabels]) // eslint-disable-line react-hooks/exhaustive-deps
   // New or changed marks invalidate a previously chosen focus area.
   useEffect(() => { setFocusKey(null) }, [zones])
 
@@ -576,7 +580,7 @@ export default function PainAssessment() {
   // opening screen instead of costing three. With several areas, age and
   // duration are still asked once; only "how did it start?" is asked per area,
   // because its options (and weights) differ from area to area.
-  const { context: ctxQuestions, questions: regionQuestions } = useMemo(() => buildScreens(keys), [keys])
+  const { context: ctxQuestions, questions: regionQuestions } = useMemo(() => buildScreens(keys, areaLabels), [keys, areaLabels])
   // Two unscored screens close the questions: pain behaviour (severity,
   // irritability, 24-hour pattern, easing — ../data/painBehaviour.js) and the
   // yellow flags (../data/psychosocial.js). The generic set already asks about
@@ -773,6 +777,8 @@ export default function PainAssessment() {
   // is in PLAIN_AREAS (one area or several; an area a mark only implies does
   // not decide it): plain group questions with bullets, one sign per tick.
   const plainA = !widespreadPath ? plainAreas(flowZ) : null
+  // The same areas as drawn (chest, side), for the words the patient reads.
+  const plainWordA = plainA ? [...new Set(flowZ.filter((z) => !z.implied).map((z) => z.type))] : null
   const lbProto = !!plainA
   // Gateway groups the person has opened on the doctor page.
   const [openGates, setOpenGates] = useState([])
@@ -999,7 +1005,7 @@ export default function PainAssessment() {
     // Only when every question in the group has its plain bullet and ticks, so
     // the bullets name every sign behind the group; otherwise the usual line.
     const shownMembers = r.members.filter((m) => !notForThem(m))
-    const plain = lbProto && shownMembers.length > 0 && shownMembers.every((m) => shortFor(m.id, who.sex, plainA, screening.covered) && plainTicks(m).length) && gateQ(r.gate.id, plainA)
+    const plain = lbProto && shownMembers.length > 0 && shownMembers.every((m) => shortFor(m.id, who.sex, plainA, screening.covered) && plainTicks(m).length) && gateQ(r.gate.id, plainWordA)
     const bullets = plain ? [...new Set(shownMembers.map((m) => shortFor(m.id, who.sex, plainA, screening.covered)).filter(Boolean))] : []
     return (
       <div key={r.gate.id} className={'pa-gate' + (open ? ' pa-gate-open' : '')}>
@@ -1174,7 +1180,7 @@ export default function PainAssessment() {
   const holdToday = doctorFlags.some((f) => physioPlan(f) === 'doctorFirst' && f.sameDay)
   // "Tell them" (plain questions): only the ticks of questions on this result,
   // so a tick kept from an earlier drawing never counts.
-  const tellLine = tellThem(flags.filter((x) => pickedFlags.some((f) => f.id === x.split('~')[0])), answers, plainA)
+  const tellLine = tellThem(flags.filter((x) => pickedFlags.some((f) => f.id === x.split('~')[0])), answers, plainWordA)
   // Where "Continue" goes from the see-a-doctor screen: on through the flow.
   const continueAfterDoctor = () => {
     if (flaggedAt === 'physician') { if (injuryApplies && !smartFirst) startInjury(); else startQuestions() }
@@ -1286,9 +1292,10 @@ export default function PainAssessment() {
   const drawnLocationPairs = useMemo(() => Object.entries(locationAnswers(flowZ))
     .filter(([qid]) => !askedIds.includes(qid))
     .map(([qid, oids]) => {
-      const r = keys.map((k) => REGIONS[k]).find((x) => x && x.questions.some((q) => q.id === qid))
+      const rk = keys.find((k) => REGIONS[k] && REGIONS[k].questions.some((q) => q.id === qid))
+      const r = rk && REGIONS[rk]
       const q = r && r.questions.find((x) => x.id === qid)
-      return q && { area: r.name, question: q.text, answer: oids.map((id) => (q.options.find((o) => o.id === id) || {}).label).filter(Boolean).join(' · ') }
+      return q && { area: regionName(rk), question: q.text, answer: oids.map((id) => (q.options.find((o) => o.id === id) || {}).label).filter(Boolean).join(' · ') }
     })
     .filter(Boolean), [flowZ, keys, askedIds])
   const qaPairs = useMemo(() => [
@@ -2591,12 +2598,12 @@ export default function PainAssessment() {
                     <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', margin: '0 0 12px', maxWidth: 520 }}>
                       Pain that travels down the {referral[0].kind} often starts in
                       the {referral[0].kind === 'arm' ? 'neck' : 'back'}, so these questions start with
-                      the {REGIONS[keys[0]].name.toLowerCase()}.
+                      the {regionName(keys[0]).toLowerCase()}.
                     </p>
                   ) : multiArea ? (
                     <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', margin: '0 0 12px', maxWidth: 520 }}>
                       These questions cover the {(() => {
-                        const n = keys.map((k) => REGIONS[k].name.toLowerCase())
+                        const n = keys.map((k) => regionName(k).toLowerCase())
                         return `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}`
                       })()}, the areas you marked.
                     </p>
@@ -3684,7 +3691,7 @@ export default function PainAssessment() {
 
                 {shown.length > 0 ? (
                   <div style={{ marginBottom: 24 }}>
-                    <ResultsConditions shown={shown} multiArea={multiArea} regionName={(rk) => REGIONS[rk].name}
+                    <ResultsConditions shown={shown} multiArea={multiArea} regionName={regionName}
                       reasons={(rk, id) => reasonsFor(keys, scopedAnswers, rk, id)} />
                     <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.5)', margin: '12px 0 0', maxWidth: 520 }}>
                       These patterns can be associated with answers like yours. They are general
@@ -3717,7 +3724,7 @@ export default function PainAssessment() {
                     <ul style={{ margin: 0, paddingLeft: 18, fontSize: 15.5, lineHeight: 1.6, color: '#fff' }}>
                       {alsoConsider.map(({ c, rk }) => (
                         <li key={`${rk}/${c.id}`} style={{ marginBottom: 2 }}>
-                          {c.name}{multiArea ? <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13.5 }}> · {REGIONS[rk].name}</span> : null}
+                          {c.name}{multiArea ? <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13.5 }}> · {regionName(rk)}</span> : null}
                         </li>
                       ))}
                     </ul>

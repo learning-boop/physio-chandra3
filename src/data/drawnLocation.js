@@ -143,6 +143,12 @@ export const LOCATION_QUESTIONS = {
   // front of the neck answers nothing. "Upper Cervical Pain" document Q1
   // (28 Sep 2026). `stillAsk`: N13 also asks whether the base of the skull
   // is tender, so the question stays open, with the drawing's answer ticked.
+  // The front of the chest and the side below the ribs (18 Oct 2026): a
+  // mark there ticks "At the front of my chest" (T1) or "At my side, just
+  // below the ribs" (J1). Both questions take several answers (a band
+  // around the chest, the back as well), so they are still asked.
+  chest: { q: 'T1', stillAsk: true, pick: () => 'front' },
+  flank: { q: 'J1', stillAsk: true, pick: () => 'side' },
   neck: { q: 'N13', stillAsk: true, pick: (at) => {
     if (at.lx > -0.04) return null
     return at.fy >= 0.385 ? 'skullbase' : at.fy < 0.36 ? 'lowerneck' : null
