@@ -754,7 +754,9 @@ const limbScreens = (zones) => screensFor(zones).filter((sc) => LIMB.includes(sc
 const limbMerged = (zones) => limbScreens(zones).length >= 2
 
 function limbQuestion(zones) {
-  const ids = limbScreens(zones).map((sc) => sc.id)
+  return limbQuestionFor(limbScreens(zones).map((sc) => sc.id))
+}
+function limbQuestionFor(ids) {
   const names = ids.map((id) => LIMB_NAME[id])
   const where = names.length > 2 ? names.slice(0, -1).join(', ') + ', or ' + names[names.length - 1] : names.join(' or ')
   const weeks = Math.max(...ids.map((id) => LIMB_WEEKS[id]))
@@ -781,11 +783,22 @@ function limbBlowLabel(ids) {
   const where = names.length > 2 ? names.slice(0, -1).join(', ') + ', or ' + names[names.length - 1] : names.join(' or ')
   return `Yes, a blow to the ${where}`
 }
-const LIMB_WHEN = { id: 'I2', text: 'When did it happen?', options: [
+/** Every version of the shared arm question (two or more of the six areas,
+    in screen order), so each one is recorded in Chandra's voice (18 Oct
+    2026: "shoulder, upper arm, or elbow" was read by the browser's voice). */
+export function limbQuestionVariants() {
+  const out = []
+  for (let m = 1; m < 1 << LIMB.length; m++) {
+    const ids = LIMB.filter((_, i) => m & (1 << i))
+    if (ids.length >= 2) out.push(limbQuestionFor(ids))
+  }
+  return out
+}
+export const LIMB_WHEN = { id: 'I2', text: 'When did it happen?', options: [
   { id: 'recent', label: 'In the last 2 weeks' },
   { id: 'older', label: '2 to 6 weeks ago' },
 ]}
-const LIMB_SCREEN = { id: 'limb', title: 'Recent Arm Injury' }
+export const LIMB_SCREEN = { id: 'limb', title: 'Recent Arm Injury' }
 
 /** Each screen's I1, from the merged answers: undefined while still needed. */
 function limbGate(zones, answers) {

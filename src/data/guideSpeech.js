@@ -122,6 +122,9 @@ export function allGuideLines() {
     // Safety items of the area (read back when ticked).
     arr(r.redFlags).forEach((f) => add(asSentence(f.text)))
   }
+  // With several areas drawn, the opening questions name each area ("How
+  // did the knee pain start?"): every area's version, built at once.
+  if (typeof AF.buildContext === 'function') { try { arr(AF.buildContext(Object.keys(regions).filter((k) => regions[k].context))).forEach(question) } catch { /* not built */ } }
   // Areas asked another area's questions keep their own name (AF.SHOWN_AS).
   for (const s of Object.values(AF.SHOWN_AS || {})) for (const v of [s.alone, s.both]) { add(asSentence(v.name)); add(`How did the ${v.word} pain start?`) }
   question(PT.PAIN_QUALITY)
@@ -168,6 +171,10 @@ export function allGuideLines() {
 
   // Injury questions.
   for (const sc of arr(INJ.SCREENS)) arr(sc.questions).forEach(question)
+  // The shared arm question, in every combination of areas, and its follow-up.
+  if (typeof INJ.limbQuestionVariants === 'function') INJ.limbQuestionVariants().forEach(question)
+  if (INJ.LIMB_WHEN) question(INJ.LIMB_WHEN)
+  if (INJ.LIMB_SCREEN) add(asSentence(INJ.LIMB_SCREEN.title))
   // Last: the chat answers.
   for (const t of spokenAll) if (chatty(t)) add(t.text)
   return out

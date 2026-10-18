@@ -310,7 +310,12 @@ function useVoice(level, volume, onBlocked) {
         setTimeout(() => { if (t === token.current) clipOne(id, i, src, t, next, (w2) => (w2 === 'blocked' ? blocked() : viaVoice())) }, 400)
       })
     }
-    else viaVoice()
+    else {
+      // Development only: name the sentence, so it can be added to the
+      // recordings (src/data/guideSpeech.js) and said in Chandra's voice.
+      if (import.meta.env.DEV && hasRecordings()) console.warn('[guide] no recording:', parts[i])
+      viaVoice()
+    }
     // Fetch the next recording while this one plays.
     const after = parts[i + 1] && audioFor(parts[i + 1])
     if (after) { const p = new Audio(); p.preload = 'auto'; p.src = after }
