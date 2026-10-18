@@ -3027,8 +3027,12 @@ export default function PainAssessment() {
                         ? <>First, let's rule out a <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>medical emergency</em></>
                         : <>A few more <em style={{ fontStyle: 'italic', color: GOLD_LIGHT }}>safety questions</em></>}
                     </h2>
+                    {/* The question itself stands out (Chandra, 17 Oct 2026). */}
                     <p style={{ ...body, fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, maxWidth: 520 }}>
-                      {emergency ? 'Most people answer no. Is this happening to you now?' : 'Most people answer no. Does this fit you now?'}
+                      Most people answer no.
+                    </p>
+                    <p style={{ ...body, fontSize: 'clamp(18px, 4.6vw, 20px)', fontWeight: 700, color: '#fff', margin: '4px 0 0', maxWidth: 520 }}>
+                      {emergency ? 'Is this happening to you now?' : 'Does this fit you now?'}
                     </p>
                   </div>
                   <div className="pa-emg-card" style={{ ...qPanel }}>
