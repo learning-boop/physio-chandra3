@@ -14,6 +14,11 @@ reviewed:
 # counted as a leader on an upper-arm drawing from duration alone, and the
 # arm's own questions were crowded out (biceps strain test patient); the
 # sudden-onset answers already carry the acute crisis.
+# 19 Oct 2026: "PhysioChandra Shoulder Conditions.docx" form 4 (signed v1.0, 19 Oct 2026), fed
+# with Chandra's approval: pointers unchanged (already the form's intent);
+# timeline, flare care and a pharmacist line; the form's therapeutic
+# ultrasound left out (JOSPT 2025, C) and its pain-relief lines reworded (no
+# medication advice).
 pointers:
   "Sudden severe pain with no injury": 3
   "The pain built up over a day or two to very severe, with no injury": 3
@@ -31,7 +36,7 @@ pointers:
 ---
 
 ## blurb
-Small calcium deposits can build up inside one of the rotator cuff tendons, causing a deep ache or sometimes a sudden, intense flare of shoulder pain. It's usually confirmed with an ultrasound or X-ray rather than symptoms alone. The deposits often clear up by themselves.
+Small calcium deposits can build up inside one of the rotator cuff tendons, causing a deep ache or sometimes a sudden, intense flare of shoulder pain. It's usually confirmed with an ultrasound or X-ray rather than symptoms alone. The deposits often clear up by themselves. It is not arthritis, and it does not mean the shoulder is wearing out.
 
 ## noticed
 - A deep ache in the shoulder that can flare up strongly, sometimes without warning
@@ -40,8 +45,11 @@ Small calcium deposits can build up inside one of the rotator cuff tendons, caus
 
 ## homeCare
 - Use simple comfort measures and ease off aggravating overhead activities during a flare
+- In a bad flare, rest the arm in a comfortable, supported position, and use a cold pack wrapped in a cloth for short periods
+- Keep your elbow, wrist and hand moving, and gently swing the arm when the pain allows
 - Keep gently moving the shoulder within a comfortable range rather than resting it completely
-- A sudden flare usually starts to ease within one to two weeks; a longer-standing ache can take a few months
+- If pain is stopping you sleeping, ask a pharmacist or your doctor what pain relief is safe for you
+- A sudden flare usually eases within 1 to 2 weeks and settles over about 2 to 6 weeks; a longer-standing ache can take a few months
 
 ## seePhysioIf
 - Fever, feeling unwell, or a hot, swollen shoulder: see a doctor the same day
@@ -63,4 +71,5 @@ Small calcium deposits can build up inside one of the rotator cuff tendons, caus
 - Shockwave may be used for calcific tendinopathy (C), unlike non-calcific; not in the acute resorptive phase; consider for formative deposits after 4-6 weeks of rehabilitation (Chandra's protocol; SICOT-J 2025: high-energy focused shockwave, then barbotage). Laser alone or with rehab (C); no therapeutic ultrasound (C). Ultrasound-guided lavage (barbotage) for cases not settling with initial care including injection (B); its benefit for acute cases or as a first treatment is not shown, and relief is mainly short term.
 - Course: acute calcific periarthritis usually improves within 4-7 days and resolves in 3-4 weeks; often misdiagnosed (58-70%) as infection (PMC9197888); formative deposits run for months.
 - Sudden severe pain without injury: exclude septic arthritis (fever), crystal arthritis, neuralgic amyotrophy (weakness or wasting after days of pain) and cardiac or visceral referral before calling it a calcific flare.
-- Sources: Desmeules F et al., JOSPT 2025;55(4):235-274, grades in brackets; acute calcific periarthritis reviews (PMC9197888, PMC12659715); SICOT-J 2025; Chandra's calcific tendinopathy protocol.
+- Assessment (form 4): irritability staging; AROM/PROM (may be globally limited by pain in the acute phase); painful arc; supraspinatus palpation; MMT once irritability allows; imaging to confirm; liaise with the GP about analgesia or injection options (barbotage, ESWT) if persistent. Phases: Uhthoff and Loehr 1997; minimally invasive options: Louwerens 2014. The form's "ultrasound therapy" in the longer-standing phase is not used (no therapeutic ultrasound, C).
+- Sources: Desmeules F et al., JOSPT 2025;55(4):235-274, grades in brackets; acute calcific periarthritis reviews (PMC9197888, PMC12659715); SICOT-J 2025; Chandra's calcific tendinopathy protocol; "PhysioChandra Shoulder Conditions.docx" form 4 (v1.0, 19 Oct 2026).

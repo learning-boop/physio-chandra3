@@ -10,6 +10,13 @@ ages: 30-49, 50-64, o64
 # 5 Oct 2026: shoulder cross-check, approved by Chandra: S4 X-ray line for the
 # look-alikes, P3 (normal passive movement -2, 30 to 49 +1, over 3 months +1),
 # A2 outward rotation wording, no guarantee, other shoulder, clinic notes.
+# 19 Oct 2026: "PhysioChandra Shoulder Conditions.docx" forms 15 (adhesive capsulitis) and 16
+# (capsular pattern, cause to be confirmed; a routing note, folded into the
+# clinic notes), signed v1.0 by Chandra 19 Oct 2026, fed with Chandra's
+# approval: clicking or catching -1 (separates it from arthritis, form 15 Q6);
+# the steroid-injection line left patient text (no medication advice); the
+# timeline stays one to two years, sometimes longer; physiotherapy is not said
+# to shorten the course (UK FROST).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -28,13 +35,15 @@ pointers:
   "The stiffness is slowly easing": 2
   "No real stiffness, just pain": -2
   "Moving my neck": -2
+  "Clicking or catching deep in the shoulder": -1
+  "At the inner end of the collarbone, next to the breastbone": -1
   "30 to 49": 1
   "50 to 64": 1
   "More than 3 months": 1
 ---
 
 ## blurb
-The capsule around the shoulder joint tightens, causing pain then marked stiffness in all directions. It's most common between 40 and 65, and more common with diabetes or thyroid conditions. Most people get most of their movement and comfort back over one to two years; some mild stiffness can remain, often without limiting daily life. Physiotherapy, and for some people a steroid injection from a doctor, can ease the pain and help you keep using your arm while it recovers.
+The capsule around the shoulder joint tightens, causing pain then marked stiffness in all directions. It's most common between 40 and 65, and more common with diabetes or thyroid conditions. It is not arthritis and does not harm the joint in the long term. Most people get most of their movement and comfort back, usually over one to two years and sometimes longer; some mild stiffness can remain, often without limiting daily life. Physiotherapy can help ease the pain and keep your arm working while it recovers; your doctor can talk with you about other options for the pain.
 
 ## noticed
 - Stiffness in every direction: others can't move it further either
@@ -45,6 +54,8 @@ The capsule around the shoulder joint tightens, causing pain then marked stiffne
 - Move within tolerable limits: gentle pendulum and wall-slide movements
 - Heat before movement can ease things
 - Pace tasks; adapt rather than force through sharp pain
+- Use your good arm to help the sore one lift
+- For sleep, lie on your other side hugging a pillow, or on your back with the sore arm resting on a pillow
 - In some people the other shoulder is affected later; this is not a sign of anything serious
 
 ## seePhysioIf
@@ -52,6 +63,8 @@ The capsule around the shoulder joint tightens, causing pain then marked stiffne
 - Stiffness is progressing or already limits daily tasks
 - You have diabetes or a thyroid condition with new shoulder stiffness
 - It came on with no injury: please also ask your doctor whether your thyroid and blood sugar have been checked (simple blood tests)
+- Night pain is stopping you sleeping
+- Your shoulder became stiff after time in a sling, an operation or an injury: a physiotherapist can check why and help you get it moving again
 - You'd like a staged plan matched to the phase you're in
 
 ## physioHelps
@@ -66,5 +79,7 @@ The capsule around the shoulder joint tightens, causing pain then marked stiffne
 - Risk (B): diabetes, thyroid disease (OR about 1.9), age 40-65 (peak 51-55), female, a previous episode on the other side (5-34%; 6-17% within 5 years, BESS). Also immobilisation, cardiac events, trauma, Dupuytren's, autoimmune disease. Diabetes and male sex are linked to poorer ROM outcomes. Stages (CPG): stage 1, then stage 2 "painful" or "freezing" (3-9 months), stage 3 frozen (9-15), stage 4 thawing (15-24); mild to moderate deficits may persist with little disability (C). Outcomes: about 59% full recovery, 35% mild-moderate and 6% severe symptoms at 4.4 years (Hand 2008, via BESS); complete resolution without treatment is not certain (Wong 2017).
 - Irritability guides dose: high (pain 7/10 or more, constant night or rest pain, pain before end range, active less than passive), moderate (4-6/10, pain at end range), low (3/10 or less, pain only with overpressure). Measures (A): DASH, ASES or SPADI; pain, active and passive ROM (E).
 - Interventions: intra-articular corticosteroid plus mobility exercise beats exercise alone at 4-6 weeks (A), so refer for injection when pain dominates (works best with prompt physiotherapy, BESS); education on the natural course and stretching matched to irritability (B); stretching dosed by irritability (B); glenohumeral mobilisation (C); short-wave diathermy, ultrasound or electrical stimulation with exercise (C); translational manipulation under anaesthesia for non-responders (C). Gentle 'supervised neglect' beat aggressive stretching past the pain threshold (89% vs 63% good outcome at 2 years; Diercks). UK FROST (Lancet 2020): early structured physiotherapy, MUA and capsular release did not differ meaningfully at 12 months; MUA most cost-effective. Hydrodilatation: a medical option with short-term benefit at 6-12 weeks. No revision of the 2013 CPG has been found (Oct 2026).
+- Capsular pattern, cause to be confirmed (form 16): Cyriax ER > ABD > IR, passive = active, capsular end-feel. Identify the cause: post-immobilisation, post-surgical, early adhesive capsulitis, OA, post-dislocation. Post-immobilisation stiffness often improves over 6-12 weeks. Check GH accessory glides and SC, AC and scapulothoracic contribution; X-ray if OA or dislocation is suspected. Stiffness after a sling or surgery belongs with the surgical team's rehabilitation plan.
+- Form 15 additions: assess each capsular region (anterior-superior, posterior, inferior); UEFI/PSFS; the form notes a perimenopause association (the form's claim); look-alikes include CRPS (skin colour or temperature change, swelling, touch hurting, after an injury, surgery or stroke, usually with the hand) and a stiff shoulder blade (scapulothoracic restriction, form 22: overhead reach blocked around the blade with free glenohumeral rotation). Green S et al., Cochrane 2003 CD004258.
 - Chandra's protocol versus the CPG: 3 phases versus 4 stages; the Cyriax pattern (ER > abduction > IR) versus the CPG's ER most limited with rotation falling in abduction; "physiotherapy accelerates results" is not shown (FROST).
-- Sources: Kelley MJ et al., JOSPT 2013;43(5):A1-A31 (adhesive capsulitis), grades in brackets; BESS/BOA frozen shoulder pathway; Rangan A et al. (UK FROST), Lancet 2020; Wong CK et al., Physiotherapy 2017; hydrodilatation meta-analysis, Br Med Bull 2023.
+- Sources: Kelley MJ et al., JOSPT 2013;43(5):A1-A31 (adhesive capsulitis), grades in brackets; BESS/BOA frozen shoulder pathway; Rangan A et al. (UK FROST), Lancet 2020; Wong CK et al., Physiotherapy 2017; hydrodilatation meta-analysis, Br Med Bull 2023; "PhysioChandra Shoulder Conditions.docx" forms 15 and 16 (v1.0, 19 Oct 2026).

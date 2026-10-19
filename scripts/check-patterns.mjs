@@ -738,7 +738,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   check('911 split: a possible femur fracture calls 911', thigh.route === 'emergency' && thigh.call911, thigh)
   const { SCREENS } = await imp('src/data/injuryScreen.js')
   const injury911 = SCREENS.filter((sc) => !['neck', 'head'].includes(sc.id)).flatMap((sc) => sc.questions).flatMap((q) => q.options || []).filter((o) => o.call911).map((o) => o.why)
-  check('911 split: in the limb injury screens only the hip, pelvis and femur fractures call 911', injury911.length === 3, injury911)
+  // + the shoulder's I8 (19 Oct 2026, shoulder conditions document form 24):
+  // breathing or swallowing trouble after a collarbone injury.
+  check('911 split: in the limb injury screens only the hip, pelvis and femur fractures, and a collarbone joint pushed back against the windpipe, call 911',
+    injury911.length === 4 && injury911.some((w) => /sternoclavicular/.test(w)), injury911)
 }
 
 // ── 17. Head injury screen ("Concussion.docx" v1.0, 2 Oct 2026) ──
@@ -1145,7 +1148,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     JSON.stringify(DM.diabetesFlags({ dmTreat: 'insulin', dmComp: ['eyes', 'kidneys', 'heart'], dmFeel: 'reduced' })) === JSON.stringify({ HYPO: true, EYE: true, KIDNEY: true, CARDIAC: true, FOOT: true }))
 
   const shZ = ZN(['shoulderL'])
-  const a = { age: '50-64', onset: 'gradual', duration: 'o3m', S1: 'deep', S2: 'top', S3: ['behind', 'highshelf', 'lying'], S6: ['weakness'], S7: 'shoulder' }
+  // No S7 (19 Oct 2026): reaching behind the back now counts +1 for the
+  // rotator cuff (shoulder conditions document, forms 2 and 7), and with the
+  // neck-or-shoulder answer as well the two cards tied (0.481 vs 0.480).
+  const a = { age: '50-64', onset: 'gradual', duration: 'o3m', S1: 'deep', S2: 'top', S3: ['behind', 'highshelf', 'lying'], S6: ['weakness'] }
   // The order of the two conditions the lift is about (5 Oct 2026: the new
   // rotator cuff tear card can now sit between them on these answers).
   const order = (b, ans = a) => rankAcross(['shoulder'], ans, 9, b).map((x) => x.c.id).filter((id) => id === 'rc' || id === 'frozen').join()

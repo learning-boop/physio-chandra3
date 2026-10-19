@@ -345,7 +345,10 @@ export const REGIONS = {
         {id:"outer", label:"Outer upper arm, below the shoulder"},
         {id:"deep", label:"Deep inside, or at the front of the shoulder"},
         {id:"back", label:"Back of the shoulder", unlocks:"scapback"},
-        {id:"topneck", label:"Top of the shoulder spreading up into the neck"}
+        {id:"topneck", label:"Top of the shoulder spreading up into the neck"},
+        // The SC joint ("PhysioChandra Shoulder Conditions.docx" form 24,
+        // 19 Oct 2026): before this, it could only be answered as the AC joint.
+        {id:"innerclav", label:"At the inner end of the collarbone, next to the breastbone"}
       ]},
       {id:"S2", text:"When you lift your arm out to the side and up, what happens?", options:[
         {id:"midarc", label:"It hurts in the middle of the movement, then eases near the top"},
@@ -373,11 +376,14 @@ export const REGIONS = {
       {id:"S5", text:"Does your shoulder ever slip, or feel as if it might come out of place?",
         // "Under 40": the age bands split at 50, so 30 to 49 is included.
         askIf: ({ ra }) => !ra.age || ["u5", "u18", "18-29", "30-49"].includes(ra.age) || ra.onset === "popped" || ra.onset === "overhead",
+        // One answer (excl, 19 Oct 2026, forms 10-14): added together, the
+        // three slipping answers made the card's ceiling 20, so a shoulder
+        // that slips with no injury (5 of 20) never reached the card.
         options:[
-          {id:"popped", label:"It has popped out and needed putting back"},
-          {id:"slips", label:"It slips or clunks, then goes back on its own"},
-          {id:"worry", label:"I worry it will pop out with my arm up and back"},
-          {id:"stable", label:"No, it feels stable"}
+          {id:"popped", excl:"slip", label:"It has popped out and needed putting back"},
+          {id:"slips", excl:"slip", label:"It slips or clunks, then goes back on its own"},
+          {id:"worry", excl:"slip", label:"I worry it will pop out with my arm up and back"},
+          {id:"stable", excl:"slip", label:"No, it feels stable"}
         ]},
       {id:"S6", text:"Which of these do you notice? Tick all that apply.", options:[
         {id:"weakness", label:"Weakness lifting the arm or turning it outwards"},
@@ -399,6 +405,9 @@ export const REGIONS = {
         {id:"wasting", label:"The back of my shoulder blade looks hollow, or thinner than the other side", special:"nerveLossShoulder"},
         {id:"weakout", label:"Turning my arm outwards is weak or tires quickly"},
         {id:"overhead", label:"It came on with overhead sport or work (volleyball, throwing, tennis, lifting overhead)"},
+        // Scapular winging (form 21, 19 Oct 2026): "clearly" keeps it apart
+        // from the slight unevenness many people have without pain.
+        {id:"winging", label:"My shoulder blade clearly sticks out from my back, especially when I push against a wall or lift my arm forward"},
         {id:"none", label:"None of these"}
       ]},
       {id:"S7", text:"Which hurts more: moving your neck, or moving your shoulder and arm?",

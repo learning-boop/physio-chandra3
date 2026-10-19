@@ -1470,7 +1470,13 @@ export const EXTRA_REGIONS = {
       ]}
     ],
     questions: [
-      { id: "U1", text: "Where is the pain mainly?", options: [
+      { id: "U1", text: "Where is the pain mainly?",
+        // The upper arm's lead question goes early (19 Oct 2026): an upper-arm
+        // mark also asks the shoulder, and its new cards (shoulder conditions
+        // document) made the shoulder's questions crowd this one out. Not when
+        // the drawing runs down to the wrist: then spread (U3) matters more.
+        priority: ({ draw }) => !!draw && draw.has("upperarm") && !draw.has("wrist"),
+        options: [
         { id: "front", label: "Front of the upper arm (biceps)" },
         { id: "back", label: "Back of the upper arm (triceps)" },
         { id: "outer", label: "Outer upper arm, just below the shoulder" },
@@ -1514,6 +1520,11 @@ export const EXTRA_REGIONS = {
         ]},
       { id: "U6", text: "About the muscle after exercise: which apply?",
         askIf: ({ ra }) => ra.onset === "gym",
+        // Priority (19 Oct 2026): with the six new shoulder cards from the
+        // shoulder conditions document, an upper-arm mark (which also asks the
+        // shoulder) spent its slots on shoulder questions and this one, the
+        // question that tells gym soreness from a strain, was crowded out.
+        priority: () => true,
         options: [
           { id: "doms", label: "Sore and stiff 1 to 3 days after, then easing" },
           { id: "sharp", label: "A sudden sharp pain during a lift, with bruising after" },

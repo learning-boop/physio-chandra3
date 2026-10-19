@@ -8,6 +8,9 @@ ages: 50-64, o64
 # with a stiff, grating shoulder are not shown frozen shoulder only. From the
 # JOSPT 2013 differential, the osteoarthritis reference (content/reference/
 # osteoarthritis.md) and Chandra's impingement protocol (differential table).
+# 19 Oct 2026: "PhysioChandra Shoulder Conditions.docx" form 17 (and form 16's capsular-pattern
+# routing note), signed v1.0 by Chandra 19 Oct 2026, fed with Chandra's
+# approval: clicking or catching 2 to 3 (grinding is the form's strongest sign).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -19,7 +22,8 @@ pointers:
   "It will not go as high as the other side, even when I help it with my other hand": 2
   "Reaching behind my back": 1
   "Getting stiffer month by month": 2
-  "Clicking or catching deep in the shoulder": 2
+  "Clicking or catching deep in the shoulder": 3
+  "At the inner end of the collarbone, next to the breastbone": -1
   "Very painful at first, now more stiff than painful": -1
   "The stiffness is slowly easing": -1
   "It lifts fully without pain": -3
@@ -27,17 +31,19 @@ pointers:
 ---
 
 ## blurb
-A gradual change in the cartilage and bone of the main shoulder joint, usually after 55 or after an old injury. It brings a deep ache with use, stiffness in all directions and sometimes a grinding or clicking feeling. Exercise to keep the shoulder moving and strong is the core of care, and it often eases pain.
+A gradual change in the cartilage and bone of the main shoulder joint, usually after 55 or after an old injury. It brings a deep ache with use, stiffness in all directions and sometimes a grinding or clicking feeling. Exercise to keep the shoulder moving and strong is the core of care, and it can help ease pain. Arthritis does not mean the shoulder has to keep getting worse quickly.
 
 ## noticed
 - A deep ache in the shoulder with use, easing with rest
 - Stiffness in all directions that builds slowly over months or years
 - A grinding, grating or clicking feeling deep in the joint
+- Stiff after rest or first thing in the morning, loosening as you get going
 
 ## homeCare
 - Keep the shoulder moving every day within comfort; gentle range exercises help
 - Strengthen the muscles around the shoulder and shoulder blade gradually
 - Pace heavy or overhead tasks; heat can ease stiffness
+- Use warmth before activity, and spread heavy tasks across the week
 - During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning
 
 ## seePhysioIf
@@ -55,5 +61,6 @@ A gradual change in the cartilage and bone of the main shoulder joint, usually a
 ## clinicNotes
 - Glenohumeral OA: age usually over 55, or earlier after instability surgery, dislocation, fracture or avascular necrosis; gradual pain with use, crepitus, global restriction of active and passive range (external rotation often most), posterior humeral head migration. X-ray (true AP and axillary views) confirms; it also separates OA from frozen shoulder, where radiographs are normal (JOSPT 2013, BESS/BOA).
 - Management: education, range and strength exercise, activity modification (osteoarthritis foundation, content/reference/osteoarthritis.md); injection and arthroplasty are medical and surgical options when function is limited.
+- Form 17: rotator cuff integrity changes management (OA with a cuff tear); post-dislocation arthropathy (Hovelius and Rahme 2016) can come before 50, which this card's age gate leaves out; liaise with the GP about analgesia, injection and orthopaedic referral when function and sleep are significantly affected (Ansok and Muh, Orthop Res Rev 2018). Capsular pattern of unknown cause (form 16): see the frozen shoulder notes.
 - Differentials: frozen shoulder (normal X-ray), rotator cuff arthropathy (massive cuff tear with superior migration), inflammatory arthritis, PMR (both shoulders, over 50, morning stiffness, unwell), avascular necrosis.
-- Sources: Kelley MJ et al., JOSPT 2013 (differential); BESS/BOA frozen shoulder pathway (X-ray); content/reference/osteoarthritis.md; Chandra's impingement protocol.
+- Sources: Kelley MJ et al., JOSPT 2013 (differential); BESS/BOA frozen shoulder pathway (X-ray); content/reference/osteoarthritis.md; Chandra's impingement protocol; "PhysioChandra Shoulder Conditions.docx" forms 16 and 17 (v1.0, 19 Oct 2026).

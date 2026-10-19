@@ -205,3 +205,12 @@ Expect: route = physician first, same day (X-ray), not the emergency department
 
 ## changes 6 Oct 2026 (neurodynamics, second batch; DRAFT for Chandra's review)
 New S9 "About the back of the shoulder" (hollow shoulder blade, weak turning out, overhead sport or work), asked after "Back of the shoulder" (S1, which unlocks it with no weight of its own) or weakness turning out (S6); a mark on the back of the shoulder answers S1 from the drawing (shoulder-suprascapular, nerveLossShoulder card). Test patients N1-N2. Sources: Butler NOI neurodynamic techniques workbook; Shacklock NDS lower-quarter manual 2017-18.
+
+## changes 19 Oct 2026 ("PhysioChandra Shoulder Conditions.docx", 26 forms, signed v1.0 by Chandra 19 Oct 2026; applied with Chandra's approval the same day)
+Full mapping, choices and open items: content/reference/shoulder-conditions.md.
+- S1 new answer "At the inner end of the collarbone, next to the breastbone" (SC joint card).
+- S5 is one answer (excl "slip"): the slipping answers no longer add up, so a shoulder that slips with no injury reaches the slipping card.
+- S9 new tick "My shoulder blade clearly sticks out from my back, especially when I push against a wall or lift my arm forward" (winging card, doctor first).
+- Injury screen: new I8 (emergency, 911) "Since the injury, do you have new trouble breathing or swallowing, a hoarse voice, or swelling in your neck or arm?" (posterior SC dislocation); I7 now "along your collarbone or at the top of the shoulder"; new I9 after a sudden pull, the upper arm's biceps question word for word (same day), so a torn biceps is asked from a shoulder-only drawing too.
+- New cards: shoulder-strain, shoulder-sprain, shoulder-scj, shoulder-winging, shoulder-throwing. Nine cards updated. Test patients SC1 to SC14.
+- Known gap (accepted): a mark on the shoulder blade alone is the mid back on the body map, so it never reaches the shoulder's cards (winging included).

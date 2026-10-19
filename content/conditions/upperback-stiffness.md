@@ -45,3 +45,6 @@ Stiffness and muscle ache of the mid-back region, commonly linked to sustained p
 - A physiotherapist can check how your mid back moves and explain why it dislikes staying still.
 - Hands-on care with mobility and strength exercises can help ease stiffness and ache.
 - You get a posture-and-strength plan for desk work and tips to keep your back moving.
+
+## clinicNotes
+- Stiff shoulder blade (scapulothoracic restriction, "PhysioChandra Shoulder Conditions.docx" form 22, v1.0, 19 Oct 2026; folded here with Chandra's approval, no separate card): side-lying passive scapular mobility (elevation and depression, protraction and retraction, upward and downward rotation, tilt), thoracic extension and rotation, pec minor and levator scapulae length, SC and AC accessory glides, serratus and trapezius strength. Overhead reach blocked around the blade with free glenohumeral rotation suggests a scapulothoracic or thoracic restriction rather than a capsular one (frozen shoulder). Snapping scapula (grinding under the blade): assess in clinic. A mark on the shoulder blade itself is the mid back on the body map, so it reaches this card rather than the shoulder's.

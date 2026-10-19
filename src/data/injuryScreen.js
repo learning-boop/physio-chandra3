@@ -184,11 +184,23 @@ export const SHOULDER_INJURY = [
     options: yesNo('emergency', 'Possible dislocation or fracture that has not been put back') },
   { id: 'I3', text: 'Since the injury, has your arm or hand been cold, pale, or blue?',
     options: yesNo('emergency', 'Possible blood vessel injury') },
+  // "PhysioChandra Shoulder Conditions.docx" form 24 (signed v1.0, 19 Oct
+  // 2026; applied with Chandra's approval the same day): the inner end of the
+  // collarbone pushed back behind the breastbone presses on the windpipe,
+  // gullet and large vessels. Asked only after an injury.
+  { id: 'I8', text: 'Since the injury, do you have new trouble breathing or swallowing, a hoarse voice, or swelling in your neck or arm?',
+    options: yesNo('emergency', 'Possible collarbone joint pushed back towards the windpipe and blood vessels (posterior sternoclavicular dislocation)', { call911: true }) },
   // A new step at the top of the shoulder is an X-ray the same day, not the
   // emergency department (shoulder cross-check S5, Chandra 5 Oct 2026): the
   // AC joint grade decides the care; in children, a collarbone growth plate.
-  { id: 'I7', text: 'Is there a new lump or step at the top of the shoulder since the injury?',
-    sameDay: true, options: yesNo('urgent', 'Possible AC joint separation or collarbone fracture: an X-ray is needed the same day') },
+  // 19 Oct 2026 (form 24): "along your collarbone" too, for the inner end.
+  { id: 'I7', text: 'Is there a new lump or step along your collarbone or at the top of the shoulder since the injury?',
+    sameDay: true, options: yesNo('urgent', 'Possible AC or SC joint separation or collarbone fracture: an X-ray is needed the same day') },
+  // Forms 1, 3, 5 and 6 (19 Oct 2026): a torn biceps was only asked from an
+  // upper-arm mark. Worded as the upper arm's I6, so it is asked once.
+  { id: 'I9', text: 'Did you feel a pop, click, or tearing at the front of the shoulder or upper arm during a sudden, forceful lift or pull, and has the shape of your biceps changed since (a new bulge low in the arm)?',
+    askIf: (a) => a.I1 === 'pull', sameDay: true,
+    options: yesNo('urgent', 'Possible torn biceps tendon: a doctor should check it the same day') },
   // Wider (shoulder cross-check S7): marked weakness with some lift is a tear too.
   { id: 'I4', text: 'Since the injury, are you unable to lift your arm, or is it much weaker than before, or is there a numb patch on the outer upper arm?',
     options: yesNo('urgent', 'Possible acute rotator cuff tear or nerve injury: see a doctor within a few days, as a repair works best within about 3 weeks') },

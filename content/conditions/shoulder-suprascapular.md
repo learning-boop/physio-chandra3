@@ -57,3 +57,4 @@ A nerve runs across the top and back of the shoulder blade to the muscles that l
 - Management: load modification, scapular control, posterior shoulder mobility, nerve sliders; surgical decompression for structural causes or failed rehabilitation.
 - Look-alikes: rotator cuff tear (shoulder-cufftear.md: drop arm, trauma, age), rotator cuff related pain, C5-C6 radiculopathy (neck-led, dermatomal), neuralgic amyotrophy (severe pain then weakness: doctor), quadrilateral space syndrome (axillary nerve: posterior shoulder, deltoid and teres minor, overhead throwers), myofascial pain.
 - Sources: Butler DS, NOI neurodynamic techniques workbook (other nerves: suprascapular); Boykin RE et al., J Shoulder Elbow Surg 2010 (suprascapular neuropathy review).
+- Look-alike: scapular winging (shoulder-winging, form 21 of "PhysioChandra Shoulder Conditions.docx", 19 Oct 2026): the blade lifts away from the ribs (serratus anterior or trapezius), rather than looking hollow behind it.
