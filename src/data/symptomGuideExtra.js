@@ -1563,6 +1563,11 @@ export const EXTRA_REGIONS = {
   elbow: {
     name: "Elbow",
     redFlags: [
+      // "PhysioChandra Elbow Conditions ALL.docx" forms 2, 9, 27 and 28 (signed v1.0, 19 Oct 2026; applied
+      // with Chandra's approval the same day): an elbow-only drawing was never
+      // asked the heart question. Worded as the upper arm's, so it is asked once.
+      { id: "erf-cardiac", tier: "emergency", call911: true, group: "cardiac", why: "Heart pain can be felt down the inside of the arm and elbow",
+        text: "Is the pain in your arm, especially the inside of the left arm, brought on by effort, or does it come with chest tightness, shortness of breath, sweating, or jaw pain?" },
       { id: "erf-hot", tier: "emergency", group: "hotjoint", why: "Possible joint infection (septic arthritis)",
         text: "Is a painful joint hot, red or swollen, with a fever or feeling very unwell, especially after a recent injection?" },
       // 6 Oct 2026: elbow cross-check, approved by Chandra (S1, S12): worded as the forearm's, so asked once.
@@ -1576,8 +1581,10 @@ export const EXTRA_REGIONS = {
         text: "Is there a swelling at the point of your elbow that is red, warm, or has a cut or graze over it?" },
       { id: "erf-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
         text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
-      { id: "erf-nerve", tier: "urgent", group: "handweak", why: "Nerve weakness (ulnar, radial or posterior interosseous nerve) needs medical review",
-        text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist or straighten your fingers?" },
+      // + the "OK" sign (form 26, 19 Oct 2026): an anterior interosseous nerve
+      // palsy at the elbow was asked only after an injury (injury screen I8).
+      { id: "erf-nerve", tier: "urgent", group: "handweak", why: "Nerve weakness (ulnar, radial, posterior or anterior interosseous nerve) needs medical review",
+        text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, can you not lift your wrist or straighten your fingers, or can you not make an “OK” sign with your thumb and index finger?" },
       { id: "erf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
       { id: "erf-child", ages: ["u5", "u18"], tier: "urgent", why: "Possible growth plate injury or osteochondritis dissecans; needs imaging",
@@ -1598,7 +1605,8 @@ export const EXTRA_REGIONS = {
         { id: "gradual", label: "Gradually, no clear reason" },
         { id: "grip", label: "After a lot of gripping, lifting, or tool or computer use" },
         { id: "throw", label: "After throwing, or a racquet or golf swing" },
-        { id: "fall", label: "After a fall onto the hand or elbow" },
+        // "or a knock" (form 8, 19 Oct 2026): a blow had no start answer.
+        { id: "fall", label: "After a fall onto the hand or elbow, or a knock to the elbow" },
         { id: "pop", label: "I felt a pop while lifting or pulling" },
         { id: "swell", label: "Sudden pain and swelling with no injury" },
         // 6 Oct 2026 (elbow cross-check N1): the fracture rehabilitation card.
@@ -1631,8 +1639,10 @@ export const EXTRA_REGIONS = {
       { id: "E3", text: "Which of these do you notice in your hand? Tick all that apply.",
         askIf: ({ draw, all }) => !draw || draw.has("wrist") || [].concat(all.painQuality || []).includes("tingling"),
         // Early when there is tingling (or the drawing is unknown): it
-        // separates the nerve from the tendons.
-        priority: ({ draw, all }) => !draw || [].concat(all.painQuality || []).includes("tingling"),
+        // separates the nerve from the tendons. Strength 2 with tingling (19 Oct
+        // 2026): the elbow document's new triceps card made "Where is the
+        // pain?" outrank it.
+        priority: ({ draw, all }) => ([].concat(all.painQuality || []).includes("tingling") ? 2 : !draw),
         options: [
           { id: "little", label: "Tingling or numbness in the little and ring fingers" },
           { id: "thumb", label: "Tingling or numbness in the thumb, index, and middle fingers", special: "medianhand" },
@@ -1642,7 +1652,9 @@ export const EXTRA_REGIONS = {
         ]},
       { id: "E4", text: "If you keep your elbow fully bent for a minute (like holding a phone to your ear), what happens?",
         askIf: ({ ra }) => [].concat(ra.E3 || []).includes("little"),
-        priority: () => true,
+        // Strength 2 (19 Oct 2026): the new triceps card made "Where is the
+        // pain?" outrank this deciding nerve test after little-finger tingling.
+        priority: () => 2,
         options: [
           { id: "tingle", label: "Tingling comes on in the little and ring fingers" },
           { id: "ache", label: "The elbow aches, but no tingling" },
@@ -1722,8 +1734,10 @@ export const EXTRA_REGIONS = {
         text: "Along with the arm symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "frf-cellulitis", sameDay: true, tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
         text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
-      { id: "frf-nerve", tier: "urgent", why: "Nerve weakness (radial or anterior interosseous nerve) needs medical review",
-        text: "Is your hand becoming weaker, can you not lift your wrist, or can you not make an “OK” sign with your thumb and index finger?" },
+      // "or straighten your fingers" (elbow document form 24, 19 Oct 2026): a
+      // posterior interosseous nerve palsy drops the fingers, not the wrist.
+      { id: "frf-nerve", tier: "urgent", why: "Nerve weakness (radial, posterior or anterior interosseous nerve) needs medical review",
+        text: "Is your hand becoming weaker, can you not lift your wrist or straighten your fingers, or can you not make an “OK” sign with your thumb and index finger?" },
       { id: "frf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy (buttons, writing), or has your walking become unsteady?" },
       { id: "frf-pancoast", tier: "urgent", group: "pancoast", why: "Possible tumour at the top of the lung (Pancoast)",

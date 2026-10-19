@@ -8,13 +8,16 @@ ages: 18-29, 30-49, 50-64, o64
 # 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); signed by Chandra Matla, 4 Oct 2026.
 # 6 Oct 2026: elbow cross-check, approved by Chandra (review/elbow-crosscheck.html).
 # S11, C3, W1: 16 and over, little-finger tingling +1, no "unstable", clinic notes.
+# 19 Oct 2026: "PhysioChandra Elbow Conditions ALL.docx" (signed v1.0 by Chandra, 19 Oct 2026; applied with Chandra's approval the same day), form 10: the throwing start 2 to 1
+# (one opening answer must not lead), losing speed 2 to 1 (the form calls it
+# weak).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
   "Pain on the inside of the elbow as my arm goes back to throw": 3
   "I felt a pop on the inside of the elbow": 3
-  "Losing speed or accuracy": 2
-  "After throwing, or a racquet or golf swing": 2
+  "Losing speed or accuracy": 1
+  "After throwing, or a racquet or golf swing": 1
   "Throwing, a golf swing, or a racquet shot": 2
   "Inner elbow, on the bony bump on the little-finger side": 2
   "Gripping, shaking hands, or lifting a mug or kettle": -1
@@ -35,6 +38,7 @@ The ligament on the inner side of the elbow takes a large strain each time the a
 - Rest from throwing while it is painful; keep the rest of the body training
 - Keep the elbow moving gently
 - Return to throwing gradually, with fewer and softer throws at first
+- Avoid carrying heavy bags with the arm hanging straight at your side
 
 ## seePhysioIf
 - Throwing still hurts after 2 weeks of rest
@@ -50,3 +54,4 @@ The ligament on the inner side of the elbow takes a large strain each time the a
 ## clinicNotes
 - Moving valgus stress test: sensitivity 100% (17 of 17), specificity 75% (3 of 4), n = 21 (O'Driscoll 2005): a small sample. Ulnar nerve symptoms often coexist. Differential: posteromedial impingement or valgus extension overload.
 - Under 16: medial epicondyle apophysitis or avulsion (little leaguer's elbow), not the ligament; a pop means a same-day X-ray (erf-child).
+- Form 10 (19 Oct 2026): valgus stress at 0 and 30 degrees, milking manoeuvre, side-to-side laxity and end-feel, grade I-III; MRI/MRA or stress ultrasound if a complete tear is suspected; surgical opinion for high-demand throwers with complete tears; KJOC, PSFS. Partial tears 6-12 weeks; reconstruction 9-12 months to throwing. An inner ligament injury from a fall or dislocation: elbow-fracture (Cain 2003; Hsu 2012; ACOEM 2013).

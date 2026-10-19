@@ -259,9 +259,11 @@ export const ELBOW_INJURY = [
   // Asked after a pop only: it does not fit a fall or a blow. Not under 5 (I12).
   // Same day (Chandra, 25 Sep 2026): a sudden forced effort, a pop, click or
   // tearing feeling, and a change in the shape of the biceps.
-  { id: 'I5', text: 'Did you feel a pop, click, or tearing at the front of the elbow during a sudden, forceful lift or pull, and now have bruising there or a change in the shape of your biceps?',
+  // The back of the elbow too (elbow document form 4, 19 Oct 2026): a torn
+  // triceps after a forced push was not asked at all.
+  { id: 'I5', text: 'Did you feel a pop, click, or tearing at the front or back of the elbow during a sudden, forceful lift, pull or push, and now have bruising there, a change in the shape of your biceps, or a dent just above the point of the elbow?',
     askIf: (a, age) => a.I1 === 'pop' && age !== 'u5', sameDay: true,
-    options: yesNo('urgent', 'Possible torn biceps tendon at the elbow: repair works best within about 2 to 3 weeks, so a doctor should check it the same day') },
+    options: yesNo('urgent', 'Possible torn biceps or triceps tendon at the elbow: repair works best within about 2 to 3 weeks, so a doctor should check it the same day') },
   // The elbow extension test (Appelboam 2008): a possible fracture, so same day.
   { id: 'I6', text: 'After the fall or blow, can you fully straighten your elbow?',
     askIf: (a) => a.I1 === 'fall' || a.I1 === 'blow', sameDay: true, options: [
@@ -278,8 +280,14 @@ export const ELBOW_INJURY = [
   { id: 'I11', text: 'Is the elbow swollen, or is your child not using the arm?',
     askIf: (a, age) => (a.I1 === 'fall' || a.I1 === 'blow') && (age === 'u5' || age === 'u18'), sameDay: true,
     options: yesNo('urgent', 'In children, elbow fractures are common and the straightening test can miss them: an X-ray is needed') },
+  // "Already put back and X-rayed" (elbow document form 13, 19 Oct 2026): a
+  // patient treated at hospital was being told to get an X-ray again.
   { id: 'I9', text: 'Did your elbow go out of place, even if it went back by itself?', sameDay: true,
-    options: yesNo('urgent', 'An elbow that has been out of place can have a fracture with it: an X-ray is needed') },
+    options: [
+      { id: 'yes', label: 'Yes', route: 'urgent', why: 'An elbow that has been out of place can have a fracture with it: an X-ray is needed' },
+      { id: 'xrayed', label: 'Yes, and it was put back and X-rayed at hospital' },
+      { id: 'no', label: 'No' },
+    ]},
   // Worded as the upper arm's I5 and the forearm's I6, so asked once.
   { id: 'I7', text: 'Since the injury, can you not lift your wrist or straighten your fingers?', sameDay: true,
     options: yesNo('urgent', 'Possible radial or posterior interosseous nerve injury, often with a fracture or dislocation') },

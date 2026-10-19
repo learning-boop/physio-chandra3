@@ -158,7 +158,7 @@ Ask only if: How did it start? is “After throwing, or a racquet or golf swing�
 - Pectoralis minor and serratus posterior superior → inner arm to the ring and little fingers | Muscle trigger point referral | C8 nerve root, ulnar nerve, heart
 - Elbow joint (capitellum, radial head, olecranon) → around the joint, with catching, locking, or loss of straightening | Elbow joint problem (arthritis, loose body, osteochondritis in young throwers) | Tendon pain around the elbow
 - Inner elbow ligament (UCL) → inner elbow during the late throwing phase | Ligament strain in throwers (moving valgus stress test) | Golfer's elbow, ulnar nerve
-- Upper arm and forearm → elbow (muscle strains, nerve and circulation causes) | Check the arm file | Heart, clot, and Pancoast red flags live in the arm file
+- Upper arm and forearm → elbow (muscle strains, nerve and circulation causes) | Check the arm file | Clot and Pancoast red flags live in the arm file; the heart question is asked on the elbow too since 19 Oct 2026 (erf-cardiac, worded as the arm's)
 
 ## test patients
 CASE: Test patient 1
@@ -196,3 +196,12 @@ Drawing: Whole left elbow after a fall
 Answers: Age 16 to 29 · After a fall onto the hand or elbow · Less than 2 weeks; Injury screen: I1 “Yes, I fell onto my hand or elbow”; I2 to I5 No; I6 “No, it will not straighten fully”
 Flags: Injury screen I6 (cannot straighten the elbow)
 Expect: top condition = None; see a doctor first; must not show = Results + booking without the physician-first message; route = Physician first
+
+## changes 19 Oct 2026 ("PhysioChandra Elbow Conditions ALL.docx", 28 forms, signed v1.0 by Chandra 19 Oct 2026; applied with Chandra's approval the same day)
+Full mapping, choices and open items: content/reference/elbow-conditions.md.
+- New red flag erf-cardiac (911, group "cardiac", the upper arm's wording): an elbow-only drawing was never asked the heart question.
+- erf-nerve also asks the "OK" sign (anterior interosseous nerve); the forearm's frf-nerve also asks "or straighten your fingers" (posterior interosseous nerve). Both stay doctor first.
+- Start answer "After a fall onto the hand or elbow, or a knock to the elbow" (id `fall` unchanged).
+- Injury screen: I5 asks the front or back of the elbow (torn biceps or triceps, same day); I9 has "Yes, and it was put back and X-rayed at hospital" (no route).
+- E3 priority 2 with tingling, E4 priority 2: the new triceps card made "Where is the pain?" outrank the nerve questions.
+- New cards elbow-triceps (the back-of-elbow card is now bursitis only), elbow-lcl, elbow-contusion; twelve cards updated. Test patients EC1 to EC8.

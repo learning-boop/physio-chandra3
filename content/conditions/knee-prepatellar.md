@@ -36,7 +36,7 @@ A small fluid sac sits in front of the kneecap to let the skin glide over it. A 
 - Keep the knee moving normally
 
 ## seePhysioIf
-- It becomes hot, red, or very tender, there is a cut or graze over it, the redness is spreading, or you feel unwell: see a doctor the same day
+- It becomes hot, red, or very tender, there is a cut or graze over it, the redness is spreading, or you feel unwell: see a doctor the same day; with a fever or feeling very unwell, go to the emergency department now
 - The whole knee is swollen and it hurts to bend, rather than a lump on the front: see a doctor
 - The swelling has not gone down after 2 to 3 weeks
 - It keeps coming back with work

@@ -299,7 +299,7 @@ export const SIGNS = {
   // Elbow
   'erf-bursa': 'a swelling at the point of the elbow that is red, warm or has a cut or graze over it',
   'erf-gout': 'a joint that became suddenly hot, swollen and very painful overnight, with gout or pseudogout before',
-  'erf-nerve': 'a hand getting weaker or thinner, finger numbness all the time, or a wrist or fingers you cannot straighten',
+  'erf-nerve': 'a hand getting weaker or thinner, finger numbness all the time, a wrist or fingers you cannot straighten, or an "OK" sign you cannot make',
   'erf-cast': 'a cast, splint or bandage on the arm that feels more and more tight and painful',
   'erf-cellulitis': 'spreading redness, a red streak up the arm, or a hot swollen area, with a fever',
   'erf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
@@ -307,7 +307,7 @@ export const SIGNS = {
   // Forearm
   'frf-cast': 'a cast, splint or bandage on the arm that feels more and more tight and painful',
   'frf-cellulitis': 'spreading redness, a red streak up the arm, or a hot swollen area, with a fever',
-  'frf-nerve': 'a hand becoming weaker, a wrist you cannot lift, or an "OK" sign you cannot make',
+  'frf-nerve': 'a hand becoming weaker, a wrist or fingers you cannot straighten, or an "OK" sign you cannot make',
   'frf-myelo': 'both hands numb or clumsy (buttons, writing), or walking that has become unsteady',
   'frf-shingles': 'a band of burning pain down the forearm, with a rash or blisters in the same strip',
   'frf-pancoast': 'pain down the little-finger side of the forearm with a cough that will not go away, or a drooping eyelid, if you smoke or used to',
@@ -471,7 +471,7 @@ export const SHORT = {
   'erf-pta': 'sudden pain then weak muscles',
   'frf-cast': 'a tight cast',
   'frf-cellulitis': 'spreading redness with a fever',
-  'frf-nerve': 'a weaker hand or a wrist you cannot lift',
+  'frf-nerve': 'a weaker hand, or a wrist or fingers you cannot lift',
   'frf-myelo': 'both hands numb or clumsy',
   'frf-shingles': 'a band of burning pain with a rash',
   'frf-pancoast': 'a lasting cough in a smoker',

@@ -8,6 +8,8 @@ ages: 18-29, 30-49, 50-64, o64
 # Pointers from content/regions/elbow.md, 25 Sep 2026.
 # 6 Oct 2026: elbow cross-check, approved by Chandra (review/elbow-crosscheck.html).
 # S10, S11, C5, W3, W6: 16 and over, gripping 2, location negatives, doctor line, clinic notes.
+# 19 Oct 2026: "PhysioChandra Elbow Conditions ALL.docx" (signed v1.0 by Chandra, 19 Oct 2026; applied with Chandra's approval the same day), form 2: a pop on the inside of the
+# elbow -2 (the ligament card), using the arm +1, thumb-side tingling -1.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -27,19 +29,24 @@ pointers:
   "Back of the elbow, at the point": -2
   "30 to 49": 1
   "50 to 64": 1
+  "I felt a pop on the inside of the elbow": -2
+  "Using my arm and hand": 1
+  "Tingling or numbness in the thumb, index, and middle fingers": -1
 ---
 
 ## blurb
-The mirror image of tennis elbow: overload of the tendons that flex the wrist and grip, felt at the inner elbow — common with golf, throwing, climbing, and heavy carrying.
+The inner-elbow version of tennis elbow, and much less common: overload of the tendons that bend the wrist and grip, felt at the inner elbow. Common with golf, throwing, climbing, heavy carrying, and trades such as carpentry or plumbing.
 
 ## noticed
 - Ache or sharp pain at the inner elbow
 - Worse with gripping, wringing, or lifting palm-up
 - May radiate a little down the inner forearm
 - Early on only during activity; later can ache at rest
+- Tender just in front of and below the inner bony bump
+- Sometimes tingling into the ring and little fingers, if the nearby nerve is irritated
 
 ## homeCare
-- Moderate the clearly provoking loads for a while
+- For a couple of weeks, lift with the palm down and the elbow bent, and avoid forceful wringing or screwdriver work
 - Warm up the forearm before sport or heavy tasks
 - Progressive forearm-flexor strengthening as symptoms allow
 
@@ -59,3 +66,4 @@ The mirror image of tennis elbow: overload of the tendons that flex the wrist an
 - Diagnosis: pain on resisted wrist flexion and pronation; tender 5-10 mm distal and anterior to the medial epicondyle; peak 4th to 6th decade (AIM manual pp. 316-317). No physiotherapy trials specific to medial pain; care follows the lateral evidence; eccentric not superior (AIM p. 317).
 - Differentials: UCL sprain (throwers), ulnar neuropathy (often coexists), C8-T1 radiculopathy. Under 16: medial epicondyle apophysitis or avulsion (little leaguer's elbow).
 - Injections and PRP are physician decisions; the golfer's elbow protocol calls PRP "promising", but there is no strong medial evidence. Protocol figures (10-20% of elbow tendinopathies, surgery 5-10%) not checked against primary sources.
+- Form 2 (19 Oct 2026): resisted wrist flexion with the elbow extended, resisted pronation, grip; valgus stress, milking manoeuvre and moving valgus stress test to rule out the UCL; Tinel's and the elbow flexion test; PRTEE (adapted), PSFS; management extrapolated from the lateral evidence (ACOEM 2013; Amin 2015). Muscle imbalance (form 9): grip and wrist strength both sides, forearm length and motor control as treatment targets.

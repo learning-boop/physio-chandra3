@@ -3,11 +3,16 @@ region: elbow
 id: radialtunnel
 name: Radial tunnel syndrome
 clin: Posterior interosseous nerve irritation at the radial tunnel
+# From age 5 (19 Oct 2026, elbow conditions document review): like the other
+# arm cards; no booking or nerve-entrapment card for a child under 5.
+ages: u18, 18-29, 30-49, 50-64, o64
 # DRAFT patient text written 25 Sep 2026 from content/regions/elbow.md — not yet reviewed.
 # Patient text shared with forearm-radialtunnel.md: keep the two in step.
 # 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); signed by Chandra Matla, 4 Oct 2026.
 # 6 Oct 2026: elbow cross-check, approved by Chandra (review/elbow-crosscheck.html).
 # S6: posterior interosseous nerve line, the same in both copies.
+# 19 Oct 2026: "PhysioChandra Elbow Conditions ALL.docx" (signed v1.0 by Chandra, 19 Oct 2026; applied with Chandra's approval the same day), forms 23 and 24: a 4 to 6 week doctor
+# line; the same patient text in the elbow and forearm copies.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -35,10 +40,12 @@ A nerve that runs through the muscles at the top of the forearm can be squeezed 
 - Ease off the repeated twisting and gripping that bring it on
 - Take short breaks and change hand position during tool or computer work
 - Keep the arm moving gently rather than resting it completely
+- Use tools with a thicker handle, and keep the elbow a little bent when you grip or lift
 
 ## seePhysioIf
 - The ache has not eased after 2 to 3 weeks
 - Tennis elbow treatment has not helped
+- It is not clearly improving after 4 to 6 weeks: see your doctor
 - You cannot fully straighten your fingers at the knuckles, or your wrist or fingers are getting weaker: see a doctor, who may arrange nerve tests
 
 ## physioHelps
@@ -49,3 +56,5 @@ A nerve that runs through the muscles at the top of the forearm can be squeezed 
 
 ## clinicNotes
 - In posterior interosseous nerve palsy the wrist can still lift (drifting to the thumb side) but the fingers cannot straighten at the knuckles; no sensory loss. Radial tunnel: deep ache 3-5 cm below the lateral epicondyle, worse with resisted supination; sensory and motor change rare; often coexists with tennis elbow (AIM manual p. 325; Lucado 2022).
+- Form 23 (19 Oct 2026): tender over the radial tunnel about 4 cm below the lateral epicondyle (vs the epicondyle in lateral elbow pain); resisted supination with the elbow straight; resisted middle-finger extension (also positive in LE); rule of nine; ULNT2b (radial bias); sensation and extensor strength normal; NCS often normal; treat the supinator and ECRB, neural mobilisation; PRTEE, PSFS (Naam 2012; Dang 2009).
+- Posterior interosseous nerve syndrome (form 24): finger drop at the knuckles with the wrist still lifting, no sensory loss: doctor first (erf-nerve, frf-nerve, injury screen I7); no card. Surgical release claims are not used in patient text.

@@ -774,6 +774,11 @@ export function questionValue(q, region, answers) {
   let v = 0
   for (const c of region.conditions) {
     if (!canQualify(c, scores, rem, maxS, unlocks, region, answers)) continue
+    // A card that needs a particular start (an `onset:` gate) is not worth a
+    // question until the start is known (19 Oct 2026). The real flow always
+    // asks the start first; with it blank, the elbow's fall-only cards (bruise,
+    // outer ligament) pulled elbow questions ahead of a forearm line's own.
+    if ((c.gates || {}).requiresOnset && answers.onset === undefined) continue
     v += bestFromQuestion(q, c.id) / maxS[c.id]
   }
   return v

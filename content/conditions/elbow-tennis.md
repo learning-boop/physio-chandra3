@@ -8,10 +8,13 @@ ages: 18-29, 30-49, 50-64, o64
 # Pointers from content/regions/elbow.md, 25 Sep 2026.
 # 6 Oct 2026: elbow cross-check, approved by Chandra (review/elbow-crosscheck.html).
 # S10, S11, C4, W2, W6, N2: 16 and over, location negatives, doctor line, outlook, clinic notes.
+# 19 Oct 2026: "PhysioChandra Elbow Conditions ALL.docx" (signed v1.0 by Chandra, 19 Oct 2026; applied with Chandra's approval the same day), form 1.
+# The gripping start 2 to 1 (one opening answer must not lead and take the
+# forearm's, wrist's or neck's questions); tingling in either nerve area -1.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
-  "After a lot of gripping, lifting, or tool or computer use": 2
+  "After a lot of gripping, lifting, or tool or computer use": 1
   "After throwing, or a racquet or golf swing": 1
   "Outer elbow, on the bony bump on the thumb side": 3
   "Gripping, shaking hands, or lifting a mug or kettle": 3
@@ -26,6 +29,8 @@ pointers:
   "Front of the elbow, in the crease": -2
   "30 to 49": 1
   "50 to 64": 1
+  "Tingling or numbness in the thumb, index, and middle fingers": -1
+  "Tingling or numbness in the little and ring fingers": -1
 ---
 
 ## blurb
@@ -36,11 +41,13 @@ An overload of the tendons that lift the wrist and fingers, felt at the outer el
 - Weakened grip: a full cup or a handshake hurts
 - Tenderness on the outer bony bump
 - Worse with lifting, gripping, twisting
+- Turning a door handle or key can hurt
 
 ## homeCare
 - Temporarily reduce the most aggravating grip loads, but don't stop using the arm entirely
-- Lift with the palm up where possible
-- Gradual strengthening of the forearm helps most people: build it up slowly, keeping any pain mild and settled by the next day
+- Lift with the palm up and the elbow bent where possible
+- Break up long spells of gripping, typing or mouse use
+- Gradual strengthening of the forearm can help many people: build it up slowly, keeping any pain mild and settled by the next day
 - A forearm strap worn during heavy tasks eases pain for some people
 
 ## seePhysioIf
@@ -62,3 +69,7 @@ An overload of the tendons that lift the wrist and fingers, felt at the outer el
 - Physician decisions: corticosteroid injection (BESS strong against; worse at 6 months, Coombes 2013); topical NSAID up to 4 weeks (BESS conditional); PRP (BESS: may be no better than placebo).
 - Differentials (CPG13): C6 radiculopathy, radial tunnel and PIN, radiocapitellar plica or chondromalacia, posterolateral rotatory instability or LCL injury, trigger points (wrist extensors, triceps). Under 16: capitellar OCD (11 to 16) or Panner's (under 10), not tendinopathy.
 - Your tennis elbow protocols differ from current evidence: eccentric as the gold standard (CPG: any loading type, B); shockwave (BESS strong against; AIM manual p. 328 no evidence); no exercise in weeks 0 to 4 (CPG and AIM p. 326: early pain-free isometrics); a brace as standard (CPG D long term); rest and ice (CPG E); imaging after 6 weeks (BESS: only if unsure); recovery figures without a source; numbness or tingling as immediate referral (site: urgent only for progressive weakness or constant numbness).
+- Form 1 (19 Oct 2026): risk factors smoking and a co-existing shoulder problem; Coombes 2015 good / moderate / poor prognosis stratification; cold hyperalgesia (ice test) as a poor-prognosis flag; pain-free grip is the main measure; Thomsen's test; mobilisation with movement (Bisset 2006 BMJ); C4-C7, thoracic and radial nerve neurodynamic screen. The form's "one in three beyond a year" is not used: the card keeps Ikonen 2022 and the AIM figures.
+- Radial head / proximal radioulnar joint (form 15): outer elbow pain mainly with forearm rotation, without grip pain: PRUJ and radial head glides (posterior translation in pronation, anterior in supination), radiohumeral compression, DRUJ and wrist after an old wrist fracture (regional interdependence); MWM into rotation (Magee 2014; O'Driscoll 2000; Hsu 2012). Expert opinion; no patient answer separates it.
+- Upper-limb impairments (form 9): reduced pain-free and maximal grip, wrist and finger extensor, rotator cuff and scapular strength, often on both sides (Alizadehkhaiyat 2007); the motor system is one part of the integrative model (Coombes 2009). Treatment targets, not a separate diagnosis: whole-arm progressive resistance and endurance, forearm length, task and technique advice (Bisset and Vicenzino 2015).
+- Neck (form 28): screen the cervical and thoracic spine in persistent lateral elbow pain (Coombes 2014; Berglund 2008), Wainner cluster when the arm is involved (neck-radic). Patient wording about neck treatment waits for a check against the JOSPT 2022 CPG.

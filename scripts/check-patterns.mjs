@@ -699,8 +699,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const flags = Object.values(REGIONS).flatMap((r) => r.redFlags)
   const byId = Object.fromEntries(flags.map((f) => [f.id, f]))
   const em = flags.filter((f) => f.tier === 'emergency')
-  check('911 split: 47 region flags call 911 (41 + the 4 leg-weakness halves + pregnancy bleeding + a dislocated hip replacement)',
-    em.filter((f) => f.call911).length === 47, em.filter((f) => f.call911).map((f) => f.id))
+  // 48 with the elbow's heart question (elbow conditions document, 19 Oct 2026).
+  check('911 split: 48 region flags call 911 (41 + the 4 leg-weakness halves + pregnancy bleeding + a dislocated hip replacement + the elbow heart question)',
+    em.filter((f) => f.call911).length === 48, em.filter((f) => f.call911).map((f) => f.id))
   // 49: the base of the neck's recent-crash flag (ctj.md:34) is the neck injury screen, not a flag;
   // 54 since the compartment syndrome document added the ankle, foot, wrist
   // and hand compartment questions and the calf rhabdomyolysis one (2 Oct 2026).

@@ -42,3 +42,6 @@ The muscles that grip and move the wrist and fingers fill most of the forearm. L
 - A physiotherapist can check your forearm and explain why the muscles are aching.
 - Advice on breaks, grip and workstation set-up, plus gradual strengthening, can help ease the ache.
 - You get a plan to build longer or heavier tasks back up step by step.
+
+## clinicNotes
+- Elbow document forms 6 and 9 (19 Oct 2026): an acute pronator teres or flexor-pronator strain after a sudden effort: pain on resisted pronation and on stretch, no tingling (with thumb-side tingling, see pronator syndrome). Fatigue, loss of grip power and forearm tightness without tendon-point pain: test grip and wrist strength on both sides, forearm length and motor control during tasks, as treatment targets rather than a diagnosis; PRTEE or PSFS.

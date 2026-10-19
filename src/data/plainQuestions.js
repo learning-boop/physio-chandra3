@@ -302,7 +302,7 @@ export const PLAIN_SHORT = {
   'erf-cellulitis': 'Spreading redness, a red streak or a hot swollen area, with a fever',
   'erf-bursa': 'A red or warm swelling on the elbow point, or a cut over it',
   'erf-gout': 'A joint suddenly hot and swollen overnight, with past gout',
-  'erf-nerve': 'A weaker hand, a thinning thumb muscle, constant numbness, or a dropped wrist',
+  'erf-nerve': 'A weaker hand, thinning thumb muscle, constant numbness, dropped wrist, or no OK sign',
   'erf-myelo': 'Both hands numb or clumsy, or unsteady walking',
   'erf-child': 'Under 16, with elbow pain from throwing, or catching or locking',
   'erf-pta': 'Sudden bad pain, then a weak arm',
@@ -341,12 +341,13 @@ export const PLAIN_SHORT = {
   'frf-necfasc': 'A hot red area spreading fast, with bad pain or feeling unwell',
   'frf-cardiac': 'Left arm pain on brisk walking, or with chest tightness or breathlessness',
   'frf-stroke': 'A drooping face, one weak or numb side, or trouble speaking',
-  'frf-nerve': 'A weaker hand, a dropped wrist, or cannot make an OK sign',
+  'frf-nerve': 'A weaker hand, a dropped wrist or fingers, or cannot make an OK sign',
   'frf-pancoast': 'A smoker with little-finger-side arm pain and a cough or droopy eyelid',
   'frf-stress': 'A young gymnast with pinpoint forearm bone pain',
   'frf-shingles': 'A band of burning pain with a rash',
   // Upper arm
   'arf-cardiac': 'Arm pain on brisk walking, or with chest tightness, breathlessness or jaw pain',
+  'erf-cardiac': 'Arm pain on brisk walking, or with chest tightness, breathlessness or jaw pain',
   'arf-clotlung': 'A suddenly swollen, bluish arm, with breathlessness or chest pain',
   'arf-clot': 'A whole arm swollen, heavy or bluish over a day or two',
   'arf-pancoast': 'A smoker with arm pain to the little finger, and cough or droopy eyelid',
@@ -429,7 +430,7 @@ export const MULTI_SHORT = {
   ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout', 'hnd-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
   ...fam(['rf-aaa', 'hpf-aaa', 'jrf-aaa', 'trf-aorta', 'jrf-aorta', 'crf-aorta'], 'Sudden tearing or very bad back or tummy pain, or feeling faint'),
-  ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung', 'mrf-cardiac'], 'Chest tightness, cold sweat, arm or jaw pain on brisk walking, or sudden breathlessness'),
+  ...fam(['trf-cardiac', 'rf-cardiac1', 'nrf-cardiac', 'arf-cardiac', 'frf-cardiac', 'erf-cardiac', 'trf-lung', 'srf-lung', 'crf-cardiac', 'crf-lung', 'mrf-cardiac'], 'Chest tightness, cold sweat, arm or jaw pain on brisk walking, or sudden breathlessness'),
   ...fam(['rf-osteo', 'hpf-nofall', 'trf-osteo', 'crf-osteo', 'jrf-osteo', 'prf-osteo', 'xrf-osteo'], 'Sudden pain after a small strain or slip, with weak bones or older age'),
   ...fam(['kf-sufe', 'kf-perthes', 'hpf-sufe', 'tgf-sufe'], 'A child or teenager limping, with hip, thigh or knee pain'),
   ...fam(['kf-cancer', 'af-cancer', 'lgf-cancer', 'tgf-cancer', 'hpf-cancer'], 'Past cancer, a growing lump, or deep night pain'),
@@ -540,6 +541,7 @@ export const PLAIN_Q = {
   'frf-stroke': 'Along with the arm symptoms, has one of these happened suddenly?',
   'frf-nerve': 'Do any of these fit you?',
   'arf-cardiac': 'Do any of these fit you?',
+  'erf-cardiac': 'Do any of these fit you?',
   'trf-cardiac': 'Do any of these fit you?',
   'trf-fracture': 'Did this start in the last few days after one of these?',
   'trf-infection': 'Do any of these fit you?',
@@ -1194,6 +1196,7 @@ export const TICKS = {
     { key: 'thin', text: 'The muscle at the base of your thumb, or beside it, getting thinner', tell: 'the muscle at the base of my thumb is getting thinner' },
     { key: 'numb', text: 'Finger numbness that is there all the time', tell: 'my fingers are numb all the time' },
     { key: 'wrist', text: 'You cannot lift your wrist or straighten your fingers', tell: 'I cannot lift my wrist or straighten my fingers' },
+    { key: 'ok', text: 'You cannot make an "OK" sign with your thumb and first finger', tell: 'I cannot make an OK sign with my thumb and finger' },
   ],
   'erf-myelo': [
     { key: 'hands', text: 'Both hands numb or clumsy, like with buttons or writing', tell: 'both my hands are numb or clumsy' },
@@ -1239,7 +1242,7 @@ export const TICKS = {
     { key: 'weaker', text: 'Your hand getting weaker', tell: 'my hand is getting weaker' },
     { key: 'thin', text: 'The muscle at the base of your thumb, or beside it, getting thinner', tell: 'the muscle at the base of my thumb is getting thinner' },
     { key: 'numb', text: 'Finger numbness that is there all the time', tell: 'my fingers are numb all the time' },
-    { key: 'wrist', text: 'You cannot lift your wrist', tell: 'I cannot lift my wrist' },
+    { key: 'wrist', text: 'You cannot lift your wrist or straighten your fingers', tell: 'I cannot lift my wrist or straighten my fingers' },
   ],
   'wrf-myelo': [
     { key: 'hands', text: 'Both hands numb or clumsy most of the day, not only at night', tell: 'both my hands are numb or clumsy most of the day' },
@@ -1341,6 +1344,12 @@ export const TICKS = {
   ],
   // ── Upper arm ──
   'arf-cardiac': [
+    { key: 'effort', text: 'Arm pain (often inner left) on *brisk walking or stairs*, not from moving it', tell: 'my arm hurts when I walk fast or climb stairs' },
+    { key: 'chest', text: 'With the pain: *chest* pressure or tightness, or jaw pain', tell: 'I have chest tightness or jaw pain with it' },
+    { key: 'breath', text: 'With the pain: *unusually* short of breath, or a cold sweat', tell: 'I am short of breath or sweating with it' },
+  ],
+  // The elbow's heart question (19 Oct 2026) is the upper arm's, word for word.
+  'erf-cardiac': [
     { key: 'effort', text: 'Arm pain (often inner left) on *brisk walking or stairs*, not from moving it', tell: 'my arm hurts when I walk fast or climb stairs' },
     { key: 'chest', text: 'With the pain: *chest* pressure or tightness, or jaw pain', tell: 'I have chest tightness or jaw pain with it' },
     { key: 'breath', text: 'With the pain: *unusually* short of breath, or a cold sweat', tell: 'I am short of breath or sweating with it' },
@@ -1624,7 +1633,7 @@ export const COVERED = {
   'pc-urinary': { by: ['rf-kidney', 'hpf-kidney', 'trf-kidney', 'jrf-kidney', 'prf-kidney'] },
   'rf-aaa': { by: ['hpf-aaa', 'jrf-aaa'] },
   // An area's own heart question asks these signs (the page leaves pc-cardiac out too).
-  'pc-cardiac': { by: ['trf-cardiac', 'nrf-cardiac', 'rf-cardiac1', 'arf-cardiac', 'frf-cardiac', 'crf-cardiac', 'mrf-cardiac'] },
+  'pc-cardiac': { by: ['trf-cardiac', 'nrf-cardiac', 'rf-cardiac1', 'arf-cardiac', 'frf-cardiac', 'erf-cardiac', 'crf-cardiac', 'mrf-cardiac'] },
   // An area's own stroke question asks these signs (the page leaves pc-stroke out too).
   'pc-stroke': { by: ['nrf-stroke', 'hrf-stroke', 'arf-stroke', 'frf-stroke', 'wrf-stroke', 'hnd-stroke'] },
   'jrf-aaa': { by: ['hpf-aaa'] },

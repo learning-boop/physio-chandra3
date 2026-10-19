@@ -38,6 +38,7 @@ content/
     osteopenia.md   (low bone density as context: ca-osteopenia, the optional risk questions and the ask-your-doctor clarifier, the bone-loading results panel, fracture questions widened to "low bone density", src/data/osteopenia.js)
     osteomalacia.md   (soft bones and rickets: osteomalacia's clues folded into the calcium screen pc-calcium, the child question pc-rickets, ca-osteomalacia and its recovery panel, the stress-fracture, widespread-pain and osteoporosis cross-links, src/data/osteomalacia.js)
     osteogenesis-imperfecta.md   (diagnosed OI as context: the optional tick on "A little about you", fracture-first and OI red flags first in every area, the optional details and the results panel in src/data/oi.js)
+    elbow-conditions.md   (the 28 elbow condition forms, 19 Oct 2026: which card each form became, the safety changes, the choices made against the site's rules, and what is still open)
     shoulder-conditions.md   (the 26 shoulder condition forms, 19 Oct 2026: which card each form became, the choices made against the site's rules, and what is still open)
     diabetes.md   (diabetes as context: the question on "A little about you", its red flags first, the doctor-first nerve screen without it, the details and burden tier, the rank lift and the results panel in src/data/diabetes.js)
 ```
@@ -76,7 +77,7 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Head | `head` | Head assessment (+ Cervicogenic Headache 1 document, D2 and D3; + Concussion document, the head injury screen, D8 and D9) | 14 |
 | 11 || Shoulder | `shoulder` | Shoulder assessment (cross-checked against the CPGs, AIM manual and Chandra's protocols, 5 Oct 2026; + the 26-form "PhysioChandra Shoulder Conditions.docx", v1.0, 19 Oct 2026: S1 SC joint answer, S5 one answer, S9 winging tick, injury screen I8 and I9, five new cards, reasoning in reference/shoulder-conditions.md) | 27 |
 | Upper arm | `arm` | Upper arm assessment | 5 |
-| Elbow | `elbow` | Elbow assessment | 6 |
+| Elbow | `elbow` | Elbow assessment (+ the 28-form "PhysioChandra Elbow Conditions ALL.docx", v1.0, 19 Oct 2026: heart question erf-cardiac, OK sign and finger drop, I5 front or back, I9 already X-rayed, three new cards, reasoning in reference/elbow-conditions.md) | 23 |
 | Forearm | `forearm` | Forearm assessment | 5 |
 | Wrist | `wrist` | Wrist assessment (+ CRPS document, W9) | 8 |
 | Hand & fingers | `hand` | Hand and fingers assessment (+ CRPS document, H9; + Dupuytren's document, H2) | 8 |
