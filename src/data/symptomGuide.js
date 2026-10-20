@@ -55,6 +55,12 @@ export const REGIONS = {
         text:"Along with the leg symptoms, have your hands become clumsy (buttons, writing), your walking unsteady or your legs stiff, or do you have neck pain as well?"},
       {id:"rf-footdrop", tier:"urgent", why:"Nerve weakness (foot drop) needs medical review",
         text:"Is your foot slapping down or your toes catching when you walk, even if it is not getting worse?"},
+      // After back surgery (clinic case LB-01; Chandra's sign-off, 20 Oct 2026):
+      // a new or returning leg pain, or a wound problem, in the first year is
+      // the surgeon's to check (recurrent disc, nerve root scarring, infection).
+      // Doctor first, no booking until then. Lower back only for now.
+      {id:"rf-postop", tier:"urgent", noBooking: true, why:"After back surgery, this needs your surgeon's check: please contact their office, or your family doctor, in the next day or two",
+        text:"Have you had an operation on your back in the last year, and since then had a new or returning pain, tingling or numbness going into a leg, or a red, leaking wound or a fever?"},
       {id:"rf-kidney", tier:"urgent", group:"kidney", why:"Possible kidney stone or kidney infection",
         text:"Does the pain come in waves from your side to your groin, or come with a fever, burning when you pass urine, or blood in your urine?"},
       {id:"rf-spondy", ages:["u5", "u18", "18-29"], tier:"urgent", why:"Possible stress fracture of the spine (spondylolysis); needs imaging",

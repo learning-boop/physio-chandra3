@@ -33,8 +33,8 @@ const as = (v) => (Array.isArray(v) ? v : v === undefined || v === null ? [] : [
 const has = (v, id) => as(v).includes(id)
 
 /* Safety-check ids whose YES makes neurodynamic testing a later priority:
-   cauda equina, rapidly worsening or both-leg weakness, foot drop, cord signs. */
-const LEVEL_ZERO_FLAGS = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'rf-footdrop', 'rf-myelo', 'nrf-myelo', 'nrf-cord']
+   cauda equina, rapidly worsening or both-leg weakness, foot drop, cord signs, new or returning leg pain after back surgery. */
+const LEVEL_ZERO_FLAGS = ['rf-saddle', 'rf-bladder', 'rf-sexual', 'rf-legs', 'rf-footdrop', 'rf-myelo', 'rf-postop', 'nrf-myelo', 'nrf-cord']
 
 /** Is there a nerve picture at all worth a neurodynamic plan? */
 function nervePicture(answers, referral) {

@@ -1762,8 +1762,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
     shoulderHurt: real('shoulder', 'shoulder', UNI, '30-49', 'male', 'fall'),
   }
   const ms = Object.entries(more).map(([k, v]) => k + ' ' + v.before.length + '→' + v.rows.length).join('; ')
+  // The lower back has 5: the after-surgery question stands on its own (Chandra's sign-off, 20 Oct 2026).
   check('Smart flow: back, neck and shoulder pages shrink too',
-    ['lowback', 'upperback', 'tlj'].every((k) => more[k].rows.length === 4) && more.neck.rows.length === 3 && more.shoulder.rows.length === 3 &&
+    more.lowback.rows.length === 5 && ['upperback', 'tlj'].every((k) => more[k].rows.length === 4) && more.neck.rows.length === 3 && more.shoulder.rows.length === 3 &&
     Object.values(more).every((v) => v.rows.length < v.before.length), ms)
   const ids2 = (v) => v.rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id]))
   check('Smart flow: no back, neck or shoulder red flag is lost; after a shoulder injury only the "no injury" Parsonage-Turner question is skipped',

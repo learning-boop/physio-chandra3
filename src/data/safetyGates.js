@@ -67,6 +67,7 @@ export const GATES = {
     { id: 'lowback-infection', title: 'Signs of infection or another medical cause', members: ['rf-infection', 'sc-systemic'] },
     { id: 'lowback-organ', title: 'Signs coming from inside the body', members: ['rf-kidney', 'pc-urinary', 'rf-pelvic', 'rf-aaa-slow'] },
     { id: 'lowback-nerve', title: 'Changes in feeling or strength', members: ['rf-footdrop', 'rf-myelo', 'sc-neuro'] },
+    { id: 'lowback-postop', title: 'Signs of a problem after back surgery', members: ['rf-postop'] },
   ],
   // Mid back and front of the chest (zone type upperback).
   upperback: [
@@ -232,6 +233,7 @@ export const SIGNS = {
   'rf-aaa-slow': 'over 50 with smoking, high blood pressure, diabetes or artery disease, and a deep, constant ache that does not change with movement, or a pulsing in your tummy',
   'rf-footdrop': 'your foot slapping down or your toes catching when you walk',
   'rf-myelo': 'clumsy hands, unsteady walking or stiff legs, or neck pain with the leg symptoms',
+  'rf-postop': 'back surgery in the last year, with new or returning leg pain, or a red or leaking wound',
   // Mid back
   'trf-osteo': 'pain that started suddenly after a minor strain, cough, lift or a fall from standing height, if you are over 50, have low bone density or take long-term steroid tablets',
   'trf-cancer': 'a past cancer, with this new mid-back pain',
@@ -411,6 +413,7 @@ export const SHORT = {
   'rf-aaa-slow': 'a constant deep ache or a pulsing tummy (over 50)',
   'rf-footdrop': 'the foot slapping down',
   'rf-myelo': 'clumsy hands or unsteady walking',
+  'rf-postop': 'new leg pain after back surgery',
   'trf-osteo': 'sudden pain after a small strain (low bone density, steroids or over 50)',
   'trf-cancer': 'a past cancer',
   'trf-infection': 'a fever or a weak immune system',
@@ -588,7 +591,7 @@ const THEME_OF_SUFFIX = {
   circulation: 'circulation', skin: 'circulation', surgery: 'circulation',
   infection: 'infection', flare: 'infection',
   nerve: 'nerve', cord: 'nerve', arm: 'nerve',
-  bone: 'bone', organ: 'organ', medical: 'medical', bowel: 'bowel', injury: 'injury', pattern: 'headache',
+  bone: 'bone', organ: 'organ', postop: 'postop', medical: 'medical', bowel: 'bowel', injury: 'injury', pattern: 'headache',
 }
 export const themeOf = (g) => THEME_OF_SUFFIX[g.id.slice(g.id.lastIndexOf('-') + 1)] || 'medical'
 export const THEME_TITLES = {
@@ -607,6 +610,7 @@ export const THEME_TITLES = {
   bowel: 'Signs coming from the bowel or bottom',
   injury: 'After a blow or a fall',
   headache: 'A headache that is new or changing',
+  postop: 'Signs of a problem after back surgery',
 }
 /** Kept for the knee prototype's checks. */
 export const kneeOnly = (zones = []) => smartArea(zones) === 'knee'

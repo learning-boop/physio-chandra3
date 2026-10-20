@@ -165,6 +165,7 @@ export const PLAIN_SHORT = {
   'rf-aaa-slow': 'A deep ache that never changes, or a pulsing tummy',
   'rf-footdrop': 'Your foot slaps down or your toes catch',
   'rf-myelo': 'Clumsy hands, unsteady walking, or neck pain too',
+  'rf-postop': 'New or returning leg pain after back surgery',
   'sc-neuro': 'New weakness or numbness in an arm or leg',
   'jrf-legs': 'Legs slowly getting stiff or heavy',
   'jrf-shingles': 'A band of burning pain with a rash',
@@ -459,6 +460,7 @@ export const PLAIN_Q = {
   'rf-kidney': 'Do any of these fit you?',
   'rf-pelvic': 'Do any of these fit you?',
   'rf-myelo': 'Have any of these changed?',
+  'rf-postop': 'Have you had an operation on your back in the last year? Do any of these fit you?',
   'sc-neuro': 'Have any of these changed?',
   'rf-saddle': 'Have you noticed any of these?',
   'rf-bladder': 'Have you noticed any of these?',
@@ -585,6 +587,7 @@ export const SUBHEAD = {
   'pc-stroke': 'Started in the last few hours:',
   'kf-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
   'hpf-dislocation': 'After a hip replacement or a hip fracture operation:',
+  'rf-postop': 'After an operation on your back in the last year:',
   'rf-fracture': 'In the last few days:',
   'jrf-fracture': 'In the last few days:',
   'af-compartment': 'In the last day or two, after a broken bone, a crush, an operation, a tight cast or bandage, lying on the leg a long time, a knock on blood thinners, or very hard exercise:',
@@ -701,6 +704,11 @@ export const TICKS = {
   ],
   'rf-footdrop': [
     { key: 'slap', text: 'Your foot slaps down or your toes catch when you walk', tell: 'my foot slaps down when I walk' },
+  ],
+  'rf-postop': [
+    { key: 'new', text: 'A new pain, tingling or numbness going into a leg, or the other leg', tell: 'I had back surgery this year, and now I have a new pain going into my leg' },
+    { key: 'back', text: 'The leg pain from before the operation has come back', tell: 'I had back surgery this year, and my old leg pain has come back' },
+    { key: 'wound', text: 'The wound is red, swollen, hot or leaking, or you feel feverish', tell: 'I had back surgery, and the wound is red or leaking, or I feel feverish' },
   ],
   'rf-myelo': [
     { key: 'hands', text: 'Your hands have become clumsy, like with buttons or writing', tell: 'my hands have become clumsy' },
