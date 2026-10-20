@@ -8,14 +8,16 @@ ages: 30-49, 50-64, o64
 # Pointers from content/regions/hand.md, 25 Sep 2026.
 # 6 Oct 2026: wrist and hand cross-check, approved by Chandra (review/wrist-hand-crosscheck.html).
 # C1, W3, S9: 30 and over, scoring, splint and exercise, doctor line, clinic notes.
+# 20 Oct 2026: "PhysioChandra WristHand Conditions.docx" (signed v1.0 by Chandra, 19-20 Oct 2026; applied with Chandra's approval, 20 Oct 2026), form 22: 65 or over 2 to 1 (one opening
+# answer must not lead); plain "can help" wording, the same in both copies.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
   "Base of the thumb, where it meets the wrist": 3
-  "Pinching (turning a key, opening a jar, doing up buttons)": 2
+  "Pinching (turning a key, opening a jar, doing up buttons)": 3
   "Gripping firmly": 1
   "Hard, bony swelling of the finger joints": 1
-  "65 or over": 2
+  "65 or over": 1
   "50 to 64": 1
   "More than 3 months": 1
   "Gradually, no clear reason": 1
@@ -26,20 +28,21 @@ pointers:
 ---
 
 ## blurb
-This is osteoarthritis at the joint where the thumb meets the wrist: a slow change in the joint that can make pinching and gripping tasks painful. Exercises, a splint and easier ways of gripping often help.
+This is osteoarthritis at the joint where the thumb meets the wrist: a slow change in the joint that can make pinching and gripping tasks painful. Exercises, a splint and easier ways of gripping can help.
 
 ## noticed
 - An ache at the base of the thumb that's worse with pinching or gripping
 - Stiffness and less movement when trying to spread the thumb away from the hand
 - A grinding, catching, or crunchy feeling when moving the thumb
+- A bump or squared-off look at the base of the thumb, or the thumb feeling weak when you pinch
 
 ## homeCare
 - Use adaptive tools like jar openers or ergonomic scissors to ease strain
 - Try gentle warmth on the thumb before activity to loosen it up
 - Cut back on repeated pinching or gripping tasks that flare it up
 - During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
-- A splint that supports the base of the thumb, worn for tasks that hurt (or at night if it helps), can ease pain
-- Regular thumb and hand strengthening exercises help most people
+- A splint that supports the base of the thumb, worn for tasks that hurt (or at night if it helps), can ease pain; use it less as pinching becomes comfortable
+- Regular thumb and hand strengthening exercises can help
 - Avoid sleeping with the thumb tucked into your palm
 
 ## seePhysioIf
@@ -58,3 +61,4 @@ This is osteoarthritis at the joint where the thumb meets the wrist: a slow chan
 - Thumb base: EULAR 2018, long-term thumb base orthosis, exercise, joint protection. Manual therapy plus exercise improved pain but not pinch or grip strength (Villafane 2013, cited in the AIM manual). Measures: grip and pinch, AUSCAN.
 - Tests: grind test (AIM reports sensitivity 0.53, specificity 0.80; its stated LR+ 4.45 does not match these, so do not quote it); pressure-shear test; Eaton stages on X-ray if needed. Exercise: C-position stability (first dorsal interosseous, opponens). Differentials: de Quervain's (Eichhoff or WHAT test), scaphoid fracture, STT joint OA, trigger thumb. EULAR 2018: long-term thumb base orthosis; ACR 2019: CMC orthosis strongly recommended.
 - For Chandra: the AIM manual says post-exercise discomfort should last no more than 2 hours; the site's OA foundation uses "back to usual by the next morning".
+- Form 22 (20 Oct 2026): capsular pattern (retroposition limited; clinic finding); pressure-shear test (form: Sn 64-99%, Sp 95-100%, small studies); CMC subluxation with MCP hyperextension and adduction contracture; STT co-exists (slightly more proximal); FIHOA/DASH. Ahern 2018; Villafañe 2013; Valdes 2012; ACR 2019. The site keeps its OA exercise rule ("back to usual by the next morning") and does not quote the grind test LR+.

@@ -5,6 +5,7 @@ name: Forearm muscle overuse
 clin: Forearm flexor and extensor muscle overload
 # DRAFT patient text written 25 Sep 2026 from content/regions/forearm.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 20 Oct 2026: "PhysioChandra WristHand Conditions.docx" (signed v1.0 by Chandra, 19-20 Oct 2026; applied with Chandra's approval, 20 Oct 2026), forms 4 (an acute strain, folded here) and 5.
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "The whole forearm": 2
@@ -29,13 +30,15 @@ The muscles that grip and move the wrist and fingers fill most of the forearm. L
 ## homeCare
 - Break up long gripping or typing sessions with short pauses
 - Check your workstation, grip size, and tool set-up
-- Gentle forearm stretches and heat can ease the ache
+- Gentle forearm stretches (not hard ones in the first days of a sudden strain) and heat can ease the ache
 - Build heavier or longer tasks back up gradually
 
 ## seePhysioIf
 - The ache has not settled after 2 to 3 weeks of changes
 - It is limiting your work or sport
 - You start to notice tingling or weakness in the hand
+- You felt a pop and can see a dent or bulge in the muscle: see your doctor within a few days
+- It is not getting better after 4 to 6 weeks: see your doctor
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
@@ -45,3 +48,4 @@ The muscles that grip and move the wrist and fingers fill most of the forearm. L
 
 ## clinicNotes
 - Elbow document forms 6 and 9 (19 Oct 2026): an acute pronator teres or flexor-pronator strain after a sudden effort: pain on resisted pronation and on stretch, no tingling (with thumb-side tingling, see pronator syndrome). Fatigue, loss of grip power and forearm tightness without tendon-point pain: test grip and wrist strength on both sides, forearm length and motor control during tasks, as treatment targets rather than a diagnosis; PRTEE or PSFS.
+- Form 4 (20 Oct 2026): acute strain of a forearm muscle belly or musculotendinous junction after a sudden effort or unaccustomed load; pain on resisted contraction and passive stretch; grade I-III; rule out tendon rupture and compartment syndrome; frictions once settled, then graded loading; PRWHE (Järvinen 2005). Form 5: stable weakness after a healed injury is a treatment target; weakness getting worse stays a red flag (wrf-numb).

@@ -221,3 +221,11 @@ Expect: top condition = CRPS (with the see-your-doctor note); route = results
 
 CASE: CRPS 2. Hand and wrist drawn as a glove
 Expect: the CRPS question is asked once (the hand's H9 is not asked)
+
+## changes 20 Oct 2026 ("PhysioChandra WristHand Conditions.docx", 37 forms, signed v1.0 by Chandra 19-20 Oct 2026; applied with Chandra's approval the same day)
+Full mapping, choices and open items: content/reference/wristhand-conditions.md.
+- Bug fixes: wrist-crps now opens after "After a broken wrist, in a cast or after surgery" (its gate missed it); wrf-oldscaphoid also asks "or was the X-ray normal" (the classic missed scaphoid).
+- New red flags: wrf-cellulitis (same day, the forearm's wording), wrf-lump (the hand's lump question; the general new-lump tick is skipped at the wrist), wrf-coldfinger (same day, the hand's wording; wrf-raynaud now asks attacks only). wrf-inflam carries the "already diagnosed" escape.
+- Injury screen: I1 "Yes, it was cut" and I10 (cut with a finger or thumb that will not move, or numbness: emergency); I7 "Yes, and it has been X-rayed and treated" (no route; never on I5).
+- W4 new answer for handlebars, crutches or a tool (Guyon's); new W10 "Since the injury, does your wrist click, clunk or give way?" after a fall or twist, not on the little-finger side.
+- New card wrist-sprain; cards updated: dq, ecu, dorsal, fracture, tfcc, median (both twins), guyon, ganglion, thumboa (both twins), crps gate. Test patients WH1 to WH9.

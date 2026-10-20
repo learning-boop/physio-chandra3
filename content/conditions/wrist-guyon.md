@@ -7,6 +7,8 @@ clin: Ulnar neuropathy at the wrist (Guyon's canal)
 # 4 Oct 2026: doctor line added at Chandra's request (Tier 3 review); signed by Chandra Matla, 4 Oct 2026.
 # 6 Oct 2026: wrist and hand cross-check, approved by Chandra (review/wrist-hand-crosscheck.html).
 # C5, S9, W6: scoring, doctor lines, clinic notes.
+# 20 Oct 2026: "PhysioChandra WristHand Conditions.docx" (signed v1.0 by Chandra, 19-20 Oct 2026; applied with Chandra's approval, 20 Oct 2026), form 17: the new W4 answer for
+# handlebars, crutches and tools 3.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
@@ -23,6 +25,7 @@ pointers:
   "Moving my neck": -2
   "Moving my elbow": -2
   "The back of my hand is numb too": -3
+  "After cycling, or pressing the heel of my hand on handlebars, crutches or a tool": 3
 ---
 
 ## blurb
@@ -37,6 +40,7 @@ The ulnar nerve passes through a small tunnel at the base of the palm on the lit
 - Change your hand position often when cycling; padded gloves and a higher handlebar can help
 - Use padded or wider tool handles, and avoid pressing on the heel of the hand
 - Take short breaks from tasks that press on that spot
+- If you use crutches or a cane, a padded or shaped handle can take pressure off the heel of the hand
 
 ## seePhysioIf
 - The tingling has not eased after 2 to 3 weeks of changes
@@ -53,3 +57,4 @@ The ulnar nerve passes through a small tunnel at the base of the palm on the lit
 
 ## clinicNotes
 - Zones: 1 mixed, 2 motor only (deep branch; e.g. hook of hamate fracture), 3 sensory only. Froment's and Wartenberg's signs; dorsal ulnar cutaneous sensation and FDP 4/5 strength are spared at Guyon's and affected at the elbow. A ganglion causes about 30-40% (StatPearls); ultrasound or MRI for a ganglion, CT for the hamate. Differentials: cubital tunnel, C8-T1, thoracic outlet, Pancoast tumour; painless wasting without sensory loss can be motor neurone disease (refer). Hypothenar hammer syndrome (ulnar artery) in people who use the palm as a hammer.
+- Form 17 (20 Oct 2026): elbow flexion test negative at Guyon's; first dorsal interosseous and abductor digiti minimi testing; padding and activity changes; surgical referral for a mass or motor deficit; DASH (Elhassan and Steinmann 2007). Double crush (form 19): screen the elbow and neck; see neck-neural. Claw posture (form 34) is ulnar motor loss: doctor first.

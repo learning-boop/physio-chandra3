@@ -52,6 +52,7 @@ Dupuytren's is a thickening of the tough layer of tissue just under the skin of 
 - Keep using your hand normally: resting it does not stop the cord, and keeping the fingers moving keeps the rest of the hand healthy. If you use vibrating tools a lot, padded gloves and breaks are sensible
 - Stretching or forcing the finger straight does not stop the cord, so there is no need to push it
 - After a procedure, do your exercises little and often, keep the hand raised when it swells, and keep the wound clean and dry until it has healed; cutting down smoking and good diabetes control help healing
+- If a lump in your palm is tender, padded gloves or thicker tool grips can make gripping more comfortable
 
 ## seePhysioIf
 - You have found a lump or cord in your palm and want to understand it, and what to watch for
@@ -66,9 +67,10 @@ Dupuytren's is a thickening of the tough layer of tissue just under the skin of 
 
 ## clinicNotes
 - Physio role: education and monitoring; timely referral (GP to hand surgeon) once the hand no longer lies flat; hand therapy before and after fasciectomy, needle fasciotomy or injection. Stretching, splinting and manual therapy do not prevent progression (NICE IPG43 / BSSH); do not sell a course of treatment to "prevent" it.
-- Assess: Hueston table-top test; passive extension deficit at MCP and PIP by goniometry, each joint; Tubiana stage; nodule vs cord, skin pitting; diathesis (bilateral, early onset, family history, Garrod's pads, plantar nodules) means higher recurrence.
+- Assess: Hueston table-top test; passive extension deficit at MCP and PIP by goniometry, each joint; Tubiana stage; nodule vs cord, skin pitting; diathesis (bilateral, early onset, family history, Garrod's pads, plantar and penile disease) means higher recurrence.
 - Referral threshold (Dutch guideline 2023; HAND-2): MCP 30 degrees or more, or any PIP contracture, with functional loss. PIP contractures respond less well, so refer them earlier.
 - Differentiate: trigger finger (A1 nodule, locking), ulnar neuropathy (Froment, intrinsic wasting, sensation), cervical screen, camptodactyly (since childhood, both hands, no cord), post-traumatic or arthritic joint stiffness, ganglion or callus; a rapidly growing, painful or deep lump needs a doctor.
 - Procedures: needle fasciotomy (best for MCP; recurrence about 60% at 3 years), limited fasciectomy (standard; about 1 in 5 recur within 5 years), dermofasciectomy; collagenase (Xiaflex) discontinued in Canada since 2020 (Special Access only). Manual work and vibration are risk factors (Descatha 2011 meta-analysis), with no evidence on progression.
 - After surgery: wound and dehiscence, oedema (circumferential), active and passive range, total active motion, tendon glides, scar pliability, digital nerve sensation, grip and pinch from 6 weeks, QuickDASH or MHQ, early CRPS screen (Budapest). Night extension splint only if extension is being lost: routine splinting adds nothing to hand therapy (Jerosch-Herold 2011 SCoRD; Collis 2013; Kemler 2012). Graded strengthening from about 4 to 6 weeks.
 - Sources: Dutch multidisciplinary guideline on Dupuytren disease (J Hand Surg Am 2023); NICE IPG43 / BSSH; Dias 2024 (HAND-2 protocol, Trials); Jerosch-Herold 2011; Collis 2013; Kemler 2012; Aggarwal and Blazar 2025 (UpToDate); AIM Theory Manual 2023 Ch. 2.9.
+- Form 33 (20 Oct 2026): agrees with the card; collagenase injection is not offered (discontinued in Canada since 2020) and "not caused by work" is not used (Descatha 2011). Claw posture (MCP hyperextension, IP flexion, no palpable cord) is ulnar motor loss, not Dupuytren's: doctor first (form 34). After a release: oedema and scar care as in hand-fracture.

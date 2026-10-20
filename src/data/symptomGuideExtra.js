@@ -1875,20 +1875,37 @@ export const EXTRA_REGIONS = {
       // 6 Oct 2026: wrist and hand cross-check, approved by Chandra (S8): a first attack too (pseudogout often affects older wrists).
       { id: "wrf-gout", tier: "urgent", sameDay: true, group: "gout", why: "Possible gout, pseudogout or other crystal arthritis; same-day review",
         text: "Did a joint become suddenly hot, red, swollen and very painful over a day or so (gout or pseudogout, even a first attack)?" },
+      // "PhysioChandra WristHand Conditions.docx" (signed v1.0, 19-20 Oct 2026; applied with Chandra's approval, 20 Oct 2026): the cellulitis question the forearm,
+      // elbow and upper arm already ask (worded the same, so asked once).
+      { id: "wrf-cellulitis", sameDay: true, tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
+        text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
+      // The diagnosed escape (20 Oct 2026, form 27): someone already under
+      // rheumatology care was sent to a doctor first for the arthritis they have.
       { id: "wrf-inflam", tier: "urgent", group: "handinflam", why: "Possible inflammatory arthritis (for example rheumatoid arthritis)",
-        text: "Are both wrists or several finger joints swollen and stiff for more than an hour in the morning?" },
+        text: "Not explained by an inflammatory arthritis you have already been diagnosed with: are both wrists or several finger joints swollen and stiff for more than an hour in the morning?" },
       { id: "wrf-numb", tier: "urgent", group: "handweak", why: "Severe nerve compression (carpal tunnel) may need a specialist opinion",
         text: "Is your hand getting weaker, is the muscle at the base of the thumb or between the thumb and index finger getting thinner, is finger numbness there all the time, or can you not lift your wrist?" },
       // W9: both-sided carpal tunnel (night numbness) is common, so "most of the day".
       { id: "wrf-myelo", tier: "urgent", group: "myelo", why: "Possible pressure on the spinal cord in the neck",
         text: "Do both hands feel numb or clumsy most of the day (not only at night), or has your walking become unsteady?" },
+      // The cold finger is its own same-day question (20 Oct 2026), worded as the
+      // hand's, so the wrist and hand match and it is asked once.
       { id: "wrf-raynaud", tier: "urgent", group: "raynaud", why: "Possible circulation problem (Raynaud's, or damage to the artery in the palm)",
-        text: "Do your fingers or hand go white, blue, or cold in attacks, or is there a painful cold finger that does not recover?" },
+        text: "Do your fingers or hand go white, blue, or cold in attacks?" },
+      { id: "wrf-coldfinger", tier: "urgent", sameDay: true, why: "A finger whose blood supply is not recovering needs checking today",
+        text: "Is one finger cold, white or blue and painful, and not recovering when it is warmed?" },
       // 6 Oct 2026: wrist and hand cross-check, approved by Chandra (S8).
-      { id: "wrf-oldscaphoid", tier: "urgent", why: "Possible scaphoid fracture that was missed or has not healed: it needs an X-ray",
-        text: "Since a fall onto the hand some weeks or months ago, is there still pain in the hollow at the base of the thumb, and has it never been X-rayed?" },
+      // "or was the X-ray normal" (20 Oct 2026, form 9): the classic missed
+      // scaphoid had a normal first X-ray and answered No.
+      { id: "wrf-oldscaphoid", tier: "urgent", why: "Possible scaphoid fracture that was missed or has not healed: the first X-ray is often normal, so it needs checking again",
+        text: "Since a fall onto the hand some weeks or months ago, is there still pain in the hollow at the base of the thumb, and was it never X-rayed, or was the X-ray normal?" },
       { id: "wrf-stress", ages: ["u18", "18-29"], tier: "urgent", why: "Possible stress injury of the growth plate at the wrist (gymnast's wrist); needs an X-ray",
         text: "Do you take weight on your hands in gymnastics or sport, with a deep ache at the end of the forearm bone just above the wrist, worse with handstands or tumbling?" },
+      // The hand's lump question (20 Oct 2026, form 37), worded the same so it is
+      // asked once: the wrist asked only "growing", and the general new-lump tick
+      // sent every new ganglion to a doctor first (skipped below, TICK_SKIP).
+      { id: "wrf-lump", tier: "urgent", why: "A growing lump or nail streak needs medical review",
+        text: "Is there a hard lump that is growing quickly over weeks, is painful, or is deep and larger than a few centimetres, or a new dark streak under a nail?" },
     ],
     context: [
       { id: "age", text: "Your age?", options: [
@@ -1954,7 +1971,9 @@ export const EXTRA_REGIONS = {
           { id: "posture", label: "When driving, holding a phone, or reading" },
           { id: "constant", label: "The numbness is there all the time", special: "nerveDoctor" },
           { id: "back", label: "The back of my hand is numb too" },
-          { id: "weakthumb", label: "My thumb feels weak or clumsy", special: "nerveDoctor" }
+          { id: "weakthumb", label: "My thumb feels weak or clumsy", special: "nerveDoctor" },
+          // Guyon's canal (20 Oct 2026, form 17): handlebars and crutches had no answer.
+          { id: "heel", label: "After cycling, or pressing the heel of my hand on handlebars, crutches or a tool" }
         ]},
       { id: "W5", text: "Tuck your thumb into your palm, close your fingers over it, then gently bend your wrist towards your little finger. What happens?",
         askIf: ({ ra }) => [].concat(ra.W1 || []).includes("thumb"),
@@ -2005,6 +2024,16 @@ export const EXTRA_REGIONS = {
           { id: "touch", label: "Light touch (clothes, sheets, water in the shower) hurts on that area" },
           { id: "motor", label: "It is stiff, weak or shaky, or the nails, hair or skin there have changed" },
           { id: "none", label: "None of these" }
+        ]},
+      // A torn ligament between the wrist bones (20 Oct 2026, form 14): after 6
+      // weeks nothing caught a wrist that clicks or gives way, except on the
+      // little-finger side (W6). Asked after a fall or twist only.
+      { id: "W10", text: "Since the injury, does your wrist click, clunk or give way?",
+        askIf: ({ ra }) => ["fall", "twist"].includes(ra.onset) && ![].concat(ra.W1 || []).includes("little"),
+        options: [
+          { id: "clicks", excl: "w10", label: "Yes, it clicks or clunks" },
+          { id: "givesway", excl: "w10", label: "It gives way when I push up or grip" },
+          { id: "neither", excl: "w10", label: "No, neither" }
         ]}
     ],
     conditions: []
@@ -2043,8 +2072,10 @@ export const EXTRA_REGIONS = {
         text: "Is there a tense, throbbing, swollen fingertip, or pus around the nail?" },
       { id: "hnd-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
         text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
+      { id: "hnd-cellulitis", sameDay: true, tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
+        text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
       { id: "hnd-inflam", tier: "urgent", group: "handinflam", why: "Possible inflammatory arthritis (rheumatoid or psoriatic)",
-        text: "Are the knuckles in both hands swollen and stiff for more than an hour in the morning, or is a whole finger swollen like a sausage (especially with psoriasis)?" },
+        text: "Not explained by an inflammatory arthritis you have already been diagnosed with: are the knuckles in both hands swollen and stiff for more than an hour in the morning, or is a whole finger swollen like a sausage (especially with psoriasis)?" },
       { id: "hnd-raynaud", tier: "urgent", group: "raynaud", why: "Possible Raynaud's or another circulation problem",
         text: "Do your fingers go white, then blue, in the cold, or is there a sore or ulcer on a fingertip?" },
       // 6 Oct 2026: wrist and hand cross-check, approved by Chandra (S6).
@@ -2076,6 +2107,10 @@ export const EXTRA_REGIONS = {
         { id: "grip", label: "After a lot of gripping, pinching, typing, or phone use" },
         { id: "injury", label: "A finger was jammed, bent back, or caught" },
         { id: "crush", label: "It was crushed or cut" },
+        // 20 Oct 2026 (forms 25, 31, 32, 35): the wrist and elbow had a fracture
+        // or surgery start; the hand had none, so its rehabilitation card could
+        // not be gated and the CRPS question missed a hand after a cast.
+        { id: "surgery", label: "After a broken hand or finger, a cast or splint, or surgery on the hand" },
         { id: "baby", label: "During pregnancy, or since having a baby" },
         { id: "joints", label: "Other joints in my body are swollen or stiff too", special: "handDoctor" }
       ]},
@@ -2106,6 +2141,11 @@ export const EXTRA_REGIONS = {
         { id: "dupuytren", label: "A finger is slowly bending into my palm over months or years" },
         { id: "flat", label: "I cannot lay my hand flat on a table: a finger lifts off", special: "dupuytrenReferral" },
         { id: "procedure", label: "I have had a procedure on my palm for this (surgery, a needle release or an injection)" },
+        // Finger shape (20 Oct 2026, forms 28-30): mallet and boutonnière past the
+        // 6-week injury screen; one of them only (excl).
+        { id: "droop", excl: "shape", label: "The tip of a finger droops, and it will not straighten on its own" },
+        { id: "pipbent", excl: "shape", label: "The middle joint of a finger stays bent, and it will not straighten fully" },
+        { id: "nobend", excl: "shape", label: "I cannot bend the tip of a finger by itself", special: "tendonDoctor" },
         { id: "nodes", label: "Hard bony bumps on the finger joints" },
         { id: "none", label: "None of these" }
       ]},
@@ -2171,8 +2211,8 @@ export const EXTRA_REGIONS = {
       // `same: "crps"`: a glove or sock drawing across two areas asks it once.
       { id: "H9", same: "crps", text: "Which of these apply to the painful area? Tick all that apply.",
         // After an injury-type start, from 2 weeks on (CRPS develops over weeks).
-        askIf: ({ ra }) => (!ra.onset || ["injury", "crush"].includes(ra.onset)) && ra.duration !== "d2w",
-        priority: ({ ra }) => ["injury", "crush"].includes(ra.onset),
+        askIf: ({ ra }) => (!ra.onset || ["injury", "crush", "surgery"].includes(ra.onset)) && ra.duration !== "d2w",
+        priority: ({ ra }) => ["injury", "crush", "surgery"].includes(ra.onset),
         options: [
           { id: "trigger", label: "It started after a fracture, an operation, or time in a cast or splint on this arm or leg" },
           { id: "outofprop", label: "The pain is far worse, or has lasted far longer, than I would expect from the injury" },
@@ -3128,7 +3168,11 @@ export const EXTRA_SPECIAL_CARDS = {
   handDoctor: { title: "Please have this checked by a doctor",
     body: "A whole finger swollen like a sausage, knuckles swollen in both hands, a hot puffy joint, long morning stiffness, nail pitting with psoriasis, other joints swollen too, tingling in both hands, fingers that go white then blue in the cold, or a hand that has changed colour or temperature since an injury are signs a doctor should look at. They can point to inflammatory arthritis, gout, a circulation problem, a nerve condition, or complex regional pain syndrome. Physiotherapy can help alongside or afterwards." },
   nerveDoctor: { title: "Constant numbness or a weak thumb should be checked by a doctor",
-    body: "Numbness that no longer comes and goes, or a thumb that is getting weak or clumsy, can mean the nerve is being pressed on hard. A doctor should check this. Physiotherapy can help alongside or afterwards." },
+    body: "Numbness that no longer comes and goes, or a thumb that is getting weak or clumsy, can mean the nerve is being pressed on hard. A doctor should check this first. Physiotherapy can help once a doctor has checked it." },
+  // A finger that cannot bend at the tip (20 Oct 2026, form 31): a missed
+  // jersey finger, or a tendon that has torn without an injury.
+  tendonDoctor: { title: "A finger that will not bend by itself: please see a doctor",
+    body: "A finger that cannot bend at a joint by itself can mean a torn tendon. A doctor or hand clinic should check it, as some need repair. Physiotherapy can help afterwards." },
   lumpDoctor: { title: "A hard or growing lump should be checked by a doctor",
     body: "Most lumps at the wrist are harmless fluid cysts (ganglions) that are soft and change size. A lump that is <strong>hard</strong> or <strong>keeps growing</strong> should be looked at by a doctor first." },
   // Loss of nerve function (the neck's N14), from the "Cervical Neural

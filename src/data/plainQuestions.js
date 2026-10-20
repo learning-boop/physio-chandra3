@@ -312,13 +312,13 @@ export const PLAIN_SHORT = {
   'wrf-bite': 'A cut or bite on the hand, now swollen, red and very painful',
   'wrf-compartment': 'Arm pain still climbing after an injury, cast, operation, lying still, or hard exercise',
   'wrf-cast': 'A cast, splint or bandage getting tighter and more painful',
-  'wrf-raynaud': 'Fingers turning white or blue in attacks, or a cold painful finger',
+  'wrf-raynaud': 'Fingers turning white or blue in attacks',
   'wrf-gout': 'A joint suddenly hot, red, swollen and very painful',
   'wrf-inflam': 'Both wrists or several finger joints swollen and stiff each morning',
   'wrf-numb': 'A weaker hand, a thinning thumb muscle, constant numbness, or a dropped wrist',
   'wrf-myelo': 'Both hands numb or clumsy most of the day, or unsteady walking',
   'wrf-crps': 'Since an injury or cast: burning, swelling, colour change, or touch hurts',
-  'wrf-oldscaphoid': 'Thumb-base pain since an old fall, never X-rayed',
+  'wrf-oldscaphoid': 'Thumb-base pain since an old fall, not X-rayed or the X-ray was normal',
   'wrf-stress': 'A gymnast with a deep ache just above the wrist',
   // A whole painful limb (pattern question, ../data/patternChecks.js)
   'pc-limb': 'The painful arm or leg changing colour, temperature, sweating or swelling',
@@ -1230,13 +1230,12 @@ export const TICKS = {
   ],
   'wrf-raynaud': [
     { key: 'attacks', text: 'Fingers or hand turning white, blue or cold in attacks', tell: 'my fingers turn white, blue or cold in attacks' },
-    { key: 'cold', text: 'A painful cold finger that does not warm up again', tell: 'I have a painful cold finger that does not warm up' },
   ],
   'wrf-gout': [
     { key: 'sudden', text: 'A joint suddenly hot, red, swollen and very painful over a day or so', tell: 'a joint became suddenly hot, red, swollen and very painful' },
   ],
   'wrf-inflam': [
-    { key: 'morning', text: 'Both wrists or several finger joints swollen and stiff over an hour each morning', tell: 'my wrists or finger joints are swollen and stiff for over an hour each morning' },
+    { key: 'morning', text: 'Swollen, stiff wrists or finger joints over an hour each morning, not yet diagnosed', tell: 'my wrists or finger joints are swollen and stiff for over an hour each morning' },
   ],
   'wrf-numb': [
     { key: 'weaker', text: 'Your hand getting weaker', tell: 'my hand is getting weaker' },
@@ -1252,7 +1251,7 @@ export const TICKS = {
     { key: 'since', combo: true, text: 'Since a wrist injury, operation or cast: burning, swelling, shiny skin, colour or temperature changes, or light touch hurts', tell: 'since the injury my hand burns, swells or changes colour' },
   ],
   'wrf-oldscaphoid': [
-    { key: 'thumb', combo: true, text: 'Since a fall onto the hand weeks or months ago: pain still in the hollow at the base of the thumb, never X-rayed', tell: 'since a fall weeks ago I still have pain at the base of my thumb, and it was never X-rayed' },
+    { key: 'thumb', combo: true, text: 'Since a fall weeks or months ago: pain still in the hollow at the thumb base, never X-rayed or the X-ray was normal', tell: 'since a fall weeks ago I still have pain at the base of my thumb, and it was not X-rayed or the X-ray was normal' },
   ],
   'wrf-stress': [
     { key: 'gym', combo: true, text: 'You take weight on your hands in gymnastics or sport, with a deep ache just above the wrist, worse with handstands or tumbling', tell: 'I take weight on my hands in sport and have a deep ache above my wrist' },
@@ -1291,8 +1290,8 @@ export const TICKS = {
     { key: 'overnight', combo: true, text: 'A joint became hot, swollen and very painful overnight, and you have had gout or pseudogout before', tell: 'a joint became hot and swollen overnight, and I have had gout before' },
   ],
   'hnd-inflam': [
-    { key: 'knuckles', text: 'Knuckles in both hands swollen and stiff for over an hour each morning', tell: 'my knuckles are swollen and stiff for over an hour each morning' },
-    { key: 'sausage', text: 'A whole finger swollen like a sausage', tell: 'a whole finger is swollen like a sausage' },
+    { key: 'knuckles', text: 'Knuckles of both hands swollen, stiff over an hour each morning, not yet diagnosed', tell: 'my knuckles are swollen and stiff for over an hour each morning' },
+    { key: 'sausage', text: 'A whole finger swollen like a sausage, not yet diagnosed', tell: 'a whole finger is swollen like a sausage' },
   ],
   'hnd-raynaud': [
     { key: 'cold', text: 'Fingers going white, then blue, in the cold', tell: 'my fingers go white, then blue, in the cold' },
@@ -1613,6 +1612,7 @@ export const TICKS = {
 /* Questions worded exactly like another area's: the same ticks, bullet and heading. */
 for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], ['hnd-stroke', 'wrf-stroke'], ['hnd-numb', 'wrf-numb'], ['hnd-myelo', 'wrf-myelo'],
   ['frf-compartment', 'wrf-compartment'], ['frf-cast', 'erf-cast'], ['frf-cellulitis', 'erf-cellulitis'], ['frf-myelo', 'erf-myelo'],
+  ['wrf-cellulitis', 'erf-cellulitis'], ['hnd-cellulitis', 'erf-cellulitis'], ['wrf-lump', 'hnd-lump'], ['wrf-coldfinger', 'hnd-coldfinger'],
   ['arf-stroke', 'frf-stroke'], ['arf-rhabdo', 'srf-rhabdo'], ['arf-cellulitis', 'erf-cellulitis'], ['arf-myelo', 'erf-myelo'],
   ['trf-lung', 'srf-lung'], ['trf-pancreas', 'jrf-pancreas'], ['trf-cord-legs', 'jrf-conus-legs'], ['trf-myelo', 'jrf-legs'], ['trf-shingles', 'jrf-shingles'],
   ['crf-lung', 'srf-lung'], ['crf-cord', 'trf-cord'], ['crf-gallbladder', 'srf-organ'], ['crf-shingles', 'jrf-shingles'],
@@ -1664,6 +1664,8 @@ export const TICK_SKIP = { lowerback: ['sc-systemic~fever', 'sc-systemic~cancer'
   lowerleg: ['sc-systemic~cancer'],
   // The hand's lump question asks a growing lump.
   hand: ['sc-systemic~lump'],
+  // The wrist's lump question asks a growing, painful or large lump (20 Oct 2026).
+  wrist: ['sc-systemic~lump'],
   // The mid back asks fever in trf-infection and cancer in trf-cancer.
   upperback: ['sc-systemic~fever', 'sc-systemic~cancer'],
   // The mid-to-low back asks fever in jrf-infection and cancer in jrf-cancer.

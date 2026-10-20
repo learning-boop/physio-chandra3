@@ -12,7 +12,7 @@ clin: Complex regional pain syndrome, type I (no major nerve injury) or type II 
 reviewed: Chandra Matla, 2026-10-02
 # Only after an injury-type start (the document's Q1: no injury, route to
 # other causes).
-onset: fall, twist
+onset: fall, twist, surgery
 # Pointers follow the document's scored question set (section 4), asked as
 # one tick-all question (W9 / H9 / A9 / B9, asked once); max 17:
 #   Q1 after a fracture, operation or cast 3 · Q2 out of proportion 3 ·

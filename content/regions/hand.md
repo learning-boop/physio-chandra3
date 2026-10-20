@@ -236,3 +236,12 @@ Expect: top condition = Dupuytren's, with the see-your-doctor card; route = resu
 CASE: Dupuytren's 2. A finger that clicks and locks
 Answers: Q2 = clicks or locks + tender lump
 Expect: Dupuytren's not on top (trigger finger)
+
+## changes 20 Oct 2026 ("PhysioChandra WristHand Conditions.docx", 37 forms, signed v1.0 by Chandra 19-20 Oct 2026; applied with Chandra's approval the same day)
+Full mapping, choices and open items: content/reference/wristhand-conditions.md.
+- New start answer "After a broken hand or finger, a cast or splint, or surgery on the hand" (id surgery): gates the new hand-fracture card; H9 (CRPS) and hand-crps include it.
+- H2 finger-shape ticks (one only): "The tip of a finger droops, and it will not straighten on its own", "The middle joint of a finger stays bent, and it will not straighten fully", "I cannot bend the tip of a finger by itself" (tendonDoctor card).
+- New red flag hnd-cellulitis (same day); hnd-inflam carries the "already diagnosed" escape.
+- Injury screen: I1 "Yes, I punched something hard (a wall, a door)"; I10 cold, pale or blue hand (the wrist's I3 wording, emergency); I11 swelling, bone pain, a sunk knuckle or no full fist (same-day X-ray); "Yes, and a doctor or hand clinic has already treated it" on I3, I4, I5, I7 and I11; I6 (skier's thumb) also after a jammed finger, "see a doctor within a few days".
+- nerveDoctor card: "Physiotherapy can help once a doctor has checked it".
+- New card hand-fracture; cards updated: fingerinjury, handoa, thumboa, median, dupuytren, trigger, crps gate. Test patients WH10 to WH14.

@@ -7,16 +7,18 @@ ages: 30-49, 50-64, o64
 # DRAFT patient text written 25 Sep 2026 from content/regions/hand.md — not yet reviewed.
 # 6 Oct 2026: wrist and hand cross-check, approved by Chandra (review/wrist-hand-crosscheck.html).
 # C1, S10, W1, W6: 30 and over, hot joint line, no "unstable", clinic notes.
+# 20 Oct 2026: "PhysioChandra WristHand Conditions.docx" (signed v1.0 by Chandra, 19-20 Oct 2026; applied with Chandra's approval, 20 Oct 2026), forms 26 and 27: the H6 bony swelling 3 to
+# 2 (the same sign already scores 3 on H2), gripping 1 to 2, 65 or over 2 to 1.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 reviewed:
 pointers:
   "Middle or end joints of the fingers": 3
   "Hard bony bumps on the finger joints": 3
-  "Hard, bony swelling of the finger joints": 3
-  "Gripping firmly": 1
+  "Hard, bony swelling of the finger joints": 2
+  "Gripping firmly": 2
   "Pinching (turning a key, opening a jar, doing up buttons)": 1
   "Cold weather": 1
-  "65 or over": 2
+  "65 or over": 1
   "50 to 64": 1
   "Gradually, no clear reason": 1
   "More than 3 months": 1
@@ -41,12 +43,14 @@ Arthritis in the small joints in the middle and at the end of the fingers is com
 - Use tools with thicker handles, and jar openers, to reduce strain
 - Spread heavy hand tasks through the day
 - During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
+- Keep the hands active through the day rather than resting them completely
 
 ## seePhysioIf
 - A finger joint suddenly becomes hot, red and swollen: see a doctor the same day, or go to emergency if you have a fever or feel unwell
 - Pain or stiffness is limiting everyday tasks
 - A finger joint is becoming crooked, or gives way when you pinch
 - You want an exercise plan and advice on splints or aids
+- Without an injury, a finger or thumb suddenly will not straighten or bend on its own: see a doctor within a few days, as a tendon may have torn
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
@@ -58,3 +62,5 @@ Arthritis in the small joints in the middle and at the end of the fingers is com
 - Osteoarthritis foundation (content/reference/osteoarthritis.md; "Osteoarthritis.docx" intake v1.0, signed by Chandra 2 Oct 2026; AIM Theory Manual 2023 pp. 572-581): clinical diagnosis without imaging (NICE NG226: 45 or over, activity-related pain, morning stiffness 30 minutes or less); stage early / moderate / advanced. First line at every stage: education, strength and neuromuscular exercise (2-3 times a week, 6-12 weeks), weight management where relevant; manual therapy only alongside exercise. Pain monitoring: up to 5/10 during exercise, back to usual by the next morning. Avoid "wear and tear" and "bone on bone" framing. EULAR 2023 hip and knee update (Moseng 2024): self-management education, reinforced at follow-up. Dry needling: JOSPT hip OA 2025 grade A (short term, trigger points) vs NICE NG226 (do not offer); a shared decision, adjunct only.
 - Hand: EULAR 2018, education, joint protection, hand exercises, orthoses as needed. Measures: AUSCAN or FIHOA, grip and pinch. Screen an inflammatory pattern (knuckle or wrist swelling, morning stiffness over an hour).
 - Erosive hand OA (inflamed IP joints, flares). MCP 2-3 involvement suggests haemochromatosis or CPPD: screen. A mucous cyst at the DIP joint. Intra-articular steroid for a painful IP joint is a physician decision (EULAR 2018 rec 7). ACR 2019: exercise strongly recommended; thermal treatments conditional.
+- Form 26 (20 Oct 2026): bony versus synovial swelling; FIHOA/DASH; X-ray only if the diagnosis is unclear; topical NSAIDs via the GP (EULAR) stay internal. Mucous cyst (form 37): nail grooving.
+- Rheumatoid hand (form 27; no card): symmetrical MCP, PIP and wrist synovitis, morning stiffness over 1 hour; ulnar drift, swan neck, boutonnière, Z-thumb; extensor tendon rupture; CTS secondary to RA; SARAH programme (Lamb 2015, 11 exercises); undiagnosed: GP or rheumatology first. The hand and wrist inflammatory questions now carry the "already diagnosed" escape.

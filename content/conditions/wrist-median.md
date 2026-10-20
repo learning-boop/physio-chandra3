@@ -7,6 +7,8 @@ clin: Median nerve compression at the wrist (JOSPT CPG 2019; Wainner cluster; CT
 # Pointers from content/regions/wrist.md, 25 Sep 2026.
 # 6 Oct 2026: wrist and hand cross-check, approved by Chandra (review/wrist-hand-crosscheck.html).
 # C2, W2, S9: scoring for classic and daytime cases, wording, pregnancy, outcome figures, injury line, CTS-6.
+# 20 Oct 2026: "PhysioChandra WristHand Conditions.docx" (signed v1.0 by Chandra, 19-20 Oct 2026; applied with Chandra's approval, 20 Oct 2026), form 16: a 4 to 6 week doctor line
+# (the same text in the wrist and hand copies).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 # Patient text shared with hand-median.md: keep the two in step.
 reviewed:
@@ -48,6 +50,7 @@ The median nerve supplies feeling to the thumb, index, and middle fingers. Compr
 - Both hands tingle or go numb at night: please also ask your doctor whether your thyroid and blood sugar have been checked (simple blood tests)
 - Grip or fine motor control is slipping
 - Many improve with a night splint and changes to how you use the hand, and some need surgery; numbness that is there all the time, or a thumb muscle that is getting thinner, needs a doctor's review
+- Not clearly better after 4 to 6 weeks of a night splint and changes: ask your doctor for a review, as nerve tests may be needed
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
@@ -64,3 +67,4 @@ The median nerve supplies feeling to the thumb, index, and middle fingers. Compr
 - Differentials: cervical radiculopathy, thoracic outlet, polyneuropathy, pronator syndrome, ulnar and radial tunnel; ALS and MS can begin distally. Acute CTS (fracture, bleeding, infection) is urgent.
 - Source: Erickson M et al., JOSPT 2019;49(5):CPG1-CPG85 (carpal tunnel syndrome), grades in brackets.
 - CTS-6 (Graham): numbness in the median territory 3.5, nocturnal numbness 4, thenar atrophy or weakness 5, Phalen 5, loss of two-point discrimination 4.5, Tinel 4; 12 or more = high probability. AAOS 2024: CTS-6 recommended over routine nerve conduction studies for diagnosis; corticosteroid injection gives no long-term benefit (a physician decision); routine supervised therapy after release is not recommended (press release; strengths not verified). JOSPT CTS revision 2026, Part 1 (diagnosis): CTS-6 and the Durkan test grade B (secondary source; full text paywalled); Part 2 (treatment) not yet published.
+- Form 16 (20 Oct 2026): lumbrical incursion test, Katz diagram (Sn 75%, Sp 72%), carpal compression (Sn 64%, Sp 83%), APB strength, BCTQ (= CTQ); keep the JOSPT Semmes-Weinstein threshold. The form's "guidelines recommend nerve gliding" is not used (JOSPT grade D). Double crush (form 19): screen the neck and elbow (ULNT1, ULNT3); see neck-neural.

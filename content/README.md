@@ -38,6 +38,7 @@ content/
     osteopenia.md   (low bone density as context: ca-osteopenia, the optional risk questions and the ask-your-doctor clarifier, the bone-loading results panel, fracture questions widened to "low bone density", src/data/osteopenia.js)
     osteomalacia.md   (soft bones and rickets: osteomalacia's clues folded into the calcium screen pc-calcium, the child question pc-rickets, ca-osteomalacia and its recovery panel, the stress-fracture, widespread-pain and osteoporosis cross-links, src/data/osteomalacia.js)
     osteogenesis-imperfecta.md   (diagnosed OI as context: the optional tick on "A little about you", fracture-first and OI red flags first in every area, the optional details and the results panel in src/data/oi.js)
+    wristhand-conditions.md   (the 37 wrist and hand condition forms, 20 Oct 2026: which card each form became, the two bugs fixed, the safety changes, the choices made, and what is still open)
     elbow-conditions.md   (the 28 elbow condition forms, 19 Oct 2026: which card each form became, the safety changes, the choices made against the site's rules, and what is still open)
     shoulder-conditions.md   (the 26 shoulder condition forms, 19 Oct 2026: which card each form became, the choices made against the site's rules, and what is still open)
     diabetes.md   (diabetes as context: the question on "A little about you", its red flags first, the doctor-first nerve screen without it, the details and burden tier, the rank lift and the results panel in src/data/diabetes.js)
@@ -79,8 +80,8 @@ Files starting with `_` are templates, examples and instructions, never data.
 | Upper arm | `arm` | Upper arm assessment | 5 |
 | Elbow | `elbow` | Elbow assessment (+ the 28-form "PhysioChandra Elbow Conditions ALL.docx", v1.0, 19 Oct 2026: heart question erf-cardiac, OK sign and finger drop, I5 front or back, I9 already X-rayed, three new cards, reasoning in reference/elbow-conditions.md) | 23 |
 | Forearm | `forearm` | Forearm assessment | 5 |
-| Wrist | `wrist` | Wrist assessment (+ CRPS document, W9) | 8 |
-| Hand & fingers | `hand` | Hand and fingers assessment (+ CRPS document, H9; + Dupuytren's document, H2) | 8 |
+| Wrist | `wrist` | Wrist assessment (+ CRPS document, W9; + the 37-form "PhysioChandra WristHand Conditions.docx", v1.0, 20 Oct 2026: CRPS gate and scaphoid fixes, W4 handlebars answer, W10, new safety questions, wrist-sprain, reasoning in reference/wristhand-conditions.md) | 25 |
+| Hand & fingers | `hand` | Hand and fingers assessment (+ CRPS document, H9; + Dupuytren's document, H2; + the 37-form wrist and hand document, 20 Oct 2026: the surgery start answer, H2 finger-shape ticks, new injury questions, hand-fracture) | 18 |
 | Hip & groin | `hip` | Hip assessment (question ids G1–G8; + hip fracture CPG 2021: a dislocated or painful hip replacement and a fracture without a fall, red flags; cross-checked against the CPGs, AIM manual and protocols, 5 Oct 2026) | 14 |
 | Thigh | `thigh` | Thigh assessment (question ids R1–R8) | 6 |
 | Knee (from just above the kneecap to just below it) | `knee` | Knee assessment (question ids K1–K8; + the Pittsburgh knee rule and the peroneal nerve in the injury screen, I8 and I9, and a femoral stress fracture flag; cross-checked against the CPGs and AIM manual, 5 Oct 2026) | 14 |
