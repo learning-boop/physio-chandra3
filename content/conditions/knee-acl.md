@@ -11,6 +11,10 @@ clin: Anterior cruciate ligament injury (JOSPT knee ligament sprain CPG 2017; in
 # after a blow too), A1 no "unstable", A2 early movement, treatment choice,
 # prevention wording and clinic notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 5:
+# the locked-knee line is now same day; Sokal, lever sign and decision notes.
 reviewed:
 pointers:
   "I felt or heard a pop": 3
@@ -44,7 +48,7 @@ This is an injury to one of the main ligaments deep inside the knee, usually fro
 - You heard or felt a pop, or the knee swelled within 2 hours of the injury: see a doctor the same day to rule out a break
 - The knee is out of shape, or your foot is cold, pale or numb: go to the emergency department now
 - You could not take 4 steps straight after the injury, cannot bend the knee to a right angle, or you are 55 or over: an X-ray is needed first, the same day
-- Your knee is stuck and will not straighten fully: see a doctor soon, as it may need an early surgical opinion
+- Your knee is stuck and will not straighten fully: see a doctor the same day, as it may need an early surgical opinion
 - Your knee gave way or buckled after a twisting or landing injury, or keeps giving way: book a physiotherapy assessment
 
 ## physioHelps
@@ -54,6 +58,7 @@ This is an injury to one of the main ligaments deep inside the knee, usually fro
 - You get a step-by-step return-to-sport plan, with exercises that may help lower the chance of another injury.
 
 ## clinicNotes
+- Knee document form 5 (Lower Quadrant Clinical Manual pp. 379-404, checked): Lachman is the only test adequate on its own (Decary 2017); Table 6-2 (Sokal 2022): Lachman sens 81, spec 85, +LR 5.72; lever sign sens 83, spec 93; anterior drawer sens 83, spec 85; pivot shift (Tanaka 2022) sens 0.55, spec 0.96, +LR 11.6. Huang 2016: Lachman sens 0.87, spec 0.94; pivot shift spec 0.98. Haemarthrosis within hours: intra-articular ligament rupture in 65% (Noyes 1980). Decision: rehab-first is reasonable in young active adults (KANON, Frobell 2013, similar at 2 and 5 years); instability episodes matter more than time to surgery (Ardern 2018); AAOS ACL CPG 2022: when surgery is chosen, reconstruction within 3 months for acute isolated tears, so orthopaedic input runs alongside rehab. Second ACL injury 1 in 4 under 25 returning to pivoting sport; return-to-sport by criteria, not time.
 - Diagnosis (ligament CPG 2017): non-contact deceleration or cutting with valgus near extension (about 70%; about 30% contact, including a blow to the back of the knee, AIM manual p.55), a pop, swelling within 0-12 hours (haemarthrosis), giving way. Lachman sens 85%, spec 94%; pivot shift sens 24%, spec 98% (rules in); anterior drawer. The AIM manual's 2016 pooled figures (p.56): Lachman sens 0.87, spec 0.94; pivot shift sens 0.49, spec 0.98, +LR 16; anterior drawer sens 0.73, spec 0.93; lever sign close to 100% sensitive; in acute or partial tears Lachman 0.42, anterior drawer 0.29, pivot shift 0.11.
 - Ottawa knee rule (CPG p.a16): age 55 or over, isolated kneecap tenderness, fibular head tenderness, cannot flex to 90 degrees, cannot bear weight for 4 steps. The patient screen asks only age, steps and flexion: palpate the kneecap and fibular head in clinic. Validated in adults (Bachmann 2004: sens 98.5%, -LR 0.05); the Pittsburgh rule under 12. Check MCL, menisci (medial meniscus involved in about 50%), the posterolateral corner, a Segond fracture, and the look-alikes: kneecap dislocation and osteochondral fracture (x-ray, AIM manual p.57).
 - Instability markers: 6-m timed hop under 80% of the other leg, quadriceps index under 80%, giving way in daily activities. Measures (B): IKDC 2000 or KOOS, Tegner or Marx, hop tests, laxity, quadriceps strength, effusion (stroke test), ROM; ACL-RSI for fear of re-injury. Coper screening (timed hop, giving way, KOS-ADLS, global rating) changes with training.

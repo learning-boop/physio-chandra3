@@ -47,6 +47,8 @@ export const GATES = {
   knee: [
     { id: 'knee-infection', title: 'Signs of infection or a flare-up', members: ['kf-replacement', 'kf-gout', 'kf-inflam'] },
     { id: 'knee-circulation', title: 'Signs of a clot or a circulation problem', members: ['kf-dvt', 'kf-artery'] },
+    // Knee document, 26 Oct 2026: a locked knee and OCD.
+    { id: 'knee-joint', title: 'Signs from inside the knee joint', members: ['kf-locked', 'kf-ocd'] },
     { id: 'knee-medical', title: 'Signs that need a medical check', members: ['kf-cancer', 'kf-tumour', 'kf-stress', 'kf-sufe', 'kf-perthes', 'sc-systemic'] },
   ],
   foot: [
@@ -183,6 +185,8 @@ export const SIGNS = {
   'kf-artery': 'a pulsing lump behind the knee, or calf cramps on walking that ease within minutes of standing still',
   'kf-cancer': 'a past cancer, or a deep ache at night that does not change with position, with weight loss',
   'kf-tumour': 'a deep ache around the knee that wakes you at night, or a lump near the knee that is growing',
+  'kf-locked': 'a knee stuck right now, so it will not fully straighten even when you gently help it',
+  'kf-ocd': 'a child, teenager or young adult with knee swelling that keeps coming back after sport, with no injury',
   'kf-stress': 'a deep ache above the knee that is worse with running or hopping',
   'kf-sufe': 'a child or teenager aged about 9 to 17 limping, or with hip pain',
   'kf-perthes': 'a child aged about 4 to 10 limping, with no injury',
@@ -379,6 +383,8 @@ export const SHORT = {
   'kf-artery': 'calf cramps on walking or a pulsing lump behind the knee',
   'kf-cancer': 'a past cancer',
   'kf-tumour': 'night pain or a growing lump',
+  'kf-locked': 'a knee stuck so it will not straighten',
+  'kf-ocd': 'swelling that keeps coming back after sport',
   'kf-stress': 'a deep ache with running',
   'kf-sufe': 'a child or teen limping',
   'kf-perthes': 'a child limping',
@@ -594,6 +600,9 @@ const THEME_OF_SUFFIX = {
   infection: 'infection', flare: 'infection',
   nerve: 'nerve', cord: 'nerve', arm: 'nerve',
   bone: 'bone', organ: 'organ', postop: 'postop', medical: 'medical', bowel: 'bowel', injury: 'injury', pattern: 'headache',
+  // A locked knee and OCD (knee document, 26 Oct 2026): their own theme, so the
+  // medical-check group of a knee-and-shin drawing stays at six.
+  joint: 'joint',
 }
 export const themeOf = (g) => THEME_OF_SUFFIX[g.id.slice(g.id.lastIndexOf('-') + 1)] || 'medical'
 export const THEME_TITLES = {
@@ -613,6 +622,7 @@ export const THEME_TITLES = {
   injury: 'After a blow or a fall',
   headache: 'A headache that is new or changing',
   postop: 'Signs of a problem after back surgery',
+  joint: 'Signs from inside the knee joint',
 }
 /** Kept for the knee prototype's checks. */
 export const kneeOnly = (zones = []) => smartArea(zones) === 'knee'

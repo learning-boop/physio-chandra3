@@ -10,6 +10,10 @@ clin: Meniscal lesion (JOSPT CPG 2018)
 # P8 (65 or over +1, swelling after activity +1, outer side 1, inner side 2),
 # A4 clinic notes and plain wording.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 9:
+# the locked-knee line is now same day; Logerstedt 2018, Table 6-5 and AAOS 2024 notes.
 reviewed:
 pointers:
   "Twisting or turning on the leg": 3
@@ -41,7 +45,7 @@ The knee's cartilage shock-absorbers can be irritated by twisting, deep squattin
 - Gentle range-of-motion work within comfort
 
 ## seePhysioIf
-- Your knee gets stuck and will not straighten fully: see a doctor soon
+- Your knee gets stuck and will not straighten fully: see a doctor the same day
 - Joint-line pain persists beyond about 2 weeks, or there is catching
 - You want a rehab-first plan: for many age-related tears, exercise does as well as surgery
 
@@ -52,6 +56,7 @@ The knee's cartilage shock-absorbers can be irritated by twisting, deep squattin
 - You get a plan to return to daily activities and sport, and to manage flare-ups.
 
 ## clinicNotes
+- Knee document form 9 (Lower Quadrant Clinical Manual pp. 391-394, 427-428, checked): Logerstedt 2018: twisting injury, tearing sensation, delayed effusion (6-24 h), catching or locking, pain with forced hyperextension and maximum flexion; JLT sens 76, spec 77; McMurray sens 55, spec 77; Thessaly at 20 degrees medial sens 59-89, spec 83-97. Single tests cannot diagnose a tear (Decary 2017); the experienced clinician's history is the most accurate non-imaging method (Blyth 2015). Meniscal Pathology Composite Score: 5 positive spec 99%. AAOS 2024 meniscal CPG: combine JLT, McMurray and Thessaly; preserve the meniscus; surgery within 6 months if non-operative care fails. After surgery: full weight bearing by 6-8 weeks, return to sport about 4-7 months.
 - Diagnosis (meniscus and cartilage CPG 2018): twisting injury, tearing sensation, swelling over 6-24 hours, catching or locking, pain on forced hyperextension and maximal flexion, McMurray pain or click, joint-line tenderness, Thessaly at 20 degrees. Single tests are weak in primary care (Blyth: McMurray sens 0.58, spec 0.56; joint-line tenderness sens 0.77, spec 0.26; Thessaly sens 0.66, spec 0.39). The AIM manual (p.75) gives McMurray about 50-55% sensitive and 77% specific (medial), with joint-line tenderness higher on both. A composite of more than 3 positive findings has spec 90.2% (sens 30.8%), more than 5 spec 99.0% (sens 11.2%): it rules in, not out (the composite has 5 items; ">5" as published).
 - Risk: degenerative tears with age over 60 (OR 2.32), work kneeling or squatting, many flights of stairs; sex: the CPG lists male sex, the AIM manual female sex for medial tears (p.74). Medial tears are about three times more common than lateral (10.8% vs 3.7%, p.74). Acute tears with soccer and rugby, and delayed ACL reconstruction.
 - Locked knee: a knee that truly cannot straighten (a displaced bucket-handle tear) needs an early surgical opinion (clinical consensus; Bansal, cited in the CPG). Catching or occasional locking alone is not a reason for surgery: in FIDELITY, partial meniscectomy did no better than sham surgery for mechanical symptoms (Sihvonen 2016), and the BMJ Rapid Recommendations (2017) advise strongly against arthroscopy in degenerative knee disease, including with mechanical symptoms. Lavage and debridement only with mechanical locking (AIM manual p.11). In young people, traumatic longitudinal or radial tears favour repair: preserve the meniscus (p.76).

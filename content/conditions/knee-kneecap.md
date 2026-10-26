@@ -10,6 +10,10 @@ clin: Patellar dislocation or subluxation (lateral patellar instability)
 # tear. No "unstable" in patient wording. A first acute dislocation is caught
 # by the injury screen (I1 kneecap, I2, I5, I7).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 10:
+# moving apprehension and recurrence-risk notes.
 reviewed:
 pointers:
   "The kneecap shifts or slips to the side": 3
@@ -49,6 +53,7 @@ This happens when the kneecap shifts partly or fully out of its groove, usually 
 - You get a step-by-step return-to-sport plan to help lower the chance of it happening again.
 
 ## clinicNotes
+- Knee document form 10 (Theory pp. 488-492; Lower Quadrant Clinical Manual pp. 432-437, checked): 70% under 20; girls 10-17 at highest risk; spontaneous reduction in 80%; MPFL lesion in 83%; osteochondral fragments or loose bodies in a third (knee-loosebody). Moving patellar apprehension test (Bank 2017): sens 100%, spec 88% under anaesthesia. Recurrence (Parikh 2018): 2 or more risk factors over 50%, 3 or more 74.8% (young age, skeletal immaturity, female, bilateral or family history, trochlear dysplasia, patella alta, TT lateralisation); falls 8% per year of age, none after 40 (Lewallen). Ipsilateral 36% vs contralateral 5.4% at 20 years (Christensen 2017). Return to play 84-100% by functional criteria, 3-12 months (Sherman 2018). ESSKA 2024 first-time dislocation consensus: not yet checked.
 - Presentation (AIM manual pp.63-66): knee flexed with internal rotation of the femur over a planted foot (valgus); the kneecap usually goes laterally and about 80% reduce spontaneously; haemarthrosis, medial (MPFL) tenderness overlapping the femoral MCL origin, apprehension, difficulty walking. 70% are under 20; highest risk in girls aged 10-17.
 - Recurrence: about 36% at 20 years; 60-70% with trochlear dysplasia under 25; two or more Parikh risk factors give over 50% risk. Past dislocation is associated with later patellofemoral OA (OR 3.2; p.64).
 - Imaging: x-ray in all suspected dislocations (osteochondral fragment); MRI for young first-time dislocations (p.66). Differentials: ACL tear (pivot, pop, haemarthrosis), MCL sprain, osteochondral fracture.

@@ -9,6 +9,10 @@ onset: twist, blow
 # 5 Oct 2026: knee cross-check, approved by Chandra: S6 doctor lines for the
 # outer corner (posterolateral) injury, P11 giving way +1, A3.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 8:
+# Logerstedt LCL criteria and combined-injury notes.
 reviewed:
 pointers:
   "Outer side of the knee": 3
@@ -49,6 +53,7 @@ This is a stretch or tear of the ligament on the outer side of your knee, typica
 - A gradual plan can help you return safely to walking, work and sport.
 
 ## clinicNotes
+- Knee document form 8 (Lower Quadrant Clinical Manual pp. 378-381, 425, 429, checked): LCL sprain criteria (Logerstedt 2017): varus trauma, localised swelling and tenderness over the LCL, lateral pain and increased separation with varus stress at 0 and 30 degrees. Table 6-1: general examination sens 100, spec 20; varus stress sens 25. Over 13 degrees more ER on one side correlates with combined PLC and PCL injury (Alam 2013); dial test. Functional bracing for posterolateral corner injury (F). The CPN lies at the back-outer knee: foot drop is the injury screen I9 (same day).
 - Diagnosis (ligament CPG 2017): varus force; local swelling and tenderness over the LCL; lateral pain and laxity on varus stress at 0 and 30 degrees. LCL injury is the least common knee ligament injury (incidence about 4%, CPG). Suspect a posterolateral corner (PLC) injury with hyperextension plus varus or a posterolateral blow to the medial tibia near extension; it can be part of a knee dislocation. Dial test and external rotation recurvatum for the PLC (not in the CPG).
 - Neurovascular check: peroneal nerve injury occurs in about 13-44% of PLC or multiligament injuries (PMC8475172; not stated in the CPG). Ottawa fibular head tenderness (CPG p.a16; fibular head avulsion, the arcuate sign) is checked in clinic.
 - Acute PLC repair or reconstruction within about 3 weeks does better than chronic reconstruction (surgical case series, e.g. Stannard 2005; the CPG reports acute versus chronic outcomes, p.a9): refer suspected PLC injuries early.

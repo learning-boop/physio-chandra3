@@ -10,6 +10,10 @@ clin: Patellofemoral pain (JOSPT CPG 2019; Neal best practice guide 2024)
 # activity -1), A7 (no promise; thigh and hip strengthening; not damage;
 # Neal 2024; dry needling CPG vs manual; differentials and measures).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 2:
+# creaking +1 (common in PFP), stiffness over an hour -1; Decary and Table 6-9 notes.
 reviewed:
 pointers:
   "Around or behind the kneecap": 3
@@ -27,6 +31,8 @@ pointers:
   "Moving my low back": -2
   "Just below the kneecap": -1
   "A tender bony bump just below the kneecap (in a teenager)": -2
+  "The knee creaks or grinds when I bend it": 1
+  "Stiff in the morning for more than an hour": -1
 ---
 
 ## blurb
@@ -47,6 +53,7 @@ Pain from the joint between the kneecap and thigh bone, usually when it's asked 
 - It's not settling after about 2 weeks of load management, or has lasted more than 6 weeks: earlier exercise care tends to do better
 - It limits sport, stairs, or work
 - You'd like a graded strengthening plan, the best-evidenced treatment
+- Your knee is stuck right now and will not straighten fully, even when you gently help it: see a doctor the same day
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
@@ -55,6 +62,7 @@ Pain from the joint between the kneecap and thigh bone, usually when it's asked 
 - You get a plan to adjust and then rebuild your activity, and to manage flare-ups.
 
 ## clinicNotes
+- Knee document form 2 (Lower Quadrant Clinical Manual pp. 430-437, checked): Decary 2017 rule-in (spec 0.93, +LR 8.7): under 40 with isolated anterior pain or medial facet tenderness, or 40-58 with anterior or diffuse pain, difficulty descending stairs, medial facet tenderness and full passive extension; rule-out (sens 0.92, -LR 0.12): under 58 with medial, lateral or posterior pain and no facet tenderness, or over 58. Table 6-9: pain with squat sens 0.91-0.94, kneeling 0.84, stairs 0.75-0.94 (all low specificity); patellar tilt sens 0.43, spec 0.92; Clarke's sign of low value. AKPP 45-s single-leg squat at 60 degrees tracks adolescents (Rathleff 2022). The JOSPT 2019 CPG does not recommend dry needling, electrophysical agents or biofeedback for PFP.
 - Diagnosis (B): pain around or behind the kneecap reproduced by squatting, stairs, prolonged sitting or other loaded flexion, after excluding other causes. Pain on squatting is the test (A: +LR 1.8, -LR 0.2); reduced patellar tilt supports it (C: +LR 5.4). Clarke's sign is not useful (sens 0.39, spec 0.67; AIM manual p.44). Clicks or clunks may be heard (p.42). A rise in load is reported by almost all patients (p.39); PFP is common after knee surgery such as meniscectomy or ACL reconstruction (p.42).
 - Subgroups (F): overuse or overload; muscle performance deficits (hip and quadriceps); movement coordination (dynamic valgus); mobility (foot pronation, or tight hamstrings, quadriceps, calf, lateral retinaculum or ITB). Measures (A): AKPS, KOOS-PF, worst and usual pain; squat, step-down and single-leg squat (B). The AIM manual uses LEFS and PSFS (p.45).
 - Treatment: combined hip and knee exercise, hip emphasis early (A); combined interventions (A); prefabricated foot orthoses for pronators for up to 6 weeks with exercise (A); tailored taping with exercise up to 4 weeks (B); education on load, weight and adherence (F). Runners: gait retraining (C). Neal et al. 2024 best practice guide: knee-targeted (quadriceps) exercise first, hip- and knee-targeted exercise similar; supportive extras (orthoses, taping) as needed. Not recommended: patellofemoral braces, sleeves or straps (B), biofeedback (B), manual therapy alone (A), biophysical agents including cryotherapy (B), dry needling (A; the AIM manual allows dry needling as part of care, p.46, and the CPG grade is followed here).

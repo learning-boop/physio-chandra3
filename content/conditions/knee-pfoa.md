@@ -11,6 +11,10 @@ ages: 50-64, o64
 # side -1 (the AIM manual: kneecap pain can be inner, outer or below); A6
 # "sometimes", both views on the PFP link, taping and brace evidence.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 1:
+# creaking +2, morning stiffness over an hour -2.
 reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Around or behind the kneecap": 2
@@ -23,6 +27,8 @@ pointers:
   "Moving my low back": -2
   "Inner side of the knee": -1
   "Outer side of the knee": -1
+  "The knee creaks or grinds when I bend it": 2
+  "Stiff in the morning for more than an hour": -2
 ---
 
 ## blurb

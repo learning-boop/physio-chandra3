@@ -509,8 +509,9 @@ export const THIGH_INJURY = [
 ]
 
 /* ── Knee: twist, blow or fall (Ottawa knee rule, adapted; Stiell 1996) ──
-   Tenderness of the kneecap and the head of the fibula can only be checked in
-   person, so those Ottawa items are left out. */
+   Tenderness of the kneecap and the head of the fibula is asked as the patient
+   pressing it themselves (knee document, Chandra 26 Oct 2026); before that,
+   those two Ottawa items were left out. */
 export const KNEE_INJURY = [
   { id: 'I1', text: 'Have you injured your knee in the last 6 weeks, for example in a twist, a fall, or a knock?', options: [
     { id: 'no', label: 'No', route: 'skip' },
@@ -520,9 +521,12 @@ export const KNEE_INJURY = [
     { id: 'kneecap', label: 'Yes, the kneecap slipped out of place' },
     // Over-straightening tears the PCL and the outer corner (AIM manual p.61; 5 Oct 2026).
     { id: 'hyper', label: 'Yes, my knee was forced backwards (over-straightened)' },
+    // High-energy injuries (knee document form 6, PCL, 26 Oct 2026).
+    { id: 'vehicle', label: 'Yes, a car or motorbike crash, or a fall from a height' },
   ]},
-  { id: 'I2', text: 'Is the knee out of shape, or is the kneecap still out of place?',
-    options: yesNo('emergency', 'Possible knee or kneecap dislocation that has not gone back') },
+  // A wound over the bone (knee document form 13): an open fracture.
+  { id: 'I2', text: 'Is the knee out of shape, is the kneecap still out of place, or is there a wound over the bone?',
+    options: yesNo('emergency', 'Possible knee or kneecap dislocation that has not gone back, or an open fracture') },
   { id: 'I3', text: 'Since the injury, is your foot cold, pale, or numb?',
     options: yesNo('emergency', 'Possible artery or nerve injury after a knee dislocation') },
   // The peroneal nerve wraps round the outer knee: hurt with an outer corner
@@ -530,7 +534,8 @@ export const KNEE_INJURY = [
   { id: 'I9', text: 'Since the injury, is your foot weak, so your toes catch or your foot slaps down when you walk?',
     sameDay: true, options: yesNo('urgent', 'Possible peroneal nerve injury: it needs checking today') },
   // A possible fracture: same day.
-  { id: 'I4', text: 'Are you 55 or over, or could you not take 4 steps straight after the injury (and still cannot), or can you not bend the knee to a right angle?',
+  // All five Ottawa items since 26 Oct 2026 (knee document forms 5-8, 13).
+  { id: 'I4', text: 'Are you 55 or over, could you not take 4 steps straight after the injury (and still cannot), can you not bend the knee to a right angle, or is the kneecap, or the bony bump just below the outer knee, very sore to press?',
     sameDay: true, options: yesNo('urgent', 'Ottawa knee rule: an X-ray is needed to rule out a fracture') },
   // The Pittsburgh knee rule works at every age, after a fall or a blow
   // (JOSPT patellofemoral pain CPG 2019: Ottawa is validated for adults).
@@ -542,8 +547,14 @@ export const KNEE_INJURY = [
   // bone or cartilage injury (AIM manual pp.56, 64, 78).
   { id: 'I5', text: 'Did the knee swell up within 2 hours of the injury (with or without a pop)?',
     sameDay: true, options: yesNo('urgent', 'Quick swelling means bleeding in the joint: possible ACL tear, kneecap dislocation, or a break in the bone or cartilage') },
-  { id: 'I6', text: 'Is the knee stuck, so you cannot straighten it fully?',
-    options: yesNo('urgent', 'Possible locked knee from a torn meniscus (bucket-handle tear): it needs an early surgical opinion') },
+  // Same day (knee document, 26 Oct 2026), as the safety page's kf-locked.
+  { id: 'I6', text: 'Is the knee stuck, so you cannot straighten it fully?', sameDay: true,
+    options: yesNo('urgent', 'Possible locked knee from a torn meniscus (bucket-handle tear) or a loose fragment: it needs a doctor today and an early surgical opinion') },
+  // After a crash or a fall from a height (knee document form 6): up to 95% of
+  // PCL tears come with other ligament injuries (Pache 2018). Same day.
+  { id: 'I10', text: 'Since the crash or fall, does the knee feel loose, give way, or wobble in more than one direction?',
+    askIf: (a) => a.I1 === 'vehicle', sameDay: true,
+    options: yesNo('urgent', 'Possible injury to more than one knee ligament after a high-energy injury: it needs a doctor and imaging today') },
   // Asked after "the kneecap slipped out of place" only.
   // Same day (5 Oct 2026): an X-ray in every suspected dislocation (AIM manual p.66).
   { id: 'I7', text: 'Did the kneecap pop out and go back in?',

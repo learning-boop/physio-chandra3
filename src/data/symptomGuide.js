@@ -479,6 +479,16 @@ export const REGIONS = {
         text: "Is a child or teenager aged about 9 to 17 limping with knee or thigh pain, or does moving the hip hurt?" },
       { id: "kf-perthes", ages: ["u5", "u18"], sameDay: true, tier: "urgent", why: "Possible Perthes disease or other hip problem felt at the knee",
         text: "Is a child aged about 4 to 10 limping, with knee or hip pain, but no injury?" },
+      // A knee stuck now, with or without an injury (knee document forms 1, 5,
+      // 7, 8, 9, 12, 26 Oct 2026): same day. The injury screen's I6 asks it only
+      // after an injury.
+      { id: "kf-locked", sameDay: true, tier: "urgent", why: "A locked knee: a torn meniscus or a loose piece of cartilage or bone may be blocking it, and a doctor should check it today",
+        text: "Is your knee stuck right now, so it will not fully straighten even when you gently help it?" },
+      // Osteochondritis dissecans (knee document form 15): a teenager or young
+      // adult with swelling that keeps coming back with sport and no injury.
+      // Doctor first within days (X-ray, MRI if still suspected).
+      { id: "kf-ocd", ages: ["u18", "18-29"], tier: "urgent", why: "Possible osteochondritis dissecans, a weak patch of bone under the joint cartilage: cut back sport and see a doctor within days for an X-ray",
+        text: "Is a child, teenager or young adult (about 10 to 25) having knee pain with swelling that keeps coming back after sport, with no injury?" },
       { id: "kf-tumour", ages: ["u5", "u18", "18-29"], tier: "urgent", why: "Bone tumours in young people are most common around the knee; needs imaging",
         text: "Are you under 25 with a deep ache around the knee that wakes you at night, or a lump near the knee that is growing?" },
       { id: "kf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
@@ -515,11 +525,16 @@ export const REGIONS = {
       ]}
     ],
     questions: [
-      { id: "K1", text: "Where is the pain mainly?", options: [
+      // Asked first (knee document, 26 Oct 2026), as the hip's G1: the four new
+      // K3 answers made K3 outrank K1, and on a thigh-to-knee or knee-to-shin
+      // line the knee's one slot then missed where it hurts.
+      { id: "K1", text: "Where is the pain mainly?", priority: () => true, options: [
         { id: "kneecap", label: "Around or behind the kneecap" },
         { id: "below", label: "Just below the kneecap" },
         { id: "inner", label: "Inner side of the knee" },
         { id: "outer", label: "Outer side of the knee" },
+        // Superior tibiofibular joint (knee document form 11).
+        { id: "fibhead", label: "The bony bump just below the outer knee" },
         { id: "back", label: "Back of the knee" }
       ]},
       { id: "K2", text: "Which of these bring it on? Tick all that apply.", options: [
@@ -527,13 +542,28 @@ export const REGIONS = {
         { id: "jump", label: "Jumping or landing" },
         { id: "twist", label: "Twisting or turning on the leg" },
         { id: "running", label: "Running, coming on after the same distance each time" },
-        { id: "kneeling", label: "Kneeling" }
+        { id: "kneeling", label: "Kneeling" },
+        // Biceps femoris on the fibular head (knee document form 11; MP 449).
+        { id: "curl", label: "Bending the knee against resistance, like hamstring curls" }
       ]},
-      { id: "K3", text: "Which of these apply? Tick all that apply.", options: [
+      // Early too (knee document, 26 Oct 2026): the loose body and the
+      // diagnosed cartilage card are told only here, and on a two-area line the
+      // knee's slots went elsewhere.
+      { id: "K3", text: "Which of these apply? Tick all that apply.",
+        // Not for pain just below the kneecap: there the tender-bump question
+        // (K5, Osgood-Schlatter) and the tendon questions matter more.
+        priority: ({ ra }) => ([].concat(ra.K1 || []).includes("below") ? false : 0.5), options: [
         { id: "click", label: "Clicking, catching, or locking" },
         { id: "giveway", label: "The knee gives way" },
         { id: "swelling", label: "Swelling after activity" },
         { id: "stiff", label: "Stiff for less than 30 minutes in the morning or after sitting, then eases" },
+        // Knee document, 26 Oct 2026: over an hour is inflammatory (form 1);
+        // crepitus (form 1); loose body (form 12); a diagnosed cartilage injury,
+        // bone bruise or OCD (forms 14 and 15).
+        { id: "amlong", label: "Stiff in the morning for more than an hour" },
+        { id: "creak", label: "The knee creaks or grinds when I bend it" },
+        { id: "twinge", label: "Sudden sharp twinges that stop me mid-step, freed by shaking the knee" },
+        { id: "cartdx", label: "A doctor has found a cartilage injury, bone bruise or OCD on a scan" },
         // 5 Oct 2026 (knee cross-check): tells a kneecap that slips from an ACL tear.
         { id: "kneecapshift", label: "The kneecap shifts or slips to the side" },
         { id: "none", label: "None of these" }
@@ -550,7 +580,10 @@ export const REGIONS = {
           { id: "stop", label: "I could not carry on playing" },
           { id: "none", label: "None of these" }
         ]},
-      { id: "K5", text: "Is there any swelling or lump in one place?", options: [
+      // Early for a child or teenager (knee document, 26 Oct 2026): the tender
+      // bump is Osgood-Schlatter's telltale, and the busier K3 had pushed it
+      // out of the five slots.
+      { id: "K5", text: "Is there any swelling or lump in one place?", priority: ({ ra }) => (ra.age === "u18" ? 2 : false), options: [
         { id: "prepatellar", label: "Swelling on the front of the kneecap (after kneeling)" },
         { id: "back", label: "A lump or fullness at the back of the knee" },
         { id: "bump", label: "A tender bony bump just below the kneecap (in a teenager)" },
@@ -566,7 +599,9 @@ export const REGIONS = {
         // Early for a child, or when the thigh or hip is drawn too: hip
         // problems (in children, a slipped growth plate) are often felt only
         // at the knee.
-        priority: ({ draw, ra }) => !draw || ["thigh", "hip"].some((t) => draw.has(t)) || ["u5", "u18"].includes(ra.age),
+        // Strength 2 (knee document, 26 Oct 2026): K3's new answers and its
+        // own nudge had pushed it out on a knee-to-shin line.
+        priority: ({ draw, ra }) => (!draw || ["thigh", "hip"].some((t) => draw.has(t)) || ["u5", "u18"].includes(ra.age) ? 2 : false),
         options: [
           { id: "yes", label: "Yes", special: "hipSourceKnee" },
           { id: "no", label: "No" },

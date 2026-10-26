@@ -122,18 +122,33 @@ function ageRange(id) {
   return null
 }
 const sharesAge = (q) => q.id === 'age' && q.options.every((o) => ageRange(o.id))
+// An option's range within its own question: "u18" is "5 to 15" (5 to 17)
+// where the question also has "u5" (26 Oct 2026; before, both started at 0,
+// so a shared "Under 18" band mapped every child to "Under 5").
+function optionRange(id, q) {
+  const r = ageRange(id)
+  if (id === 'u18' && q.options.some((o) => o.id === 'u5')) return [5, 17]
+  return r
+}
 
 function ageBuckets(questions) {
-  const starts = [...new Set(questions.flatMap((q) => q.options.map((o) => ageRange(o.id)[0])))].sort((a, b) => a - b)
+  const starts = [...new Set(questions.flatMap((q) => q.options.map((o) => optionRange(o.id, q)[0])))].sort((a, b) => a - b)
   return starts.map((lo, i) => {
     const hi = i + 1 < starts.length ? starts[i + 1] - 1 : 150
     const label = lo === 0 ? `Under ${hi + 1}` : hi === 150 ? `Over ${lo - 1}` : `${lo} – ${hi}`
     return { id: 'a' + lo, label }
   })
 }
+/* `bucketId` is a shared band ("a30") or, from "A little about you", an
+   area's own id ("30-49"). The own id is kept when the area has it; before
+   26 Oct 2026 it was read as a band, so on a drawing of two or more areas
+   every age from 16 to 64 was lost and the others moved up a band. */
 function mapAge(bucketId, q) {
-  const lo = Number(String(bucketId).slice(1))
-  const o = q.options.find((x) => { const r = ageRange(x.id); return r && lo >= r[0] && lo <= r[1] })
+  const id = String(bucketId)
+  if (q.options.some((o) => o.id === id)) return id
+  const own = /^a\d+$/.test(id) ? null : ageRange(id)
+  const lo = own ? (id === 'u18' ? 5 : own[0]) : Number(id.slice(1))
+  const o = q.options.find((x) => { const r = optionRange(x.id, q); return r && lo >= r[0] && lo <= r[1] })
   return o ? o.id : undefined
 }
 

@@ -54,6 +54,7 @@ export const PLAIN_GATES = {
   'shoulder-nerve': 'Has your arm become weak or numb?',
   'knee-infection': 'Could the knee be infected or inflamed?',
   'knee-circulation': 'Could there be a problem with the blood flow in your leg?',
+  'knee-joint': 'Is the knee stuck, or does it keep swelling?',
   'knee-medical': 'Could something else be going on?',
   'hip-surgery': 'Could there be a problem after hip surgery, or a clot?',
   'hip-bone': 'Could the bone be hurt or weak?',
@@ -121,6 +122,7 @@ export const PLAIN_GATES = {
   'multi-infection': 'Do you feel unwell, not just sore?',
   'multi-organ': 'Could the pain be coming from inside your body?',
   'multi-nerve': 'Have your arms, legs, feet or hands changed?',
+  'multi-joint': 'Is the knee stuck, or does it keep swelling?',
   'multi-medical': 'Could something else be going on?',
   'multi-circulation': 'Could there be a clot, a blood flow problem, or a problem after surgery?',
 }
@@ -202,6 +204,8 @@ export const PLAIN_SHORT = {
   'kf-inflam': 'Other swollen joints, a rash, sore eyes, or a recent infection',
   'kf-cancer': 'Past cancer, or night pain with weight loss',
   'kf-tumour': 'Under 25 with a night ache, or a growing lump',
+  'kf-locked': 'A knee stuck right now, so it will not straighten',
+  'kf-ocd': 'Young, with knee swelling that keeps coming back after sport',
   'kf-stress': 'A runner with a deep ache above the knee',
   'kf-sufe': 'A child or teenager limping, with knee or hip pain',
   'kf-perthes': 'A child or teenager limping, with knee or hip pain',
@@ -856,6 +860,13 @@ export const TICKS = {
   'kf-cancer': [
     { key: 'past', text: 'You have had cancer before', tell: 'I have had cancer before' },
     { key: 'night', combo: true, text: 'Deep knee pain at night that does not change however you lie, with weight loss', tell: 'I have deep knee pain at night and I am losing weight' },
+  ],
+  // Knee document, 26 Oct 2026.
+  'kf-locked': [
+    { key: 'stuck', text: 'Your knee is *stuck right now* and will not straighten, even with help', tell: 'my knee is stuck and will not straighten' },
+  ],
+  'kf-ocd': [
+    { key: 'swell', combo: true, text: 'About 10 to 25, with knee swelling that *keeps coming back* after sport, and no injury', tell: 'my knee keeps swelling after sport, with no injury' },
   ],
   'kf-tumour': [
     { key: 'ache', combo: true, text: 'You are under 25, with a deep ache around the knee that wakes you at night', tell: 'I am under 25 and a deep ache around my knee wakes me at night' },

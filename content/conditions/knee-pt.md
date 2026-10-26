@@ -9,6 +9,10 @@ clin: Patellar tendinopathy (Malliaras 2015; Breda 2021)
 # P5 (16 to 29 +1, 5 to 15 -1, whole knee puffy -1, clicking -1), A8 clinic
 # notes, softer isometric line, pain monitoring, next-day pain, shallow depth.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 3:
+# notes (VISA-P, decline squat, deep frictions not offered).
 reviewed:
 pointers:
   "Just below the kneecap": 3
@@ -52,6 +56,7 @@ The tendon just below the kneecap can become sensitive when jumping, landing, or
 - You get a gradual plan to build back up to jumping, landing and your sport.
 
 ## clinicNotes
+- Knee document form 3 (Theory pp. 452-462): primary criterion is load-related pain at the inferior pole; palpation unreliable (sens 37-56%, spec 47-83%; Cook 2013). Loading tests should reproduce local pain only; record the angle at onset; single-leg decline squat at 25 degrees for diagnosis and self-monitoring (Rudavsky 2014). VISA-P /100, MCID 13, repeat every 4-6 weeks. Isometrics can ease pain for up to about 45 minutes (Rio 2015). Prevalence up to 32% in basketball and 45% in volleyball (Lian 2005); 50% recurrence. The manual lists infrapatellar deep tendon frictions (p. 396) but the Theory Resources say they are not supported (Cook 2018; p. 459): not offered. No CPG exists (searched 26 Oct 2026).
 - Diagnosis (Malliaras 2015): pain localised to the inferior pole of the patella, load-dependent, rising with the energy-storage demand of the tendon (jumping, landing, change of direction); first episode usually between 15 and 30 (AIM manual p.28); pain often worse 24 hours later (p.29). Decline single-leg squat at 25 degrees. Palpation is of low value (sens 37-56%, spec 47-83%). Imaging does not confirm the diagnosis: tendon changes are common without pain.
 - Measure: VISA-P (minimal clinically important change about 13 points).
 - Management: progressive tendon loading (Breda 2021: isometric, then isotonic, then energy-storage, then sport-specific, which beat eccentric training at 24 weeks), or heavy slow resistance; pain-monitoring model (about 3/10, settled by next morning). Isometrics (for example 5 x 45 s at 60 degrees, 70-80% MVC) may ease pain for some, though later trials did not reproduce reliable immediate relief (Clifford 2020). Increase depth only once pain has reduced substantially (p.33). Shockwave is no better than exercise; deep friction is not supported; surgery is a last resort.

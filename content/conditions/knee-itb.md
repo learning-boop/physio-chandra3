@@ -9,6 +9,10 @@ clin: ITB syndrome (runner's knee, outer)
 # lines, P7 (swelling, whole knee puffy, giving way and 65 or over -1),
 # A10 downhill and bike set-up, later-stage line, clinic notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "PhysioChandra_Knee_Condition_Forms_ALL.docx" (15 forms, signed v1.0
+# by Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/knee-conditions.md): form 4:
+# the bony-bump and resisted-bending answers -1 (tibiofibular joint); Renne and Noble notes.
 reviewed:
 pointers:
   "Outer side of the knee": 3
@@ -21,6 +25,8 @@ pointers:
   "The knee gives way": -1
   "65 or over": -1
   "Moving my low back": -2
+  "The bony bump just below the outer knee": -1
+  "Bending the knee against resistance, like hamstring curls": -1
 ---
 
 ## blurb
@@ -50,6 +56,7 @@ Irritation where the long band on the outside of the thigh crosses the knee, cla
 - You get a gradual plan back to running or cycling, including tips on training, shoes and bike set-up.
 
 ## clinicNotes
+- Knee document form 4 (Lower Quadrant Clinical Manual pp. 406-407, checked): onset several minutes in, often at exactly the same time, or after activity; worse downhill and on stairs (Fairclough 2007). Renne test (single-leg weight bearing at 30-40 degrees reproduces the pain; Renne 1975, 16 of 1,000 trainees) and Noble compression test (pain at about 30 degrees with pressure 1-2 cm above the lateral condyle; Noble 1980, 220 cases): no sensitivity or specificity data; diagnosis rests on history plus these tests (van der Worp 2012). Contributors: reduced ankle DF, increased hip IR and knee adduction, weak hip ER (Noehren 2014). Exclude LCL, lateral meniscus, STFJ (knee-stfj), biceps femoris, popliteus, CPN and lumbar referral. No CPG; the 2024 conservative treatment review (Front Sports Act Living 2024;6:1386456) is not yet checked.
 - Diagnosis by history (lateral knee pain at a predictable distance, worse downhill and descending stairs) plus Renne's and Noble's tests, which have no sensitivity or specificity data (AIM manual p.23); Ober's test for tightness. Imaging is largely not indicated. Typical age from the teens to the 50s (p.22).
 - Differentials: lateral meniscus, LCL and posterolateral corner, superior tibiofibular joint, biceps femoris or popliteus tendons, patellofemoral pain, peroneal nerve, TFL or gluteus minimus referral, lumbar (L5) referral.
 - Management: short-term load reduction below the symptom threshold, then graded return; hip abductor strengthening (consistent benefit, low-quality evidence: Sanchez-Alvarado 2024 systematic review). Stretching or foam rolling the band itself has little evidence. Surgery only after conservative care fails.

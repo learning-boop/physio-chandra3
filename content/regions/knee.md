@@ -21,6 +21,14 @@ reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: 2026-09-25
 ---
 
+## changes 26 Oct 2026 ("PhysioChandra_Knee_Condition_Forms_ALL.docx", 15 forms, approved by Chandra)
+<!-- Built into symptomGuide.js and injuryScreen.js; reasoning in content/reference/knee-conditions.md. -->
+- Safety page: kf-locked (a knee stuck now, same day) and kf-ocd (5 to 29, swelling that keeps coming back after sport, no injury; doctor within days), in their own group.
+- Injury screen: I1 gains a crash or fall from a height; I2 adds a wound over the bone (emergency); I4 asks all five Ottawa items (the kneecap or fibular head very sore to press); I6 (locked) is same day; new I10 after a crash: loose in more than one direction (same day).
+- New answers: K1 the bony bump below the outer knee; K2 bending against resistance; K3 morning stiffness over an hour, creaking, sudden twinges freed by shaking the knee, a scan has found a cartilage injury, bone bruise or OCD.
+- K1 and K3 asked early, K5 early for 5 to 15, K6 priority 2: the busier K3 had crowded out the location, the tender bump and the hip on lines across two areas.
+- New cards: knee-stfj, knee-loosebody, knee-cartilage. Test patients KC1 to KC10.
+
 ## red flags
 - Is your knee hot, red, and swollen, with a fever or feeling unwell, especially after an injection, surgery, or a cut? | emergency | Possible joint infection (septic arthritis)
 - Is your calf or thigh swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung

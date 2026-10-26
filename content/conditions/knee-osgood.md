@@ -12,6 +12,8 @@ ages: u18, 18-29
 # folded in (the parked _knee-slj.md draft). Age: 16 and 17 year olds are in
 # the "16 to 29" band, so it is allowed with -1 (it is rare in adults).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026 (knee document check): "5 to 15" +1, its peak age (10 to 15); the
+# busier K3 had let the jumper's knee card rank above it for a teenager.
 reviewed:
 pointers:
   "A tender bony bump just below the kneecap (in a teenager)": 3
@@ -20,6 +22,7 @@ pointers:
   "Jumping or landing": 1
   "Kneeling": 1
   "Going down stairs, squatting, or sitting a long time with the knee bent": 1
+  "5 to 15": 1
   "16 to 29": -1
   "Around or behind the kneecap": -1
   "The whole knee is puffy": -1
