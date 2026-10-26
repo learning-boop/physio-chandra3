@@ -19,6 +19,7 @@ pointers:
   "50 to 64": 1
   "Yes: one clear injury, or it follows one clear line or joint": 1
   "No: there was no single cause": -1
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 ---
 
 ## blurb
@@ -39,7 +40,7 @@ Osteoarthritis is the most common reason for aching in several joints as we get 
 ## seePhysioIf
 - The aching is limiting walking, sleep, work or the things you enjoy: a physiotherapy assessment can give you a plan for exercise and load
 - Morning stiffness lasting more than an hour, or joints that look swollen or feel hot: see your doctor (possible inflammatory arthritis)
-- A joint that is suddenly very swollen, hot and too painful to touch, especially with a fever: see a doctor the same day
+- A joint that is suddenly very swollen, hot and too painful to touch: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Pain that wakes you and does not change with position, or unexplained weight loss: see your doctor within days
 
 ## physioHelps

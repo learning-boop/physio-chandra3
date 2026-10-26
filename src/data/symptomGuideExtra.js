@@ -49,7 +49,7 @@ export const EXTRA_REGIONS = {
       // A1.1: sudden severe headache + sudden stroke signs + new, sudden
       // dizziness with signs. Dizziness alone still does not count.
       { id: "nrf-stroke", tier: "emergency", call911: true, group: ["stroke", "thunderclap", "dizzystroke"], why: "Possible stroke, bleed, or neck artery tear",
-        text: "Since this started, has any of these come on suddenly: the worst headache of your life; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk?" },
+        text: "Since this started, has any of these come on suddenly: the worst headache of your life, or a new neck pain or headache that is severe and unlike anything before, even without an injury; a drooping or numb face; weakness or numbness in an arm or leg on one side; slurred speech, or trouble finding or understanding words; loss of sight or double vision; trouble swallowing; confusion, falls or blackouts; or new dizziness or spinning with vomiting, or being unable to stand or walk?" },
       // Numbness and weakness spreading quickly in both hands and feet (a
       // fast nerve condition such as Guillain-Barre) from the "Cervical Neural
       // Mechanosensitivity" document (v1.0, approved 28 Sep 2026).
@@ -79,7 +79,7 @@ export const EXTRA_REGIONS = {
         // + no injury (neck cross-check, Chandra 5 Oct 2026): a neck artery tear
         // can start as ordinary-seeming neck pain or headache without any injury
         // (IFOMPT cervical framework 2020; Cervical Clinic Manual 2026 §3, §14).
-        text: "Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before? Or, even without any injury, has a new neck pain or headache come on suddenly that is severe and feels unlike anything you have had before?" },
+        text: "Since a car accident, a neck manipulation, a sudden jerk or a knock to the head or neck, have you had dizziness that keeps coming back, any of the signs above even if they are not getting worse, or a new neck pain or headache that is different from any before?" },
       // A2.2: hands or walking quickly worse + the general "new or worsening
       // weakness or numbness" (group "neuro" replaces it). Now same day.
       // The slow pattern is asked in N9/N10 and scored (neck-dcm.md).
@@ -556,8 +556,11 @@ export const EXTRA_REGIONS = {
       // over 50, or a fall from standing height, as well as a minor strain.
       { id: "trf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine: your doctor should examine you and arrange an X-ray before treatment starts",
         text: "Did the pain start suddenly after a minor strain, cough, lift, or a fall from standing height, and are you over 50, or do you have osteoporosis or low bone density, or take long-term steroid tablets?" },
+      // Head-to-toe review, 26 Oct 2026 (content/review/site-review-2026-10-26.md), approved by Chandra: A8, a fever with back pain is same day; the risk factors alone stay doctor first.
+      { id: "trf-fever", sameDay: true, tier: "urgent", group: "spinefever", why: "Possible spinal infection: a fever or chills with back pain needs a doctor today",
+        text: "Do you have a fever or chills with the back pain?" },
       { id: "trf-infection", tier: "urgent", group: "infection", why: "Possible spinal infection",
-        text: "Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?" },
+        text: "Is the back pain new or getting worse, and do you have a weakened immune system, or have you injected drugs?" },
       { id: "trf-kidney", tier: "urgent", group: "kidney", why: "Possible kidney infection or stone",
         text: "Is the pain in your side or lower ribs, with a fever, burning when you pass urine, or blood in your urine?" },
       { id: "trf-gut", tier: "urgent", why: "Stomach, ulcer, or gallbladder pain can be felt in the back",
@@ -709,8 +712,11 @@ export const EXTRA_REGIONS = {
         text: "Have you ever had cancer, and is this a new back pain?" },
       { id: "jrf-osteo", tier: "urgent", group: "osteo", why: "Possible osteoporotic fracture of the spine",
         text: "Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?" },
+      // Head-to-toe review, 26 Oct 2026 (content/review/site-review-2026-10-26.md), approved by Chandra: A8, a fever with back pain is same day; the risk factors alone stay doctor first.
+      { id: "jrf-fever", sameDay: true, tier: "urgent", group: "spinefever", why: "Possible spinal infection: a fever or chills with back pain needs a doctor today",
+        text: "Do you have a fever or chills with the back pain?" },
       { id: "jrf-infection", tier: "urgent", group: "infection", why: "Possible spinal infection",
-        text: "Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs?" },
+        text: "Is the back pain new or getting worse, and do you have a weakened immune system, or have you injected drugs?" },
       { id: "jrf-legs", tier: "urgent", group: "legs", why: "Possible slow pressure on the spinal cord",
         text: "Have your legs gradually become stiff, heavy, or clumsy when you walk?" },
       { id: "jrf-shingles", tier: "urgent", group: "shingles", why: "Possible shingles",
@@ -1297,7 +1303,8 @@ export const EXTRA_REGIONS = {
       // Shared with the neck (group "cadsevere", Chandra 28 Sep 2026): asked once.
       { id: "hrf-cad-severe", tier: "emergency", call911: true, group: "cadsevere", why: "Severe new pain or fast-changing symptoms after a neck manipulation, jerk or knock: possible neck artery tear",
         text: "Since a neck manipulation, a sudden jerk, or a minor knock, have you had neck pain or a headache that is severe and unlike anything you have felt before, or symptoms that are changing or getting worse quickly?" },
-      { id: "hrf-cad", tier: "urgent", group: "cad", why: "Early sign of a neck artery tear can be pain alone (IFOMPT framework)",
+      // Head-to-toe review, 26 Oct 2026 (content/review/site-review-2026-10-26.md), approved by Chandra: A4, same day as the neck's nrf-after-doc (same group).
+      { id: "hrf-cad", sameDay: true, tier: "urgent", group: "cad", why: "Early sign of a neck artery tear can be pain alone (IFOMPT framework)",
         text: "Did a new headache with neck pain, different from any you have had before but not severe, start after a neck manipulation or sudden jolt?" }
     ],
     context: [
@@ -1582,7 +1589,7 @@ export const EXTRA_REGIONS = {
         text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
       { id: "erf-bursa", sameDay: true, tier: "urgent", why: "Possible infected bursa at the back of the elbow",
         text: "Is there a swelling at the point of your elbow that is red, warm, or has a cut or graze over it?" },
-      { id: "erf-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
+      { id: "erf-gout", sameDay: true, tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
         text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
       // + the "OK" sign (form 26, 19 Oct 2026): an anterior interosseous nerve
       // palsy at the elbow was asked only after an injury (injury screen I8).
@@ -2073,7 +2080,7 @@ export const EXTRA_REGIONS = {
         text: "Along with the hand symptoms, has one side of your face drooped, or have you had sudden weakness or numbness down one whole side, or trouble speaking?" },
       { id: "hnd-felon", sameDay: true, tier: "urgent", why: "Possible fingertip or nail-fold infection (felon or paronychia); same-day review",
         text: "Is there a tense, throbbing, swollen fingertip, or pus around the nail?" },
-      { id: "hnd-gout", tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
+      { id: "hnd-gout", sameDay: true, tier: "urgent", group: "gout", why: "Possible gout or other crystal arthritis",
         text: "Did a joint become suddenly hot, swollen and very painful overnight, and have you had gout or pseudogout before?" },
       { id: "hnd-cellulitis", sameDay: true, tier: "urgent", group: "cellulitis", why: "Possible skin or lymph infection (cellulitis or lymphangitis); same-day review",
         text: "Is there spreading redness, a red streak running up the arm, or a hot swollen area, with a fever?" },
@@ -2463,6 +2470,9 @@ export const EXTRA_REGIONS = {
         text: "Is your thigh or calf swollen, warm, or tender, especially after surgery, a long journey, time in bed, a cast, or starting the pill?" },
       { id: "tgf-cellulitis", sameDay: true, tier: "urgent", group: "legcellulitis", why: "Possible skin infection (cellulitis); same-day review",
         text: "Is there spreading redness, a red streak up the leg, or a hot, swollen area, with a fever?" },
+      // Head-to-toe review, 26 Oct 2026 (content/review/site-review-2026-10-26.md), approved by Chandra: A10, every step or at rest is same day (as the hip, shin and foot).
+      { id: "tgf-stressday", sameDay: true, tier: "urgent", group: "femstressday", why: "Possible stress fracture of the thigh bone that is getting worse: it needs a doctor today, and crutches until it is checked",
+        text: "Do you run or train hard, and does the deep thigh or above-the-knee ache now come with every step when you walk, at rest, or so that you cannot take weight on the leg?" },
       { id: "tgf-stress", tier: "urgent", group: "femstress", why: "Possible stress fracture of the thigh bone; needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep, aching thigh pain that is worse with hopping, or aches at night?" },
       { id: "tgf-tumour", ages: ["u5", "u18", "18-29"], tier: "urgent", why: "Bone or soft-tissue lumps in the thigh need imaging to rule out a tumour",
@@ -2786,6 +2796,9 @@ export const EXTRA_REGIONS = {
       { id: "af-neuropathy", tier: "urgent", noBooking: true, group: "neuropathy", why: "Possible peripheral neuropathy; needs medical review and foot checks",
         text: "Do both feet feel numb, burning, or tingling, like wearing socks, especially with diabetes?" },
       // 6 Oct 2026: ankle and foot cross-check, approved by Chandra.
+      // Head-to-toe review, 26 Oct 2026 (content/review/site-review-2026-10-26.md), approved by Chandra: A10, every step or at rest is same day (as the hip, shin and foot).
+      { id: "af-stressday", sameDay: true, tier: "urgent", why: "Possible stress fracture at the ankle or midfoot that is getting worse: it needs a doctor today, and to keep weight off until it is checked",
+        text: "After more running, walking, marching or training, can you now not take weight on the foot, or does the ankle or midfoot bone hurt even at rest?" },
       { id: "af-stress", tier: "urgent", why: "Possible stress fracture of the navicular or the inner ankle bone; these are high-risk and need imaging",
         text: "After more running, walking, marching or training, is there pain on one spot of bone (the inner ankle bone, or the top of the inner midfoot) that is worse with every step or hopping, or aches at night?" },
       { id: "af-cancer", tier: "urgent", group: "cancer", why: "A lump or bone lesion needs medical review",

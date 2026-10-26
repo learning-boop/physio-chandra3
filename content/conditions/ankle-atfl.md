@@ -11,6 +11,7 @@ clin: Lateral ankle ligament sprain, ATFL with or without CFL (JOSPT CPG 2021)
 # 26 Oct 2026: "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 7 notes; the easily-missed fracture line.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "Outer ankle, in front of or below the bony bump": 3
@@ -27,7 +28,7 @@ pointers:
 ---
 
 ## blurb
-The most commonly injured ligament in the ankle, stretched or torn when the ankle rolls inwards. Most heal well, but without balance and strength exercises about 4 in 10 people go on to have an ankle that keeps rolling or giving way.
+The most commonly injured ligament in the ankle, stretched or torn when the ankle rolls inwards. Many settle well, but without balance and strength exercises about 4 in 10 people go on to have an ankle that keeps rolling or giving way.
 
 ## noticed
 - Outer ankle pain and swelling after a roll/twist

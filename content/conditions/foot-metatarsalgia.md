@@ -7,6 +7,7 @@ clin: Metatarsalgia or plantar plate injury
 # 6 Oct 2026: ankle and foot cross-check, approved by Chandra (review/ankle-foot-crosscheck.html).
 # S7, S8, N7, N8: doctor lines (gout or infection, RA, Freiberg's, stress fracture, diabetes), plantar plate and Freiberg's notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "Pain under one toe joint, with swelling on top": 3
@@ -34,7 +35,7 @@ The ball of the foot carries a lot of load with every step, especially in high h
 - Avoid walking barefoot on hard floors
 
 ## seePhysioIf
-- A toe joint is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day
+- A toe joint is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Several toe joints are swollen in both feet, or in the hands too, with morning stiffness over 30 minutes: see your doctor
 - One spot of bone in the front of the foot hurts with every step or hop, or aches at night, after more running, walking or training: see a doctor first (possible stress fracture)
 - A teenager with pain and swelling at the base of the 2nd toe: see us or your doctor, as an X-ray may be needed

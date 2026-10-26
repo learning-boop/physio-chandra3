@@ -9,6 +9,7 @@ onset: surgery
 # 26 Oct 2026: "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 10 notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed:
 pointers:
   "After surgery, or time in a cast or boot, for a broken ankle or foot": 4
@@ -36,6 +37,7 @@ After a broken ankle or foot, whether treated in a cast, a boot or with surgery,
 - Burning pain, colour or temperature changes, or skin so sensitive that light touch hurts: see your doctor and book physiotherapy now
 - You would like a structured movement, strength and balance programme
 - Progress has stalled, or you are not back to the activities you want
+- The cast or boot feels tighter and more painful, with numbness, tingling, or a cold, pale or blue foot: go to the emergency department now
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

@@ -14,6 +14,7 @@ clin: Non-specific low back pain, mechanical pattern (NICE NG59; JOSPT 2012 low 
 # 4 to 6 weeks (NICE), replacing the 30-day flag; no medication line; the
 # fracture line keeps the safety question's over 70 (rf-osteo), not over 50.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A6 to A8, the leg-weakness, injury and infection lines.
 reviewed: Chandra Matla, 2026-10-06 (approved in session)
 # Pointers follow the document's scored question set (section 4, max 14,
 # possible 6-9, likely 10+), mapped onto the low back questions already asked
@@ -83,9 +84,10 @@ This is the most common kind of back pain. The muscles, joints, discs and ligame
 - The pain is limiting your work, sleep or the things you enjoy, keeps coming back, or is not clearly improving after 2 to 3 weeks
 - It is not clearly better after 4 to 6 weeks, or is getting worse week on week: see your doctor as well
 - Numbness around your saddle area or genitals, new trouble starting or controlling urine, a new bowel accident, or leg pain that spreads to both legs or swaps sides: go to the emergency department now
-- A leg or foot that is getting weaker, or a foot that slaps or drags: see a doctor the same day
-- A fever or chills with the back pain, or a recent infection, injection or surgery to the spine: see a doctor the same day
-- Back pain after a fall, a crash or a heavy knock, or after even a minor strain or fall if you are over 70, have thin bones (osteoporosis) or take steroid tablets: see a doctor today
+- Leg weakness that is getting quickly worse over hours or days: go to the emergency department now; a foot that slaps or drags, or a leg getting slowly weaker: see a doctor the same day
+- A fever or chills with the back pain: see a doctor the same day
+- A recent infection, or an injection or surgery to the spine, and the back pain is new or getting worse: see your doctor within a few days
+- Back pain after a car crash, a fall from a height or a hard landing: go to the emergency department; after only a minor strain or fall if you are over 70, have thin bones (osteoporosis) or take steroid tablets: see a doctor today
 - Constant pain that is the same whatever you do and wakes you most nights, weight loss you cannot explain, a past cancer, or feeling generally unwell: see your doctor this week
 - Under 20, with pain on arching your back in sport for more than 2 to 3 weeks: see your doctor for an X-ray before training through it
 

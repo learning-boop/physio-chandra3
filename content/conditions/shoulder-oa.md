@@ -12,6 +12,7 @@ ages: 50-64, o64
 # routing note), signed v1.0 by Chandra 19 Oct 2026, fed with Chandra's
 # approval: clicking or catching 2 to 3 (grinding is the form's strongest sign).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "65 or over": 2
@@ -47,7 +48,7 @@ A gradual change in the cartilage and bone of the main shoulder joint, usually a
 - During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning
 
 ## seePhysioIf
-- The shoulder becomes hot, red or swollen, or you have a fever: see a doctor the same day
+- The shoulder becomes hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Pain at night that no position eases, a new lump, or weight loss you cannot explain: see a doctor
 - Stiffness or pain limits dressing, reaching or sleep
 - You would like a structured exercise plan, or are weighing up options with your doctor

@@ -6,6 +6,7 @@ clin: Thoracic spine stiffness (mobility deficit)
 # Patient text moved from the old upper back region (July 2026 document set).
 # Pointers from content/regions/upperback.md, 24 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed:
 pointers:
   "After long hours sitting, at a desk, or driving": 2
@@ -39,6 +40,7 @@ Stiffness and muscle ache of the mid-back region, commonly linked to sustained p
 - Stiffness or ache persists beyond 2 weeks
 - It limits work, sport, or sleep
 - You'd like a posture-and-strength plan for desk work
+- Chest pain or pressure, pain spreading to the arm or jaw, or breathlessness, especially with exercise or a cold sweat: call 911
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

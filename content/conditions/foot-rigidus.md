@@ -11,6 +11,7 @@ clin: First metatarsophalangeal joint osteoarthritis
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 16 notes; gout is now same day (ft-gout)
 # and a hot toe with a fever an emergency (ft-septic).
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "Stiff, and painful when I push off or rise on my toes": 3
@@ -39,7 +40,7 @@ Arthritis in the big toe joint makes it stiff, especially when bending the toe u
 - During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
 
 ## seePhysioIf
-- The big toe joint is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day
+- The big toe joint is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Pain is limiting walking or sport
 - The toe is getting stiffer
 - You want advice on shoes, insoles, or other options

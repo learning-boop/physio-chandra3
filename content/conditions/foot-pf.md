@@ -11,6 +11,8 @@ clin: Plantar heel pain / plantar fasciopathy (JOSPT CPG 2023)
 # 26 Oct 2026: "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 13 notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "Under the heel": 3
@@ -49,11 +51,11 @@ Irritation of the strong tissue band supporting the arch, where it anchors into 
 ## seePhysioIf
 - Pain when you squeeze the sides of the heel or hop, or heel pain at night or at rest: see a doctor first (possible stress fracture)
 - Pain in both heels, with back stiffness in the mornings, psoriasis, sore red eyes or other swollen joints: see your doctor
-- The heel is hot, red and swollen, or you have a fever: see a doctor the same day
+- The heel is hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Numbness or burning in both feet, or it is spreading up the legs: see your doctor
 - Heel pain lasts more than 2 weeks
 - Mornings or long standing remain painful
-- You want a loading and footwear plan — most cases settle with the right progression
+- You want a loading and footwear plan; many people improve with the right progression
 - Burning on the inner heel that builds through the day, rather than first-step pain: see us, as a small nerve may be involved
 
 ## physioHelps

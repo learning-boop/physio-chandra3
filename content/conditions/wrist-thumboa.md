@@ -12,6 +12,7 @@ ages: 30-49, 50-64, o64
 # answer must not lead); plain "can help" wording, the same in both copies.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
 # Patient text shared with hand-thumboa.md: keep the two in step.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "65 or over": 1
@@ -53,7 +54,8 @@ This is osteoarthritis at the joint where the thumb meets the wrist: a slow chan
 ## seePhysioIf
 - Thumb pain is limiting everyday tasks like opening jars or turning keys
 - The ache or stiffness has lasted several weeks without improving
-- Several finger joints in both hands are swollen and stiff for more than an hour in the morning, or the thumb base is suddenly hot, red and swollen: see a doctor
+- Several finger joints in both hands are swollen and stiff for more than an hour in the morning: see a doctor
+- The thumb base is suddenly hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

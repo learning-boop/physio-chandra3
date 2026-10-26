@@ -16,6 +16,7 @@ clin: Full-thickness rotator cuff tear: traumatic (acute) or atraumatic degenera
 # card; gradual onset and 30 to 49 +1; blocked even when helped -2 and "very
 # painful at first, now stiff" -1 (frozen shoulder look-alike).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "After a fall onto the arm or shoulder": 2
@@ -57,7 +58,7 @@ One of the tendons that lift and turn the arm can tear through, either suddenly 
 ## seePhysioIf
 - After a fall, a heavy pull or a dislocation, your arm became much weaker or you cannot lift it: see a doctor within a few days
 - The arm will not lift on its own but goes up when you help it: see a doctor or physiotherapist within a week
-- The shoulder is hot, red or swollen, or you have a fever: see a doctor the same day
+- The shoulder is hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Pain that comes on with effort, chest tightness or breathlessness: call 911
 - Numbness, pins and needles or weakness spreading down the arm or into the hand: see a doctor
 - Weakness that is getting worse week by week: see a doctor

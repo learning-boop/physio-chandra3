@@ -9,6 +9,7 @@ ages: u18
 # 6 Oct 2026: ankle and foot cross-check, approved by Chandra (review/ankle-foot-crosscheck.html).
 # S5, W4: renamed, outlook wording, heel squeeze +2 (the Sever's test in a child), clinic notes. Copied to ankle-severs.md.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "Heel pain in a child aged about 8 to 14, worse with sport": 3
@@ -35,7 +36,8 @@ In children aged about 8 to 14, the growth plate at the back of the heel bone is
 - It is stopping your child from playing sport
 - The pain is there at rest or at night: see a doctor first
 - You want a plan to manage sport through the growth spurt
-- The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first
+- The heel is swollen, red or warm, or the pain is in one heel and keeps getting worse: see a doctor first
+- The heel is hot, red and swollen and your child has a fever or seems unwell: go to the emergency department now
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

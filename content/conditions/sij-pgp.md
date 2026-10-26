@@ -9,6 +9,7 @@ clin: Pelvic girdle pain in pregnancy or after birth (European guidelines, Vleem
 onset: pregnancy, postpartum
 # DRAFT patient text written 25 Sep 2026 from content/regions/sij.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "During pregnancy": 3
@@ -42,6 +43,9 @@ During pregnancy the load on the pelvis grows and the way the body carries it ch
 - Pain limits walking, stairs or sleep
 - It has not eased in the weeks after giving birth
 - You want exercises and support that are safe for your stage of pregnancy
+- Bleeding, fluid leaking, regular tightenings or contractions, or the baby moving less: contact your maternity unit now
+- A swollen, warm or tender calf, or sudden breathlessness: see a doctor the same day; call 911 if you are short of breath
+- A bad headache, blurred vision or sudden swelling of the face or hands: contact your maternity unit or a doctor the same day
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

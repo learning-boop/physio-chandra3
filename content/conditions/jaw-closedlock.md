@@ -5,6 +5,7 @@ name: Jaw that locks closed
 clin: TMJ disc displacement without reduction, with limited opening (closed lock; DC/TMD)
 # DRAFT patient text written 25 Sep 2026 from content/regions/jaw.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules. The stuck-open line (mrf-stuckopen).
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "I woke up with it": 1
@@ -32,7 +33,8 @@ When the cartilage disc in the jaw joint slips forward and stays there, it can b
 - Lips together, teeth apart during the day
 
 ## seePhysioIf
-- Book soon: early guided movement gives the best chance of restoring opening
+- Book soon: early guided movement can help restore opening
+- Your jaw is stuck open and you cannot close your mouth: go to the emergency department now
 - Opening is not improving over a week or two
 - Eating or cleaning your teeth is difficult
 

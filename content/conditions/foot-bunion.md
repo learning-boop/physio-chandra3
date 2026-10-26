@@ -10,6 +10,7 @@ clin: Hallux valgus
 # 26 Oct 2026: "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 17 notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "A bump on the side of the joint, the toe leaning towards the others": 3
@@ -35,7 +36,7 @@ A bunion is a bony bump on the inside of the big toe joint, with the big toe lea
 - Keep the big toe moving with gentle exercises
 
 ## seePhysioIf
-- The big toe joint is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day
+- The big toe joint is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - The bump is very red and swollen, or the skin over it breaks or blisters, especially with diabetes: see a doctor the same day
 - Pain is limiting walking or shoe choice
 - The toe is crossing over or under the second toe

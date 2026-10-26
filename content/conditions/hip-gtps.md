@@ -15,6 +15,7 @@ clin: Greater trochanteric pain syndrome: gluteal tendinopathy with or without b
 # 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
 # 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): form 4:
 # Grimaldi 2017, hip lag sign and ICON 2020 notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "Outer hip, over the bony point at the side": 3
@@ -56,7 +57,7 @@ The tendons of the buttock muscles, where they attach at the bony point of the o
 ## seePhysioIf
 - Night pain on that side persists beyond 2 weeks
 - Walking distance or stairs are limited
-- You want a progressive loading program, the evidence-based treatment
+- You want a progressive loading programme, which can help
 - Deep pain at night that does not change with position, weight loss you cannot explain, or a past cancer: see your doctor
 - A sudden pop at the outer hip, then a marked limp or you cannot lift the leg out to the side: see a doctor (possible tendon tear)
 - You run or train hard and have a deep groin ache that is worse with hopping or aches at night: see a doctor before more running

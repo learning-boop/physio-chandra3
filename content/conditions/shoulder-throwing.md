@@ -14,6 +14,7 @@ ages: u18, 18-29, 30-49, 50-64
 # "16 to 29" 1, an upper-arm drawing after the gym (read as overhead work)
 # made this card a leader and the arm's own questions were crowded out.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "Throwing, or overhead sport": 3
@@ -49,7 +50,7 @@ In people who throw, serve, bowl or swim a lot, the arm is taken up and back aga
 ## seePhysioIf
 - It is still out of place or looks a different shape: go to the emergency department
 - Weakness or numbness spreading down the arm: see a doctor
-- The shoulder is hot, red or swollen, or you have a fever: see a doctor the same day
+- The shoulder is hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - A new lump, weight loss you cannot explain, or night pain that no position eases: see a doctor
 - Pain on the inside of the elbow when throwing
 - Throwing or serving is painful, or your speed or accuracy has dropped

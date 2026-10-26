@@ -6,6 +6,7 @@ clin: Thoracic outlet pattern, nerve type (SVS reporting standards 2016)
 # Patient text shared with ctj-tos.md: keep the two in step.
 # Pointers from content/regions/arm.md, 25 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed:
 pointers:
   "Lifting my arm up or reaching overhead": 2
@@ -36,6 +37,8 @@ The nerves to the arm pass through a narrow gap between the collarbone, the firs
 - Tingling or heaviness keeps coming back with overhead work or carrying
 - It is affecting your grip, work or sleep
 - You want a plan for posture, breathing and first-rib mobility that eases the outlet
+- Your whole arm suddenly becomes swollen, heavy or bluish: see a doctor the same day; call 911 if you are also short of breath or have chest pain
+- A hand or fingers suddenly become cold, pale or numb: go to the emergency department now
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

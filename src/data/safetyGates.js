@@ -49,7 +49,7 @@ export const GATES = {
     { id: 'knee-circulation', title: 'Signs of a clot or a circulation problem', members: ['kf-dvt', 'kf-artery'] },
     // Knee document, 26 Oct 2026: a locked knee and OCD.
     { id: 'knee-joint', title: 'Signs from inside the knee joint', members: ['kf-locked', 'kf-ocd'] },
-    { id: 'knee-medical', title: 'Signs that need a medical check', members: ['kf-cancer', 'kf-tumour', 'kf-stress', 'kf-sufe', 'kf-perthes', 'sc-systemic'] },
+    { id: 'knee-medical', title: 'Signs that need a medical check', members: ['kf-stress', 'kf-stressday', 'kf-cancer', 'kf-tumour', 'kf-sufe', 'kf-perthes', 'sc-systemic'] },
   ],
   foot: [
     { id: 'foot-infection', title: 'Signs of infection or a flare-up', members: ['ft-puncture', 'ft-charcot', 'ft-gout', 'ft-inflam'] },
@@ -66,7 +66,7 @@ export const GATES = {
   // Lower back (zone type lowerback): no injury screen, so groups only.
   lowerback: [
     { id: 'lowback-bone', title: 'Signs of a problem in the bone', members: ['rf-osteo', 'sc-trauma', 'rf-cancer', 'rf-spondy'] },
-    { id: 'lowback-infection', title: 'Signs of infection or another medical cause', members: ['rf-infection', 'sc-systemic'] },
+    { id: 'lowback-infection', title: 'Signs of infection or another medical cause', members: ['rf-fever', 'rf-infection', 'sc-systemic'] },
     { id: 'lowback-organ', title: 'Signs coming from inside the body', members: ['rf-kidney', 'pc-urinary', 'rf-pelvic', 'rf-aaa-slow'] },
     { id: 'lowback-nerve', title: 'Changes in feeling or strength', members: ['rf-footdrop', 'rf-myelo', 'sc-neuro'] },
     { id: 'lowback-postop', title: 'Signs of a problem after back surgery', members: ['rf-postop'] },
@@ -74,14 +74,14 @@ export const GATES = {
   // Mid back and front of the chest (zone type upperback).
   upperback: [
     { id: 'upperback-bone', title: 'Signs of a problem in the bone', members: ['trf-osteo', 'sc-trauma', 'trf-cancer'] },
-    { id: 'upperback-infection', title: 'Signs of infection or another medical cause', members: ['trf-infection', 'trf-shingles', 'sc-systemic'] },
+    { id: 'upperback-infection', title: 'Signs of infection or another medical cause', members: ['trf-fever', 'trf-infection', 'trf-shingles', 'sc-systemic'] },
     { id: 'upperback-organ', title: 'Signs coming from inside the body', members: ['trf-kidney', 'trf-gut', 'pc-visceral'] },
     { id: 'upperback-nerve', title: 'Changes in feeling or strength', members: ['trf-myelo', 'sc-neuro'] },
   ],
   // Thoracolumbar junction (zone type tlj).
   tlj: [
     { id: 'tlj-bone', title: 'Signs of a problem in the bone', members: ['jrf-osteo', 'sc-trauma', 'jrf-cancer'] },
-    { id: 'tlj-infection', title: 'Signs of infection or another medical cause', members: ['jrf-infection', 'jrf-shingles', 'sc-systemic'] },
+    { id: 'tlj-infection', title: 'Signs of infection or another medical cause', members: ['jrf-fever', 'jrf-infection', 'jrf-shingles', 'sc-systemic'] },
     { id: 'tlj-organ', title: 'Signs coming from inside the body', members: ['jrf-kidney', 'pc-urinary', 'pc-visceral'] },
     { id: 'tlj-nerve', title: 'Changes in feeling or strength', members: ['jrf-legs', 'sc-neuro'] },
   ],
@@ -157,7 +157,7 @@ export const GATES = {
   thigh: [
     { id: 'thigh-circulation', title: 'Signs of a clot, an infection or a circulation problem', members: ['tgf-dvt', 'tgf-cellulitis', 'tgf-claudication'] },
     { id: 'thigh-nerve', title: 'Changes in feeling or strength', members: ['tgf-femoral', 'sc-neuro'] },
-    { id: 'thigh-medical', title: 'Signs that need a medical check', members: ['tgf-stress', 'tgf-tumour', 'tgf-sufe', 'tgf-cancer', 'sc-systemic'] },
+    { id: 'thigh-medical', title: 'Signs that need a medical check', members: ['tgf-stress', 'tgf-stressday', 'tgf-tumour', 'tgf-sufe', 'tgf-cancer', 'sc-systemic'] },
   ],
   // Lower leg (calf and shin; the leg injury screen).
   lowerleg: [
@@ -170,7 +170,7 @@ export const GATES = {
     { id: 'ankle-infection', title: 'Signs of infection or a flare-up', members: ['af-charcot', 'af-gout', 'af-inflam'] },
     { id: 'ankle-nerve', title: 'Changes in feeling or strength', members: ['af-neuropathy', 'af-footdrop', 'af-crps', 'sc-neuro'] },
     { id: 'ankle-joint', title: 'Signs from inside the ankle joint', members: ['af-locked'] },
-    { id: 'ankle-medical', title: 'Signs that need a medical check', members: ['af-quinolone', 'af-stress', 'af-cancer', 'sc-systemic'] },
+    { id: 'ankle-medical', title: 'Signs that need a medical check', members: ['af-quinolone', 'af-stress', 'af-stressday', 'af-cancer', 'sc-systemic'] },
   ],
 }
 
@@ -188,6 +188,7 @@ export const SIGNS = {
   'kf-tumour': 'a deep ache around the knee that wakes you at night, or a lump near the knee that is growing',
   'kf-locked': 'a knee stuck right now, so it will not fully straighten even when you gently help it',
   'kf-ocd': 'a child, teenager or young adult with knee swelling that keeps coming back after sport, with no injury',
+  'kf-stressday': 'a deep thigh or above-the-knee ache with every step when walking, at rest, or too much to stand on',
   'kf-stress': 'a deep ache above the knee that is worse with running or hopping',
   'kf-sufe': 'a child or teenager aged about 9 to 17 limping, or with hip pain',
   'kf-perthes': 'a child aged about 4 to 10 limping, with no injury',
@@ -229,13 +230,15 @@ export const SIGNS = {
   'af-footdrop': 'your foot slapping down or your toes catching when you walk',
   'af-crps': 'since an injury, surgery or cast, an ankle or foot that burns, swells, changes colour or is so sensitive that light touch hurts',
   'af-quinolone': 'Achilles pain after a recent quinolone antibiotic (such as ciprofloxacin) or steroid tablets',
+  'af-stressday': 'after more running or walking, a foot you cannot take weight on, or an ankle or midfoot bone that hurts at rest',
   'af-stress': 'pain on one spot of bone at the inner ankle or midfoot that is worse with every step or hopping, after more running, walking or training',
   'af-cancer': 'a past cancer, a lump that is growing, or a deep ache at night that does not change with position',
   // Lower back
   'rf-osteo': 'pain that started suddenly after a minor strain, cough or lift, if you have low bone density, take long-term steroid tablets or are over 70',
   'rf-cancer': 'a past cancer, with this new back pain',
   'rf-spondy': 'under 20, with pain on arching the back, especially with sport such as gymnastics, dance, cricket bowling or tennis',
-  'rf-infection': 'a fever or chills, a weakened immune system, injected drugs, or a recent urine or skin infection, or a spine procedure or injection',
+  'rf-fever': 'a fever or chills with the back pain',
+  'rf-infection': 'new or worse back pain with a weakened immune system, injected drugs, or a recent urine or skin infection, or a spine procedure or injection',
   'rf-kidney': 'pain in waves from your side to your groin, or a fever, burning or blood when you pass urine',
   'rf-pelvic': 'pain linked to your periods, unusual vaginal bleeding, or (for men) new trouble passing urine',
   'rf-aaa-slow': 'over 50 with smoking, high blood pressure, diabetes or artery disease, and a deep, constant ache that does not change with movement, or a pulsing in your tummy',
@@ -245,7 +248,8 @@ export const SIGNS = {
   // Mid back
   'trf-osteo': 'pain that started suddenly after a minor strain, cough, lift or a fall from standing height, if you are over 50, have low bone density or take long-term steroid tablets',
   'trf-cancer': 'a past cancer, with this new mid-back pain',
-  'trf-infection': 'a fever or chills, a weakened immune system, or injected drugs',
+  'trf-fever': 'a fever or chills with the back pain',
+  'trf-infection': 'new or worse back pain with a weakened immune system, or injected drugs',
   'trf-shingles': 'a band of burning pain around one side of the chest or back, with a rash or blisters',
   'trf-kidney': 'pain in your side or lower ribs, with a fever, burning or blood when you pass urine',
   'trf-gut': 'pain linked to eating, heartburn or black stools, or under the right shoulder blade after fatty meals',
@@ -253,7 +257,8 @@ export const SIGNS = {
   // Thoracolumbar junction
   'jrf-osteo': 'pain that started suddenly after a minor strain, cough or lift, if you have low bone density, take long-term steroid tablets or are over 70',
   'jrf-cancer': 'a past cancer, with this new back pain',
-  'jrf-infection': 'a fever or chills, a weakened immune system, or injected drugs',
+  'jrf-fever': 'a fever or chills with the back pain',
+  'jrf-infection': 'new or worse back pain with a weakened immune system, or injected drugs',
   'jrf-shingles': 'a band of burning pain around one side of your body, with a rash or blisters',
   'jrf-kidney': 'waves of severe pain from your side down to your groin, or a fever, burning or blood when you pass urine',
   'jrf-legs': 'legs that have gradually become stiff, heavy or clumsy when you walk',
@@ -353,6 +358,7 @@ export const SIGNS = {
   'tgf-cellulitis': 'spreading redness, a red streak up the leg, or a hot swollen area, with a fever',
   'tgf-claudication': 'cramping thigh or buttock pain on walking that eases when you stand still, if you smoke or have diabetes',
   'tgf-femoral': 'a thigh muscle that has become weak or thin, or a knee that gives way, with no injury',
+  'tgf-stressday': 'a deep thigh ache with every step when walking, at rest, or too much to stand on',
   'tgf-stress': 'a deep, aching thigh pain that is worse with hopping or aches at night, if you run or train hard',
   'tgf-tumour': 'a deep thigh ache that wakes you at night, or a lump in the thigh that is growing',
   'tgf-sufe': 'a child or teenager aged about 5 to 17 limping or not taking weight, with thigh or knee pain',
@@ -390,6 +396,7 @@ export const SHORT = {
   'kf-locked': 'a knee stuck so it will not straighten',
   'kf-ocd': 'swelling that keeps coming back after sport',
   'kf-stress': 'a deep ache with running',
+  'kf-stressday': 'a thigh ache with every step',
   'kf-sufe': 'a child or teen limping',
   'kf-perthes': 'a child limping',
   'ft-puncture': 'a wound from something through the shoe',
@@ -420,7 +427,8 @@ export const SHORT = {
   'sc-trauma': 'a significant fall or accident',
   'rf-cancer': 'a past cancer',
   'rf-spondy': 'pain arching the back in a young athlete',
-  'rf-infection': 'a fever or a weak immune system',
+  'rf-fever': 'a fever with back pain',
+  'rf-infection': 'a weak immune system',
   'rf-kidney': 'pain with passing urine',
   'rf-pelvic': 'pain linked to periods or bladder',
   'rf-aaa-slow': 'a constant deep ache or a pulsing tummy (over 50)',
@@ -429,7 +437,8 @@ export const SHORT = {
   'rf-postop': 'new leg pain after back surgery',
   'trf-osteo': 'sudden pain after a small strain (low bone density, steroids or over 50)',
   'trf-cancer': 'a past cancer',
-  'trf-infection': 'a fever or a weak immune system',
+  'trf-fever': 'a fever with back pain',
+  'trf-infection': 'a weak immune system',
   'trf-shingles': 'a band of burning pain with a rash',
   'trf-kidney': 'pain with passing urine',
   'trf-gut': 'pain with eating or heartburn',
@@ -437,7 +446,8 @@ export const SHORT = {
   'trf-myelo': 'stiff or clumsy legs',
   'jrf-osteo': 'sudden pain after a small strain (low bone density, steroids or over 70)',
   'jrf-cancer': 'a past cancer',
-  'jrf-infection': 'a fever or a weak immune system',
+  'jrf-fever': 'a fever with back pain',
+  'jrf-infection': 'a weak immune system',
   'jrf-shingles': 'a band of burning pain with a rash',
   'jrf-kidney': 'waves of pain to the groin',
   'jrf-legs': 'stiff or clumsy legs',
@@ -525,6 +535,7 @@ export const SHORT = {
   'tgf-claudication': 'thigh cramps on walking',
   'tgf-femoral': 'a weak, thin thigh muscle',
   'tgf-stress': 'a deep ache with running',
+  'tgf-stressday': 'a thigh ache with every step',
   'tgf-tumour': 'night pain or a growing lump',
   'tgf-sufe': 'a child limping',
   'tgf-cancer': 'a past cancer',
@@ -549,6 +560,7 @@ export const SHORT = {
   'af-crps': 'burning or colour change after an injury',
   'af-quinolone': 'Achilles pain after certain antibiotics or steroids',
   'af-stress': 'pain on one ankle bone with every step',
+  'af-stressday': 'an ankle bone too sore to stand on',
   'af-cancer': 'a past cancer or a growing lump',
   'sc-systemic': 'fever or weight loss',
   'sc-neuro': 'new weakness or numbness',
@@ -571,8 +583,8 @@ export function gateText(gate, members = []) {
    'noInjury' questions (overuse stress fractures, "no injury" Perthes) are
    skipped after a recent injury to that area. */
 export const MECHANISM = {
-  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'ft-stressday': 'foot', 'af-stress': 'ankle', 'hpf-stress': 'hip', 'hpf-stressday': 'hip', 'srf-pta': 'shoulder',
-  'frf-stress': 'forearm', 'wrf-stress': 'wrist', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'lgf-stressday': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
+  'kf-stress': 'knee', 'kf-stressday': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'ft-stressday': 'foot', 'af-stress': 'ankle', 'af-stressday': 'ankle', 'hpf-stress': 'hip', 'hpf-stressday': 'hip', 'srf-pta': 'shoulder',
+  'frf-stress': 'forearm', 'wrf-stress': 'wrist', 'tgf-stress': 'thigh', 'tgf-stressday': 'thigh', 'lgf-stress': 'leg', 'lgf-stressday': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
 }
 export const injuredIn = (screen, a = {}) => a[`${screen}:I1`] !== undefined && a[`${screen}:I1`] !== 'no'
 /** Kept for the knee prototype's wording. */

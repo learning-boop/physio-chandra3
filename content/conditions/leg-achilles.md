@@ -11,6 +11,8 @@ clin: Mid-portion Achilles tendinopathy (JOSPT CPG 2024)
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): forms 11 and 12 notes (Thompson figures
 # corrected); recovery after a torn Achilles has its own card (ankle-achillesrupture).
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "Back of the lower leg, just above the heel (Achilles)": 3
@@ -40,7 +42,8 @@ The Achilles dislikes sudden jumps in training load. It responds with pain and m
 ## seePhysioIf
 - Heel/calf pain lasts more than 1–2 weeks or keeps flaring
 - Stairs, walking, or running are limited
-- You want a structured loading program — the proven treatment for tendinopathy
+- You want a structured loading programme, which can help tendon pain
+- A sudden kick, snap or "shot" at the back of the ankle, and now you cannot push off or rise onto your toes: see a doctor the same day
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

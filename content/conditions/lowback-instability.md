@@ -8,6 +8,7 @@ clin: Lumbar movement control impairment (instability) = low back pain with move
 # request ("Non specific low back pain" document review): patient wording avoids
 # "unstable". The card stays separate from common low back pain.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules. No weak-core framing (JOSPT 2021: motor control exercise helps but not more than general exercise).
 reviewed:
 # Pointers re-mapped 24 Sep 2026 to the questions in content/regions/lowback.md.
 pointers:
@@ -19,7 +20,7 @@ pointers:
 ---
 
 ## blurb
-Some low back pain happens because the deep core muscles aren't controlling movement well, leading to a catching or weak feeling with certain movements.
+Some low back pain comes with a catching or giving-way feeling with certain small movements. Your back is not weak or damaged: practising smooth, controlled movement and building general strength and fitness usually helps it feel steadier.
 
 ## noticed
 - A catching or giving-way feeling with everyday movements like rolling over in bed or standing on one leg
@@ -27,7 +28,7 @@ Some low back pain happens because the deep core muscles aren't controlling move
 - A general ache spread across the whole lower back rather than one exact spot
 
 ## homeCare
-- Practice gentle deep core activation, like softly drawing in your lower tummy while breathing normally
+- Practise smooth, controlled movements that bring on the catch, such as rolling over or standing on one leg, and keep walking and active
 - Build general strength and endurance gradually, focusing on smooth control rather than pushing hard
 - Progress from simple stability exercises to more everyday movements as things feel steadier
 

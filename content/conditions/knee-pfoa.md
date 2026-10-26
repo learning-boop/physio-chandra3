@@ -15,6 +15,7 @@ ages: 50-64, o64
 # by Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/knee-conditions.md): form 1:
 # creaking +2, morning stiffness over an hour -2.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed: Chandra Matla, 2026-10-02
 pointers:
   "Around or behind the kneecap": 2
@@ -46,7 +47,7 @@ This is osteoarthritis behind the kneecap: a slow change in the cartilage and bo
 - During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping
 
 ## seePhysioIf
-- The knee becomes hot, red and swollen, especially with a fever: get urgent medical care
+- The knee becomes hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Other joints swell too, or stiffness lasts well over half an hour each morning: see a doctor
 - It is getting quickly worse over a few weeks: see your doctor
 - The pain or stiffness is starting to limit your daily activities or sleep

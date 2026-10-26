@@ -95,7 +95,7 @@ export const AUTHORED = [
         "Pain or stiffness is limiting walking",
         "The ankle keeps swelling or giving way",
         "You want a strength, balance, and footwear plan",
-        "The ankle is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day",
+        "The ankle is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Morning stiffness lasting well over 30 minutes, or both ankles or several joints are swollen: see your doctor"
       ],
       "physioHelps": [
@@ -267,7 +267,7 @@ export const AUTHORED = [
       "id": "atfl",
       "name": "Lateral ankle sprain",
       "clin": "Lateral ankle ligament sprain, ATFL with or without CFL (JOSPT CPG 2021)",
-      "blurb": "The most commonly injured ligament in the ankle, stretched or torn when the ankle rolls inwards. Most heal well, but without balance and strength exercises about 4 in 10 people go on to have an ankle that keeps rolling or giving way.",
+      "blurb": "The most commonly injured ligament in the ankle, stretched or torn when the ankle rolls inwards. Many settle well, but without balance and strength exercises about 4 in 10 people go on to have an ankle that keeps rolling or giving way.",
       "noticed": [
         "Outer ankle pain and swelling after a roll/twist",
         "Bruising in the first days",
@@ -605,7 +605,8 @@ export const AUTHORED = [
         "The wound is red, hot or leaking, or you have a fever: see a doctor the same day",
         "Burning pain, colour or temperature changes, or skin so sensitive that light touch hurts: see your doctor and book physiotherapy now",
         "You would like a structured movement, strength and balance programme",
-        "Progress has stalled, or you are not back to the activities you want"
+        "Progress has stalled, or you are not back to the activities you want",
+        "The cast or boot feels tighter and more painful, with numbness, tingling, or a cold, pale or blue foot: go to the emergency department now"
       ],
       "physioHelps": [
         "Once your fracture team allows, a physiotherapist can explain what to expect as the bone heals.",
@@ -778,7 +779,7 @@ export const AUTHORED = [
         "A snap or a kick feeling at the back of the ankle, and you cannot rise onto your toes on that leg: see a doctor the same day",
         "You recently took a quinolone antibiotic (such as ciprofloxacin) or steroid tablets and now have Achilles pain: tell your doctor or the prescriber now",
         "Pain in both heels, with back stiffness in the mornings, psoriasis, sore red eyes or other swollen joints: see your doctor",
-        "The back of the heel is hot, red and swollen, or you have a fever: see a doctor the same day",
+        "The back of the heel is hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "It has not settled after 2 to 3 weeks of changes",
         "It is limiting walking or running",
         "You want a graded tendon-loading plan"
@@ -1126,7 +1127,8 @@ export const AUTHORED = [
         "It is stopping your child from playing sport",
         "The pain is there at rest or at night: see a doctor first",
         "You want a plan to manage sport through the growth spurt",
-        "The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first"
+        "The heel is swollen, red or warm, or the pain is in one heel and keeps getting worse: see a doctor first",
+        "The heel is hot, red and swollen and your child has a fever or seems unwell: go to the emergency department now"
       ],
       "physioHelps": [
         "A physiotherapist can check your child's heel and explain growing-bone heel pain in plain words.",
@@ -1344,7 +1346,7 @@ export const AUTHORED = [
         "A sudden pop at the inner ankle: see a doctor the same day",
         "The arch is flattening quickly over weeks, or you cannot rise onto your toes at all on that leg: see us or your doctor within a week, as a foot specialist may be needed",
         "You have diabetes and the foot is hot, red or swollen, even if it does not hurt much, or its shape is changing: see a doctor the same day and keep weight off it",
-        "Inner-ankle pain with any new arch flattening — early care shortens recovery",
+        "Inner-ankle pain with any new arch flattening: early care can help",
         "Pain with stairs, hills, or longer standing",
         "A single-leg heel raise is painful or impossible"
       ],
@@ -1563,7 +1565,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Tingling or heaviness keeps coming back with overhead work or carrying",
         "It is affecting your grip, work or sleep",
-        "You want a plan for posture, breathing and first-rib mobility that eases the outlet"
+        "You want a plan for posture, breathing and first-rib mobility that eases the outlet",
+        "Your whole arm suddenly becomes swollen, heavy or bluish: see a doctor the same day; call 911 if you are also short of breath or have chest pain",
+        "A hand or fingers suddenly become cold, pale or numb: go to the emergency department now"
       ],
       "physioHelps": [
         "A physiotherapist can check your neck, shoulders and posture and explain what irritates the nerves.",
@@ -1994,7 +1998,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Recurring end-of-day neck/upper-back ache",
         "Stiffness limits looking up or over the shoulder",
-        "You want targeted mobility and strengthening for desk work"
+        "You want targeted mobility and strengthening for desk work",
+        "Chest pain or pressure, pain spreading to the arm or jaw, or breathlessness, especially with exercise or a cold sweat: call 911"
       ],
       "physioHelps": [
         "A physiotherapist can check how your neck and upper back move together and explain what is going on.",
@@ -3780,7 +3785,7 @@ export const AUTHORED = [
         "Keep the big toe moving with gentle exercises"
       ],
       "seePhysioIf": [
-        "The big toe joint is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day",
+        "The big toe joint is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "The bump is very red and swollen, or the skin over it breaks or blisters, especially with diabetes: see a doctor the same day",
         "Pain is limiting walking or shoe choice",
         "The toe is crossing over or under the second toe",
@@ -4225,7 +4230,8 @@ export const AUTHORED = [
         "The wound is red, hot or leaking, or you have a fever: see a doctor the same day",
         "Burning pain, colour or temperature changes, or skin so sensitive that light touch hurts: see your doctor and book physiotherapy now",
         "You would like a structured movement, strength and balance programme",
-        "Progress has stalled, or you are not back to the activities you want"
+        "Progress has stalled, or you are not back to the activities you want",
+        "The cast or boot feels tighter and more painful, with numbness, tingling, or a cold, pale or blue foot: go to the emergency department now"
       ],
       "physioHelps": [
         "Once your fracture team allows, a physiotherapist can explain what to expect as the bone heals.",
@@ -4284,7 +4290,7 @@ export const AUTHORED = [
         "Avoid walking barefoot on hard floors"
       ],
       "seePhysioIf": [
-        "A toe joint is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day",
+        "A toe joint is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Several toe joints are swollen in both feet, or in the hands too, with morning stiffness over 30 minutes: see your doctor",
         "One spot of bone in the front of the foot hurts with every step or hop, or aches at night, after more running, walking or training: see a doctor first (possible stress fracture)",
         "A teenager with pain and swelling at the base of the 2nd toe: see us or your doctor, as an X-ray may be needed",
@@ -4488,7 +4494,7 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "Numbness spreads beyond two toes or into both feet, or you have diabetes and your toes are numb: see your doctor",
-        "The front of the foot is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day",
+        "The front of the foot is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Ball-of-foot pain or the pebble feeling persists after 2 to 3 weeks of footwear changes",
         "Toe tingling or numbness continues",
         "You want gait and footwear assessment before considering injections"
@@ -4614,11 +4620,11 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Pain when you squeeze the sides of the heel or hop, or heel pain at night or at rest: see a doctor first (possible stress fracture)",
         "Pain in both heels, with back stiffness in the mornings, psoriasis, sore red eyes or other swollen joints: see your doctor",
-        "The heel is hot, red and swollen, or you have a fever: see a doctor the same day",
+        "The heel is hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Numbness or burning in both feet, or it is spreading up the legs: see your doctor",
         "Heel pain lasts more than 2 weeks",
         "Mornings or long standing remain painful",
-        "You want a loading and footwear plan — most cases settle with the right progression",
+        "You want a loading and footwear plan; many people improve with the right progression",
         "Burning on the inner heel that builds through the day, rather than first-step pain: see us, as a small nerve may be involved"
       ],
       "physioHelps": [
@@ -4755,7 +4761,7 @@ export const AUTHORED = [
         "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
-        "The big toe joint is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day",
+        "The big toe joint is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Pain is limiting walking or sport",
         "The toe is getting stiffer",
         "You want advice on shoes, insoles, or other options"
@@ -4938,7 +4944,8 @@ export const AUTHORED = [
         "It is stopping your child from playing sport",
         "The pain is there at rest or at night: see a doctor first",
         "You want a plan to manage sport through the growth spurt",
-        "The heel is swollen, red or warm, your child has a fever, or the pain is in one heel and keeps getting worse: see a doctor first"
+        "The heel is swollen, red or warm, or the pain is in one heel and keeps getting worse: see a doctor first",
+        "The heel is hot, red and swollen and your child has a fever or seems unwell: go to the emergency department now"
       ],
       "physioHelps": [
         "A physiotherapist can check your child's heel and explain growing-bone heel pain in plain words.",
@@ -5132,7 +5139,7 @@ export const AUTHORED = [
         "A sudden pop at the inner ankle: see a doctor the same day",
         "The arch is flattening quickly over weeks, or you cannot rise onto your toes at all on that leg: see us or your doctor within a week, as a foot specialist may be needed",
         "You have diabetes and the foot is hot, red or swollen, even if it does not hurt much, or its shape is changing: see a doctor the same day and keep weight off it",
-        "Inner-ankle pain with any new arch flattening — early care shortens recovery",
+        "Inner-ankle pain with any new arch flattening: early care can help",
         "Pain with stairs, hills, or longer standing",
         "A single-leg heel raise is painful or impossible"
       ],
@@ -6692,7 +6699,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Thumb pain is limiting everyday tasks like opening jars or turning keys",
         "The ache or stiffness has lasted several weeks without improving",
-        "Several finger joints in both hands are swollen and stiff for more than an hour in the morning, or the thumb base is suddenly hot, red and swollen: see a doctor"
+        "Several finger joints in both hands are swollen and stiff for more than an hour in the morning: see a doctor",
+        "The thumb base is suddenly hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now"
       ],
       "physioHelps": [
         "A physiotherapist can check your thumb joint and explain in plain words what is going on.",
@@ -6900,7 +6908,12 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Your headaches are happening regularly, or are affecting work or sleep",
         "You are taking pain medicine for them often: a physiotherapy assessment can help find out whether your neck is involved, and no doctor's referral is needed",
-        "You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer. If any of the warning signs apply, see a doctor first"
+        "You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer. If any of the warning signs apply, see a doctor first",
+        "A sudden, severe headache, the worst of your life, or with a drooping face, slurred speech or weakness on one side: call 911",
+        "A headache with a fever and a stiff neck, a rash, or feeling very unwell: call 911",
+        "Over 50, with a new headache, a tender scalp or temple, or jaw pain when chewing: see a doctor the same day",
+        "A headache that is worse lying down or with coughing or straining, with vomiting or changes in your vision: see a doctor the same day",
+        "A new headache since a neck manipulation, a sudden jolt or a knock to the head: see a doctor the same day"
       ],
       "physioHelps": [
         "A physiotherapist can check the top of your neck and explain how it can cause head pain.",
@@ -7065,7 +7078,7 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "A doctor has checked you and you still have headache, dizziness, neck pain, balance or vision problems, or trouble coping with exercise, school or work",
-        "Symptoms are lasting beyond 2 to 4 weeks: physiotherapy for the neck, balance and exercise tolerance tends to help most here",
+        "Symptoms are lasting beyond 2 to 4 weeks: physiotherapy for the neck, balance and exercise tolerance can help",
         "You want a step-by-step plan to return to sport, school or work",
         "Tiredness, weakness, low mood, or changes in sex drive or periods are not improving 3 months or more after the injury: please also ask your family doctor about a hormone (pituitary) blood test, which can be checked alongside physiotherapy"
       ],
@@ -7308,13 +7321,13 @@ export const AUTHORED = [
       ],
       "homeCare": [
         "Relative rest from sprinting/kicking early on — keep walking as comfortable",
-        "Early gentle range, then progressive adductor strengthening (for example ball squeezes): the best-supported treatment for long-lasting adductor groin pain",
+        "Early gentle range, then progressive adductor strengthening (for example ball squeezes), which can help long-lasting adductor groin pain",
         "Return to sport gradually via straight-line running before cutting"
       ],
       "seePhysioIf": [
         "Pain limits walking beyond a few days",
         "You want a criteria-based return-to-sport plan — re-injury is common without one",
-        "Groin pain keeps recurring each season: an adductor strengthening programme (such as the Copenhagen adduction exercise) cuts groin problems by about 40% in footballers",
+        "Groin pain keeps recurring each season: an adductor strengthening programme (such as the Copenhagen adduction exercise) may help lower the chance of it coming back",
         "A pop with a large bruise or a dent, or you cannot walk: see a doctor the same day",
         "Groin pain at rest or at night, or pain on hopping: see a doctor (possible bone stress)",
         "A lump in the groin, testicle pain or swelling, or burning or blood when you pass urine: see a doctor",
@@ -7515,7 +7528,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Groin pinching persists beyond 2–3 weeks or limits sport",
         "Catching or clicking with pain, or a sharp pain when you pivot or twist on that leg",
-        "The hip locks so you cannot move it: see your doctor soon",
+        "The hip locks so you cannot move it: see a doctor the same day",
         "You would like a guided rehab plan: physiotherapy is the usual first step and helps many people",
         "It is not improving after about 3 months of a guided programme: we can discuss a referral to a hip specialist",
         "Groin pain that aches at night, or hurts to hop or run, especially after an increase in training: see a doctor before running again"
@@ -7662,7 +7675,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Night pain on that side persists beyond 2 weeks",
         "Walking distance or stairs are limited",
-        "You want a progressive loading program, the evidence-based treatment",
+        "You want a progressive loading programme, which can help",
         "Deep pain at night that does not change with position, weight loss you cannot explain, or a past cancer: see your doctor",
         "A sudden pop at the outer hip, then a marked limp or you cannot lift the leg out to the side: see a doctor (possible tendon tear)",
         "You run or train hard and have a deep groin ache that is worse with hopping or aches at night: see a doctor before more running"
@@ -8888,7 +8901,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The snapping is painful, or is affecting your training or daily activities",
         "It comes with catching or giving way: see us, as the joint itself may be involved",
-        "The hip locks so you cannot move it: see your doctor soon",
+        "The hip locks so you cannot move it: see a doctor the same day",
         "It started after a fall or an injury",
         "Painful snapping has not settled after 2 to 3 months of a guided plan: we can talk with you about a medical opinion"
       ],
@@ -9109,7 +9122,8 @@ export const AUTHORED = [
         "Lips together, teeth apart during the day"
       ],
       "seePhysioIf": [
-        "Book soon: early guided movement gives the best chance of restoring opening",
+        "Book soon: early guided movement can help restore opening",
+        "Your jaw is stuck open and you cannot close your mouth: go to the emergency department now",
         "Opening is not improving over a week or two",
         "Eating or cleaning your teeth is difficult"
       ],
@@ -10038,7 +10052,7 @@ export const AUTHORED = [
           "blow"
         ]
       },
-      "blurb": "This is a stretch or tear of the ligament running along the inner side of your knee, usually caused by a sideways force or an awkward twist. Most heal well with the right exercise and time.",
+      "blurb": "This is a stretch or tear of the ligament running along the inner side of your knee, usually caused by a sideways force or an awkward twist. Many settle well with the right exercise and time.",
       "noticed": [
         "Pain right along the inner side of the knee after a blow or twisting injury",
         "Tenderness when pressing directly over the inner knee",
@@ -10271,7 +10285,7 @@ export const AUTHORED = [
         "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
-        "The knee becomes hot, red and swollen, especially with a fever: get urgent medical care",
+        "The knee becomes hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Other joints swell too, or stiffness lasts well over half an hour each morning: see a doctor",
         "It is getting quickly worse over a few weeks: see your doctor",
         "Pain or stiffness limits walking, stairs, or sleep",
@@ -10714,7 +10728,7 @@ export const AUTHORED = [
         "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning; if the joint is worse the next day, ease back a little rather than stopping"
       ],
       "seePhysioIf": [
-        "The knee becomes hot, red and swollen, especially with a fever: get urgent medical care",
+        "The knee becomes hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Other joints swell too, or stiffness lasts well over half an hour each morning: see a doctor",
         "It is getting quickly worse over a few weeks: see your doctor",
         "The pain or stiffness is starting to limit your daily activities or sleep",
@@ -10828,7 +10842,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It's not settling after about 2 weeks of load management, or has lasted more than 6 weeks: earlier exercise care tends to do better",
         "It limits sport, stairs, or work",
-        "You'd like a graded strengthening plan, the best-evidenced treatment",
+        "You'd like a graded strengthening plan, which can help",
         "Your knee is stuck right now and will not straighten fully, even when you gently help it: see a doctor the same day"
       ],
       "physioHelps": [
@@ -11323,7 +11337,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Heel/calf pain lasts more than 1–2 weeks or keeps flaring",
         "Stairs, walking, or running are limited",
-        "You want a structured loading program — the proven treatment for tendinopathy"
+        "You want a structured loading programme, which can help tendon pain",
+        "A sudden kick, snap or \"shot\" at the back of the ankle, and now you cannot push off or rise onto your toes: see a doctor the same day"
       ],
       "physioHelps": [
         "A physiotherapist can check your Achilles and explain why the tendon has become sore.",
@@ -11587,7 +11602,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Shin pain persists despite 2 weeks of reduced load",
         "Pain is becoming sharper and more focal (needs a stress-fracture check)",
-        "You want a running load and biomechanics review"
+        "You want a running load and biomechanics review",
+        "Pain in one small spot on the shin bone that you can cover with a fingertip, pain when you hop, or pain at rest or at night: stop running and see a doctor, as a stress fracture needs ruling out"
       ],
       "physioHelps": [
         "A physiotherapist can check your shins and explain why they hurt when you run.",
@@ -11896,7 +11912,7 @@ export const AUTHORED = [
         "Stay gently active with short, frequent walks rather than resting in bed"
       ],
       "seePhysioIf": [
-        "Numbness or weakness in the leg that is spreading or getting worse: see a doctor the same day, rather than working on positions",
+        "Numbness in the leg that is spreading, or a leg getting slowly weaker: see a doctor the same day, rather than working on positions; weakness getting quickly worse over hours or days: go to the emergency department now",
         "Numbness around your saddle area or genitals, a new bladder or bowel change, or leg pain spreading to both legs: go to the emergency department now",
         "Leg symptoms are spreading further down or getting stronger despite trying position changes",
         "There's no improvement after a couple of weeks of adjusting your positions and staying active"
@@ -12080,14 +12096,14 @@ export const AUTHORED = [
       "id": "instability",
       "name": "Back that catches with small movements",
       "clin": "Lumbar movement control impairment (instability) = low back pain with movement coordination impairments (JOSPT 2012)",
-      "blurb": "Some low back pain happens because the deep core muscles aren't controlling movement well, leading to a catching or weak feeling with certain movements.",
+      "blurb": "Some low back pain comes with a catching or giving-way feeling with certain small movements. Your back is not weak or damaged: practising smooth, controlled movement and building general strength and fitness usually helps it feel steadier.",
       "noticed": [
         "A catching or giving-way feeling with everyday movements like rolling over in bed or standing on one leg",
         "Repeated episodes of low back pain over months or years, often triggered by small movements",
         "A general ache spread across the whole lower back rather than one exact spot"
       ],
       "homeCare": [
-        "Practice gentle deep core activation, like softly drawing in your lower tummy while breathing normally",
+        "Practise smooth, controlled movements that bring on the catch, such as rolling over or standing on one leg, and keep walking and active",
         "Build general strength and endurance gradually, focusing on smooth control rather than pushing hard",
         "Progress from simple stability exercises to more everyday movements as things feel steadier"
       ],
@@ -12376,9 +12392,10 @@ export const AUTHORED = [
         "The pain is limiting your work, sleep or the things you enjoy, keeps coming back, or is not clearly improving after 2 to 3 weeks",
         "It is not clearly better after 4 to 6 weeks, or is getting worse week on week: see your doctor as well",
         "Numbness around your saddle area or genitals, new trouble starting or controlling urine, a new bowel accident, or leg pain that spreads to both legs or swaps sides: go to the emergency department now",
-        "A leg or foot that is getting weaker, or a foot that slaps or drags: see a doctor the same day",
-        "A fever or chills with the back pain, or a recent infection, injection or surgery to the spine: see a doctor the same day",
-        "Back pain after a fall, a crash or a heavy knock, or after even a minor strain or fall if you are over 70, have thin bones (osteoporosis) or take steroid tablets: see a doctor today",
+        "Leg weakness that is getting quickly worse over hours or days: go to the emergency department now; a foot that slaps or drags, or a leg getting slowly weaker: see a doctor the same day",
+        "A fever or chills with the back pain: see a doctor the same day",
+        "A recent infection, or an injection or surgery to the spine, and the back pain is new or getting worse: see your doctor within a few days",
+        "Back pain after a car crash, a fall from a height or a hard landing: go to the emergency department; after only a minor strain or fall if you are over 70, have thin bones (osteoporosis) or take steroid tablets: see a doctor today",
         "Constant pain that is the same whatever you do and wakes you most nights, weight loss you cannot explain, a past cancer, or feeling generally unwell: see your doctor this week",
         "Under 20, with pain on arching your back in sport for more than 2 to 3 weeks: see your doctor for an X-ray before training through it"
       ],
@@ -12538,9 +12555,10 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Numbness around your saddle area or genitals, new trouble starting or controlling urine, a new bowel accident, or new loss of feeling during sex: go to the emergency department now",
         "Leg pain that has started in both legs at once, has spread from one leg to both, or has swapped sides: go to the emergency department now",
-        "A leg or foot that is getting weaker day by day, or a foot that has started to slap or drag: see a doctor the same day",
-        "Leg pain after a fall, a crash or a heavy knock, or after even a minor fall if you are over 70, have thin bones or take steroid tablets: see a doctor today",
-        "A fever or chills, a recent infection, spinal injection or surgery, a past cancer, unexplained weight loss, or pain that is constant and the same whatever you do: see your doctor this week, the same day with a fever",
+        "Leg weakness that is getting quickly worse over hours or days: go to the emergency department now; a foot that slaps or drags, or a leg getting slowly weaker: see a doctor the same day",
+        "Leg pain after a car crash, a fall from a height or a hard landing: go to the emergency department; after only a minor fall if you are over 70, have thin bones or take steroid tablets: see a doctor today",
+        "A fever or chills with the pain: see a doctor the same day",
+        "A recent infection, spinal injection or surgery, a past cancer, unexplained weight loss, or pain that is constant and the same whatever you do: see your doctor this week",
         "Calf swelling, warmth or redness, especially after travel, surgery or time off your feet: see a doctor the same day; the emergency department if you are also breathless or have chest pain",
         "Leg pain that is not easing at all by about 6 weeks, or is still limiting your daily life at about 12 weeks: see your doctor to discuss a review and whether a specialist opinion would help",
         "Leg symptoms are limiting your work, sleep or walking, or have not started to ease after two to three weeks: a physiotherapy assessment can check the nerve, work out which positions help, and give you a plan"
@@ -12638,8 +12656,8 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "New difficulty passing or holding urine, loss of bowel control, or numbness around the genitals, back passage or inner thighs: go to the nearest emergency department now",
-        "Leg weakness that is getting worse, a foot that slaps or drags, or new tripping or falls: see a doctor today",
-        "Back pain starting after a fall, a car crash or a heavy knock, especially if you are over 65 or have thin bones: seek urgent medical care, as the bone itself needs checking",
+        "Leg weakness that is getting quickly worse over hours or days: go to the emergency department now; a foot that slaps or drags, or a leg getting slowly weaker: see a doctor the same day; new tripping or falls: see a doctor today",
+        "Back pain after a car crash, a fall from a height or a hard landing: go to the emergency department; after only a minor strain or fall if you are over 70, have thin bones (osteoporosis) or take steroid tablets: see a doctor today",
         "Leg symptoms on walking that keep shortening your walking distance, or leg pain and tingling that is not settling after about 12 weeks of treatment: see your doctor to discuss whether imaging or a specialist opinion would help",
         "You want a plan: a physiotherapy assessment can work out which positions unload your back, and build the strength programme that suits the slip you have"
       ],
@@ -12743,9 +12761,10 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "New difficulty passing or holding urine, loss of bowel control, or numbness around the genitals, back passage or inner thighs: go to the nearest emergency department now",
-        "Leg weakness that is getting worse, a foot that slaps or drags, or new tripping or falls: see a doctor today",
+        "Leg weakness that is getting quickly worse over hours or days: go to the emergency department now; a foot that slaps or drags, or a leg getting slowly weaker: see a doctor the same day; new tripping or falls: see a doctor today",
         "Calf pain on walking that stops as soon as you stand still, with cold or pale feet, or you have diabetes or smoke: see your doctor to check the circulation in your legs",
-        "Constant pain that does not change with position or at night, a fever, weight loss you cannot explain, or a past history of cancer: see your doctor",
+        "A fever or chills with the back pain: see a doctor the same day",
+        "Constant pain that does not change with position or at night, weight loss you cannot explain, or a past history of cancer: see your doctor",
         "New clumsiness of the hands, unsteady walking, stiff legs, or neck pain with the leg symptoms: see a doctor promptly, as the spinal cord higher up may be involved",
         "Your walking distance has shrunk, your legs tire or tingle when you stand or walk, or you have been told you have spinal stenosis and want a plan for it: a physiotherapy assessment can help you work out the right next steps"
       ],
@@ -12952,7 +12971,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "You feel off-balance or dizzy along with neck pain or stiffness, especially after a neck injury: an assessment can help work out whether your neck is involved, and we will involve your doctor if another cause needs checking",
         "You would like a plan to retrain neck position sense, eye and head coordination, and balance",
-        "The dizziness keeps coming back with desk work, screens or driving"
+        "The dizziness keeps coming back with desk work, screens or driving",
+        "Dizziness with double vision, trouble speaking or swallowing, a drooping or numb face, weakness on one side, or you cannot stand or walk: call 911"
       ],
       "physioHelps": [
         "A physiotherapist can check your neck, balance and inner ear, and explain how the neck can affect balance.",
@@ -13205,7 +13225,10 @@ export const AUTHORED = [
       "seePhysioIf": [
         "You would like your hands, walking and balance checked; we will write to your family doctor with what we find",
         "Your medical team advises monitoring, and you would like a supervised programme for balance, strength, hand function and falls prevention",
-        "You are preparing for, or recovering from, neck surgery (usually from about 4 weeks after, or as your surgeon advises)"
+        "You are preparing for, or recovering from, neck surgery (usually from about 4 weeks after, or as your surgeon advises)",
+        "New trouble controlling your bladder or bowels, or numbness between your legs: go to the emergency department now",
+        "New weakness or numbness in both legs, coming on over hours or days: call 911",
+        "Your hands, walking or balance getting quickly worse over days or weeks: see a doctor the same day"
       ],
       "physioHelps": [
         "Once your doctor has checked it, a physiotherapist can help you alongside their care.",
@@ -14154,12 +14177,12 @@ export const AUTHORED = [
         "Keep the neck moving gently within comfort, little and often; avoid a collar",
         "Heat on the sore side can ease the muscles",
         "Rest the neck on a supportive pillow at night, and change position often during the day",
-        "Most people feel much freer within a few days"
+        "It often eases over the first few days"
       ],
       "seePhysioIf": [
         "A child or teenager with a stiff, twisted neck and a fever, a sore throat, or after a recent throat or ear operation: see a doctor the same day",
         "It started after a fall, an accident or a knock: see a doctor first",
-        "A fever, a severe headache, or feeling very unwell with the stiff neck: get urgent medical care",
+        "A fever, a severe headache, or feeling very unwell with the stiff neck: call 911",
         "It is not easing after a few days, or keeps coming back: a physiotherapy assessment can help free it up and stop it recurring"
       ],
       "physioHelps": [
@@ -14502,7 +14525,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "After a fall, a heavy pull or a dislocation, your arm became much weaker or you cannot lift it: see a doctor within a few days",
         "The arm will not lift on its own but goes up when you help it: see a doctor or physiotherapist within a week",
-        "The shoulder is hot, red or swollen, or you have a fever: see a doctor the same day",
+        "The shoulder is hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Pain that comes on with effort, chest tightness or breathlessness: call 911",
         "Numbness, pins and needles or weakness spreading down the arm or into the hand: see a doctor",
         "Weakness that is getting worse week by week: see a doctor",
@@ -15189,7 +15212,7 @@ export const AUTHORED = [
         "During exercise, some discomfort (up to about 5 out of 10) is fine if it settles by the next morning"
       ],
       "seePhysioIf": [
-        "The shoulder becomes hot, red or swollen, or you have a fever: see a doctor the same day",
+        "The shoulder becomes hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Pain at night that no position eases, a new lump, or weight loss you cannot explain: see a doctor",
         "Stiffness or pain limits dressing, reaching or sleep",
         "You would like a structured exercise plan, or are weighing up options with your doctor"
@@ -15323,7 +15346,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "After a fall or sudden pull, your arm became much weaker or you cannot lift it: see a doctor within a few days, as a repair, if needed, works best within a few weeks",
         "Your arm will not lift on its own but goes up when you help it: see a physiotherapist or doctor within a week",
-        "The shoulder is hot, red or swollen, or you have a fever: see a doctor the same day",
+        "The shoulder is hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "A new lump, weight loss you cannot explain, or night pain that no position eases: see a doctor",
         "Pain that comes on with effort, or with chest tightness or breathlessness: call 911",
         "Numbness or weakness spreading down the arm: see a doctor",
@@ -15948,7 +15971,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It is still out of place or looks a different shape: go to the emergency department",
         "Weakness or numbness spreading down the arm: see a doctor",
-        "The shoulder is hot, red or swollen, or you have a fever: see a doctor the same day",
+        "The shoulder is hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "A new lump, weight loss you cannot explain, or night pain that no position eases: see a doctor",
         "Pain on the inside of the elbow when throwing",
         "Throwing or serving is painful, or your speed or accuracy has dropped",
@@ -16389,7 +16412,10 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Pain limits walking, stairs or sleep",
         "It has not eased in the weeks after giving birth",
-        "You want exercises and support that are safe for your stage of pregnancy"
+        "You want exercises and support that are safe for your stage of pregnancy",
+        "Bleeding, fluid leaking, regular tightenings or contractions, or the baby moving less: contact your maternity unit now",
+        "A swollen, warm or tender calf, or sudden breathlessness: see a doctor the same day; call 911 if you are short of breath",
+        "A bad headache, blurred vision or sudden swelling of the face or hands: contact your maternity unit or a doctor the same day"
       ],
       "physioHelps": [
         "A physiotherapist can check your pelvis and explain in plain words why it hurts during pregnancy.",
@@ -16486,7 +16512,10 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Walking is still painful after a few days",
         "The pain is moving up into the groin",
-        "You want a plan to return to sport"
+        "You want a plan to return to sport",
+        "A pop with a large bruise on the inner thigh, or you cannot walk properly: see a doctor the same day",
+        "A lump in the groin that appears when you cough or stand: see your doctor",
+        "A deep groin or inner-thigh ache that is worse with every run or hop, or at night: see a doctor before more running"
       ],
       "physioHelps": [
         "A physiotherapist can check your inner thigh and explain how bad the strain looks.",
@@ -16763,7 +16792,8 @@ export const AUTHORED = [
       ],
       "seePhysioIf": [
         "The pain isn't easing after a couple of weeks, or you're still limping when walking",
-        "You've strained this area before and want a structured plan to get back to sport safely and lower the chance of it happening again"
+        "You've strained this area before and want a structured plan to get back to sport safely and lower the chance of it happening again",
+        "A pop or tearing high in the back of the thigh or at the sit bone, with a large bruise, or a gap you can feel: see a doctor the same day, as a torn tendon is repaired early"
       ],
       "physioHelps": [
         "A physiotherapist can check your thigh and explain how bad the strain looks.",
@@ -16969,7 +16999,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "You cannot walk normally after a few days",
         "You want a graded plan to return to kicking or sprinting: re-injury is common without one",
-        "It keeps coming back"
+        "It keeps coming back",
+        "Since the injury you cannot straighten your knee, or lift your leg straight off the bed: see a doctor the same day",
+        "The thigh is getting tighter and more painful by the hour, rather than settling: go to the emergency department now"
       ],
       "physioHelps": [
         "A physiotherapist can check your thigh and explain how bad the strain looks.",
@@ -17070,7 +17102,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Pelvic-rim or flank pain hasn't responded to treatment aimed at the low back or hip",
         "The pattern keeps recurring",
-        "You'd like assessment of the thoracolumbar junction specifically"
+        "You'd like assessment of the thoracolumbar junction specifically",
+        "Sudden, severe tearing pain in the back or tummy, or feeling faint: call 911",
+        "Pain in waves from your side to your groin, burning when you pass urine, or blood in your urine: see a doctor the same day"
       ],
       "physioHelps": [
         "A physiotherapist can check where your mid and low back meet, and explain why the pain is felt lower down.",
@@ -17241,7 +17275,9 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It hasn't settled after 2 weeks",
         "It keeps coming back with lifting or sport",
-        "You'd like a mobility and strength plan for the junction"
+        "You'd like a mobility and strength plan for the junction",
+        "Sudden, severe tearing pain in the back or tummy, or feeling faint: call 911",
+        "Pain in waves from your side to your groin, burning when you pass urine, or blood in your urine: see a doctor the same day"
       ],
       "physioHelps": [
         "A physiotherapist can check how your lower ribcage and low back move, and explain what is going on.",
@@ -17738,7 +17774,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "It has not eased after a week or two",
         "Every breath or sleeping on that side stays painful",
-        "It keeps returning with twisting at work or in sport"
+        "It keeps returning with twisting at work or in sport",
+        "Chest pain or pressure, pain spreading to the arm or jaw, or breathlessness, especially with exercise or a cold sweat: call 911"
       ],
       "physioHelps": [
         "A physiotherapist can check the rib joint and explain why it hurts when you breathe or twist.",
@@ -17811,7 +17848,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Stiffness or ache persists beyond 2 weeks",
         "It limits work, sport, or sleep",
-        "You'd like a posture-and-strength plan for desk work"
+        "You'd like a posture-and-strength plan for desk work",
+        "Chest pain or pressure, pain spreading to the arm or jaw, or breathlessness, especially with exercise or a cold sweat: call 911"
       ],
       "physioHelps": [
         "A physiotherapist can check how your mid back moves and explain why it dislikes staying still.",
@@ -17919,7 +17957,7 @@ export const AUTHORED = [
       "seePhysioIf": [
         "The aching is limiting walking, sleep, work or the things you enjoy: a physiotherapy assessment can give you a plan for exercise and load",
         "Morning stiffness lasting more than an hour, or joints that look swollen or feel hot: see your doctor (possible inflammatory arthritis)",
-        "A joint that is suddenly very swollen, hot and too painful to touch, especially with a fever: see a doctor the same day",
+        "A joint that is suddenly very swollen, hot and too painful to touch: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now",
         "Pain that wakes you and does not change with position, or unexplained weight loss: see your doctor within days"
       ],
       "physioHelps": [
@@ -19277,7 +19315,8 @@ export const AUTHORED = [
       "seePhysioIf": [
         "Thumb pain is limiting everyday tasks like opening jars or turning keys",
         "The ache or stiffness has lasted several weeks without improving",
-        "Several finger joints in both hands are swollen and stiff for more than an hour in the morning, or the thumb base is suddenly hot, red and swollen: see a doctor"
+        "Several finger joints in both hands are swollen and stiff for more than an hour in the morning: see a doctor",
+        "The thumb base is suddenly hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now"
       ],
       "physioHelps": [
         "A physiotherapist can check your thumb joint and explain in plain words what is going on.",

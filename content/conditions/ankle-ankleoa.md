@@ -8,6 +8,7 @@ ages: 30-49, 50-64, o64
 # 6 Oct 2026: ankle and foot cross-check, approved by Chandra (review/ankle-foot-crosscheck.html).
 # C13, W13: acute negatives, old sprains +1, inflammatory and hot-joint lines, prevalence.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "The first steps in the morning, or after sitting": 2
@@ -42,7 +43,7 @@ Unlike the hip and knee, ankle arthritis usually follows an old injury, such as 
 - Pain or stiffness is limiting walking
 - The ankle keeps swelling or giving way
 - You want a strength, balance, and footwear plan
-- The ankle is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day
+- The ankle is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Morning stiffness lasting well over 30 minutes, or both ankles or several joints are swollen: see your doctor
 
 ## physioHelps

@@ -8,6 +8,7 @@ clin: Interdigital nerve thickening (usually between the 3rd and 4th toes; Bhati
 # 6 Oct 2026: ankle and foot cross-check, approved by Chandra (review/ankle-foot-crosscheck.html).
 # C2, C3, W12: click answer, negatives, doctor lines, clinic notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "Burning, tingling, or shooting into two toes, better with shoes off": 3
@@ -43,7 +44,7 @@ A small nerve between the toes becomes irritated and thickened, giving burning, 
 
 ## seePhysioIf
 - Numbness spreads beyond two toes or into both feet, or you have diabetes and your toes are numb: see your doctor
-- The front of the foot is suddenly hot, red and very painful, or you feel unwell or feverish: see a doctor the same day
+- The front of the foot is suddenly hot, red and very painful: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - Ball-of-foot pain or the pebble feeling persists after 2 to 3 weeks of footwear changes
 - Toe tingling or numbness continues
 - You want gait and footwear assessment before considering injections

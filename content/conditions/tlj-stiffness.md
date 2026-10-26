@@ -5,6 +5,7 @@ name: Stiffness where the mid and low back meet
 clin: Thoracolumbar joint dysfunction (mobility deficit)
 # DRAFT patient text written 24 Sep 2026 from content/regions/tlj.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "After lifting, twisting, or bending": 2
@@ -38,6 +39,8 @@ The joints where the stiff ribcage spine meets the mobile low back take a lot of
 - It hasn't settled after 2 weeks
 - It keeps coming back with lifting or sport
 - You'd like a mobility and strength plan for the junction
+- Sudden, severe tearing pain in the back or tummy, or feeling faint: call 911
+- Pain in waves from your side to your groin, burning when you pass urine, or blood in your urine: see a doctor the same day
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

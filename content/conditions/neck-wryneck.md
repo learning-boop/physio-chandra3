@@ -10,6 +10,7 @@ ages: u18, 18-29, 30-49, 50-64, o64
 # pain CPG 2017 (acute neck pain with mobility deficits), the Cervical Clinic
 # Manual 2026 and general references; for Chandra's sign-off.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A5, a fever with a stiff neck is 911 (nrf-mening); E, no outcome promise.
 reviewed:
 pointers:
   "Woke up with it": 3
@@ -37,12 +38,12 @@ A neck that suddenly locks, often on waking or after a small awkward movement, s
 - Keep the neck moving gently within comfort, little and often; avoid a collar
 - Heat on the sore side can ease the muscles
 - Rest the neck on a supportive pillow at night, and change position often during the day
-- Most people feel much freer within a few days
+- It often eases over the first few days
 
 ## seePhysioIf
 - A child or teenager with a stiff, twisted neck and a fever, a sore throat, or after a recent throat or ear operation: see a doctor the same day
 - It started after a fall, an accident or a knock: see a doctor first
-- A fever, a severe headache, or feeling very unwell with the stiff neck: get urgent medical care
+- A fever, a severe headache, or feeling very unwell with the stiff neck: call 911
 - It is not easing after a few days, or keeps coming back: a physiotherapy assessment can help free it up and stop it recurring
 
 ## physioHelps

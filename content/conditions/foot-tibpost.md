@@ -6,6 +6,7 @@ clin: Posterior tibial tendinopathy / progressive collapsing foot deformity (PCF
 # 6 Oct 2026: ankle and foot cross-check W8, approved by Chandra: the foot copy of ankle-tibpost.md
 # for patients who point to the arch. Keep the two in step.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "The arch, underneath": 3
@@ -35,7 +36,7 @@ The tibialis posterior tendon holds up the arch from the inner ankle. When overl
 - A sudden pop at the inner ankle: see a doctor the same day
 - The arch is flattening quickly over weeks, or you cannot rise onto your toes at all on that leg: see us or your doctor within a week, as a foot specialist may be needed
 - You have diabetes and the foot is hot, red or swollen, even if it does not hurt much, or its shape is changing: see a doctor the same day and keep weight off it
-- Inner-ankle pain with any new arch flattening — early care shortens recovery
+- Inner-ankle pain with any new arch flattening: early care can help
 - Pain with stairs, hills, or longer standing
 - A single-leg heel raise is painful or impossible
 

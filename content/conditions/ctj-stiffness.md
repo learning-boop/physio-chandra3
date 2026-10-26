@@ -6,6 +6,7 @@ clin: Cervicothoracic junction stiffness (neck pain with mobility deficits, JOSP
 # Patient text moved from the old neck region (July 2026 document set).
 # Pointers from content/regions/ctj.md, 24 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed:
 pointers:
   "After long hours at a desk, screen, or looking down": 2
@@ -41,6 +42,7 @@ The hinge where the mobile neck meets the stiffer upper back can become restrict
 - Recurring end-of-day neck/upper-back ache
 - Stiffness limits looking up or over the shoulder
 - You want targeted mobility and strengthening for desk work
+- Chest pain or pressure, pain spreading to the arm or jaw, or breathlessness, especially with exercise or a cold sweat: call 911
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

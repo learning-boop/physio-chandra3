@@ -47,8 +47,11 @@ export const REGIONS = {
         text:"Have you ever had cancer, and is this a new back pain?"},
       {id:"rf-osteo", tier:"urgent", group:"osteo", why:"Possible osteoporotic fracture of the spine",
         text:"Did the pain start suddenly after a minor strain, cough, or lift, and you have osteoporosis or low bone density, take long-term steroid tablets, or are over 70?"},
+      // Head-to-toe review, 26 Oct 2026 (content/review/site-review-2026-10-26.md), approved by Chandra: A8, a fever with back pain is same day; the risk factors alone stay doctor first.
+      {id:"rf-fever", sameDay:true, tier:"urgent", group:"spinefever", why:"Possible spinal infection: a fever or chills with back pain needs a doctor today",
+        text:"Do you have a fever or chills with the back pain?"},
       {id:"rf-infection", tier:"urgent", group:"infection", why:"Possible spinal infection",
-        text:"Do you have a fever or chills with the back pain, or a weakened immune system, or have you injected drugs, or had a recent urine or skin infection, or a recent spine procedure or injection?"},
+        text:"Is the back pain new or getting worse, and do you have a weakened immune system, or have you injected drugs, or had a recent urine or skin infection, or a recent spine procedure or injection?"},
       // "Stenosis lumbar" document (v1.0, signed 5 Oct 2026), red flag 5: leg
       // symptoms can come from the spinal cord higher up (neck or mid back).
       {id:"rf-myelo", tier:"urgent", group:"myelo", why:"Possible pressure on the spinal cord higher up (neck or mid back); a doctor should check promptly",
@@ -471,6 +474,9 @@ export const REGIONS = {
         text: "Do you have a knee replacement, and is it newly painful, warm, swollen, or is the wound red or leaking?" },
       // A thigh-bone stress fracture can look like kneecap pain in people who
       // train a lot (JOSPT patellofemoral pain CPG 2019); shared with the thigh.
+      // Head-to-toe review, 26 Oct 2026 (content/review/site-review-2026-10-26.md), approved by Chandra: A10, every step or at rest is same day (as the hip, shin and foot).
+      { id: "kf-stressday", sameDay: true, tier: "urgent", group: "femstressday", why: "Possible stress fracture of the thigh bone that is getting worse: it needs a doctor today, and crutches until it is checked",
+        text: "Do you run or train hard, and does the deep thigh or above-the-knee ache now come with every step when you walk, at rest, or so that you cannot take weight on the leg?" },
       { id: "kf-stress", tier: "urgent", group: "femstress", why: "Possible stress fracture of the thigh bone: it needs imaging before more running",
         text: "Do you run or train hard, and do you have a deep ache above the knee or in the thigh that is worse with hopping or each run, or aches at night or at rest?" },
       // Same day, and asked to 16 and 17 year olds too (knee cross-check, Chandra 5 Oct 2026):
@@ -491,7 +497,7 @@ export const REGIONS = {
         text: "Is a child, teenager or young adult (about 10 to 25) having knee pain with swelling that keeps coming back after sport, with no injury?" },
       { id: "kf-tumour", ages: ["u5", "u18", "18-29"], tier: "urgent", why: "Bone tumours in young people are most common around the knee; needs imaging",
         text: "Are you under 25 with a deep ache around the knee that wakes you at night, or a lump near the knee that is growing?" },
-      { id: "kf-gout", tier: "urgent", why: "Possible gout or other crystal arthritis",
+      { id: "kf-gout", sameDay: true, tier: "urgent", why: "Possible gout or other crystal arthritis",
         text: "Did your knee become suddenly hot, swollen, and very painful overnight, and have you had gout or “pseudogout” before?" },
       { id: "kf-inflam", tier: "urgent", why: "Possible inflammatory or reactive arthritis",
         text: "Are other joints swollen too, or is the knee swollen with a rash, psoriasis, eye inflammation, or after a stomach bug or sexually transmitted infection?" },

@@ -5,6 +5,7 @@ name: Rib joint strain
 clin: Rib joint (costovertebral) dysfunction
 # DRAFT patient text written 24 Sep 2026 from content/regions/upperback.md — not yet reviewed.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "After lifting, twisting, or reaching": 2
@@ -33,6 +34,7 @@ Each rib joins the spine at small joints that move with every breath. A twist, l
 - It has not eased after a week or two
 - Every breath or sleeping on that side stays painful
 - It keeps returning with twisting at work or in sport
+- Chest pain or pressure, pain spreading to the arm or jaw, or breathlessness, especially with exercise or a cold sweat: call 911
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

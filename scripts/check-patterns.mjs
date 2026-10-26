@@ -889,7 +889,8 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const foot = knee({ I1: 'blow', I2: 'no', I3: 'no', I9: 'yes' })
   check('Knee ligament CPG: a weak foot after a knee injury (peroneal nerve) is a same-day check', foot.route === 'urgent' && foot.sameDay, foot)
   const legs = flagsOf(['kneeR', 'thighR']).map((f) => f.id)
-  check('PFP CPG: the thigh-bone stress fracture question is asked once for a knee and thigh', legs.filter((id) => /stress/.test(id)).length === 1, legs)
+  // And its every-step version once (head-to-toe review A10, 26 Oct 2026).
+  check('PFP CPG: the thigh-bone stress fracture question is asked once for a knee and thigh', legs.filter((id) => /stress$/.test(id)).length === 1 && legs.filter((id) => /stressday$/.test(id)).length === 1, legs)
   const off = interpretPsychosocial({ bfOffWork: 'agree' })
   check('Work participation CPG: off work or on lighter duties is a blue flag with a return-to-work note',
     off.flags.blue.length === 1 && off.notes.some((n) => /modified duties/.test(n)), off)
@@ -2027,8 +2028,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   const card = (id) => N.conditions.find((c) => c.id === id)
   const q = (id) => N.questions.find((x) => x.id === id)
   const opt = (qid, oid) => q(qid).options.find((o) => o.id === oid)
-  check('A sudden, severe, unusual neck pain or headache is asked even without an injury (same day), on the existing question',
-    /even without any injury/.test(N.redFlags.find((f) => f.id === 'nrf-after-doc').text) && N.redFlags.find((f) => f.id === 'nrf-after-doc').sameDay)
+  // 911 since 26 Oct 2026 (head-to-toe review A3): moved from the same-day nrf-after-doc into the stroke question.
+  check('A sudden, severe, unusual neck pain or headache is asked even without an injury (911), on the stroke question',
+    /even without an injury/.test(N.redFlags.find((f) => f.id === 'nrf-stroke').text) && N.redFlags.find((f) => f.id === 'nrf-stroke').call911 &&
+    !/even without any injury/.test(N.redFlags.find((f) => f.id === 'nrf-after-doc').text))
   check('Each spinal cord sign shows a doctor card whatever the scores; weakness shows "book promptly"; trouble concentrating after an accident shows a concussion check',
     ['bothhands', 'clumsy', 'walking'].every((o) => opt('N9', o).special === 'cordSign') && opt('N2', 'weak').special === 'nerveLoss' &&
     opt('N5', 'concentrate').special === 'concussionCheck' && ['cordSign', 'concussionCheck', 'dizzyVascular', 'dizzyStanding'].every((k) => SPECIAL_CARDS[k]))

@@ -12,6 +12,7 @@ clin: Degenerative cervical myelopathy (DCM)
 # protocol), AO Spine treatment rules; each cord sign in N9 now also shows a
 # "see your doctor" card whatever the scores.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
 #   Q1 both hands 3 · Q2 clumsy 3 · Q3 walking 3 · Q4 electric feeling 2
@@ -68,6 +69,9 @@ Please see your family doctor soon. These symptoms need a medical assessment, wh
 - You would like your hands, walking and balance checked; we will write to your family doctor with what we find
 - Your medical team advises monitoring, and you would like a supervised programme for balance, strength, hand function and falls prevention
 - You are preparing for, or recovering from, neck surgery (usually from about 4 weeks after, or as your surgeon advises)
+- New trouble controlling your bladder or bowels, or numbness between your legs: go to the emergency department now
+- New weakness or numbness in both legs, coming on over hours or days: call 911
+- Your hands, walking or balance getting quickly worse over days or weeks: see a doctor the same day
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

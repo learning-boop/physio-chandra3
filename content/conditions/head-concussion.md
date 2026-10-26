@@ -14,6 +14,7 @@ clin: Concussion (mild traumatic brain injury, mTBI)
 # there, before any score. A recent injury no doctor has seen gets education
 # only, with no booking.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 # Only after a knock, fall, crash or jolt (the document's Q1 gate).
 onset: knock
@@ -66,7 +67,7 @@ Concussion is diagnosed by a doctor or nurse practitioner, who also checks for a
 
 ## seePhysioIf
 - A doctor has checked you and you still have headache, dizziness, neck pain, balance or vision problems, or trouble coping with exercise, school or work
-- Symptoms are lasting beyond 2 to 4 weeks: physiotherapy for the neck, balance and exercise tolerance tends to help most here
+- Symptoms are lasting beyond 2 to 4 weeks: physiotherapy for the neck, balance and exercise tolerance can help
 - You want a step-by-step plan to return to sport, school or work
 - Tiredness, weakness, low mood, or changes in sex drive or periods are not improving 3 months or more after the injury: please also ask your family doctor about a hormone (pituitary) blood test, which can be checked alongside physiotherapy
 

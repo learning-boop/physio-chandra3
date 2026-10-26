@@ -159,6 +159,8 @@ export const PLAIN_SHORT = {
   'sc-trauma': 'A bad fall or accident',
   'rf-cancer': 'Cancer in the past, and this pain is new',
   'rf-spondy': 'Under 20, and it hurts to bend backwards',
+  // One bullet for both (head-to-toe review A8): it names both signs.
+  'rf-fever': 'Fever, or a higher chance of infection',
   'rf-infection': 'Fever, or a higher chance of infection',
   'sc-systemic': { lowerback: 'Weight loss, a growing lump, or bad night pain', knee: 'Fever, weight loss, a growing lump, or bad night pain', ankle: 'Fever, or weight loss without trying', foot: 'Fever, weight loss, or past cancer', hand: 'Fever, weight loss, night pain, or past cancer', upperback: 'Weight loss, a growing lump, or bad night pain', tlj: 'Weight loss, a growing lump, or bad night pain', sij: 'Weight loss, a growing lump, or bad night pain', coccyx: 'Fever, or weight loss without trying', jaw: 'Fever, weight loss, night pain, or past cancer', thigh: 'Fever, weight loss, a growing lump, or bad night pain', lowerleg: 'Fever, weight loss, a growing lump, or bad night pain', any: 'Fever, weight loss, a lump, night pain, or past cancer' },
   'rf-kidney': 'Pain in waves to the groin, burning or bloody pee, or fever',
@@ -206,6 +208,7 @@ export const PLAIN_SHORT = {
   'kf-tumour': 'Under 25 with a night ache, or a growing lump',
   'kf-locked': 'A knee stuck right now, so it will not straighten',
   'kf-ocd': 'Young, with knee swelling that keeps coming back after sport',
+  'kf-stressday': 'A runner with a deep ache above the knee',  // one bullet with kf-stress (head-to-toe review A10)
   'kf-stress': 'A runner with a deep ache above the knee',
   'kf-sufe': 'A child or teenager limping, with knee or hip pain',
   'kf-perthes': 'A child or teenager limping, with knee or hip pain',
@@ -248,6 +251,7 @@ export const PLAIN_SHORT = {
   'af-quinolone': 'Achilles pain after a ciprofloxacin-type antibiotic or steroid tablets',
   'af-footdrop': 'Your foot slaps down or your toes catch',
   'af-neuropathy': 'Both feet numb or burning, like wearing socks',
+  'af-stressday': 'An ankle or midfoot bone too sore to stand on, or sore at rest',
   'af-stress': 'More running or walking, and pain on one spot of bone',
   'af-cancer': 'Past cancer, a growing lump, or night pain',
   'af-crps': 'Since an injury or cast: burning, swelling, colour change, or touch hurts',
@@ -279,6 +283,7 @@ export const PLAIN_SHORT = {
   'tgf-cellulitis': 'Spreading redness, a red streak or a hot swollen area, with a fever',
   'tgf-claudication': 'Thigh cramps when walking, if you smoke or have diabetes',
   'tgf-femoral': 'A weak or thin thigh muscle, or a knee giving way',
+  'tgf-stressday': 'A runner with a deep thigh ache',  // one bullet with tgf-stress (head-to-toe review A10)
   'tgf-stress': 'A runner with a deep thigh ache',
   'tgf-tumour': 'Under 25 with a night ache, or a growing thigh lump',
   'tgf-sufe': 'A child or teenager limping, with thigh or knee pain',
@@ -371,6 +376,7 @@ export const PLAIN_SHORT = {
   'trf-fracture': 'A crash, fall from a height, or hard blow in the last few days',
   'trf-cancer': 'Cancer in the past, and this pain is new',
   'trf-osteo': 'Sudden pain after a small strain or slip, with weak bones or older age',
+  'trf-fever': 'Fever, a weak immune system, or injected drugs',
   'trf-infection': 'Fever, a weak immune system, or injected drugs',
   'trf-kidney': 'Side or lower-rib pain with a fever, or burning or bloody pee',
   'trf-gut': 'Pain with eating, heartburn, black poo, or after fatty meals',
@@ -435,7 +441,7 @@ const fam = (ids, text) => Object.fromEntries(ids.map((id) => [id, text]))
 export const MULTI_SHORT = {
   ...fam(['kf-septic', 'af-septic', 'ft-septic', 'rf-hotjoint', 'erf-hot', 'wrf-hot', 'hnd-hot'], 'A hot, red, swollen joint with a fever or feeling unwell'),
   ...fam(['kf-compartment', 'af-compartment', 'ft-compartment', 'lgf-compartment', 'tgf-compartment'], 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise'),
-  ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress', 'hpf-stressday', 'lgf-stressday', 'ft-stressday'], 'More running or training, and a deep ache or sore spot on a bone'),
+  ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress', 'hpf-stressday', 'lgf-stressday', 'ft-stressday', 'kf-stressday', 'tgf-stressday', 'af-stressday'], 'More running or training, and a deep ache or sore spot on a bone'),
   ...fam(['kf-tumour', 'lgf-tumour', 'tgf-tumour'], 'Under 25 with a deep night ache, or a growing lump'),
   ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout', 'hnd-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
@@ -683,8 +689,11 @@ export const TICKS = {
   'rf-spondy': [
     { key: 'arch', combo: true, text: 'You are under 20, and it hurts to bend backwards, especially in sport like gymnastics, dance, cricket or tennis', tell: 'I am under 20 and it hurts to bend backwards in sport' },
   ],
-  'rf-infection': [
+  // A8 (head-to-toe review, 26 Oct 2026): a fever with back pain, same day.
+  'rf-fever': [
     { key: 'fever', text: 'A fever or chills with the back pain', tell: 'I have a fever or chills' },
+  ],
+  'rf-infection': [
     { key: 'immune', text: 'A weak immune system, from an illness or medicines', tell: 'I have a weak immune system' },
     { key: 'drugs', text: 'You have injected drugs', tell: 'I have injected drugs' },
     { key: 'recent', text: 'A recent bladder or skin infection', tell: 'I had a bladder or skin infection recently' },
@@ -738,6 +747,8 @@ export const TICKS = {
   // ── Neck ──
   'nrf-stroke': [
     { key: 'headache', text: 'A *sudden*, explosive headache, the *worst of your life*', tell: 'I suddenly have the worst headache of my life' },
+    // A3 (head-to-toe review, 26 Oct 2026): moved here from nrf-after-doc, so it is 911.
+    { key: 'neckbad', text: 'A *sudden*, very bad new neck pain or headache, unlike any before', tell: 'I suddenly have a very bad new neck pain or headache, unlike any before' },
     { key: 'face', text: 'One side of your face *suddenly* drooping or numb, like a lopsided smile', tell: 'my face is drooping or numb' },
     { key: 'side', text: '*Sudden* numb or weak face, arm or leg, *one side* (not just tingly fingers)', tell: 'one side of my body is weak or numb' },
     { key: 'speech', text: '*Sudden* slurred speech, or trouble finding or understanding words', tell: 'my speech is slurred' },
@@ -777,7 +788,6 @@ export const TICKS = {
     { key: 'dizzy', combo: true, text: 'Since a crash, a neck crack, a jerk or a knock: dizziness that keeps coming back', tell: 'since the injury, dizziness keeps coming back' },
     { key: 'signs', combo: true, text: 'Since that injury: numbness, seeing double, slurred speech or trouble swallowing, even if not getting worse', tell: 'since the injury I have had numbness, double vision or trouble swallowing' },
     { key: 'newpain', combo: true, text: 'Since that injury: a new neck pain or headache, different from any before', tell: 'since the injury I have a new kind of neck pain or headache' },
-    { key: 'sudden', combo: true, text: 'Without an injury: a sudden, very bad new neck pain or headache, unlike any before', tell: 'I suddenly have a very bad new neck pain or headache, unlike any before' },
   ],
   'nrf-myelo': [
     { key: 'limb', text: 'An arm, hand or leg getting weaker, number or clumsier', tell: 'an arm, hand or leg is quickly getting weaker or clumsier' },
@@ -875,6 +885,9 @@ export const TICKS = {
   'kf-tumour': [
     { key: 'ache', combo: true, text: 'You are under 25, with a deep ache around the knee that wakes you at night', tell: 'I am under 25 and a deep ache around my knee wakes me at night' },
     { key: 'lump', text: 'A lump near the knee that is growing', tell: 'I have a growing lump near my knee' },
+  ],
+  'kf-stressday': [
+    { key: 'step', combo: true, text: 'You run or train hard, and the thigh or above-the-knee ache now comes with *every step*, at rest, or too much to stand on', tell: 'my thigh aches with every step or at rest' },
   ],
   'kf-stress': [
     { key: 'run', combo: true, text: 'You run or train hard, and have a deep ache above the knee that is worse with hopping, each run, or at night', tell: 'I run or train hard, and I have a deep ache above the knee that is getting worse' },
@@ -1010,6 +1023,9 @@ export const TICKS = {
   'af-neuropathy': [
     { key: 'socks', text: 'Both feet numb, burning or tingling, like wearing socks', tell: 'both my feet are numb or burning' },
   ],
+  'af-stressday': [
+    { key: 'weight', combo: true, text: 'After more running or walking: you *cannot take weight* on the foot, or the ankle bone hurts at rest', tell: 'I cannot take weight on my foot, or the bone hurts at rest' },
+  ],
   'af-stress': [
     { key: 'spot', combo: true, text: 'After more running, walking or training: pain on one spot of the inner ankle or midfoot bone, worse with each step, hopping or at night', tell: 'after more running or walking I have pain on one spot of bone' },
   ],
@@ -1114,6 +1130,9 @@ export const TICKS = {
   'tgf-femoral': [
     { key: 'thin', text: 'Your thigh muscle has become weak or thin, with no injury', tell: 'my thigh muscle has become weak or thin' },
     { key: 'giveway', text: 'Your knee gives way, with no injury', tell: 'my knee gives way' },
+  ],
+  'tgf-stressday': [
+    { key: 'step', combo: true, text: 'You run or train hard, and the thigh ache now comes with *every step*, at rest, or too much to stand on', tell: 'my thigh aches with every step or at rest' },
   ],
   'tgf-stress': [
     { key: 'run', combo: true, text: 'You run or train hard, and have a deep thigh ache that is worse with hopping, or aches at night', tell: 'I run or train hard, and I have a deep thigh ache' },
@@ -1433,7 +1452,6 @@ export const TICKS = {
     { key: 'strain', combo: true, text: 'Pain came on suddenly after a small strain, cough, lift or fall from standing, and you are over 50, have weak bones or take steroid tablets', tell: 'the pain came on suddenly after a small strain, and I am over 50 or have weak bones' },
   ],
   'trf-infection': [
-    { key: 'fever', text: 'A fever or chills with the pain', tell: 'I have a fever or chills' },
     { key: 'immune', text: 'A weak immune system, from an illness or medicines', tell: 'I have a weak immune system' },
     { key: 'drugs', text: 'You have injected drugs', tell: 'I have injected drugs' },
   ],
@@ -1658,7 +1676,7 @@ for (const [copy, from] of [['nrf-kehr', 'srf-kehr'], ['nrf-tip', 'srf-organ'], 
   ['arf-stroke', 'frf-stroke'], ['arf-rhabdo', 'srf-rhabdo'], ['arf-cellulitis', 'erf-cellulitis'], ['arf-myelo', 'erf-myelo'],
   ['trf-lung', 'srf-lung'], ['trf-pancreas', 'jrf-pancreas'], ['trf-cord-legs', 'jrf-conus-legs'], ['trf-myelo', 'jrf-legs'], ['trf-shingles', 'jrf-shingles'],
   ['crf-lung', 'srf-lung'], ['crf-cord', 'trf-cord'], ['crf-gallbladder', 'srf-organ'], ['crf-shingles', 'jrf-shingles'],
-  ['jrf-kidney', 'rf-kidney'], ['jrf-cancer', 'rf-cancer'], ['jrf-osteo', 'rf-osteo'], ['jrf-infection', 'trf-infection'],
+  ['jrf-kidney', 'rf-kidney'], ['jrf-cancer', 'rf-cancer'], ['jrf-osteo', 'rf-osteo'], ['jrf-infection', 'trf-infection'], ['trf-fever', 'rf-fever'], ['jrf-fever', 'rf-fever'],
   ['prf-kidney', 'hpf-kidney'], ['xrf-osteo', 'prf-osteo'],
   ['hrf-trauma5d', 'crf-trauma5d'], ['hrf-trauma5d-doc', 'crf-trauma5d-doc'], ['hrf-gca', 'mrf-gca']]) {
   TICKS[copy] = TICKS[from]

@@ -23,6 +23,7 @@ clin: Lumbar spondylolisthesis, adult isthmic and degenerative (Meyerding grade 
 #      is what the document asks for)
 #   Q6 told after a scan that a bone sits forward (3): the new L7 answer 4 -
 #      the document calls prior imaging the strongest single pointer
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A6 and A7, the leg-weakness and injury lines.
 reviewed: Chandra Matla, 2026-10-06 (in session)
 pointers:
   "A scan or X-ray has shown one back bone sitting forward": 4
@@ -57,8 +58,8 @@ Spondylolisthesis means one of the bones in the lower back sits a little forward
 
 ## seePhysioIf
 - New difficulty passing or holding urine, loss of bowel control, or numbness around the genitals, back passage or inner thighs: go to the nearest emergency department now
-- Leg weakness that is getting worse, a foot that slaps or drags, or new tripping or falls: see a doctor today
-- Back pain starting after a fall, a car crash or a heavy knock, especially if you are over 65 or have thin bones: seek urgent medical care, as the bone itself needs checking
+- Leg weakness that is getting quickly worse over hours or days: go to the emergency department now; a foot that slaps or drags, or a leg getting slowly weaker: see a doctor the same day; new tripping or falls: see a doctor today
+- Back pain after a car crash, a fall from a height or a hard landing: go to the emergency department; after only a minor strain or fall if you are over 70, have thin bones (osteoporosis) or take steroid tablets: see a doctor today
 - Leg symptoms on walking that keep shortening your walking distance, or leg pain and tingling that is not settling after about 12 weeks of treatment: see your doctor to discuss whether imaging or a specialist opinion would help
 - You want a plan: a physiotherapy assessment can work out which positions unload your back, and build the strength programme that suits the slip you have
 

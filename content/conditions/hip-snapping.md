@@ -9,6 +9,7 @@ clin: Snapping hip syndrome (coxa saltans), external (ITB or gluteus maximus ove
 # (G3); the deep, painful catch stays with the joint cards (FAI and labrum,
 # loose body). The hip flexor card keeps its painful front snap.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A2, a locked hip is same day.
 reviewed:
 pointers:
   "A snap or clunk I can feel or see, and can make happen": 4
@@ -43,7 +44,7 @@ A snap or clunk you can feel, see or hear as the hip moves. On the outside of th
 ## seePhysioIf
 - The snapping is painful, or is affecting your training or daily activities
 - It comes with catching or giving way: see us, as the joint itself may be involved
-- The hip locks so you cannot move it: see your doctor soon
+- The hip locks so you cannot move it: see a doctor the same day
 - It started after a fall or an injury
 - Painful snapping has not settled after 2 to 3 months of a guided plan: we can talk with you about a medical opinion
 

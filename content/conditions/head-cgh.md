@@ -8,6 +8,7 @@ clin: Cervicogenic headache (ICHD-3 11.2.1)
 # draft, 28 Sep 2026; the document's region is the head, cross-linked to the
 # neck. Reviewed and approved by Chandra, 28 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed: Chandra Matla, 2026-09-28
 # Pointers follow the document's scored question set (section 4):
 #   Q1 starts at the back of the neck 3 and Q2 always the same side 3: one
@@ -70,6 +71,11 @@ A cervicogenic headache is a headache that starts in the joints, muscles or nerv
 - Your headaches are happening regularly, or are affecting work or sleep
 - You are taking pain medicine for them often: a physiotherapy assessment can help find out whether your neck is involved, and no doctor's referral is needed
 - You would like a plan: many people notice fewer and milder headaches within several weeks of exercise and hands-on care, though long-standing headaches can take longer. If any of the warning signs apply, see a doctor first
+- A sudden, severe headache, the worst of your life, or with a drooping face, slurred speech or weakness on one side: call 911
+- A headache with a fever and a stiff neck, a rash, or feeling very unwell: call 911
+- Over 50, with a new headache, a tender scalp or temple, or jaw pain when chewing: see a doctor the same day
+- A headache that is worse lying down or with coughing or straining, with vomiting or changes in your vision: see a doctor the same day
+- A new headache since a neck manipulation, a sudden jolt or a knock to the head: see a doctor the same day
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

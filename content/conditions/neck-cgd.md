@@ -12,6 +12,7 @@ clin: Cervicogenic dizziness (CGD)
 # dangerous" only once other causes are checked; Barany 2022, HINTS and test
 # figures in the clinic notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed: Chandra Matla, 2026-09-28
 # BPPV will be a condition of its own later (Chandra, 28 Sep 2026); until
 # then it is a look-alike card.
@@ -67,6 +68,7 @@ A feeling of being off-balance or unsteady that may come from the neck. Your bra
 - You feel off-balance or dizzy along with neck pain or stiffness, especially after a neck injury: an assessment can help work out whether your neck is involved, and we will involve your doctor if another cause needs checking
 - You would like a plan to retrain neck position sense, eye and head coordination, and balance
 - The dizziness keeps coming back with desk work, screens or driving
+- Dizziness with double vision, trouble speaking or swallowing, a drooping or numb face, weakness on one side, or you cannot stand or walk: call 911
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

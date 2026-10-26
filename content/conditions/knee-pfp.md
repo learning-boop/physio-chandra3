@@ -14,6 +14,7 @@ clin: Patellofemoral pain (JOSPT CPG 2019; Neal best practice guide 2024)
 # by Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/knee-conditions.md): form 2:
 # creaking +1 (common in PFP), stiffness over an hour -1; Decary and Table 6-9 notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "Around or behind the kneecap": 3
@@ -52,7 +53,7 @@ Pain from the joint between the kneecap and thigh bone, usually when it's asked 
 ## seePhysioIf
 - It's not settling after about 2 weeks of load management, or has lasted more than 6 weeks: earlier exercise care tends to do better
 - It limits sport, stairs, or work
-- You'd like a graded strengthening plan, the best-evidenced treatment
+- You'd like a graded strengthening plan, which can help
 - Your knee is stuck right now and will not straighten fully, even when you gently help it: see a doctor the same day
 
 ## physioHelps

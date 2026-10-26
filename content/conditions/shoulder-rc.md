@@ -17,6 +17,7 @@ clin: Rotator cuff tendinopathy, including subacromial pain and partial-thicknes
 # behind the back +1, blocked even when helped -1 to -2 (four forms), the
 # 4 to 6 week doctor line, "best evidence" reworded (CHCPBC).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "After a lot of overhead work, lifting, or sport": 2
@@ -70,7 +71,7 @@ The most common shoulder problem (you may have heard it called impingement, burs
 ## seePhysioIf
 - After a fall or sudden pull, your arm became much weaker or you cannot lift it: see a doctor within a few days, as a repair, if needed, works best within a few weeks
 - Your arm will not lift on its own but goes up when you help it: see a physiotherapist or doctor within a week
-- The shoulder is hot, red or swollen, or you have a fever: see a doctor the same day
+- The shoulder is hot, red or swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - A new lump, weight loss you cannot explain, or night pain that no position eases: see a doctor
 - Pain that comes on with effort, or with chest tightness or breathlessness: call 911
 - Numbness or weakness spreading down the arm: see a doctor

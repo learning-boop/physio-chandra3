@@ -9,6 +9,7 @@ clin: Quadriceps muscle strain (often rectus femoris)
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 2 notes; the injury screen asks a torn
 # thigh tendon (I7) and a bleed on blood thinners (I8), both same day.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Front of the thigh": 3
@@ -41,6 +42,8 @@ The quadriceps are the big muscles at the front of the thigh. A sudden kick, spr
 - You cannot walk normally after a few days
 - You want a graded plan to return to kicking or sprinting: re-injury is common without one
 - It keeps coming back
+- Since the injury you cannot straighten your knee, or lift your leg straight off the bed: see a doctor the same day
+- The thigh is getting tighter and more painful by the hour, rather than settling: go to the emergency department now
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

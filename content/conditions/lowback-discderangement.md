@@ -6,6 +6,7 @@ name: Disc-related back pain that changes with position
 clin: Lumbar disc derangement / directional preference (Mechanical Diagnosis and Therapy) = acute low back pain with related (referred) lower extremity pain (JOSPT 2012)
 # DRAFT extracted from: Interventions for the Management of Acute and Chronic Low Back Pain: Revision 2021 (JOSPT Clinical Practice Guideline)
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A6, the leg-weakness line.
 reviewed: Chandra Matla, 2026-10-06 (approved in session)
 # Pointers re-mapped 24 Sep 2026 to the questions in content/regions/lowback.md.
 pointers:
@@ -37,7 +38,7 @@ This is back pain that's thought to come from a disc that reacts to certain posi
 - Stay gently active with short, frequent walks rather than resting in bed
 
 ## seePhysioIf
-- Numbness or weakness in the leg that is spreading or getting worse: see a doctor the same day, rather than working on positions
+- Numbness in the leg that is spreading, or a leg getting slowly weaker: see a doctor the same day, rather than working on positions; weakness getting quickly worse over hours or days: go to the emergency department now
 - Numbness around your saddle area or genitals, a new bladder or bowel change, or leg pain spreading to both legs: go to the emergency department now
 - Leg symptoms are spreading further down or getting stronger despite trying position changes
 - There's no improvement after a couple of weeks of adjusting your positions and staying active

@@ -9,6 +9,7 @@ clin: Hamstring strain injury (JOSPT CPG 2022): sprinting type in the muscle bel
 # 26 Oct 2026: "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 1 notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed:
 pointers:
   "Back of the thigh": 3
@@ -45,6 +46,7 @@ This is an injury to the muscle group at the back of your thigh, usually happeni
 ## seePhysioIf
 - The pain isn't easing after a couple of weeks, or you're still limping when walking
 - You've strained this area before and want a structured plan to get back to sport safely and lower the chance of it happening again
+- A pop or tearing high in the back of the thigh or at the sit bone, with a large bruise, or a gap you can feel: see a doctor the same day, as a torn tendon is repaired early
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

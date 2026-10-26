@@ -15,6 +15,7 @@ clin: Femoroacetabular impingement syndrome with or without a labral tear (Warwi
 # 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): forms 2
 # and 3 (FAI syndrome and labral tear stay one card: no patient answer
 # separates them); the pivoting and locked-hip lines; a repeatable snap -1.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A2, a locked hip is same day.
 reviewed:
 pointers:
   "Sitting in a low chair, or deep squatting": 3
@@ -52,7 +53,7 @@ The hip's ball and socket can pinch its cartilage rim (labrum) in deep flexion a
 ## seePhysioIf
 - Groin pinching persists beyond 2–3 weeks or limits sport
 - Catching or clicking with pain, or a sharp pain when you pivot or twist on that leg
-- The hip locks so you cannot move it: see your doctor soon
+- The hip locks so you cannot move it: see a doctor the same day
 - You would like a guided rehab plan: physiotherapy is the usual first step and helps many people
 - It is not improving after about 3 months of a guided programme: we can discuss a referral to a hip specialist
 - Groin pain that aches at night, or hurts to hop or run, especially after an increase in training: see a doctor before running again

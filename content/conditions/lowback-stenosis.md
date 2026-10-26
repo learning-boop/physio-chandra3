@@ -18,6 +18,7 @@ ages: 50-64, o64
 # (standing still is enough, or the flat is easier than uphill) shows the
 # circulation doctor card (calfDoctor).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A6 and A8, the leg-weakness and fever lines.
 reviewed: Chandra Matla, 2026-10-06 (approved in session)
 pointers:
   "Walking brings on leg pain, heaviness, or tingling that eases when I sit or bend forward": 6
@@ -53,9 +54,10 @@ Lumbar spinal stenosis means the space for the nerves in the lower back has beco
 
 ## seePhysioIf
 - New difficulty passing or holding urine, loss of bowel control, or numbness around the genitals, back passage or inner thighs: go to the nearest emergency department now
-- Leg weakness that is getting worse, a foot that slaps or drags, or new tripping or falls: see a doctor today
+- Leg weakness that is getting quickly worse over hours or days: go to the emergency department now; a foot that slaps or drags, or a leg getting slowly weaker: see a doctor the same day; new tripping or falls: see a doctor today
 - Calf pain on walking that stops as soon as you stand still, with cold or pale feet, or you have diabetes or smoke: see your doctor to check the circulation in your legs
-- Constant pain that does not change with position or at night, a fever, weight loss you cannot explain, or a past history of cancer: see your doctor
+- A fever or chills with the back pain: see a doctor the same day
+- Constant pain that does not change with position or at night, weight loss you cannot explain, or a past history of cancer: see your doctor
 - New clumsiness of the hands, unsteady walking, stiff legs, or neck pain with the leg symptoms: see a doctor promptly, as the spinal cord higher up may be involved
 - Your walking distance has shrunk, your legs tire or tingle when you stand or walk, or you have been told you have spinal stenosis and want a plan for it: a physiotherapy assessment can help you work out the right next steps
 

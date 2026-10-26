@@ -14,6 +14,7 @@ onset: twist, blow
 # by Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/knee-conditions.md): form 7:
 # the locked-knee line is now same day; grading and bracing notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "Inner side of the knee": 3
@@ -27,7 +28,7 @@ pointers:
 ---
 
 ## blurb
-This is a stretch or tear of the ligament running along the inner side of your knee, usually caused by a sideways force or an awkward twist. Most heal well with the right exercise and time.
+This is a stretch or tear of the ligament running along the inner side of your knee, usually caused by a sideways force or an awkward twist. Many settle well with the right exercise and time.
 
 ## noticed
 - Pain right along the inner side of the knee after a blow or twisting injury

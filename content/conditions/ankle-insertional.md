@@ -11,6 +11,7 @@ ages: 18-29, 30-49, 50-64, o64
 # 26 Oct 2026: "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): form 11 notes.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: A1, a hot joint with a fever is an emergency.
 reviewed:
 pointers:
   "Back of the heel, where the heel cord attaches": 3
@@ -41,7 +42,7 @@ Where the Achilles tendon attaches to the heel bone, the tendon, a small fluid s
 - A snap or a kick feeling at the back of the ankle, and you cannot rise onto your toes on that leg: see a doctor the same day
 - You recently took a quinolone antibiotic (such as ciprofloxacin) or steroid tablets and now have Achilles pain: tell your doctor or the prescriber now
 - Pain in both heels, with back stiffness in the mornings, psoriasis, sore red eyes or other swollen joints: see your doctor
-- The back of the heel is hot, red and swollen, or you have a fever: see a doctor the same day
+- The back of the heel is hot, red and swollen: see a doctor the same day; with a fever or feeling unwell, go to the emergency department now
 - It has not settled after 2 to 3 weeks of changes
 - It is limiting walking or running
 - You want a graded tendon-loading plan

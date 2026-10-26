@@ -15,6 +15,7 @@ clin: Adductor-related groin pain (Doha agreement 2015)
 # 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): form 8:
 # the squeeze answer +3 (squeeze test at 0 degrees); Serner and the
 # Copenhagen 5-second squeeze traffic light.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: E, wording within the CHCPBC rules.
 reviewed:
 pointers:
   "Pain where the inner thigh muscle meets the pubic bone": 3
@@ -41,13 +42,13 @@ Pain where the inner-thigh muscles attach to the pubic bone, often building up o
 
 ## homeCare
 - Relative rest from sprinting/kicking early on — keep walking as comfortable
-- Early gentle range, then progressive adductor strengthening (for example ball squeezes): the best-supported treatment for long-lasting adductor groin pain
+- Early gentle range, then progressive adductor strengthening (for example ball squeezes), which can help long-lasting adductor groin pain
 - Return to sport gradually via straight-line running before cutting
 
 ## seePhysioIf
 - Pain limits walking beyond a few days
 - You want a criteria-based return-to-sport plan — re-injury is common without one
-- Groin pain keeps recurring each season: an adductor strengthening programme (such as the Copenhagen adduction exercise) cuts groin problems by about 40% in footballers
+- Groin pain keeps recurring each season: an adductor strengthening programme (such as the Copenhagen adduction exercise) may help lower the chance of it coming back
 - A pop with a large bruise or a dent, or you cannot walk: see a doctor the same day
 - Groin pain at rest or at night, or pain on hopping: see a doctor (possible bone stress)
 - A lump in the groin, testicle pain or swelling, or burning or blood when you pass urine: see a doctor

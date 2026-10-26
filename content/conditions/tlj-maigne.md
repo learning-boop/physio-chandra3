@@ -6,6 +6,7 @@ clin: Thoracolumbar junction syndrome (Maigne)
 # Patient text moved from the old upper back region (July 2026 document set).
 # Pointers from content/regions/tlj.md, 24 Sep 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed:
 pointers:
   "After a twisting sport (golf, tennis, rowing, hockey)": 2
@@ -39,6 +40,8 @@ Irritation at the thoracolumbar junction can refer pain along nerves that travel
 - Pelvic-rim or flank pain hasn't responded to treatment aimed at the low back or hip
 - The pattern keeps recurring
 - You'd like assessment of the thoracolumbar junction specifically
+- Sudden, severe tearing pain in the back or tummy, or feeling faint: call 911
+- Pain in waves from your side to your groin, burning when you pass urine, or blood in your urine: see a doctor the same day
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->

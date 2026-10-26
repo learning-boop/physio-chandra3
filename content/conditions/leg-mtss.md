@@ -10,6 +10,7 @@ clin: Medial tibial stress syndrome
 # Chandra 26 Oct 2026), applied with Chandra's approval the same day
 # (content/reference/thigh-leg-ankle-foot-conditions.md): forms 4 and 5 notes; the shin stress-fracture
 # question names the risks, and lgf-stressday (every step, at rest) is same day.
+# 26 Oct 2026: head-to-toe review (content/review/site-review-2026-10-26.md), approved by Chandra: B, a doctor line for the dangerous look-alike.
 reviewed:
 pointers:
   "Along the inner edge of the shin bone": 3
@@ -40,6 +41,7 @@ Overload of the inner shin-bone lining from a jump in running volume, harder sur
 - Shin pain persists despite 2 weeks of reduced load
 - Pain is becoming sharper and more focal (needs a stress-fracture check)
 - You want a running load and biomechanics review
+- Pain in one small spot on the shin bone that you can cover with a fingertip, pain when you hop, or pain at rest or at night: stop running and see a doctor, as a stress fracture needs ruling out
 
 ## physioHelps
 <!-- Approved by Chandra Matla, 17 Oct 2026 (review: content/review/physioHelps-review-2026-10-17.docx) -->
