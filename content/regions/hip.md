@@ -22,6 +22,16 @@ reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: 2026-09-25
 ---
 
+## changes 26 Oct 2026 ("All hip conditions.docx", 16 forms, approved by Chandra)
+<!-- Built into symptomGuideExtra.js and injuryScreen.js; reasoning in content/reference/hip-conditions.md. -->
+- Septic hip question: also a child or teenager suddenly unable to stand or walk on the leg at all (emergency; unstable slipped growth plate).
+- Child limp question: limping even without pain (Perthes), or not wanting to take weight.
+- Stress fracture: the running ache stays doctor first; a new question makes an ache with every step or at night same day.
+- Injury screen I7: after a fall, crash, twist or tackle, a numb foot or a foot or toes that will not lift (emergency).
+- Start answer: after hip surgery, or a dislocation put back in hospital.
+- New answers: G2 long strides or fast walking; G3 morning stiffness over an hour, a snap you can make happen, sudden twinges freed by shaking the leg, very flexible or a shallow socket; G5 squeezing the knees together.
+- New cards: hip-ifi, hip-snapping, hip-loosebody. Test patients HC1 to HC10.
+
 ## red flags
 - Do you have a sudden, severe pain in your back, tummy, or groin, with a pulsing feeling in your tummy, or feeling faint or sweaty? | 911 | Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)
 - Is your hip very painful with a fever, and can you not put weight on the leg (or is a child suddenly refusing to walk and feverish)? | emergency | Possible joint infection (septic arthritis)

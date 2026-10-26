@@ -57,7 +57,7 @@ export const GATES = {
   ],
   hip: [
     { id: 'hip-surgery', title: 'Signs of a problem after hip surgery, or a clot', members: ['hpf-replacement', 'hpf-dvt'] },
-    { id: 'hip-bone', title: 'Signs of a problem in the bone', members: ['hpf-nofall', 'hpf-stress', 'hpf-avn', 'hpf-sufe'] },
+    { id: 'hip-bone', title: 'Signs of a problem in the bone', members: ['hpf-nofall', 'hpf-stress', 'hpf-stressday', 'hpf-avn', 'hpf-sufe'] },
     { id: 'hip-organ', title: 'Signs coming from the tummy or pelvis', members: ['hpf-hernia', 'hpf-kidney', 'pc-urinary', 'hpf-pelvic'] },
     { id: 'hip-medical', title: 'Signs that need a medical check', members: ['hpf-cancer', 'sc-systemic'] },
   ],
@@ -203,8 +203,9 @@ export const SIGNS = {
   'hpf-dvt': 'a leg that is swollen, warm or tender in the calf or thigh',
   'hpf-nofall': 'hip or groin pain that came on suddenly with no fall (or only a small slip), so it now hurts to stand on that leg, if you are 65 or over or have low bone density',
   'hpf-stress': 'a deep groin or pubic ache that is worse with running or hopping',
+  'hpf-stressday': 'a deep groin ache in a runner that now comes with every step when walking, or at night',
   'hpf-avn': 'a deep groin ache with long-term steroids, heavy drinking, sickle cell, lupus, a transplant or a past hip fracture',
-  'hpf-sufe': 'a child or teenager aged about 5 to 17 limping or not taking weight, with hip, groin, thigh or knee pain',
+  'hpf-sufe': 'a child or teenager aged about 5 to 17 limping (even without pain) or not taking weight',
   'hpf-hernia': 'a soft lump in the groin that appears when you cough, strain or stand',
   'hpf-kidney': 'pain in waves from your side to your groin, or burning or blood when you pass urine',
   // The drawing's urinary pattern question (./patternChecks.js), asked for the hip.
@@ -396,6 +397,7 @@ export const SHORT = {
   'hpf-dvt': 'a swollen, warm or tender leg',
   'hpf-nofall': 'sudden hip pain with no fall (65 or over, or low bone density)',
   'hpf-stress': 'a deep groin ache with running',
+  'hpf-stressday': 'a groin ache with every step or at night',
   'hpf-avn': 'a deep groin ache with steroids or heavy drinking',
   'hpf-sufe': 'a child limping',
   'hpf-hernia': 'a groin lump',
@@ -556,7 +558,7 @@ export function gateText(gate, members = []) {
    'noInjury' questions (overuse stress fractures, "no injury" Perthes) are
    skipped after a recent injury to that area. */
 export const MECHANISM = {
-  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'af-stress': 'ankle', 'hpf-stress': 'hip', 'srf-pta': 'shoulder',
+  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'af-stress': 'ankle', 'hpf-stress': 'hip', 'hpf-stressday': 'hip', 'srf-pta': 'shoulder',
   'frf-stress': 'forearm', 'wrf-stress': 'wrist', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
 }
 export const injuredIn = (screen, a = {}) => a[`${screen}:I1`] !== undefined && a[`${screen}:I1`] !== 'no'

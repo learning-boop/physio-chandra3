@@ -12,6 +12,9 @@ clin: Greater trochanteric pain syndrome: gluteal tendinopathy with or without b
 # and low chairs +1, socks and car, deep clicking and walking-then-sitting -1
 # (P5); clinic notes (Kinsella 2024, Grimaldi, VISA-G, LEAP, protocol differences).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
+# 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): form 4:
+# Grimaldi 2017, hip lag sign and ICON 2020 notes.
 reviewed:
 pointers:
   "Outer hip, over the bony point at the side": 3
@@ -69,4 +72,5 @@ The tendons of the buttock muscles, where they attach at the bony point of the o
 - Lateral hip pain also fits the hip OA criteria (Koc 2025) and FAI (Enseki 2014): check IR at 90 degrees of flexion and FADIR before calling it isolated GTPS; concurrent OA is common over 50. Source: Koc 2025; Enseki 2014.
 - Mainly a tendinopathy, not a bursitis (AIM manual p.376; Chandra's gluteal tendinopathy protocols); peak age 40-60, women up to 4 times more often (p.377). Kinsella 2024 (JOSPT meta-analysis): tenderness then pain on resisted abduction raises the probability from 59% to 96%, both negative lowers it to 14%. Palpation sens 80%, spec 47% (Grimaldi 2017; p.380). Lequesne 2008 single-leg stance and resisted de-rotation figures come from a small refractory cohort and overestimate accuracy. Outcome: VISA-G (Fearon 2015; the manual p.379 says there is no validated measure).
 - Management: education plus a progressive loading programme beat a corticosteroid injection and wait-and-see at 8 and 52 weeks (LEAP, Mellor, BMJ 2018;361:k1662; exact percentages not verified); injection or focused shockwave as add-ons (Bremer 2025). Avoid adduction stretches and strong figure-4 stretches (p.382). External snapping hip belongs here (p.375).
+- Hip document form 4 (Lower Quadrant Clinical Manual Tables 5-6, 5-7): diagnosis = GT tenderness plus at least one other positive test (Grimaldi 2017); 30-s single-leg stance with lateral hip pain sens 38, spec 100, +LR 12.2; FADER-R sens 44, spec 93; passive adduction plus resisted abduction sens 38, spec 93; hip lag sign sens 89, spec 97 for abductor tendon damage (Kaltenborn 2014). Tendon change on MRI in 88% of people without pain (Ganderton 2016). Screen psychological factors and central sensitisation (Plinsinga 2018). ICON 2020 core outcome set for gluteal tendinopathy (Fearon 2024). No physiotherapy CPG exists (searched 26 Oct 2026).
 - Protocol differences: the gluteal CPG summary calls ITB and piriformis stretching contraindicated with strong evidence (it rests on mechanism and expert opinion); the trochanteric bursitis protocol uses bursitis framing and ITB release, and the snapping hip protocol recommends ITB stretching, both against the gluteal protocols; some references could not be verified.

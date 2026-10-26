@@ -475,6 +475,11 @@ export const HIP_INJURY = [
   { id: 'I6', text: 'Are you under 18, and did you feel a pop at the front or side of the hip while sprinting or kicking?',
     askIf: (a) => a.I1 === 'pop' || a.I1 === 'twist', sameDay: true,
     options: yesNo('urgent', 'Possible growth plate avulsion fracture') },
+  // The sciatic nerve can be hurt when the hip goes out of place (hip
+  // document form 12, 26 Oct 2026).
+  { id: 'I7', text: 'Since the injury, is your foot numb, or can you not lift your foot or toes?',
+    askIf: (a) => a.I1 === 'fall' || a.I1 === 'vehicle' || a.I1 === 'twist',
+    options: yesNo('emergency', 'Possible injury to the nerve at the back of the hip, often with a dislocation') },
 ]
 
 /* ── Thigh: sudden pain, knock or fall ── */

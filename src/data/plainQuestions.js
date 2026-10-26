@@ -207,7 +207,7 @@ export const PLAIN_SHORT = {
   'kf-perthes': 'A child or teenager limping, with knee or hip pain',
   // Hip
   'hpf-aaa': 'Sudden, very bad back, tummy or groin pain, and feeling faint',
-  'hpf-septic': 'A very painful hip with a fever, or a feverish child not walking',
+  'hpf-septic': 'A painful hip with a fever, or a child who cannot walk',
   'hpf-ectopic': 'Could be pregnant, with sudden one-sided low pain or bleeding',
   'hpf-torsion': 'Sudden, very bad pain in a testicle',
   'hpf-strangulated': 'A groin lump that will not go back in, or with vomiting',
@@ -215,8 +215,9 @@ export const PLAIN_SHORT = {
   'hpf-rhabdo': 'Very sore or weak muscles, and dark pee',
   'hpf-replacement': 'After a hip operation: newly sore, warm, leaking, or a fever',
   'hpf-nofall': 'Sudden pain after a small strain or slip, with weak bones or older age',
-  'hpf-sufe': 'A child or teenager limping, with hip, thigh or knee pain',
+  'hpf-sufe': 'A child or teenager limping, even without pain',
   'hpf-stress': 'A runner with a deep groin ache',
+  'hpf-stressday': 'A runner whose groin aches with every step or at night',
   'hpf-avn': 'Deep groin ache with steroids, alcohol, sickle cell, lupus, transplant or old hip injury',
   'hpf-dvt': 'A swollen, warm or tender calf or thigh',
   'hpf-hernia': 'A soft groin lump when you cough or strain',
@@ -426,7 +427,7 @@ const fam = (ids, text) => Object.fromEntries(ids.map((id) => [id, text]))
 export const MULTI_SHORT = {
   ...fam(['kf-septic', 'af-septic', 'rf-hotjoint', 'erf-hot', 'wrf-hot', 'hnd-hot'], 'A hot, red, swollen joint with a fever or feeling unwell'),
   ...fam(['kf-compartment', 'af-compartment', 'ft-compartment', 'lgf-compartment', 'tgf-compartment'], 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise'),
-  ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress'], 'More running or training, and a deep ache or sore spot on a bone'),
+  ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress', 'hpf-stressday'], 'More running or training, and a deep ache or sore spot on a bone'),
   ...fam(['kf-tumour', 'lgf-tumour', 'tgf-tumour'], 'Under 25 with a deep night ache, or a growing lump'),
   ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout', 'hnd-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
@@ -876,6 +877,7 @@ export const TICKS = {
   'hpf-septic': [
     { key: 'fever', combo: true, text: 'A very painful hip with a fever, and you cannot put weight on the leg', tell: 'my hip is very painful, I have a fever and cannot put weight on the leg' },
     { key: 'child', combo: true, text: 'A child with a fever who suddenly will not walk', tell: 'my child has a fever and suddenly will not walk' },
+    { key: 'nowalk', text: 'A child or teen who *suddenly cannot stand or walk* on the leg', tell: 'my child suddenly cannot stand or walk on the leg' },
   ],
   'hpf-ectopic': [
     { key: 'preg', combo: true, sex: 'female', text: 'You could be pregnant, and have sudden pain low on one side of your tummy or groin, bleeding, or feeling faint', tell: 'I could be pregnant, and I have sudden low pain on one side' },
@@ -900,11 +902,15 @@ export const TICKS = {
   'hpf-nofall': [
     { key: 'sudden', combo: true, text: '65 or over, or weak bones, and sudden groin or hip pain with no fall or a small slip, so standing or walking hurts', tell: 'I am over 65 or have weak bones, and sudden hip pain makes it hard to stand' },
   ],
+  // Even without pain (hip document, 26 Oct 2026): Perthes can start as a painless limp.
   'hpf-sufe': [
-    { key: 'limp', combo: true, text: 'A child or teenager (about 5 to 17) limping or not wanting to put weight on the leg, with hip, groin, thigh or knee pain', tell: 'my child is limping with hip or knee pain' },
+    { key: 'limp', combo: true, text: 'A child or teen (about 5 to 17) limping, *even without pain*, or not putting weight on the leg', tell: 'my child is limping' },
   ],
   'hpf-stress': [
-    { key: 'run', combo: true, text: 'You run or train hard, and have a deep groin ache that is worse with running or hopping, or aches at night', tell: 'I run or train hard and have a deep groin ache' },
+    { key: 'run', combo: true, text: 'You run or train hard, and have a deep groin ache that is worse with running or hopping', tell: 'I run or train hard and have a deep groin ache' },
+  ],
+  'hpf-stressday': [
+    { key: 'step', combo: true, text: 'You run or train hard, and the deep groin ache now comes with *every step* when you walk, or at night', tell: 'I run or train hard, and my groin aches with every step or at night' },
   ],
   'hpf-avn': [
     { key: 'risk', combo: true, text: 'Long-term steroid tablets, heavy drinking, sickle cell, lupus, an organ transplant, or a past hip fracture or dislocation, and a deep groin ache', tell: 'I have a deep groin ache and a risk such as steroids or heavy drinking' },

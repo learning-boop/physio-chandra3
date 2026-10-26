@@ -168,7 +168,7 @@ export const EM_SHORT = {
   'wrf-bite': 'a cut or bite on the hand, now swollen, red and very painful',
   'hnd-bite': 'a whole finger swollen, held bent and very painful to straighten',
   'hnd-hot': 'a hot, red, swollen joint with a fever or feeling very unwell',
-  'hpf-septic': 'a very painful hip with a fever, unable to take weight',
+  'hpf-septic': 'a very painful hip with a fever, or a child who cannot stand or walk',
   'frf-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',
   'tgf-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',
   'lgf-necfasc': 'a hot red area spreading fast, with pain far worse than it looks',

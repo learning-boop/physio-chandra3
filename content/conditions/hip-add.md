@@ -11,9 +11,14 @@ clin: Adductor-related groin pain (Doha agreement 2015)
 # strain), doctor lines (S1), groin and pubic +1, deep clicking -1 (P6),
 # strengthening and prevention, clinic notes (A4).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
+# 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): form 8:
+# the squeeze answer +3 (squeeze test at 0 degrees); Serner and the
+# Copenhagen 5-second squeeze traffic light.
 reviewed:
 pointers:
   "Pain where the inner thigh muscle meets the pubic bone": 3
+  "Squeezing my knees together hurts in the groin": 3
   "Inner thigh, close to the groin": 3
   "A sudden twist, kick, or change of direction": 2
   "After increasing running or sport": 1
@@ -57,5 +62,6 @@ Pain where the inner-thigh muscles attach to the pubic bone, often building up o
 
 ## clinicNotes
 - Doha agreement (Weir 2015): adductor-related groin pain = adductor tenderness and pain on resisted adduction; usually long-standing overuse (acute strains: thigh-adductor). Measures: the 5-second squeeze test (pain 0-10; reflects sporting hip and groin function) and adductor squeeze strength. Differentials: obturator nerve entrapment, hip-related groin pain, pubic bone stress, inguinal-related pain, hernia.
+- Hip document form 8 (Lower Quadrant Clinical Manual pp. 338-342, 355-358): squeeze at 0 degrees sens 80, spec 74, +LR 3.13; outer-range resistance sens 85, spec 74; palpation sens 96, spec 57 (-LR 0.08); all three of squeeze, outer-range resistance and stretch positive = 80-81% probability of an acute adductor lesion on MRI (Serner 2016, 2021). Monitoring: Copenhagen 5-second squeeze, traffic light 0-2 go, 3-5 modify, 6-10 stop; keep pain about 2/10 or less. Holmich programme over 8-12 weeks or longer. HAGOS. A pop with a large inner-thigh bruise and weakness: possible avulsion, same day.
 - Management: progressive adductor strengthening (Holmich, Lancet 1999); prevention: the Copenhagen adduction programme reduced groin problems by 41% in male footballers (Haroy, BJSM 2019). ESSKA-EHPA-ESMA 2024 consensus keeps the Doha entities; sources often coexist.
 - Sources: Weir A et al., BJSM 2015 (Doha); Holmich P et al., Lancet 1999; Haroy J et al., BJSM 2019; Holmich P et al., KSSTA 2025 (ESSKA consensus).

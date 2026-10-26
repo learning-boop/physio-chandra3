@@ -11,8 +11,13 @@ clin: Hip osteoarthritis (JOSPT CPG revision 2025)
 # (S1), 30 to 49 -1 (P3), walking stick, falls and surgical opinion (A5), the
 # ultrasound note, and the manual's ACR error recorded (A8).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
+# 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): form 1:
+# morning stiffness over an hour -2 with a doctor line; Metcalfe, Wright and
+# imaging notes.
 reviewed: Chandra Matla, 2026-10-02
 pointers:
+  "Stiff in the morning for more than an hour": -2
   "Grips the side of my hip in a “C” shape, thumb at the back and fingers in the groin": 3
   "Putting on socks and shoes, or getting in and out of a car": 3
   "Stiff in the morning for less than an hour, then it eases": 3
@@ -52,6 +57,7 @@ This is a gradual change in the hip joint, common with age, that causes deep gro
 - Symptoms keep getting worse despite rest and simple activity changes
 - You have had a fall, or feel unsteady on your feet
 - Pain and function stay poor despite a good exercise programme: your doctor can talk with you about seeing a surgeon
+- Morning stiffness lasts more than an hour, or other joints are swollen or painful too: see your doctor, as this can be a different kind of arthritis
 - The pain suddenly becomes much worse, aches at night whatever position you are in, or you can no longer put weight on the leg: see your doctor first, as an X-ray may be needed
 
 
@@ -70,4 +76,5 @@ This is a gradual change in the hip joint, common with age, that causes deep gro
 - Exercise (A): individualised strength, flexibility and endurance, aquatic where suitable, 1-5 times a week, 30-120 minutes, for 5-16 weeks; supervised progressive strengthening did better than Nordic walking, which did better than unsupervised home exercise. Dry needling (A, new in 2025): trigger points in iliopsoas, rectus femoris, TFL, gluteus medius and minimus, weekly for 3 weeks, in K-L II-III, short-term gains.
 - Education (B), now including internet-based pain-coping skills training; weight loss (B, raised from C), 5-7.5% where BMI is over 25; gait and balance training with a walking aid (C); ultrasound only by shared decision (D, lowered from B); no brace as first line (F). Re-examine or refer (F) if the picture does not fit or does not improve.
 - Source: Koc TA et al., JOSPT 2025;55(11):CPG1-CPG31 (hip OA revision 2025; supersedes Cibulka 2017, JOSPT 47(6)).
+- Hip document form 1 (26 Oct 2026; Lower Quadrant Clinical Manual Ch. 5 pp. 261-267): history +LRs (Metcalfe 2019): family history 2.1, personal knee OA 2.1, pain on stairs or slopes 2.1, worst pain in the medial thigh 7.8 (sens 12%, spec 98%). PT-response CPR (Wright 2011): unilateral pain, age under 58, NPRS over 6/10, 40 m self-paced walk under 25.9 s, symptoms under 1 year; 2 of 5 = 65% success, 3 of 5 = 99%. Single-leg stance angle under 83 degrees associated with OA. Morning stiffness over an hour with other swollen joints: inflammatory arthritis, doctor first. Imaging only if atypical.
 - AIM Theory Manual 2023 p.405 states the ACR hip criteria include morning stiffness "over an hour": the ACR 1991 criterion is 60 minutes or less (as on this card); Chandra's FAI protocol table gives OA "morning stiffness over 30 minutes". NICE NG226: consider a joint replacement referral when symptoms substantially affect quality of life and non-surgical care is not working.

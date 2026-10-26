@@ -55,5 +55,5 @@ export function osteomalaciaPanel(ticked = false) {
 }
 
 /* D. The stress-fracture questions: hip, thigh, knee, shin and foot. */
-export const STRESS_IDS = ['hpf-stress', 'tgf-stress', 'kf-stress', 'lgf-stress', 'ft-stress']
+export const STRESS_IDS = ['hpf-stress', 'hpf-stressday', 'tgf-stress', 'kf-stress', 'lgf-stress', 'ft-stress']
 export const STRESS_LINE = 'If this is not your first stress fracture, or it came on with only a small increase in training, also ask your doctor for a bone blood test (vitamin D, calcium, phosphate and parathyroid hormone): bones short of vitamin D or calcium, or not getting enough fuel for the training, crack more easily, and it is treatable.'

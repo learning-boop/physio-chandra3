@@ -9,6 +9,9 @@ clin: Proximal hamstring tendinopathy, with or without ischial bursitis
 # minutes" (G2) and "Points to the bone I sit on" (G4). From the JOSPT hamstring
 # CPG 2022 (differentials), the AIM Theory Manual 2023 and current reviews.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
+# 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): form 9:
+# clinic notes (load tests, Nasser 2021).
 reviewed:
 pointers:
   "Points to the bone I sit on, at the bottom of the buttock": 3
@@ -52,4 +55,5 @@ The hamstring tendons attach to the bone you sit on, at the bottom of the buttoc
 - Diagnosis: deep buttock pain at the ischial tuberosity with sitting and hamstring loading; tender at the tuberosity; provocation by the bent-knee stretch, the Puranen-Orava test and the modified bent-knee stretch; ultrasound or MRI if unclear. Ischial bursitis often coexists.
 - Differentials: deep gluteal syndrome (sciatic symptoms, sciatic notch tenderness), ischiofemoral impingement, lumbar radiculopathy, SIJ, an avulsion (a pop with bruising: same day, I5 in the injury screen), a stress fracture of the pelvis.
 - Management: load management (reduce compression: sitting, deep hip flexion, hill and speed work), isometrics progressing to isotonic and energy-storage loading, then a return to running; avoid aggressive hamstring stretching early; shockwave or injection as add-ons for persistent cases.
+- Hip document form 9 (Lower Quadrant Clinical Manual pp. 342-345, 359-360): load tests (Cook and Purdam 2013): single-leg bent-knee bridge, then long-lever bridge, then single-leg deadlift; stretch provocation (Cacchio 2012): Puranen-Orava, bent-knee stretch, modified bent-knee stretch (last, as it can aggravate a partial tear). Expert consensus (Nasser 2021): progressive load tests with trunk lean, isometric knee flexion at 90 degrees of hip flexion, 24-hour pain response for tolerance. Sciatic nerve may be tethered: slump or SLR. No physiotherapy CPG exists (searched 26 Oct 2026).
 - Sources: JOSPT hamstring strain CPG 2022 (differentials); AIM Theory Manual 2023 Ch. 2.6; hip area document (referral patterns).

@@ -12,9 +12,15 @@ clin: Structural hip instability (acetabular dysplasia / hip laxity)
 # giving way is usually pain, arthritis or nerve weakness), stretch advice, 2023
 # CPG and the microinstability consensus in the notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
+# 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): forms 6
+# and 11: the new answer "very flexible, or a shallow hip socket" +3; a
+# diagnosed adult dysplasia belongs here (babies are under 5, outside the
+# clinic); Hoppe 2017 test figures checked against the clinical manual.
 reviewed:
 pointers:
   "The hip gives way": 3
+  "I am very flexible, or a doctor told me I have a shallow hip socket": 3
   "Clicking, catching, or locking deep in the groin": 1
   "Groin, or the front of the hip": 1
   "Deep pain in the hip joint with twisting": 1
@@ -42,6 +48,7 @@ Some hips have a slightly shallower socket or extra-stretchy ligaments, so the b
 - Avoid forcing extreme stretches such as the splits or deep yoga twists: strength and control usually help more than stretching
 
 ## seePhysioIf
+- You have been told you have a shallow hip socket (hip dysplasia) and the hip aches with walking or standing: physiotherapy alongside your doctor's advice can help
 - The hip repeatedly feels like it's about to give way or catches/locks
 - Groin or hip discomfort continues for several weeks despite easing back on aggravating activities
 - After a tackle or a fall, a clunk with severe pain, or you cannot put weight on the leg: go to the emergency department
@@ -54,6 +61,7 @@ Some hips have a slightly shallower socket or extra-stretchy ligaments, so the b
 - You get advice on which movements to ease off and a gradual plan back to sport.
 
 ## clinicNotes
+- Hip document forms 6 and 11 (26 Oct 2026): anterior microinstability tests (Hoppe 2017; Lower Quadrant Clinical Manual pp. 286-292, checked): AB-HEER sens 80.6, spec 89.4; prone instability sens 33.9, spec 97.9; HEER (anterior apprehension) sens 71.0, spec 85.1. Posterior: posterior apprehension, prone IR (no accuracy studies; Grimaldi 2020); often coexists with anterior impingement. Table 5-4 profile: age 18-30, IR over 30 degrees at 90 degrees of flexion, increased ER on log roll, apprehension with long-axis distraction. Adult dysplasia (Mortensen 2018, as cited): mild to moderate in 3.5%; iliopsoas and abductor pain, flexor and extensor weakness, Trendelenburg gait; often with a labral tear or microinstability; periacetabular osteotomy is the usual surgery, with physiotherapy before and after. Avoid end-range capsular mobilisation and lateral distraction in a lax hip. Undiagnosed teen or adult who fits: X-ray via the doctor. Orthopaedic opinion if the hip has fully dislocated or subluxed.
 - Structural instability (JOSPT 2014, C): anterior groin, lateral or general hip pain reproduced by FADIR or FABER; positive apprehension; IR over 30 degrees at 90 degrees of flexion; mechanical symptoms. Imaging: lateral centre-edge angle under 25 degrees, Tonnis angle over 10 degrees (dysplasia). Ligamentum teres tear: instability on squatting.
 - Risk factors (F): local or general laxity (Beighton), connective tissue disorders, bony shape, rotational and end-range sports. Measures (A): HOS, HAGOS or iHOT-33. Interventions (F): education to avoid end-range loading, neuromuscular re-education, strength and power; caution with capsular mobilisation in a lax hip.
 - Source: Enseki K et al., JOSPT 2014;44(6):A1-A32 (nonarthritic hip joint pain); JOSPT 2023 revision: ligamentum teres test (C), multimodal care (B). Microinstability Delphi consensus (Khanduja 2023, KSSTA): 34 criteria across history, examination and imaging. Exam tests: prone instability, abduction-hyperextension-external rotation, anterior apprehension (Hoppe 2017; combined figures not verified). Mostly women 15-41 with laxity (manual p.413). Traumatic posterior subluxation in sport: AVN risk, doctor first (the injury screen I2 now asks after a twist or tackle).

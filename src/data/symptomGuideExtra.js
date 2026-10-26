@@ -896,6 +896,9 @@ export const EXTRA_REGIONS = {
       { id: "P5", text: "Which of these apply? Tick all that apply.",
         // Or pregnant / given birth in the last 12 months (../data/pregnancy.js).
         askIf: ({ ra }) => ra.onset === "pregnancy" || ra.onset === "postpartum" || ["p1", "p2", "p3", "pp6", "pp12"].includes(ra.preg),
+        // Early whenever it is asked (26 Oct 2026): the hip document's new
+        // answers made the hip's G2 and G3 outweigh it on a pelvis-and-hip line.
+        priority: () => true,
         options: [
           { id: "pubic", label: "Pain at the front, over the pubic bone" },
           { id: "click", label: "Clicking or grinding at the pubic bone" },
@@ -2241,8 +2244,12 @@ export const EXTRA_REGIONS = {
     redFlags: [
       { id: "hpf-aaa", tier: "emergency", call911: true, why: "Possible leaking abdominal aortic aneurysm (higher risk over 60 and in smokers)",
         text: "Do you have a sudden, severe pain in your back, tummy, or groin, with a pulsing feeling in your tummy, or feeling faint or sweaty?" },
-      { id: "hpf-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
-        text: "Is your hip very painful with a fever, and can you not put weight on the leg (or is a child suddenly refusing to walk and feverish)?" },
+      // A child or teenager who cannot stand or walk at all, with or without a
+      // fever (hip document form 13, 26 Oct 2026; Webb, AFP 2025): an unstable
+      // slip is an emergency too. Here, not a child-only question, so it is
+      // asked at every age like every emergency question.
+      { id: "hpf-septic", tier: "emergency", why: "Possible joint infection (septic arthritis), or in a child or teenager an unstable slipped growth plate at the hip: keep weight off the leg",
+        text: "Is your hip very painful with a fever, and can you not put weight on the leg (or is a child feverish and suddenly refusing to walk, or a child or teenager suddenly unable to stand or walk on the leg at all)?" },
       { id: "hpf-ectopic", sex: "female", ages: ["18-29", "30-49"], tier: "emergency", call911: true, why: "Possible ectopic pregnancy",
         text: "Could you be pregnant, and do you have sudden one-sided pain low in your tummy or groin, bleeding, or feeling faint?" },
       { id: "hpf-torsion", sex: "male", tier: "emergency", why: "Possible testicular torsion",
@@ -2265,10 +2272,15 @@ export const EXTRA_REGIONS = {
         text: "Are you 65 or over, or do you have osteoporosis or low bone density, and did groin or hip pain start suddenly (with no fall, or only a small slip or twist), so that it now hurts to stand or walk on that leg?" },
       // From age 5 (hip cross-check S4): Perthes, an irritable or infected hip
       // at 5 to 8 are covered too; under 5 is outside the clinic's age range.
+      // "Even without pain" (hip document forms 13-14, 26 Oct 2026): Perthes
+      // often starts as a painless limp.
       { id: "hpf-sufe", ages: ["u18", "18-29"], sameDay: true, tier: "urgent", group: "sufe", why: "Possible slipped growth plate at the hip (SUFE), Perthes, or an irritable or infected hip; hip problems in children are often felt at the knee",
-        text: "Is a child or teenager aged about 5 to 17 limping or not wanting to take weight on the leg, with pain in the hip, groin, thigh, or knee?" },
-      { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip or pelvis (femoral neck or pubic bone); needs imaging before more running",
-        text: "Do you run or train hard, and do you have a deep groin ache that is worse with running or hopping, or aches at night?" },
+        text: "Is a child or teenager aged about 5 to 17 limping (even without pain) or not wanting to take weight on the leg?" },
+      { id: "hpf-stress", tier: "urgent", why: "Possible stress fracture of the hip or pelvis (femoral neck or pubic bone); needs imaging before more running. More likely with missed periods, low bone density, not eating enough for your training, or a past stress fracture",
+        text: "Do you run or train hard, and do you have a deep groin ache that is worse with running or hopping?" },
+      // Every step or at night: same day (hip document form 15, 26 Oct 2026).
+      { id: "hpf-stressday", sameDay: true, tier: "urgent", why: "Possible stress fracture of the femoral neck that is getting worse: it needs a doctor today, and crutches until it is checked",
+        text: "Do you run or train hard, and does the deep groin ache now come with every step when you walk, or at night?" },
       { id: "hpf-avn", tier: "urgent", why: "Possible loss of blood supply to the hip bone (avascular necrosis)",
         text: "Do you take long-term steroid tablets, drink heavily, have sickle cell disease or lupus, have had an organ transplant, or a past hip fracture or dislocation, and have a deep groin ache?" },
       { id: "hpf-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); emergency if you are also short of breath",
@@ -2303,7 +2315,8 @@ export const EXTRA_REGIONS = {
         { id: "fall", label: "After a fall" },
         { id: "pregnancy", label: "During pregnancy, or since having a baby" },
         // Recovery after hip surgery (hip cross-check N2, 5 Oct 2026).
-        { id: "surgery", label: "After hip surgery (a hip replacement or a fracture repair)" }
+        // A dislocation put back in hospital too (hip document form 12).
+        { id: "surgery", label: "After hip surgery (a replacement or fracture repair), or a dislocation put back in hospital" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -2340,13 +2353,22 @@ export const EXTRA_REGIONS = {
         { id: "walking", label: "Walking a distance, easing when I sit or bend forward", special: "lowbackHip" },
         // Sitting intolerance, the defining feature of deep gluteal syndrome and
         // proximal hamstring tendinopathy (hip cross-check P1, 5 Oct 2026).
-        { id: "sitting", label: "Sitting for more than 20 to 30 minutes, especially on a hard seat" }
+        { id: "sitting", label: "Sitting for more than 20 to 30 minutes, especially on a hard seat" },
+        // Ischiofemoral impingement (hip document form 5): the long-stride test.
+        { id: "stride", label: "Taking long strides or walking fast (easier with shorter steps)" }
       ]},
       { id: "G3", text: "Which of these apply? Tick all that apply.", options: [
         { id: "amstiff", label: "Stiff in the morning for less than an hour, then it eases" },
+        // Over an hour: an inflammatory cause (hip document form 1).
+        { id: "amlong", label: "Stiff in the morning for more than an hour" },
         { id: "sitstiff", label: "Stiff after sitting, then eases after a few steps" },
         { id: "click", label: "Clicking, catching, or locking deep in the groin" },
+        // Hip document, 26 Oct 2026: snapping hip (form 7), loose body (form
+        // 10), micro-instability and dysplasia (forms 6 and 11).
+        { id: "snap", label: "A snap or clunk I can feel or see, and can make happen" },
+        { id: "twinge", label: "Sudden sharp twinges that stop me mid-step, eased by shaking the leg" },
         { id: "giveway", label: "The hip gives way" },
+        { id: "flexible", label: "I am very flexible, or a doctor told me I have a shallow hip socket" },
         { id: "none", label: "None of these" }
       ]},
       { id: "G4", text: "If you show someone where it hurts, what does your hand do?", options: [
@@ -2366,6 +2388,8 @@ export const EXTRA_REGIONS = {
         priority: ({ ra }) => [].concat(ra.G1 || []).some((o) => o === "groin" || o === "inner"),
         options: [
           { id: "adductor", label: "Pain where the inner thigh muscle meets the pubic bone" },
+          // The squeeze test (hip document form 8; Serner 2016).
+          { id: "squeeze", label: "Squeezing my knees together hurts in the groin" },
           { id: "inguinal", label: "Pain just above the groin crease, worse with coughing or sit-ups" },
           { id: "iliopsoas", label: "Pain at the front of the hip when lifting my knee" },
           { id: "joint", label: "Deep pain in the hip joint with twisting" },

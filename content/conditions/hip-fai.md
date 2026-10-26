@@ -11,6 +11,10 @@ clin: Femoroacetabular impingement syndrome with or without a labral tear (Warwi
 # onset, socks and car, and moving the hip +1 (P4), the 2023 CPG grades, the
 # Warwick Agreement, scans in people without pain, specialist referral (A2).
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
+# 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): forms 2
+# and 3 (FAI syndrome and labral tear stay one card: no patient answer
+# separates them); the pivoting and locked-hip lines; a repeatable snap -1.
 reviewed:
 pointers:
   "Sitting in a low chair, or deep squatting": 3
@@ -28,6 +32,7 @@ pointers:
   "65 or over": -2
   "Stiff in the morning for less than an hour, then it eases": -1
   "Moving my low back": -2
+  "A snap or clunk I can feel or see, and can make happen": -1
 ---
 
 ## blurb
@@ -46,7 +51,8 @@ The hip's ball and socket can pinch its cartilage rim (labrum) in deep flexion a
 
 ## seePhysioIf
 - Groin pinching persists beyond 2–3 weeks or limits sport
-- Catching or clicking with pain
+- Catching or clicking with pain, or a sharp pain when you pivot or twist on that leg
+- The hip locks so you cannot move it: see your doctor soon
 - You would like a guided rehab plan: physiotherapy is the usual first step and helps many people
 - It is not improving after about 3 months of a guided programme: we can discuss a referral to a hip specialist
 - Groin pain that aches at night, or hurts to hop or run, especially after an increase in training: see a doctor before running again
@@ -64,6 +70,8 @@ The hip's ball and socket can pinch its cartilage rim (labrum) in deep flexion a
 - Against diagnostic injection, FADIR sens 0.78 / spec 0.10 and FABER sens 0.60 / spec 0.18 (JOSPT 2014); against arthroscopy, FADIR sens 0.94-0.99 (Reiman; AIM manual p.368): these tests screen (a negative helps rule out), they do not confirm. Measures (A): HOS, HAGOS or iHOT-33.
 - JOSPT 2023 revision (Enseki, 53(7)): FADIR and FABER (C) to identify those without FAIS when negative; multimodal care, activity modification plus hip, trunk and leg strengthening (B); movement-pattern training (C), therapeutic exercise (C), education (C); manual therapy (F), neuromuscular re-education (F), bracing (D); outcome measures (A: iHOT, HAGOS, HOS-ADL, HOS-SRA), performance tests (B: single-leg squat, SEBT, hop), psychological questionnaires (C), ligamentum teres test (C). Replaces the 2014 interventions (all F).
 - Warwick Agreement (Griffin 2016): FAI syndrome needs symptoms, clinical signs and imaging together. Cam shape in 37% and pincer in 67% of hips without pain (Frank 2015; manual p.369); labral tears in 69-86% without symptoms (p.413). UK FASHIoN and FAIT: surgery and physiotherapy both improved hip quality of life, surgery more at 12 months; refer to a hip surgeon after about 12 weeks of failed rehabilitation (Chandra's FAI and labrum protocols). Cycling may provoke FAI pain (p.368).
+- Labral tear (hip document form 3): Burnett 2006 (n=66, arthroscopy-confirmed): FADIR positive 95%, groin pain 92%, lateral hip 59%, anterior thigh or knee 52%, buttock 38%, night pain 71%, limp 39%, normal X-ray 36%; onset gradual in about 6 in 10; pivoting aggravates in about 70%. Labral tests (Reiman 2015; Lower Quadrant Clinical Manual Table 5-8): FADIR sens 95 / spec 7, flexion-IR 96 / 19, FABER 52 / 49: rule out when negative, never rule in. The form's "Thomas test sens 89 / spec 92 (Reiman 2013)" is in neither AIM manual: not used until checked. Staged non-surgical programme 10-12 weeks or longer (Yazbek 2011). Screen lumbar, SIJ and pelvic floor (obturator internus).
+- FAI syndrome (hip document form 2): rule-out cluster (Caliesch 2020): FADIR sens 96 / spec 11, FPAW 61 / 56, maximal squat 75 / 41; all negative lowers the likelihood. Rule-in: restricted prone IR (sens 29, spec 94). Exercise-based care for at least 3 months before a surgical opinion (Kemp 2020, Zurich consensus). Under 16: rule out SUFE and Perthes first (hpf-sufe).
 - Chandra's FAI protocol: "high sensitivity, especially cam/pincer" and joint manipulation in phase 3 are not in the 2014 or 2023 CPG (mobilisation only, F); age range 15-45.
 - Differentials: lumbar or SIJ referral, pubic symphysis, nerve entrapment, hip OA, iliopsoas or adductor problems, hernia or athletic pubalgia, osteonecrosis, femoral neck or pelvic stress fracture, avulsion, Perthes or SUFE, septic arthritis, gynaecological or prostate causes, tumour.
 - Source: Enseki K et al., JOSPT 2014;44(6):A1-A32 (nonarthritic hip joint pain); Enseki KR et al., JOSPT 2023;53(7) (revision, grades above); Griffin DR et al., BJSM 2016 (Warwick); Griffin 2018 (UK FASHIoN), Lancet; FAIT trial.

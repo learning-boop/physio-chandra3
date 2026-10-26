@@ -22,6 +22,7 @@ pointers:
   "Moving my hip": 1
   "Gradually, no clear reason": 1
   "Moving my low back": -2
+  "Taking long strides or walking fast (easier with shorter steps)": -1
 ---
 
 ## blurb

@@ -10,6 +10,9 @@ clin: Iliopsoas-related groin pain, sometimes with snapping (Doha agreement 2015
 # same-day doctor line (cannot lift the knee sitting, or fever), internal
 # snapping and the Doha definition in the notes.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "All hip conditions.docx" (16 forms, signed v1.0 by Chandra 26 Oct
+# 2026), applied with Chandra's approval the same day (content/reference/hip-conditions.md): form 7:
+# the repeatable snap +1 (internal snapping); the painless snap has its own card.
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Pain at the front of the hip when lifting my knee": 3
@@ -20,6 +23,7 @@ pointers:
   "A sudden twist, kick, or change of direction": 1
   "Points into the groin": 1
   "Moving my low back": -2
+  "A snap or clunk I can feel or see, and can make happen": 1
 ---
 
 ## blurb
