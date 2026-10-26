@@ -42,7 +42,7 @@ Sometimes a small piece of cartilage or bone comes loose inside the hip joint. I
 - The pain is constant rather than coming in sudden catches, or you have deep pain at night: see us or your doctor, as something else may be going on
 
 ## physioHelps
-<!-- DRAFT (26 Oct 2026), new card from the hip document form 10: awaiting Chandra's review, like the 169 texts approved 17 Oct 2026 -->
+<!-- Approved by Chandra Matla, 26 Oct 2026 (in chat; written from the hip document form 10) -->
 - A physiotherapist can talk through your catching episodes, check how your hip moves and explain what may be happening.
 - With your consent, a specific hands-on technique that gently pulls and turns the hip may help ease the catching.
 - Exercises keep the hip moving and strong, and we can tell you if you need to see a doctor for imaging.

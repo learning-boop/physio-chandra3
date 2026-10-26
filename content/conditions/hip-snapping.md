@@ -48,7 +48,7 @@ A snap or clunk you can feel, see or hear as the hip moves. On the outside of th
 - Painful snapping has not settled after 2 to 3 months of a guided plan: we can talk with you about a medical opinion
 
 ## physioHelps
-<!-- DRAFT (26 Oct 2026), new card from the hip document form 7: awaiting Chandra's review, like the 169 texts approved 17 Oct 2026 -->
+<!-- Approved by Chandra Matla, 26 Oct 2026 (in chat; written from the hip document form 7) -->
 - A physiotherapist can watch the movement that makes the snap, feel where it comes from, and explain it in plain words.
 - Exercises for hip and trunk strength and control, with flexibility work where it helps, can help settle a painful snap.
 - You get a plan to adjust training for a while and build back up.

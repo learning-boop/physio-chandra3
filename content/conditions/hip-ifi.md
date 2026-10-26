@@ -48,7 +48,7 @@ The space between the bone you sit on and the top of the thigh bone is narrower 
 - It is not easing after a few months of a guided programme: your doctor can arrange a scan or an opinion about an injection
 
 ## physioHelps
-<!-- DRAFT (26 Oct 2026), new card from the hip document form 5: awaiting Chandra's review, like the 169 texts approved 17 Oct 2026 -->
+<!-- Approved by Chandra Matla, 26 Oct 2026 (in chat; written from the hip document form 5) -->
 - A physiotherapist can watch you walk with short and long steps and explain what is squeezing at the back of the hip.
 - Changes to your stride and a step-by-step strengthening programme for the hip and trunk can help ease the pain.
 - If it does not settle, we can talk with you about seeing your doctor for a scan.

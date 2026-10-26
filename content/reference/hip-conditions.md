@@ -49,10 +49,13 @@ Source: `Infographics/7 PhysioChandra/Conditions/Hip/All hip conditions.docx`, 1
 
 - Match the Lower Quadrant Clinical Manual Ch. 5: Sutlive 2008 (4 of 5, +LR 24.3), Metcalfe 2019 (medial thigh +LR 7.8), Wright 2011, Grimaldi 30-s single-leg stance (spec 100, +LR 12.2), hip lag sign (89/97), Hoppe 2017 (AB-HEER 80.6/89.4, prone instability 33.9/97.9), Table 5-8 labral tests, patellar-pubic percussion (95/86).
 - Match the AIM Theory Manual 2023: ischiofemoral impingement tests (IFI 0.82/0.85, long stride 0.94/0.85).
-- Not verified: the labral form's "Thomas test sens 89 / spec 92 (Reiman 2013)" is in neither manual; left out of the clinic notes until checked.
+- Checked online 26 Oct 2026 (not in either manual): the labral form's Thomas test (sens 89 / spec 92) is in Reiman 2013 (BJSM 47:893-902), from one small arthroscopy study with no confidence intervals; Narvani 2003 found sens 75 / spec 43 against MR arthrogram, and Dhillon 2025 (ASMR) calls hip test accuracy highly variable. Added to the hip-fai notes with that caveat.
+- Microinstability Delphi (Khanduja 2023, KSSTA 31(1):40-49): 37 criteria, 14 major; at least 4 in each of history, examination and imaging, with 6 or more major. The hip-hipinstab note said 34 criteria: corrected.
+- Bone stress injury Delphi (Hoenig 2025, BJSM 59(2):78-90): confirmed; 41 panel members, consensus on 41 of 58 statements across pathophysiology and diagnosis, risk and prevention, and management and return to sport. Its return-to-sport statements were not read in full; return planning depends on the site and grade (MRI grade 1 to 4: about 42, 70, 84 and 99 days to return, Hoenig 2022 meta-analysis), and the low-risk / high-risk site split is not well validated (Hoenig 2023). The femoral neck stays doctor first on the site.
+- Osteonecrosis of the femoral head: no 2021 Chinese guideline was found; the 2019 version (Zhao, J Orthop Translat 2020;21:100-110) with ARCO 2019 staging remains the current reference.
 
 ## Still open for Chandra
 
-1. Drafts awaiting review: "How physiotherapy helps" on hip-ifi, hip-snapping and hip-loosebody.
-2. Sources the forms mark as unverified: the hip microinstability Delphi (KSSTA 2023, full text not opened), the 2021 Chinese ONFH guideline (does it supersede 2019?), the BSI Delphi (Hoenig, BJSM 2025; grading and return-to-sport criteria), the AAOS infant DDH CPG 2022 recommendations, the UK Perthes consensus statements (Galloway 2024), NICE NG157 for rehabilitation after dislocation.
+1. The "How physiotherapy helps" texts on hip-ifi, hip-snapping and hip-loosebody were approved by Chandra on 26 Oct 2026.
+2. Still unchecked: the AAOS infant DDH CPG 2022 recommendations (under 5 is outside the clinic), the UK Perthes consensus statements (Galloway 2024), NICE NG157 for rehabilitation after dislocation, and the BSI Delphi's individual return-to-sport statements.
 3. Not applied: the forms' family-history and past-injury questions (OA Q6, loose body Q5, AVN Q1 and Q5) as separate questions; dry needling in patient text (JOSPT hip OA 2025 grade A; Chandra to confirm he offers it); the privacy statement block (global wording, not per condition).
