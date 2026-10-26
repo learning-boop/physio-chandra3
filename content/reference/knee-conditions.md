@@ -58,4 +58,9 @@ Matched in the Lower Quadrant Clinical Manual Ch. 6: Sokal 2022 (Lachman 81/85, 
 ## Still open for Chandra
 
 1. The "How physiotherapy helps" texts on knee-stfj, knee-loosebody and knee-cartilage were approved by Chandra on 26 Oct 2026.
-2. Sources the forms mark as unverified: the ESSKA 2024 first-time patellar dislocation consensus, the AAOS OCD CPG 2023 recommendations, the 2024 conservative ITB treatment review (Front Sports Act Living 2024;6:1386456), OARSI 2019 as cited.
+2. The four unverified sources were checked online on 26 Oct 2026 (notes on knee-kneecap, knee-cartilage, knee-itb and knee-oa):
+   - ESSKA 2024 first-time patellar dislocation consensus: X-ray and MRI for every first-time dislocation; nonoperative care only with low recurrence risk when mature; surgery discussed with every skeletally immature patient; no brace better than another (B). The site's same-day doctor line stands.
+   - AAOS OCD CPG: the 2010 text is inconclusive on every non-operative treatment, activity restriction included; surgery for salvageable unstable lesions (consensus). The 2023 rapid update's three upgraded recommendations were not identified.
+   - ITB review 2024 (Sanchez-Alvarado): hip abductor strengthening is the core; stretching weak; matches the card.
+   - OARSI 2019: education plus land-based exercise, with weight management for the knee, is core; no newer OARSI version found.
+3. For Chandra: the approved kneecap physioHelps line "short-term brace advice if needed" against ESSKA's "no brace is better than another" (B). Keep, or drop the brace words?
