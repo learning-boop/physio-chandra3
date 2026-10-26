@@ -57,5 +57,5 @@ Matched in the Lower Quadrant Clinical Manual Ch. 7: Ottawa ankle rules (adults 
 
 ## Still open for Chandra
 
-1. Draft awaiting review: "How physiotherapy helps" on ankle-achillesrupture.
+1. The "How physiotherapy helps" text on ankle-achillesrupture was approved by Chandra on 26 Oct 2026.
 2. Not applied: a rehabilitation card after a diagnosed tibial or foot bone stress injury (forms 5 and 20, second state); the DVT form's "being treated for a clot and getting worse, or unusual bleeding" line.

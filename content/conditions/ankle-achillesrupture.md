@@ -42,7 +42,7 @@ After a torn Achilles, whether it is treated in a boot or cast with the foot poi
 - The boot or cast feels too tight, with numbness, tingling, or a cold, pale or blue foot: go to the emergency department
 
 ## physioHelps
-<!-- DRAFT (26 Oct 2026), new card from the thigh, leg, ankle and foot document form 12: awaiting Chandra's review, like the 169 texts approved 17 Oct 2026 -->
+<!-- Approved by Chandra Matla, 26 Oct 2026 (in chat; written from the thigh, leg, ankle and foot document form 12) -->
 - A physiotherapist can check your walking, ankle movement and calf strength, and follow your treating team's plan.
 - A staged programme, from early protected movement to strength and balance, helps the tendon and calf get stronger.
 - You get a gradual plan back to walking, work and sport, including the heel-raise and hop tests that show when you are ready.
