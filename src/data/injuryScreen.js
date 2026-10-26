@@ -506,6 +506,12 @@ export const THIGH_INJURY = [
   { id: 'I6', text: 'A few weeks after a knock, is there a hard lump in the thigh muscle, and is the knee still stiff?',
     askIf: (a) => a.I1 === 'knock',
     options: yesNo('urgent', 'Possible bone forming in the muscle after a bruise (myositis ossificans): it needs imaging') },
+  // Thigh, leg, ankle and foot document form 2 (26 Oct 2026): a torn
+  // quadriceps tendon, and a big bleed on blood thinners. Both same day.
+  { id: 'I7', text: 'Since the injury, can you not straighten your knee, or lift your leg straight off the bed?',
+    sameDay: true, options: yesNo('urgent', 'Possible torn thigh (quadriceps) tendon: repair works best early, so a doctor should check it today') },
+  { id: 'I8', text: 'Do you take blood-thinning medicine or have a bleeding disorder, and is there a large bruise or swelling on the thigh?',
+    sameDay: true, options: yesNo('urgent', 'A large bleed into the thigh on blood thinners needs checking today') },
 ]
 
 /* ── Knee: twist, blow or fall (Ottawa knee rule, adapted; Stiell 1996) ──

@@ -713,8 +713,9 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   // signed 5 Oct 2026).
   // 61 with the many-places route's dark-urine and self-harm questions
   // (path 4, 6 Oct 2026; the Fibromyalgia document's section 6).
-  check('911 split: 61 region flags send the person to emergency now',
-    em.filter((f) => !f.call911).length === 61, em.filter((f) => !f.call911).map((f) => f.id))
+  // 62 since 26 Oct 2026: the foot's hot toe or foot with a fever (ft-septic).
+  check('911 split: 62 region flags send the person to emergency now',
+    em.filter((f) => !f.call911).length === 62, em.filter((f) => !f.call911).map((f) => f.id))
   check('911 split: call911 only on emergency-tier flags', !flags.some((f) => f.call911 && f.tier !== 'emergency'))
   // A shared group must lead to the same place in every area that asks it.
   const byGroup = {}
@@ -1730,9 +1731,10 @@ check('knee only is NOT a referral line', detectReferral([['kneeL']]).length ===
   }
   const summary = Object.entries(counts).map(([k, v]) => k + ' ' + v.map((x) => x.before.length + '→' + x.rows.length).join(' ')).join('; ')
   // Knee 5 since 26 Oct 2026: its own group for a locked knee and OCD (knee document).
-  check('Smart flow: the doctor page shrinks in every area (knee 10-14 → 5, foot 13 → 4, hip 10-12 → 5, ankle 12 → 4)',
+  // Ankle 5 since 26 Oct 2026: its own group for a locked ankle.
+  check('Smart flow: the doctor page shrinks in every area (knee 10-14 → 5, foot 14 → 4, hip 10-12 → 5, ankle 14 → 5)',
     Object.values(counts).flat().every((x) => x.rows.length <= 5 && x.rows.length < x.before.length) &&
-    counts.foot[0].rows.length === 4 && counts.ankle[0].rows.length === 4 && counts.hip[0].rows.length === 5 && counts.knee[0].rows.length === 5, summary)
+    counts.foot[0].rows.length === 4 && counts.ankle[0].rows.length === 5 && counts.hip[0].rows.length === 5 && counts.knee[0].rows.length === 5, summary)
   const ids = (r) => r.rows.flatMap((x) => (x.gate ? x.members.map((m) => m.id) : [x.flag.id]))
   check('Smart flow: no red flag is lost in any area (every question is still on the page, inside its group), except those the mechanism rules out',
     Object.values(counts).flat().every((x) => x.before.filter((f) => !x.list.length || x.list.some((y) => y.id === f.id)).every((f) => ids(x).includes(f.id))) &&

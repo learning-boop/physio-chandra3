@@ -14,6 +14,12 @@ reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: 2026-09-25
 ---
 
+## changes 26 Oct 2026 ("Thigh Leg Ankle Foot all conditions.docx", 20 forms, approved by Chandra)
+<!-- Reasoning in content/reference/thigh-leg-ankle-foot-conditions.md. -->
+- ft-septic (emergency): a toe joint or foot hot, red and swollen with a fever; ft-gout is same day.
+- ft-stressday (same day): cannot take weight on the foot, or a foot bone hurts at rest; ft-stress names the high-risk sites and the risks.
+- Notes from forms 10 and 13 to 18 on the foot cards. Test patients TL7, TL8.
+
 ## red flags
 - Has your foot or toes suddenly become cold, pale, blue, or numb, or very painful at rest? | emergency | Possible blocked artery
 - Is there a hot, red area on your foot that is spreading fast, with pain far worse than it looks, or feeling very unwell? | emergency | Possible severe skin and tissue infection

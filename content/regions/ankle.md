@@ -14,6 +14,12 @@ reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: 2026-09-25
 ---
 
+## changes 26 Oct 2026 ("Thigh Leg Ankle Foot all conditions.docx", 20 forms, approved by Chandra)
+<!-- Reasoning in content/reference/thigh-leg-ankle-foot-conditions.md. -->
+- af-locked (same day): an ankle stuck right now, in a new group and the shared joint theme; af-gout is same day.
+- A6 gains "A doctor has diagnosed a torn Achilles"; the start answer after a cast or boot names a torn Achilles too. New card ankle-achillesrupture.
+- ankle-atfl: the easily-missed fracture line; ankle-osteochondral: the locked line is same day. Notes from forms 7 to 12 and 15 and 19. Test patients TL4 to TL6.
+
 ## red flags
 - Is your ankle hot, red, and swollen, with a fever or feeling unwell? | emergency | Possible joint infection (septic arthritis)
 - Is your calf or ankle swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung

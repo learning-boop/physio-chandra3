@@ -55,7 +55,7 @@ export const GATES = {
     { id: 'foot-infection', title: 'Signs of infection or a flare-up', members: ['ft-puncture', 'ft-charcot', 'ft-gout', 'ft-inflam'] },
     { id: 'foot-circulation', title: 'Signs of a circulation problem or a tight cast', members: ['ft-cast', 'ft-claudication'] },
     { id: 'foot-nerve', title: 'Changes in feeling or strength', members: ['ft-neuropathy', 'ft-footdrop', 'ft-crps', 'sc-neuro'] },
-    { id: 'foot-medical', title: 'Signs that need a medical check', members: ['ft-stress', 'ft-lump', 'sc-systemic'] },
+    { id: 'foot-medical', title: 'Signs that need a medical check', members: ['ft-stress', 'ft-stressday', 'ft-lump', 'sc-systemic'] },
   ],
   hip: [
     { id: 'hip-surgery', title: 'Signs of a problem after hip surgery, or a clot', members: ['hpf-replacement', 'hpf-dvt'] },
@@ -163,12 +163,13 @@ export const GATES = {
   lowerleg: [
     { id: 'leg-circulation', title: 'Signs of a clot, an infection, a tight cast or a circulation problem', members: ['lgf-cast', 'lgf-dvt', 'lgf-cellulitis', 'lgf-claudication'] },
     { id: 'leg-nerve', title: 'Changes in feeling or strength', members: ['lgf-footdrop', 'lgf-neuropathy', 'sc-neuro'] },
-    { id: 'leg-medical', title: 'Signs that need a medical check', members: ['lgf-stress', 'lgf-tumour', 'lgf-cancer', 'sc-systemic'] },
+    { id: 'leg-medical', title: 'Signs that need a medical check', members: ['lgf-stress', 'lgf-stressday', 'lgf-tumour', 'lgf-cancer', 'sc-systemic'] },
   ],
   ankle: [
     { id: 'ankle-circulation', title: 'Signs of a clot or a tight cast', members: ['af-cast', 'af-dvt'] },
     { id: 'ankle-infection', title: 'Signs of infection or a flare-up', members: ['af-charcot', 'af-gout', 'af-inflam'] },
     { id: 'ankle-nerve', title: 'Changes in feeling or strength', members: ['af-neuropathy', 'af-footdrop', 'af-crps', 'sc-neuro'] },
+    { id: 'ankle-joint', title: 'Signs from inside the ankle joint', members: ['af-locked'] },
     { id: 'ankle-medical', title: 'Signs that need a medical check', members: ['af-quinolone', 'af-stress', 'af-cancer', 'sc-systemic'] },
   ],
 }
@@ -200,6 +201,7 @@ export const SIGNS = {
   'ft-neuropathy': 'both feet numb, burning or tingling, like wearing socks',
   'ft-footdrop': 'your foot slapping down or your toes catching when you walk',
   'ft-crps': 'since an injury, surgery or cast, a foot that burns, swells, changes colour or is so sensitive that light touch hurts',
+  'ft-stressday': 'after more running or walking, a foot you cannot take weight on, or a foot bone that hurts at rest',
   'ft-stress': 'pain on one foot bone (or under the big toe joint) that is worse with every step or hopping, after more running, walking or training',
   'ft-lump': 'a lump in the foot that is growing, or a new dark mark under a toenail',
   // Hip
@@ -221,6 +223,7 @@ export const SIGNS = {
   'af-dvt': 'a calf or ankle that is swollen, warm or tender',
   'af-charcot': 'diabetes with a foot or ankle that is hot, red or swollen, or a wound that is not healing',
   'af-gout': 'an ankle or big toe that became suddenly hot, swollen and very painful overnight',
+  'af-locked': 'an ankle stuck right now, so it will not bend up or down',
   'af-inflam': 'heel or Achilles pain with morning back stiffness, psoriasis, sore eyes or other swollen joints',
   'af-neuropathy': 'both feet numb, burning or tingling, like wearing socks',
   'af-footdrop': 'your foot slapping down or your toes catching when you walk',
@@ -361,6 +364,7 @@ export const SIGNS = {
   'lgf-claudication': 'cramping calf pain on walking that eases when you stand still, if you smoke, have diabetes or are over 50',
   'lgf-footdrop': 'your foot slapping down or your toes catching when you walk',
   'lgf-neuropathy': 'both feet numb, burning or tingling, like wearing socks',
+  'lgf-stressday': 'a shin bone that hurts with every step when walking, at rest, or too much to stand on',
   'lgf-stress': 'a sore spot on the shin bone you can point to with one finger, or pain when hopping or at night, if you run or train hard',
   'lgf-tumour': 'a deep shin ache that wakes you at night, or a lump on the shin that is growing',
   'lgf-cancer': 'a past cancer, or a deep leg ache at night that does not change with position, with weight loss',
@@ -398,6 +402,7 @@ export const SHORT = {
   'ft-footdrop': 'the foot slapping down',
   'ft-crps': 'burning or colour change after an injury',
   'ft-stress': 'pain on one foot bone with every step',
+  'ft-stressday': 'a foot too sore to take weight',
   'ft-lump': 'a growing lump or a dark nail mark',
   'hpf-replacement': 'a painful hip replacement or wound',
   'hpf-dvt': 'a swollen, warm or tender leg',
@@ -530,12 +535,14 @@ export const SHORT = {
   'lgf-footdrop': 'the foot slapping down',
   'lgf-neuropathy': 'numb or burning feet',
   'lgf-stress': 'a sore spot on the shin with running',
+  'lgf-stressday': 'shin pain with every step',
   'lgf-tumour': 'night pain or a growing lump',
   'lgf-cancer': 'a past cancer',
   'af-cast': 'a tight cast',
   'af-dvt': 'a swollen, warm or tender calf',
   'af-charcot': 'diabetes with a hot foot or a wound',
   'af-gout': 'a joint suddenly hot and swollen',
+  'af-locked': 'an ankle stuck so it will not bend',
   'af-inflam': 'heel pain with back stiffness or psoriasis',
   'af-neuropathy': 'numb or burning feet',
   'af-footdrop': 'the foot slapping down',
@@ -564,8 +571,8 @@ export function gateText(gate, members = []) {
    'noInjury' questions (overuse stress fractures, "no injury" Perthes) are
    skipped after a recent injury to that area. */
 export const MECHANISM = {
-  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'af-stress': 'ankle', 'hpf-stress': 'hip', 'hpf-stressday': 'hip', 'srf-pta': 'shoulder',
-  'frf-stress': 'forearm', 'wrf-stress': 'wrist', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
+  'kf-stress': 'knee', 'kf-perthes': 'knee', 'ft-stress': 'foot', 'ft-stressday': 'foot', 'af-stress': 'ankle', 'hpf-stress': 'hip', 'hpf-stressday': 'hip', 'srf-pta': 'shoulder',
+  'frf-stress': 'forearm', 'wrf-stress': 'wrist', 'tgf-stress': 'thigh', 'lgf-stress': 'leg', 'lgf-stressday': 'leg', 'arf-pta': 'arm', 'erf-pta': 'elbow', 'tgf-femoral': 'thigh',
 }
 export const injuredIn = (screen, a = {}) => a[`${screen}:I1`] !== undefined && a[`${screen}:I1`] !== 'no'
 /** Kept for the knee prototype's wording. */
@@ -622,7 +629,7 @@ export const THEME_TITLES = {
   injury: 'After a blow or a fall',
   headache: 'A headache that is new or changing',
   postop: 'Signs of a problem after back surgery',
-  joint: 'Signs from inside the knee joint',
+  joint: 'Signs from inside the joint',
 }
 /** Kept for the knee prototype's checks. */
 export const kneeOnly = (zones = []) => smartArea(zones) === 'knee'

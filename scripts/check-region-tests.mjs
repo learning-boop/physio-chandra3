@@ -1406,12 +1406,12 @@ const TESTS = {
       expect: { asked: ['R5'], special: 'obturatorNerve', route: 'results' } },
     { name: '1. Hamstring strain while sprinting',
       lines: [['thighR']],
-      answers: { age: '18-29', onset: 'sprint', duration: 'd2w', I1: 'sprint', I2: 'no', I4: 'no', I5: 'no',
+      answers: { age: '18-29', onset: 'sprint', duration: 'd2w', I1: 'sprint', I2: 'no', I4: 'no', I5: 'no', I7: 'no', I8: 'no',
         R1: ['back'], R2: ['sprint', 'stretch'], R3: ['sharp'] },
       expect: { top: 'thigh/hamstring', route: 'results' } },
     { name: '2. Dead leg after a knee in football',
       lines: [['thighL']],
-      answers: { age: '18-29', onset: 'knock', duration: 'd2w', I1: 'knock', I2: 'no', I3: 'no', I5: 'no', I6: 'no',
+      answers: { age: '18-29', onset: 'knock', duration: 'd2w', I1: 'knock', I2: 'no', I3: 'no', I5: 'no', I6: 'no', I7: 'no', I8: 'no',
         R3: ['bruise'], R4: ['half'] },
       expect: { top: 'thigh/contusion', notTop: ['thigh/quadstrain'], route: 'results' } },
     { name: '3. Meralgia paraesthetica',
@@ -1434,6 +1434,16 @@ const TESTS = {
       lines: [['thighL']],
       answers: { age: '18-29', onset: 'running', duration: 'd6w', R1: ['front'] },
       flags: ['tgf-stress'],
+      expect: { route: 'urgent' } },
+    // "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
+    // Chandra 26 Oct 2026), fed with Chandra's approval the same day.
+    { name: 'TL1. Sprinting, now cannot lift the straight leg: same day (torn thigh tendon)',
+      lines: [['thighR']],
+      answers: { age: '30-49', onset: 'sprint', duration: 'd2w', I1: 'sprint', I2: 'no', I4: 'no', I5: 'no', I7: 'yes' },
+      expect: { route: 'urgent' } },
+    { name: 'TL2. A knock to the thigh on blood thinners, large bruise: same day',
+      lines: [['thighL']],
+      answers: { age: 'o64', onset: 'knock', duration: 'd2w', I1: 'knock', I2: 'no', I3: 'no', I5: 'no', I6: 'no', I7: 'no', I8: 'yes' },
       expect: { route: 'urgent' } },
   ],  knee: [
     // The pattern screens (../src/data/patternChecks.js), 6 Oct 2026 audit.
@@ -1605,6 +1615,13 @@ const TESTS = {
       answers: { age: '30-49', onset: 'gradual', duration: 'd6w', painQuality: ['burning'],
         V1: ['lateral'], V6: ['outer'], V7: ['back'] },
       expect: { notRegion: ['leg'], areas: ['lowback'], route: 'results' } },
+    // "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
+    // Chandra 26 Oct 2026), fed with Chandra's approval the same day.
+    { name: 'TL3. Runner whose shin bone now hurts with every step: same day',
+      lines: [['lowerlegR']],
+      answers: { age: '18-29', onset: 'running', duration: 'd6w', I1: 'no' },
+      flags: ['lgf-stressday'],
+      expect: { route: 'urgent' } },
   ],  ankle: [
     // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
     // Butler NOI workbook and the Shacklock NDS manual.
@@ -1688,6 +1705,21 @@ const TESTS = {
       lines: [['ankleR']],
       answers: { age: '18-29', onset: 'twistout', duration: 'd2w', I1: 'eversion', I2: 'no', I3: 'no', I9: 'no', I4: 'no', I8: 'no', I5: 'no', I10: 'no', I11: 'no', I6: 'no', I7: 'no', A1: ['high'] },
       expect: { top: 'ankle/highankle', route: 'results' } },
+    // "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
+    // Chandra 26 Oct 2026), fed with Chandra's approval the same day.
+    { name: 'TL4. Ankle stuck right now, will not bend: same day',
+      lines: [['ankleL']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd3m', I1: 'no' },
+      flags: ['af-locked'],
+      expect: { route: 'urgent' } },
+    { name: 'TL5. Weeks after a torn Achilles in a boot: the recovery card',
+      lines: [['ankleR']],
+      answers: { age: '30-49', onset: 'gradual', duration: 'd6w', I1: 'no', A1: ['heel'], A6: ['torndx'] },
+      expect: { top: 'ankle/achillesrupture', route: 'results' } },
+    { name: 'TL6. Back-of-heel pain, stiff in the morning, no diagnosis: not the torn Achilles card',
+      lines: [['ankleL']],
+      answers: { age: '30-49', onset: 'running', duration: 'd3m', I1: 'no', A1: ['heel'], A6: ['morning', 'bump'] },
+      expect: { not: ['ankle/achillesrupture'], route: 'results' } },
   ],  foot: [
     // Neurodynamics, second batch (6 Oct 2026): nerve conditions from the
     // Butler NOI workbook and the Shacklock NDS manual.
@@ -1765,6 +1797,18 @@ const TESTS = {
       lines: [['footL']],
       answers: { age: '50-64', onset: 'gradual', duration: 'o3m', B1: ['instep'], B5: ['tiptoe', 'standing'] },
       expect: { top: 'foot/tibpost', route: 'results' } },
+    // "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
+    // Chandra 26 Oct 2026), fed with Chandra's approval the same day.
+    { name: 'TL7. A hot, swollen big toe with a fever: emergency',
+      lines: [['footR']],
+      answers: { age: '50-64', onset: 'sudden', duration: 'd2w', I1: 'no' },
+      flags: ['ft-septic'],
+      expect: { route: 'emergency' } },
+    { name: 'TL8. After more marching, cannot take weight on the foot: same day',
+      lines: [['footL']],
+      answers: { age: '18-29', onset: 'load', duration: 'd2w', I1: 'no' },
+      flags: ['ft-stressday'],
+      expect: { route: 'urgent' } },
   ],
 }
 

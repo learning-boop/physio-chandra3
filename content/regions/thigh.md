@@ -11,6 +11,12 @@ reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: 2026-09-25
 ---
 
+## changes 26 Oct 2026 ("Thigh Leg Ankle Foot all conditions.docx", 20 forms, approved by Chandra)
+<!-- Reasoning in content/reference/thigh-leg-ankle-foot-conditions.md. -->
+- Injury screen I7: cannot straighten the knee or lift the straight leg (torn quadriceps tendon), same day.
+- Injury screen I8: blood thinners or a bleeding disorder with a large bruise or swelling, same day.
+- Notes from forms 1 and 2 on thigh-hamstring, thigh-quadstrain and thigh-contusion. Test patients TL1, TL2.
+
 ## red flags
 - Is your thigh or calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung
 - Is your thigh pain getting worse and worse, with the thigh tense and swollen, especially after a heavy knock or crush? | emergency | Possible compartment syndrome of the thigh

@@ -2613,8 +2613,13 @@ export const EXTRA_REGIONS = {
         text: "Is there spreading redness, a red streak up the leg, or a hot, swollen area with a fever, or a leg ulcer that is not healing?" },
       { id: "lgf-claudication", tier: "urgent", group: "claudication", why: "Possible narrowed leg arteries (vascular claudication)",
         text: "Do you get a cramping calf pain when walking that eases within minutes of standing still, and do you smoke, have diabetes, or are over 50?" },
-      { id: "lgf-stress", tier: "urgent", why: "Possible tibial stress fracture; needs imaging before more running",
+      { id: "lgf-stress", tier: "urgent", why: "Possible tibial stress fracture; needs imaging before more running. A sore spot on the sharp front edge of the shin is a high-risk site. More likely with missed periods, low bone density, not eating enough for your training, or a past stress fracture",
         text: "Do you run or train hard, and is there a sore spot on the shin bone that you can point to with one finger, or pain when hopping or at night?" },
+      // Every step, at rest, or no longer taking weight: same day, as the hip's
+      // hpf-stressday (thigh, leg, ankle and foot document forms 5 and 20,
+      // 26 Oct 2026).
+      { id: "lgf-stressday", sameDay: true, tier: "urgent", why: "Possible stress fracture of the shin that is getting worse: it needs a doctor today, and crutches until it is checked",
+        text: "Do you run or train hard, and does the shin bone now hurt with every step when you walk, at rest, or so that you cannot take weight on the leg?" },
       { id: "lgf-footdrop", tier: "urgent", group: "footdrop", why: "Foot drop (peroneal nerve or L5) needs medical review",
         text: "Is your foot slapping down or your toes catching when you walk?" },
       { id: "lgf-neuropathy", tier: "urgent", noBooking: true, group: "neuropathy", why: "Possible peripheral neuropathy; needs medical review and foot checks",
@@ -2754,6 +2759,10 @@ export const EXTRA_REGIONS = {
         text: "Is a cast, splint or bandage on this leg feeling more and more tight and painful? Please do not cut it off yourself." },
       { id: "af-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
         text: "Is your ankle hot, red, and swollen, with a fever or feeling unwell?" },
+      // A locked ankle (thigh, leg, ankle and foot document form 19): a loose
+      // fragment from a talus cartilage injury. Same day, as the knee's kf-locked.
+      { id: "af-locked", sameDay: true, tier: "urgent", why: "A locked ankle: a loose piece of cartilage or bone may be blocking it, and a doctor should check it today",
+        text: "Is your ankle stuck right now, so it will not bend up or down?" },
       { id: "af-pe", tier: "emergency", call911: true, group: "legclotlung", why: "Possible blood clot that has travelled to the lung",
         text: "Is your calf or ankle swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood?" },
       { id: "af-ischaemia", tier: "emergency", group: "limbischaemia", why: "Possible blocked artery",
@@ -2764,7 +2773,9 @@ export const EXTRA_REGIONS = {
         text: "Do you have diabetes, and is your foot or ankle hot, red, and swollen (even if it does not hurt much), or is there a wound that is not healing?" },
       { id: "af-dvt", sameDay: true, tier: "urgent", group: "legclot", why: "Possible blood clot (DVT); same-day review",
         text: "Is your calf or ankle swollen, warm, or tender, especially after surgery, a cast or boot, a long journey, time in bed, or starting the pill?" },
-      { id: "af-gout", tier: "urgent", group: "footgout", why: "Possible gout or other crystal arthritis",
+      // Same day (thigh, leg, ankle and foot document forms 16-17, 26 Oct 2026),
+      // as the foot's twin in the same group.
+      { id: "af-gout", sameDay: true, tier: "urgent", group: "footgout", why: "Possible gout or other crystal arthritis",
         text: "Did your ankle or big toe become suddenly hot, swollen, and very painful overnight, and have you had gout before?" },
       { id: "af-inflam", tier: "urgent", group: "footinflam", why: "Possible inflammatory or reactive arthritis affecting the tendons",
         text: "Do you have heel or Achilles pain along with back stiffness in the morning, psoriasis, eye inflammation, other swollen joints, or a recent stomach bug or sexually transmitted infection?" },
@@ -2801,7 +2812,7 @@ export const EXTRA_REGIONS = {
         { id: "landing", label: "After landing badly or a fall" },
         // 6 Oct 2026: ankle and foot cross-check, approved by Chandra.
         { id: "twistout", label: "My foot was planted and twisted outwards" },
-        { id: "surgery", label: "After surgery, or time in a cast or boot, for a broken ankle or foot" }
+        { id: "surgery", label: "After surgery, or time in a cast or boot, for a broken ankle or foot, or a torn Achilles" }
       ]},
       { id: "duration", text: "How long has it been going on?", options: [
         { id: "d2w", label: "Less than 2 weeks" },
@@ -2864,6 +2875,9 @@ export const EXTRA_REGIONS = {
           { id: "higher", label: "The pain is higher, 2 to 6 cm above the heel", special: "achillesHigher" },
           { id: "morning", label: "Stiff and sore for the first steps in the morning" },
           { id: "creak", label: "Creaking when I move the ankle" },
+          // Recovery after a torn Achilles (thigh, leg, ankle and foot document
+          // form 12, 26 Oct 2026): a new rupture is the injury screen's I5.
+          { id: "torndx", label: "A doctor has diagnosed a torn Achilles (boot, cast or surgery)" },
           { id: "none", label: "None of these" }
         ]},
       { id: "A7", text: "Which of these do you notice in the foot? Tick all that apply.",
@@ -2946,13 +2960,17 @@ export const EXTRA_REGIONS = {
         text: "Has your foot or toes suddenly become cold, pale, blue, or numb, or very painful at rest?" },
       { id: "ft-necfasc", tier: "emergency", group: "legnecfasc", why: "Possible severe skin and tissue infection",
         text: "Is there a hot, red area on your foot that is spreading fast, with pain far worse than it looks, or feeling very unwell?" },
+      // The foot had no infected-joint question (thigh, leg, ankle and foot
+      // document forms 16-17, 26 Oct 2026): a hot toe or foot with a fever.
+      { id: "ft-septic", tier: "emergency", why: "Possible joint infection (septic arthritis)",
+        text: "Is a toe joint or your foot hot, red, and swollen, with a fever or feeling unwell?" },
       { id: "ft-diabeticinfection", tier: "emergency", why: "Diabetic foot infection can threaten the limb",
         text: "Do you have diabetes, and a foot wound with spreading redness, pus, a bad smell, or a fever?" },
       { id: "ft-puncture", sameDay: true, tier: "urgent", why: "Possible deep puncture infection; same-day review",
         text: "Did something go through your shoe into your foot (nail, glass), and is the foot now swollen, red, or painful to walk on?" },
       { id: "ft-charcot", sameDay: true, tier: "urgent", group: "charcot", why: "Possible Charcot foot or diabetic foot ulcer; same-day review protects the foot",
         text: "Do you have diabetes, and is your foot hot, red, or swollen (even if it does not hurt much), or is there a wound or ulcer that is not healing?" },
-      { id: "ft-gout", tier: "urgent", group: "footgout", why: "Possible gout",
+      { id: "ft-gout", sameDay: true, tier: "urgent", group: "footgout", why: "Possible gout",
         text: "Did your big toe joint (or another joint) become suddenly hot, swollen, red, and too painful to touch, often overnight?" },
       { id: "ft-inflam", tier: "urgent", group: "footinflam", why: "Possible inflammatory or reactive arthritis",
         text: "Is a whole toe swollen like a sausage, or do you have heel pain with back stiffness, psoriasis, eye inflammation, or after a stomach bug or sexually transmitted infection?" },
@@ -2962,8 +2980,10 @@ export const EXTRA_REGIONS = {
         text: "Do both feet feel numb, burning, or tingling, like wearing socks?" },
       { id: "ft-crps", tier: "urgent", group: "crps", why: "Possible complex regional pain syndrome (CRPS)",
         text: "Since a foot injury, surgery, or cast, is your foot burning, swollen, shiny, changing colour or temperature, or so sensitive that light touch hurts?" },
-      { id: "ft-stress", tier: "urgent", why: "Possible stress fracture; navicular and 5th metatarsal stress fractures are high-risk and need imaging",
+      { id: "ft-stress", tier: "urgent", why: "Possible stress fracture; navicular, 5th metatarsal, base of the 2nd metatarsal and big-toe sesamoid stress fractures are high-risk and need imaging. More likely with missed periods, low bone density, not eating enough for your training, or a past stress fracture",
         text: "After more running, walking, marching or training, is there pain on one foot bone (heel, midfoot, a metatarsal, or under the big toe joint) that is worse with every step or hopping, or aches at night?" },
+      { id: "ft-stressday", sameDay: true, tier: "urgent", why: "Possible stress fracture of a foot bone that is getting worse: it needs a doctor today, and to keep weight off the foot until it is checked",
+        text: "After more running, walking, marching or training, can you now not take weight on the foot, or does a foot bone hurt even at rest?" },
       { id: "ft-footdrop", tier: "urgent", group: "footdrop", why: "Foot drop (peroneal nerve or L5) needs medical review",
         text: "Is your foot slapping down or your toes catching when you walk?" },
       { id: "ft-lump", tier: "urgent", group: "cancer", why: "A growing lump or nail mark needs medical review",

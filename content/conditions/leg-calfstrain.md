@@ -6,6 +6,9 @@ clin: Medial gastrocnemius or soleus strain
 # DRAFT patient text written 25 Sep 2026 from content/regions/leg.md — not yet reviewed.
 # 4 Oct 2026: doctor and emergency lines added for the Tier 2 review; signed by Chandra Matla, 4 Oct 2026.
 # reviewed: your name and the date, once every line is checked (e.g. Chandra Matla, 2026-09-26)
+# 26 Oct 2026: "Thigh Leg Ankle Foot all conditions.docx" (20 forms, signed v1.0 by
+# Chandra 26 Oct 2026), applied with Chandra's approval the same day
+# (content/reference/thigh-leg-ankle-foot-conditions.md): form 3 notes (Thompson figures corrected).
 reviewed: Chandra Matla, 2026-10-04
 pointers:
   "Calf": 3
@@ -43,3 +46,6 @@ A sudden push-off, such as a lunge in tennis or a sprint, can tear some fibres o
 - A physiotherapist can check your calf and explain how bad the strain looks.
 - Gentle calf exercises, building up step by step, can help the muscle heal and get stronger.
 - You get a gradual plan to get back to running, jumping and sport.
+
+## clinicNotes
+- Thigh, leg, ankle and foot document form 3 (signed v1.0 by Chandra, 26 Oct 2026): History (Green 2022, 20 expert clinicians): gastrocnemius – usually immediate onset with acceleration, jumping or sprinting, well localised; soleus – often cumulative or gradual 'tightness'/cramping in steady-state running, poorly localised. Ask at what speed symptoms began; pain-free walking not reached until after day 10 may signal a longer recovery. Length (MP 506): DF with knee extended (gastrocnemius, plantaris, soleus) vs knee flexed ≥20° (soleus). Lunge test reliability (Table 7-1, MP 488): intra-rater ICC 0.65–0.99, inter-rater ICC 0.80–0.99; MDC 4.7° / 1.9 cm intra-rater, 4.5° / 1.6 cm inter-rater. Strength (MP 497): gastrocnemius and plantaris – resisted PF in knee extension, in WB if grade 3 or stronger; soleus – prone, knee 90°, ankle fully PF. Single-leg calf raise capacity, knee straight vs bent, and graded hopping; severe strains usually cannot complete plyometric testing (Green 2022). Exclude Achilles rupture: Thompson test about 96% sensitive and 93% specific in Maffulli 1998 (the form's "Sn 29–76%, Sp 96–100%, +LR 3.3–43.1, −LR 0.3–0.8" are the knee manual's quadriceps active test figures, corrected 26 Oct 2026) (Table 7-4, MP 507); the ankle may still plantarflex with a torn tendon if the sheath is intact, so also assess single-leg heel raise. DVT: Wells score ≥2 likely, <2 unlikely (MP 507). Homans test is not a useful clinical test: calf strain or contusion can give a positive and DVT a negative (MP 508). Imaging (Green 2022): MRI is the reference standard; US preferred by some for distal medial gastrocnemius; experts often wait 1–2 days; clinical progression is a stronger prognostic guide than MRI. Strongest risk factors: older age and previous calf strain (Green & Pizzari 2017). RTP criteria (Green 2022, Table 4): pain/tightness 0/10; palpation tenderness 0 cm; DF asymmetry ≤10%; single-leg calf raise ≥30 reps with asymmetry ≤10%; sport-specific strength, power and running benchmarks; full training completed. Running was the most common cause of early recurrence.

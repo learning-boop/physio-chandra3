@@ -11,6 +11,11 @@ reviewed_by: Chandra Matla, Registered Physiotherapist
 reviewed_on: 2026-09-25
 ---
 
+## changes 26 Oct 2026 ("Thigh Leg Ankle Foot all conditions.docx", 20 forms, approved by Chandra)
+<!-- Reasoning in content/reference/thigh-leg-ankle-foot-conditions.md. -->
+- lgf-stressday (same day): the shin bone hurts with every step, at rest, or too much to stand on; lgf-stress names the risks (missed periods, low bone density, under-eating, a past stress fracture) and the high-risk front of the shin.
+- Notes from forms 3 to 5 and 11 to 12 on leg-calfstrain, leg-mtss and leg-achilles (Thompson figures corrected). Test patient TL3.
+
 ## red flags
 - Is your calf swollen, warm, or tender, and are you also short of breath, or have chest pain or are coughing blood? | 911 | Possible blood clot that has travelled to the lung
 - Is your lower leg pain getting worse and worse, with the leg tight and swollen and much worse when your toes are moved, especially after an injury or under a cast? | emergency | Possible acute compartment syndrome

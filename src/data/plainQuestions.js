@@ -122,7 +122,7 @@ export const PLAIN_GATES = {
   'multi-infection': 'Do you feel unwell, not just sore?',
   'multi-organ': 'Could the pain be coming from inside your body?',
   'multi-nerve': 'Have your arms, legs, feet or hands changed?',
-  'multi-joint': 'Is the knee stuck, or does it keep swelling?',
+  'multi-joint': 'Is a joint stuck, or does it keep swelling?',
   'multi-medical': 'Could something else be going on?',
   'multi-circulation': 'Could there be a clot, a blood flow problem, or a problem after surgery?',
 }
@@ -236,6 +236,7 @@ export const PLAIN_SHORT = {
   // Ankle
   'af-compartment': 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise',
   'af-septic': 'A hot, red, swollen ankle with a fever or feeling unwell',
+  'af-locked': 'An ankle stuck right now, so it will not bend',
   'af-pe': 'A swollen calf or ankle, with breathlessness, chest pain or coughing blood',
   'af-ischaemia': 'A foot suddenly cold, pale, numb, or painful at rest',
   'af-necfasc': 'A hot red area spreading fast, with bad pain or feeling unwell',
@@ -264,6 +265,8 @@ export const PLAIN_SHORT = {
   'ft-neuropathy': 'Both feet numb or burning, like wearing socks',
   'ft-crps': 'Since an injury or cast: burning, swelling, colour change, or touch hurts',
   'ft-stress': 'More running or walking, and pain on one foot bone',
+  'ft-stressday': 'A foot bone too sore to take weight, or sore at rest',
+  'ft-septic': 'A hot, red, swollen toe or foot with a fever',
   'ft-footdrop': 'Your foot slaps down or your toes catch',
   'ft-lump': 'A growing lump, a dark mark under a nail, or night pain',
   // Thigh
@@ -292,6 +295,7 @@ export const PLAIN_SHORT = {
   'lgf-cellulitis': 'Spreading redness, a red streak, a hot area with fever, or an ulcer',
   'lgf-claudication': 'Calf cramps when walking, if you smoke, have diabetes or are over 50',
   'lgf-stress': 'A runner with a sore spot on the shin bone',
+  'lgf-stressday': 'A shin bone sore with every step, at rest, or to stand on',
   'lgf-footdrop': 'Your foot slaps down or your toes catch',
   'lgf-neuropathy': 'Both feet numb or burning, like wearing socks',
   'lgf-tumour': 'Under 25 with a night ache, or a growing shin lump',
@@ -429,9 +433,9 @@ export const PLAIN_SHORT = {
    merged group names each sign once. The ticks inside keep their own area. */
 const fam = (ids, text) => Object.fromEntries(ids.map((id) => [id, text]))
 export const MULTI_SHORT = {
-  ...fam(['kf-septic', 'af-septic', 'rf-hotjoint', 'erf-hot', 'wrf-hot', 'hnd-hot'], 'A hot, red, swollen joint with a fever or feeling unwell'),
+  ...fam(['kf-septic', 'af-septic', 'ft-septic', 'rf-hotjoint', 'erf-hot', 'wrf-hot', 'hnd-hot'], 'A hot, red, swollen joint with a fever or feeling unwell'),
   ...fam(['kf-compartment', 'af-compartment', 'ft-compartment', 'lgf-compartment', 'tgf-compartment'], 'Pain still climbing after an injury, cast, operation, lying still long, or hard exercise'),
-  ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress', 'hpf-stressday'], 'More running or training, and a deep ache or sore spot on a bone'),
+  ...fam(['kf-stress', 'af-stress', 'ft-stress', 'lgf-stress', 'tgf-stress', 'hpf-stress', 'hpf-stressday', 'lgf-stressday', 'ft-stressday'], 'More running or training, and a deep ache or sore spot on a bone'),
   ...fam(['kf-tumour', 'lgf-tumour', 'tgf-tumour'], 'Under 25 with a deep night ache, or a growing lump'),
   ...fam(['kf-gout', 'af-gout', 'ft-gout', 'erf-gout', 'wrf-gout', 'hnd-gout'], 'A joint or big toe suddenly hot, red and swollen, often overnight'),
   ...fam(['kf-inflam', 'af-inflam', 'ft-inflam'], 'Other swollen joints, sausage toe, heel pain, a rash, sore eyes or recent infection'),
@@ -984,6 +988,10 @@ export const TICKS = {
     { key: 'hot', combo: true, text: 'You have diabetes, and your foot or ankle is hot, red and swollen, even if it does not hurt much', tell: 'I have diabetes and my foot is hot, red and swollen' },
     { key: 'wound', combo: true, text: 'You have diabetes, and a wound on your foot is not healing', tell: 'I have diabetes and a wound on my foot is not healing' },
   ],
+  // Thigh, leg, ankle and foot document, 26 Oct 2026.
+  'af-locked': [
+    { key: 'stuck', text: 'Your ankle is *stuck right now* and will not bend up or down', tell: 'my ankle is stuck and will not bend' },
+  ],
   'af-gout': [
     { key: 'overnight', combo: true, text: 'Your ankle or big toe became hot, swollen and very painful overnight, and you have had gout before', tell: 'my ankle became hot and swollen overnight, and I have had gout before' },
   ],
@@ -1039,6 +1047,9 @@ export const TICKS = {
     { key: 'hot', combo: true, text: 'You have diabetes, and your foot is hot, red or swollen, even if it does not hurt much', tell: 'I have diabetes and my foot is hot, red and swollen' },
     { key: 'wound', combo: true, text: 'You have diabetes, and a wound or ulcer on your foot is not healing', tell: 'I have diabetes and a wound on my foot is not healing' },
   ],
+  'ft-septic': [
+    { key: 'fever', combo: true, text: 'A toe joint or your foot hot, red and swollen, *and* a fever or feeling unwell', tell: 'my toe or foot is hot and swollen, and I have a fever' },
+  ],
   'ft-gout': [
     { key: 'toe', text: 'Big toe or another joint suddenly hot, swollen, red, and too sore to touch', tell: 'my big toe became suddenly hot, swollen and too painful to touch' },
   ],
@@ -1057,6 +1068,9 @@ export const TICKS = {
   ],
   'ft-crps': [
     { key: 'since', combo: true, text: 'Since a foot injury, operation or cast: burning, swelling, shiny skin, colour or temperature changes, or light touch hurts', tell: 'since the injury my foot burns, swells or changes colour' },
+  ],
+  'ft-stressday': [
+    { key: 'weight', combo: true, text: 'After more running or walking: you *cannot take weight* on the foot, or a foot bone hurts at rest', tell: 'I cannot take weight on my foot, or a foot bone hurts at rest' },
   ],
   'ft-stress': [
     { key: 'bone', combo: true, text: 'After more running, walking or training: pain on one foot bone, worse with each step, hopping or at night', tell: 'after more running or walking I have pain on one foot bone' },
@@ -1152,6 +1166,9 @@ export const TICKS = {
   ],
   'lgf-claudication': [
     { key: 'cramp', combo: true, text: 'Calf cramps when walking that ease within minutes of standing still, and you smoke, have diabetes, or are over 50', tell: 'my calf cramps when I walk and eases when I stand still' },
+  ],
+  'lgf-stressday': [
+    { key: 'step', combo: true, text: 'You run or train hard, and the shin bone now hurts with *every step*, at rest, or too much to stand on', tell: 'my shin bone hurts with every step or at rest' },
   ],
   'lgf-stress': [
     { key: 'shin', combo: true, text: 'You run or train hard, and have a shin sore spot you can point to with one finger, or pain hopping or at night', tell: 'I run or train hard and have a sore spot on my shin bone' },
