@@ -63,4 +63,4 @@ Matched in the Lower Quadrant Clinical Manual Ch. 6: Sokal 2022 (Lachman 81/85, 
    - AAOS OCD CPG: the 2010 text is inconclusive on every non-operative treatment, activity restriction included; surgery for salvageable unstable lesions (consensus). The 2023 rapid update's three upgraded recommendations were not identified.
    - ITB review 2024 (Sanchez-Alvarado): hip abductor strengthening is the core; stretching weak; matches the card.
    - OARSI 2019: education plus land-based exercise, with weight management for the knee, is core; no newer OARSI version found.
-3. For Chandra: the approved kneecap physioHelps line "short-term brace advice if needed" against ESSKA's "no brace is better than another" (B). Keep, or drop the brace words?
+3. The kneecap physioHelps brace words were dropped at Chandra's request (26 Oct 2026), following ESSKA's "no brace is better than another" (B).
