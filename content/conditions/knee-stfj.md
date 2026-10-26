@@ -45,7 +45,7 @@ A small joint sits on the outer side of the knee, where the top of the thin oute
 - After a fall, twist or blow, the bump is very sore to press or looks out of place: see a doctor the same day, as an X-ray may be needed
 
 ## physioHelps
-<!-- DRAFT (26 Oct 2026), new card from the knee document form 11: awaiting Chandra's review, like the 169 texts approved 17 Oct 2026 -->
+<!-- Approved by Chandra Matla, 26 Oct 2026 (in chat; written from the knee document form 11) -->
 - A physiotherapist can gently move this small joint, compare it with the other knee and explain what is going on.
 - Gentle joint techniques and muscle work for the outer hamstring may help it move normally again.
 - Strength and balance exercises for the whole leg help keep the joint well supported.

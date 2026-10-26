@@ -57,6 +57,6 @@ Matched in the Lower Quadrant Clinical Manual Ch. 6: Sokal 2022 (Lachman 81/85, 
 
 ## Still open for Chandra
 
-1. Drafts awaiting review: "How physiotherapy helps" on knee-stfj, knee-loosebody and knee-cartilage.
+1. The "How physiotherapy helps" texts on knee-stfj, knee-loosebody and knee-cartilage were approved by Chandra on 26 Oct 2026.
 2. Sources the forms mark as unverified: the ESSKA 2024 first-time patellar dislocation consensus, the AAOS OCD CPG 2023 recommendations, the 2024 conservative ITB treatment review (Front Sports Act Living 2024;6:1386456), OARSI 2019 as cited.
 3. Acupuncture for knee OA: offered or not?

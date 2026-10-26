@@ -42,7 +42,7 @@ Sometimes a small piece of cartilage or bone comes free inside the knee joint, o
 - The pain is there all the time rather than in sudden catches: see us or your doctor, as something else may be going on
 
 ## physioHelps
-<!-- DRAFT (26 Oct 2026), new card from the knee document form 12: awaiting Chandra's review, like the 169 texts approved 17 Oct 2026 -->
+<!-- Approved by Chandra Matla, 26 Oct 2026 (in chat; written from the knee document form 12) -->
 - A physiotherapist can talk through your catching episodes, check that the knee is stable and explain what may be happening.
 - With your consent, a specific hands-on technique that gently pulls and turns the knee may help free a catching knee.
 - Exercises keep the knee moving and strong, and we can tell you if you need to see a doctor for imaging.

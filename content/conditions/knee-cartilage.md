@@ -40,7 +40,7 @@ The smooth cartilage on the ends of the knee bones can be injured in a twist, a 
 - The knee is hot, red and swollen with a fever, or you feel unwell: go to the emergency department
 
 ## physioHelps
-<!-- DRAFT (26 Oct 2026), new card from the knee document forms 14 and 15: awaiting Chandra's review, like the 169 texts approved 17 Oct 2026 -->
+<!-- Approved by Chandra Matla, 26 Oct 2026 (in chat; written from the knee document forms 14 and 15) -->
 - A physiotherapist can check your knee's movement, swelling and strength and explain the plan in plain words.
 - Exercises for the knee and hip, then balance and control work, can help you get stronger within your doctor's limits.
 - You get a gradual plan back to running, jumping and sport.
