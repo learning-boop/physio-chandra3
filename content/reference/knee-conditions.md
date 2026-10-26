@@ -49,7 +49,7 @@ When two or more areas were drawn, the age from "A little about you" was read as
 - A knee that cannot take weight after an injury stays same day (Ottawa, X-ray); emergency is kept for a deformed knee or a wound over the bone (the fracture form says emergency).
 - No injection, medication or surgical outcome advice in patient text; the OA form's injections and arthroplasty lines are in clinic notes only.
 - No "unstable" in patient text (patellar and LCL forms).
-- Acupuncture stays out of patient text until Chandra confirms he offers it (OA form). Dry needling is not recommended for PFP by the JOSPT 2019 CPG, so it is not offered on that card.
+- Acupuncture stays out of patient text: Chandra does not offer it (confirmed 26 Oct 2026; OA form). Dry needling is not recommended for PFP by the JOSPT 2019 CPG, so it is not offered on that card.
 
 ## Checked against the manuals
 
@@ -59,4 +59,3 @@ Matched in the Lower Quadrant Clinical Manual Ch. 6: Sokal 2022 (Lachman 81/85, 
 
 1. The "How physiotherapy helps" texts on knee-stfj, knee-loosebody and knee-cartilage were approved by Chandra on 26 Oct 2026.
 2. Sources the forms mark as unverified: the ESSKA 2024 first-time patellar dislocation consensus, the AAOS OCD CPG 2023 recommendations, the 2024 conservative ITB treatment review (Front Sports Act Living 2024;6:1386456), OARSI 2019 as cited.
-3. Acupuncture for knee OA: offered or not?
